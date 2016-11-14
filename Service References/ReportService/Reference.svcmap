@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="cf700e72-713d-4037-9aa4-1dc080958418" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:54995/ReportService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ReportService.wsdl" MetadataType="Wsdl" ID="16e5e32e-79b1-4819-86f2-6b838f8ef53c" SourceId="1" SourceUrl="http://localhost:54995/ReportService.svc?wsdl" />
+    <MetadataFile FileName="ReportService.xsd" MetadataType="Schema" ID="0be1df6c-a94e-4aa3-9307-19b9798cda62" SourceId="1" SourceUrl="http://localhost:54995/ReportService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ReportService.disco" MetadataType="Disco" ID="80c0b25c-fa7a-406c-81f4-5ef79c30cb99" SourceId="1" SourceUrl="http://localhost:54995/ReportService.svc?disco" />
+    <MetadataFile FileName="ReportService1.xsd" MetadataType="Schema" ID="94688eae-19a2-4e5b-934d-3dbfda960385" SourceId="1" SourceUrl="http://localhost:54995/ReportService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
