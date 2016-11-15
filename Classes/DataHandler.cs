@@ -267,7 +267,7 @@ namespace Astrodon
             sqlParms.Add("@readreceipt", readreceipt);
             sqlParms.Add("@attachment", attachment);
             sqlParms.Add("@unitno", unitNo);
-            DateTime? processDate = null;
+            Object processDate = DBNull.Value;
             if (sendnow) { processDate = DateTime.Now; }
             sqlParms.Add("@processDate", processDate);
             SetData(query, sqlParms, out status);

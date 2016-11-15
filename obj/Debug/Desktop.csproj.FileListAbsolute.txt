@@ -568,4 +568,3 @@ C:\Projects\Stephen\Stephen\Astrodon\Desktop\obj\Debug\Astrodon.PrintOptions.res
 C:\Projects\Stephen\Stephen\Astrodon\Desktop\obj\Debug\Astrodon.Properties.Resources.resources
 C:\Projects\Stephen\Stephen\Astrodon\Desktop\obj\Debug\Astrodon.Reports.LevyRollUserControl.resources
 C:\Projects\Stephen\Stephen\Astrodon\Desktop\obj\Debug\Desktop.csproj.GenerateResource.Cache
-C:\Projects\Stephen\Stephen\Astrodon\Desktop\obj\Debug\Desktop.csprojResolveAssemblyReference.cache
