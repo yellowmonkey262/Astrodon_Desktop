@@ -758,6 +758,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\AstradonNewLogo.jpg" />
+    <Content Include="Resources\stdmd5.jpg" />
+    <None Include="Resources\stdmd5.png" />
     <None Include="Service References\ReportService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

@@ -6,9 +6,10 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Astrodon {
-
-    public partial class usrStatements : UserControl {
+namespace Astrodon
+{
+    public partial class usrStatements : UserControl
+    {
         private SqlDataHandler dh;
         private String status = String.Empty;
         private DataSet dsBuildings;
@@ -16,7 +17,8 @@ namespace Astrodon {
         private int userid;
         private Statements statements;
 
-        public usrStatements() {
+        public usrStatements()
+        {
             InitializeComponent();
             dh = new SqlDataHandler();
             bs = new BindingSource();
@@ -25,33 +27,44 @@ namespace Astrodon {
             dgBuildings.DataSource = bs;
         }
 
-        private void usrStatements_Load(object sender, EventArgs e) {
+        private void usrStatements_Load(object sender, EventArgs e)
+        {
             LoadBuildings();
             DateTime callDate = DateTime.Now.AddMonths(1);
             DateTime stmtDate = new DateTime(callDate.Year, callDate.Month, 1);
             stmtDatePicker.Value = stmtDate;
         }
 
-        private void LoadBuildings() {
+        private void LoadBuildings()
+        {
             String point = "0";
             String build = String.Empty;
-            try {
+            try
+            {
                 String query = String.Empty;
-                try {
-                    query = String.Format("SELECT DISTINCT b.Building, b.DataPath, b.Period, '' as [Last Processed], b.pm, b.bankName, b.accName, b.bankAccNumber, b.branch FROM tblBuildings AS b INNER JOIN tblUserBuildings AS u ON b.id = u.buildingid WHERE u.userid = {0} ORDER BY b.Building", userid.ToString());
-                } catch {
+                try
+                {
+                    query = String.Format("SELECT DISTINCT b.Building, b.DataPath, b.Period, '' as [Last Processed], b.pm, b.bankName, b.accName, b.bankAccNumber, b.branch, b.bank FROM tblBuildings AS b INNER JOIN tblUserBuildings AS u ON b.id = u.buildingid WHERE u.userid = {0} ORDER BY b.Building", userid.ToString());
+                }
+                catch
+                {
                     MessageBox.Show("query generator" + userid.ToString());
                 }
                 dsBuildings = dh.GetData(query, null, out status);
-                if (dsBuildings != null && dsBuildings.Tables.Count > 0 && dsBuildings.Tables[0].Rows.Count > 0) {
-                    foreach (DataRow dr in dsBuildings.Tables[0].Rows) {
+                if (dsBuildings != null && dsBuildings.Tables.Count > 0 && dsBuildings.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dsBuildings.Tables[0].Rows)
+                    {
                         String building = dr["Building"].ToString();
                         String lpQuery = String.Format("SELECT top(1) lastProcessed FROM tblStatements WHERE building = '{0}' ORDER BY lastProcessed DESC", building);
                         DataSet dsLP = dh.GetData(lpQuery, null, out status);
                         DateTime lastProcessed;
-                        if (dsLP != null && dsLP.Tables.Count > 0 && dsLP.Tables[0].Rows.Count > 0) {
+                        if (dsLP != null && dsLP.Tables.Count > 0 && dsLP.Tables[0].Rows.Count > 0)
+                        {
                             lastProcessed = DateTime.Parse(dsLP.Tables[0].Rows[0]["lastProcessed"].ToString());
-                        } else {
+                        }
+                        else
+                        {
                             lastProcessed = DateTime.Now.AddYears(-1);
                         }
                         point = "1";
@@ -67,36 +80,49 @@ namespace Astrodon {
                         point = "6";
                     }
                 }
-            } catch {
+            }
+            catch
+            {
                 MessageBox.Show(point + " - " + build);
             }
         }
 
-        private void dgBuildings_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e) {
-            try {
-                if (dgBuildings.Rows.Count == dsBuildings.Tables[0].Rows.Count) {
-                    foreach (DataGridViewRow dvr in dgBuildings.Rows) {
+        private void dgBuildings_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            try
+            {
+                if (dgBuildings.Rows.Count == dsBuildings.Tables[0].Rows.Count)
+                {
+                    foreach (DataGridViewRow dvr in dgBuildings.Rows)
+                    {
                         DateTime lastProcessed = DateTime.Parse(dvr.Cells[7].Value.ToString());
                         TimeSpan elapsed = DateTime.Now - lastProcessed;
-                        for (int i = 0; i < dgBuildings.ColumnCount; i++) {
+                        for (int i = 0; i < dgBuildings.ColumnCount; i++)
+                        {
                             if (elapsed.TotalDays > 5) { dvr.Cells[i].Style.BackColor = System.Drawing.Color.Red; } else { dvr.Cells[i].Style.BackColor = System.Drawing.Color.White; }
                         }
                     }
                 }
-            } catch { }
+            }
+            catch { }
         }
 
-        private void chkSelectAll_CheckedChanged(object sender, EventArgs e) {
-            foreach (DataGridViewRow dvr in dgBuildings.Rows) {
+        private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow dvr in dgBuildings.Rows)
+            {
                 dvr.Cells[0].Value = chkSelectAll.Checked;
             }
         }
 
-        private String getDebtorEmail(String buildingName) {
+        private String getDebtorEmail(String buildingName)
+        {
             List<Building> testBuildings = new Buildings(false).buildings;
             String dEmail = "";
-            foreach (Building b in testBuildings) {
-                if (b.Name == buildingName) {
+            foreach (Building b in testBuildings)
+            {
+                if (b.Name == buildingName)
+                {
                     dEmail = b.Debtor;
                 }
             }
@@ -104,11 +130,14 @@ namespace Astrodon {
             return (dEmail != "" ? dEmail : Controller.user.email);
         }
 
-        private void SetBuildingStatement(String buildingName) {
+        private void SetBuildingStatement(String buildingName)
+        {
             List<Building> testBuildings = new Buildings(false).buildings;
             int buildingID = 0;
-            foreach (Building b in testBuildings) {
-                if (b.Name == buildingName) {
+            foreach (Building b in testBuildings)
+            {
+                if (b.Name == buildingName)
+                {
                     buildingID = b.ID;
                     String query = "IF NOT EXISTS(SELECT id FROM tblDebtors WHERE buildingID = " + b.ID.ToString() + " AND completeDate = '" + DateTime.Now.ToString("yyyy/MM/dd") + "')";
                     query += " INSERT INTO tblDebtors(buildingID, completeDate, stmtprintemail) VALUES(" + b.ID.ToString() + ", '" + DateTime.Now.ToString("yyyy/MM/dd") + "', 'True')";
@@ -118,13 +147,16 @@ namespace Astrodon {
             }
         }
 
-        private void btnProcess_Click(object sender, EventArgs e) {
+        private void btnProcess_Click(object sender, EventArgs e)
+        {
             this.Cursor = Cursors.WaitCursor;
             statements = new Statements();
             statements.statements = new List<Statement>();
             Dictionary<String, bool> hasStatements = new Dictionary<string, bool>();
-            foreach (DataGridViewRow dvr in dgBuildings.Rows) {
-                if ((bool)dvr.Cells[0].Value) {
+            foreach (DataGridViewRow dvr in dgBuildings.Rows)
+            {
+                if ((bool)dvr.Cells[0].Value)
+                {
                     String buildingName = dvr.Cells[1].Value.ToString();
                     SetBuildingStatement(buildingName);
                     String datapath = dvr.Cells[5].Value.ToString();
@@ -142,12 +174,15 @@ namespace Astrodon {
                     String accName = dr["accName"].ToString();
                     String bankAccNumber = dr["bankAccNumber"].ToString();
                     String branch = dr["branch"].ToString();
-                    foreach (Statement s in bStatements) {
+                    bool isStd = dr["bank"].ToString() == "STANDARD";
+                    foreach (Statement s in bStatements)
+                    {
                         s.pm = pm;
                         s.bankName = bankName;
                         s.accName = accName;
                         s.accNumber = bankAccNumber;
                         s.branch = branch;
+                        s.isStd = isStd;
                         statements.statements.Add(s);
                     }
                 }
@@ -156,9 +191,10 @@ namespace Astrodon {
             PDF generator = new PDF(true);
             MySqlConnector mySqlConn = new MySqlConnector();
             Classes.Sftp ftpClient = new Classes.Sftp(String.Empty, true);
-            foreach (Statement stmt in statements.statements) {
+            foreach (Statement stmt in statements.statements)
+            {
                 String fileName = String.Empty;
-                generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName);
+                generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd);
 
                 #region Upload Letter
 
@@ -173,16 +209,22 @@ namespace Astrodon {
 
                 #endregion Upload Letter
 
-                if (stmt.EmailMe) {
-                    if (!String.IsNullOrEmpty(fileName)) {
+                if (stmt.EmailMe)
+                {
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
                         if (!hasStatements.ContainsKey(stmt.BuildingName)) { hasStatements.Add(stmt.BuildingName, true); }
-                        if (Controller.user.id != 1) {
+                        if (Controller.user.id != 1)
+                        {
                             SetupEmail(stmt, fileName);
                         }
-                        if (stmt.PrintMe && Controller.user.id != 1) {
-                            if (!printerSet) {
+                        if (stmt.PrintMe && Controller.user.id != 1)
+                        {
+                            if (!printerSet)
+                            {
                                 frmPrintDialog printDialog = new frmPrintDialog();
-                                if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                                if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                                {
                                     SetDefaultPrinter(printDialog.selectedPrinter);
                                     Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
                                     Properties.Settings.Default.Save();
@@ -192,10 +234,14 @@ namespace Astrodon {
                             SendToPrinter(fileName);
                         }
                     }
-                } else if (stmt.PrintMe && Controller.user.id != 1) {
-                    if (!printerSet) {
+                }
+                else if (stmt.PrintMe && Controller.user.id != 1)
+                {
+                    if (!printerSet)
+                    {
                         frmPrintDialog printDialog = new frmPrintDialog();
-                        if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                        if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        {
                             SetDefaultPrinter(printDialog.selectedPrinter);
                             Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
                             Properties.Settings.Default.Save();
@@ -203,21 +249,29 @@ namespace Astrodon {
                         }
                     }
                     SendToPrinter(fileName);
-                    try {
+                    try
+                    {
                         mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
                         ftpClient.Upload(fileName, actFile, false);
-                    } catch { }
-                } else {
-                    try {
+                    }
+                    catch { }
+                }
+                else
+                {
+                    try
+                    {
                         mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
                         ftpClient.Upload(fileName, actFile, false);
-                    } catch { }
+                    }
+                    catch { }
                 }
             }
-            foreach (DataGridViewRow dvr in dgBuildings.Rows) {
+            foreach (DataGridViewRow dvr in dgBuildings.Rows)
+            {
                 dvr.Cells[0].Value = false;
             }
-            foreach (KeyValuePair<String, bool> hasStatement in hasStatements) {
+            foreach (KeyValuePair<String, bool> hasStatement in hasStatements)
+            {
                 String query = "INSERT INTO tblStatements(building, lastProcessed) VALUES(@building, @lastProcessed)";
                 Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
                 sqlParms.Add("@building", hasStatement.Key);
@@ -228,7 +282,8 @@ namespace Astrodon {
             MessageBox.Show("Process Complete");
         }
 
-        public List<Statement> SetBuildings(String buildingName, String buildingPath, int buildingPeriod, bool isHOA) {
+        public List<Statement> SetBuildings(String buildingName, String buildingPath, int buildingPeriod, bool isHOA)
+        {
             Building build = new Building();
             build.Name = buildingName;
             build.DataPath = buildingPath;
@@ -238,8 +293,10 @@ namespace Astrodon {
             lblCCount.Text = build.Name + " 0/" + customers.Count.ToString();
             lblCCount.Refresh();
             int ccount = 0;
-            foreach (Customer customer in customers) {
-                try {
+            foreach (Customer customer in customers)
+            {
+                try
+                {
                     bool stophere = false;
                     Statement myStatement = new Statement();
                     myStatement.AccNo = customer.accNumber;
@@ -263,9 +320,11 @@ namespace Astrodon {
 
                     myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 ? false : true);
                     myStatement.EmailMe = (customer.statPrintorEmail == 4 ? false : true);
-                    if (customer.Email != null && customer.Email.Length > 0) {
+                    if (customer.Email != null && customer.Email.Length > 0)
+                    {
                         List<String> newEmails = new List<string>();
-                        foreach (String emailAddress in customer.Email) {
+                        foreach (String emailAddress in customer.Email)
+                        {
                             if (!emailAddress.Contains("@imp.ad-one.co.za")) { newEmails.Add(emailAddress); }
                         }
                         myStatement.email1 = newEmails.ToArray();
@@ -273,7 +332,8 @@ namespace Astrodon {
                     if (stophere) { MessageBox.Show("235"); }
 
                     myStatements.Add(myStatement);
-                } catch { }
+                }
+                catch { }
                 ccount++;
                 lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();
                 lblCCount.Refresh();
@@ -282,8 +342,10 @@ namespace Astrodon {
             return myStatements;
         }
 
-        private void SetupEmail(Statement stmt, String fileName) {
-            try {
+        private void SetupEmail(Statement stmt, String fileName)
+        {
+            try
+            {
                 String query = "INSERT INTO tblStatementRun(email1, queueDate, fileName, debtorEmail, unit, attachment, subject) VALUES(@email1, @queueDate, @fileName, @debtorEmail, @unit, @attachment, @subject)";
                 Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
                 String emailAddy = "";
@@ -295,26 +357,31 @@ namespace Astrodon {
                 sqlParms.Add("@unit", stmt.AccNo + (stmt.BuildingName == "ASTRODON RENTALS" ? "R" : ""));
                 sqlParms.Add("@subject", Path.GetFileNameWithoutExtension(fileName) + " " + DateTime.Now.ToString());
                 String attachment = "none";
-                if (!String.IsNullOrEmpty(txtAttachment.Text)) {
+                if (!String.IsNullOrEmpty(txtAttachment.Text))
+                {
                     attachment = txtAttachment.Text;
-                    if (!attachment.StartsWith("K:")) {
+                    if (!attachment.StartsWith("K:"))
+                    {
                         File.Copy(attachment, Path.Combine("K:\\Debtors System\\statement", Path.GetFileName(attachment)), true);
                         attachment = Path.GetFileName(attachment);
                     }
                 }
 
                 sqlParms.Add("@attachment", attachment);
-                if (emailAddy != "") {
+                if (emailAddy != "")
+                {
                     dh.SetData(query, sqlParms, out status);
                     if (!String.IsNullOrEmpty(status)) { MessageBox.Show(status); }
                 }
-            } catch { }
+            }
+            catch { }
         }
 
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetDefaultPrinter(string Name);
 
-        private void SendToPrinter(String fileName) { //C:\statement.pdf
+        private void SendToPrinter(String fileName)
+        { //C:\statement.pdf
             ProcessStartInfo info = new ProcessStartInfo();
             info.Verb = "print";
             info.FileName = fileName;
@@ -333,18 +400,24 @@ namespace Astrodon {
             System.Threading.Thread.Sleep(5000);
         }
 
-        private void btnFile_Click(object sender, EventArgs e) {
+        private void btnFile_Click(object sender, EventArgs e)
+        {
             OpenFileDialog ofd = new OpenFileDialog();
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                if (!String.IsNullOrEmpty(ofd.FileName) && File.Exists(ofd.FileName)) {
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (!String.IsNullOrEmpty(ofd.FileName) && File.Exists(ofd.FileName))
+                {
                     txtAttachment.Text = ofd.FileName;
                 }
-            } else {
+            }
+            else
+            {
                 txtAttachment.Text = "";
             }
         }
 
-        public int getPeriod(DateTime trnDate, int buildPeriod) {
+        public int getPeriod(DateTime trnDate, int buildPeriod)
+        {
             int myMonth = trnDate.Month;
             myMonth = myMonth - 2;
             myMonth = (myMonth < 1 ? myMonth + 12 : myMonth);
@@ -352,29 +425,36 @@ namespace Astrodon {
             return buildPeriod;
         }
 
-        private String HOAMessage1 {
-            get {
+        private String HOAMessage1
+        {
+            get
+            {
                 String hoaMessage = "Levies are due and payable on the 1st of every month in advance in terms of the Sectional Titles Act 95 of 1986 as amended and or the Articles of Association of the H.O.A.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended.";
                 return hoaMessage;
             }
         }
 
-        private String BCMessage1 {
-            get {
+        private String BCMessage1
+        {
+            get
+            {
                 String hoaMessage = "Levies are due and payable on the 1st of every month in advance in terms of the Sectional Titles Act 95 of 1986 as amended.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended.";
                 return hoaMessage;
             }
         }
 
-        private String Message2 {
-            get {
+        private String Message2
+        {
+            get
+            {
                 String hoaMessage = "***PLEASE ENSURE THAT ALL PAYMENTS REFLECTS IN OUR NOMINATED ACCOUNT ON OR BEFORE DUE DATE TO AVOID ANY PENALTIES, REFER TO TERMS AND CONDITIONS.***";
                 return hoaMessage;
             }
         }
     }
 
-    public class StatementBuilding {
+    public class StatementBuilding
+    {
         private bool process = false;
         private String building = String.Empty;
         private String dataPath = String.Empty;
@@ -383,49 +463,60 @@ namespace Astrodon {
         public bool bc = false;
         private String lastProcessed = String.Empty;
 
-        public bool Process {
+        public bool Process
+        {
             get { return process; }
             set { process = value; }
         }
 
-        public String Building {
+        public String Building
+        {
             get { return building; }
             set { building = value; }
         }
 
-        public bool HOA {
+        public bool HOA
+        {
             get { return hoa; }
         }
 
-        public bool BC {
+        public bool BC
+        {
             get { return bc; }
         }
 
-        public String LastProcessed {
+        public String LastProcessed
+        {
             get { return lastProcessed; }
             set { lastProcessed = value; }
         }
 
-        public String DataPath {
+        public String DataPath
+        {
             get { return dataPath; }
             set { dataPath = value; }
         }
 
-        public int Period {
+        public int Period
+        {
             get { return period; }
             set { period = value; }
         }
 
-        public StatementBuilding(String build, String dp, int p, DateTime lastProcessed) {
+        public StatementBuilding(String build, String dp, int p, DateTime lastProcessed)
+        {
             Process = false;
             Building = build;
             DataPath = dp;
             Period = p;
             LastProcessed = lastProcessed.ToString("yyyy/MM/dd");
-            if (building.ToLower().Contains("hoa")) {
+            if (building.ToLower().Contains("hoa"))
+            {
                 hoa = true;
                 bc = false;
-            } else {
+            }
+            else
+            {
                 hoa = false;
                 bc = true;
             }

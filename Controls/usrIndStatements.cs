@@ -153,6 +153,7 @@ namespace Astrodon
                 double totalDue = 0;
                 lineNo = 128;
                 stmt.Transactions = (new Classes.LoadTrans()).LoadTransactions(building, customer, stmtDatePicker.Value, out totalDue);
+                bool isStd = building.Bank == "STANDARD";
                 stmt.totalDue = totalDue;
                 stmt.AccNo = customer.accNumber;
                 List<String> addList = new List<string>();
@@ -204,7 +205,7 @@ namespace Astrodon
                 {
                     lineNo = 158;
                     PDF generator = new PDF(true);
-                    generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, excludeStationery);
+                    generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, isStd);
                     //generator.CreateStatement(stmt, out fileName);
                     if (!String.IsNullOrEmpty(fileName)) { success = true; }
                 }

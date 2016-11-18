@@ -779,7 +779,8 @@
             this.cmbBank.Items.AddRange(new object[] {
             "PLEASE SELECT",
             "TRUST",
-            "OWN"});
+            "OWN",
+            "STANDARD"});
             this.cmbBank.Location = new System.Drawing.Point(747, 125);
             this.cmbBank.Name = "cmbBank";
             this.cmbBank.Size = new System.Drawing.Size(150, 21);

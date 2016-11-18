@@ -1134,15 +1134,12 @@ namespace Astrodon
                 PdfWriter writer = PdfWriter.GetInstance(document, stream);
                 document.Open();
                 PdfTemplate background = null;
-                if (!excludeStationery)
-                {
-                    background = writer.GetImportedPage(reader, 1);
-                }
+                background = writer.GetImportedPage(reader, 1);
                 int transactionNumber = 0;
                 while (transactionNumber < statement.Transactions.Count)
                 {
                     int newTrnNumber = 0;
-                    CreateStatements(statement, ref document, writer, background, transactionNumber, out newTrnNumber);
+                    CreateStatements(statement, ref document, writer, background, transactionNumber, excludeStationery, out newTrnNumber);
                     transactionNumber = newTrnNumber;
                 }
 
@@ -1163,7 +1160,7 @@ namespace Astrodon
             return success;
         }
 
-        public void CreateStatements(Statement statement, ref Document document, PdfWriter writer, PdfTemplate background, int transNumber, out int newTrnNumber)
+        public void CreateStatements(Statement statement, ref Document document, PdfWriter writer, PdfTemplate background, int transNumber, bool stdBank, out int newTrnNumber)
         {
             // Create a page in the document and add it to the bottom layer
             document.NewPage();
@@ -1318,9 +1315,8 @@ namespace Astrodon
             cell5.BorderColorRight = BaseColor.BLACK;
             cell5.HorizontalAlignment = 1;
             table.AddCell(cell5);
-
-            int transCount = 30;
-            int transMax = transNumber + 30;
+            int transCount = (stdBank ? 25 : 30);
+            int transMax = transNumber + (stdBank ? 25 : 30);
             if (transMax > statement.Transactions.Count) { transMax = statement.Transactions.Count; }
             for (int i = transNumber; i < transMax; i++)
             {
@@ -1436,37 +1432,9 @@ namespace Astrodon
 
             document.Add(table);
 
-            document.Add(paragraphSpacer);
-
-            table = new PdfPTable(2);
-            table.TotalWidth = 510;
-            table.HorizontalAlignment = 0;
-            table.LockedWidth = true;
-            widths = new float[] { 125, 385 };
-            table.SetWidths(widths);
-
-            cell0 = new PdfPCell(new Paragraph("BANKING DETAILS:", font));
-            cell0.Border = topleftbottom;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorBottom = BaseColor.BLACK;
-            cell0.BorderColorLeft = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
-
-            cell0 = new PdfPCell(new Paragraph(statement.BankDetails, font));
-            cell0.HorizontalAlignment = 0;
-            cell0.Border = toprightbottom;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorBottom = BaseColor.BLACK;
-            cell0.BorderColorRight = BaseColor.BLACK;
-            table.AddCell(cell0);
-
-            document.Add(table);
-            int yAdjustment = 50;
-
             if (!String.IsNullOrEmpty(statement.Message))
             {
-                yAdjustment = 0;
+                //yAdjustment = 0;
                 document.Add(paragraphSpacer);
 
                 table = new PdfPTable(1);
@@ -1488,125 +1456,205 @@ namespace Astrodon
 
                 document.Add(table);
             }
-            document.Add(paragraphSpacer);
 
-            SetFont(24);
-            _pcb.BeginText();
-            _pcb.SetColorFill(BaseColor.LIGHT_GRAY);
-            _pcb.ShowTextAligned(0, "SAMPLE DEPOSIT SLIP", 150, 20 + yAdjustment, 10);
-            _pcb.EndText();
+            if (!stdBank)
+            {
+                document.Add(paragraphSpacer);
+                table = new PdfPTable(2);
+                table.TotalWidth = 510;
+                table.HorizontalAlignment = 0;
+                table.LockedWidth = true;
+                widths = new float[] { 125, 385 };
+                table.SetWidths(widths);
 
-            table = new PdfPTable(4);
-            table.TotalWidth = 510;
-            table.HorizontalAlignment = 0;
-            table.LockedWidth = true;
-            widths = new float[] { 127.5f, 127.5f, 127.5f, 127.5f };
-            table.SetWidths(widths);
+                cell0 = new PdfPCell(new Paragraph("BANKING DETAILS:", font));
+                cell0.Border = topleftbottom;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorBottom = BaseColor.BLACK;
+                cell0.BorderColorLeft = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph(statement.bankName, fontB));
-            cell0.Border = topleft;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorLeft = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph(statement.BankDetails, font));
+                cell0.HorizontalAlignment = 0;
+                cell0.Border = toprightbottom;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorBottom = BaseColor.BLACK;
+                cell0.BorderColorRight = BaseColor.BLACK;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph("DEPOSIT SLIP", fontB));
-            cell0.Border = top;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorLeft = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                document.Add(table);
+                int yAdjustment = 50;
 
-            cell0 = new PdfPCell(new Paragraph("DATE", fontB));
-            cell0.Border = top;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorLeft = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                #region deposit slip
 
-            cell0 = new PdfPCell(new Paragraph(statement.StmtDate.ToString("yyyy/MM/dd"), fontB));
-            cell0.Border = topright;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorRight = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                SetFont(24);
+                _pcb.BeginText();
+                _pcb.SetColorFill(BaseColor.LIGHT_GRAY);
+                _pcb.ShowTextAligned(0, "SAMPLE DEPOSIT SLIP", 150, 20 + yAdjustment, 10);
+                _pcb.EndText();
 
-            cell0 = new PdfPCell(new Paragraph("Deposit To", fontB));
-            cell0.Border = left;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorLeft = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                table = new PdfPTable(4);
+                table.TotalWidth = 510;
+                table.HorizontalAlignment = 0;
+                table.LockedWidth = true;
+                widths = new float[] { 127.5f, 127.5f, 127.5f, 127.5f };
+                table.SetWidths(widths);
 
-            cell0 = new PdfPCell(new Paragraph(statement.accName, fontB));
-            cell0.Border = Rectangle.NO_BORDER;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph(statement.bankName, fontB));
+                cell0.Border = topleft;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorLeft = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph("Branch Code", fontB));
-            cell0.Border = Rectangle.NO_BORDER;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph("DEPOSIT SLIP", fontB));
+                cell0.Border = top;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorLeft = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph(statement.branch, fontB));
-            cell0.Border = right;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorRight = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph("DATE", fontB));
+                cell0.Border = top;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorLeft = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph("Account Number", fontB));
-            cell0.Border = left;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorLeft = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph(statement.StmtDate.ToString("yyyy/MM/dd"), fontB));
+                cell0.Border = topright;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorRight = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph(statement.accNumber, fontB));
-            cell0.HorizontalAlignment = 0;
-            cell0.Border = Rectangle.NO_BORDER;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph("Deposit To", fontB));
+                cell0.Border = left;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorLeft = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph(" ", fontB));
-            cell0.Border = Rectangle.NO_BORDER;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph(statement.accName, fontB));
+                cell0.Border = Rectangle.NO_BORDER;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph(" ", fontB));
-            cell0.Border = right;
-            cell0.BorderColorTop = BaseColor.BLACK;
-            cell0.BorderColorRight = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph("Branch Code", fontB));
+                cell0.Border = Rectangle.NO_BORDER;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph("Reference", fontB));
-            cell0.Border = bottomleft;
-            cell0.BorderColorBottom = BaseColor.BLACK;
-            cell0.BorderColorLeft = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph(statement.branch, fontB));
+                cell0.Border = right;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorRight = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph(statement.AccNo, fontB));
-            cell0.Border = bottom;
-            cell0.BorderColorBottom = BaseColor.BLACK;
-            cell0.BorderColorLeft = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph("Account Number", fontB));
+                cell0.Border = left;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorLeft = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph("Total", fontB));
-            cell0.Border = bottom;
-            cell0.BorderColorBottom = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph(statement.accNumber, fontB));
+                cell0.HorizontalAlignment = 0;
+                cell0.Border = Rectangle.NO_BORDER;
+                table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph(statement.totalDue.ToString("#,##0.00"), fontB));
-            cell0.Border = bottomright;
-            cell0.BorderColorBottom = BaseColor.BLACK;
-            cell0.BorderColorRight = BaseColor.BLACK;
-            cell0.HorizontalAlignment = 0;
-            table.AddCell(cell0);
+                cell0 = new PdfPCell(new Paragraph(" ", fontB));
+                cell0.Border = Rectangle.NO_BORDER;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
 
-            document.Add(table);
+                cell0 = new PdfPCell(new Paragraph(" ", fontB));
+                cell0.Border = right;
+                cell0.BorderColorTop = BaseColor.BLACK;
+                cell0.BorderColorRight = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
+
+                cell0 = new PdfPCell(new Paragraph("Reference", fontB));
+                cell0.Border = bottomleft;
+                cell0.BorderColorBottom = BaseColor.BLACK;
+                cell0.BorderColorLeft = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
+
+                cell0 = new PdfPCell(new Paragraph(statement.AccNo, fontB));
+                cell0.Border = bottom;
+                cell0.BorderColorBottom = BaseColor.BLACK;
+                cell0.BorderColorLeft = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
+
+                cell0 = new PdfPCell(new Paragraph("Total", fontB));
+                cell0.Border = bottom;
+                cell0.BorderColorBottom = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
+
+                cell0 = new PdfPCell(new Paragraph(statement.totalDue.ToString("#,##0.00"), fontB));
+                cell0.Border = bottomright;
+                cell0.BorderColorBottom = BaseColor.BLACK;
+                cell0.BorderColorRight = BaseColor.BLACK;
+                cell0.HorizontalAlignment = 0;
+                table.AddCell(cell0);
+
+                document.Add(table);
+
+                #endregion deposit slip
+            }
+            else
+            {
+                try
+                {
+                    CustomDashedLineSeparator separator = new CustomDashedLineSeparator();
+                    separator.Dash = 10;
+                    separator.Gap = 7;
+                    separator.LineWidth = 1;
+                    Chunk linebreak = new Chunk(separator);
+                    document.Add(linebreak);
+
+                    System.Drawing.Image myMd5 = Properties.Resources.stdmd5;
+                    //System.Drawing.Image.FromFile(filePath);
+                    int myHeight = myMd5.Height;
+                    int myWidth = myMd5.Width;
+                    iTextSharp.text.Image md5 = iTextSharp.text.Image.GetInstance(myMd5, System.Drawing.Imaging.ImageFormat.Png);
+                    //MessageBox.Show(PageSize.A4.Width.ToString());
+                    float x = 555;
+                    float ratio = x / md5.Width;
+                    float newHeight = md5.Height * ratio;
+                    md5.ScaleAbsoluteWidth(x);
+                    md5.ScaleAbsoluteHeight(newHeight);
+                    float leftM = (PageSize.A4.Width - x) / 2;
+                    md5.SetAbsolutePosition(leftM, 0);
+                    _pcb = writer.DirectContentUnder;
+                    _pcb.BeginText();
+                    _pcb.AddImage(md5);
+                    _pcb.EndText();
+                    SetFont(8, false);
+
+                    _pcb = writer.DirectContent;
+                    _pcb.BeginText();
+                    _pcb.SetTextMatrix(leftM + 90, 165);
+                    _pcb.ShowText(statement.accName);
+                    _pcb.SetTextMatrix(leftM + 90, 150);
+                    _pcb.ShowText(statement.accNumber);
+                    _pcb.SetTextMatrix(leftM + 90, 130);
+                    _pcb.ShowText(statement.branch);
+                    _pcb.SetTextMatrix(leftM + 90, 115);
+                    _pcb.ShowText(statement.AccNo);
+                    _pcb.EndText();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("MD5" + ex.Message);
+                }
+            }
 
             #endregion table
         }
@@ -3124,6 +3172,45 @@ namespace Astrodon
         {
             description = dr["description"].ToString();
             amount = double.Parse(dr["amount"].ToString());
+        }
+    }
+
+    public class CustomDashedLineSeparator : iTextSharp.text.pdf.draw.DottedLineSeparator
+    {
+        public Single dash = 5;
+        public Single phase = 2.5F;
+
+        public Single Dash
+        {
+            get
+            {
+                return dash;
+            }
+            set
+            {
+                dash = value;
+            }
+        }
+
+        public Single Phase
+        {
+            get
+            {
+                return phase;
+            }
+            set
+            {
+                phase = value;
+            }
+        }
+
+        public void draw(PdfContentByte canvas, Single llx, Single lly, Single urx, Single ury, Single y)
+        {
+            canvas.SaveState();
+            //canvas.li = LineWidth;
+            canvas.SetLineDash(dash, Gap, phase);
+            DrawLine(canvas, llx, urx, y);
+            canvas.RestoreState();
         }
     }
 }
