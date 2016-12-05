@@ -153,7 +153,7 @@ namespace Astrodon
                 double totalDue = 0;
                 lineNo = 128;
                 stmt.Transactions = (new Classes.LoadTrans()).LoadTransactions(building, customer, stmtDatePicker.Value, out totalDue);
-                bool isStd = building.Bank == "STANDARD";
+                bool isStd = building.Bank_Name.ToLower().Contains("standard");
                 stmt.totalDue = totalDue;
                 stmt.AccNo = customer.accNumber;
                 List<String> addList = new List<string>();

@@ -1100,7 +1100,7 @@ namespace Astrodon
             }
         }
 
-        public bool CreateStatement(Statement statement, bool isBuilding, out String fName, bool excludeStationery = false)
+        public bool CreateStatement(Statement statement, bool isBuilding, out String fName, bool stdBank = false)
         {
             bool success = false;
             String message = "";
@@ -1139,7 +1139,7 @@ namespace Astrodon
                 while (transactionNumber < statement.Transactions.Count)
                 {
                     int newTrnNumber = 0;
-                    CreateStatements(statement, ref document, writer, background, transactionNumber, excludeStationery, out newTrnNumber);
+                    CreateStatements(statement, ref document, writer, background, transactionNumber, stdBank, out newTrnNumber);
                     transactionNumber = newTrnNumber;
                 }
 
@@ -1636,18 +1636,47 @@ namespace Astrodon
                     _pcb.BeginText();
                     _pcb.AddImage(md5);
                     _pcb.EndText();
-                    SetFont(8, false);
+                    SetFont(12, false);
 
                     _pcb = writer.DirectContent;
                     _pcb.BeginText();
-                    _pcb.SetTextMatrix(leftM + 90, 165);
+                    _pcb.SetTextMatrix(leftM + 87, 165);
                     _pcb.ShowText(statement.accName);
-                    _pcb.SetTextMatrix(leftM + 90, 150);
-                    _pcb.ShowText(statement.accNumber);
-                    _pcb.SetTextMatrix(leftM + 90, 130);
-                    _pcb.ShowText(statement.branch);
-                    _pcb.SetTextMatrix(leftM + 90, 115);
-                    _pcb.ShowText(statement.AccNo);
+
+                    List<String> accNumber = SplitWord(statement.accNumber);
+                    float stdx = leftM + 87;
+                    float stdy = 145;
+                    for (int i = 0; i < accNumber.Count; i++)
+                    {
+                        _pcb.SetTextMatrix(stdx, stdy);
+                        _pcb.ShowText(accNumber[i]);
+                        stdx += 11;
+                    }
+                    //_pcb.SetTextMatrix(leftM + 85, 145);
+                    //_pcb.ShowText(statement.accNumber);
+
+                    List<String> branch = SplitWord(statement.branch);
+                    stdx = leftM + 87;
+                    stdy = 125;
+                    for (int i = 0; i < branch.Count; i++)
+                    {
+                        _pcb.SetTextMatrix(stdx, stdy);
+                        _pcb.ShowText(branch[i]);
+                        stdx += 11;
+                    }
+                    //_pcb.SetTextMatrix(leftM + 85, 130);
+                    //_pcb.ShowText(statement.branch);
+
+                    List<String> AccNo = SplitWord(statement.AccNo);
+                    stdx = leftM + 87;
+                    stdy = 105;
+                    for (int i = 0; i < AccNo.Count; i++)
+                    {
+                        _pcb.SetTextMatrix(stdx, stdy);
+                        _pcb.ShowText(AccNo[i]);
+                        stdx += 11;
+                    }
+                    // _pcb.SetTextMatrix(leftM + 85, 115); _pcb.ShowText(statement.AccNo);
                     _pcb.EndText();
                 }
                 catch (Exception ex)
@@ -1657,6 +1686,43 @@ namespace Astrodon
             }
 
             #endregion table
+        }
+
+        public List<string> SplitWord(string s)
+        {
+            char[] a = s.ToCharArray();
+            List<String> wordList = new List<string>();
+            for (int i = 0; i < a.Length; i++)
+            {
+                wordList.Add(a[i].ToString());
+            }
+
+            return wordList;
+        }
+
+        public static string DoubleSpace(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+
+            char[] a = s.ToCharArray();
+            char[] b = new char[(a.Length * 2) - 1];
+
+            int bIndex = 0;
+            for (int i = 0; i < a.Length; i++)
+            {
+                b[bIndex++] = a[i];
+
+                //Insert a white space after the char
+                if (i < (a.Length - 1))
+                {
+                    b[bIndex++] = ' ';
+                }
+            }
+
+            return new string(b);
         }
 
         public bool CreateReminderLetter(String accNo, String letterDate, String customerName, String[] address, String amtDue, String amtAdmin, String faxNumber, String dName, String dTelephone, bool isHOA, out String fName)

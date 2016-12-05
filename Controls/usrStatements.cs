@@ -174,7 +174,7 @@ namespace Astrodon
                     String accName = dr["accName"].ToString();
                     String bankAccNumber = dr["bankAccNumber"].ToString();
                     String branch = dr["branch"].ToString();
-                    bool isStd = dr["bank"].ToString() == "STANDARD";
+                    bool isStd = bankName.ToLower().Contains("standard");// dr["bank"].ToString() == "STANDARD";
                     foreach (Statement s in bStatements)
                     {
                         s.pm = pm;
