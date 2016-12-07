@@ -1100,15 +1100,16 @@ namespace Astrodon
             }
         }
 
-        public bool CreateStatement(Statement statement, bool isBuilding, out String fName, bool stdBank = false)
+        public bool CreateStatement(Statement statement, bool isBuilding, out String fName, bool stdBank = false, bool preprint = false)
         {
+            stdBank = Properties.Settings.Default.StandardBankStatements == true ? stdBank : false;
             bool success = false;
             String message = "";
             message = "Starting";
 
             #region Create Document
 
-            String templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "stmt_template.pdf");
+            String templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.statementTemplate);
             PdfReader reader = new PdfReader(templateFile);
             fName = String.Empty;
             Document document = new Document();
@@ -1139,7 +1140,7 @@ namespace Astrodon
                 while (transactionNumber < statement.Transactions.Count)
                 {
                     int newTrnNumber = 0;
-                    CreateStatements(statement, ref document, writer, background, transactionNumber, stdBank, out newTrnNumber);
+                    CreateStatements(statement, ref document, writer, background, transactionNumber, stdBank, preprint, out newTrnNumber);
                     transactionNumber = newTrnNumber;
                 }
 
@@ -1160,11 +1161,11 @@ namespace Astrodon
             return success;
         }
 
-        public void CreateStatements(Statement statement, ref Document document, PdfWriter writer, PdfTemplate background, int transNumber, bool stdBank, out int newTrnNumber)
+        public void CreateStatements(Statement statement, ref Document document, PdfWriter writer, PdfTemplate background, int transNumber, bool stdBank, bool preprint, out int newTrnNumber)
         {
             // Create a page in the document and add it to the bottom layer
             document.NewPage();
-            if (background != null)
+            if (background != null && !preprint)
             {
                 _pcb = writer.DirectContentUnder;
                 _pcb.AddTemplate(background, 0, 0);
@@ -1182,11 +1183,19 @@ namespace Astrodon
             _pcb.EndText();
 
             _pcb.BeginText();
-            _pcb.ShowTextAligned(0, statement.pm, 350, 700, 0);
+            _pcb.ShowTextAligned(0, statement.pm, 350, 710, 0);
             _pcb.EndText();
 
             _pcb.BeginText();
-            _pcb.ShowTextAligned(0, statement.DebtorEmail, 350, 660, 0);
+            _pcb.ShowTextAligned(0, GetUserName(statement.pm), 350, 700, 0);
+            _pcb.EndText();
+
+            _pcb.BeginText();
+            _pcb.ShowTextAligned(0, statement.DebtorEmail, 350, 670, 0);
+            _pcb.EndText();
+
+            _pcb.BeginText();
+            _pcb.ShowTextAligned(0, GetUserName(statement.DebtorEmail), 350, 660, 0);
             _pcb.EndText();
 
             int startY = 700;
@@ -1213,14 +1222,14 @@ namespace Astrodon
             float[] widths = new float[] { 220 };
             table.SetWidths(widths);
             table.DefaultCell.Border = 0;
-
-            //#region InvHeader
-            PdfPCell cell0 = new PdfPCell(new Paragraph(statement.LevyMessage1, font));
+            String lm1 = preprint ? new string(' ', statement.LevyMessage1.Length) : statement.LevyMessage1;
+            String lm2 = preprint ? new string(' ', statement.LevyMessage2.Length) : statement.LevyMessage2;
+            PdfPCell cell0 = new PdfPCell(new Paragraph(lm1, font));
             cell0.HorizontalAlignment = 0;
             cell0.Colspan = 1;
             cell0.Border = 0;
             table.AddCell(cell0);
-            cell0 = new PdfPCell(new Paragraph(statement.LevyMessage2, fontB));
+            cell0 = new PdfPCell(new Paragraph(lm2, fontB));
             cell0.HorizontalAlignment = 0;
             cell0.Colspan = 1;
             cell0.Border = 0;
@@ -1229,12 +1238,25 @@ namespace Astrodon
 
             document.Add(paragraphSpacer);
             document.Add(paragraphSpacer);
-
-            table = new PdfPTable(7);
+            if (!preprint)
+            {
+                table = new PdfPTable(7);
+            }
+            else
+            {
+                table = new PdfPTable(5);
+            }
             table.TotalWidth = 510;
             table.HorizontalAlignment = 0;
             table.LockedWidth = true;
-            widths = new float[] { 50, 50, 50, 50, 200, 100, 110 };
+            if (!preprint)
+            {
+                widths = new float[] { 50, 50, 50, 50, 200, 100, 110 };
+            }
+            else
+            {
+                widths = new float[] { 80, 80, 50, 200, 100, 110 };
+            }
             table.SetWidths(widths);
 
             int topleftbottom = 0;
@@ -1265,30 +1287,30 @@ namespace Astrodon
                 all = Rectangle.TOP_BORDER | Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER;
             }
 
-            PdfPCell cell1 = new PdfPCell(new Paragraph("Date", fontB));
+            PdfPCell cell1 = new PdfPCell(new Paragraph(preprint ? "    " : "Date", fontB));
             cell1.HorizontalAlignment = 0;
-            cell1.BackgroundColor = BaseColor.LIGHT_GRAY;
-            cell1.Border = topleftbottom;
+            cell1.BackgroundColor = preprint ? BaseColor.WHITE : BaseColor.LIGHT_GRAY;
+            cell1.Border = preprint ? Rectangle.NO_BORDER : topleftbottom;
             cell1.BorderColorTop = BaseColor.BLACK;
             cell1.BorderColorLeft = BaseColor.BLACK;
             cell1.BorderColorBottom = BaseColor.DARK_GRAY;
             cell1.BorderColorRight = BaseColor.WHITE;
             table.AddCell(cell1);
 
-            PdfPCell cell2 = new PdfPCell(new Paragraph("Reference", fontB));
+            PdfPCell cell2 = new PdfPCell(new Paragraph(preprint ? "    " : "Reference", fontB));
             cell2.HorizontalAlignment = 0;
-            cell2.BackgroundColor = BaseColor.LIGHT_GRAY;
-            cell2.Border = topbottom;
+            cell2.BackgroundColor = preprint ? BaseColor.WHITE : BaseColor.LIGHT_GRAY;
+            cell2.Border = preprint ? Rectangle.NO_BORDER : topbottom;
             cell2.BorderColorTop = BaseColor.BLACK;
             cell2.BorderColorLeft = BaseColor.WHITE;
             cell2.BorderColorBottom = BaseColor.DARK_GRAY;
             cell2.BorderColorRight = BaseColor.WHITE;
             table.AddCell(cell2);
 
-            PdfPCell cell3 = new PdfPCell(new Paragraph("Description", fontB));
-            cell3.BackgroundColor = BaseColor.LIGHT_GRAY;
+            PdfPCell cell3 = new PdfPCell(new Paragraph(preprint ? "    " : "Description", fontB));
+            cell3.BackgroundColor = preprint ? BaseColor.WHITE : BaseColor.LIGHT_GRAY;
             cell3.Colspan = 3;
-            cell3.Border = topbottom;
+            cell3.Border = preprint ? Rectangle.NO_BORDER : topbottom;
             cell3.BorderColorTop = BaseColor.BLACK;
             cell3.BorderColorLeft = BaseColor.WHITE;
             cell3.BorderColorBottom = BaseColor.DARK_GRAY;
@@ -1296,19 +1318,19 @@ namespace Astrodon
             cell3.HorizontalAlignment = 0;
             table.AddCell(cell3);
 
-            PdfPCell cell4 = new PdfPCell(new Paragraph("Transaction Amount", fontB));
-            cell4.BackgroundColor = BaseColor.LIGHT_GRAY;
+            PdfPCell cell4 = new PdfPCell(new Paragraph(preprint ? "    " : "Transaction Amount", fontB));
+            cell4.BackgroundColor = preprint ? BaseColor.WHITE : BaseColor.LIGHT_GRAY;
             cell4.HorizontalAlignment = 1;
-            cell4.Border = topbottom;
+            cell4.Border = preprint ? Rectangle.NO_BORDER : topbottom;
             cell4.BorderColorTop = BaseColor.BLACK;
             cell4.BorderColorLeft = BaseColor.WHITE;
             cell4.BorderColorBottom = BaseColor.DARK_GRAY;
             cell4.BorderColorRight = BaseColor.WHITE;
             table.AddCell(cell4);
 
-            PdfPCell cell5 = new PdfPCell(new Paragraph("Accumulated Balance", fontB));
-            cell5.BackgroundColor = BaseColor.LIGHT_GRAY;
-            cell5.Border = toprightbottom;
+            PdfPCell cell5 = new PdfPCell(new Paragraph(preprint ? "    " : "Accumulated Balance", fontB));
+            cell5.BackgroundColor = preprint ? BaseColor.WHITE : BaseColor.LIGHT_GRAY;
+            cell5.Border = preprint ? Rectangle.NO_BORDER : toprightbottom;
             cell5.BorderColorTop = BaseColor.BLACK;
             cell5.BorderColorLeft = BaseColor.WHITE;
             cell5.BorderColorBottom = BaseColor.DARK_GRAY;
@@ -1388,7 +1410,7 @@ namespace Astrodon
             }
             //#region Totals
 
-            cell0 = new PdfPCell(new Paragraph("***PLEASE USE THE FOLLOWING", font));
+            cell0 = new PdfPCell(new Paragraph("TO ENSURE PROMPT ALLOCATION ONLY USE", font));
             cell0.Border = topleftbottom;
             cell0.BorderColorTop = BaseColor.BLACK;
             cell0.BorderColorBottom = BaseColor.BLACK;
@@ -1405,7 +1427,7 @@ namespace Astrodon
             cell0.BorderColorBottom = BaseColor.BLACK;
             table.AddCell(cell0);
 
-            cell0 = new PdfPCell(new Paragraph("AS REFERENCE***", font));
+            cell0 = new PdfPCell(new Paragraph("AS REFERENCE", font));
             cell0.HorizontalAlignment = 0;
             cell0.Border = toprightbottom;
             cell0.BorderColorTop = BaseColor.BLACK;
@@ -1686,6 +1708,22 @@ namespace Astrodon
             }
 
             #endregion table
+        }
+
+        private String GetUserName(String emailAddress)
+        {
+            String query = "SELECT name FROM tblUsers WHERE email = '" + emailAddress + "'";
+            SqlDataHandler dh = new SqlDataHandler();
+            String status;
+            DataSet ds = dh.GetData(query, null, out status);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                return ds.Tables[0].Rows[0]["name"].ToString();
+            }
+            else
+            {
+                return "";
+            }
         }
 
         public List<string> SplitWord(string s)

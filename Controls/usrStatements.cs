@@ -429,7 +429,7 @@ namespace Astrodon
         {
             get
             {
-                String hoaMessage = "Levies are due and payable on the 1st of every month in advance in terms of the Sectional Titles Act 95 of 1986 as amended and or the Articles of Association of the H.O.A.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended.";
+                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
                 return hoaMessage;
             }
         }
@@ -438,7 +438,7 @@ namespace Astrodon
         {
             get
             {
-                String hoaMessage = "Levies are due and payable on the 1st of every month in advance in terms of the Sectional Titles Act 95 of 1986 as amended.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended.";
+                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
                 return hoaMessage;
             }
         }
