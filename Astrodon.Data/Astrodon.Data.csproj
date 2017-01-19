@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{89422917-7104-43AA-B124-BCCABF3C733B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Astrodon.Data</RootNamespace>
+    <AssemblyName>Astrodon.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataContext.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tblAttachment.cs" />
+    <Compile Include="tblBankCharge.cs" />
+    <Compile Include="tblBuilding.cs" />
+    <Compile Include="tblBuildingSetting.cs" />
+    <Compile Include="tblCashDeposit.cs" />
+    <Compile Include="tblClearance.cs" />
+    <Compile Include="tblClearanceTransaction.cs" />
+    <Compile Include="tblCustomerNote.cs" />
+    <Compile Include="tblDebtor.cs" />
+    <Compile Include="tblDevision.cs" />
+    <Compile Include="tblEmail.cs" />
+    <Compile Include="tblEmbedType.cs" />
+    <Compile Include="tblExport.cs" />
+    <Compile Include="tblJob.cs" />
+    <Compile Include="tblJobAttachment.cs" />
+    <Compile Include="tblJobCustomer.cs" />
+    <Compile Include="tblJobStatu.cs" />
+    <Compile Include="tblJobUpdate.cs" />
+    <Compile Include="tblJournal.cs" />
+    <Compile Include="tblLedgerTransaction.cs" />
+    <Compile Include="tblLetterRun.cs" />
+    <Compile Include="tblMatch.cs" />
+    <Compile Include="tblMonthFin.cs" />
+    <Compile Include="tblMsg.cs" />
+    <Compile Include="tblMsgData.cs" />
+    <Compile Include="tblMsgRecipient.cs" />
+    <Compile Include="tblPAStatu.cs" />
+    <Compile Include="tblPMCustomer.cs" />
+    <Compile Include="tblPMJob.cs" />
+    <Compile Include="tblPMJobStatu.cs" />
+    <Compile Include="tblPMQCustomer.cs" />
+    <Compile Include="tblPMQStatu.cs" />
+    <Compile Include="tblPMQueue.cs" />
+    <Compile Include="tblPMStatu.cs" />
+    <Compile Include="tblReminder.cs" />
+    <Compile Include="tblRental.cs" />
+    <Compile Include="tblRentalAccount.cs" />
+    <Compile Include="tblRentalRecon.cs" />
+    <Compile Include="tblRequisition.cs" />
+    <Compile Include="tblRunConfig.cs" />
+    <Compile Include="tblSetting.cs" />
+    <Compile Include="tblSM.cs" />
+    <Compile Include="tblStatement.cs" />
+    <Compile Include="tblStatementRun.cs" />
+    <Compile Include="tblStatu.cs" />
+    <Compile Include="tblTemplate.cs" />
+    <Compile Include="tblUnallocated.cs" />
+    <Compile Include="tblUser.cs" />
+    <Compile Include="tblUserBuilding.cs" />
+    <Compile Include="tblUserLog.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

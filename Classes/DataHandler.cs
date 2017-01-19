@@ -9,30 +9,43 @@ namespace Astrodon
 {
     public class SqlDataHandler
     {
-        public String connString = "Data Source=SERVER2\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=sa"; //Astrodon
-        public String connStringL = "Data Source=STEPHEN-PC\\MTDNDSQL;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=m3t@p@$$"; //Local
-        public String connStringD = "Data Source=DEVELOPERPC\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=$DEVELOPER$"; //Astrodon
-        public String connStringLocal = "Data Source=.;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=1q2w#E$R"; //LamaDev
+        private static String connStringDefault = "Data Source=SERVER2\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=sa"; //Astrodon
+        private static String connStringL = "Data Source=STEPHEN-PC\\MTDNDSQL;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=m3t@p@$$"; //Local
+        private static String connStringD = "Data Source=DEVELOPERPC\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=$DEVELOPER$"; //Astrodon
+        private static String connStringLocal = "Data Source=.;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=1q2w#E$R"; //LamaDev
+        public string  connString = null;
+
         public SqlConnection sqlConnection;
         private SqlCommand cmd;
 
         public SqlDataHandler()
         {
-            if (Environment.MachineName == "STEPHEN-PC")
-            {
-                connString = connStringL;
-            }
-            else if (Environment.MachineName == "DEVELOPERPC")
-            {
-                connString = connStringD;
-            }
-            else if (Environment.MachineName == "PASTELPARTNER")
-                connString = connStringLocal;
+            connString = GetConnectionString();
 
             sqlConnection = new SqlConnection(connString);
             cmd = new SqlCommand();
             cmd.Connection = sqlConnection;
             cmd.CommandType = CommandType.Text;
+        }
+
+        private static string GetConnectionString()
+        {
+            if (Environment.MachineName == "STEPHEN-PC")
+            {
+                return connStringL;
+            }
+            else if (Environment.MachineName == "DEVELOPERPC")
+            {
+                return connStringD;
+            }
+            else if (Environment.MachineName == "PASTELPARTNER")
+                return connStringLocal;
+            return connStringDefault;
+        }
+
+        public static Astrodon.Data.DataContext GetDataContext()
+        {
+            return new Astrodon.Data.DataContext(GetConnectionString());
         }
 
         public DataSet GetData(String sqlQuery, Dictionary<String, Object> sqlParms, out String status)
