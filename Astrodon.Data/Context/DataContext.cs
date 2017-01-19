@@ -12,6 +12,8 @@ namespace Astrodon.Data
 {
     public partial class DataContext : DbContext
     {
+        #region Ctor
+
         public DataContext()
             : base("DataContext")
         {
@@ -30,6 +32,9 @@ namespace Astrodon.Data
 
         }
 
+        #endregion
+
+        #region Setup
 
         public static void Setup(string connectionString)
         {
@@ -42,22 +47,27 @@ namespace Astrodon.Data
 
         private static void Setup(DbConnection dbConnection, bool initDefaultData = true)
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataContext, Migrations.Configuration>());
-            using (var context = new DataContext(dbConnection))
-            {
-                try
-                {
-                    context.Database.Initialize(true);
-                }
-                catch (InvalidOperationException ex)
-                {
-                    throw ex;
-                }
-                catch (ModelValidationException ex)
-                {
-                    throw ex;
-                }
-            }
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataContext, Migrations.Configuration>());
+            //using (var context = new DataContext(dbConnection))
+            //{
+            //    try
+            //    {
+            //        context.Database.Initialize(true);
+                
+            //    }
+            //    catch (InvalidOperationException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //    catch (ModelValidationException ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
         }
+
+        #endregion
+
+//        public DbSet<BuildingMaintenanceConfiguration> BuildingMaintenanceConfigurationSet { get; set; }
     }
 }
