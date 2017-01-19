@@ -9,7 +9,8 @@ namespace Astrodon.Data
     public partial class tblSetting
     {
         [Key]
-        [Column(Order = 0, TypeName = "ntext")]
+        [Column(Order = 0)]
+        [MaxLength(200)]
         public string templatedir { get; set; }
 
         [Key]

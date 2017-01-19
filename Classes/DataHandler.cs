@@ -11,6 +11,8 @@ namespace Astrodon
     {
         private static String connStringDefault = "Data Source=SERVER2\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=sa"; //Astrodon
         private static String connStringL = "Data Source=STEPHEN-PC\\MTDNDSQL;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=m3t@p@$$"; //Local
+
+      
         private static String connStringD = "Data Source=DEVELOPERPC\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=$DEVELOPER$"; //Astrodon
         private static String connStringLocal = "Data Source=.;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=1q2w#E$R"; //LamaDev
         public string  connString = null;
@@ -43,10 +45,18 @@ namespace Astrodon
             return connStringDefault;
         }
 
+        #region Entity Framework Hooks
         public static Astrodon.Data.DataContext GetDataContext()
         {
             return new Astrodon.Data.DataContext(GetConnectionString());
         }
+
+        public static void MigrateEFDataBase()
+        {
+            Astrodon.Data.DataContext.Setup(GetConnectionString());
+        }
+        #endregion
+
 
         public DataSet GetData(String sqlQuery, Dictionary<String, Object> sqlParms, out String status)
         {
