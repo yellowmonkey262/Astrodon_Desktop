@@ -1,0 +1,41 @@
+﻿Editable match list
+Debtors reports 
+	- Monthly
+	- Daily
+	- Statements
+	- Letters
+PM Management report
+	- Balance & Transactions
+	- Web docs
+Building maintenance
+	- Web docs
+			Printable tree structure:
+	•	Building
+	•	Image
+	•	Image Date
+	•	Address
+	•	Folder
+	o	File Name
+	o	File Date
+	•	Folder
+	o	File Name
+	o	File Date
+	o	Trustee registration, login and document visibility
+	- Add / edit / remove building
+	- Remove customer docs
+	- Auto purge customer docs > 16 months old
+Monthly financial checklist
+Disconnection / Reconnection module
+	On disconnection:
+•	Send sms, change customer category & process journal
+•	Add client to “New” disconnection list
+	System to produce three disconnection lists
+•	New; Old; Combined
+	Ability to mark a client as physically disconnected with comments
+•	Once physically disconnected, the client moves to the old list
+	Display disconnection list:
+•	Fields: Acc # | Amount O/S | Disconnected date | Reconnect Requested (Checkbox) | Last Paid Date | Comments
+•	When “Reconnect Requested” is checked display a popup:
+o	Request Date | POP Received | Verified payment
+o	Process adds the client to reconnect list
+o	Reconnect list automatically emailed Monday – Friday at 12pm.
