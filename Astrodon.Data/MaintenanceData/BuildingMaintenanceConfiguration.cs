@@ -6,8 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
-namespace Astrodon.Data.Maintenance
+namespace Astrodon.Data.MaintenanceData
 {
+    [Table("BuildingMaintenanceConfiguration")]
     public class BuildingMaintenanceConfiguration : DbEntity
     {
         [Index("UIDX_BuildingMaintenanceConfiguration",IsUnique =true,Order =0)]
@@ -18,12 +19,16 @@ namespace Astrodon.Data.Maintenance
 
         [MaxLength(200)]
         [Index("UIDX_BuildingMaintenanceConfiguration", IsUnique = true, Order = 1)]
+        [Required]
         public virtual string PastelAccountNumber { get; set; }
 
         [MaxLength(200)]
+        [Required]
         public virtual string Name { get; set; }
 
         public MaintenanceClassificationType MaintenanceClassificationType { get; set; }
+
+        public virtual ICollection<Maintenance> MaintenanceItems { get; set; }
 
     }
 }

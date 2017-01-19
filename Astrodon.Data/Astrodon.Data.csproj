@@ -53,11 +53,18 @@
     <Compile Include="Base\DbEntity.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
-    <Compile Include="Maintenance\BuildingMaintenanceConfiguration.cs" />
-    <Compile Include="Maintenance\MaintenanceClassificationType.cs" />
+    <Compile Include="MaintenanceData\BuildingMaintenanceConfiguration.cs" />
+    <Compile Include="MaintenanceData\DurationType.cs" />
+    <Compile Include="MaintenanceData\Maintenance.cs" />
+    <Compile Include="MaintenanceData\MaintenanceClassificationType.cs" />
+    <Compile Include="MaintenanceData\MaintenanceDocument.cs" />
     <Compile Include="Migrations\201701191057016_InitialCreate.cs" />
     <Compile Include="Migrations\201701191057016_InitialCreate.Designer.cs">
       <DependentUpon>201701191057016_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701191246111_MaintenanceTracking.cs" />
+    <Compile Include="Migrations\201701191246111_MaintenanceTracking.Designer.cs">
+      <DependentUpon>201701191246111_MaintenanceTracking.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +118,8 @@
     <Compile Include="Entities\tblUser.cs" />
     <Compile Include="Entities\tblUserBuilding.cs" />
     <Compile Include="Entities\tblUserLog.cs" />
+    <Compile Include="SupplierData\Supplier.cs" />
+    <Compile Include="SupplierData\SupplierAudit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -119,6 +128,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201701191057016_InitialCreate.resx">
       <DependentUpon>201701191057016_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701191246111_MaintenanceTracking.resx">
+      <DependentUpon>201701191246111_MaintenanceTracking.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

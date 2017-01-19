@@ -1,6 +1,7 @@
 ﻿
 //using Astrodon.Data.Maintenance;
-using Astrodon.Data.Maintenance;
+using Astrodon.Data.MaintenanceData;
+using Astrodon.Data.SupplierData;
 using System;
 using System.Configuration;
 using System.Data.Common;
@@ -61,10 +62,14 @@ namespace Astrodon.Data
             }
         }
 
-       
+
 
         #endregion
 
         public DbSet<BuildingMaintenanceConfiguration> BuildingMaintenanceConfigurationSet { get; set; }
+        public DbSet<Supplier> SupplierSet { get; set; }
+        public DbSet<SupplierAudit> SupplierAuditSet { get; set; }
+        public DbSet<Maintenance> MaintenanceSet { get; set; }
+        public DbSet<MaintenanceDocument> MaintenanceDocumentSet { get; set; }
     }
 }

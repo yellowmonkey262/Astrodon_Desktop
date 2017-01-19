@@ -11,7 +11,9 @@ namespace Astrodon.Data.Migrations
 
         public Configuration()
         {
-            this.TargetDatabase = new System.Data.Entity.Infrastructure.DbConnectionInfo(Configuration.MigrationConnectionString, "System.Data.SqlClient");
+            if(!string.IsNullOrEmpty(Configuration.MigrationConnectionString))
+               this.TargetDatabase = new System.Data.Entity.Infrastructure.DbConnectionInfo(Configuration.MigrationConnectionString, "System.Data.SqlClient");
+
             AutomaticMigrationsEnabled = false;
         }
 
