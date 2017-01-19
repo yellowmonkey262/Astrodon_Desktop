@@ -153,6 +153,7 @@ namespace Astrodon
                 double totalDue = 0;
                 lineNo = 128;
                 stmt.Transactions = (new Classes.LoadTrans()).LoadTransactions(building, customer, stmtDatePicker.Value, out totalDue);
+                bool isStd = building.Bank_Name.ToLower().Contains("standard");
                 stmt.totalDue = totalDue;
                 stmt.AccNo = customer.accNumber;
                 List<String> addList = new List<string>();
@@ -204,7 +205,7 @@ namespace Astrodon
                 {
                     lineNo = 158;
                     PDF generator = new PDF(true);
-                    generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, excludeStationery);
+                    generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, isStd);
                     //generator.CreateStatement(stmt, out fileName);
                     if (!String.IsNullOrEmpty(fileName)) { success = true; }
                 }
@@ -232,7 +233,7 @@ namespace Astrodon
         {
             get
             {
-                String hoaMessage = "Levies are due and payable on the 1st of every month in advance in terms of the Sectional Titles Act 95 of 1986 as amended and or the Articles of Association of the H.O.A.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended.";
+                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
                 return hoaMessage;
             }
         }
@@ -241,7 +242,7 @@ namespace Astrodon
         {
             get
             {
-                String hoaMessage = "Levies are due and payable on the 1st of every month in advance in terms of the Sectional Titles Act 95 of 1986 as amended.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended.";
+                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
                 return hoaMessage;
             }
         }

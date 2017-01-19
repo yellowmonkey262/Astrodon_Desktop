@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Astrodon {
-
-    public class Statements {
+namespace Astrodon
+{
+    public class Statements
+    {
         public List<Statement> statements { get; set; }
     }
 
-    public class Statement {
+    public class Statement
+    {
         public DateTime StmtDate { get; set; }
 
         public String DebtorEmail { get; set; }
@@ -46,10 +48,13 @@ namespace Astrodon {
 
         public String accNumber { get; set; }
 
+        public bool isStd { get; set; }
+
         public String pm { get; set; }
     }
 
-    public class Transaction {
+    public class Transaction
+    {
         public DateTime TrnDate { get; set; }
 
         public String Reference { get; set; }
