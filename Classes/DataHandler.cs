@@ -48,7 +48,8 @@ namespace Astrodon
         #region Entity Framework Hooks
         public static Astrodon.Data.DataContext GetDataContext()
         {
-            return new Astrodon.Data.DataContext(GetConnectionString());
+            var dbContext = new Astrodon.Data.DataContext(GetConnectionString());
+            return dbContext;
         }
 
         public static void MigrateEFDataBase()

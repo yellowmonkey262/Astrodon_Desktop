@@ -1,4 +1,6 @@
 ﻿
+//using Astrodon.Data.Maintenance;
+using Astrodon.Data.Maintenance;
 using System;
 using System.Configuration;
 using System.Data.Common;
@@ -38,36 +40,31 @@ namespace Astrodon.Data
 
         public static void Setup(string connectionString)
         {
-            var connection = connectionString;
-            using (DbConnection setupCon = new SqlConnection(connectionString))
+            Migrations.Configuration.MigrationConnectionString = connectionString;
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataContext, Migrations.Configuration>());
+
+            using (var context = new DataContext(Migrations.Configuration.MigrationConnectionString))
             {
-                Setup(setupCon);
+                try
+                {
+                    context.Database.Initialize(false);
+
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw ex;
+                }
+                catch (ModelValidationException ex)
+                {
+                    throw ex;
+                }
             }
         }
 
-        private static void Setup(DbConnection dbConnection, bool initDefaultData = true)
-        {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataContext, Migrations.Configuration>());
-            //using (var context = new DataContext(dbConnection))
-            //{
-            //    try
-            //    {
-            //        context.Database.Initialize(true);
-                
-            //    }
-            //    catch (InvalidOperationException ex)
-            //    {
-            //        throw ex;
-            //    }
-            //    catch (ModelValidationException ex)
-            //    {
-            //        throw ex;
-            //    }
-            //}
-        }
+       
 
         #endregion
 
-//        public DbSet<BuildingMaintenanceConfiguration> BuildingMaintenanceConfigurationSet { get; set; }
+        public DbSet<BuildingMaintenanceConfiguration> BuildingMaintenanceConfigurationSet { get; set; }
     }
 }

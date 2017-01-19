@@ -7,8 +7,11 @@ namespace Astrodon.Data.Migrations
 
     internal sealed class Configuration : DbMigrationsConfiguration<Astrodon.Data.DataContext>
     {
+        public static string MigrationConnectionString = "";
+
         public Configuration()
         {
+            this.TargetDatabase = new System.Data.Entity.Infrastructure.DbConnectionInfo(Configuration.MigrationConnectionString, "System.Data.SqlClient");
             AutomaticMigrationsEnabled = false;
         }
 
