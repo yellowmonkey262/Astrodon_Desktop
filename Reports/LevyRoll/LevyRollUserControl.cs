@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.IO;
 using Astrodon.ReportService;
+using Astrodon.Data.Base;
 
 namespace Astrodon.Reports
 {

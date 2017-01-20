@@ -1,4 +1,6 @@
-﻿using Astrodon.Reports;
+﻿using Astrodon.Controls.Maintenance;
+using Astrodon.Data;
+using Astrodon.Reports;
 using NotificationWindow;
 using System;
 using System.Data;
@@ -8,8 +10,11 @@ namespace Astrodon {
 
     public partial class frmMain : Form {
 
+        private DataContext _DataContext;
+
         public frmMain() {
             InitializeComponent();
+            _DataContext = SqlDataHandler.GetDataContext();
         }
 
         private void frmMain_Load(object sender, EventArgs e) {
@@ -67,6 +72,7 @@ namespace Astrodon {
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e) {
             Controller.DependencyTermination();
             if (Controller.commClient != null) { Controller.commClient.Disconnect(); }
+            _DataContext.Dispose();
             Application.Exit();
             Environment.Exit(0);
         }
@@ -440,6 +446,15 @@ namespace Astrodon {
             trustCtl.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(trustCtl);
             toolStripStatusLabel1.Text = "Levy Roll Report";
+        }
+
+        private void tbMaintenanceConfig_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrBuildingMaintenanceConfiguration buildingMaintenance = new usrBuildingMaintenanceConfiguration(_DataContext);
+            buildingMaintenance.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(buildingMaintenance);
+            toolStripStatusLabel1.Text = "Building Maintenance Configuration";
         }
     }
 }

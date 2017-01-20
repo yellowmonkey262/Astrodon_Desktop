@@ -1,4 +1,5 @@
-﻿using Astrodon.Data.Base;
+﻿using Astradon.Data.Utility;
+using Astrodon.Data.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,11 +23,25 @@ namespace Astrodon.Data.MaintenanceData
         [Required]
         public virtual string PastelAccountNumber { get; set; }
 
+        public virtual string PastelAccountName { get; set; }
+
+        [NotMapped]
+        public string PastelAccount { get { return PastelAccountNumber + " - " + PastelAccountName; } }
+
         [MaxLength(200)]
         [Required]
         public virtual string Name { get; set; }
 
-        public MaintenanceClassificationType MaintenanceClassificationType { get; set; }
+        public virtual MaintenanceClassificationType MaintenanceClassificationType { get; set; }
+
+        [NotMapped]
+        public string Classification
+        {
+            get
+            {
+                return NameSplitting.SplitCamelCase(MaintenanceClassificationType);
+            }
+        }
 
         public virtual ICollection<Maintenance> MaintenanceItems { get; set; }
 

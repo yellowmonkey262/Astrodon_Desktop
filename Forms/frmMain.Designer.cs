@@ -75,12 +75,13 @@
             this.monthlyFinancialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checklistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.levyRollToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.levyRollToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbMaintenanceConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -109,6 +110,7 @@
             this.systemToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.configToolStripMenuItem,
             this.buildingsToolStripMenuItem,
+            this.tbMaintenanceConfig,
             this.usersToolStripMenuItem,
             this.bulkSMSToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -119,35 +121,35 @@
             // configToolStripMenuItem
             // 
             this.configToolStripMenuItem.Name = "configToolStripMenuItem";
-            this.configToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.configToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.configToolStripMenuItem.Text = "Config";
             this.configToolStripMenuItem.Click += new System.EventHandler(this.configToolStripMenuItem_Click);
             // 
             // buildingsToolStripMenuItem
             // 
             this.buildingsToolStripMenuItem.Name = "buildingsToolStripMenuItem";
-            this.buildingsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.buildingsToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.buildingsToolStripMenuItem.Text = "Buildings";
             this.buildingsToolStripMenuItem.Click += new System.EventHandler(this.buildingsToolStripMenuItem_Click);
             // 
             // usersToolStripMenuItem
             // 
             this.usersToolStripMenuItem.Name = "usersToolStripMenuItem";
-            this.usersToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.usersToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.usersToolStripMenuItem.Text = "Users";
             this.usersToolStripMenuItem.Click += new System.EventHandler(this.usersToolStripMenuItem_Click);
             // 
             // bulkSMSToolStripMenuItem
             // 
             this.bulkSMSToolStripMenuItem.Name = "bulkSMSToolStripMenuItem";
-            this.bulkSMSToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.bulkSMSToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.bulkSMSToolStripMenuItem.Text = "Bulk SMS";
             this.bulkSMSToolStripMenuItem.Click += new System.EventHandler(this.bulkSMSToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -482,16 +484,23 @@
             // checklistToolStripMenuItem
             // 
             this.checklistToolStripMenuItem.Name = "checklistToolStripMenuItem";
-            this.checklistToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.checklistToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.checklistToolStripMenuItem.Text = "Checklist";
             this.checklistToolStripMenuItem.Click += new System.EventHandler(this.checklistToolStripMenuItem_Click);
             // 
             // reportToolStripMenuItem
             // 
             this.reportToolStripMenuItem.Name = "reportToolStripMenuItem";
-            this.reportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.reportToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.reportToolStripMenuItem.Text = "Report";
             this.reportToolStripMenuItem.Click += new System.EventHandler(this.reportToolStripMenuItem_Click);
+            // 
+            // levyRollToolStripMenuItem
+            // 
+            this.levyRollToolStripMenuItem.Name = "levyRollToolStripMenuItem";
+            this.levyRollToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.levyRollToolStripMenuItem.Text = "Levy Roll";
+            this.levyRollToolStripMenuItem.Click += new System.EventHandler(this.levyRollToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -532,12 +541,13 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // levyRollToolStripMenuItem
+            // tbMaintenanceConfig
             // 
-            this.levyRollToolStripMenuItem.Name = "levyRollToolStripMenuItem";
-            this.levyRollToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.levyRollToolStripMenuItem.Text = "Levy Roll";
-            this.levyRollToolStripMenuItem.Click += new System.EventHandler(this.levyRollToolStripMenuItem_Click);
+            this.tbMaintenanceConfig.Name = "tbMaintenanceConfig";
+            this.tbMaintenanceConfig.Size = new System.Drawing.Size(267, 22);
+            this.tbMaintenanceConfig.Text = "Building Maintenance Configuration";
+            this.tbMaintenanceConfig.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.tbMaintenanceConfig.Click += new System.EventHandler(this.tbMaintenanceConfig_Click);
             // 
             // frmMain
             // 
@@ -622,5 +632,6 @@
         private System.Windows.Forms.ToolStripMenuItem statementRunToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem trustToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem levyRollToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tbMaintenanceConfig;
     }
 }

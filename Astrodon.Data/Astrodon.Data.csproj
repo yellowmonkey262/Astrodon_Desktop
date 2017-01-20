@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\DbEntity.cs" />
+    <Compile Include="Base\IdValue.cs" />
+    <Compile Include="Base\StringKeyValue.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
     <Compile Include="MaintenanceData\BuildingMaintenanceConfiguration.cs" />
@@ -65,6 +67,10 @@
     <Compile Include="Migrations\201701191246111_MaintenanceTracking.cs" />
     <Compile Include="Migrations\201701191246111_MaintenanceTracking.Designer.cs">
       <DependentUpon>201701191246111_MaintenanceTracking.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701201241326_PastelAccountName.cs" />
+    <Compile Include="Migrations\201701201241326_PastelAccountName.Designer.cs">
+      <DependentUpon>201701201241326_PastelAccountName.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,6 +126,7 @@
     <Compile Include="Entities\tblUserLog.cs" />
     <Compile Include="SupplierData\Supplier.cs" />
     <Compile Include="SupplierData\SupplierAudit.cs" />
+    <Compile Include="Utility\NameSplitting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -131,6 +138,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701191246111_MaintenanceTracking.resx">
       <DependentUpon>201701191246111_MaintenanceTracking.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701201241326_PastelAccountName.resx">
+      <DependentUpon>201701201241326_PastelAccountName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
