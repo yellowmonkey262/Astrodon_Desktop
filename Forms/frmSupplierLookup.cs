@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -54,6 +55,13 @@ namespace Astrodon.Forms
                 var frm = new frmSupplierLookup(context);
                 var dialogResult = frm.ShowDialog();
                 supplier = frm._SelectedItem;
+
+                if (Debugger.IsAttached)
+                {
+                    supplier = context.SupplierSet.FirstOrDefault();
+                    return supplier != null;
+                }
+
                 return (dialogResult == DialogResult.OK && supplier != null);
             }
         }

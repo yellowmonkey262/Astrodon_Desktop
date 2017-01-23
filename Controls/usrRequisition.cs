@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Astrodon.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
 
-namespace Astrodon.Controls {
+namespace Astrodon.Controls
+{
 
-    public partial class usrRequisition : UserControl {
+    public partial class usrRequisition : UserControl
+    {
         private List<Building> allBuildings;
         private List<Building> myBuildings = new List<Building>();
         private BindingList<RequisitionList> unProcessedRequisitions = new BindingList<RequisitionList>();
@@ -17,11 +20,15 @@ namespace Astrodon.Controls {
         private Dictionary<String, double> avAmts = new Dictionary<string, double>();
         private String status;
 
-        public usrRequisition() {
+        public usrRequisition()
+        {
             InitializeComponent();
+
+            dtInvoiceDate.MaxDate = DateTime.Today.AddDays(7);
         }
 
-        private void usrRequisition_Load(object sender, EventArgs e) {
+        private void usrRequisition_Load(object sender, EventArgs e)
+        {
             LoadBuildings();
             dgUnprocessed.DataSource = unProcessedRequisitions;
             dgUnpaid.DataSource = unPaidRequisitions;
@@ -30,12 +37,16 @@ namespace Astrodon.Controls {
             //LoadRequisitions();
         }
 
-        private void LoadBuildings() {
+        private void LoadBuildings()
+        {
             allBuildings = new Buildings(false).buildings;
 
-            foreach (int bid in Controller.user.buildings) {
-                foreach (Building b in allBuildings) {
-                    if (bid == b.ID && b.Web_Building && !myBuildings.Contains(b)) {
+            foreach (int bid in Controller.user.buildings)
+            {
+                foreach (Building b in allBuildings)
+                {
+                    if (bid == b.ID && b.Web_Building && !myBuildings.Contains(b))
+                    {
                         myBuildings.Add(b);
                         break;
                     }
@@ -50,57 +61,27 @@ namespace Astrodon.Controls {
             cmbBuilding.SelectedIndexChanged += cmbBuilding_SelectedIndexChanged;
         }
 
-        //private void LoadRequisitions() {
-        //    String query = "SELECT r.id, r.trnDate, b.Building, r.account, r.reference, r.payreference, r.amount, r.ledger, b.DataPath, b.Acc, b.ownbank";
-        //    query += " FROM tblRequisition AS r INNER JOIN tblBuildings AS b ON r.building = b.id";
-        //    query += " WHERE (r.building = @building) AND (r.processed = 'False') ORDER BY trnDate";
-        //    Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-        //    sqlParms.Add("@building", myBuildings[cmbBuilding.SelectedIndex].ID);
-        //    DataSet dsRequisitions = dh.GetData(query, sqlParms, out status);
-
-        //    requisitions.Clear();
-        //    avAmts.Clear();
-
-        //    if (dsRequisitions != null && dsRequisitions.Tables.Count > 0 && dsRequisitions.Tables[0].Rows.Count > 0) {
-        //        foreach (DataRow dr in dsRequisitions.Tables[0].Rows) {
-        //            Requisition r = new Requisition();
-        //            r.ID = dr["id"].ToString();
-        //            r.trnDate = DateTime.Parse(dr["trnDate"].ToString());
-        //            r.building = dr["Building"].ToString();
-        //            r.account = dr["account"].ToString();
-        //            r.reference = dr["reference"].ToString();
-        //            r.payreference = dr["payreference"].ToString();
-        //            String acc = (r.account.ToUpper() == "TRUST" ? dr["Acc"].ToString() : dr["ownbank"].ToString());
-        //            double multiplier = (r.account.ToUpper() == "TRUST" ? -1 : 1);
-        //            String path = (r.account.ToUpper() == "TRUST" ? GetTrustPath() : dr["DataPath"].ToString());
-        //            r.amount = double.Parse(dr["amount"].ToString());
-        //            r.ledger = dr["ledger"].ToString();
-        //            if (!avAmts.ContainsKey(r.building + r.account)) {
-        //                avAmts.Add(r.building + r.account, (GetBalance(path, acc) * multiplier));
-        //            }
-        //            r.accBalance = avAmts[r.building + r.account];
-        //            avAmts[r.building + r.account] -= r.amount;
-        //            requisitions.Add(r);
-        //        }
-        //    }
-        //}
-
-        private void LoadRequisitions() {
+        private void LoadRequisitions()
+        {
             unProcessedRequisitions.Clear();
             unPaidRequisitions.Clear();
             paidRequisitions.Clear();
             String lineNumber = "0";
-            try {
-                if (cmbBuilding.SelectedIndex > -1) {
+            try
+            {
+                if (cmbBuilding.SelectedIndex > -1)
+                {
                     String buildingID = myBuildings[cmbBuilding.SelectedIndex].ID.ToString();
                     String unpaidQuery = "SELECT count(*) as unpaids FROM tblRequisition WHERE paid = 'False' AND building = " + buildingID;
                     DataSet unpaidDS = dh.GetData(unpaidQuery, null, out status);
                     lineNumber = "98";
                     bool hasUnpaids = false;
                     List<Trns> transactions = new List<Trns>();
-                    if (unpaidDS != null && unpaidDS.Tables.Count > 0 && unpaidDS.Tables[0].Rows.Count > 0) {
+                    if (unpaidDS != null && unpaidDS.Tables.Count > 0 && unpaidDS.Tables[0].Rows.Count > 0)
+                    {
                         int unpaids = (int.TryParse(unpaidDS.Tables[0].Rows[0]["unpaids"].ToString(), out unpaids) ? unpaids : 0);
-                        if (unpaids > 0) {
+                        if (unpaids > 0)
+                        {
                             hasUnpaids = true;
                             String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
                             String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
@@ -115,8 +96,10 @@ namespace Astrodon.Controls {
                     Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
                     DataSet dsRequisitions = dh.GetData(query, null, out status);
                     lineNumber = "117";
-                    if (dsRequisitions != null && dsRequisitions.Tables.Count > 0 && dsRequisitions.Tables[0].Rows.Count > 0) {
-                        foreach (DataRow dr in dsRequisitions.Tables[0].Rows) {
+                    if (dsRequisitions != null && dsRequisitions.Tables.Count > 0 && dsRequisitions.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dsRequisitions.Tables[0].Rows)
+                        {
                             RequisitionList r = new RequisitionList();
                             r.ID = dr["id"].ToString();
                             r.trnDate = DateTime.Parse(dr["trnDate"].ToString());
@@ -130,16 +113,24 @@ namespace Astrodon.Controls {
                             bool paid = bool.Parse(dr["paid"].ToString());
                             bool processed = bool.Parse(dr["processed"].ToString());
                             String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
-                            if (r.account.ToUpper() == "TRUST" && !paid) {
+                            if (r.account.ToUpper() == "TRUST" && !paid)
+                            {
                                 matched = GetTransactions(r.trnDate, r.amount, transactions);
-                            } else if (!paid) {
+                            }
+                            else if (!paid)
+                            {
                                 matched = GetTransactions(r.trnDate, r.amount * -1, transactions);
                             }
-                            if (!processed) {
+                            if (!processed)
+                            {
                                 unProcessedRequisitions.Add(r);
-                            } else if (!matched && !paid) {
+                            }
+                            else if (!matched && !paid)
+                            {
                                 unPaidRequisitions.Add(r);
-                            } else {
+                            }
+                            else
+                            {
                                 String updateQuery = "UPDATE tblRequisition SET paid = 'True' WHERE id = " + r.ID;
                                 paidRequisitions.Add(r);
                                 dh.SetData(updateQuery, null, out status);
@@ -147,19 +138,24 @@ namespace Astrodon.Controls {
                         }
                     }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show("Loading " + lineNumber + ":" + ex.Message);
             }
         }
 
-        private bool GetTransactions(DateTime reqDate, double amt, List<Trns> transactions) {
+        private bool GetTransactions(DateTime reqDate, double amt, List<Trns> transactions)
+        {
             bool matched = false;
             reqDate = new DateTime(reqDate.Year, reqDate.Month, reqDate.Day, 0, 0, 0);
             //MessageBox.Show(transactions.Count.ToString());
-            foreach (Trns transaction in transactions) {
+            foreach (Trns transaction in transactions)
+            {
                 DateTime trnDate = DateTime.Parse(transaction.Date);
                 //MessageBox.Show(amt.ToString() + " -- " + transaction.Amount);
-                if (trnDate >= reqDate.AddDays(-5) && trnDate <= reqDate.AddDays(2) && double.Parse(transaction.Amount) == amt) {
+                if (trnDate >= reqDate.AddDays(-5) && trnDate <= reqDate.AddDays(2) && double.Parse(transaction.Amount) == amt)
+                {
                     matched = true;
                     break;
                 }
@@ -167,35 +163,46 @@ namespace Astrodon.Controls {
             return matched;
         }
 
-        private double GetBalance(String datapath, String account) {
+        private double GetBalance(String datapath, String account)
+        {
             String acc = Controller.pastel.GetAccount(datapath, account.Replace("/", ""));
-            if (acc.StartsWith("99")) {
+            if (acc.StartsWith("99"))
+            {
                 return 0;
-            } else {
+            }
+            else
+            {
                 String[] accBits = acc.Split(new String[] { "|" }, StringSplitOptions.None);
                 double bal = 0;
-                try {
-                    for (int i = 7; i <= 32; i++) {
+                try
+                {
+                    for (int i = 7; i <= 32; i++)
+                    {
                         double lbal = (double.TryParse(accBits[i], out lbal) ? lbal : 0);
                         bal += lbal;
                     }
-                } catch { }
+                }
+                catch { }
                 return bal;
             }
         }
 
-        private void btnSubmit_Click(object sender, EventArgs e) {
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
             LoadRequisitions();
             this.Cursor = Cursors.WaitCursor;
-            try {
+            try
+            {
                 double balance = GetBuildingBalance();
-                foreach (DataGridViewRow dvr in dgUnprocessed.Rows) {
+                foreach (DataGridViewRow dvr in dgUnprocessed.Rows)
+                {
                     String message = "";
                     RequisitionList r = unProcessedRequisitions[dvr.Index];
                     String id = r.ID;
                     DateTime trnDate = r.trnDate;
                     double reqAmt = r.amount;
-                    if (reqAmt <= balance && trnDate <= DateTime.Now) {
+                    if (reqAmt <= balance && trnDate <= DateTime.Now)
+                    {
                         message += "Date requested: " + r.trnDate.ToString("yyyy/MM/dd") + "." + Environment.NewLine;
                         message += "Building: " + r.building + "." + Environment.NewLine;
                         message += "From Account: " + r.account + "." + Environment.NewLine;
@@ -205,7 +212,8 @@ namespace Astrodon.Controls {
                         message += "For amount : " + r.amount.ToString("#,##0.00") + "." + Environment.NewLine;
                         message += "-----------------------" + "." + Environment.NewLine + Environment.NewLine;
                         String query = "UPDATE tblRequisition SET processed = 'True' WHERE id = " + id;
-                        if (message != "") {
+                        if (message != "")
+                        {
                             String[] attachments = null;
                             String email = myBuildings[cmbBuilding.SelectedIndex].PM;
                             //email = "stephen@metathought.co.za";
@@ -213,61 +221,81 @@ namespace Astrodon.Controls {
                         }
                         dh.SetData(query, null, out status);
                         balance -= reqAmt;
-                    } else if (reqAmt > balance) {
+                    }
+                    else if (reqAmt > balance)
+                    {
                         MessageBox.Show("Insufficient funds for ID " + id);
                     }
                 }
                 ResetRequisitions();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message);
             }
             this.Cursor = Cursors.Default;
         }
 
-        private String GetTrustPath() {
+        private String GetTrustPath()
+        {
             String query = "SELECT trust FROM tblSettings";
             String status;
             DataSet ds = (new SqlDataHandler()).GetData(query, null, out status);
             String trustPath = "";
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0) {
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
                 trustPath = ds.Tables[0].Rows[0]["trust"].ToString();
-            } else {
+            }
+            else
+            {
                 trustPath = String.Empty;
             }
             return trustPath;
         }
 
-        private double GetEFTFee() {
+        private double GetEFTFee()
+        {
             DataSet dsEFT = dh.GetData("SELECT DebitOrder FROM tblBankCharges", null, out status);
             String amt = dsEFT.Tables[0].Rows[0]["DebitOrder"].ToString();
             return double.Parse(amt);
         }
 
-        private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e) {
+        private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnSupplierLookup.Enabled = true;
             cmbAccount.Items.Clear();
             cmbLedger.Items.Clear();
-            try {
+            try
+            {
                 lblBank.Text = myBuildings[cmbBuilding.SelectedIndex].Bank.ToUpper();
                 cmbAccount.Items.Add("TRUST");
                 cmbAccount.Items.Add("OWN");
                 cmbAccount.SelectedItem = lblBank.Text;
-            } catch { }
+            }
+            catch { }
             LoadRequisitions();
-            try {
+            try
+            {
                 Dictionary<String, String> accounts = Controller.pastel.GetAccountList(myBuildings[cmbBuilding.SelectedIndex].DataPath);
-                foreach (KeyValuePair<String, String> reqAcc in accounts) {
+                foreach (KeyValuePair<String, String> reqAcc in accounts)
+                {
                     cmbLedger.Items.Add(reqAcc.Key + ": " + reqAcc.Value);
                 }
-            } catch { }
+            }
+            catch { }
         }
 
-        private void cmbAccount_SelectedIndexChanged(object sender, EventArgs e) {
-            try {
+        private void cmbAccount_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
                 UpdateBalanceLabel();
-            } catch { }
+            }
+            catch { }
         }
 
-        private void UpdateBalanceLabel() {
+        private void UpdateBalanceLabel()
+        {
             double balance = GetBuildingBalance();
             balance -= getOutstandingAmt();
             lblBalance.Text = balance.ToString("#,##0.00");
@@ -275,36 +303,53 @@ namespace Astrodon.Controls {
             lblAvAmt.Text = (double.Parse(lblBalance.Text) - requestedAmt - (requestedAmt > 0 ? GetEFTFee() : 0)).ToString("#,##0.00");
         }
 
-        private double GetBuildingBalance() {
-            try {
-                if (cmbAccount.SelectedItem != null) {
-                    if (cmbAccount.SelectedItem.ToString() == "TRUST") {
+        private double GetBuildingBalance()
+        {
+            try
+            {
+                if (cmbAccount.SelectedItem != null)
+                {
+                    if (cmbAccount.SelectedItem.ToString() == "TRUST")
+                    {
                         return (!String.IsNullOrEmpty(GetTrustPath()) ? GetBalance(GetTrustPath(), myBuildings[cmbBuilding.SelectedIndex].Trust) : 0) * -1;
-                    } else {
+                    }
+                    else
+                    {
                         return GetBalance(myBuildings[cmbBuilding.SelectedIndex].DataPath, myBuildings[cmbBuilding.SelectedIndex].OwnBank);
                     }
-                } else {
+                }
+                else
+                {
                     return 0;
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show("b count = " + myBuildings.Count.ToString() + " b idx = " + cmbBuilding.SelectedIndex);
                 return 0;
             }
         }
 
-        private double getOutstandingAmt() {
+        private double getOutstandingAmt()
+        {
             double os = 0;
-            foreach (RequisitionList r in unProcessedRequisitions) {
+            foreach (RequisitionList r in unProcessedRequisitions)
+            {
                 os += r.amount;
             }
             return os;
         }
 
-        private void btnSave_Click(object sender, EventArgs e) {
+        private void btnSave_Click(object sender, EventArgs e)
+        {
             double amt;
-            if (double.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null && cmbLedger.SelectedItem != null && cmbAccount.SelectedItem != null) {
-                String query = "INSERT INTO tblRequisition(trnDate, account, reference, payreference, ledger, amount, userID, building)";
-                query += " VALUES(@trnDate, @account, @reference, @payment, @ledger, @amount, @userID, @building)";
+            if (double.TryParse(txtAmount.Text, out amt) 
+                && cmbBuilding.SelectedItem != null 
+                && cmbLedger.SelectedItem != null 
+                && cmbAccount.SelectedItem != null)
+            {
+                String query = "INSERT INTO tblRequisition(trnDate, account, reference, payreference, ledger, amount, userID, building,SupplierId,InvoiceNumber,InvoiceDate,BankName,BranchCode,AccountNumber)";
+                query += " VALUES(@trnDate, @account, @reference, @payment, @ledger, @amount, @userID, @building,@SupplierId,@InvoiceNumber,@InvoiceDate,@BankName,@BranchCode,@AccountNumber)";
                 Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
                 sqlParms.Add("@trnDate", DateTime.Parse(trnDatePicker.Value.ToString("yyyy/MM/dd")));
                 sqlParms.Add("@account", cmbAccount.SelectedItem.ToString());
@@ -314,56 +359,86 @@ namespace Astrodon.Controls {
                 sqlParms.Add("@payment", txtPaymentRef.Text);
                 sqlParms.Add("@userID", Controller.user.id);
                 sqlParms.Add("@building", myBuildings[cmbBuilding.SelectedIndex].ID);
+                sqlParms.Add("@SupplierId",_supplier == null ? (int?)null: _supplier.id);
+                sqlParms.Add("@InvoiceNumber", txtInvoiceNumber.Text);
+                sqlParms.Add("@InvoiceDate", dtInvoiceDate.Value.ToString("yyyy/MM/dd"));
+                sqlParms.Add("@BankName", _supplier == null ? (string)null: _supplier.BankName);
+                sqlParms.Add("@BranchCode", _supplier == null ? (string)null : _supplier.BranceCode);
+                sqlParms.Add("@AccountNumber", _supplier == null ? (string)null : _supplier.AccountNumber);
+
                 dh.SetData(query, sqlParms, out status);
-                if (cmbRecur.SelectedIndex > 0) {
+                if (cmbRecur.SelectedIndex > 0)
+                {
                     DateTime startDate = trnDatePicker.Value;
                     List<DateTime> dates = new List<DateTime>();
-                    switch (cmbRecur.SelectedIndex) {
+                    switch (cmbRecur.SelectedIndex)
+                    {
                         case 1: //weekly
-                            while (startDate.AddDays(7) <= dtEndDate.Value) {
+                            while (startDate.AddDays(7) <= dtEndDate.Value)
+                            {
                                 dates.Add(startDate.AddDays(7));
                                 startDate = startDate.AddDays(7);
                             }
                             break;
 
                         case 2: //month
-                            while (startDate.AddMonths(1) <= dtEndDate.Value) {
+                            while (startDate.AddMonths(1) <= dtEndDate.Value)
+                            {
                                 dates.Add(startDate.AddMonths(1));
                                 startDate = startDate.AddMonths(1);
                             }
                             break;
 
                         case 3: //yearly
-                            while (startDate.AddYears(1) <= dtEndDate.Value) {
+                            while (startDate.AddYears(1) <= dtEndDate.Value)
+                            {
                                 dates.Add(startDate.AddYears(1));
                                 startDate = startDate.AddYears(1);
                             }
                             break;
                     }
-                    foreach (DateTime dt in dates) {
+                    foreach (DateTime dt in dates)
+                    {
                         sqlParms["@trnDate"] = dt;
                         dh.SetData(query, sqlParms, out status);
                     }
                 }
                 LoadRequisitions();
                 ClearRequisitions();
-            } else {
-                MessageBox.Show("Please enter all fields");
+            }
+            else
+            {
+                Controller.HandleError("Please enter all fields","Validation Error");
             }
         }
 
-        private void ClearRequisitions() {
+        private void ClearRequisitions()
+        {
             trnDatePicker.Value = DateTime.Now;
             txtPaymentRef.Text = "";
             lblBalance.Text = "";
             lblAvAmt.Text = "";
+            txtInvoiceNumber.Text = "";
+            dtInvoiceDate.Value = DateTime.Today;
+
+            ClearSupplier();
+
             txtAmount.TextChanged -= txtAmount_TextChanged;
             txtAmount.Text = "";
             txtAmount.TextChanged += txtAmount_TextChanged;
             this.Invalidate();
         }
 
-        private void ResetRequisitions() {
+        private void ClearSupplier()
+        {
+            _supplier = null;
+            lbSupplierName.Text = "";
+            lbAccountNumber.Text = "";
+            lbBankName.Text = "";
+        }
+
+        private void ResetRequisitions()
+        {
             trnDatePicker.Value = DateTime.Now;
             cmbBuilding.SelectedIndexChanged -= cmbBuilding_SelectedIndexChanged;
             cmbBuilding.SelectedIndex = -1;
@@ -383,13 +458,16 @@ namespace Astrodon.Controls {
             this.Invalidate();
         }
 
-        private void txtAmount_TextChanged(object sender, EventArgs e) {
+        private void txtAmount_TextChanged(object sender, EventArgs e)
+        {
             double requestedAmt = double.TryParse(txtAmount.Text, out requestedAmt) ? requestedAmt : 0;
             lblAvAmt.Text = (double.Parse(lblBalance.Text) - requestedAmt - (requestedAmt > 0 ? GetEFTFee() : 0)).ToString("#,##0.00");
         }
 
-        private void btnDelete_Click(object sender, EventArgs e) {
-            foreach (DataGridViewRow dvr in dgUnprocessed.SelectedRows) {
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow dvr in dgUnprocessed.SelectedRows)
+            {
                 RequisitionList r = unProcessedRequisitions[dvr.Index];
                 String query = "DELETE FROM tblRequisition WHERE id = " + r.ID;
                 dh.SetData(query, null, out status);
@@ -397,39 +475,74 @@ namespace Astrodon.Controls {
             LoadRequisitions();
             dgUnprocessed.Invalidate();
             UpdateBalanceLabel();
-            foreach (DataGridViewRow dvr in dgUnprocessed.SelectedRows) {
+            foreach (DataGridViewRow dvr in dgUnprocessed.SelectedRows)
+            {
                 dvr.Selected = false;
             }
         }
 
-        private void dgUnprocessed_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e) {
+        private void dgUnprocessed_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
             double balance = GetBuildingBalance();
-            try {
-                for (int i = 0; i < unProcessedRequisitions.Count; i++) {
-                    if (unProcessedRequisitions[i].amount > balance) {
+            try
+            {
+                for (int i = 0; i < unProcessedRequisitions.Count; i++)
+                {
+                    if (unProcessedRequisitions[i].amount > balance)
+                    {
                         dgUnprocessed.Rows[i].Cells[7].Style.BackColor = System.Drawing.Color.Yellow;
-                    } else {
+                    }
+                    else
+                    {
                         dgUnprocessed.Rows[i].Cells[7].Style.BackColor = System.Drawing.Color.White;
                     }
                     balance -= unProcessedRequisitions[i].amount;
-                    if (unProcessedRequisitions[i].trnDate > DateTime.Now) {
+                    if (unProcessedRequisitions[i].trnDate > DateTime.Now)
+                    {
                         dgUnprocessed.Rows[i].Cells[1].Style.BackColor = System.Drawing.Color.Yellow;
-                    } else {
+                    }
+                    else
+                    {
                         dgUnprocessed.Rows[i].Cells[1].Style.BackColor = System.Drawing.Color.White;
                     }
                 }
-            } catch { }
+            }
+            catch { }
         }
 
-        private void cmbLedger_SelectedIndexChanged(object sender, EventArgs e) {
-            try {
+        private void cmbLedger_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
                 String ledger = cmbLedger.SelectedItem.ToString();
                 String[] ledgerBits = ledger.Split(new String[] { ":" }, StringSplitOptions.None);
-            } catch { }
+            }
+            catch { }
         }
+
+
+        private Data.SupplierData.Supplier _supplier;
+        private void btnSupplierLookup_Click(object sender, EventArgs e)
+        {
+            
+            if (frmSupplierLookup.SelectSupplier(out _supplier))
+            {
+                lbSupplierName.Text = _supplier.CompanyName;
+                lbBankName.Text = _supplier.BankName + " (" + _supplier.BranceCode + ")";
+                lbAccountNumber.Text = _supplier.AccountNumber;
+                btnSave.Enabled = true;
+            }
+            else
+            {
+                ClearSupplier();
+            }
+        }
+
+
     }
 
-    public class Requisition {
+    public class Requisition
+    {
         public String ID { get; set; }
 
         public DateTime trnDate { get; set; }
@@ -447,9 +560,11 @@ namespace Astrodon.Controls {
         public double accBalance { get; set; }
 
         public double amount { get; set; }
+
     }
 
-    public class RequisitionList {
+    public class RequisitionList
+    {
         public String ID { get; set; }
 
         public DateTime trnDate { get; set; }
@@ -467,7 +582,8 @@ namespace Astrodon.Controls {
         public double amount { get; set; }
     }
 
-    public class ReqAccount {
+    public class ReqAccount
+    {
         public String accNumber { get; set; }
 
         public String accDescription { get; set; }

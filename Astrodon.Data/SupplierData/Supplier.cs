@@ -59,5 +59,6 @@ namespace Astrodon.Data.SupplierData
         #endregion
 
         public virtual ICollection<SupplierAudit> AuditRecords { get; set; }
+        public virtual ICollection<tblRequisition> Requisitions { get; set; }
     }
 }
