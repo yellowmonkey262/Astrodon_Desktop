@@ -61,5 +61,6 @@ namespace Astrodon.Data.SupplierData
         public virtual ICollection<MaintenanceData.Maintenance> Maintenance { get; set; }
 
         public virtual ICollection<SupplierAudit> AuditRecords { get; set; }
+        public virtual ICollection<tblRequisition> Requisitions { get; set; }
     }
 }

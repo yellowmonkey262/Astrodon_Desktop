@@ -1,6 +1,6 @@
 ﻿namespace Astrodon.Forms
 {
-    partial class frmSupplierLookup
+    partial class frmMaintenance
     {
         /// <summary>
         /// Required designer variable.
@@ -37,19 +37,19 @@
             this.pnlContents.Location = new System.Drawing.Point(0, 0);
             this.pnlContents.Name = "pnlContents";
             this.pnlContents.Size = new System.Drawing.Size(284, 261);
-            this.pnlContents.TabIndex = 3;
+            this.pnlContents.TabIndex = 4;
             // 
-            // frmSupplierLookup
+            // frmMaintenance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.pnlContents);
-            this.Name = "frmSupplierLookup";
+            this.Name = "frmMaintenance";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Supplier Lookup";
+            this.Text = "Maintenance";
             this.ResumeLayout(false);
 
         }

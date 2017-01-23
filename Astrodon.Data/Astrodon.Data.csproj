@@ -72,6 +72,14 @@
     <Compile Include="Migrations\201701201241326_PastelAccountName.Designer.cs">
       <DependentUpon>201701201241326_PastelAccountName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701231044471_RequisitionSupplier.cs" />
+    <Compile Include="Migrations\201701231044471_RequisitionSupplier.Designer.cs">
+      <DependentUpon>201701231044471_RequisitionSupplier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701231347353_RequisitionSupplierBankDetails.cs" />
+    <Compile Include="Migrations\201701231347353_RequisitionSupplierBankDetails.Designer.cs">
+      <DependentUpon>201701231347353_RequisitionSupplierBankDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -141,6 +149,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701201241326_PastelAccountName.resx">
       <DependentUpon>201701201241326_PastelAccountName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701231044471_RequisitionSupplier.resx">
+      <DependentUpon>201701231044471_RequisitionSupplier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701231347353_RequisitionSupplierBankDetails.resx">
+      <DependentUpon>201701231347353_RequisitionSupplierBankDetails.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
