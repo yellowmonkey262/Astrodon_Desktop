@@ -29,6 +29,7 @@
             this.systemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbMaintenanceConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.usersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkSMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,7 +82,8 @@
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.tbMaintenanceConfig = new System.Windows.Forms.ToolStripMenuItem();
+            this.suppliersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.maintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -98,7 +100,8 @@
             this.helpToolStripMenuItem,
             this.remindersToolStripMenuItem,
             this.stephenToolStripMenuItem,
-            this.monthlyFinancialsToolStripMenuItem});
+            this.monthlyFinancialsToolStripMenuItem,
+            this.suppliersToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1015, 24);
@@ -131,6 +134,14 @@
             this.buildingsToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.buildingsToolStripMenuItem.Text = "Buildings";
             this.buildingsToolStripMenuItem.Click += new System.EventHandler(this.buildingsToolStripMenuItem_Click);
+            // 
+            // tbMaintenanceConfig
+            // 
+            this.tbMaintenanceConfig.Name = "tbMaintenanceConfig";
+            this.tbMaintenanceConfig.Size = new System.Drawing.Size(267, 22);
+            this.tbMaintenanceConfig.Text = "Building Maintenance Configuration";
+            this.tbMaintenanceConfig.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.tbMaintenanceConfig.Click += new System.EventHandler(this.tbMaintenanceConfig_Click);
             // 
             // usersToolStripMenuItem
             // 
@@ -541,13 +552,20 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // tbMaintenanceConfig
+            // suppliersToolStripMenuItem
             // 
-            this.tbMaintenanceConfig.Name = "tbMaintenanceConfig";
-            this.tbMaintenanceConfig.Size = new System.Drawing.Size(267, 22);
-            this.tbMaintenanceConfig.Text = "Building Maintenance Configuration";
-            this.tbMaintenanceConfig.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.tbMaintenanceConfig.Click += new System.EventHandler(this.tbMaintenanceConfig_Click);
+            this.suppliersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.maintenanceToolStripMenuItem});
+            this.suppliersToolStripMenuItem.Name = "suppliersToolStripMenuItem";
+            this.suppliersToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.suppliersToolStripMenuItem.Text = "Suppliers";
+            // 
+            // maintenanceToolStripMenuItem
+            // 
+            this.maintenanceToolStripMenuItem.Name = "maintenanceToolStripMenuItem";
+            this.maintenanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.maintenanceToolStripMenuItem.Text = "Maintenance";
+            this.maintenanceToolStripMenuItem.Click += new System.EventHandler(this.maintenanceToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -633,5 +651,7 @@
         private System.Windows.Forms.ToolStripMenuItem trustToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem levyRollToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tbMaintenanceConfig;
+        private System.Windows.Forms.ToolStripMenuItem suppliersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem maintenanceToolStripMenuItem;
     }
 }

@@ -28,11 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.pnlContents = new System.Windows.Forms.Panel();
+            this.SuspendLayout();
+            // 
+            // pnlContents
+            // 
+            this.pnlContents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlContents.Location = new System.Drawing.Point(0, 0);
+            this.pnlContents.Name = "pnlContents";
+            this.pnlContents.Size = new System.Drawing.Size(284, 261);
+            this.pnlContents.TabIndex = 3;
+            // 
+            // frmSupplierLookup
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "frmSupplierLookup";
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.pnlContents);
+            this.Name = "frmSupplierLookup";
+            this.Text = "Supplier Lookup";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Panel pnlContents;
     }
 }

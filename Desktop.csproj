@@ -512,6 +512,9 @@
     <EmbeddedResource Include="Controls\Maintenance\usrBuildingMaintenanceConfiguration.resx">
       <DependentUpon>usrBuildingMaintenanceConfiguration.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Supplier\usrSupplierLookup.resx">
+      <DependentUpon>usrSupplierLookup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\usrAccounts.resx">
       <DependentUpon>usrAccounts.cs</DependentUpon>
     </EmbeddedResource>
@@ -656,6 +659,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmPrompt.resx">
       <DependentUpon>frmPrompt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSupplierLookup.resx">
+      <DependentUpon>frmSupplierLookup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSupport.resx">
       <DependentUpon>frmSupport.cs</DependentUpon>

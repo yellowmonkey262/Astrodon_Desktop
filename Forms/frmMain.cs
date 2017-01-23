@@ -1,4 +1,5 @@
 ﻿using Astrodon.Controls.Maintenance;
+using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using Astrodon.Reports;
 using NotificationWindow;
@@ -455,6 +456,15 @@ namespace Astrodon {
             buildingMaintenance.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(buildingMaintenance);
             toolStripStatusLabel1.Text = "Building Maintenance Configuration";
+        }
+
+        private void maintenanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext);
+            supplierLookup.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(supplierLookup);
+            toolStripStatusLabel1.Text = "Supplier Maintenance";
         }
     }
 }
