@@ -16,7 +16,7 @@ namespace Astrodon.Data
         public DateTime trnDate { get; set; }
 
         public int building { get; set; }
-
+ 
         [Required]
         [StringLength(50)]
         public string account { get; set; }
@@ -47,7 +47,9 @@ namespace Astrodon.Data
 
         public string InvoiceNumber { get; set; }
         public DateTime? InvoiceDate { get; set; }
+
         public string BankName { get; set; }
+        public string BranchName { get; set; }
         public string BranchCode { get; set; }
         public string AccountNumber { get; set; }
     }

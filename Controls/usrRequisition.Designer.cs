@@ -23,9 +23,9 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -277,7 +277,7 @@
             this.tabControl1.Location = new System.Drawing.Point(15, 330);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(832, 326);
+            this.tabControl1.Size = new System.Drawing.Size(841, 326);
             this.tabControl1.TabIndex = 25;
             // 
             // tabPage1
@@ -288,7 +288,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(824, 300);
+            this.tabPage1.Size = new System.Drawing.Size(833, 300);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Unprocessed";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -331,7 +331,7 @@
             this.dgUnprocessed.Location = new System.Drawing.Point(6, 6);
             this.dgUnprocessed.Name = "dgUnprocessed";
             this.dgUnprocessed.ReadOnly = true;
-            this.dgUnprocessed.Size = new System.Drawing.Size(800, 250);
+            this.dgUnprocessed.Size = new System.Drawing.Size(818, 250);
             this.dgUnprocessed.TabIndex = 10;
             this.dgUnprocessed.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgUnprocessed_DataBindingComplete);
             // 
@@ -387,9 +387,9 @@
             // colAmount
             // 
             this.colAmount.DataPropertyName = "amount";
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle13.Format = "N2";
-            this.colAmount.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle16.Format = "N2";
+            this.colAmount.DefaultCellStyle = dataGridViewCellStyle16;
             this.colAmount.HeaderText = "Amount";
             this.colAmount.Name = "colAmount";
             this.colAmount.ReadOnly = true;
@@ -400,7 +400,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(824, 300);
+            this.tabPage2.Size = new System.Drawing.Size(833, 300);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Unpaid";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -423,7 +423,7 @@
             this.dgUnpaid.Location = new System.Drawing.Point(6, 6);
             this.dgUnpaid.Name = "dgUnpaid";
             this.dgUnpaid.ReadOnly = true;
-            this.dgUnpaid.Size = new System.Drawing.Size(800, 250);
+            this.dgUnpaid.Size = new System.Drawing.Size(818, 250);
             this.dgUnpaid.TabIndex = 11;
             // 
             // dataGridViewTextBoxColumn1
@@ -478,9 +478,9 @@
             // dataGridViewTextBoxColumn8
             // 
             this.dataGridViewTextBoxColumn8.DataPropertyName = "amount";
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle14.Format = "N2";
-            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle17.Format = "N2";
+            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle17;
             this.dataGridViewTextBoxColumn8.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
             this.dataGridViewTextBoxColumn8.ReadOnly = true;
@@ -491,7 +491,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(824, 300);
+            this.tabPage3.Size = new System.Drawing.Size(833, 300);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Paid";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -514,7 +514,7 @@
             this.dgPaid.Location = new System.Drawing.Point(6, 6);
             this.dgPaid.Name = "dgPaid";
             this.dgPaid.ReadOnly = true;
-            this.dgPaid.Size = new System.Drawing.Size(800, 250);
+            this.dgPaid.Size = new System.Drawing.Size(818, 250);
             this.dgPaid.TabIndex = 11;
             // 
             // dataGridViewTextBoxColumn9
@@ -569,9 +569,9 @@
             // dataGridViewTextBoxColumn16
             // 
             this.dataGridViewTextBoxColumn16.DataPropertyName = "amount";
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle15.Format = "N2";
-            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle18.Format = "N2";
+            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle18;
             this.dataGridViewTextBoxColumn16.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
             this.dataGridViewTextBoxColumn16.ReadOnly = true;

@@ -1,9 +1,12 @@
-﻿using Astrodon.Forms;
+﻿using Astrodon.Data;
+using Astrodon.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
+using System.Linq;
+using System.Data.Entity;
 
 namespace Astrodon.Controls
 {
@@ -31,8 +34,14 @@ namespace Astrodon.Controls
         {
             LoadBuildings();
             dgUnprocessed.DataSource = unProcessedRequisitions;
+            dgUnprocessed.AutoGenerateColumns = false;
+
             dgUnpaid.DataSource = unPaidRequisitions;
+            dgUnpaid.AutoGenerateColumns = false;
+
             dgPaid.DataSource = paidRequisitions;
+            dgUnpaid.AutoGenerateColumns = false;
+
             cmbRecur.SelectedIndex = 0;
             //LoadRequisitions();
         }
@@ -90,53 +99,127 @@ namespace Astrodon.Controls
                         }
                     }
                     lineNumber = "111";
-                    String query = "SELECT r.id, r.trnDate, b.Building, r.account, r.processed, r.paid, r.reference, r.contractor, r.payreference, r.amount, r.ledger, b.acc, b.ownbank, b.datapath";
-                    query += " FROM tblRequisition AS r INNER JOIN tblBuildings AS b ON r.building = b.id";
-                    query += " WHERE b.id = " + buildingID + " ORDER BY trnDate";
-                    Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-                    DataSet dsRequisitions = dh.GetData(query, null, out status);
-                    lineNumber = "117";
-                    if (dsRequisitions != null && dsRequisitions.Tables.Count > 0 && dsRequisitions.Tables[0].Rows.Count > 0)
+
+
+
+                    using (var context = SqlDataHandler.GetDataContext())
                     {
-                        foreach (DataRow dr in dsRequisitions.Tables[0].Rows)
+                        var buildingId = myBuildings[cmbBuilding.SelectedIndex].ID;
+                        var q = from r in context.tblRequisitions.Include(a => a.Supplier)
+                                where r.building == buildingId
+                                select new RequisitionList
+                                {
+                                    ID = r.id.ToString(),
+                                    trnDate = r.trnDate,
+                                    building = r.building.ToString(),
+                                    account = r.account,
+                                    reference = r.reference,
+                                    payreference = r.payreference,
+                                    amount = (double)r.amount,
+                                    ledger = r.ledger,
+                                    paid = r.paid,
+                                    processed = r.processed,
+
+                                    supplierName = r.Supplier != null ? r.Supplier.CompanyName : string.Empty,
+                                    supplierId = r.Supplier != null ? r.Supplier.id.ToString() : string.Empty,
+                                    supplierContact = r.Supplier != null ? r.Supplier.ContactPerson : string.Empty,
+                                    supplierVat = r.Supplier != null ? r.Supplier.VATNumber : string.Empty,
+                                    supplierEmail = r.Supplier != null ? r.Supplier.EmailAddress : string.Empty,
+
+                                    supplierBank = r.BankName,
+                                    supplierBranchName = r.BranchName,
+                                    supplierBranchCode = r.BranchCode,
+                                    supplierAccountNumber = r.AccountNumber
+                                };
+
+                        var requisitions = q.OrderBy(a => a.trnDate).ToList();
+
+                        lineNumber = "117";
+                        if (requisitions != null && requisitions.Count > 0)
                         {
-                            RequisitionList r = new RequisitionList();
-                            r.ID = dr["id"].ToString();
-                            r.trnDate = DateTime.Parse(dr["trnDate"].ToString());
-                            r.building = dr["Building"].ToString();
-                            r.account = dr["account"].ToString();
-                            r.reference = dr["reference"].ToString();
-                            r.payreference = dr["payreference"].ToString();
-                            r.amount = double.Parse(dr["amount"].ToString());
-                            r.ledger = dr["ledger"].ToString();
-                            bool matched = false;
-                            bool paid = bool.Parse(dr["paid"].ToString());
-                            bool processed = bool.Parse(dr["processed"].ToString());
-                            String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
-                            if (r.account.ToUpper() == "TRUST" && !paid)
+                            foreach (RequisitionList r in requisitions)
                             {
-                                matched = GetTransactions(r.trnDate, r.amount, transactions);
-                            }
-                            else if (!paid)
-                            {
-                                matched = GetTransactions(r.trnDate, r.amount * -1, transactions);
-                            }
-                            if (!processed)
-                            {
-                                unProcessedRequisitions.Add(r);
-                            }
-                            else if (!matched && !paid)
-                            {
-                                unPaidRequisitions.Add(r);
-                            }
-                            else
-                            {
-                                String updateQuery = "UPDATE tblRequisition SET paid = 'True' WHERE id = " + r.ID;
-                                paidRequisitions.Add(r);
-                                dh.SetData(updateQuery, null, out status);
+                                //r.building = r.buildingId.ToString();
+                               // r.amount = Convert.ToDouble(r.amountD);
+
+                                bool matched = false;
+                                bool paid = r.paid;
+                                bool processed = r.processed;
+                                String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
+                                if (r.account.ToUpper() == "TRUST" && !paid)
+                                {
+                                    matched = GetTransactions(r.trnDate, r.amount, transactions);
+                                }
+                                else if (!paid)
+                                {
+                                    matched = GetTransactions(r.trnDate, r.amount * -1, transactions);
+                                }
+                                if (!processed)
+                                {
+                                    unProcessedRequisitions.Add(r);
+                                }
+                                else if (!matched && !paid)
+                                {
+                                    unPaidRequisitions.Add(r);
+                                }
+                                else
+                                {
+                                    String updateQuery = "UPDATE tblRequisition SET paid = 'True' WHERE id = " + r.ID;
+                                    r.paid = true;
+                                    paidRequisitions.Add(r);
+                                    dh.SetData(updateQuery, null, out status);
+                                }
                             }
                         }
                     }
+
+                    //String query = "SELECT r.id, r.trnDate, b.Building, r.account, r.processed, r.paid, r.reference, r.contractor, r.payreference, r.amount, r.ledger, b.acc, b.ownbank, b.datapath";
+                    //query += " FROM tblRequisition AS r INNER JOIN tblBuildings AS b ON r.building = b.id";
+                    //query += " WHERE b.id = " + buildingID + " ORDER BY trnDate";
+                    //Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
+                    //DataSet dsRequisitions = dh.GetData(query, null, out status);
+                    //lineNumber = "117";
+                    //if (dsRequisitions != null && dsRequisitions.Tables.Count > 0 && dsRequisitions.Tables[0].Rows.Count > 0)
+                    //{
+                    //    foreach (DataRow dr in dsRequisitions.Tables[0].Rows)
+                    //    {
+                    //        RequisitionList r = new RequisitionList();
+                    //        r.ID = dr["id"].ToString();
+                    //        r.trnDate = DateTime.Parse(dr["trnDate"].ToString());
+                    //        r.building = dr["Building"].ToString();
+                    //        r.account = dr["account"].ToString();
+                    //        r.reference = dr["reference"].ToString();
+                    //        r.payreference = dr["payreference"].ToString();
+                    //        r.amount = double.Parse(dr["amount"].ToString());
+                    //        r.ledger = dr["ledger"].ToString();
+                    //        bool matched = false;
+                    //        bool paid = bool.Parse(dr["paid"].ToString());
+                    //        bool processed = bool.Parse(dr["processed"].ToString());
+                    //        String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
+                    //        if (r.account.ToUpper() == "TRUST" && !paid)
+                    //        {
+                    //            matched = GetTransactions(r.trnDate, r.amount, transactions);
+                    //        }
+                    //        else if (!paid)
+                    //        {
+                    //            matched = GetTransactions(r.trnDate, r.amount * -1, transactions);
+                    //        }
+                    //        if (!processed)
+                    //        {
+                    //            unProcessedRequisitions.Add(r);
+                    //        }
+                    //        else if (!matched && !paid)
+                    //        {
+                    //            unPaidRequisitions.Add(r);
+                    //        }
+                    //        else
+                    //        {
+                    //            String updateQuery = "UPDATE tblRequisition SET paid = 'True' WHERE id = " + r.ID;
+                    //            paidRequisitions.Add(r);
+                    //            dh.SetData(updateQuery, null, out status);
+                    //        }
+                    //    }
+                    //}
                 }
             }
             catch (Exception ex)
@@ -210,7 +293,37 @@ namespace Astrodon.Controls
                         message += "Ledger Account: " + r.ledger + "." + Environment.NewLine;
                         message += "Reference: " + r.payreference + "." + Environment.NewLine;
                         message += "For amount : " + r.amount.ToString("#,##0.00") + "." + Environment.NewLine;
+
+                        if (!String.IsNullOrWhiteSpace(r.supplierName))
+                        {
+
+                            message += Environment.NewLine;
+
+                            message += "Supplier Details" + Environment.NewLine;
+                            message += "Supplier ID: " + r.supplierId + Environment.NewLine;
+                            message += "Name: " + r.supplierName + Environment.NewLine;
+                            message += "VAT: " + r.supplierVat + Environment.NewLine;
+                            message += "Contact Person: " + r.supplierContact + Environment.NewLine;
+                            message += "Email :" + r.supplierEmail + Environment.NewLine;
+
+
+
+                        }
+
+                        if (!String.IsNullOrWhiteSpace(r.supplierBank))
+                        {
+                            message += Environment.NewLine;
+                            message += "Banking Details" + Environment.NewLine;
+                            message += "Bank: " + r.supplierBank + Environment.NewLine;
+                            message += "Branch: " + r.supplierBranchName + Environment.NewLine;
+                            message += "Branch Code: " + r.supplierBranchCode + Environment.NewLine;
+                            message += "Account Number: " + r.supplierAccountNumber + Environment.NewLine;
+                        }
+
                         message += "-----------------------" + "." + Environment.NewLine + Environment.NewLine;
+
+
+
                         String query = "UPDATE tblRequisition SET processed = 'True' WHERE id = " + id;
                         if (message != "")
                         {
@@ -342,14 +455,15 @@ namespace Astrodon.Controls
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            
             double amt;
             if (double.TryParse(txtAmount.Text, out amt) 
                 && cmbBuilding.SelectedItem != null 
                 && cmbLedger.SelectedItem != null 
                 && cmbAccount.SelectedItem != null)
             {
-                String query = "INSERT INTO tblRequisition(trnDate, account, reference, payreference, ledger, amount, userID, building,SupplierId,InvoiceNumber,InvoiceDate,BankName,BranchCode,AccountNumber)";
-                query += " VALUES(@trnDate, @account, @reference, @payment, @ledger, @amount, @userID, @building,@SupplierId,@InvoiceNumber,@InvoiceDate,@BankName,@BranchCode,@AccountNumber)";
+                String query = "INSERT INTO tblRequisition(trnDate, account, reference, payreference, ledger, amount, userID, building,SupplierId,InvoiceNumber,InvoiceDate,BankName,BranchCode,AccountNumber,BranchName)";
+                query += " VALUES(@trnDate, @account, @reference, @payment, @ledger, @amount, @userID, @building,@SupplierId,@InvoiceNumber,@InvoiceDate,@BankName,@BranchCode,@AccountNumber,@BranchName)";
                 Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
                 sqlParms.Add("@trnDate", DateTime.Parse(trnDatePicker.Value.ToString("yyyy/MM/dd")));
                 sqlParms.Add("@account", cmbAccount.SelectedItem.ToString());
@@ -365,8 +479,59 @@ namespace Astrodon.Controls
                 sqlParms.Add("@BankName", _supplier == null ? (string)null: _supplier.BankName);
                 sqlParms.Add("@BranchCode", _supplier == null ? (string)null : _supplier.BranceCode);
                 sqlParms.Add("@AccountNumber", _supplier == null ? (string)null : _supplier.AccountNumber);
+                sqlParms.Add("@BranchName", _supplier == null ? (string)null : _supplier.BranchName);
+                using (var context = SqlDataHandler.GetDataContext())
+                {
 
-                dh.SetData(query, sqlParms, out status);
+                    var item = new tblRequisition()
+                    {
+                        trnDate = trnDatePicker.Value.Date,
+                        account = cmbAccount.SelectedItem.ToString(),
+                        reference = myBuildings[cmbBuilding.SelectedIndex].Abbr + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + myBuildings[cmbBuilding.SelectedIndex].Trust + ")" : ""),
+                        ledger = cmbLedger.SelectedItem.ToString(),
+                        amount = decimal.Parse(txtAmount.Text),
+                        payreference = txtPaymentRef.Text,
+                        userID = Controller.user.id,
+                        building = myBuildings[cmbBuilding.SelectedIndex].ID,
+                        SupplierId = _supplier == null ? (int?)null : _supplier.id,
+                        InvoiceNumber = txtInvoiceNumber.Text,
+                        InvoiceDate = dtInvoiceDate.Value.Date,
+                        BankName = _supplier == null ? (string)null : _supplier.BankName,
+                        BranchCode = _supplier == null ? (string)null : _supplier.BranceCode,
+                        BranchName = _supplier == null ? (string)null : _supplier.BranchName,
+                        AccountNumber = _supplier == null ? (string)null : _supplier.AccountNumber
+
+                    };
+                    context.tblRequisitions.Add(item);
+
+
+                    string ledgerAccount = item.ledger;
+                    
+                    if(ledgerAccount.Contains(":"))
+                        ledgerAccount = ledgerAccount.Split(":".ToCharArray())[0];
+
+                    var config = (from c in context.BuildingMaintenanceConfigurationSet
+                                                   .Include(a => a.Building)
+                                  where c.BuildingId == item.building
+                                  && c.PastelAccountNumber == ledgerAccount
+                                  select c).SingleOrDefault();
+
+                    if (config != null)
+                    {
+                        //capture the maintenance as part of the same unit of work
+                        if (frmMaintenance.CaptureMaintenanceRecord(context, item, config))
+                            context.SaveChanges();
+                    }
+                    else
+                    {
+                        context.SaveChanges();
+                    }
+
+                    //removed - insert handled by EF so that we can get to the PK of the record
+                    //dh.SetData(query, sqlParms, out status);
+                }
+               
+
                 if (cmbRecur.SelectedIndex > 0)
                 {
                     DateTime startDate = trnDatePicker.Value;
@@ -403,6 +568,7 @@ namespace Astrodon.Controls
                         dh.SetData(query, sqlParms, out status);
                     }
                 }
+
                 LoadRequisitions();
                 ClearRequisitions();
             }
@@ -460,8 +626,15 @@ namespace Astrodon.Controls
 
         private void txtAmount_TextChanged(object sender, EventArgs e)
         {
-            double requestedAmt = double.TryParse(txtAmount.Text, out requestedAmt) ? requestedAmt : 0;
-            lblAvAmt.Text = (double.Parse(lblBalance.Text) - requestedAmt - (requestedAmt > 0 ? GetEFTFee() : 0)).ToString("#,##0.00");
+            try
+            {
+                double requestedAmt = double.TryParse(txtAmount.Text, out requestedAmt) ? requestedAmt : 0;
+                lblAvAmt.Text = (double.Parse(lblBalance.Text) - requestedAmt - (requestedAmt > 0 ? GetEFTFee() : 0)).ToString("#,##0.00");
+            }
+            catch
+            {
+                lblAvAmt.Text = string.Empty;
+            }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -565,6 +738,28 @@ namespace Astrodon.Controls
 
     public class RequisitionList
     {
+        public string supplierName;
+
+        public string supplierId;
+
+        public string supplierContact;
+
+        public string supplierVat;
+
+        public string supplierEmail;
+
+        public string supplierBank;
+
+        public string supplierBranchName;
+
+        public string supplierBranchCode;
+
+        public string supplierAccountNumber;
+
+        public bool paid;
+
+        public bool processed;
+
         public String ID { get; set; }
 
         public DateTime trnDate { get; set; }
