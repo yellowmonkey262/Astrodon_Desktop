@@ -58,6 +58,8 @@ namespace Astrodon.Data.SupplierData
         
         #endregion
 
+        public virtual ICollection<MaintenanceData.Maintenance> Maintenance { get; set; }
+
         public virtual ICollection<SupplierAudit> AuditRecords { get; set; }
     }
 }
