@@ -151,6 +151,13 @@
     <Compile Include="Controls\Maintenance\usrBuildingMaintenanceConfiguration.Designer.cs">
       <DependentUpon>usrBuildingMaintenanceConfiguration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Supplier\SupplierEventArgs.cs" />
+    <Compile Include="Controls\Supplier\usrSupplierLookup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Supplier\usrSupplierLookup.Designer.cs">
+      <DependentUpon>usrSupplierLookup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\usrAccounts.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -459,6 +466,12 @@
     </Compile>
     <Compile Include="Forms\frmPrompt.Designer.cs">
       <DependentUpon>frmPrompt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmSupplierLookup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmSupplierLookup.Designer.cs">
+      <DependentUpon>frmSupplierLookup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSupport.cs">
       <SubType>Form</SubType>
