@@ -46,6 +46,9 @@
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.pnlContents);
             this.Name = "frmSupplierLookup";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Supplier Lookup";
             this.ResumeLayout(false);
 

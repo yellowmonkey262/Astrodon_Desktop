@@ -13,27 +13,49 @@ namespace Astrodon.Forms
 {
     public partial class frmSupplierLookup : Form
     {
-        private DataContext _DataContext;
+        private usrSupplierLookup _LookupControl;
 
-        public frmSupplierLookup()
+        private Data.SupplierData.Supplier _SelectedItem = null;
+
+        public frmSupplierLookup(DataContext context)
         {
             InitializeComponent();
-            _DataContext = new DataContext();
+            DialogResult = DialogResult.Cancel;
 
-            usrSupplierLookup lookupControl = new usrSupplierLookup(_DataContext);
-            lookupControl.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(lookupControl);
+            _LookupControl = new usrSupplierLookup(context);
+            _LookupControl.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(_LookupControl);
+
+            _LookupControl.SupplierSelectedEvent += LookupControl_SupplierSelectedEvent;
+        }
+
+        private void LookupControl_SupplierSelectedEvent(object sender, SupplierEventArgs e)
+        {
+            _SelectedItem = e.SelectedItem;
+            if (e.SupplierSelected)
+                DialogResult = DialogResult.OK;
+            else
+                DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            _DataContext.Dispose();
+            _LookupControl.SupplierSelectedEvent -= LookupControl_SupplierSelectedEvent;
             base.OnClosed(e);
         }
+      
 
-        private void label1_Click(object sender, EventArgs e)
+        public static bool SelectSupplier(out Data.SupplierData.Supplier supplier)
         {
-
+            supplier = null;
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var frm = new frmSupplierLookup(context);
+                var dialogResult = frm.ShowDialog();
+                supplier = frm._SelectedItem;
+                return (dialogResult == DialogResult.OK && supplier != null);
+            }
         }
     }
 }
