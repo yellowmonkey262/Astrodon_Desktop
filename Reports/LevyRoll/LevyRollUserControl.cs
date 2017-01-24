@@ -82,7 +82,7 @@ namespace Astrodon.Reports
                 button1.Enabled = false;
                 try
                 {
-                    using (var reportService = new ReportServiceClient("BasicHttpEndpoint"))
+                    using (var reportService = new ReportServiceClient())
                     {
                         DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
                         var reportData = reportService.LevyRollReport(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);

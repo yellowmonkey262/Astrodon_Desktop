@@ -8,6 +8,9 @@ using System.Text;
 using System.Windows.Forms;
 using Astrodon.Data.Base;
 using System.Globalization;
+using Astrodon.ReportService;
+using System.IO;
+using System.Diagnostics;
 
 namespace Astrodon.Reports.MaintenanceReport
 {
@@ -74,9 +77,43 @@ namespace Astrodon.Reports.MaintenanceReport
         }
 
 
-
         private void button1_Click(object sender, EventArgs e)
         {
+            if (dlgSave.ShowDialog() == DialogResult.OK)
+            {
+
+                button1.Enabled = false;
+                try
+                {
+                    using (var reportService = new ReportServiceClient())
+                    {
+                        DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+
+                        MaintenanceReportType repType;
+                        if (rbDetailed.Checked)
+                            repType = MaintenanceReportType.DetailedReport;
+                        else if (rbDetailWithDocs.Checked)
+                            repType = MaintenanceReportType.DetailedReportWithSupportingDocuments;
+                        else
+                            repType = MaintenanceReportType.SummaryReport;
+
+                        var building = cmbBuilding.SelectedItem as Building;
+
+                        var reportData = reportService.MaintenanceReport(SqlDataHandler.GetConnectionString(), repType, dDate, building.ID, building.Name, (cmbBuilding.SelectedItem as Building).DataPath);
+                        if (reportData == null)
+                        {
+                            Controller.HandleError("No data found for " + dDate.ToString("MMM yyyy"), "Maintenance Report");
+                            return;
+                        }
+                        File.WriteAllBytes(dlgSave.FileName, reportData);
+                        Process.Start(dlgSave.FileName);
+                    }
+                }
+                finally
+                {
+                    button1.Enabled = true;
+                }
+            }
         }
     }
 }

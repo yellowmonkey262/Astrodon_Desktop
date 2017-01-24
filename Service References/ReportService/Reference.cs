@@ -37,7 +37,7 @@ namespace Astrodon.ReportService {
         byte[] SupplierReport(string sqlConnectionString, System.DateTime processMonth);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MaintenanceReport", ReplyAction="http://tempuri.org/IReportService/MaintenanceReportResponse")]
-        byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime processMonth, string buildingName, string dataPath);
+        byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime processMonth, int buildingId, string buildingName, string dataPath);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -75,8 +75,8 @@ namespace Astrodon.ReportService {
             return base.Channel.SupplierReport(sqlConnectionString, processMonth);
         }
         
-        public byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime processMonth, string buildingName, string dataPath) {
-            return base.Channel.MaintenanceReport(sqlConnectionString, reportType, processMonth, buildingName, dataPath);
+        public byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime processMonth, int buildingId, string buildingName, string dataPath) {
+            return base.Channel.MaintenanceReport(sqlConnectionString, reportType, processMonth, buildingId, buildingName, dataPath);
         }
     }
 }
