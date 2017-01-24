@@ -8,6 +8,9 @@ using System.Text;
 using System.Windows.Forms;
 using Astrodon.Data.Base;
 using System.Globalization;
+using Astrodon.ReportService;
+using System.IO;
+using System.Diagnostics;
 
 namespace Astrodon.Reports.SupplierReport
 {
@@ -50,5 +53,33 @@ namespace Astrodon.Reports.SupplierReport
             cmbMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            if (dlgSave.ShowDialog() == DialogResult.OK)
+            {
+
+                button1.Enabled = false;
+                try
+                {
+                    using (var reportService = new ReportServiceClient())
+                    {
+                        DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+                        var reportData = reportService.SupplierReport(SqlDataHandler.GetConnectionString(), dDate);
+                        if(reportData == null)
+                        {
+                            Controller.HandleError("No data found for " + dDate.ToString("MMM yyyy"), "Supplier Report");
+                            return;
+                        }
+                        File.WriteAllBytes(dlgSave.FileName, reportData);
+                        Process.Start(dlgSave.FileName);
+                    }
+                }
+                finally
+                {
+                    button1.Enabled = true;
+                }
+            }
+        }
     }
 }
