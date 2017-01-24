@@ -2,6 +2,7 @@
 using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using Astrodon.Reports;
+using Astrodon.Reports.MaintenanceReport;
 using Astrodon.Reports.SupplierReport;
 using NotificationWindow;
 using System;
@@ -473,13 +474,23 @@ namespace Astrodon {
 
         }
 
-        private void supplierReportToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void supplierReportToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
             usrSupplierReport suppReport = new usrSupplierReport();
             suppReport.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(suppReport);
-            toolStripStatusLabel1.Text = "Supplier REport";
+            toolStripStatusLabel1.Text = "Supplier Report";
+        }
+
+        private void maintenanceReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrMaintenanceReport report = new usrMaintenanceReport();
+            report.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(report);
+            toolStripStatusLabel1.Text = "Maintenance Report";
         }
     }
 }

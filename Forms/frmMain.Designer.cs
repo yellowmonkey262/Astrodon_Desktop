@@ -84,7 +84,8 @@
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.supplierReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.supplierReportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.maintenanceReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -173,7 +174,9 @@
             this.emailToolStripMenuItem,
             this.pAPMToolStripMenuItem,
             this.statementRunToolStripMenuItem,
-            this.trustToolStripMenuItem});
+            this.trustToolStripMenuItem,
+            this.supplierReportToolStripMenuItem1,
+            this.maintenanceReportToolStripMenuItem});
             this.reportingToolStripMenuItem.Name = "reportingToolStripMenuItem";
             this.reportingToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.reportingToolStripMenuItem.Text = "Reporting";
@@ -181,7 +184,7 @@
             // summaryToolStripMenuItem
             // 
             this.summaryToolStripMenuItem.Name = "summaryToolStripMenuItem";
-            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.summaryToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.summaryToolStripMenuItem.Text = "Summary";
             this.summaryToolStripMenuItem.Click += new System.EventHandler(this.summaryToolStripMenuItem_Click);
             // 
@@ -189,35 +192,35 @@
             // 
             this.sMSToolStripMenuItem.Enabled = false;
             this.sMSToolStripMenuItem.Name = "sMSToolStripMenuItem";
-            this.sMSToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sMSToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.sMSToolStripMenuItem.Text = "SMS";
             this.sMSToolStripMenuItem.Click += new System.EventHandler(this.sMSToolStripMenuItem_Click);
             // 
             // emailToolStripMenuItem
             // 
             this.emailToolStripMenuItem.Name = "emailToolStripMenuItem";
-            this.emailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.emailToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.emailToolStripMenuItem.Text = "Email";
             this.emailToolStripMenuItem.Click += new System.EventHandler(this.emailToolStripMenuItem_Click);
             // 
             // pAPMToolStripMenuItem
             // 
             this.pAPMToolStripMenuItem.Name = "pAPMToolStripMenuItem";
-            this.pAPMToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pAPMToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.pAPMToolStripMenuItem.Text = "PA / PM";
             this.pAPMToolStripMenuItem.Click += new System.EventHandler(this.pAPMToolStripMenuItem_Click);
             // 
             // statementRunToolStripMenuItem
             // 
             this.statementRunToolStripMenuItem.Name = "statementRunToolStripMenuItem";
-            this.statementRunToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.statementRunToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.statementRunToolStripMenuItem.Text = "Statement Run";
             this.statementRunToolStripMenuItem.Click += new System.EventHandler(this.statementRunToolStripMenuItem_Click);
             // 
             // trustToolStripMenuItem
             // 
             this.trustToolStripMenuItem.Name = "trustToolStripMenuItem";
-            this.trustToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.trustToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.trustToolStripMenuItem.Text = "Trust";
             this.trustToolStripMenuItem.Click += new System.EventHandler(this.trustToolStripMenuItem_Click);
             // 
@@ -517,8 +520,7 @@
             // suppliersToolStripMenuItem
             // 
             this.suppliersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.maintenanceToolStripMenuItem,
-            this.supplierReportToolStripMenuItem});
+            this.maintenanceToolStripMenuItem});
             this.suppliersToolStripMenuItem.Name = "suppliersToolStripMenuItem";
             this.suppliersToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.suppliersToolStripMenuItem.Text = "Suppliers";
@@ -569,12 +571,19 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // supplierReportToolStripMenuItem
+            // supplierReportToolStripMenuItem1
             // 
-            this.supplierReportToolStripMenuItem.Name = "supplierReportToolStripMenuItem";
-            this.supplierReportToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.supplierReportToolStripMenuItem.Text = "Supplier Report";
-            this.supplierReportToolStripMenuItem.Click += new System.EventHandler(this.supplierReportToolStripMenuItem_Click);
+            this.supplierReportToolStripMenuItem1.Name = "supplierReportToolStripMenuItem1";
+            this.supplierReportToolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
+            this.supplierReportToolStripMenuItem1.Text = "Supplier Report";
+            this.supplierReportToolStripMenuItem1.Click += new System.EventHandler(this.supplierReportToolStripMenuItem1_Click);
+            // 
+            // maintenanceReportToolStripMenuItem
+            // 
+            this.maintenanceReportToolStripMenuItem.Name = "maintenanceReportToolStripMenuItem";
+            this.maintenanceReportToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.maintenanceReportToolStripMenuItem.Text = "Maintenance Report";
+            this.maintenanceReportToolStripMenuItem.Click += new System.EventHandler(this.maintenanceReportToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -662,6 +671,7 @@
         private System.Windows.Forms.ToolStripMenuItem tbMaintenanceConfig;
         private System.Windows.Forms.ToolStripMenuItem suppliersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem maintenanceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem supplierReportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem supplierReportToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem maintenanceReportToolStripMenuItem;
     }
 }
