@@ -22,9 +22,6 @@ namespace Astrodon.Controls.Maintenance
         private BuildingMaintenanceConfiguration _Item = null;
         private Building _SelectedBuilding;
         private DataContext dataContext;
-
-
-
         private int userid;
 
         public usrBuildingMaintenanceConfiguration(DataContext context)
@@ -36,11 +33,10 @@ namespace Astrodon.Controls.Maintenance
             GotoReadOnly();
         }
 
-      
-
         private void LoadAccounts()
         {
             this.Cursor = Cursors.WaitCursor;
+
             try
             {
                 try
@@ -68,6 +64,7 @@ namespace Astrodon.Controls.Maintenance
         private void LoadBuildings()
         {
             this.Cursor = Cursors.WaitCursor;
+
             try
             {
                 Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
@@ -92,7 +89,6 @@ namespace Astrodon.Controls.Maintenance
             LoadAccounts();
             LoadMaintenanceRecords();
             GotoReadOnly();
-
         }
 
         private void LoadMaintenanceRecords()
@@ -103,7 +99,6 @@ namespace Astrodon.Controls.Maintenance
             _Data = dataContext.BuildingMaintenanceConfigurationSet.Where(a => a.BuildingId == _SelectedBuilding.ID).OrderBy(a => a.Name).ToList();
            
             BindDataGrid();
-
         }
 
         private void BindDataGrid()
@@ -124,7 +119,6 @@ namespace Astrodon.Controls.Maintenance
                 HeaderText = "Action",
                 Text = "Edit",
                 UseColumnTextForButtonValue = true
-                               
             });
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
@@ -148,7 +142,6 @@ namespace Astrodon.Controls.Maintenance
             });
 
             dgItems.AutoResizeColumns();
-
         }
 
         private void btnNew_Click(object sender, EventArgs e)
