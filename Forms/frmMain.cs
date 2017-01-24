@@ -2,6 +2,7 @@
 using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using Astrodon.Reports;
+using Astrodon.Reports.SupplierReport;
 using NotificationWindow;
 using System;
 using System.Data;
@@ -470,6 +471,15 @@ namespace Astrodon {
             bool result = Forms.frmSupplierLookup.SelectSupplier(out x);
             MessageBox.Show(result.ToString());
 
+        }
+
+        private void supplierReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrSupplierReport suppReport = new usrSupplierReport();
+            suppReport.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(suppReport);
+            toolStripStatusLabel1.Text = "Supplier REport";
         }
     }
 }

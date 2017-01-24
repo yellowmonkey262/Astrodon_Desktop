@@ -65,7 +65,10 @@ namespace Astrodon.Reports
      
         private void LoadBuildings()
         {
-            _Buildings = new Buildings(false, "All buildings").buildings;
+            var userid = Controller.user.id;
+            Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
+
+            _Buildings = bManager.buildings;
             cmbBuilding.DataSource = _Buildings;
             cmbBuilding.ValueMember = "ID";
             cmbBuilding.DisplayMember = "Name";

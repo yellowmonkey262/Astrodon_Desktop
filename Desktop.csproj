@@ -516,6 +516,18 @@
     <Compile Include="Reports\LevyRoll\LevyRollUserControl.Designer.cs">
       <DependentUpon>LevyRollUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\MaintenanceReport\usrMaintenanceReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reports\MaintenanceReport\usrMaintenanceReport.Designer.cs">
+      <DependentUpon>usrMaintenanceReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\SupplierReport\usrSupplierReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reports\SupplierReport\usrSupplierReport.Designer.cs">
+      <DependentUpon>usrSupplierReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Service References\ReportService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -692,6 +704,12 @@
     <EmbeddedResource Include="Reports\LevyRoll\LevyRollUserControl.resx">
       <DependentUpon>LevyRollUserControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\MaintenanceReport\usrMaintenanceReport.resx">
+      <DependentUpon>usrMaintenanceReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\SupplierReport\usrSupplierReport.resx">
+      <DependentUpon>usrSupplierReport.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="ADL001_env.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -865,13 +883,16 @@
     <None Include="SEK001_env.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Service References\ReportService\ReportService.wsdl" />
-    <None Include="Service References\ReportService\ReportService.xsd">
+    <None Include="Service References\ReportService\item.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService1.xsd">
+    <None Include="Service References\ReportService\item1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ReportService\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService1.wsdl" />
     <None Include="stmt_template.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1000,6 +1021,7 @@
     </Content>
     <Content Include="Resources\AstradonNewLogo.jpg" />
     <Content Include="Resources\stdmd5.jpg" />
+    <None Include="Service References\ReportService\item.disco" />
     <Content Include="signature.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1013,7 +1035,6 @@
     </None>
     <None Include="Service References\ReportService\configuration.svcinfo" />
     <None Include="Service References\ReportService\configuration91.svcinfo" />
-    <None Include="Service References\ReportService\ReportService.disco" />
     <None Include="Resources\astrodon.png" />
     <Content Include="astrodon_favicon.ico" />
     <None Include="Resources\centrec.png" />
