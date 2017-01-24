@@ -460,16 +460,11 @@ namespace Astrodon {
 
         private void maintenanceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //pnlContents.Controls.Clear();
-            //usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext);
-            //supplierLookup.Dock = DockStyle.Fill;
-            //pnlContents.Controls.Add(supplierLookup);
-            //toolStripStatusLabel1.Text = "Supplier Maintenance";
-
-            Data.SupplierData.Supplier x;
-            bool result = Forms.frmSupplierLookup.SelectSupplier(out x);
-            MessageBox.Show(result.ToString());
-
+            pnlContents.Controls.Clear();
+            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext);
+            supplierLookup.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(supplierLookup);
+            toolStripStatusLabel1.Text = "Supplier Maintenance";
         }
     }
 }

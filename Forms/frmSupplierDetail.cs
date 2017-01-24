@@ -13,22 +13,36 @@ namespace Astrodon.Forms
 {
     public partial class frmSupplierDetail : Form
     {
-        //private DataContext _DataContext;
+        private DataContext _DataContext;
+        private usrSupplierDetail _SupplierDetailControl;
 
-        public frmSupplierDetail()
+        public frmSupplierDetail(DataContext context, int supplierId)
         {
             InitializeComponent();
-            //_DataContext = new DataContext();
+            DialogResult = DialogResult.Cancel;
 
-            //usrSupplierDetail lookupControl = new usrSupplierDetail(_DataContext);
-            //lookupControl.Dock = DockStyle.Fill;
-            //pnlContents.Controls.Add(lookupControl);
+            _DataContext = context;
+
+            _SupplierDetailControl = new usrSupplierDetail(_DataContext, supplierId);
+            _SupplierDetailControl.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(_SupplierDetailControl);
+
+            _SupplierDetailControl.SaveSuccessEvent += SupplierDetail_SaveSuccessEvent;
         }
 
-        //protected override void OnClosed(EventArgs e)
-        //{
-        //    _DataContext.Dispose();
-        //    base.OnClosed(e);
-        //}
+        private void SupplierDetail_SaveSuccessEvent(object sender, SaveSuccessEventArgs e)
+        {
+            if (e.SaveSuccess)
+                DialogResult = DialogResult.OK;
+            else
+                DialogResult = DialogResult.Cancel;
+
+            Close();
+        }
+
+        private void frmSupplierDetail_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            _SupplierDetailControl.SaveSuccessEvent -= SupplierDetail_SaveSuccessEvent;
+        }
     }
 }

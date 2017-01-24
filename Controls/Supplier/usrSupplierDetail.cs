@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Astrodon.Data;
+using System.Data.Entity;
 
 namespace Astrodon.Controls.Supplier
 {
@@ -26,6 +27,24 @@ namespace Astrodon.Controls.Supplier
             PopulateForm();
         }
 
+        #region Events
+
+        public event SaveSuccessEventHandler SaveSuccessEvent;
+
+        private void RaiseSaveSuccess()
+        {
+            if (SaveSuccessEvent != null)
+                SaveSuccessEvent(this, new SaveSuccessEventArgs(true));
+        }
+
+        private void RaiseCancel()
+        {
+            if (SaveSuccessEvent != null)
+                SaveSuccessEvent(this, new SaveSuccessEventArgs());
+        }
+
+        #endregion
+
         private void PopulateForm()
         {
             if (_SupplierId > 0)
@@ -36,15 +55,17 @@ namespace Astrodon.Controls.Supplier
                                   .Where(a => a.SupplierId == _SupplierId)
                                   .Select(a => new SupplierAuditTrailResult
                                   {
-                                      AuditTimeStamp = a.AuditTimeStamp,
+                                      AuditDate = a.AuditTimeStamp,
                                       UserName = a.User.username,
                                       FieldName = a.FieldName,
                                       OldValue = a.OldValue,
                                       NewValue = a.NewValue
-                                  }).ToList();
+                                  })
+                                  .OrderByDescending(a => a.AuditDate)
+                                  .ToList();
 
                 _BuildingData = (from m in _DataContext.MaintenanceSet.Where(a => a.SupplierId == _SupplierId)
-                                 join bc in _DataContext.BuildingMaintenanceConfigurationSet on m.BuildingMaintenanceConfigurationId equals bc.id
+                                 join bc in _DataContext.BuildingMaintenanceConfigurationSet.Include(a => a.Building) on m.BuildingMaintenanceConfigurationId equals bc.id
                                  select new BuildingResult
                                  {
                                      BuildingName = bc.Building.Building,
@@ -65,26 +86,6 @@ namespace Astrodon.Controls.Supplier
             BindBuildingsDataGrid();
         }
 
-        public class BuildingResult
-        {
-            public bool IsLinked { get; set; }
-
-            public string BuildingName { get; set; }
-        }
-
-        public class SupplierAuditTrailResult
-        {
-            public DateTime AuditTimeStamp { get; set; }
-
-            public string UserName { get; set; }
-
-            public string FieldName { get; set; }
-
-            public string OldValue { get; set; }
-
-            public string NewValue { get; set; }
-        }
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             var validationResult = ValidateForm();
@@ -94,6 +95,68 @@ namespace Astrodon.Controls.Supplier
                 Controller.HandleError(validationResult, "Validation Error");
                 return;
             }
+            else
+            {
+                if(_SupplierId > 0)
+                {
+                    var supplier = _DataContext.SupplierSet.Single(a => a.id == _SupplierId);
+                    supplier.CompanyName = txtCompanyName.Text.Trim();
+                    supplier.CompanyRegistration = txtCompanyReg.Text.Trim();
+                    supplier.VATNumber = txtVatNumber.Text.Trim();
+                    supplier.ContactPerson = txtContactPerson.Text.Trim();
+                    supplier.EmailAddress = txtEmailAddress.Text.Trim();
+                    supplier.ContactNumber = txtContactNumber.Text.Trim();
+                    supplier.BlackListed = chkIsBlackListed.Checked;
+                    supplier.BlackListReason = txtBlackListReason.Text.Trim();
+                    supplier.BankName = txtBank.Text.Trim();
+                    supplier.BranchName = txtBranch.Text.Trim();
+                    supplier.BranceCode = txtBranchCode.Text.Trim();
+                    supplier.AccountNumber = txtAccountNumber.Text.Trim();
+
+                    TrackSupplierChanges(_Supplier, supplier);
+
+                    _DataContext.SaveChanges();
+
+                    RaiseSaveSuccess();
+                }
+                else
+                {
+                    var supplier = _DataContext.SupplierSet.FirstOrDefault(a => a.CompanyName == txtCompanyName.Text.Trim());
+
+                    if(supplier != null)
+                    {
+                        Controller.HandleError("Supplier with the same name already exists.", "Save Error");
+                        return;
+                    }
+                    else
+                    {
+                        _DataContext.SupplierSet.Add(new Data.SupplierData.Supplier()
+                        {
+                            CompanyName = txtCompanyName.Text.Trim(),
+                            CompanyRegistration = txtCompanyReg.Text.Trim(),
+                            VATNumber = txtVatNumber.Text.Trim(),
+                            ContactPerson = txtContactPerson.Text.Trim(),
+                            EmailAddress = txtEmailAddress.Text.Trim(),
+                            ContactNumber = txtContactNumber.Text.Trim(),
+                            BlackListed = chkIsBlackListed.Checked,
+                            BlackListReason = txtBlackListReason.Text.Trim(),
+                            BankName = txtBank.Text.Trim(),
+                            BranchName = txtBranch.Text.Trim(),
+                            BranceCode = txtBranchCode.Text.Trim(),
+                            AccountNumber = txtAccountNumber.Text.Trim()
+                        });
+
+                        _DataContext.SaveChanges();
+
+                        RaiseSaveSuccess();
+                    }
+                }
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            RaiseCancel();
         }
 
         #region Helper Functions
@@ -108,6 +171,10 @@ namespace Astrodon.Controls.Supplier
             txtContactNumber.Text = _Supplier.ContactNumber;
             chkIsBlackListed.Checked = _Supplier.BlackListed;
             txtBlackListReason.Text = _Supplier.BlackListReason;
+            txtBank.Text = _Supplier.BankName;
+            txtBranch.Text = _Supplier.BranchName;
+            txtBranchCode.Text = _Supplier.BranceCode;
+            txtAccountNumber.Text = _Supplier.AccountNumber;
         }
 
         private void BindAuditTrailDataGrid()
@@ -116,49 +183,52 @@ namespace Astrodon.Controls.Supplier
             dgAuditTrail.MultiSelect = false;
             dgAuditTrail.AutoGenerateColumns = false;
 
-            BindingSource bs = new BindingSource();
-            bs.DataSource = _AuditTrailData;
-
             dgAuditTrail.Columns.Clear();
 
-            dgAuditTrail.DataSource = bs;
-
-            dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
+            if (_AuditTrailData.Count > 0)
             {
-                DataPropertyName = "AuditTimeStamp",
-                HeaderText = "Date",
-                ReadOnly = true
-            });
+                BindingSource bs = new BindingSource();
+                bs.DataSource = _AuditTrailData;
 
-            dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "UserName",
-                HeaderText = "User",
-                ReadOnly = true
-            });
+                dgAuditTrail.DataSource = bs;
 
-            dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "FieldName",
-                HeaderText = "Field",
-                ReadOnly = true
-            });
+                dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "AuditDateString",
+                    HeaderText = "Date",
+                    ReadOnly = true
+                });
 
-            dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "OldValue",
-                HeaderText = "Old Value",
-                ReadOnly = true
-            });
+                dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "UserName",
+                    HeaderText = "User",
+                    ReadOnly = true
+                });
 
-            dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "NewValue",
-                HeaderText = "New Value",
-                ReadOnly = true
-            });
+                dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "FieldName",
+                    HeaderText = "Field",
+                    ReadOnly = true
+                });
 
-            dgAuditTrail.AutoResizeColumns();
+                dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "OldValue",
+                    HeaderText = "Old Value",
+                    ReadOnly = true
+                });
+
+                dgAuditTrail.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "NewValue",
+                    HeaderText = "New Value",
+                    ReadOnly = true
+                });
+
+                dgAuditTrail.AutoResizeColumns();
+            }
         }
 
         private void BindBuildingsDataGrid()
@@ -167,28 +237,30 @@ namespace Astrodon.Controls.Supplier
             dgBuildings.MultiSelect = false;
             dgBuildings.AutoGenerateColumns = false;
 
-            BindingSource bs = new BindingSource();
-            bs.DataSource = _AuditTrailData;
-
             dgBuildings.Columns.Clear();
 
-            dgBuildings.DataSource = bs;
-
-            dgBuildings.Columns.Add(new DataGridViewCheckBoxColumn()
+            if (_BuildingData.Count > 0)
             {
-                DataPropertyName = "IsLinked",
-                HeaderText = "Date",
-                ReadOnly = true,
-            });
+                BindingSource bs = new BindingSource();
+                bs.DataSource = _BuildingData;
+                dgBuildings.DataSource = bs;
 
-            dgBuildings.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "BuildingName",
-                HeaderText = "Buildings",
-                ReadOnly = true
-            });
 
-            dgBuildings.AutoResizeColumns();
+                dgBuildings.Columns.Add(new DataGridViewCheckBoxColumn()
+                {
+                    DataPropertyName = "IsLinked",
+                    ReadOnly = true
+                });
+
+                dgBuildings.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "BuildingName",
+                    HeaderText = "Building",
+                    ReadOnly = true
+                });
+
+                dgBuildings.AutoResizeColumns();
+            }
         }
 
         private string ValidateForm()
@@ -214,7 +286,7 @@ namespace Astrodon.Controls.Supplier
             if (String.IsNullOrEmpty(txtAccountNumber.Text))
                 errors.Add("Account Number is Required.");
 
-            if (!(txtEmailAddress.Text.Contains("@") && txtEmailAddress.Text.Contains(".")))
+            if (string.IsNullOrEmpty(txtEmailAddress.Text) && !(txtEmailAddress.Text.Contains("@") && txtEmailAddress.Text.Contains(".")))
                 errors.Add("Invalid Email Address");
 
             if(errors.Count > 0)
@@ -230,6 +302,50 @@ namespace Astrodon.Controls.Supplier
             return result;
         }
 
+        private void TrackSupplierChanges(Astrodon.Data.SupplierData.Supplier source, Astrodon.Data.SupplierData.Supplier dest)
+        {
+            var modified = _DataContext.ChangeTracker.Entries().Where(p => p.State == EntityState.Modified && p.Entity is Astrodon.Data.SupplierData.Supplier);
+
+            foreach (var supplier in modified)
+            {
+                var audit = (from propertyName in supplier.OriginalValues.PropertyNames
+                             where !Equals(supplier.OriginalValues.GetValue<object>(propertyName), supplier.CurrentValues.GetValue<object>(propertyName))
+                             select new Data.SupplierData.SupplierAudit()
+                             {
+                                 AuditTimeStamp = DateTime.Now,
+                                 SupplierId = _SupplierId,
+                                 UserId = Controller.user.id,
+                                 FieldName = propertyName,
+                                 OldValue = supplier.OriginalValues.GetValue<object>(propertyName) == null ? null : supplier.OriginalValues.GetValue<object>(propertyName).ToString(),
+                                 NewValue = supplier.CurrentValues.GetValue<object>(propertyName) == null ? null : supplier.CurrentValues.GetValue<object>(propertyName).ToString()
+                             }).ToList();
+
+                _DataContext.SupplierAuditSet.AddRange(audit);
+            }
+        }
+
         #endregion
+
+        public class BuildingResult
+        {
+            public bool IsLinked { get; set; }
+
+            public string BuildingName { get; set; }
+        }
+
+        public class SupplierAuditTrailResult
+        {
+            public DateTime AuditDate { get; set; }
+
+            public string AuditDateString { get { return AuditDate.ToString("yyy-MM-dd"); } }
+
+            public string UserName { get; set; }
+
+            public string FieldName { get; set; }
+
+            public string OldValue { get; set; }
+
+            public string NewValue { get; set; }
+        }
     }
 }

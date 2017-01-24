@@ -127,6 +127,7 @@
             this.dgSuppliers.ReadOnly = true;
             this.dgSuppliers.Size = new System.Drawing.Size(795, 369);
             this.dgSuppliers.TabIndex = 9;
+            this.dgSuppliers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgSuppliers_CellContentClick);
             // 
             // btnSearch
             // 
@@ -147,6 +148,7 @@
             this.btnNewSupplier.Text = "New Supplier";
             this.btnNewSupplier.UseVisualStyleBackColor = true;
             this.btnNewSupplier.Visible = false;
+            this.btnNewSupplier.Click += new System.EventHandler(this.btnNewSupplier_Click);
             // 
             // usrSupplierLookup
             // 
