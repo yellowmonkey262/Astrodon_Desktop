@@ -18,13 +18,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:54995/ReportService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8080/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ReportService.wsdl" MetadataType="Wsdl" ID="16e5e32e-79b1-4819-86f2-6b838f8ef53c" SourceId="1" SourceUrl="http://localhost:54995/ReportService.svc?wsdl" />
-    <MetadataFile FileName="ReportService.xsd" MetadataType="Schema" ID="0be1df6c-a94e-4aa3-9307-19b9798cda62" SourceId="1" SourceUrl="http://localhost:54995/ReportService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ReportService.disco" MetadataType="Disco" ID="80c0b25c-fa7a-406c-81f4-5ef79c30cb99" SourceId="1" SourceUrl="http://localhost:54995/ReportService.svc?disco" />
-    <MetadataFile FileName="ReportService1.xsd" MetadataType="Schema" ID="94688eae-19a2-4e5b-934d-3dbfda960385" SourceId="1" SourceUrl="http://localhost:54995/ReportService.svc?xsd=xsd1" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="46c6a197-9f35-4157-b635-1a7dd0c3e580" SourceId="1" SourceUrl="http://localhost:8080/?xsd=xsd2" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="3fbc73e5-a883-46fb-af70-d62f28b666f9" SourceId="1" SourceUrl="http://localhost:8080/?disco" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="aca75d9e-6f08-4f57-88eb-5c02f63f4ce5" SourceId="1" SourceUrl="http://localhost:8080/?xsd=xsd0" />
+    <MetadataFile FileName="ReportService1.wsdl" MetadataType="Wsdl" ID="2b4d25f4-bdb9-4d51-9a03-fa23a171c63f" SourceId="1" SourceUrl="http://localhost:8080/?wsdl" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="9250badd-ecf3-43de-9aa7-4504da866197" SourceId="1" SourceUrl="http://localhost:8080/?xsd=xsd1" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

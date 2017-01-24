@@ -7,6 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desktop", "Desktop.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astrodon.Data", "Astrodon.Data\Astrodon.Data.csproj", "{89422917-7104-43AA-B124-BCCABF3C733B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleHost", "..\astrodon_reportserver\ConsoleHost\ConsoleHost.csproj", "{BFD9F879-784A-40B8-A1AC-8E5F0815B0BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reporting", "Reporting", "{D37CCCDF-36F8-4319-8C86-21C948CCF778}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PastelReportServer", "..\astrodon_reportserver\PastelReportServer\PastelReportServer.csproj", "{479C6C3D-B394-43E8-A8BC-3569F377FA36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PastelReportService", "..\astrodon_reportserver\PastelReportService\PastelReportService.csproj", "{100A030D-7F41-452B-AA4E-14365A6E6D62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +29,25 @@ Global
 		{89422917-7104-43AA-B124-BCCABF3C733B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89422917-7104-43AA-B124-BCCABF3C733B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89422917-7104-43AA-B124-BCCABF3C733B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFD9F879-784A-40B8-A1AC-8E5F0815B0BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFD9F879-784A-40B8-A1AC-8E5F0815B0BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFD9F879-784A-40B8-A1AC-8E5F0815B0BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFD9F879-784A-40B8-A1AC-8E5F0815B0BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{479C6C3D-B394-43E8-A8BC-3569F377FA36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{479C6C3D-B394-43E8-A8BC-3569F377FA36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{479C6C3D-B394-43E8-A8BC-3569F377FA36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{479C6C3D-B394-43E8-A8BC-3569F377FA36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{100A030D-7F41-452B-AA4E-14365A6E6D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{100A030D-7F41-452B-AA4E-14365A6E6D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{100A030D-7F41-452B-AA4E-14365A6E6D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{100A030D-7F41-452B-AA4E-14365A6E6D62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BFD9F879-784A-40B8-A1AC-8E5F0815B0BC} = {D37CCCDF-36F8-4319-8C86-21C948CCF778}
+		{479C6C3D-B394-43E8-A8BC-3569F377FA36} = {D37CCCDF-36F8-4319-8C86-21C948CCF778}
+		{100A030D-7F41-452B-AA4E-14365A6E6D62} = {D37CCCDF-36F8-4319-8C86-21C948CCF778}
 	EndGlobalSection
 EndGlobal

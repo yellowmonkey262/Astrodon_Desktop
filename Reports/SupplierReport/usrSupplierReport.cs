@@ -6,41 +6,34 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Globalization;
-using Desktop.Lib.Pervasive;
-using System.Data.Odbc;
-using System.Diagnostics;
-using System.Collections;
-using System.IO;
-using Astrodon.ReportService;
 using Astrodon.Data.Base;
+using System.Globalization;
+using Astrodon.ReportService;
+using System.IO;
+using System.Diagnostics;
 
-namespace Astrodon.Reports
+namespace Astrodon.Reports.SupplierReport
 {
-    public partial class LevyRollUserControl : UserControl
+    public partial class usrSupplierReport : UserControl
     {
-        private List<Building> _Buildings;
         private List<IdValue> _Years;
         private List<IdValue> _Months;
 
-        private SqlDataHandler dh = new SqlDataHandler();
-
-        public LevyRollUserControl()
+        public usrSupplierReport()
         {
             InitializeComponent();
-            LoadBuildings();
             LoadYears();
         }
 
         private void LoadYears()
         {
             _Years = new List<IdValue>();
-            _Years.Add(new IdValue() {Id = DateTime.Now.Year - 1, Value = (DateTime.Now.Year - 1).ToString() });
-            _Years.Add(new IdValue() { Id = DateTime.Now.Year, Value = (DateTime.Now.Year ).ToString() });
-            _Years.Add(new IdValue() { Id = DateTime.Now.Year+1, Value = (DateTime.Now.Year+1).ToString() });
+            _Years.Add(new IdValue() { Id = DateTime.Now.Year - 1, Value = (DateTime.Now.Year - 1).ToString() });
+            _Years.Add(new IdValue() { Id = DateTime.Now.Year, Value = (DateTime.Now.Year).ToString() });
+            _Years.Add(new IdValue() { Id = DateTime.Now.Year + 1, Value = (DateTime.Now.Year + 1).ToString() });
 
             _Months = new List<IdValue>();
-            for (int x=1; x<=12; x++)
+            for (int x = 1; x <= 12; x++)
             {
                 _Months.Add(new IdValue()
                 {
@@ -58,34 +51,26 @@ namespace Astrodon.Reports
             cmbMonth.ValueMember = "Id";
             cmbMonth.DisplayMember = "Value";
             cmbMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
-
-            
-        }
-
-     
-        private void LoadBuildings()
-        {
-            var userid = Controller.user.id;
-            Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
-
-            _Buildings = bManager.buildings;
-            cmbBuilding.DataSource = _Buildings;
-            cmbBuilding.ValueMember = "ID";
-            cmbBuilding.DisplayMember = "Name";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             if (dlgSave.ShowDialog() == DialogResult.OK)
             {
-            
+
                 button1.Enabled = false;
                 try
                 {
-                    using (var reportService = new ReportServiceClient("BasicHttpEndpoint"))
+                    using (var reportService = new ReportServiceClient())
                     {
                         DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
-                        var reportData = reportService.LevyRollReport(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
+                        var reportData = reportService.SupplierReport(SqlDataHandler.GetConnectionString(), dDate);
+                        if(reportData == null)
+                        {
+                            Controller.HandleError("No data found for " + dDate.ToString("MMM yyyy"), "Supplier Report");
+                            return;
+                        }
                         File.WriteAllBytes(dlgSave.FileName, reportData);
                         Process.Start(dlgSave.FileName);
                     }
@@ -96,8 +81,5 @@ namespace Astrodon.Reports
                 }
             }
         }
-
-    
-       
     }
 }

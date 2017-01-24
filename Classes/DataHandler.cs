@@ -30,7 +30,7 @@ namespace Astrodon
             cmd.CommandType = CommandType.Text;
         }
 
-        private static string GetConnectionString()
+        public static string GetConnectionString()
         {
             if (Environment.MachineName == "STEPHEN-PC")
             {
