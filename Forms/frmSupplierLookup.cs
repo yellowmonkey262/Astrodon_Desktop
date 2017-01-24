@@ -16,23 +16,23 @@ namespace Astrodon.Forms
     {
         private usrSupplierLookup _LookupControl;
 
-        private Data.SupplierData.Supplier _SelectedItem = null;
+        public Data.SupplierData.Supplier SelectedSupplier { get ; private set; }
 
         public frmSupplierLookup(DataContext context)
         {
             InitializeComponent();
             DialogResult = DialogResult.Cancel;
 
-            _LookupControl = new usrSupplierLookup(context);
+            _LookupControl = new usrSupplierLookup(context, true);
             _LookupControl.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(_LookupControl);
 
             _LookupControl.SupplierSelectedEvent += LookupControl_SupplierSelectedEvent;
         }
 
-        private void LookupControl_SupplierSelectedEvent(object sender, SupplierEventArgs e)
+        private void LookupControl_SupplierSelectedEvent(object sender, SupplierSelectEventArgs e)
         {
-            _SelectedItem = e.SelectedItem;
+            SelectedSupplier = e.SelectedItem;
             if (e.SupplierSelected)
                 DialogResult = DialogResult.OK;
             else
@@ -40,30 +40,9 @@ namespace Astrodon.Forms
             Close();
         }
 
-        protected override void OnClosed(EventArgs e)
+        private void frmSupplierLookup_FormClosed(object sender, FormClosedEventArgs e)
         {
             _LookupControl.SupplierSelectedEvent -= LookupControl_SupplierSelectedEvent;
-            base.OnClosed(e);
-        }
-      
-
-        public static bool SelectSupplier(out Data.SupplierData.Supplier supplier)
-        {
-            supplier = null;
-            using (var context = SqlDataHandler.GetDataContext())
-            {
-                var frm = new frmSupplierLookup(context);
-                var dialogResult = frm.ShowDialog();
-                supplier = frm._SelectedItem;
-
-                if (Debugger.IsAttached)
-                {
-                    supplier = context.SupplierSet.FirstOrDefault();
-                    return supplier != null;
-                }
-
-                return (dialogResult == DialogResult.OK && supplier != null);
-            }
         }
     }
 }

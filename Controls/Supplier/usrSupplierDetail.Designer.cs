@@ -59,6 +59,7 @@
             this.lblAuditTrail = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.lblLinkedBuildings = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgBuildings)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAuditTrail)).BeginInit();
             this.SuspendLayout();
@@ -280,7 +281,7 @@
             // dgBuildings
             // 
             this.dgBuildings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgBuildings.Location = new System.Drawing.Point(38, 276);
+            this.dgBuildings.Location = new System.Drawing.Point(38, 291);
             this.dgBuildings.Name = "dgBuildings";
             this.dgBuildings.Size = new System.Drawing.Size(337, 250);
             this.dgBuildings.TabIndex = 26;
@@ -288,16 +289,16 @@
             // dgAuditTrail
             // 
             this.dgAuditTrail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgAuditTrail.Location = new System.Drawing.Point(425, 276);
+            this.dgAuditTrail.Location = new System.Drawing.Point(425, 291);
             this.dgAuditTrail.Name = "dgAuditTrail";
-            this.dgAuditTrail.Size = new System.Drawing.Size(458, 250);
+            this.dgAuditTrail.Size = new System.Drawing.Size(564, 250);
             this.dgAuditTrail.TabIndex = 27;
             // 
             // lblAuditTrail
             // 
             this.lblAuditTrail.AutoSize = true;
             this.lblAuditTrail.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAuditTrail.Location = new System.Drawing.Point(422, 253);
+            this.lblAuditTrail.Location = new System.Drawing.Point(422, 268);
             this.lblAuditTrail.Name = "lblAuditTrail";
             this.lblAuditTrail.Size = new System.Drawing.Size(72, 15);
             this.lblAuditTrail.TabIndex = 28;
@@ -305,7 +306,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(300, 551);
+            this.btnSave.Location = new System.Drawing.Point(686, 230);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 29;
@@ -315,17 +316,29 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(219, 551);
+            this.btnCancel.Location = new System.Drawing.Point(605, 230);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 30;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // lblLinkedBuildings
+            // 
+            this.lblLinkedBuildings.AutoSize = true;
+            this.lblLinkedBuildings.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLinkedBuildings.Location = new System.Drawing.Point(36, 268);
+            this.lblLinkedBuildings.Name = "lblLinkedBuildings";
+            this.lblLinkedBuildings.Size = new System.Drawing.Size(67, 15);
+            this.lblLinkedBuildings.TabIndex = 31;
+            this.lblLinkedBuildings.Text = "Buildings";
             // 
             // usrSupplierDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblLinkedBuildings);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lblAuditTrail);
@@ -358,7 +371,7 @@
             this.Controls.Add(this.lblBankingDetail);
             this.Controls.Add(this.lblSupplierDetail);
             this.Name = "usrSupplierDetail";
-            this.Size = new System.Drawing.Size(915, 601);
+            this.Size = new System.Drawing.Size(1032, 574);
             ((System.ComponentModel.ISupportInitialize)(this.dgBuildings)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAuditTrail)).EndInit();
             this.ResumeLayout(false);
@@ -399,5 +412,6 @@
         private System.Windows.Forms.Label lblAuditTrail;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label lblLinkedBuildings;
     }
 }

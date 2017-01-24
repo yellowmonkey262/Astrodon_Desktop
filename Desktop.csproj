@@ -157,7 +157,8 @@
     <Compile Include="Controls\Maintenance\usrCaptureMaintenance.Designer.cs">
       <DependentUpon>usrCaptureMaintenance.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Supplier\SupplierEventArgs.cs" />
+    <Compile Include="Controls\Supplier\SaveSuccessEventArgs.cs" />
+    <Compile Include="Controls\Supplier\SupplierSelectEventArgs.cs" />
     <Compile Include="Controls\Supplier\usrSupplierDetail.cs">
       <SubType>UserControl</SubType>
     </Compile>

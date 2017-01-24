@@ -36,20 +36,22 @@
             this.pnlContents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContents.Location = new System.Drawing.Point(0, 0);
             this.pnlContents.Name = "pnlContents";
-            this.pnlContents.Size = new System.Drawing.Size(284, 261);
+            this.pnlContents.Size = new System.Drawing.Size(909, 577);
             this.pnlContents.TabIndex = 3;
             // 
             // frmSupplierLookup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(909, 577);
             this.Controls.Add(this.pnlContents);
             this.Name = "frmSupplierLookup";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Supplier Lookup";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmSupplierLookup_FormClosed);
             this.ResumeLayout(false);
 
         }

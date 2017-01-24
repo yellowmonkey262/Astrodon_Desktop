@@ -18,6 +18,7 @@ namespace Astrodon.Controls
         private BindingList<RequisitionList> unProcessedRequisitions = new BindingList<RequisitionList>();
         private BindingList<RequisitionList> unPaidRequisitions = new BindingList<RequisitionList>();
         private BindingList<RequisitionList> paidRequisitions = new BindingList<RequisitionList>();
+        private Data.SupplierData.Supplier _Supplier;
 
         private SqlDataHandler dh = new SqlDataHandler();
         private Dictionary<String, double> avAmts = new Dictionary<string, double>();
@@ -473,13 +474,13 @@ namespace Astrodon.Controls
                 sqlParms.Add("@payment", txtPaymentRef.Text);
                 sqlParms.Add("@userID", Controller.user.id);
                 sqlParms.Add("@building", myBuildings[cmbBuilding.SelectedIndex].ID);
-                sqlParms.Add("@SupplierId",_supplier == null ? (int?)null: _supplier.id);
+                sqlParms.Add("@SupplierId",_Supplier == null ? (int?)null: _Supplier.id);
                 sqlParms.Add("@InvoiceNumber", txtInvoiceNumber.Text);
                 sqlParms.Add("@InvoiceDate", dtInvoiceDate.Value.ToString("yyyy/MM/dd"));
-                sqlParms.Add("@BankName", _supplier == null ? (string)null: _supplier.BankName);
-                sqlParms.Add("@BranchCode", _supplier == null ? (string)null : _supplier.BranceCode);
-                sqlParms.Add("@AccountNumber", _supplier == null ? (string)null : _supplier.AccountNumber);
-                sqlParms.Add("@BranchName", _supplier == null ? (string)null : _supplier.BranchName);
+                sqlParms.Add("@BankName", _Supplier == null ? (string)null: _Supplier.BankName);
+                sqlParms.Add("@BranchCode", _Supplier == null ? (string)null : _Supplier.BranceCode);
+                sqlParms.Add("@AccountNumber", _Supplier == null ? (string)null : _Supplier.AccountNumber);
+                sqlParms.Add("@BranchName", _Supplier == null ? (string)null : _Supplier.BranchName);
                 using (var context = SqlDataHandler.GetDataContext())
                 {
 
@@ -493,13 +494,13 @@ namespace Astrodon.Controls
                         payreference = txtPaymentRef.Text,
                         userID = Controller.user.id,
                         building = myBuildings[cmbBuilding.SelectedIndex].ID,
-                        SupplierId = _supplier == null ? (int?)null : _supplier.id,
+                        SupplierId = _Supplier == null ? (int?)null : _Supplier.id,
                         InvoiceNumber = txtInvoiceNumber.Text,
                         InvoiceDate = dtInvoiceDate.Value.Date,
-                        BankName = _supplier == null ? (string)null : _supplier.BankName,
-                        BranchCode = _supplier == null ? (string)null : _supplier.BranceCode,
-                        BranchName = _supplier == null ? (string)null : _supplier.BranchName,
-                        AccountNumber = _supplier == null ? (string)null : _supplier.AccountNumber
+                        BankName = _Supplier == null ? (string)null : _Supplier.BankName,
+                        BranchCode = _Supplier == null ? (string)null : _Supplier.BranceCode,
+                        BranchName = _Supplier == null ? (string)null : _Supplier.BranchName,
+                        AccountNumber = _Supplier == null ? (string)null : _Supplier.AccountNumber
 
                     };
                     context.tblRequisitions.Add(item);
@@ -597,7 +598,7 @@ namespace Astrodon.Controls
 
         private void ClearSupplier()
         {
-            _supplier = null;
+            _Supplier = null;
             lbSupplierName.Text = "";
             lbAccountNumber.Text = "";
             lbBankName.Text = "";
@@ -694,24 +695,29 @@ namespace Astrodon.Controls
         }
 
 
-        private Data.SupplierData.Supplier _supplier;
         private void btnSupplierLookup_Click(object sender, EventArgs e)
         {
-            
-            if (frmSupplierLookup.SelectSupplier(out _supplier))
+            using (var context = SqlDataHandler.GetDataContext())
             {
-                lbSupplierName.Text = _supplier.CompanyName;
-                lbBankName.Text = _supplier.BankName + " (" + _supplier.BranceCode + ")";
-                lbAccountNumber.Text = _supplier.AccountNumber;
-                btnSave.Enabled = true;
-            }
-            else
-            {
-                ClearSupplier();
+                var frmSupplierLookup = new frmSupplierLookup(context);
+                frmSupplierLookup.StartPosition = FormStartPosition.CenterParent;
+
+                var dialogResult = frmSupplierLookup.ShowDialog();
+                var supplier = frmSupplierLookup.SelectedSupplier;
+
+                if(dialogResult == DialogResult.OK)
+                {
+                    lbSupplierName.Text = supplier.CompanyName;
+                    lbBankName.Text = supplier.BankName + " (" + supplier.BranceCode + ")";
+                    lbAccountNumber.Text = supplier.AccountNumber;
+                    btnSave.Enabled = true;
+                }
+                else
+                {
+                    ClearSupplier();
+                }
             }
         }
-
-
     }
 
     public class Requisition

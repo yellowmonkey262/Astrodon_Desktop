@@ -9,9 +9,9 @@ using System.Text;
 namespace Astrodon.Data.SupplierData
 {
     [Table("SupplierAudit")]
-    public class SupplierAudit:DbEntity
+    public class SupplierAudit : DbEntity
     {
-        [Index("IDX_SupplierAudit",Order =0)]
+        [Index("IDX_SupplierAudit", Order = 0)]
         public virtual int SupplierId { get; set; }
         [ForeignKey("SupplierId")]
         public virtual Supplier Supplier { get; set; }

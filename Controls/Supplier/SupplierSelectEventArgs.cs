@@ -5,17 +5,17 @@ using System.Text;
 
 namespace Astrodon.Controls.Supplier
 {
-    public delegate void SupplierSelectedEventHandler(object sender, SupplierEventArgs e);
+    public delegate void SupplierSelectedEventHandler(object sender, SupplierSelectEventArgs e);
 
-    public class SupplierEventArgs : EventArgs
+    public class SupplierSelectEventArgs : EventArgs
     {
-        public SupplierEventArgs(Astrodon.Data.SupplierData.Supplier supplier)
+        public SupplierSelectEventArgs(Astrodon.Data.SupplierData.Supplier supplier)
         {
             SelectedItem = supplier;
             SupplierSelected = true;
         }
 
-        public SupplierEventArgs()
+        public SupplierSelectEventArgs()
         {
             SupplierSelected = false;
         }
