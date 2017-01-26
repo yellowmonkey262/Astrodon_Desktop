@@ -12,7 +12,7 @@ namespace Astrodon.Data.MaintenanceData
     [Table("BuildingMaintenanceConfiguration")]
     public class BuildingMaintenanceConfiguration : DbEntity
     {
-        [Index("UIDX_BuildingMaintenanceConfiguration",IsUnique =true,Order =0)]
+        [Index("UIDX_BuildingMaintenanceConfiguration", IsUnique = true, Order = 0)]
         public virtual int BuildingId { get; set; }
 
         [ForeignKey("BuildingId")]

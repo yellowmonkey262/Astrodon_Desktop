@@ -73,7 +73,6 @@ namespace Astrodon.Controls.Supplier
         private void btnNewSupplier_Click(object sender, EventArgs e)
         {
             var frmSupplierDetail = new frmSupplierDetail(_DataContext, 0);
-            frmSupplierDetail.StartPosition = FormStartPosition.CenterParent;
             var dialogResult = frmSupplierDetail.ShowDialog();
 
             if (dialogResult == DialogResult.OK)
@@ -84,20 +83,31 @@ namespace Astrodon.Controls.Supplier
         {
             var senderGrid = (DataGridView)sender;
 
-            var lastColumnIndex = senderGrid.Columns.Count - 1;
+            int editColumnIndex = -1;
+            int selectColumnIndex = -1;
 
-            if (e.ColumnIndex == lastColumnIndex && senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+            if (_IsSelectDialog)
+            {
+                editColumnIndex = senderGrid.Columns.Count - 1;
+                selectColumnIndex = senderGrid.Columns.Count - 2;
+            }
+            else
+            {
+                editColumnIndex = senderGrid.Columns.Count - 1;
+            }
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
                 _SelectedSupplier = senderGrid.Rows[e.RowIndex].DataBoundItem as SupplierResult;
 
                 if (_SelectedSupplier != null)
                 {
-                    if (_IsSelectDialog)
+                    if (e.ColumnIndex == selectColumnIndex)
                     {
                         var supplier = _DataContext.SupplierSet.Single(a => a.id == _SelectedSupplier.SupplierId);
                         SupplierSelected(supplier);
                     }
-                    else
+                    else if (e.ColumnIndex == editColumnIndex)
                     {
                         var frmSupplierDetail = new frmSupplierDetail(_DataContext, _SelectedSupplier.SupplierId);
                         frmSupplierDetail.StartPosition = FormStartPosition.CenterParent;
@@ -166,7 +176,7 @@ namespace Astrodon.Controls.Supplier
                 ReadOnly = true
             });
 
-            if(_IsSelectDialog)
+            if (_IsSelectDialog)
             {
                 dgSuppliers.Columns.Add(new DataGridViewButtonColumn()
                 {
@@ -175,15 +185,13 @@ namespace Astrodon.Controls.Supplier
                     UseColumnTextForButtonValue = true,
                 });
             }
-            else
+            
+            dgSuppliers.Columns.Add(new DataGridViewButtonColumn()
             {
-                dgSuppliers.Columns.Add(new DataGridViewButtonColumn()
-                {
-                    HeaderText = "Action",
-                    Text = "Edit",
-                    UseColumnTextForButtonValue = true
-                });
-            }
+                HeaderText = "Action",
+                Text = "Edit",
+                UseColumnTextForButtonValue = true
+            });
 
             dgSuppliers.AutoResizeColumns();
         }
@@ -208,7 +216,5 @@ namespace Astrodon.Controls.Supplier
 
             public string LinkedToBuildingString { get { return IsLinkedToBuilding == true ? "Yes" : "No"; } }
         }
-
-       
     }
 }

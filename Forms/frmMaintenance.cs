@@ -28,15 +28,14 @@ namespace Astrodon.Forms
             InitializeComponent();
 
             DialogResult = DialogResult.Cancel;
-            _LookupControl = new usrCaptureMaintenance(context,item,config);
+            _LookupControl = new usrCaptureMaintenance(context, item, config);
             _LookupControl.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(_LookupControl);
         }
 
-
         public static bool CaptureMaintenanceRecord(DataContext context, tblRequisition item, BuildingMaintenanceConfiguration config)
         {
-            var frm = new frmMaintenance(context,item,config);
+            var frm = new frmMaintenance(context, item, config);
             var dialogResult = frm.ShowDialog();
 
             return dialogResult == DialogResult.OK;

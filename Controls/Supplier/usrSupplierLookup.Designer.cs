@@ -121,6 +121,7 @@
             // 
             this.dgSuppliers.AllowUserToAddRows = false;
             this.dgSuppliers.AllowUserToDeleteRows = false;
+            this.dgSuppliers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgSuppliers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgSuppliers.Location = new System.Drawing.Point(26, 190);
             this.dgSuppliers.Name = "dgSuppliers";

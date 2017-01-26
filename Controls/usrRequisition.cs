@@ -481,9 +481,9 @@ namespace Astrodon.Controls
                 sqlParms.Add("@BranchCode", _Supplier == null ? (string)null : _Supplier.BranceCode);
                 sqlParms.Add("@AccountNumber", _Supplier == null ? (string)null : _Supplier.AccountNumber);
                 sqlParms.Add("@BranchName", _Supplier == null ? (string)null : _Supplier.BranchName);
+
                 using (var context = SqlDataHandler.GetDataContext())
                 {
-
                     var item = new tblRequisition()
                     {
                         trnDate = trnDatePicker.Value.Date,
@@ -495,30 +495,35 @@ namespace Astrodon.Controls
                         userID = Controller.user.id,
                         building = myBuildings[cmbBuilding.SelectedIndex].ID,
                         SupplierId = _Supplier == null ? (int?)null : _Supplier.id,
+                        Supplier = _Supplier == null ? null : _Supplier,
                         InvoiceNumber = txtInvoiceNumber.Text,
                         InvoiceDate = dtInvoiceDate.Value.Date,
                         BankName = _Supplier == null ? (string)null : _Supplier.BankName,
                         BranchCode = _Supplier == null ? (string)null : _Supplier.BranceCode,
                         BranchName = _Supplier == null ? (string)null : _Supplier.BranchName,
                         AccountNumber = _Supplier == null ? (string)null : _Supplier.AccountNumber
-
                     };
-                    context.tblRequisitions.Add(item);
 
+                    context.tblRequisitions.Add(item);
 
                     string ledgerAccount = item.ledger;
                     
                     if(ledgerAccount.Contains(":"))
                         ledgerAccount = ledgerAccount.Split(":".ToCharArray())[0];
 
-                    var config = (from c in context.BuildingMaintenanceConfigurationSet
-                                                   .Include(a => a.Building)
+                    var config = (from c in context.BuildingMaintenanceConfigurationSet.Include(a => a.Building)
                                   where c.BuildingId == item.building
                                   && c.PastelAccountNumber == ledgerAccount
                                   select c).SingleOrDefault();
 
                     if (config != null)
                     {
+                        if (item.SupplierId == null)
+                        {
+                            Controller.HandleError("Supplier required for Maintenance. Please select a supplier.", "Validation Error");
+                            return;
+                        }
+
                         //capture the maintenance as part of the same unit of work
                         if (frmMaintenance.CaptureMaintenanceRecord(context, item, config))
                             context.SaveChanges();
@@ -694,19 +699,18 @@ namespace Astrodon.Controls
             catch { }
         }
 
-
         private void btnSupplierLookup_Click(object sender, EventArgs e)
         {
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var frmSupplierLookup = new frmSupplierLookup(context);
-                frmSupplierLookup.StartPosition = FormStartPosition.CenterParent;
 
                 var dialogResult = frmSupplierLookup.ShowDialog();
                 var supplier = frmSupplierLookup.SelectedSupplier;
 
-                if(dialogResult == DialogResult.OK)
+                if(dialogResult == DialogResult.OK && supplier != null)
                 {
+                    _Supplier = supplier;
                     lbSupplierName.Text = supplier.CompanyName;
                     lbBankName.Text = supplier.BankName + " (" + supplier.BranceCode + ")";
                     lbAccountNumber.Text = supplier.AccountNumber;

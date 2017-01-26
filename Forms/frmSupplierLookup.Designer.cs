@@ -43,9 +43,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(909, 577);
             this.Controls.Add(this.pnlContents);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmSupplierLookup";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

@@ -43,10 +43,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1001, 597);
             this.Controls.Add(this.pnlContents);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmSupplierDetail";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Supplier Detail";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmSupplierDetail_FormClosed);
             this.ResumeLayout(false);

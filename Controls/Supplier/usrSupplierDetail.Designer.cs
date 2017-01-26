@@ -280,6 +280,7 @@
             // 
             // dgBuildings
             // 
+            this.dgBuildings.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgBuildings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgBuildings.Location = new System.Drawing.Point(38, 291);
             this.dgBuildings.Name = "dgBuildings";
@@ -288,6 +289,7 @@
             // 
             // dgAuditTrail
             // 
+            this.dgAuditTrail.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgAuditTrail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgAuditTrail.Location = new System.Drawing.Point(425, 291);
             this.dgAuditTrail.Name = "dgAuditTrail";

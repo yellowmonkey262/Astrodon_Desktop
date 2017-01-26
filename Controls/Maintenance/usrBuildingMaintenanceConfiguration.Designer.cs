@@ -204,8 +204,9 @@
             // 
             this.dgItems.AllowUserToAddRows = false;
             this.dgItems.AllowUserToDeleteRows = false;
+            this.dgItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgItems.Location = new System.Drawing.Point(16, 307);
+            this.dgItems.Location = new System.Drawing.Point(10, 306);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
             this.dgItems.Size = new System.Drawing.Size(582, 150);

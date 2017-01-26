@@ -11,6 +11,6 @@ namespace Astrodon.Data.Base
 
         public string Value { get; set; }
 
-        public string Display { get { return Id + " - " + Value; } }
+        public string Display { get { return string.IsNullOrEmpty(Id) ? Value : Id + " - " + Value; } }
     }
 }

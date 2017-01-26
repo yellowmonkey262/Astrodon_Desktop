@@ -276,9 +276,7 @@ namespace Astrodon.Controls.Maintenance
                 cmbAccount.DataSource = _FilteredList;
 
                 btnNew.Visible = _FilteredList.Count > 0;
-
             }
-
         }
 
         private MaintenanceClassificationType GetClassificationType()
