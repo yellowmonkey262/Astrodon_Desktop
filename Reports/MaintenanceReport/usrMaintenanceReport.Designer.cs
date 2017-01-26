@@ -34,13 +34,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cmbYear = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.gbReportType = new System.Windows.Forms.GroupBox();
-            this.rbSummaryReport = new System.Windows.Forms.RadioButton();
-            this.rbDetailed = new System.Windows.Forms.RadioButton();
             this.rbDetailWithDocs = new System.Windows.Forms.RadioButton();
+            this.rbDetailed = new System.Windows.Forms.RadioButton();
+            this.rbSummaryReport = new System.Windows.Forms.RadioButton();
+            this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.gbReportType.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,14 +99,6 @@
             this.label1.TabIndex = 8;
             this.label1.Text = "Year";
             // 
-            // dlgSave
-            // 
-            this.dlgSave.CheckPathExists = false;
-            this.dlgSave.DefaultExt = "pdf";
-            this.dlgSave.Filter = "Adobe PDF files (*.pdf)|*.pdf";
-            this.dlgSave.InitialDirectory = "Y:\\";
-            this.dlgSave.Title = "Levy Roll Report";
-            // 
             // cmbBuilding
             // 
             this.cmbBuilding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -136,17 +128,15 @@
             this.gbReportType.TabIndex = 16;
             this.gbReportType.TabStop = false;
             // 
-            // rbSummaryReport
+            // rbDetailWithDocs
             // 
-            this.rbSummaryReport.AutoSize = true;
-            this.rbSummaryReport.Checked = true;
-            this.rbSummaryReport.Location = new System.Drawing.Point(7, 20);
-            this.rbSummaryReport.Name = "rbSummaryReport";
-            this.rbSummaryReport.Size = new System.Drawing.Size(103, 17);
-            this.rbSummaryReport.TabIndex = 0;
-            this.rbSummaryReport.TabStop = true;
-            this.rbSummaryReport.Text = "Summary Report";
-            this.rbSummaryReport.UseVisualStyleBackColor = true;
+            this.rbDetailWithDocs.AutoSize = true;
+            this.rbDetailWithDocs.Location = new System.Drawing.Point(7, 68);
+            this.rbDetailWithDocs.Name = "rbDetailWithDocs";
+            this.rbDetailWithDocs.Size = new System.Drawing.Size(232, 17);
+            this.rbDetailWithDocs.TabIndex = 2;
+            this.rbDetailWithDocs.Text = "Detailed Report with Supporting Documents";
+            this.rbDetailWithDocs.UseVisualStyleBackColor = true;
             // 
             // rbDetailed
             // 
@@ -159,15 +149,25 @@
             this.rbDetailed.Text = "Detailed Report";
             this.rbDetailed.UseVisualStyleBackColor = true;
             // 
-            // rbDetailWithDocs
+            // rbSummaryReport
             // 
-            this.rbDetailWithDocs.AutoSize = true;
-            this.rbDetailWithDocs.Location = new System.Drawing.Point(7, 68);
-            this.rbDetailWithDocs.Name = "rbDetailWithDocs";
-            this.rbDetailWithDocs.Size = new System.Drawing.Size(232, 17);
-            this.rbDetailWithDocs.TabIndex = 2;
-            this.rbDetailWithDocs.Text = "Detailed Report with Supporting Documents";
-            this.rbDetailWithDocs.UseVisualStyleBackColor = true;
+            this.rbSummaryReport.AutoSize = true;
+            this.rbSummaryReport.Checked = true;
+            this.rbSummaryReport.Location = new System.Drawing.Point(7, 20);
+            this.rbSummaryReport.Name = "rbSummaryReport";
+            this.rbSummaryReport.Size = new System.Drawing.Size(103, 17);
+            this.rbSummaryReport.TabIndex = 0;
+            this.rbSummaryReport.TabStop = true;
+            this.rbSummaryReport.Text = "Summary Report";
+            this.rbSummaryReport.UseVisualStyleBackColor = true;
+            // 
+            // dlgSave
+            // 
+            this.dlgSave.CheckPathExists = false;
+            this.dlgSave.DefaultExt = "pdf";
+            this.dlgSave.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            this.dlgSave.InitialDirectory = "Y:\\";
+            this.dlgSave.Title = "Levy Roll Report";
             // 
             // usrMaintenanceReport
             // 
@@ -199,12 +199,12 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cmbYear;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.SaveFileDialog dlgSave;
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox gbReportType;
         private System.Windows.Forms.RadioButton rbDetailWithDocs;
         private System.Windows.Forms.RadioButton rbDetailed;
         private System.Windows.Forms.RadioButton rbSummaryReport;
+        private System.Windows.Forms.SaveFileDialog dlgSave;
     }
 }

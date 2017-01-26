@@ -38,6 +38,7 @@
         <xs:element minOccurs="0" name="sqlConnectionString" nillable="true" type="xs:string" />
         <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" minOccurs="0" name="reportType" type="q1:MaintenanceReportType" />
         <xs:element minOccurs="0" name="processMonth" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="buildingId" type="xs:int" />
         <xs:element minOccurs="0" name="buildingName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="dataPath" nillable="true" type="xs:string" />
       </xs:sequence>
