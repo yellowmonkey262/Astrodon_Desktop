@@ -10,7 +10,7 @@ using System.Text;
 namespace Astrodon.Data.MaintenanceData
 {
     [Table("MaintenanceDocument")]
-    public class MaintenanceDocument:DbEntity
+    public class MaintenanceDocument : DbEntity
     {
         [Index("IDX_MaintenanceDocument")]
         public virtual int MaintenanceId { get; set; }
@@ -22,6 +22,5 @@ namespace Astrodon.Data.MaintenanceData
         public virtual string FileName { get; set; }
 
         public byte[] FileData { get; set; }
-
     }
 }

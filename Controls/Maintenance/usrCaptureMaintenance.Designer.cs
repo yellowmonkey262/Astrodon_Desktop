@@ -43,7 +43,7 @@
             this.cbUnit = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblMaintenanceDescription = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtDescription = new System.Windows.Forms.TextBox();
             this.lblSupplierTitle = new System.Windows.Forms.Label();
             this.lblSupplier = new System.Windows.Forms.Label();
             this.lblCompanyRegTitle = new System.Windows.Forms.Label();
@@ -60,7 +60,6 @@
             this.lblInvoiceNumberTitle = new System.Windows.Forms.Label();
             this.lblInvoiceDate = new System.Windows.Forms.Label();
             this.lblInvoiceDateTitle = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.lblWarranty = new System.Windows.Forms.Label();
             this.lblWarrantyExpiresTitle = new System.Windows.Forms.Label();
             this.lblWarrantyExpires = new System.Windows.Forms.Label();
@@ -74,12 +73,14 @@
             this.lblSupportingDocuments = new System.Windows.Forms.Label();
             this.lblAttachment = new System.Windows.Forms.Label();
             this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
-            this.txtAttachment = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.lblAllowedFiles = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.dgSupportingDocuments = new System.Windows.Forms.DataGridView();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.sfdDownloadAttachment = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.numWarrantyDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgSupportingDocuments)).BeginInit();
             this.SuspendLayout();
@@ -195,6 +196,7 @@
             // 
             // cbUnit
             // 
+            this.cbUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbUnit.FormattingEnabled = true;
             this.cbUnit.Location = new System.Drawing.Point(168, 157);
             this.cbUnit.Name = "cbUnit";
@@ -218,13 +220,13 @@
             this.lblMaintenanceDescription.TabIndex = 15;
             this.lblMaintenanceDescription.Text = "Description Of Maintenance";
             // 
-            // textBox1
+            // txtDescription
             // 
-            this.textBox1.Location = new System.Drawing.Point(22, 225);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(337, 86);
-            this.textBox1.TabIndex = 16;
+            this.txtDescription.Location = new System.Drawing.Point(22, 225);
+            this.txtDescription.Multiline = true;
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.Size = new System.Drawing.Size(337, 86);
+            this.txtDescription.TabIndex = 16;
             // 
             // lblSupplierTitle
             // 
@@ -370,18 +372,10 @@
             this.lblInvoiceDateTitle.TabIndex = 31;
             this.lblInvoiceDateTitle.Text = "Invoice Date";
             // 
-            // label2
-            // 
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label2.Location = new System.Drawing.Point(0, 518);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(401, 2);
-            this.label2.TabIndex = 33;
-            // 
             // lblWarranty
             // 
             this.lblWarranty.AutoSize = true;
-            this.lblWarranty.Location = new System.Drawing.Point(19, 545);
+            this.lblWarranty.Location = new System.Drawing.Point(432, 42);
             this.lblWarranty.Name = "lblWarranty";
             this.lblWarranty.Size = new System.Drawing.Size(50, 13);
             this.lblWarranty.TabIndex = 35;
@@ -390,7 +384,7 @@
             // lblWarrantyExpiresTitle
             // 
             this.lblWarrantyExpiresTitle.AutoSize = true;
-            this.lblWarrantyExpiresTitle.Location = new System.Drawing.Point(19, 600);
+            this.lblWarrantyExpiresTitle.Location = new System.Drawing.Point(432, 97);
             this.lblWarrantyExpiresTitle.Name = "lblWarrantyExpiresTitle";
             this.lblWarrantyExpiresTitle.Size = new System.Drawing.Size(41, 13);
             this.lblWarrantyExpiresTitle.TabIndex = 36;
@@ -399,7 +393,7 @@
             // lblWarrantyExpires
             // 
             this.lblWarrantyExpires.AutoSize = true;
-            this.lblWarrantyExpires.Location = new System.Drawing.Point(162, 600);
+            this.lblWarrantyExpires.Location = new System.Drawing.Point(575, 97);
             this.lblWarrantyExpires.Name = "lblWarrantyExpires";
             this.lblWarrantyExpires.Size = new System.Drawing.Size(35, 13);
             this.lblWarrantyExpires.TabIndex = 37;
@@ -408,7 +402,7 @@
             // lblSerialNumber
             // 
             this.lblSerialNumber.AutoSize = true;
-            this.lblSerialNumber.Location = new System.Drawing.Point(19, 625);
+            this.lblSerialNumber.Location = new System.Drawing.Point(432, 122);
             this.lblSerialNumber.Name = "lblSerialNumber";
             this.lblSerialNumber.Size = new System.Drawing.Size(73, 13);
             this.lblSerialNumber.TabIndex = 38;
@@ -417,7 +411,7 @@
             // lblWarrantyNotesTitle
             // 
             this.lblWarrantyNotesTitle.AutoSize = true;
-            this.lblWarrantyNotesTitle.Location = new System.Drawing.Point(19, 651);
+            this.lblWarrantyNotesTitle.Location = new System.Drawing.Point(432, 148);
             this.lblWarrantyNotesTitle.Name = "lblWarrantyNotesTitle";
             this.lblWarrantyNotesTitle.Size = new System.Drawing.Size(81, 13);
             this.lblWarrantyNotesTitle.TabIndex = 39;
@@ -425,29 +419,37 @@
             // 
             // cbWarrantyDurationType
             // 
+            this.cbWarrantyDurationType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbWarrantyDurationType.FormattingEnabled = true;
-            this.cbWarrantyDurationType.Location = new System.Drawing.Point(165, 569);
+            this.cbWarrantyDurationType.Location = new System.Drawing.Point(578, 66);
             this.cbWarrantyDurationType.Name = "cbWarrantyDurationType";
             this.cbWarrantyDurationType.Size = new System.Drawing.Size(194, 21);
             this.cbWarrantyDurationType.TabIndex = 41;
+            this.cbWarrantyDurationType.SelectedIndexChanged += new System.EventHandler(this.cbWarrantyDurationType_SelectedIndexChanged);
             // 
             // numWarrantyDuration
             // 
-            this.numWarrantyDuration.Location = new System.Drawing.Point(165, 543);
+            this.numWarrantyDuration.Location = new System.Drawing.Point(578, 40);
+            this.numWarrantyDuration.Maximum = new decimal(new int[] {
+            365,
+            0,
+            0,
+            0});
             this.numWarrantyDuration.Name = "numWarrantyDuration";
             this.numWarrantyDuration.Size = new System.Drawing.Size(70, 20);
             this.numWarrantyDuration.TabIndex = 42;
+            this.numWarrantyDuration.ValueChanged += new System.EventHandler(this.numWarrantyDuration_ValueChanged);
             // 
             // txtSerialNumber
             // 
-            this.txtSerialNumber.Location = new System.Drawing.Point(165, 622);
+            this.txtSerialNumber.Location = new System.Drawing.Point(578, 119);
             this.txtSerialNumber.Name = "txtSerialNumber";
             this.txtSerialNumber.Size = new System.Drawing.Size(194, 20);
             this.txtSerialNumber.TabIndex = 43;
             // 
             // txtWarrantyNotes
             // 
-            this.txtWarrantyNotes.Location = new System.Drawing.Point(165, 648);
+            this.txtWarrantyNotes.Location = new System.Drawing.Point(578, 145);
             this.txtWarrantyNotes.Name = "txtWarrantyNotes";
             this.txtWarrantyNotes.Size = new System.Drawing.Size(194, 20);
             this.txtWarrantyNotes.TabIndex = 44;
@@ -455,7 +457,7 @@
             // label3
             // 
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label3.Location = new System.Drawing.Point(0, 682);
+            this.label3.Location = new System.Drawing.Point(423, 192);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(401, 2);
             this.label3.TabIndex = 45;
@@ -464,7 +466,7 @@
             // 
             this.lblSupportingDocuments.AutoSize = true;
             this.lblSupportingDocuments.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSupportingDocuments.Location = new System.Drawing.Point(19, 696);
+            this.lblSupportingDocuments.Location = new System.Drawing.Point(432, 207);
             this.lblSupportingDocuments.Name = "lblSupportingDocuments";
             this.lblSupportingDocuments.Size = new System.Drawing.Size(153, 15);
             this.lblSupportingDocuments.TabIndex = 46;
@@ -473,7 +475,7 @@
             // lblAttachment
             // 
             this.lblAttachment.AutoSize = true;
-            this.lblAttachment.Location = new System.Drawing.Point(19, 730);
+            this.lblAttachment.Location = new System.Drawing.Point(432, 241);
             this.lblAttachment.Name = "lblAttachment";
             this.lblAttachment.Size = new System.Drawing.Size(61, 13);
             this.lblAttachment.TabIndex = 47;
@@ -482,27 +484,25 @@
             // ofdAttachment
             // 
             this.ofdAttachment.FileName = "openFileDialog1";
-            // 
-            // txtAttachment
-            // 
-            this.txtAttachment.Location = new System.Drawing.Point(165, 727);
-            this.txtAttachment.Name = "txtAttachment";
-            this.txtAttachment.Size = new System.Drawing.Size(140, 20);
-            this.txtAttachment.TabIndex = 48;
+            this.ofdAttachment.Filter = "PDF Files (*.pdf)|*.pdf";
+            this.ofdAttachment.InitialDirectory = "c:\\\\";
+            this.ofdAttachment.Multiselect = true;
+            this.ofdAttachment.RestoreDirectory = true;
             // 
             // btnBrowse
             // 
-            this.btnBrowse.Location = new System.Drawing.Point(311, 725);
+            this.btnBrowse.Location = new System.Drawing.Point(578, 236);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(75, 23);
             this.btnBrowse.TabIndex = 49;
             this.btnBrowse.Text = "Browse";
             this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // lblAllowedFiles
             // 
             this.lblAllowedFiles.AutoSize = true;
-            this.lblAllowedFiles.Location = new System.Drawing.Point(19, 759);
+            this.lblAllowedFiles.Location = new System.Drawing.Point(432, 270);
             this.lblAllowedFiles.Name = "lblAllowedFiles";
             this.lblAllowedFiles.Size = new System.Drawing.Size(112, 13);
             this.lblAllowedFiles.TabIndex = 50;
@@ -510,21 +510,23 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(311, 989);
+            this.btnSave.Location = new System.Drawing.Point(724, 535);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 51;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(230, 989);
+            this.btnClose.Location = new System.Drawing.Point(643, 535);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 52;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // dgSupportingDocuments
             // 
@@ -532,22 +534,46 @@
             this.dgSupportingDocuments.AllowUserToDeleteRows = false;
             this.dgSupportingDocuments.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgSupportingDocuments.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgSupportingDocuments.Location = new System.Drawing.Point(22, 784);
+            this.dgSupportingDocuments.Location = new System.Drawing.Point(435, 286);
             this.dgSupportingDocuments.Name = "dgSupportingDocuments";
             this.dgSupportingDocuments.ReadOnly = true;
-            this.dgSupportingDocuments.Size = new System.Drawing.Size(364, 183);
+            this.dgSupportingDocuments.Size = new System.Drawing.Size(364, 223);
             this.dgSupportingDocuments.TabIndex = 53;
+            this.dgSupportingDocuments.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgSupportingDocuments_CellContentClick);
+            // 
+            // label4
+            // 
+            this.label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label4.Location = new System.Drawing.Point(406, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(2, 493);
+            this.label4.TabIndex = 54;
+            // 
+            // label5
+            // 
+            this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label5.Location = new System.Drawing.Point(0, 522);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(824, 2);
+            this.label5.TabIndex = 56;
+            // 
+            // sfdDownloadAttachment
+            // 
+            this.sfdDownloadAttachment.Filter = "PDF Files (*.pdf)|*.pdf";
+            this.sfdDownloadAttachment.InitialDirectory = "c:\\\\";
+            this.sfdDownloadAttachment.RestoreDirectory = true;
             // 
             // usrCaptureMaintenance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.dgSupportingDocuments);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lblAllowedFiles);
             this.Controls.Add(this.btnBrowse);
-            this.Controls.Add(this.txtAttachment);
             this.Controls.Add(this.lblAttachment);
             this.Controls.Add(this.lblSupportingDocuments);
             this.Controls.Add(this.label3);
@@ -560,7 +586,6 @@
             this.Controls.Add(this.lblWarrantyExpires);
             this.Controls.Add(this.lblWarrantyExpiresTitle);
             this.Controls.Add(this.lblWarranty);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.lblInvoiceDate);
             this.Controls.Add(this.lblInvoiceDateTitle);
             this.Controls.Add(this.lblInvoiceNumber);
@@ -577,7 +602,7 @@
             this.Controls.Add(this.lblCompanyRegTitle);
             this.Controls.Add(this.lblSupplier);
             this.Controls.Add(this.lblSupplierTitle);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtDescription);
             this.Controls.Add(this.lblMaintenanceDescription);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbUnit);
@@ -594,7 +619,7 @@
             this.Controls.Add(this.lblBuildingNameTitle);
             this.Controls.Add(this.lblSupplierDetail);
             this.Name = "usrCaptureMaintenance";
-            this.Size = new System.Drawing.Size(401, 1022);
+            this.Size = new System.Drawing.Size(822, 575);
             ((System.ComponentModel.ISupportInitialize)(this.numWarrantyDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgSupportingDocuments)).EndInit();
             this.ResumeLayout(false);
@@ -619,7 +644,7 @@
         private System.Windows.Forms.ComboBox cbUnit;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblMaintenanceDescription;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label lblSupplierTitle;
         private System.Windows.Forms.Label lblSupplier;
         private System.Windows.Forms.Label lblCompanyRegTitle;
@@ -636,7 +661,6 @@
         private System.Windows.Forms.Label lblInvoiceNumberTitle;
         private System.Windows.Forms.Label lblInvoiceDate;
         private System.Windows.Forms.Label lblInvoiceDateTitle;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblWarranty;
         private System.Windows.Forms.Label lblWarrantyExpiresTitle;
         private System.Windows.Forms.Label lblWarrantyExpires;
@@ -650,11 +674,13 @@
         private System.Windows.Forms.Label lblSupportingDocuments;
         private System.Windows.Forms.Label lblAttachment;
         private System.Windows.Forms.OpenFileDialog ofdAttachment;
-        private System.Windows.Forms.TextBox txtAttachment;
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.Label lblAllowedFiles;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.DataGridView dgSupportingDocuments;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.SaveFileDialog sfdDownloadAttachment;
     }
 }

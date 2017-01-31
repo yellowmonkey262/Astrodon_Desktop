@@ -145,6 +145,7 @@
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\webreport.cs" />
     <Compile Include="Classes\WordProcessor.cs" />
+    <Compile Include="Controls\Maintenance\MaintenanceException.cs" />
     <Compile Include="Controls\Maintenance\usrBuildingMaintenanceConfiguration.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -157,7 +158,7 @@
     <Compile Include="Controls\Maintenance\usrCaptureMaintenance.Designer.cs">
       <DependentUpon>usrCaptureMaintenance.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Supplier\SaveSuccessEventArgs.cs" />
+    <Compile Include="Controls\Events\SaveSuccessEventArgs.cs" />
     <Compile Include="Controls\Supplier\SupplierSelectEventArgs.cs" />
     <Compile Include="Controls\Supplier\usrSupplierDetail.cs">
       <SubType>UserControl</SubType>

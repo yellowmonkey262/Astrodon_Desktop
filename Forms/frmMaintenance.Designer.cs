@@ -36,14 +36,14 @@
             this.pnlContents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContents.Location = new System.Drawing.Point(0, 0);
             this.pnlContents.Name = "pnlContents";
-            this.pnlContents.Size = new System.Drawing.Size(284, 261);
+            this.pnlContents.Size = new System.Drawing.Size(897, 636);
             this.pnlContents.TabIndex = 4;
             // 
             // frmMaintenance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(897, 636);
             this.Controls.Add(this.pnlContents);
             this.Name = "frmMaintenance";
             this.ShowIcon = false;

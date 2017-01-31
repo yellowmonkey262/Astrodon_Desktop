@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Astrodon.Data;
 using System.Data.Entity;
+using Astrodon.Controls.Events;
 
 namespace Astrodon.Controls.Supplier
 {
@@ -29,18 +30,18 @@ namespace Astrodon.Controls.Supplier
 
         #region Events
 
-        public event SaveSuccessEventHandler SaveSuccessEvent;
+        public event SaveResultEventHandler SaveResultEvent;
 
         private void RaiseSaveSuccess()
         {
-            if (SaveSuccessEvent != null)
-                SaveSuccessEvent(this, new SaveSuccessEventArgs(true));
+            if (SaveResultEvent != null)
+                SaveResultEvent(this, new SaveResultEventArgs(true));
         }
 
         private void RaiseCancel()
         {
-            if (SaveSuccessEvent != null)
-                SaveSuccessEvent(this, new SaveSuccessEventArgs());
+            if (SaveResultEvent != null)
+                SaveResultEvent(this, new SaveResultEventArgs());
         }
 
         #endregion

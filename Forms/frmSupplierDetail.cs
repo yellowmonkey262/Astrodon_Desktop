@@ -1,4 +1,5 @@
-﻿using Astrodon.Controls.Supplier;
+﻿using Astrodon.Controls.Events;
+using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using System;
 using System.Collections.Generic;
@@ -27,12 +28,12 @@ namespace Astrodon.Forms
             _SupplierDetailControl.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(_SupplierDetailControl);
 
-            _SupplierDetailControl.SaveSuccessEvent += SupplierDetail_SaveSuccessEvent;
+            _SupplierDetailControl.SaveResultEvent += _SupplierDetailControl_SaveResultEvent; ;
         }
 
-        private void SupplierDetail_SaveSuccessEvent(object sender, SaveSuccessEventArgs e)
+        private void _SupplierDetailControl_SaveResultEvent(object sender, SaveResultEventArgs e)
         {
-            if (e.SaveSuccess)
+            if (e.Success)
                 DialogResult = DialogResult.OK;
             else
                 DialogResult = DialogResult.Cancel;
@@ -42,7 +43,7 @@ namespace Astrodon.Forms
 
         private void frmSupplierDetail_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _SupplierDetailControl.SaveSuccessEvent -= SupplierDetail_SaveSuccessEvent;
+            _SupplierDetailControl.SaveResultEvent -= _SupplierDetailControl_SaveResultEvent;
         }
     }
 }
