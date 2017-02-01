@@ -230,7 +230,7 @@
             this.Controls.Add(this.cmbBuilding);
             this.Controls.Add(this.label3);
             this.Name = "usrBuildingMaintenanceConfiguration";
-            this.Size = new System.Drawing.Size(601, 521);
+            this.Size = new System.Drawing.Size(601, 473);
             this.gbClassification.ResumeLayout(false);
             this.gbClassification.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).EndInit();

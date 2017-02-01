@@ -22,7 +22,11 @@ namespace Astrodon.Controls.Supplier
         {
             _DataContext = context;
             _IsSelectDialog = isSelectDialog;
+
             InitializeComponent();
+
+            if (!_IsSelectDialog)
+                lblTitle.Text = "Supplier Maintenance";
         }
 
         #region Supplier Lookup Events
@@ -110,8 +114,6 @@ namespace Astrodon.Controls.Supplier
                     else if (e.ColumnIndex == editColumnIndex)
                     {
                         var frmSupplierDetail = new frmSupplierDetail(_DataContext, _SelectedSupplier.SupplierId);
-                        frmSupplierDetail.StartPosition = FormStartPosition.CenterParent;
-
                         var dialogResult = frmSupplierDetail.ShowDialog();
 
                         if (dialogResult == DialogResult.OK)

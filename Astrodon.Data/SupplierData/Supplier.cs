@@ -11,11 +11,6 @@ namespace Astrodon.Data.SupplierData
     [Table("Supplier")]
     public class Supplier : DbEntity
     {
-        public Supplier()
-        {
-
-        }
-
         [MaxLength(200)]
         [Required]
         public virtual string CompanyName { get; set; }

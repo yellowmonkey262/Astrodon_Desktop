@@ -531,16 +531,6 @@ namespace Astrodon
             toolStripStatusLabel1.Text = "Building Maintenance Configuration";
         }
 
-        private void maintenanceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            pnlContents.Controls.Clear();
-            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext);
-            supplierLookup.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(supplierLookup);
-            toolStripStatusLabel1.Text = "Supplier Maintenance";
-        }
-
-
         private void supplierReportToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
@@ -557,6 +547,24 @@ namespace Astrodon
             report.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(report);
             toolStripStatusLabel1.Text = "Maintenance Report";
+        }
+
+        private void suppliersToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext);
+            supplierLookup.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(supplierLookup);
+            toolStripStatusLabel1.Text = "Supplier Maintenance";
+        }
+
+        private void buildingMaintenanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            var maintenance = new usrMaintenance(_DataContext);
+            maintenance.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(maintenance);
+            toolStripStatusLabel1.Text = "Building Maintenance";
         }
     }
 }

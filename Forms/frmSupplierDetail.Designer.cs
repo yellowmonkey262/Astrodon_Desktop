@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSupplierDetail));
             this.pnlContents = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
@@ -46,9 +47,11 @@
             this.ClientSize = new System.Drawing.Size(1001, 597);
             this.Controls.Add(this.pnlContents);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmSupplierDetail";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Supplier Detail";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmSupplierDetail_FormClosed);

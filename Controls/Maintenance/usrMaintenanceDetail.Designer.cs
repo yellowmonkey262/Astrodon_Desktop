@@ -1,6 +1,6 @@
 ﻿namespace Astrodon.Controls.Maintenance
 {
-    partial class usrCaptureMaintenance
+    partial class usrMaintenanceDetail
     {
         /// <summary> 
         /// Required designer variable.
@@ -116,7 +116,7 @@
             // lblLedgerAccountTitle
             // 
             this.lblLedgerAccountTitle.AutoSize = true;
-            this.lblLedgerAccountTitle.Location = new System.Drawing.Point(19, 84);
+            this.lblLedgerAccountTitle.Location = new System.Drawing.Point(19, 85);
             this.lblLedgerAccountTitle.Name = "lblLedgerAccountTitle";
             this.lblLedgerAccountTitle.Size = new System.Drawing.Size(83, 13);
             this.lblLedgerAccountTitle.TabIndex = 4;
@@ -125,7 +125,7 @@
             // lblClassificationTitle
             // 
             this.lblClassificationTitle.AutoSize = true;
-            this.lblClassificationTitle.Location = new System.Drawing.Point(19, 107);
+            this.lblClassificationTitle.Location = new System.Drawing.Point(19, 108);
             this.lblClassificationTitle.Name = "lblClassificationTitle";
             this.lblClassificationTitle.Size = new System.Drawing.Size(68, 13);
             this.lblClassificationTitle.TabIndex = 5;
@@ -134,7 +134,7 @@
             // lblTotalAmountTitle
             // 
             this.lblTotalAmountTitle.AutoSize = true;
-            this.lblTotalAmountTitle.Location = new System.Drawing.Point(19, 131);
+            this.lblTotalAmountTitle.Location = new System.Drawing.Point(19, 132);
             this.lblTotalAmountTitle.Name = "lblTotalAmountTitle";
             this.lblTotalAmountTitle.Size = new System.Drawing.Size(70, 13);
             this.lblTotalAmountTitle.TabIndex = 6;
@@ -563,7 +563,7 @@
             this.sfdDownloadAttachment.InitialDirectory = "c:\\\\";
             this.sfdDownloadAttachment.RestoreDirectory = true;
             // 
-            // usrCaptureMaintenance
+            // usrMaintenanceDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -618,7 +618,7 @@
             this.Controls.Add(this.lblMaintenanceTypeTitle);
             this.Controls.Add(this.lblBuildingNameTitle);
             this.Controls.Add(this.lblSupplierDetail);
-            this.Name = "usrCaptureMaintenance";
+            this.Name = "usrMaintenanceDetail";
             this.Size = new System.Drawing.Size(822, 575);
             ((System.ComponentModel.ISupportInitialize)(this.numWarrantyDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgSupportingDocuments)).EndInit();

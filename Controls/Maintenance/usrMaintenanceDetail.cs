@@ -17,13 +17,13 @@ using System.IO;
 
 namespace Astrodon.Controls.Maintenance
 {
-    public partial class usrCaptureMaintenance : UserControl
+    public partial class usrMaintenanceDetail : UserControl
     {
         private DataContext _DataContext;
         private Astrodon.Data.MaintenanceData.Maintenance _Maintenance;
         private List<SupportingDocument> _Documents;
 
-        public usrCaptureMaintenance(DataContext context, int maintenanceId)
+        public usrMaintenanceDetail(DataContext context, int maintenanceId)
         {
             this.Cursor = Cursors.WaitCursor;
 
@@ -54,7 +54,7 @@ namespace Astrodon.Controls.Maintenance
             }
         }
 
-        public usrCaptureMaintenance(DataContext context, tblRequisition requisition, BuildingMaintenanceConfiguration config)
+        public usrMaintenanceDetail(DataContext context, tblRequisition requisition, BuildingMaintenanceConfiguration config)
         {
             this.Cursor = Cursors.WaitCursor;
 
@@ -220,7 +220,7 @@ namespace Astrodon.Controls.Maintenance
                 else
                 {
                     _Maintenance.IsForBodyCorporate = false;
-                    _Maintenance.CustomerAccount = selectedUnit.Value;
+                    _Maintenance.CustomerAccount = selectedUnit.Id;
                 }
 
                 _Maintenance.Description = txtDescription.Text;
@@ -246,7 +246,7 @@ namespace Astrodon.Controls.Maintenance
             }
             catch (Exception ex)
             {
-                Controller.HandleError(ex.Message);
+                Controller.HandleError("An error occured saving the record.");
             }
             finally
             {
@@ -267,7 +267,7 @@ namespace Astrodon.Controls.Maintenance
             lblBuildingName.Text = _Maintenance.BuildingMaintenanceConfiguration.Building.Building;
             lblMaintenanceType.Text = _Maintenance.BuildingMaintenanceConfiguration.Name;
             lblLedgerAccount.Text = _Maintenance.BuildingMaintenanceConfiguration.PastelAccountName;
-            lblClassification.Text = NameSplitting.SplitCamelCase(_Maintenance.BuildingMaintenanceConfiguration.Classification.ToString());
+            lblClassification.Text = _Maintenance.BuildingMaintenanceConfiguration.Classification;
             lblTotalAmount.Text = "R" + _Maintenance.TotalAmount.ToString("#,###.00");
             txtDescription.Text = _Maintenance.Description;
             lblSupplier.Text = _Maintenance.Supplier.CompanyName;
@@ -305,6 +305,9 @@ namespace Astrodon.Controls.Maintenance
                     cbUnit.DataSource = customers;
                     cbUnit.ValueMember = "Id";
                     cbUnit.DisplayMember = "Display";
+
+                    if (!string.IsNullOrEmpty(_Maintenance.CustomerAccount))
+                        cbUnit.SelectedIndex = cbUnit.FindString(_Maintenance.CustomerAccount);
                 }
                 catch (Exception e)
                 {

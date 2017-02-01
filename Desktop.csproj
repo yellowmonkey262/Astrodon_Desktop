@@ -152,11 +152,17 @@
     <Compile Include="Controls\Maintenance\usrBuildingMaintenanceConfiguration.Designer.cs">
       <DependentUpon>usrBuildingMaintenanceConfiguration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Maintenance\usrCaptureMaintenance.cs">
+    <Compile Include="Controls\Maintenance\usrMaintenance.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Maintenance\usrCaptureMaintenance.Designer.cs">
-      <DependentUpon>usrCaptureMaintenance.cs</DependentUpon>
+    <Compile Include="Controls\Maintenance\usrMaintenance.Designer.cs">
+      <DependentUpon>usrMaintenance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Maintenance\usrMaintenanceDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Maintenance\usrMaintenanceDetail.Designer.cs">
+      <DependentUpon>usrMaintenanceDetail.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Events\SaveSuccessEventArgs.cs" />
     <Compile Include="Controls\Supplier\SupplierSelectEventArgs.cs" />
@@ -463,11 +469,11 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmMaintenance.cs">
+    <Compile Include="Forms\frmMaintenanceDetail.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmMaintenance.Designer.cs">
-      <DependentUpon>frmMaintenance.cs</DependentUpon>
+    <Compile Include="Forms\frmMaintenanceDetail.Designer.cs">
+      <DependentUpon>frmMaintenanceDetail.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmNewBuilding.cs">
       <SubType>Form</SubType>
@@ -550,8 +556,11 @@
     <EmbeddedResource Include="Controls\Maintenance\usrBuildingMaintenanceConfiguration.resx">
       <DependentUpon>usrBuildingMaintenanceConfiguration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Maintenance\usrCaptureMaintenance.resx">
-      <DependentUpon>usrCaptureMaintenance.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\Maintenance\usrMaintenance.resx">
+      <DependentUpon>usrMaintenance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Maintenance\usrMaintenanceDetail.resx">
+      <DependentUpon>usrMaintenanceDetail.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Supplier\usrSupplierDetail.resx">
       <DependentUpon>usrSupplierDetail.cs</DependentUpon>
@@ -695,8 +704,8 @@
       <DependentUpon>frmMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmMaintenance.resx">
-      <DependentUpon>frmMaintenance.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmMaintenanceDetail.resx">
+      <DependentUpon>frmMaintenanceDetail.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmNewBuilding.resx">
       <DependentUpon>frmNewBuilding.cs</DependentUpon>
