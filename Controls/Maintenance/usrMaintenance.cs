@@ -22,9 +22,7 @@ namespace Astrodon.Controls.Maintenance
         public usrMaintenance(DataContext context)
         {
             _DataContext = context;
-
             InitializeComponent();
-
             LoadBuildings();
         }
 
@@ -37,7 +35,7 @@ namespace Astrodon.Controls.Maintenance
             var toDate = dtpToDate.Value.Date.AddDays(1).AddMinutes(-1);
 
             _MaintenanceRecords = (from m in _DataContext.MaintenanceSet
-                                   where m.BuildingMaintenanceConfiguration.BuildingId == buildingId || buildingId == 0
+                                   where m.BuildingMaintenanceConfiguration.BuildingId == buildingId
                                    && m.DateLogged >= fromDate
                                    && m.DateLogged <= toDate
                                    select new MaintenanceResult()
@@ -61,18 +59,14 @@ namespace Astrodon.Controls.Maintenance
 
         private void LoadBuildings()
         {
-            var allBuildings = new Buildings(false).buildings;
+            Buildings bManager = (Controller.user.id == 0 ? new Buildings(false) : new Buildings(Controller.user.id));
 
-            var buildings = new List<IdValue>();
-            buildings.Add(new IdValue() { Id = 0, Value = "All Buildings" });
-
-            buildings.AddRange((from building in allBuildings
-                                join userBuilding in Controller.user.buildings on building.ID equals userBuilding
-                                select new IdValue
-                                {
-                                    Id = building.ID,
-                                    Value = building.Name
-                                }).OrderBy(a => a.Value).ToList());
+            var buildings = (from building in bManager.buildings
+                            select new IdValue
+                            {
+                                Id = building.ID,
+                                Value = building.Name
+                            }).OrderBy(a => a.Value).ToList();
 
             cmbBuilding.DataSource = buildings;
             cmbBuilding.ValueMember = "Id";
