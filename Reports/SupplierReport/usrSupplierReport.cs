@@ -55,11 +55,11 @@ namespace Astrodon.Reports.SupplierReport
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             if (dlgSave.ShowDialog() == DialogResult.OK)
             {
-
+                this.Cursor = Cursors.WaitCursor;
                 button1.Enabled = false;
+
                 try
                 {
                     using (var reportService = new ReportServiceClient())
@@ -77,6 +77,7 @@ namespace Astrodon.Reports.SupplierReport
                 }
                 finally
                 {
+                    this.Cursor = Cursors.Default;
                     button1.Enabled = true;
                 }
             }

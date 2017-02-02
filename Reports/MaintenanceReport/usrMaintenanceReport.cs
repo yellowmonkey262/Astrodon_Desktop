@@ -31,6 +31,7 @@ namespace Astrodon.Reports.MaintenanceReport
         private void LoadBuildings()
         {
             this.Cursor = Cursors.WaitCursor;
+
             try
             {
                 var userid = Controller.user.id; 
@@ -76,13 +77,13 @@ namespace Astrodon.Reports.MaintenanceReport
             cmbMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
         }
 
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (dlgSave.ShowDialog() == DialogResult.OK)
             {
-
+                this.Cursor = Cursors.WaitCursor;
                 button1.Enabled = false;
+
                 try
                 {
                     using (var reportService = new ReportServiceClient())
@@ -111,6 +112,7 @@ namespace Astrodon.Reports.MaintenanceReport
                 }
                 finally
                 {
+                    this.Cursor = Cursors.Default;
                     button1.Enabled = true;
                 }
             }
