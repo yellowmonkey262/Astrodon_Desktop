@@ -70,8 +70,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\Itenso.Sys.dll</HintPath>
     </Reference>
-    <Reference Include="itextsharp">
-      <HintPath>..\DLL\itextsharp.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.5.10.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\iTextSharp.5.5.10\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="itextsharp.pdfa">
       <HintPath>..\DLL\itextsharp.pdfa.dll</HintPath>

@@ -11,6 +11,8 @@ using System.Globalization;
 using Astrodon.ReportService;
 using System.IO;
 using System.Diagnostics;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace Astrodon.Reports.MaintenanceReport
 {
@@ -106,7 +108,46 @@ namespace Astrodon.Reports.MaintenanceReport
                             Controller.HandleError("No data found for " + dDate.ToString("MMM yyyy"), "Maintenance Report");
                             return;
                         }
-                        File.WriteAllBytes(dlgSave.FileName, reportData);
+
+                        if(repType == MaintenanceReportType.DetailedReportWithSupportingDocuments)
+                        {
+                            byte[] combinedReport = null;
+
+                            using (var dataContext = SqlDataHandler.GetDataContext())
+                            {
+                                var documentIds = (from m in dataContext.MaintenanceSet
+                                                            from d in m.MaintenanceDocuments
+                                                            where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
+                                                            orderby m.DateLogged
+                                                            select d.id).ToList();
+
+                                using (MemoryStream ms = new MemoryStream())
+                                {
+                                    using (Document doc = new Document())
+                                    {
+                                        using (PdfCopy copy = new PdfCopy(doc, ms))
+                                        {
+                                            doc.Open();
+
+                                            AddPdfDocument(copy, reportData);
+
+                                            foreach (var documentId in documentIds)
+                                            {
+                                                var document = dataContext.MaintenanceDocumentSet.Where(a => a.id == documentId).Select(a => a.FileData).Single();
+                                                AddPdfDocument(copy, document);
+                                            }
+                                        }
+                                    }
+
+                                    combinedReport = ms.ToArray();
+                                }
+                            }
+
+                            File.WriteAllBytes(dlgSave.FileName, combinedReport);
+                        }
+                        else
+                            File.WriteAllBytes(dlgSave.FileName, reportData);
+
                         Process.Start(dlgSave.FileName);
                     }
                 }
@@ -115,6 +156,16 @@ namespace Astrodon.Reports.MaintenanceReport
                     this.Cursor = Cursors.Default;
                     button1.Enabled = true;
                 }
+            }
+        }
+
+        private void AddPdfDocument(PdfCopy copy, byte[] document)
+        {
+            PdfReader reader = new PdfReader(document);
+            int n = reader.NumberOfPages;
+            for (int page = 0; page < n;)
+            {
+                copy.AddPage(copy.GetImportedPage(reader, ++page));
             }
         }
     }
