@@ -122,7 +122,7 @@
             this.dgMaintenance.Location = new System.Drawing.Point(21, 141);
             this.dgMaintenance.Name = "dgMaintenance";
             this.dgMaintenance.ReadOnly = true;
-            this.dgMaintenance.Size = new System.Drawing.Size(666, 327);
+            this.dgMaintenance.Size = new System.Drawing.Size(1093, 327);
             this.dgMaintenance.TabIndex = 9;
             this.dgMaintenance.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgMaintenance_CellContentClick);
             // 
@@ -140,7 +140,7 @@
             this.Controls.Add(this.lblSelectBuilding);
             this.Controls.Add(this.lblTitle);
             this.Name = "usrMaintenance";
-            this.Size = new System.Drawing.Size(711, 494);
+            this.Size = new System.Drawing.Size(1132, 494);
             ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

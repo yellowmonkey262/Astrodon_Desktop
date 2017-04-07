@@ -45,7 +45,7 @@ namespace Astrodon.Controls.Maintenance
                         return;
                     Dictionary<String, String> ledgerAccounts = Controller.pastel.GetAccountList(_SelectedBuilding.DataPath);
 
-                    _Accounts = ledgerAccounts.Where(a => a.Key.StartsWith("435") || a.Key == "9200999").Select(b => new StringKeyValue() { Id = b.Key, Value = b.Value }).ToList();
+                    _Accounts = ledgerAccounts.Select(b => new StringKeyValue() { Id = b.Key, Value = b.Value }).ToList();
                     cmbAccount.DataSource = _Accounts;
                     cmbAccount.ValueMember = "Id";
                     cmbAccount.DisplayMember = "Display";

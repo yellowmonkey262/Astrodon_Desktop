@@ -223,7 +223,7 @@
             this.cmbLedger.FormattingEnabled = true;
             this.cmbLedger.Location = new System.Drawing.Point(158, 128);
             this.cmbLedger.Name = "cmbLedger";
-            this.cmbLedger.Size = new System.Drawing.Size(204, 21);
+            this.cmbLedger.Size = new System.Drawing.Size(293, 21);
             this.cmbLedger.TabIndex = 4;
             this.cmbLedger.SelectedIndexChanged += new System.EventHandler(this.cmbLedger_SelectedIndexChanged);
             // 
