@@ -1117,7 +1117,7 @@ namespace Astrodon
             FileStream stream;
             try
             {
-                fName = Path.Combine(folderPath, String.Format("{0} - statement - {1}_{2}.pdf", statement.AccNo.Replace(@"/", "-").Replace(@"\", "-"), DateTime.Now.ToString("dd-MMMM-yyyy"), (isBuilding ? "" : "R")));
+                fName = Path.Combine(folderPath, String.Format("{0} - statement - {1}{2}.pdf", statement.AccNo.Replace(@"/", "-").Replace(@"\", "-"), DateTime.Now.ToString("dd-MMMM-yyyy"), (isBuilding ? "" : "_R")));
                 if (File.Exists(fName)) { File.Delete(fName); }
                 stream = new FileStream(fName, FileMode.CreateNew);
             }

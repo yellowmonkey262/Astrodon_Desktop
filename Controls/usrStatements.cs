@@ -312,7 +312,8 @@ namespace Astrodon
                     myStatement.Message = (!String.IsNullOrEmpty(txtMessage.Text) ? txtMessage.Text : "");
                     myStatement.StmtDate = stmtDatePicker.Value;
                     double totalDue = 0;
-                    List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue);
+                    String trnMsg;
+                    List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
                     if (transactions != null) { myStatement.Transactions = transactions; }
                     if (stophere) { MessageBox.Show("222"); }
                     myStatement.totalDue = totalDue;
