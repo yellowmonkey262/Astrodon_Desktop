@@ -1,0 +1,7 @@
+C:\Projects\Stephen\Astrodon\AstroLibrary\bin\Debug\Astro.Library.dll
+C:\Projects\Stephen\Astrodon\AstroLibrary\bin\Debug\Astro.Library.pdb
+C:\Projects\Stephen\Astrodon\AstroLibrary\bin\Debug\System.Net.Http.dll
+C:\Projects\Stephen\Astrodon\AstroLibrary\bin\Debug\System.Net.Http.xml
+C:\Projects\Stephen\Astrodon\AstroLibrary\obj\Debug\Astro.Library.dll
+C:\Projects\Stephen\Astrodon\AstroLibrary\obj\Debug\Astro.Library.pdb
+C:\Projects\Stephen\Astrodon\AstroLibrary\obj\Debug\AstroLibrary.csprojResolveAssemblyReference.cache
