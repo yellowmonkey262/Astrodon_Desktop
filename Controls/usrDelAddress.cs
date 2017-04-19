@@ -1,17 +1,21 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using System;
 using System.Windows.Forms;
 
-namespace Astrodon.Controls {
-
-    public partial class usrDelAddress : UserControl {
+namespace Astrodon.Controls
+{
+    public partial class usrDelAddress : UserControl
+    {
         private AdditionalAddress add;
 
-        public usrDelAddress(AdditionalAddress aa) {
+        public usrDelAddress(AdditionalAddress aa)
+        {
             InitializeComponent();
             add = aa;
         }
 
-        private void usrDelAddress_Load(object sender, EventArgs e) {
+        private void usrDelAddress_Load(object sender, EventArgs e)
+        {
             txtAddy1.Text = add.Address[0];
             txtAddy2.Text = add.Address[1];
             txtAddy3.Text = add.Address[2];

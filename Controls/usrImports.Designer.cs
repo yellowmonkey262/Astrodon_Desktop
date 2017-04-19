@@ -1,5 +1,7 @@
-﻿namespace Astrodon {
-    partial class usrImports {
+﻿namespace Astrodon
+{
+    partial class usrImports
+    {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -9,8 +11,10 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing) {
-            if (disposing && (components != null)) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -22,7 +26,8 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             this.btnHardImport = new System.Windows.Forms.Button();
             this.txtPeriod = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -107,7 +112,6 @@
             this.Controls.Add(this.btnSelect);
             this.Name = "usrImports";
             this.Size = new System.Drawing.Size(410, 227);
-            this.Load += new System.EventHandler(this.usrImports_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

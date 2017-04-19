@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Forms;
+using Astro.Library.Entities;
 using System.Linq;
 using System.Data.Entity;
 
@@ -44,11 +45,11 @@ namespace Astrodon.Controls
             dgUnpaid.AutoGenerateColumns = false;
 
             cmbRecur.SelectedIndex = 0;
-            //LoadRequisitions();
         }
 
         private void LoadBuildings()
         {
+
             _AllBuildings = new Buildings(false).buildings;
 
             foreach (int bid in Controller.user.buildings)
@@ -58,13 +59,13 @@ namespace Astrodon.Controls
                     if (bid == b.ID && b.Web_Building && !_MyBuildings.Contains(b))
                     {
                         _MyBuildings.Add(b);
+
+
                         break;
                     }
                 }
             }
-
-            _MyBuildings.Sort(new BuildingComparer("Name", SortOrder.Ascending));
-
+            _MyBuildings = _MyBuildings.OrderBy(c => c.Name).ToList();
             cmbBuilding.SelectedIndexChanged -= cmbBuilding_SelectedIndexChanged;
             cmbBuilding.DataSource = _MyBuildings;
             cmbBuilding.ValueMember = "ID";
@@ -79,11 +80,11 @@ namespace Astrodon.Controls
             unPaidRequisitions.Clear();
             paidRequisitions.Clear();
             String lineNumber = "0";
-
             try
             {
                 if (cmbBuilding.SelectedIndex > -1)
                 {
+
                     String buildingID = _MyBuildings[cmbBuilding.SelectedIndex].ID.ToString();
                     String unpaidQuery = "SELECT count(*) as unpaids FROM tblRequisition WHERE paid = 'False' AND building = " + buildingID;
                     DataSet unpaidDS = dh.GetData(unpaidQuery, null, out status);
@@ -96,15 +97,13 @@ namespace Astrodon.Controls
                         if (unpaids > 0)
                         {
                             hasUnpaids = true;
-                            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : _MyBuildings[cmbBuilding.SelectedIndex].DataPath);
-                            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? _MyBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : _MyBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
-                            transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc);
-                            transactions.Sort(new TrnsComparer("Date", SortOrder.Descending));
+                            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
+                            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+                            transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).OrderByDescending(c => c.Date).ToList();
                         }
                     }
 
                     lineNumber = "111";
-
                     using (var context = SqlDataHandler.GetDataContext())
                     {
                         var buildingId = _MyBuildings[cmbBuilding.SelectedIndex].ID;
@@ -170,6 +169,7 @@ namespace Astrodon.Controls
                                     paidRequisitions.Add(r);
                                     dh.SetData(updateQuery, null, out status);
                                 }
+
                             }
                         }
                     }
@@ -380,6 +380,7 @@ namespace Astrodon.Controls
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
         {
+
             btnSupplierLookup.Enabled = true;
             cmbAccount.Items.Clear();
             cmbLedger.Items.Clear();
@@ -420,8 +421,10 @@ namespace Astrodon.Controls
             double balance = GetBuildingBalance();
             balance -= getOutstandingAmt();
             lblBalance.Text = balance.ToString("#,##0.00");
+            lblBalance.Refresh();
             double requestedAmt = double.TryParse(txtAmount.Text, out requestedAmt) ? requestedAmt : 0;
             lblAvAmt.Text = (double.Parse(lblBalance.Text) - requestedAmt - (requestedAmt > 0 ? GetEFTFee() : 0)).ToString("#,##0.00");
+            lblAvAmt.Refresh();
         }
 
         private double GetBuildingBalance()
@@ -432,6 +435,7 @@ namespace Astrodon.Controls
                 {
                     if (cmbAccount.SelectedItem.ToString() == "TRUST")
                     {
+
                         return (!String.IsNullOrEmpty(GetTrustPath()) ? GetBalance(GetTrustPath(), _MyBuildings[cmbBuilding.SelectedIndex].Trust) : 0) * -1;
                     }
                     else
@@ -446,6 +450,7 @@ namespace Astrodon.Controls
             }
             catch (Exception ex)
             {
+
                 MessageBox.Show("b count = " + _MyBuildings.Count.ToString() + " b idx = " + cmbBuilding.SelectedIndex);
                 return 0;
             }
@@ -458,12 +463,18 @@ namespace Astrodon.Controls
             {
                 os += r.amount;
             }
+            foreach (RequisitionList r in unPaidRequisitions)
+            {
+                os += r.amount;
+            }
+
             return os;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             double amt;
+
 
             if (double.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null 
                 && cmbLedger.SelectedItem != null && cmbAccount.SelectedItem != null)
@@ -525,6 +536,7 @@ namespace Astrodon.Controls
                     //dh.SetData(query, sqlParms, out status);
                 }
 
+
                 if (cmbRecur.SelectedIndex > 0)
                 {
                     DateTime startDate = trnDatePicker.Value;
@@ -579,6 +591,7 @@ namespace Astrodon.Controls
 
                     #endregion
 
+
                     foreach (DateTime dt in dates)
                     {
                         sqlParms["@trnDate"] = dt;
@@ -592,6 +605,7 @@ namespace Astrodon.Controls
             else
             {
                 Controller.HandleError("Please enter all fields","Validation Error");
+
             }
         }
 
@@ -619,6 +633,7 @@ namespace Astrodon.Controls
             lbAccountNumber.Text = "";
             lbBankName.Text = "";
         }
+
 
         private void ResetRequisitions()
         {
@@ -652,6 +667,7 @@ namespace Astrodon.Controls
             {
                 lblAvAmt.Text = string.Empty;
             }
+
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -735,73 +751,54 @@ namespace Astrodon.Controls
         }
     }
 
-    public class Requisition
-    {
-        public String ID { get; set; }
+   
 
-        public DateTime trnDate { get; set; }
+        private void btnViewTrans_Click(object sender, EventArgs e)
+        {
+            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
+            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+            List<Trns> transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).OrderByDescending(c => c.Date).ToList();
+            Forms.frmReqTrans fTrans = new Forms.frmReqTrans(transactions);
+            fTrans.Show();
+        }
 
-        public String building { get; set; }
+        private void dg_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridView senderGrid = (DataGridView)sender;
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+            {
+                RequisitionList req = (senderGrid.DataSource as BindingList<RequisitionList>)[e.RowIndex];
+                String query = "DELETE FROM tblRequisition WHERE ID = " + req.ID;
+                String status = "";
+                dh.SetData(query, null, out status);
+                LoadRequisitions();
+            }
+            else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
+            {
+                UpdatePaidStatus(e.RowIndex);
+            }
+        }
 
-        public String reference { get; set; }
-
-        public String payreference { get; set; }
-
-        public String account { get; set; }
-
-        public String ledger { get; set; }
-
-        public double accBalance { get; set; }
-
-        public double amount { get; set; }
-
-    }
-
-    public class RequisitionList
-    {
-        public string supplierName;
-
-        public string supplierId;
-
-        public string supplierContact;
-
-        public string supplierVat;
-
-        public string supplierEmail;
-
-        public string supplierBank;
-
-        public string supplierBranchName;
-
-        public string supplierBranchCode;
-
-        public string supplierAccountNumber;
-
-        public bool paid;
-
-        public bool processed;
-
-        public String ID { get; set; }
-
-        public DateTime trnDate { get; set; }
-
-        public String building { get; set; }
-
-        public String account { get; set; }
-
-        public String reference { get; set; }
-
-        public String ledger { get; set; }
-
-        public String payreference { get; set; }
-
-        public double amount { get; set; }
-    }
 
     public class ReqAccount
     {
         public String accNumber { get; set; }
 
-        public String accDescription { get; set; }
+        private void UpdatePaidStatus(int idx)
+        {
+            RequisitionList req = unPaidRequisitions[idx];
+            bool paid = !req.paid;
+            String query = "UPDATE tblRequisition SET paid = '" + paid.ToString() + "' WHERE ID = " + req.ID;
+            MessageBox.Show(query);
+            String status = "";
+            dh.SetData(query, null, out status);
+            LoadRequisitions();
+            dgUnpaid.Invalidate();
+        }
+
+
+        private void dgUnpaid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+        }
     }
 }

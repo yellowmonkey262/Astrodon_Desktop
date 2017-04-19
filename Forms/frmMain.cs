@@ -1,4 +1,4 @@
-﻿using Astrodon.Controls.Maintenance;
+using Astrodon.Controls.Maintenance;
 using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using Astrodon.Reports;
@@ -12,10 +12,16 @@ using System.Windows.Forms;
 namespace Astrodon
 {
 
+
     public partial class frmMain : Form
     {
 
         private DataContext _DataContext;
+
+
+        private Timer tmrRem = new Timer();
+
+        public delegate void PopupDelegate(String notification);
 
         public frmMain()
         {
@@ -32,10 +38,12 @@ namespace Astrodon
                 importStatementsToolStripMenuItem.Enabled = false;
                 allocationsToolStripMenuItem.Enabled = false;
             }
+
             if (Controller.user.usertype != 1 && Controller.user.usertype != 2)
             {
                 reportingToolStripMenuItem.Enabled = false;
             }
+
             if (Controller.user.usertype == 1 || Controller.user.usertype == 2)
             {
                 pMJobListToolStripMenuItem.Enabled = true;
@@ -54,9 +62,6 @@ namespace Astrodon
             LoadReminders();
             notifyIcon1.Visible = false;
         }
-
-        private Timer tmrRem = new Timer();
-
         public void LoadReminders()
         {
             String remQuery = "SELECT COUNT(*) as rems FROM tblReminders WHERE userid = " + Controller.user.id.ToString() + " AND action = 'False' AND remDate <= getdate()";
@@ -106,8 +111,6 @@ namespace Astrodon
             lblNotifications.Text = notification;
         }
 
-        public delegate void PopupDelegate(String notification);
-
         public void PopupNotification(String notification)
         {
             if (InvokeRequired)
@@ -116,30 +119,30 @@ namespace Astrodon
             }
             else
             {
-                PopupNotifier popup = new PopupNotifier();
-                popup.TitleText = "Message from Astrodon Server";
-                popup.ContentText = notification;
-                popup.ShowCloseButton = false;
-                popup.ShowOptionsButton = false;
-                popup.ShowGrip = true;
-                popup.Delay = 10000;
-                popup.AnimationInterval = 5;
-                popup.AnimationDuration = 15;
-                popup.TitlePadding = new Padding(3);
-                popup.ContentPadding = new Padding(3);
-                popup.ImagePadding = new Padding(3);
-                popup.Scroll = true;
-                popup.Popup();
+                using (PopupNotifier popup = new PopupNotifier())
+                {
+                    popup.TitleText = "Message from Astrodon Server";
+                    popup.ContentText = notification;
+                    popup.ShowCloseButton = false;
+                    popup.ShowOptionsButton = false;
+                    popup.ShowGrip = true;
+                    popup.Delay = 10000;
+                    popup.AnimationInterval = 5;
+                    popup.AnimationDuration = 15;
+                    popup.TitlePadding = new Padding(3);
+                    popup.ContentPadding = new Padding(3);
+                    popup.ImagePadding = new Padding(3);
+                    popup.Scroll = true;
+                    popup.Popup();
+                }
             }
         }
 
-        private void configToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddNewControl(Control control, String controlName)
         {
             pnlContents.Controls.Clear();
-            usrConfig config = new usrConfig();
-            config.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(config);
-            toolStripStatusLabel1.Text = "Config";
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = controlName;
         }
 
         private void buildingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -151,11 +154,11 @@ namespace Astrodon
             toolStripStatusLabel1.Text = "Buildings";
         }
 
+
         private void usersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrUsers userControl = new usrUsers();
-            userControl.Dock = DockStyle.Fill;
+            usrUsers userControl = new usrUsers { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(userControl);
             toolStripStatusLabel1.Text = "Users";
         }
@@ -163,8 +166,7 @@ namespace Astrodon
         private void summaryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrSummaryReport summControl = new usrSummaryReport();
-            summControl.Dock = DockStyle.Fill;
+            usrSummaryReport summControl = new usrSummaryReport { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(summControl);
             toolStripStatusLabel1.Text = "Summary Report";
         }
@@ -176,8 +178,7 @@ namespace Astrodon
         private void emailToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            Astrodon.Controls.usrEmail emailControl = new Controls.usrEmail();
-            emailControl.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrEmail emailControl = new Controls.usrEmail { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(emailControl);
             toolStripStatusLabel1.Text = "Email Reports";
         }
@@ -193,8 +194,7 @@ namespace Astrodon
         private void bulkSMSToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrBulkSMS smsControl = new usrBulkSMS();
-            smsControl.Dock = DockStyle.Fill;
+            usrBulkSMS smsControl = new usrBulkSMS { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(smsControl);
             toolStripStatusLabel1.Text = "SMS";
         }
@@ -208,8 +208,7 @@ namespace Astrodon
         private void rentalImportsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrImports importControl = new usrImports();
-            importControl.Dock = DockStyle.Fill;
+            usrImports importControl = new usrImports { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(importControl);
             toolStripStatusLabel1.Text = "Rental Imports";
         }
@@ -217,8 +216,7 @@ namespace Astrodon
         private void lettersToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrLetters letterControl = new usrLetters();
-            letterControl.Dock = DockStyle.Fill;
+            usrLetters letterControl = new usrLetters { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(letterControl);
             toolStripStatusLabel1.Text = "Letters";
         }
@@ -226,15 +224,13 @@ namespace Astrodon
         private void clearancesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            frmClearance clearanceF = new frmClearance();
-            clearanceF.Show();
+            using (frmClearance clearanceF = new frmClearance()) { clearanceF.Show(); }
         }
 
         private void bulkStatementsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrStatements statementControl = new usrStatements();
-            statementControl.Dock = DockStyle.Fill;
+            usrStatements statementControl = new usrStatements { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(statementControl);
             toolStripStatusLabel1.Text = "Statements";
         }
@@ -242,8 +238,7 @@ namespace Astrodon
         private void individualStatementsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrIndStatements statementControl = new usrIndStatements();
-            statementControl.Dock = DockStyle.Fill;
+            usrIndStatements statementControl = new usrIndStatements { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(statementControl);
             toolStripStatusLabel1.Text = "Statements";
         }
@@ -251,8 +246,7 @@ namespace Astrodon
         private void creditsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrCredits creditControl = new usrCredits();
-            creditControl.Dock = DockStyle.Fill;
+            usrCredits creditControl = new usrCredits { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(creditControl);
             toolStripStatusLabel1.Text = "Credits";
         }
@@ -260,8 +254,7 @@ namespace Astrodon
         private void sendBulkMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrBulkEmail emailControl = new usrBulkEmail();
-            emailControl.Dock = DockStyle.Fill;
+            usrBulkEmail emailControl = new usrBulkEmail { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(emailControl);
             toolStripStatusLabel1.Text = "Bulk Email";
         }
@@ -269,8 +262,7 @@ namespace Astrodon
         private void importStatementsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrImportBank importControl = new usrImportBank();
-            importControl.Dock = DockStyle.Fill;
+            usrImportBank importControl = new usrImportBank { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(importControl);
             toolStripStatusLabel1.Text = "Import Statements";
         }
@@ -278,8 +270,7 @@ namespace Astrodon
         private void allocationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrAllocations allocationControl = new usrAllocations();
-            allocationControl.Dock = DockStyle.Fill;
+            usrAllocations allocationControl = new usrAllocations { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(allocationControl);
             toolStripStatusLabel1.Text = "Allocations";
         }
@@ -287,8 +278,7 @@ namespace Astrodon
         private void journalsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            Astrodon.Controls.usrJournal journalControl = new Controls.usrJournal();
-            journalControl.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrJournal journalControl = new Controls.usrJournal { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(journalControl);
             toolStripStatusLabel1.Text = "Journals";
         }
@@ -297,8 +287,7 @@ namespace Astrodon
         {
             pnlContents.Controls.Clear();
             if (jobList != null) { jobList = null; }
-            Astrodon.Controls.usrJob jobControl = new Astrodon.Controls.usrJob(0);
-            jobControl.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrJob jobControl = new Astrodon.Controls.usrJob(0) { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(jobControl);
             toolStripStatusLabel1.Text = "Jobs";
         }
@@ -307,8 +296,7 @@ namespace Astrodon
         {
             pnlContents.Controls.Clear();
             if (jobList != null) { jobList = null; }
-            Astrodon.Controls.usrJob jobControl = new Astrodon.Controls.usrJob(jid);
-            jobControl.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrJob jobControl = new Astrodon.Controls.usrJob(jid) { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(jobControl);
             toolStripStatusLabel1.Text = "Jobs";
         }
@@ -316,8 +304,7 @@ namespace Astrodon
         private void pAPMToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            Astrodon.Controls.usrJobReport jobReport = new Astrodon.Controls.usrJobReport();
-            jobReport.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrJobReport jobReport = new Astrodon.Controls.usrJobReport { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(jobReport);
             toolStripStatusLabel1.Text = "Jobs";
         }
@@ -328,8 +315,7 @@ namespace Astrodon
         {
             pnlContents.Controls.Clear();
             Controller.ShowingJobList = true;
-            jobList = new Controls.usrPMJobs();
-            jobList.Dock = DockStyle.Fill;
+            jobList = new Controls.usrPMJobs { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(jobList);
             toolStripStatusLabel1.Text = "Job List";
         }
@@ -342,8 +328,7 @@ namespace Astrodon
         private void webMaintenanceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            Astrodon.Controls.usrWebDocs upload = new Controls.usrWebDocs();
-            upload.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrWebDocs upload = new Controls.usrWebDocs { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(upload);
             toolStripStatusLabel1.Text = "Web Maintenance";
         }
@@ -351,8 +336,7 @@ namespace Astrodon
         private void remindersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            Astrodon.Controls.usrReminders reminders = new Controls.usrReminders();
-            reminders.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrReminders reminders = new Controls.usrReminders { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(reminders);
             toolStripStatusLabel1.Text = "Reminders";
         }
@@ -360,8 +344,7 @@ namespace Astrodon
         private void printEnvelopesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            Astrodon.Controls.usrEnvelopes envelopes = new Controls.usrEnvelopes();
-            envelopes.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrEnvelopes envelopes = new Controls.usrEnvelopes { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(envelopes);
             toolStripStatusLabel1.Text = "Envelopes";
         }
@@ -369,8 +352,7 @@ namespace Astrodon
         private void bulkEmailToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrBulkEmail bulkMailer = new usrBulkEmail();
-            bulkMailer.Dock = DockStyle.Fill;
+            usrBulkEmail bulkMailer = new usrBulkEmail { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(bulkMailer);
             toolStripStatusLabel1.Text = "Bulk Email";
         }
@@ -378,8 +360,7 @@ namespace Astrodon
         private void debtorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            Astrodon.Controls.usrDebtor debtorCtl = new Controls.usrDebtor();
-            debtorCtl.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrDebtor debtorCtl = new Controls.usrDebtor { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(debtorCtl);
             toolStripStatusLabel1.Text = "Debtors Reports";
         }
@@ -387,8 +368,7 @@ namespace Astrodon
         private void reportingToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            Astrodon.Controls.usrDebtorReport dbReport = new Controls.usrDebtorReport();
-            dbReport.Dock = DockStyle.Fill;
+            Astrodon.Controls.usrDebtorReport dbReport = new Controls.usrDebtorReport { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(dbReport);
             toolStripStatusLabel1.Text = "Debtors Report";
         }

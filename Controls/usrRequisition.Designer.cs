@@ -1,4 +1,4 @@
-﻿namespace Astrodon.Controls {
+namespace Astrodon.Controls {
     partial class usrRequisition {
         /// <summary> 
         /// Required designer variable.
@@ -23,9 +23,9 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -58,7 +58,9 @@
             this.colLedger = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAccount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colEdit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnViewTrans = new System.Windows.Forms.Button();
             this.dgUnpaid = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -68,6 +70,8 @@
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPaid = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.colDelete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.dgPaid = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -82,6 +86,7 @@
             this.cmbRecur = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.dtEndDate = new System.Windows.Forms.DateTimePicker();
+
             this.label12 = new System.Windows.Forms.Label();
             this.lbSupplierName = new System.Windows.Forms.Label();
             this.btnSupplierLookup = new System.Windows.Forms.Button();
@@ -92,6 +97,8 @@
             this.lbInvoiceNumber = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.dtInvoiceDate = new System.Windows.Forms.DateTimePicker();
+
+
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgUnprocessed)).BeginInit();
@@ -277,7 +284,7 @@
             this.tabControl1.Location = new System.Drawing.Point(15, 330);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(841, 326);
+            this.tabControl1.Size = new System.Drawing.Size(915, 326);
             this.tabControl1.TabIndex = 25;
             // 
             // tabPage1
@@ -288,14 +295,14 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(833, 300);
+            this.tabPage1.Size = new System.Drawing.Size(907, 300);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Unprocessed";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(589, 262);
+            this.btnDelete.Location = new System.Drawing.Point(684, 262);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(136, 23);
             this.btnDelete.TabIndex = 12;
@@ -305,7 +312,7 @@
             // 
             // btnSubmit
             // 
-            this.btnSubmit.Location = new System.Drawing.Point(731, 262);
+            this.btnSubmit.Location = new System.Drawing.Point(826, 262);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(75, 23);
             this.btnSubmit.TabIndex = 11;
@@ -327,12 +334,14 @@
             this.colRef,
             this.colLedger,
             this.colAccount,
-            this.colAmount});
+            this.colAmount,
+            this.colEdit});
             this.dgUnprocessed.Location = new System.Drawing.Point(6, 6);
             this.dgUnprocessed.Name = "dgUnprocessed";
             this.dgUnprocessed.ReadOnly = true;
-            this.dgUnprocessed.Size = new System.Drawing.Size(818, 250);
+            this.dgUnprocessed.Size = new System.Drawing.Size(895, 250);
             this.dgUnprocessed.TabIndex = 10;
+            this.dgUnprocessed.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dg_CellContentClick);
             this.dgUnprocessed.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgUnprocessed_DataBindingComplete);
             // 
             // colID
@@ -387,23 +396,41 @@
             // colAmount
             // 
             this.colAmount.DataPropertyName = "amount";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N2";
-            this.colAmount.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N2";
+            this.colAmount.DefaultCellStyle = dataGridViewCellStyle5;
             this.colAmount.HeaderText = "Amount";
             this.colAmount.Name = "colAmount";
             this.colAmount.ReadOnly = true;
             // 
+            // colEdit
+            // 
+            this.colEdit.HeaderText = "Delete";
+            this.colEdit.Name = "colEdit";
+            this.colEdit.ReadOnly = true;
+            this.colEdit.UseColumnTextForButtonValue = true;
+            // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnViewTrans);
             this.tabPage2.Controls.Add(this.dgUnpaid);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(833, 300);
+            this.tabPage2.Size = new System.Drawing.Size(907, 300);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Unpaid";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // btnViewTrans
+            // 
+            this.btnViewTrans.Location = new System.Drawing.Point(734, 6);
+            this.btnViewTrans.Name = "btnViewTrans";
+            this.btnViewTrans.Size = new System.Drawing.Size(167, 23);
+            this.btnViewTrans.TabIndex = 31;
+            this.btnViewTrans.Text = "View Transactions";
+            this.btnViewTrans.UseVisualStyleBackColor = true;
+            this.btnViewTrans.Click += new System.EventHandler(this.btnViewTrans_Click);
             // 
             // dgUnpaid
             // 
@@ -419,12 +446,16 @@
             this.dataGridViewTextBoxColumn5,
             this.dataGridViewTextBoxColumn6,
             this.dataGridViewTextBoxColumn7,
-            this.dataGridViewTextBoxColumn8});
-            this.dgUnpaid.Location = new System.Drawing.Point(6, 6);
+            this.dataGridViewTextBoxColumn8,
+            this.colPaid,
+            this.colDelete});
+            this.dgUnpaid.Location = new System.Drawing.Point(6, 35);
             this.dgUnpaid.Name = "dgUnpaid";
             this.dgUnpaid.ReadOnly = true;
-            this.dgUnpaid.Size = new System.Drawing.Size(818, 250);
+            this.dgUnpaid.Size = new System.Drawing.Size(895, 221);
             this.dgUnpaid.TabIndex = 11;
+            this.dgUnpaid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dg_CellContentClick);
+            this.dgUnpaid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgUnpaid_CellValueChanged);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -478,12 +509,26 @@
             // dataGridViewTextBoxColumn8
             // 
             this.dataGridViewTextBoxColumn8.DataPropertyName = "amount";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N2";
-            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N2";
+            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewTextBoxColumn8.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
             this.dataGridViewTextBoxColumn8.ReadOnly = true;
+            // 
+            // colPaid
+            // 
+            this.colPaid.DataPropertyName = "paid";
+            this.colPaid.HeaderText = "Paid";
+            this.colPaid.Name = "colPaid";
+            this.colPaid.ReadOnly = true;
+            // 
+            // colDelete
+            // 
+            this.colDelete.HeaderText = "Delete";
+            this.colDelete.Name = "colDelete";
+            this.colDelete.ReadOnly = true;
+            this.colDelete.UseColumnTextForButtonValue = true;
             // 
             // tabPage3
             // 
@@ -491,7 +536,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(833, 300);
+            this.tabPage3.Size = new System.Drawing.Size(907, 300);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Paid";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -514,7 +559,7 @@
             this.dgPaid.Location = new System.Drawing.Point(6, 6);
             this.dgPaid.Name = "dgPaid";
             this.dgPaid.ReadOnly = true;
-            this.dgPaid.Size = new System.Drawing.Size(818, 250);
+            this.dgPaid.Size = new System.Drawing.Size(895, 288);
             this.dgPaid.TabIndex = 11;
             // 
             // dataGridViewTextBoxColumn9
@@ -569,9 +614,9 @@
             // dataGridViewTextBoxColumn16
             // 
             this.dataGridViewTextBoxColumn16.DataPropertyName = "amount";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridViewTextBoxColumn16.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
             this.dataGridViewTextBoxColumn16.ReadOnly = true;
@@ -783,14 +828,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.DataGridView dgUnprocessed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colBuilding;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPayment;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colRef;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colLedger;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colAccount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView dgUnpaid;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
@@ -816,6 +853,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DateTimePicker dtEndDate;
         private System.Windows.Forms.Button btnDelete;
+
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label lbSupplierName;
         private System.Windows.Forms.Button btnSupplierLookup;
@@ -826,5 +864,19 @@
         private System.Windows.Forms.Label lbInvoiceNumber;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.DateTimePicker dtInvoiceDate;
+
+        private System.Windows.Forms.DataGridViewCheckBoxColumn colPaid;
+        private System.Windows.Forms.DataGridViewButtonColumn colDelete;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBuilding;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPayment;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRef;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedger;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAccount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
+        private System.Windows.Forms.DataGridViewButtonColumn colEdit;
+        private System.Windows.Forms.Button btnViewTrans;
+
     }
 }

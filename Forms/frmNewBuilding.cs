@@ -1,40 +1,52 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using System;
 using System.Windows.Forms;
 
-namespace Astrodon.Forms {
-
-    public partial class frmNewBuilding : Form {
+namespace Astrodon.Forms
+{
+    public partial class frmNewBuilding : Form
+    {
         public Building building = null;
         private String oldName = "";
         private String oldAbbr = "";
 
-        public frmNewBuilding(Building b) {
+        public frmNewBuilding(Building b)
+        {
             InitializeComponent();
-            if (b != null) {
+            if (b != null)
+            {
                 building = b;
                 oldName = building.Name;
                 oldAbbr = building.Abbr;
-            } else {
-                building = new Building();
-                building.ID = 0;
-                building.pid = "0";
+            }
+            else
+            {
+                building = new Building
+                {
+                    ID = 0,
+                    pid = "0"
+                };
             }
         }
 
-        private void frmNewBuilding_Load(object sender, EventArgs e) {
+        private void frmNewBuilding_Load(object sender, EventArgs e)
+        {
             if (building != null) { LoadBuilding(); }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e) {
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.Close();
         }
 
-        private void btnSave_Click(object sender, EventArgs e) {
+        private void btnSave_Click(object sender, EventArgs e)
+        {
             SaveBuilding();
         }
 
-        private void LoadBuilding() {
+        private void LoadBuilding()
+        {
             txtName.Text = building.Name;
             txtAbbr.Text = building.Abbr;
             txtTrust.Text = building.Trust;
@@ -62,19 +74,16 @@ namespace Astrodon.Forms {
             txtAddress5.Text = building.addy5;
         }
 
-        private void SaveBuilding() {
+        private void SaveBuilding()
+        {
             building.Name = txtName.Text;
             building.Abbr = txtAbbr.Text;
             building.Trust = txtTrust.Text;
             building.DataPath = txtPath.Text;
-            txtPeriod.Focus();
             building.Period = int.Parse(txtPeriod.Text);
             building.Cash_Book = txtCash.Text;
-            txtPayment.Focus();
             building.Payments = int.Parse(txtPayment.Text);
-            txtReceipt.Focus();
             building.Receipts = int.Parse(txtReceipt.Text);
-            txtJournal.Focus();
             building.Journal = int.Parse(txtJournal.Text);
             building.Centrec_Account = txtCentrec1.Text;
             building.Centrec_Building = txtCentrec2.Text;
@@ -98,14 +107,17 @@ namespace Astrodon.Forms {
             Classes.Sftp ftpClient = new Classes.Sftp(String.Empty, false);
             String websafeName = building.Name.Replace(" ", "_").Replace("/", "_").Replace("\\", "_");
             building.webFolder = websafeName;
-            try {
+            try
+            {
                 String status = String.Empty;
-                if (BuildingManager.Update(building, out status)) {
+                if (BuildingManager.Update(building, out status))
+                {
                     String newID = "";
                     mysql.InsertBuilding(building, oldName, oldAbbr, out newID, out status);
                     building.pid = newID;
                     BuildingManager.Update(building, out status);
-                    if (ftpClient.CreateDirectory(websafeName, false)) {
+                    if (ftpClient.CreateDirectory(websafeName, false))
+                    {
                         ftpClient.WorkingDirectory += "/" + websafeName;
                         ftpClient.ChangeDirectory(false);
                         ftpClient.CreateDirectory("Annual Financial Statements", false);
@@ -118,15 +130,16 @@ namespace Astrodon.Forms {
 
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;
                     this.Close();
-                } else {
+                }
+                else
+                {
                     MessageBox.Show("Building update failed: " + status, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show("Building update failed: " + ex.Message, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void UpdateWebBuilding() {
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Astro.Library.Entities;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,24 +7,19 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Astrodon {
-
-    public class SqlArgs : EventArgs {
-        public String msgArgs;
-
-        public SqlArgs(String args) {
-            msgArgs = args;
-        }
-    }
-
-    public class MySqlConnector {
+namespace Astrodon
+{
+    public class MySqlConnector
+    {
         private MySqlConnection mysqlConn;
         private MySqlCommand mysqlCmd;
         private String sqlStatus;
 
-        public String SqlStatus {
+        public String SqlStatus
+        {
             get { return sqlStatus; }
-            set {
+            set
+            {
                 sqlStatus = value;
                 if (MessageHandler != null) { MessageHandler(this, new SqlArgs(sqlStatus)); }
             }
@@ -33,8 +29,10 @@ namespace Astrodon {
 
         private String ConnectionString { get; set; }
 
-        public MySqlConnector() {
-            try {
+        public MySqlConnector()
+        {
+            try
+            {
                 String server = "10.0.1.252";
                 String database = "astrodon_co_za";
                 String uid = "root";
@@ -43,57 +41,76 @@ namespace Astrodon {
                 ConnectionString = connectionString;
                 KillSleepingConnections();
                 mysqlConn = new MySqlConnection(connectionString);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 String msg = ex.Message;
             }
         }
 
-        private int KillSleepingConnections() {
+        private int KillSleepingConnections()
+        {
             string strSQL = "show processlist";
             System.Collections.ArrayList m_ProcessesToKill = new ArrayList();
             String status;
             DataSet ds = GetData(strSQL, null, out status);
 
-            try {
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0) {
-                    foreach (DataRow dr in ds.Tables[0].Rows) {
+            try
+            {
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
                         // Find all processes sleeping with a timeout value higher than our threshold.
                         int iPID = Convert.ToInt32(dr["Id"].ToString());
                         string strState = dr["Command"].ToString();
                         int iTime = Convert.ToInt32(dr["Time"].ToString());
 
-                        if (strState == "Sleep" && iPID > 0) {
+                        if (strState == "Sleep" && iPID > 0)
+                        {
                             // This connection is sitting around doing nothing. Kill it.
                             m_ProcessesToKill.Add(iPID);
                         }
                     }
                 }
 
-                foreach (int aPID in m_ProcessesToKill) {
+                foreach (int aPID in m_ProcessesToKill)
+                {
                     strSQL = "kill " + aPID;
                     SetData(strSQL, null, out status);
                 }
-            } catch (Exception excep) {
-            } finally {
+            }
+            catch (Exception excep)
+            {
+            }
+            finally
+            {
             }
             return m_ProcessesToKill.Count;
         }
 
-        public bool ToggleConnection(bool open) {
+        public bool ToggleConnection(bool open)
+        {
             bool success = false;
-            try {
-                if (open) {
+            try
+            {
+                if (open)
+                {
                     if (mysqlConn.State != System.Data.ConnectionState.Open) { mysqlConn.Open(); }
                     success = mysqlConn.State == System.Data.ConnectionState.Open;
-                } else {
+                }
+                else
+                {
                     if (mysqlConn.State != System.Data.ConnectionState.Closed) { mysqlConn.Close(); }
                     success = mysqlConn.State == System.Data.ConnectionState.Closed;
                 }
-            } catch { }
+            }
+            catch { }
             return success;
         }
 
-        public bool InsertStatement(String title, String description, String file, String unitno, String[] emails) {
+        public bool InsertStatement(String title, String description, String file, String unitno, String[] emails)
+        {
             description = "Customer Statements";
             String status = String.Empty;
             String cQuery = "SELECT * FROM tx_astro_docs WHERE file = @file";
@@ -101,12 +118,17 @@ namespace Astrodon {
             sqlParms.Add("@file", file);
             DataSet cDS = GetData(cQuery, sqlParms, out status);
             if (status != "OK") { SqlStatus = status; }
-            if (cDS != null && cDS.Tables.Count > 0 && cDS.Tables[0].Rows.Count > 0) {
+            if (cDS != null && cDS.Tables.Count > 0 && cDS.Tables[0].Rows.Count > 0)
+            {
                 return true;
-            } else {
+            }
+            else
+            {
                 String cruser_id = "0";
-                if (emails.Length > 0) {
-                    foreach (String email in emails) {
+                if (emails.Length > 0)
+                {
+                    foreach (String email in emails)
+                    {
                         if (GetLogin(email, unitno, out cruser_id)) { break; }
                     }
                 }
@@ -120,7 +142,8 @@ namespace Astrodon {
             }
         }
 
-        public bool InsertBuilding(Building b, out String status) {
+        public bool InsertBuilding(Building b, out String status)
+        {
             String testQuery = "SELECT uid FROM tx_astro_complex WHERE name = @name AND abbr = @abbr";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@name", b.Name);
@@ -137,24 +160,30 @@ namespace Astrodon {
             sqlParms.Add("@addy", address);
             DataSet dsTest = GetData(testQuery, sqlParms, out status);
             if (status != "OK") { SqlStatus = "Building - " + testQuery + status; }
-            if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0) {
+            if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0)
+            {
                 sqlParms.Add("@uid", dsTest.Tables[0].Rows[0]["uid"].ToString());
                 String update = "UPDATE tx_astro_complex SET name = @name, abbr = @abbr, exceptions_email = @debtor, debtors_email = @debtor, agent_email = @pm, address = @addy WHERE uid = @uid";
                 success = SetData(update, sqlParms, out status);
                 status = "OK";
                 return success;
-            } else if (status == "OK") {
+            }
+            else if (status == "OK")
+            {
                 String query = "INSERT INTO tx_astro_complex(pid, tstamp, crdate, cruser_id, name, abbr, exceptions_email, debtors_email, agent_email, address)";
                 query += " VALUES(1, UNIX_TIMESTAMP(now()), UNIX_TIMESTAMP(now()), 1, @name, @abbr, @debtor, @debtor, @pm, @addy)";
                 success = SetData(query, sqlParms, out status);
                 if (status != "OK") { SqlStatus = "Building - " + query + status; }
                 return success;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
 
-        public bool InsertBuilding(Building b, String oldName, String oldAbbr, out String buildingID, out String status) {
+        public bool InsertBuilding(Building b, String oldName, String oldAbbr, out String buildingID, out String status)
+        {
             String testQuery = "SELECT uid FROM tx_astro_complex WHERE name = @oname AND abbr = @oabbr";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@oname", oldName);
@@ -173,14 +202,16 @@ namespace Astrodon {
             sqlParms.Add("@addy", address);
             DataSet dsTest = GetData(testQuery, sqlParms, out status);
             if (status != "OK") { SqlStatus = "Building - " + testQuery + status; }
-            if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0) {
+            if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0)
+            {
                 String mySqlID = dsTest.Tables[0].Rows[0]["uid"].ToString();
                 sqlParms.Add("@uid", mySqlID);
                 String update = "UPDATE tx_astro_complex SET name = @name, abbr = @abbr, exceptions_email = @debtor, debtors_email = @debtor, agent_email = @pm, address = @addy WHERE uid = @uid";
                 success = SetData(update, sqlParms, out status);
                 status = "OK";
                 String pid = GetPID(b.Name);
-                if (pid == "") {
+                if (pid == "")
+                {
                     b.pid = "0";
                     UpdatePages(b);
                     pid = GetPID(b.Name);
@@ -189,7 +220,9 @@ namespace Astrodon {
                 buildingID = pid;
                 UpdatePages(b);
                 return success;
-            } else if (status == "OK") {
+            }
+            else if (status == "OK")
+            {
                 String query = "INSERT INTO tx_astro_complex(pid, tstamp, crdate, cruser_id, name, abbr, exceptions_email, debtors_email, agent_email, address)";
                 query += " VALUES(1, UNIX_TIMESTAMP(now()), UNIX_TIMESTAMP(now()), 1, @name, @abbr, @debtor, @debtor, @pm, @addy)";
                 success = SetData(query, sqlParms, out status);
@@ -198,27 +231,34 @@ namespace Astrodon {
                 sqlParms["@oabbr"] = b.Abbr;
                 dsTest = GetData(testQuery, sqlParms, out status);
 
-                if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0) {
+                if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0)
+                {
                     buildingID = dsTest.Tables[0].Rows[0]["uid"].ToString();
                     String pid = GetPID(b.Name);
-                    if (pid == "") {
+                    if (pid == "")
+                    {
                         b.pid = "0";
                         UpdatePages(b);
                         pid = GetPID(b.Name);
                     }
                     buildingID = pid;
                     UpdatePages(b);
-                } else {
+                }
+                else
+                {
                     buildingID = "";
                 }
                 return success;
-            } else {
+            }
+            else
+            {
                 buildingID = "";
                 return false;
             }
         }
 
-        public bool DeleteBuilding(Building b, String oldName, String oldAbbr, out String status) {
+        public bool DeleteBuilding(Building b, String oldName, String oldAbbr, out String status)
+        {
             String testQuery = "SELECT uid FROM tx_astro_complex WHERE name = @oname AND abbr = @oabbr";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@oname", oldName);
@@ -237,19 +277,23 @@ namespace Astrodon {
             sqlParms.Add("@addy", address);
             DataSet dsTest = GetData(testQuery, sqlParms, out status);
             if (status != "OK") { SqlStatus = "Building - " + testQuery + status; }
-            if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0) {
+            if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0)
+            {
                 String mySqlID = dsTest.Tables[0].Rows[0]["uid"].ToString();
                 sqlParms.Add("@uid", mySqlID);
                 String update = "UPDATE tx_astro_account_user_mapping SET cruser_id = 0 WHERE complex_id = @uid";
                 success = SetData(update, sqlParms, out status);
                 status = "OK";
                 return success;
-            } else {
+            }
+            else
+            {
                 return true;
             }
         }
 
-        public bool UpdateBuilding(Building b, String oldName, String oldAbbr, out String status) {
+        public bool UpdateBuilding(Building b, String oldName, String oldAbbr, out String status)
+        {
             String testQuery = "SELECT uid FROM tx_astro_complex WHERE name = @oname AND abbr = @oabbr";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@oname", oldName);
@@ -266,7 +310,8 @@ namespace Astrodon {
             sqlParms.Add("@addy", address);
             DataSet dsTest = GetData(testQuery, sqlParms, out status);
             if (status != "OK") { SqlStatus = "Building - " + testQuery + status; }
-            if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0) {
+            if (dsTest != null && dsTest.Tables.Count > 0 && dsTest.Tables[0].Rows.Count > 0)
+            {
                 String mySqlID = dsTest.Tables[0].Rows[0]["uid"].ToString();
                 sqlParms.Add("@uid", mySqlID);
                 String update = "UPDATE tx_astro_complex SET exceptions_email = @debtor, debtors_email = @debtor, agent_email = @pm ";
@@ -276,23 +321,31 @@ namespace Astrodon {
             return success;
         }
 
-        public String GetPID(String title) {
+        public String GetPID(String title)
+        {
             String query = "SELECT uid FROM pages WHERE title = '" + title + "'";
             String status = "";
             DataSet pidDS = GetData(query, null, out status);
-            if (pidDS != null && pidDS.Tables.Count > 0 && pidDS.Tables[0].Rows.Count > 0) {
+            if (pidDS != null && pidDS.Tables.Count > 0 && pidDS.Tables[0].Rows.Count > 0)
+            {
                 return pidDS.Tables[0].Rows[0]["uid"].ToString();
-            } else {
+            }
+            else
+            {
                 return "";
             }
         }
 
-        public void UpdatePages(Building b) {
+        public void UpdatePages(Building b)
+        {
             String query = "";
-            if (b.pid == "0") {
+            if (b.pid == "0")
+            {
                 query = "INSERT INTO pages(pid, deleted, hidden, title, doktype, urltype)";
                 query += " VALUES(@pid, @deleted, @hidden, @title, @doktype, @urltype)";
-            } else {
+            }
+            else
+            {
                 query = "UPDATE pages SET title = @title WHERE uid = @pid";
             }
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
@@ -306,9 +359,11 @@ namespace Astrodon {
             SetData(query, sqlParms, out status);
         }
 
-        public bool UpdateWebCustomer(String buildingName, String acc, String[] emails) {
+        public bool UpdateWebCustomer(String buildingName, String acc, String[] emails)
+        {
             bool success = false;
-            try {
+            try
+            {
                 String status;
                 bool isCurrentCustomer = false;
                 bool hasAccount = false;
@@ -317,11 +372,13 @@ namespace Astrodon {
                 String cruser_id = String.Empty;
                 String complex_id = String.Empty;
                 String complex_name = String.Empty;
-                foreach (String email in emails) {
+                foreach (String email in emails)
+                {
                     String owner, tenant;
                     String currentQuery = "select uid, cruser_id, owner_email, tenant_email,complex_id,complex_name  FROM tx_astro_account_user_mapping WHERE account_no = '" + acc + "'";
                     DataSet dsCurrent = GetData(currentQuery, null, out status);
-                    if (dsCurrent != null && dsCurrent.Tables.Count > 0 && dsCurrent.Tables[0].Rows.Count > 0) {
+                    if (dsCurrent != null && dsCurrent.Tables.Count > 0 && dsCurrent.Tables[0].Rows.Count > 0)
+                    {
                         uid = dsCurrent.Tables[0].Rows[0]["uid"].ToString();
                         cruser_id = dsCurrent.Tables[0].Rows[0]["cruser_id"].ToString();
                         owner = dsCurrent.Tables[0].Rows[0]["owner_email"].ToString();
@@ -329,40 +386,51 @@ namespace Astrodon {
                         complex_id = dsCurrent.Tables[0].Rows[0]["complex_id"].ToString();
                         complex_name = dsCurrent.Tables[0].Rows[0]["complex_name"].ToString();
                         hasAccount = true;
-                        if (owner == email) {
+                        if (owner == email)
+                        {
                             isCurrentCustomer = true;
                             break;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         hasAccount = false;
                     }
                 }
-                if (String.IsNullOrEmpty(complex_id)) {
+                if (String.IsNullOrEmpty(complex_id))
+                {
                     String buildingQuery = "SELECT uid FROM tx_astro_complex WHERE name = '" + buildingName + "'";
                     DataSet bDS = GetData(buildingQuery, null, out status);
-                    if (bDS != null && bDS.Tables.Count > 0 && bDS.Tables[0].Rows.Count > 0) {
+                    if (bDS != null && bDS.Tables.Count > 0 && bDS.Tables[0].Rows.Count > 0)
+                    {
                         complex_id = bDS.Tables[0].Rows[0]["uid"].ToString();
                         complex_name = buildingName;
                     }
                 }
-                if (!isCurrentCustomer && hasAccount) {
+                if (!isCurrentCustomer && hasAccount)
+                {
                     String otherQuery = "SELECT * FROM tx_astro_account_user_mapping WHERE cruser_id = '" + cruser_id + "' AND account_no <> '" + acc + "'";
                     DataSet dsOther = GetData(otherQuery, null, out status);
                     if (dsOther != null && dsOther.Tables.Count > 0 && dsOther.Tables[0].Rows.Count > 0) { createNewUser = true; }
-                } else if (isCurrentCustomer) {
+                }
+                else if (isCurrentCustomer)
+                {
                     String updateMappingQuery = "UPDATE tx_astro_docs SET cruser_id = '" + cruser_id + "' WHERE unitno = '" + acc + "' AND cruser_id <> '" + cruser_id + "'";
                     SetData(updateMappingQuery, null, out status);
                     if (status == "OK") { success = true; }
                 }
 
-                if (!isCurrentCustomer && !String.IsNullOrEmpty(complex_id) && !String.IsNullOrEmpty(complex_name)) {
-                    if (!hasAccount) { //new fe & mapping
+                if (!isCurrentCustomer && !String.IsNullOrEmpty(complex_id) && !String.IsNullOrEmpty(complex_name))
+                {
+                    if (!hasAccount)
+                    { //new fe & mapping
                         String newFe = "INSERT INTO fe_users(username, disable, email, tx_astro_accountno, tx_astro_complex_name)";
                         newFe += " VALUES('" + emails[0] + "', 1, '" + emails[0] + "', '" + acc + "', '" + buildingName + "')";
                         SetData(newFe, null, out status);
                         String feUser = "SELECT uid FROM fe_users WHERE email = '" + emails[0] + "'";
                         DataSet newFeDS = GetData(feUser, null, out status);
-                        if (newFeDS != null && newFeDS.Tables.Count > 0 && newFeDS.Tables[0].Rows.Count > 0) {
+                        if (newFeDS != null && newFeDS.Tables.Count > 0 && newFeDS.Tables[0].Rows.Count > 0)
+                        {
                             cruser_id = newFeDS.Tables[0].Rows[0]["uid"].ToString();
                             UpdateUser(cruser_id);
                             String insertMapping = "INSERT INTO tx_astro_account_user_mapping(cruser_id, account_no, owner_email, tenant_email, complex_id, complex_name)";
@@ -372,13 +440,16 @@ namespace Astrodon {
                             SetData(updateMappingQuery, null, out status);
                             if (status == "OK") { success = true; }
                         }
-                    } else if (createNewUser) { //new fe, update mapping
+                    }
+                    else if (createNewUser)
+                    { //new fe, update mapping
                         String newFe = "INSERT INTO fe_users(username, disable, email, tx_astro_accountno, tx_astro_complex_name)";
                         newFe += " VALUES('" + emails[0] + "', 1, '" + emails[0] + "', '" + acc + "', '" + buildingName + "')";
                         SetData(newFe, null, out status);
                         String feUser = "SELECT uid FROM fe_users WHERE email = '" + emails[0] + "'";
                         DataSet newFeDS = GetData(feUser, null, out status);
-                        if (newFeDS != null && newFeDS.Tables.Count > 0 && newFeDS.Tables[0].Rows.Count > 0) {
+                        if (newFeDS != null && newFeDS.Tables.Count > 0 && newFeDS.Tables[0].Rows.Count > 0)
+                        {
                             cruser_id = newFeDS.Tables[0].Rows[0]["uid"].ToString();
                             UpdateUser(cruser_id);
                             String insertMapping = "UPDATE tx_astro_account_user_mapping SET cruser_id = '" + cruser_id + "', owner_email = '" + emails[0] + "', ";
@@ -388,7 +459,9 @@ namespace Astrodon {
                             SetData(updateMappingQuery, null, out status);
                             if (status == "OK") { success = true; }
                         }
-                    } else { //update fe & mapping
+                    }
+                    else
+                    { //update fe & mapping
                         String newFe = "UPDATE fe_users SET username = '" + emails[0] + "', disable = 1, password = '', email = '" + emails[0] + "' WHERE uid = '" + cruser_id + "'";
                         SetData(newFe, null, out status);
                         String insertMapping = "UPDATE tx_astro_account_user_mapping SET owner_email = '" + emails[0] + "', tenant_email = '" + emails[0] + "' WHERE account_no = '" + acc + "'";
@@ -396,20 +469,24 @@ namespace Astrodon {
                         if (status == "OK") { success = true; }
                     }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message);
             }
             return success;
         }
 
-        public void InsertCustomer(Building b, String acc, String[] emails, out String status) {
+        public void InsertCustomer(Building b, String acc, String[] emails, out String status)
+        {
             String bQuery = "SELECT uid FROM tx_astro_complex WHERE name = '" + b.Name + "'";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@bname", b.Name);
             DataSet dsB = GetData(bQuery, sqlParms, out status);
             if (status != "OK") { SqlStatus = "Customer - " + bQuery + status; }
             List<String> emailAddresses = emails.ToList();
-            if (dsB != null && dsB.Tables.Count > 0 && dsB.Tables[0].Rows.Count > 0) {
+            if (dsB != null && dsB.Tables.Count > 0 && dsB.Tables[0].Rows.Count > 0)
+            {
                 DataRow drB = dsB.Tables[0].Rows[0];
                 String bID = drB["uid"].ToString();
                 bool newCustomer = false;
@@ -418,8 +495,10 @@ namespace Astrodon {
                 String cruser_id = CheckCustomer(acc, emails, out status, out newCustomer, out validEmail);
                 MessageBox.Show(validEmail);
                 if (status != "OK") { SqlStatus = "Customer - 129" + status; }
-                if (!String.IsNullOrEmpty(cruser_id) && !String.IsNullOrEmpty(validEmail)) {
-                    if (!String.IsNullOrEmpty(validEmail)) {
+                if (!String.IsNullOrEmpty(cruser_id) && !String.IsNullOrEmpty(validEmail))
+                {
+                    if (!String.IsNullOrEmpty(validEmail))
+                    {
                         sqlParms.Add("@acc", acc);
                         sqlParms.Add("@cruser_id", cruser_id);
                         sqlParms.Add("@validEmail", validEmail);
@@ -429,24 +508,31 @@ namespace Astrodon {
                         DataSet ds = GetData(checkMappingID, sqlParms, out status);
                         if (status != "OK") { SqlStatus = "Customer - 146" + status; }
                         String updateMappingQuery = String.Empty;
-                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0) {
-                            if (ds.Tables[0].Rows.Count > 1) {
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                        {
+                            if (ds.Tables[0].Rows.Count > 1)
+                            {
                                 updateMappingQuery = "DELETE FROM tx_astro_account_user_mapping WHERE account_no = @acc AND owner_email <> @validEmail";
                                 SetData(updateMappingQuery, sqlParms, out status);
                                 if (status != "OK") { SqlStatus = "Customer - 152" + status; }
 
                                 bool hasAccount = false;
 
-                                foreach (DataRow dr in ds.Tables[0].Rows) {
-                                    if (dr["owner_email"].ToString() == validEmail && !hasAccount) {
+                                foreach (DataRow dr in ds.Tables[0].Rows)
+                                {
+                                    if (dr["owner_email"].ToString() == validEmail && !hasAccount)
+                                    {
                                         hasAccount = true;
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         updateMappingQuery = "DELETE FROM tx_astro_account_user_mapping WHERE account_no = '" + acc + "' AND owner_email <> '" + validEmail + "'";
                                         SetData(updateMappingQuery, null, out status);
                                         if (status != "OK") { SqlStatus = "Customer - 162" + status; }
                                     }
                                 }
-                                if (!hasAccount) {
+                                if (!hasAccount)
+                                {
                                     String updCQuery = "INSERT INTO tx_astro_account_user_mapping(pid, tstamp, crdate, cruser_id, account_no, owner_email, tenant_email, complex_id, complex_name)";
                                     updCQuery += " VALUES(1, UNIX_TIMESTAMP(now()), UNIX_TIMESTAMP(now()), @cruser_id, @acc, @validEmail, @validEmail, @bID, @bname)";
                                     SetData(updCQuery, sqlParms, out status);
@@ -454,7 +540,9 @@ namespace Astrodon {
                                 }
                             }
                             UpdateUser(cruser_id);
-                        } else {
+                        }
+                        else
+                        {
                             String updCQuery = "INSERT INTO tx_astro_account_user_mapping(pid, tstamp, crdate, cruser_id, account_no, owner_email, tenant_email, complex_id, complex_name)";
                             updCQuery += " VALUES(1, UNIX_TIMESTAMP(now()), UNIX_TIMESTAMP(now()), @cruser_id, @acc, @validEmail, @validEmail, @bID, @bname)";
                             SetData(updCQuery, sqlParms, out status);
@@ -466,24 +554,30 @@ namespace Astrodon {
                         SetData(updateMappingQuery, sqlParms, out status);
                         if (status != "OK") { SqlStatus = status; }
                     }
-                } else {
+                }
+                else
+                {
                     SqlStatus = "No valid email address";
                 }
                 UpdateLogins();
-            } else if (InsertBuilding(b, out status)) {
+            }
+            else if (InsertBuilding(b, out status))
+            {
                 InsertCustomer(b, acc, emails, out status);
             }
             status = SqlStatus;
         }
 
-        private void UpdateLogins() {
+        private void UpdateLogins()
+        {
             String query = "update fe_users f inner join tx_astro_account_user_mapping t on f.uid = t.cruser_id and f.username = t.owner_email ";
             query += " set f.disable = 0 where f.disable = 1 and f.password <> '' and f.password is not null";
             String status = String.Empty;
             SetData(query, null, out status);
         }
 
-        private String UpdateUser(String cruser_id) {
+        private String UpdateUser(String cruser_id)
+        {
             String updQuery = "update  fe_users f1, fe_users f2 set f1.pid= f2.pid,f1.tstamp = f2.tstamp,f1.starttime = f2.starttime,f1.endtime = f1.endtime,f1.crdate= f2.crdate,";
             updQuery += " f1.cruser_id= f2.cruser_id,f1.lockToDomain= f2.lockToDomain,f1.deleted= f2.deleted,f1.uc= f2.uc,f1.TSconfig= f2.TSconfig,f1.fe_cruser_id= f2.fe_cruser_id,";
             updQuery += " f1.tx_astro_usertype= f2.tx_astro_usertype,f1.tx_feuserloginsystem_redirectionafterlogin= f2.tx_feuserloginsystem_redirectionafterlogin,";
@@ -495,17 +589,21 @@ namespace Astrodon {
             return status;
         }
 
-        private void CheckOldLogins(String acc, String[] emails) {
+        private void CheckOldLogins(String acc, String[] emails)
+        {
             String query = "select f.uid from fe_users f inner join tx_astro_account_user_mapping t on f.uid = t.cruser_id where t.account_no = @accNo and f.username <> @email and f.disable <> 1";
             String status = String.Empty;
-            foreach (String email in emails) {
+            foreach (String email in emails)
+            {
                 Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
                 sqlParms.Add("@accNo", acc);
                 sqlParms.Add("@email", email);
                 DataSet ds = GetData(query, sqlParms, out status);
                 if (status != "OK") { SqlStatus = "Customer - 214" + status; }
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0) {
-                    foreach (DataRow dr in ds.Tables[0].Rows) {
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
                         String uid = dr["uid"].ToString();
                         String deleteQuery = "UPDATE fe_users SET disable = 1 WHERE uid = " + uid;
                         SetData(deleteQuery, null, out status);
@@ -515,17 +613,22 @@ namespace Astrodon {
             }
         }
 
-        public String CheckCustomer(String acc, String[] emails, out String status, out bool newCustomer, out String validEmail) {
+        public String CheckCustomer(String acc, String[] emails, out String status, out bool newCustomer, out String validEmail)
+        {
             status = String.Empty;
             newCustomer = true;
             String cruser_id = String.Empty;
             validEmail = String.Empty;
-            foreach (String email in emails) {
-                if (!email.Contains("imp.ad-one.co.za") && GetLogin(email, acc, out cruser_id)) {
+            foreach (String email in emails)
+            {
+                if (!email.Contains("imp.ad-one.co.za") && GetLogin(email, acc, out cruser_id))
+                {
                     validEmail = email;
                     newCustomer = false;
                     break;
-                } else if (!email.Contains("imp.ad-one.co.za")) {
+                }
+                else if (!email.Contains("imp.ad-one.co.za"))
+                {
                     validEmail = email;
                     CreateLogin(email, acc, out cruser_id);
                     newCustomer = true;
@@ -535,7 +638,8 @@ namespace Astrodon {
             return cruser_id;
         }
 
-        private bool GetLogin(String emailAddress, String acc, out string uid) {
+        private bool GetLogin(String emailAddress, String acc, out string uid)
+        {
             String status = String.Empty;
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@emailAddress", emailAddress);
@@ -543,16 +647,20 @@ namespace Astrodon {
             DataSet dsFE = GetData(feQuery, sqlParms, out status);
             if (status != "OK") { SqlStatus = "Customer - 247" + status; }
 
-            if (dsFE != null && dsFE.Tables.Count > 0 && dsFE.Tables[0].Rows.Count > 0) {
+            if (dsFE != null && dsFE.Tables.Count > 0 && dsFE.Tables[0].Rows.Count > 0)
+            {
                 uid = dsFE.Tables[0].Rows[0]["uid"].ToString();
                 return true;
-            } else {
+            }
+            else
+            {
                 uid = "0";
                 return false;
             }
         }
 
-        private bool CreateLogin(String emailAddress, String acc, out string uid) {
+        private bool CreateLogin(String emailAddress, String acc, out string uid)
+        {
             String status = String.Empty;
             String feIQ = "INSERT INTO fe_users(pid, tstamp, username, disable, email, crdate, tx_astro_accountno, starttime, endtime, cruser_id, lockToDomain, deleted, uc, ";
             feIQ += "TSconfig, fe_cruser_id, tx_astro_usertype, tx_feuserloginsystem_redirectionafterlogin, tx_feuserloginsystem_redirectionafterlogout, tx_astro_activation_code, ";
@@ -565,15 +673,21 @@ namespace Astrodon {
             return GetLogin(emailAddress, acc, out uid);
         }
 
-        public DataSet GetData(String query, Dictionary<String, Object> sqlParms, out String status) {
+        public DataSet GetData(String query, Dictionary<String, Object> sqlParms, out String status)
+        {
             DataSet ds = new DataSet();
 
-            using (MySqlConnection connect = new MySqlConnection(ConnectionString)) {
-                using (MySqlCommand cmd = new MySqlCommand(query, connect)) {
-                    try {
+            using (MySqlConnection connect = new MySqlConnection(ConnectionString))
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connect))
+                {
+                    try
+                    {
                         if (connect.State != ConnectionState.Open) { connect.Open(); }
-                        if (sqlParms != null) {
-                            foreach (KeyValuePair<String, Object> sqlParm in sqlParms) {
+                        if (sqlParms != null)
+                        {
+                            foreach (KeyValuePair<String, Object> sqlParm in sqlParms)
+                            {
                                 cmd.Parameters.AddWithValue(sqlParm.Key, sqlParm.Value);
                             }
                         }
@@ -582,11 +696,15 @@ namespace Astrodon {
                         da.Fill(ds);
                         status = "OK";
                         connect.Close();
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex)
+                    {
                         ds = null;
                         status = ex.Message;
                         //MessageBox.Show(status);
-                    } finally {
+                    }
+                    finally
+                    {
                         if (connect.State != ConnectionState.Closed) { connect.Close(); }
                     }
                 }
@@ -594,27 +712,36 @@ namespace Astrodon {
             return ds;
         }
 
-        public DataSet GetFiles(String unitno) {
-            String query = "SELECT tstamp, title, file FROM tx_astro_docs where unitno = '" + unitno + "' ORDER BY tstamp DESC";
+        public DataSet GetFiles(String unitno, String buildingName)
+        {
+            String query = "SELECT d.tstamp, d.title, d.file FROM tx_astro_docs d inner join tx_astro_account_user_mapping m on d.unitno = m.account_no and d.cruser_id = m.cruser_id";
+            query += " where d.unitno = '" + unitno + "' and m.complex_name = '" + buildingName + "' ORDER BY d.tstamp DESC";
             String status = "";
             return GetData(query, null, out status);
         }
 
-        public DataSet GetCustomerDocs(String buildingName, out String status) {
+        public DataSet GetCustomerDocs(String buildingName, out String status)
+        {
             if (buildingName.ToUpper().StartsWith("VILLAGE GREEN")) { buildingName = "VILLAGE GREEN B/C"; }
             String query = "SELECT d.uid, d.tstamp, d.title, d.file, d.unitno FROM tx_astro_docs d inner join tx_astro_account_user_mapping m on d.unitno = m.account_no";
             query += " inner join tx_astro_complex c on m.complex_id = c.uid where c.name = '" + buildingName + "' order by d.tstamp";
             return GetData(query, null, out status);
         }
 
-        public bool SetData(String query, Dictionary<String, Object> sqlParms, out String status) {
+        public bool SetData(String query, Dictionary<String, Object> sqlParms, out String status)
+        {
             bool success = false;
-            using (MySqlConnection connect = new MySqlConnection(ConnectionString)) {
-                using (MySqlCommand cmd = new MySqlCommand(query, connect)) {
-                    try {
+            using (MySqlConnection connect = new MySqlConnection(ConnectionString))
+            {
+                using (MySqlCommand cmd = new MySqlCommand(query, connect))
+                {
+                    try
+                    {
                         if (connect.State != ConnectionState.Open) { connect.Open(); }
-                        if (sqlParms != null) {
-                            foreach (KeyValuePair<String, Object> sqlParm in sqlParms) {
+                        if (sqlParms != null)
+                        {
+                            foreach (KeyValuePair<String, Object> sqlParm in sqlParms)
+                            {
                                 cmd.Parameters.AddWithValue(sqlParm.Key, sqlParm.Value);
                             }
                         }
@@ -622,10 +749,14 @@ namespace Astrodon {
                         success = true;
                         status = "OK";
                         connect.Close();
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex)
+                    {
                         status = ex.Message;
                         //MessageBox.Show(status);
-                    } finally {
+                    }
+                    finally
+                    {
                         if (connect.State != ConnectionState.Closed) { connect.Close(); }
                     }
                 }

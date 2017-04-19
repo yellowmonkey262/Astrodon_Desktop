@@ -14,6 +14,7 @@ using System.Collections;
 using System.IO;
 using Astrodon.ReportService;
 using Astrodon.Data.Base;
+using Astro.Library.Entities;
 
 namespace Astrodon.Reports
 {
@@ -35,12 +36,12 @@ namespace Astrodon.Reports
         private void LoadYears()
         {
             _Years = new List<IdValue>();
-            _Years.Add(new IdValue() {Id = DateTime.Now.Year - 1, Value = (DateTime.Now.Year - 1).ToString() });
-            _Years.Add(new IdValue() { Id = DateTime.Now.Year, Value = (DateTime.Now.Year ).ToString() });
-            _Years.Add(new IdValue() { Id = DateTime.Now.Year+1, Value = (DateTime.Now.Year+1).ToString() });
+            _Years.Add(new IdValue() { Id = DateTime.Now.Year - 1, Value = (DateTime.Now.Year - 1).ToString() });
+            _Years.Add(new IdValue() { Id = DateTime.Now.Year, Value = (DateTime.Now.Year).ToString() });
+            _Years.Add(new IdValue() { Id = DateTime.Now.Year + 1, Value = (DateTime.Now.Year + 1).ToString() });
 
             _Months = new List<IdValue>();
-            for (int x=1; x<=12; x++)
+            for (int x = 1; x <= 12; x++)
             {
                 _Months.Add(new IdValue()
                 {
@@ -58,11 +59,8 @@ namespace Astrodon.Reports
             cmbMonth.ValueMember = "Id";
             cmbMonth.DisplayMember = "Value";
             cmbMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
-
-            
         }
 
-     
         private void LoadBuildings()
         {
             var userid = Controller.user.id;
@@ -78,7 +76,6 @@ namespace Astrodon.Reports
         {
             if (dlgSave.ShowDialog() == DialogResult.OK)
             {
-            
                 button1.Enabled = false;
                 try
                 {
@@ -96,8 +93,5 @@ namespace Astrodon.Reports
                 }
             }
         }
-
-    
-       
     }
 }

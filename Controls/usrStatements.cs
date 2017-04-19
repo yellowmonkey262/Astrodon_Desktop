@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -41,15 +42,9 @@ namespace Astrodon
             String build = String.Empty;
             try
             {
-                String query = String.Empty;
-                try
-                {
-                    query = String.Format("SELECT DISTINCT b.Building, b.DataPath, b.Period, '' as [Last Processed], b.pm, b.bankName, b.accName, b.bankAccNumber, b.branch, b.bank FROM tblBuildings AS b INNER JOIN tblUserBuildings AS u ON b.id = u.buildingid WHERE u.userid = {0} ORDER BY b.Building", userid.ToString());
-                }
-                catch
-                {
-                    MessageBox.Show("query generator" + userid.ToString());
-                }
+                String query = "SELECT DISTINCT b.Building, b.DataPath, b.Period, '' as [Last Processed], b.pm, b.bankName, b.accName, b.bankAccNumber, b.branch, b.bank FROM tblBuildings AS b ";
+                query += " INNER JOIN tblUserBuildings AS u ON b.id = u.buildingid WHERE u.userid = {0} ORDER BY b.Building";
+                try { query = String.Format(query, userid.ToString()); } catch { MessageBox.Show("query generator" + userid.ToString()); }
                 dsBuildings = dh.GetData(query, null, out status);
                 if (dsBuildings != null && dsBuildings.Tables.Count > 0 && dsBuildings.Tables[0].Rows.Count > 0)
                 {
@@ -67,23 +62,17 @@ namespace Astrodon
                         {
                             lastProcessed = DateTime.Now.AddYears(-1);
                         }
-                        point = "1";
                         build = dr["Building"].ToString();
-                        point = "2";
                         String dp = dr["DataPath"].ToString();
-                        point = "3";
                         int p = int.Parse(dr["Period"].ToString());
-                        point = "4";
                         StatementBuilding stmtBuilding = new StatementBuilding(build, dp, p, lastProcessed);
-                        point = "5";
                         if (!bs.Contains(stmtBuilding)) { bs.Add(stmtBuilding); }
-                        point = "6";
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show(point + " - " + build);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -109,10 +98,7 @@ namespace Astrodon
 
         private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow dvr in dgBuildings.Rows)
-            {
-                dvr.Cells[0].Value = chkSelectAll.Checked;
-            }
+            foreach (DataGridViewRow dvr in dgBuildings.Rows) { dvr.Cells[0].Value = chkSelectAll.Checked; }
         }
 
         private String getDebtorEmail(String buildingName)
@@ -121,12 +107,8 @@ namespace Astrodon
             String dEmail = "";
             foreach (Building b in testBuildings)
             {
-                if (b.Name == buildingName)
-                {
-                    dEmail = b.Debtor;
-                }
+                if (b.Name == buildingName) { dEmail = b.Debtor; }
             }
-            //MessageBox.Show("debtor = " + Controller.user.email + " and b email = " + dEmail);
             return (dEmail != "" ? dEmail : Controller.user.email);
         }
 
@@ -150,8 +132,7 @@ namespace Astrodon
         private void btnProcess_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            statements = new Statements();
-            statements.statements = new List<Statement>();
+            statements = new Statements { statements = new List<Statement>() };
             Dictionary<String, bool> hasStatements = new Dictionary<string, bool>();
             foreach (DataGridViewRow dvr in dgBuildings.Rows)
             {
@@ -161,14 +142,10 @@ namespace Astrodon
                     SetBuildingStatement(buildingName);
                     String datapath = dvr.Cells[5].Value.ToString();
                     int period = (int)dvr.Cells[6].Value;
-                    if (String.IsNullOrEmpty(buildingName)) { MessageBox.Show("name"); }
-                    if (String.IsNullOrEmpty(datapath)) { MessageBox.Show("datapath"); }
-                    if (String.IsNullOrEmpty(period.ToString())) { MessageBox.Show("period"); }
                     if (dvr.Cells[2].Value == null) { MessageBox.Show("ishoa"); }
                     List<Statement> bStatements = SetBuildings(buildingName, datapath, period, (bool)dvr.Cells[2].Value);
                     int idx = dvr.Index;
                     DataRow dr = dsBuildings.Tables[0].Rows[idx];
-                    //pm, b.bankName, b.accName, b.bankAccNumber, b.branch
                     String pm = dr["pm"].ToString();
                     String bankName = dr["bankName"].ToString();
                     String accName = dr["accName"].ToString();
@@ -200,12 +177,6 @@ namespace Astrodon
 
                 String actFileTitle = Path.GetFileNameWithoutExtension(fileName);
                 String actFile = Path.GetFileName(fileName);
-                //if (Controller.user.id != 1) {
-                //    try {
-                //        mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
-                //        ftpClient.Upload(fileName, actFile);
-                //    } catch { }
-                //}
 
                 #endregion Upload Letter
 
@@ -214,10 +185,7 @@ namespace Astrodon
                     if (!String.IsNullOrEmpty(fileName))
                     {
                         if (!hasStatements.ContainsKey(stmt.BuildingName)) { hasStatements.Add(stmt.BuildingName, true); }
-                        if (Controller.user.id != 1)
-                        {
-                            SetupEmail(stmt, fileName);
-                        }
+                        if (Controller.user.id != 1) { SetupEmail(stmt, fileName); }
                         if (stmt.PrintMe && Controller.user.id != 1)
                         {
                             if (!printerSet)
@@ -297,14 +265,11 @@ namespace Astrodon
             {
                 try
                 {
-                    bool stophere = false;
-                    Statement myStatement = new Statement();
-                    myStatement.AccNo = customer.accNumber;
+                    Statement myStatement = new Statement { AccNo = customer.accNumber };
                     List<String> address = new List<string>();
                     address.Add(customer.description);
                     foreach (String addyLine in customer.address) { if (!String.IsNullOrEmpty(addyLine)) { address.Add(addyLine); } }
                     myStatement.Address = address.ToArray();
-                    if (stophere) { MessageBox.Show("213"); }
                     myStatement.BankDetails = (!String.IsNullOrEmpty(Controller.pastel.GetBankDetails(buildingPath)) ? Controller.pastel.GetBankDetails(buildingPath) : "");
                     myStatement.BuildingName = buildingName;
                     myStatement.LevyMessage1 = (isHOA ? HOAMessage1 : BCMessage1);
@@ -312,12 +277,11 @@ namespace Astrodon
                     myStatement.Message = (!String.IsNullOrEmpty(txtMessage.Text) ? txtMessage.Text : "");
                     myStatement.StmtDate = stmtDatePicker.Value;
                     double totalDue = 0;
-                    List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue);
+                    String trnMsg;
+                    List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
                     if (transactions != null) { myStatement.Transactions = transactions; }
-                    if (stophere) { MessageBox.Show("222"); }
                     myStatement.totalDue = totalDue;
                     myStatement.DebtorEmail = getDebtorEmail(buildingName);
-
                     myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 ? false : true);
                     myStatement.EmailMe = (customer.statPrintorEmail == 4 ? false : true);
                     if (customer.Email != null && customer.Email.Length > 0)
@@ -329,8 +293,6 @@ namespace Astrodon
                         }
                         myStatement.email1 = newEmails.ToArray();
                     }
-                    if (stophere) { MessageBox.Show("235"); }
-
                     myStatements.Add(myStatement);
                 }
                 catch { }
@@ -349,7 +311,10 @@ namespace Astrodon
                 String query = "INSERT INTO tblStatementRun(email1, queueDate, fileName, debtorEmail, unit, attachment, subject) VALUES(@email1, @queueDate, @fileName, @debtorEmail, @unit, @attachment, @subject)";
                 Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
                 String emailAddy = "";
-                foreach (String addy in stmt.email1) { emailAddy += addy + ";"; }
+                var builder = new System.Text.StringBuilder();
+                builder.Append(emailAddy);
+                foreach (String addy in stmt.email1) { builder.Append(addy + ";"); }
+                emailAddy = builder.ToString();
                 sqlParms.Add("@email1", emailAddy);
                 sqlParms.Add("@queueDate", DateTime.Now);
                 sqlParms.Add("@fileName", Path.GetFileName(fileName));
@@ -381,55 +346,40 @@ namespace Astrodon
         public static extern bool SetDefaultPrinter(string Name);
 
         private void SendToPrinter(String fileName)
-        { //C:\statement.pdf
-            ProcessStartInfo info = new ProcessStartInfo();
-            info.Verb = "print";
-            info.FileName = fileName;
-            //info.CreateNoWindow = true;
-            //info.WindowStyle = ProcessWindowStyle.Hidden;
-
-            Process p = new Process();
-            p.StartInfo = info;
-            p.Start();
-
-            //p.WaitForInputIdle();
-
-            //if (false == p.CloseMainWindow()) {
-            //p.Kill();
-            //}
-            System.Threading.Thread.Sleep(5000);
+        {
+            using (Process p = new Process())
+            {
+                p.StartInfo = new ProcessStartInfo
+                {
+                    Verb = "print",
+                    FileName = fileName
+                };
+                p.Start();
+                System.Threading.Thread.Sleep(5000);
+            }
         }
 
         private void btnFile_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                if (!String.IsNullOrEmpty(ofd.FileName) && File.Exists(ofd.FileName))
+                if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    txtAttachment.Text = ofd.FileName;
+                    if (!String.IsNullOrEmpty(ofd.FileName) && File.Exists(ofd.FileName)) { txtAttachment.Text = ofd.FileName; }
+                }
+                else
+                {
+                    txtAttachment.Text = "";
                 }
             }
-            else
-            {
-                txtAttachment.Text = "";
-            }
-        }
-
-        public int getPeriod(DateTime trnDate, int buildPeriod)
-        {
-            int myMonth = trnDate.Month;
-            myMonth = myMonth - 2;
-            myMonth = (myMonth < 1 ? myMonth + 12 : myMonth);
-            buildPeriod = (myMonth - buildPeriod < 1 ? myMonth - buildPeriod + 12 : myMonth - buildPeriod);
-            return buildPeriod;
         }
 
         private String HOAMessage1
         {
             get
             {
-                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
+                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being ";
+                hoaMessage += "suspended and or restricted.";
                 return hoaMessage;
             }
         }
@@ -438,7 +388,8 @@ namespace Astrodon
         {
             get
             {
-                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
+                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being ";
+                hoaMessage += "suspended and or restricted.";
                 return hoaMessage;
             }
         }
@@ -449,76 +400,6 @@ namespace Astrodon
             {
                 String hoaMessage = "***PLEASE ENSURE THAT ALL PAYMENTS REFLECTS IN OUR NOMINATED ACCOUNT ON OR BEFORE DUE DATE TO AVOID ANY PENALTIES, REFER TO TERMS AND CONDITIONS.***";
                 return hoaMessage;
-            }
-        }
-    }
-
-    public class StatementBuilding
-    {
-        private bool process = false;
-        private String building = String.Empty;
-        private String dataPath = String.Empty;
-        private int period = 0;
-        public bool hoa = false;
-        public bool bc = false;
-        private String lastProcessed = String.Empty;
-
-        public bool Process
-        {
-            get { return process; }
-            set { process = value; }
-        }
-
-        public String Building
-        {
-            get { return building; }
-            set { building = value; }
-        }
-
-        public bool HOA
-        {
-            get { return hoa; }
-        }
-
-        public bool BC
-        {
-            get { return bc; }
-        }
-
-        public String LastProcessed
-        {
-            get { return lastProcessed; }
-            set { lastProcessed = value; }
-        }
-
-        public String DataPath
-        {
-            get { return dataPath; }
-            set { dataPath = value; }
-        }
-
-        public int Period
-        {
-            get { return period; }
-            set { period = value; }
-        }
-
-        public StatementBuilding(String build, String dp, int p, DateTime lastProcessed)
-        {
-            Process = false;
-            Building = build;
-            DataPath = dp;
-            Period = p;
-            LastProcessed = lastProcessed.ToString("yyyy/MM/dd");
-            if (building.ToLower().Contains("hoa"))
-            {
-                hoa = true;
-                bc = false;
-            }
-            else
-            {
-                hoa = false;
-                bc = true;
             }
         }
     }

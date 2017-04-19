@@ -1,24 +1,34 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Astrodon.Controls {
-
-    public partial class usrSearch : UserControl {
+namespace Astrodon.Controls
+{
+    public partial class usrSearch : UserControl
+    {
         private List<Building> buildings;
         private BindingList<SearchResult> searchResults = new BindingList<SearchResult>();
         private Thread myNewThread;
         private bool runSearch = false;
 
-        public usrSearch() {
+        private delegate void UpdateGridDelegate(Customer c, String buildingName);
+
+        private delegate void ChangeCursorDelegate(Cursor c);
+
+        private delegate void ShowMessageBoxDelegate(String message);
+
+        public usrSearch()
+        {
             InitializeComponent();
             Controller.pastel.Message += pastel_Message;
             Controller.pastel.CustomerFound += pastel_CustomerFound;
         }
 
-        private void usrSearch_Load(object sender, EventArgs e) {
+        private void usrSearch_Load(object sender, EventArgs e)
+        {
             buildings = new Buildings(true, "All buildings").buildings;
             cmbBuilding.Items.Clear();
             cmbBuilding.DataSource = buildings;
@@ -28,22 +38,29 @@ namespace Astrodon.Controls {
             dgResults.DataSource = searchResults;
         }
 
-        private void btnReset_Click(object sender, EventArgs e) {
+        private void btnReset_Click(object sender, EventArgs e)
+        {
             cmbBuilding.SelectedIndex = -1;
             txtCustomer.Text = "";
             txtEmail.Text = "";
             searchResults.Clear();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e) {
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
             String customer = txtCustomer.Text;
             String email = txtEmail.Text;
-            if (btnSearch.Text == "Search") {
-                if ((!String.IsNullOrEmpty(customer) || !String.IsNullOrEmpty(email)) && cmbBuilding.SelectedIndex >= 0) {
+            if (btnSearch.Text == "Search")
+            {
+                if ((!String.IsNullOrEmpty(customer) || !String.IsNullOrEmpty(email)) && cmbBuilding.SelectedIndex >= 0)
+                {
                     Dictionary<String, String> bCriteria = new Dictionary<string, string>();
-                    if (cmbBuilding.SelectedValue.ToString() == "0") {
+                    if (cmbBuilding.SelectedValue.ToString() == "0")
+                    {
                         foreach (Building b in buildings) { bCriteria.Add(b.Name, b.DataPath); }
-                    } else {
+                    }
+                    else
+                    {
                         bCriteria.Add(buildings[cmbBuilding.SelectedIndex].Name, buildings[cmbBuilding.SelectedIndex].DataPath);
                     }
                     List<String> searchCriteria = new List<string>();
@@ -55,73 +72,79 @@ namespace Astrodon.Controls {
                     this.Cursor = Cursors.WaitCursor;
                     myNewThread = new Thread(() => Controller.pastel.SearchCustomers(searchCriteria, bCriteria));
                     myNewThread.Start();
-                } else {
+                }
+                else
+                {
                     MessageBox.Show("Please enter search criteria");
                 }
-            } else {
-                try {
+            }
+            else
+            {
+                try
+                {
                     Controller.pastel.runSearch = false;
                     myNewThread.Join();
                     this.Cursor = Cursors.Default;
                     btnSearch.Text = "Search";
-                } catch { }
+                }
+                catch { }
             }
         }
 
-        private void pastel_CustomerFound(object sender, CustomerArgs e) {
+        private void pastel_CustomerFound(object sender, CustomerArgs e)
+        {
             UpdateGrid(e.customer, e.building);
         }
 
-        private delegate void UpdateGridDelegate(Customer c, String buildingName);
-
-        private void UpdateGrid(Customer c, String buildingName) {
-            if (InvokeRequired) {
+        private void UpdateGrid(Customer c, String buildingName)
+        {
+            if (InvokeRequired)
+            {
                 this.Invoke(new UpdateGridDelegate(UpdateGrid), c, buildingName);
-            } else {
-                SearchResult sr = new SearchResult();
-                sr.building = buildingName;
-                sr.acc = c.accNumber;
-                sr.description = c.description;
-                sr.email = String.Join("; ", c.Email);
+            }
+            else
+            {
+                SearchResult sr = new SearchResult
+                {
+                    building = buildingName,
+                    acc = c.accNumber,
+                    description = c.description,
+                    email = String.Join("; ", c.Email)
+                };
                 searchResults.Add(sr);
                 dgResults.Invalidate();
             }
         }
 
-        private void pastel_Message(object sender, MessageArgs e) {
+        private void pastel_Message(object sender, MessageArgs e)
+        {
             ShowMessageBox(e.message);
             ChangeCursor(Cursors.Default);
         }
 
-        private delegate void ChangeCursorDelegate(Cursor c);
-
-        private void ChangeCursor(Cursor c) {
-            if (InvokeRequired) {
+        private void ChangeCursor(Cursor c)
+        {
+            if (InvokeRequired)
+            {
                 this.Invoke(new ChangeCursorDelegate(ChangeCursor), c);
-            } else {
+            }
+            else
+            {
                 this.Cursor = c;
                 btnSearch.Text = "Search";
             }
         }
 
-        private delegate void ShowMessageBoxDelegate(String message);
-
-        private void ShowMessageBox(String message) {
-            if (InvokeRequired) {
+        private void ShowMessageBox(String message)
+        {
+            if (InvokeRequired)
+            {
                 this.Invoke(new ShowMessageBoxDelegate(ShowMessageBox), message);
-            } else {
+            }
+            else
+            {
                 MessageBox.Show(this, message);
             }
         }
-    }
-
-    public class SearchResult {
-        public String building { get; set; }
-
-        public String acc { get; set; }
-
-        public String description { get; set; }
-
-        public String email { get; set; }
     }
 }
