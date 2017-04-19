@@ -1,9 +1,4 @@
-using Astrodon.Controls.Maintenance;
-using Astrodon.Controls.Supplier;
-using Astrodon.Data;
-using Astrodon.Reports;
-using Astrodon.Reports.MaintenanceReport;
-using Astrodon.Reports.SupplierReport;
+﻿using Astrodon.Reports;
 using NotificationWindow;
 using System;
 using System.Data;
@@ -11,14 +6,8 @@ using System.Windows.Forms;
 
 namespace Astrodon
 {
-
-
     public partial class frmMain : Form
     {
-
-        private DataContext _DataContext;
-
-
         private Timer tmrRem = new Timer();
 
         public delegate void PopupDelegate(String notification);
@@ -26,7 +15,6 @@ namespace Astrodon
         public frmMain()
         {
             InitializeComponent();
-            _DataContext = SqlDataHandler.GetDataContext();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -38,12 +26,7 @@ namespace Astrodon
                 importStatementsToolStripMenuItem.Enabled = false;
                 allocationsToolStripMenuItem.Enabled = false;
             }
-
-            if (Controller.user.usertype != 1 && Controller.user.usertype != 2)
-            {
-                reportingToolStripMenuItem.Enabled = false;
-            }
-
+            if (Controller.user.usertype != 1 && Controller.user.usertype != 2) { reportingToolStripMenuItem.Enabled = false; }
             if (Controller.user.usertype == 1 || Controller.user.usertype == 2)
             {
                 pMJobListToolStripMenuItem.Enabled = true;
@@ -62,6 +45,7 @@ namespace Astrodon
             LoadReminders();
             notifyIcon1.Visible = false;
         }
+
         public void LoadReminders()
         {
             String remQuery = "SELECT COUNT(*) as rems FROM tblReminders WHERE userid = " + Controller.user.id.ToString() + " AND action = 'False' AND remDate <= getdate()";
@@ -101,7 +85,6 @@ namespace Astrodon
         {
             Controller.DependencyTermination();
             if (Controller.commClient != null) { Controller.commClient.Disconnect(); }
-            _DataContext.Dispose();
             Application.Exit();
             Environment.Exit(0);
         }
@@ -145,15 +128,15 @@ namespace Astrodon
             toolStripStatusLabel1.Text = controlName;
         }
 
-        private void buildingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void configToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pnlContents.Controls.Clear();
-            usrBuildings buildingControl = new usrBuildings();
-            buildingControl.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(buildingControl);
-            toolStripStatusLabel1.Text = "Buildings";
+            AddNewControl(new usrConfig { Dock = DockStyle.Fill }, "Config");
         }
 
+        private void buildingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddNewControl(new usrBuildings { Dock = DockStyle.Fill }, "Buildings");
+        }
 
         private void usersToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -500,51 +483,6 @@ namespace Astrodon
             trustCtl.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(trustCtl);
             toolStripStatusLabel1.Text = "Levy Roll Report";
-        }
-
-        private void tbMaintenanceConfig_Click(object sender, EventArgs e)
-        {
-            pnlContents.Controls.Clear();
-            usrBuildingMaintenanceConfiguration buildingMaintenance = new usrBuildingMaintenanceConfiguration(_DataContext);
-            buildingMaintenance.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(buildingMaintenance);
-            toolStripStatusLabel1.Text = "Building Maintenance Configuration";
-        }
-
-        private void supplierReportToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            pnlContents.Controls.Clear();
-            usrSupplierReport suppReport = new usrSupplierReport();
-            suppReport.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(suppReport);
-            toolStripStatusLabel1.Text = "Supplier Report";
-        }
-
-        private void maintenanceReportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            pnlContents.Controls.Clear();
-            usrMaintenanceReport report = new usrMaintenanceReport();
-            report.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(report);
-            toolStripStatusLabel1.Text = "Maintenance Report";
-        }
-
-        private void suppliersToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            pnlContents.Controls.Clear();
-            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext);
-            supplierLookup.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(supplierLookup);
-            toolStripStatusLabel1.Text = "Supplier Maintenance";
-        }
-
-        private void buildingMaintenanceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            pnlContents.Controls.Clear();
-            var maintenance = new usrMaintenance(_DataContext);
-            maintenance.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(maintenance);
-            toolStripStatusLabel1.Text = "Building Maintenance";
         }
     }
 }

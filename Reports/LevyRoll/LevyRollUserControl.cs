@@ -13,7 +13,6 @@ using System.Diagnostics;
 using System.Collections;
 using System.IO;
 using Astrodon.ReportService;
-using Astrodon.Data.Base;
 using Astro.Library.Entities;
 
 namespace Astrodon.Reports
@@ -63,10 +62,7 @@ namespace Astrodon.Reports
 
         private void LoadBuildings()
         {
-            var userid = Controller.user.id;
-            Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
-
-            _Buildings = bManager.buildings;
+            _Buildings = new Buildings(false, "All buildings").buildings;
             cmbBuilding.DataSource = _Buildings;
             cmbBuilding.ValueMember = "ID";
             cmbBuilding.DisplayMember = "Name";
@@ -79,7 +75,7 @@ namespace Astrodon.Reports
                 button1.Enabled = false;
                 try
                 {
-                    using (var reportService = new ReportServiceClient())
+                    using (var reportService = new ReportServiceClient("BasicHttpEndpoint"))
                     {
                         DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
                         var reportData = reportService.LevyRollReport(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
