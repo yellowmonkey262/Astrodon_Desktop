@@ -1,4 +1,4 @@
-﻿namespace Astrodon.Controls {
+namespace Astrodon.Controls {
     partial class usrRequisition {
         /// <summary> 
         /// Required designer variable.
@@ -86,6 +86,19 @@
             this.cmbRecur = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.dtEndDate = new System.Windows.Forms.DateTimePicker();
+
+            this.label12 = new System.Windows.Forms.Label();
+            this.lbSupplierName = new System.Windows.Forms.Label();
+            this.btnSupplierLookup = new System.Windows.Forms.Button();
+            this.lbBankName = new System.Windows.Forms.Label();
+            this.lbAccountNumber = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.txtInvoiceNumber = new System.Windows.Forms.TextBox();
+            this.lbInvoiceNumber = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.dtInvoiceDate = new System.Windows.Forms.DateTimePicker();
+
+
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgUnprocessed)).BeginInit();
@@ -161,7 +174,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 182);
+            this.label7.Location = new System.Drawing.Point(12, 246);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(70, 13);
             this.label7.TabIndex = 12;
@@ -169,7 +182,7 @@
             // 
             // txtAmount
             // 
-            this.txtAmount.Location = new System.Drawing.Point(158, 179);
+            this.txtAmount.Location = new System.Drawing.Point(158, 243);
             this.txtAmount.Name = "txtAmount";
             this.txtAmount.Size = new System.Drawing.Size(204, 20);
             this.txtAmount.TabIndex = 6;
@@ -177,7 +190,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(289, 205);
+            this.btnSave.Location = new System.Drawing.Point(289, 301);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 7;
@@ -188,7 +201,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(368, 182);
+            this.label8.Location = new System.Drawing.Point(368, 246);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(49, 13);
             this.label8.TabIndex = 17;
@@ -197,7 +210,7 @@
             // lblAvAmt
             // 
             this.lblAvAmt.AutoSize = true;
-            this.lblAvAmt.Location = new System.Drawing.Point(423, 182);
+            this.lblAvAmt.Location = new System.Drawing.Point(423, 246);
             this.lblAvAmt.Name = "lblAvAmt";
             this.lblAvAmt.Size = new System.Drawing.Size(28, 13);
             this.lblAvAmt.TabIndex = 18;
@@ -217,7 +230,7 @@
             this.cmbLedger.FormattingEnabled = true;
             this.cmbLedger.Location = new System.Drawing.Point(158, 128);
             this.cmbLedger.Name = "cmbLedger";
-            this.cmbLedger.Size = new System.Drawing.Size(204, 21);
+            this.cmbLedger.Size = new System.Drawing.Size(293, 21);
             this.cmbLedger.TabIndex = 4;
             this.cmbLedger.SelectedIndexChanged += new System.EventHandler(this.cmbLedger_SelectedIndexChanged);
             // 
@@ -250,15 +263,15 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(12, 153);
+            this.label11.Location = new System.Drawing.Point(12, 217);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(135, 13);
+            this.label11.Size = new System.Drawing.Size(126, 13);
             this.label11.TabIndex = 24;
-            this.label11.Text = "Enter Supplier && Reference";
+            this.label11.Text = "Enter Supplier Reference";
             // 
             // txtPaymentRef
             // 
-            this.txtPaymentRef.Location = new System.Drawing.Point(158, 153);
+            this.txtPaymentRef.Location = new System.Drawing.Point(158, 217);
             this.txtPaymentRef.Name = "txtPaymentRef";
             this.txtPaymentRef.Size = new System.Drawing.Size(204, 20);
             this.txtPaymentRef.TabIndex = 5;
@@ -268,7 +281,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(15, 234);
+            this.tabControl1.Location = new System.Drawing.Point(15, 330);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(915, 326);
@@ -648,10 +661,109 @@
             this.dtEndDate.Size = new System.Drawing.Size(198, 20);
             this.dtEndDate.TabIndex = 28;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(12, 161);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(78, 13);
+            this.label12.TabIndex = 31;
+            this.label12.Text = "Select Supplier";
+            // 
+            // lbSupplierName
+            // 
+            this.lbSupplierName.AutoSize = true;
+            this.lbSupplierName.Location = new System.Drawing.Point(158, 161);
+            this.lbSupplierName.Name = "lbSupplierName";
+            this.lbSupplierName.Size = new System.Drawing.Size(92, 13);
+            this.lbSupplierName.TabIndex = 32;
+            this.lbSupplierName.Text = "-- none selected --";
+            // 
+            // btnSupplierLookup
+            // 
+            this.btnSupplierLookup.Location = new System.Drawing.Point(376, 161);
+            this.btnSupplierLookup.Name = "btnSupplierLookup";
+            this.btnSupplierLookup.Size = new System.Drawing.Size(75, 23);
+            this.btnSupplierLookup.TabIndex = 33;
+            this.btnSupplierLookup.Text = "Find";
+            this.btnSupplierLookup.UseVisualStyleBackColor = true;
+            this.btnSupplierLookup.Click += new System.EventHandler(this.btnSupplierLookup_Click);
+            // 
+            // lbBankName
+            // 
+            this.lbBankName.AutoSize = true;
+            this.lbBankName.Location = new System.Drawing.Point(158, 184);
+            this.lbBankName.Name = "lbBankName";
+            this.lbBankName.Size = new System.Drawing.Size(81, 13);
+            this.lbBankName.TabIndex = 34;
+            this.lbBankName.Text = "-- Bank Name --";
+            // 
+            // lbAccountNumber
+            // 
+            this.lbAccountNumber.AutoSize = true;
+            this.lbAccountNumber.Location = new System.Drawing.Point(158, 200);
+            this.lbAccountNumber.Name = "lbAccountNumber";
+            this.lbAccountNumber.Size = new System.Drawing.Size(105, 13);
+            this.lbAccountNumber.TabIndex = 35;
+            this.lbAccountNumber.Text = "-- Account Number --";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(12, 184);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(81, 13);
+            this.label13.TabIndex = 36;
+            this.label13.Text = "Banking Details";
+            // 
+            // txtInvoiceNumber
+            // 
+            this.txtInvoiceNumber.Location = new System.Drawing.Point(158, 269);
+            this.txtInvoiceNumber.Name = "txtInvoiceNumber";
+            this.txtInvoiceNumber.Size = new System.Drawing.Size(204, 20);
+            this.txtInvoiceNumber.TabIndex = 7;
+            // 
+            // lbInvoiceNumber
+            // 
+            this.lbInvoiceNumber.AutoSize = true;
+            this.lbInvoiceNumber.Location = new System.Drawing.Point(12, 269);
+            this.lbInvoiceNumber.Name = "lbInvoiceNumber";
+            this.lbInvoiceNumber.Size = new System.Drawing.Size(82, 13);
+            this.lbInvoiceNumber.TabIndex = 38;
+            this.lbInvoiceNumber.Text = "Invoice Number";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(370, 269);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(68, 13);
+            this.label14.TabIndex = 39;
+            this.label14.Text = "Invoice Date";
+            // 
+            // dtInvoiceDate
+            // 
+            this.dtInvoiceDate.CustomFormat = "yyyy/MM/dd";
+            this.dtInvoiceDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtInvoiceDate.Location = new System.Drawing.Point(460, 269);
+            this.dtInvoiceDate.Name = "dtInvoiceDate";
+            this.dtInvoiceDate.Size = new System.Drawing.Size(198, 20);
+            this.dtInvoiceDate.TabIndex = 40;
+            // 
             // usrRequisition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.dtInvoiceDate);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.txtInvoiceNumber);
+            this.Controls.Add(this.lbInvoiceNumber);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.lbAccountNumber);
+            this.Controls.Add(this.lbBankName);
+            this.Controls.Add(this.btnSupplierLookup);
+            this.Controls.Add(this.lbSupplierName);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.dtEndDate);
             this.Controls.Add(this.cmbRecur);
@@ -677,7 +789,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbBuilding);
             this.Name = "usrRequisition";
-            this.Size = new System.Drawing.Size(1197, 599);
+            this.Size = new System.Drawing.Size(862, 664);
             this.Load += new System.EventHandler(this.usrRequisition_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -741,6 +853,18 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DateTimePicker dtEndDate;
         private System.Windows.Forms.Button btnDelete;
+
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label lbSupplierName;
+        private System.Windows.Forms.Button btnSupplierLookup;
+        private System.Windows.Forms.Label lbBankName;
+        private System.Windows.Forms.Label lbAccountNumber;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox txtInvoiceNumber;
+        private System.Windows.Forms.Label lbInvoiceNumber;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.DateTimePicker dtInvoiceDate;
+
         private System.Windows.Forms.DataGridViewCheckBoxColumn colPaid;
         private System.Windows.Forms.DataGridViewButtonColumn colDelete;
         private System.Windows.Forms.DataGridViewTextBoxColumn colID;
@@ -753,5 +877,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
         private System.Windows.Forms.DataGridViewButtonColumn colEdit;
         private System.Windows.Forms.Button btnViewTrans;
+
     }
 }

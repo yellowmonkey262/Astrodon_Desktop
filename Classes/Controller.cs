@@ -1,4 +1,4 @@
-﻿using Astro.Library.Entities;
+using Astro.Library.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -63,8 +63,17 @@ namespace Astrodon
             DependencyInitialization();
         }
 
-        private static void commClient_LoginOK(object sender, EventArgs e)
+        internal static void HandleError(Exception e, string title = "Application Error")
         {
+            HandleError(e.Message, title);
+        }
+
+        internal static void HandleError(string error, string title = "Application Error")
+        {
+            MessageBox.Show(error, title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
+        private static void commClient_LoginOK(object sender, EventArgs e) {       
             commClient.SendMessage("hello server");
         }
 
