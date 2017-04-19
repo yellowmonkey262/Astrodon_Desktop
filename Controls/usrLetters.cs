@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Astro.Library;
+using Astro.Library.Entities;
+using Astrodon.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -95,7 +99,7 @@ namespace Astrodon
                     }
                 }
             }
-            buildings.Sort(new BuildingComparer("Name", SortOrder.Ascending));
+            buildings = buildings.OrderBy(c => c.Name).ToList();
             LoadDefaultValues();
         }
 
@@ -170,7 +174,7 @@ namespace Astrodon
                 cls = new List<CustomerList>();
                 customerList.Clear();
                 int buildPeriod;
-                int trustPeriod = Utilities.getPeriod(DateTime.Now, building.Period, out buildPeriod);
+                int trustPeriod = Methods.getPeriod(DateTime.Now, building.Period, out buildPeriod);
                 List<Customer> customers = new List<Customer>();
                 customers = getCatCustomers(category, buildPeriod);
                 if (customers.Count > 0) { cls.Add(new CustomerList("", "", 0)); }
@@ -301,11 +305,6 @@ namespace Astrodon
 
         private void customerGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            //String msg = "";
-            //for (int i = 0; i < customerGrid.Columns.Count; i++) {
-            //    msg += i.ToString() + " - " + customerGrid.Columns[i].HeaderText + "; ";
-            //}
-            //MessageBox.Show(msg);
         }
 
         private void btnPrint_Click(object sender, EventArgs e)
@@ -599,38 +598,32 @@ namespace Astrodon
                     MessageBox.Show(c.statPrintorEmail.ToString() + " - " + created.ToString());
                 }
 
-                //#region Upload Letter
-                //String actFileTitle = Path.GetFileNameWithoutExtension(fileName);
-                //String actFile = Path.GetFileName(fileName);
-                //try {
-                //    mysqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, c.accNumber, c.Email);
-                //    ftpClient.Upload(fileName, actFile);
-                //} catch { }
-                //#endregion
-
                 if ((c.statPrintorEmail <= 3) && created)
                 {
-                    docType = docType == "Disconnect Notice" ? "Restriction Notice" : docType;
+                    docType = (docType == "Disconnect Notice" ? "Restriction Notice" : docType);
                     String msgStatus = String.Empty;
                     //if (Controller.user.id != 1) {
                     String mailBody = "Dear Owner" + Environment.NewLine + Environment.NewLine;
                     mailBody += "Attached please find " + docType + " for your attention." + Environment.NewLine + Environment.NewLine;
-                    mailBody += "Account #: " + c.accNumber + ". For any queries on your account, please contact " + uName + " on email: " + uEmail + ", tel: " + uPhone + "." + Environment.NewLine + Environment.NewLine;
+                    mailBody += "Account #: " + c.accNumber + ". For any queries on your account, please contact " + uName + " on email: " + uEmail;
+                    mailBody += ", tel: " + uPhone + "." + Environment.NewLine + Environment.NewLine;
                     mailBody += "Do not reply to this e-mail address" + Environment.NewLine + Environment.NewLine;
                     mailBody += "Regards" + Environment.NewLine;
                     mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
                     mailBody += "You're in good hands";
                     try
                     {
-                        bool sentMail = dh.InsertLetter(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(), mailBody, false, true, true, new String[] { Path.GetFileName(fileName) }, c.accNumber, out msgStatus);
+                        bool sentMail = dh.InsertLetter(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(), mailBody, false, true, true,
+                            new String[] { Path.GetFileName(fileName) }, c.accNumber, out msgStatus);
                     }
                     catch
                     {
-                        MessageBox.Show(uEmail + " - " + c.Email + " - " + docType + " - " + c.accNumber + " - " + DateTime.Now.ToString() + " - " + mailBody + " - " + Path.GetFileName(fileName) + " - " + c.accNumber);
+                        MessageBox.Show(uEmail + " - " + c.Email + " - " + docType + " - " + c.accNumber + " - " + DateTime.Now.ToString() + " - " + mailBody + " - "
+                            + Path.GetFileName(fileName) + " - " + c.accNumber);
                     }
                     if (Controller.user.id == 1) { MessageBox.Show(msgStatus); }
                     //}
-                    if ((c.statPrintorEmail == 1 || c.statPrintorEmail == 3) || docType == "Disconnect Notice")
+                    if ((c.statPrintorEmail == 1 || c.statPrintorEmail == 3) || docType == "Disconnect Notice" || docType == "Restriction Notice")
                     {
                         try
                         {
@@ -647,27 +640,41 @@ namespace Astrodon
                 }
                 if (Controller.user.id != 1)
                 {
-                    pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, docType, docType, amt.ToString("#0.00"), trustAcc, "", out pastelString);
-                    if (regPost != 0) { pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, "Registered Postage", "Registered Postage", regPost.ToString("#0.00"), "1090/000", "", out pastelString); }
+                    docType = (docType == "Disconnect Notice" ? "Restriction Notice" : docType);
+                    pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                        building.Centrec_Building, docType, docType, amt.ToString("#0.00"), trustAcc, "", out pastelString);
+                    if (regPost != 0)
+                    {
+                        pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber,
+        building.Centrec_Building, building.Centrec_Building, "Registered Postage", "Registered Postage", regPost.ToString("#0.00"), "1090/000", "", out pastelString);
+                    }
                     if (values.reminderSplit != 0 && docIdx == 1)
                     {
-                        pastelReturn = Controller.pastel.PostCredit(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, docType, docType, values.reminderSplit.ToString("#0.00"), trustAcc, "", out pastelString);
-                        pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, "9250/000", docType, docType, values.reminderSplit.ToString("#0.00"), trustAcc, "2900000", out pastelString);
+                        pastelReturn = Controller.pastel.PostCredit(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                            building.Centrec_Building, docType, docType, values.reminderSplit.ToString("#0.00"), trustAcc, "", out pastelString);
+                        pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                            "9250/000", docType, docType, values.reminderSplit.ToString("#0.00"), trustAcc, "2900000", out pastelString);
                     }
                     else if (values.finalSplit != 0 && docIdx == 2)
                     {
-                        pastelReturn = Controller.pastel.PostCredit(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, docType, docType, values.finalSplit.ToString("#0.00"), trustAcc, "", out pastelString);
-                        pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, "9250/000", docType, docType, values.finalSplit.ToString("#0.00"), trustAcc, "2900000", out pastelString);
+                        pastelReturn = Controller.pastel.PostCredit(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                            building.Centrec_Building, docType, docType, values.finalSplit.ToString("#0.00"), trustAcc, "", out pastelString);
+                        pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                            "9250/000", docType, docType, values.finalSplit.ToString("#0.00"), trustAcc, "2900000", out pastelString);
                     }
                     else if (values.disconnectionNoticeSplit != 0 && docIdx == 3)
                     {
-                        pastelReturn = Controller.pastel.PostCredit(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, docType, docType, values.disconnectionNoticeSplit.ToString("#0.00"), trustAcc, "", out pastelString);
-                        pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, "9250/000", docType, docType, values.disconnectionNoticeSplit.ToString("#0.00"), trustAcc, "2900000", out pastelString);
+                        pastelReturn = Controller.pastel.PostCredit(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                            building.Centrec_Building, docType, docType, values.disconnectionNoticeSplit.ToString("#0.00"), trustAcc, "", out pastelString);
+                        pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                            "9250/000", docType, docType, values.disconnectionNoticeSplit.ToString("#0.00"), trustAcc, "2900000", out pastelString);
                     }
                     else if (values.summonsSplit != 0 && docIdx == 5)
                     {
-                        pastelReturn = Controller.pastel.PostCredit(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, docType, docType, values.summonsSplit.ToString("#0.00"), trustAcc, "", out pastelString);
-                        pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, "9250/000", docType, docType, values.summonsSplit.ToString("#0.00"), trustAcc, "2900000", out pastelString);
+                        pastelReturn = Controller.pastel.PostCredit(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                            building.Centrec_Building, docType, docType, values.summonsSplit.ToString("#0.00"), trustAcc, "", out pastelString);
+                        pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                            "9250/000", docType, docType, values.summonsSplit.ToString("#0.00"), trustAcc, "2900000", out pastelString);
                     }
                 }
             }
@@ -694,23 +701,28 @@ namespace Astrodon
                 String pastelReturn, pastelString;
                 if (!excludedBuildings.Contains(building.Abbr))
                 {
-                    pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, docType, docType, values.disconnectionFee.ToString("#0.00"), "1105/000", "", out pastelString);
+                    pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                        building.Centrec_Building, docType, docType, values.disconnectionFee.ToString("#0.00"), "1105/000", "", out pastelString);
                 }
                 else
                 {
                     if (building.Abbr == "LR")
                     {
-                        Controller.pastel.PostBuildBatch(trnDate, building.DataPath, building.Journal, building.Period, c.accNumber, "2901000", c.accNumber, docType, values.disconnectionFee.ToString("#0.00"), out pastelString);
+                        Controller.pastel.PostBuildBatch(trnDate, building.DataPath, building.Journal, building.Period, c.accNumber, "2901000", c.accNumber, docType, values.disconnectionFee.ToString("#0.00"),
+                            out pastelString);
                     }
                     else if (building.Abbr == "TSM")
                     {
-                        Controller.pastel.PostBuildBatch(trnDate, building.DataPath, building.Journal, building.Period, c.accNumber, "2910000", c.accNumber, docType, values.disconnectionFee.ToString("#0.00"), out pastelString);
+                        Controller.pastel.PostBuildBatch(trnDate, building.DataPath, building.Journal, building.Period, c.accNumber, "2910000", c.accNumber, docType, values.disconnectionFee.ToString("#0.00"),
+                            out pastelString);
                     }
                 }
                 if (values.disconnectionSplit != 0)
                 {
-                    pastelReturn = Controller.pastel.PostCredit(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, docType, docType, values.disconnectionSplit.ToString("#0.00"), "1105/000", "", out pastelString);
-                    pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, "9250/000", docType, docType, values.disconnectionSplit.ToString("#0.00"), "", "2900000", out pastelString);
+                    pastelReturn = Controller.pastel.PostCredit(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                        building.Centrec_Building, docType, docType, values.disconnectionSplit.ToString("#0.00"), "1105/000", "", out pastelString);
+                    pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, "9250/000",
+                        docType, docType, values.disconnectionSplit.ToString("#0.00"), "", "2900000", out pastelString);
                 }
                 c.category = "04";
                 String customerString = c.GetCustomer();
@@ -729,11 +741,14 @@ namespace Astrodon
             foreach (Customer c in checkedCustomers)
             {
                 AddSMS(c, 6);
-                pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, docType, docType, values.handoverFee.ToString("#0.00"), "1110/000", "", out pastelString);
+                pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                    building.Centrec_Building, docType, docType, values.handoverFee.ToString("#0.00"), "1110/000", "", out pastelString);
                 if (values.disconnectionSplit != 0)
                 {
-                    pastelReturn = Controller.pastel.PostCredit(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, building.Centrec_Building, docType, docType, values.handoverSplit.ToString("#0.00"), "1105/000", "", out pastelString);
-                    pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, "9250/000", docType, docType, values.handoverSplit.ToString("#0.00"), "", "2900000", out pastelString);
+                    pastelReturn = Controller.pastel.PostCredit(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
+                        building.Centrec_Building, docType, docType, values.handoverSplit.ToString("#0.00"), "1105/000", "", out pastelString);
+                    pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building, "9250/000",
+                        docType, docType, values.handoverSplit.ToString("#0.00"), "", "2900000", out pastelString);
                 }
                 c.category = "05";
                 String customerString = c.GetCustomer();
@@ -747,22 +762,24 @@ namespace Astrodon
             SMS sms = new SMS();
             foreach (MessageConstruct msg in msgs)
             {
-                SMSMessage smsMsg = new SMSMessage();
-                smsMsg.astStatus = msg.astStatus;
-                smsMsg.batchID = msg.batchID;
-                smsMsg.billable = msg.billable;
-                smsMsg.building = msg.building;
-                smsMsg.bulkbillable = msg.bulkbillable;
-                smsMsg.cbal = msg.os;
-                smsMsg.customer = msg.customer;
-                smsMsg.message = msg.text;
-                smsMsg.number = msg.number;
-                smsMsg.pollCount = msg.pollCount;
-                smsMsg.reference = msg.reference;
-                smsMsg.sender = msg.sender;
-                smsMsg.sent = msg.sent;
-                smsMsg.smsType = msg.msgType;
-                smsMsg.status = msg.status;
+                SMSMessage smsMsg = new SMSMessage
+                {
+                    astStatus = msg.astStatus,
+                    batchID = msg.batchID,
+                    billable = msg.billable,
+                    building = msg.building,
+                    bulkbillable = msg.bulkbillable,
+                    cbal = msg.os,
+                    customer = msg.customer,
+                    message = msg.text,
+                    number = msg.number,
+                    pollCount = msg.pollCount,
+                    reference = msg.reference,
+                    sender = msg.sender,
+                    sent = msg.sent,
+                    smsType = msg.msgType,
+                    status = msg.status
+                };
                 bool immediate = (smsMsg.smsType == "Disconnection SMS");
                 bool success = sms.SendMessage(smsMsg, immediate, out status);
             }
@@ -776,20 +793,23 @@ namespace Astrodon
             {
                 if (cl.Journal && cl.JournalAmt != "" && cl.JournalAcc != "")
                 {
-                    String pastelReturn = Controller.pastel.PostBatch(DateTime.Now, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, cl.AccNumber, building.Centrec_Building, cl.JournalAcc, cl.AccNumber, cl.AccNumber, cl.JournalAmt, cl.AccNumber, "", out pastelString);
+                    String pastelReturn = Controller.pastel.PostBatch(DateTime.Now, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, cl.AccNumber, building.Centrec_Building,
+                        cl.JournalAcc, cl.AccNumber, cl.AccNumber, cl.JournalAmt, cl.AccNumber, "", out pastelString);
                 }
             }
         }
 
         private void AddSMS(Customer c, int docType)
         {
-            MessageConstruct m = new MessageConstruct();
-            m.id = 0;
-            m.building = building.Abbr;
-            m.customer = c.accNumber;
-            m.number = c.CellPhone;
-            m.reference = string.Empty;
-            m.os = c.ageing[0];
+            MessageConstruct m = new MessageConstruct
+            {
+                id = 0,
+                building = building.Abbr,
+                customer = c.accNumber,
+                number = c.CellPhone,
+                reference = string.Empty,
+                os = c.ageing[0]
+            };
             switch (docType)
             {
                 case 1:
@@ -854,19 +874,16 @@ namespace Astrodon
         {
             try
             {
-                ProcessStartInfo info = new ProcessStartInfo();
-                info.Verb = "print";
-                info.FileName = fileName;
-                //info.CreateNoWindow = true;
-                //info.WindowStyle = ProcessWindowStyle.Hidden;
-
-                Process p = new Process();
-                p.StartInfo = info;
-                p.Start();
-
-                //p.WaitForInputIdle();
-                System.Threading.Thread.Sleep(3000);
-                //if (false == p.CloseMainWindow()) { p.Kill(); }
+                using (Process p = new Process())
+                {
+                    p.StartInfo = new ProcessStartInfo
+                    {
+                        Verb = "print",
+                        FileName = fileName
+                    };
+                    p.Start();
+                    System.Threading.Thread.Sleep(3000);
+                }
             }
             catch
             {

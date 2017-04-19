@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using Astrodon.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
@@ -126,12 +128,14 @@ namespace Astrodon
                 clrTrans = new List<ClearanceTransactions>();
                 foreach (DataRow dr in ds2.Tables[0].Rows)
                 {
-                    ClearanceTransactions clrT = new ClearanceTransactions();
-                    clrT.Description = dr["description"].ToString();
-                    clrT.Qty = double.Parse(dr["qty"].ToString());
-                    clrT.Rate = double.Parse(dr["rate"].ToString());
-                    clrT.Markup_Percentage = double.Parse(dr["markup"].ToString());
-                    clrT.Amount = double.Parse(dr["amount"].ToString());
+                    ClearanceTransactions clrT = new ClearanceTransactions
+                    {
+                        Description = dr["description"].ToString(),
+                        Qty = double.Parse(dr["qty"].ToString()),
+                        Rate = double.Parse(dr["rate"].ToString()),
+                        Markup_Percentage = double.Parse(dr["markup"].ToString()),
+                        Amount = double.Parse(dr["amount"].ToString())
+                    };
                     if (clrT.Description == "Recon split Seller/Buyer date reconciliation")
                     {
                         txtSplit.Text = clrT.Amount.ToString("#,##0.00");
@@ -244,11 +248,13 @@ namespace Astrodon
                     {
                         clrTrans = new List<ClearanceTransactions>();
                         dgClearance.DataSource = null;
-                        ClearanceTransactions clrTrn = new ClearanceTransactions();
-                        clrTrn.Description = String.Format("OUTSTANDING BALANCE AT {0}", dtPicker.Value.ToString("yyyy/MM/dd"));
-                        clrTrn.Qty = 1;
-                        clrTrn.Rate = Math.Round(totalDue, 2);
-                        clrTrn.Markup_Percentage = 0;
+                        ClearanceTransactions clrTrn = new ClearanceTransactions
+                        {
+                            Description = String.Format("OUTSTANDING BALANCE AT {0}", dtPicker.Value.ToString("yyyy/MM/dd")),
+                            Qty = 1,
+                            Rate = Math.Round(totalDue, 2),
+                            Markup_Percentage = 0
+                        };
                         clrTrans.Add(clrTrn);
                         bs.DataSource = clrTrans;
                         dgClearance.DataSource = bs;
@@ -259,27 +265,17 @@ namespace Astrodon
             }
         }
 
-        //---------------------------------------------------------------------------------------------
-        // Performing sort on click on Column Header
-        //---------------------------------------------------------------------------------------------
-
         private void dgTransactions_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             //get the current column details
             string strColumnName = dgTransactions.Columns[e.ColumnIndex].Name;
             SortOrder strSortOrder = getSortOrder(e.ColumnIndex);
-
-            transactions.Sort(new TrnsComparer(strColumnName, strSortOrder));
+            transactions.Sort(new TransComparer(strColumnName, strSortOrder));
             dgTransactions.DataSource = null;
             dgTransactions.DataSource = transactions;
             dgTransactions.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = strSortOrder;
         }
 
-        /// <summary>
-        /// Get the current sort order of the column and return it set the new SortOrder to the columns.
-        /// </summary>
-        /// <param name="columnIndex"></param>
-        /// <returns>SortOrder of the current column</returns>
         private SortOrder getSortOrder(int columnIndex)
         {
             if (dgTransactions.Columns[columnIndex].HeaderCell.SortGlyphDirection == SortOrder.None ||
@@ -324,10 +320,6 @@ namespace Astrodon
 
         private void CalcTotals()
         {
-            //dgClearance.DataSource = null;
-            //bs.DataSource = clrTrans;
-            //dgClearance.DataSource = bs;
-
             double total = 0;
             try
             {
@@ -422,12 +414,14 @@ namespace Astrodon
                     double splitFee = (double.TryParse(txtSplit.Text, out splitFee) ? splitFee : 0);
                     if (splitFee > 0)
                     {
-                        ClearanceTransactions trn = new ClearanceTransactions();
-                        trn.Amount = splitFee;
-                        trn.Description = "Recon split Seller/Buyer date reconciliation";
-                        trn.Markup_Percentage = 0;
-                        trn.Qty = 1;
-                        trn.Rate = splitFee;
+                        ClearanceTransactions trn = new ClearanceTransactions
+                        {
+                            Amount = splitFee,
+                            Description = "Recon split Seller/Buyer date reconciliation",
+                            Markup_Percentage = 0,
+                            Qty = 1,
+                            Rate = splitFee
+                        };
                         clrTrans.Add(trn);
                     }
                 }

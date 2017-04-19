@@ -1,4 +1,6 @@
-﻿using Itenso.Rtf;
+﻿using Astro.Library.Entities;
+using Astrodon.Classes;
+using Itenso.Rtf;
 using Itenso.Rtf.Converter.Html;
 using Itenso.Rtf.Support;
 using NetSpell.SpellChecker;
@@ -10,6 +12,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -42,6 +45,7 @@ namespace Astrodon.Controls
         private Dictionary<String, System.Drawing.Image> htmlImages = null;
         private bool printerSet = false;
         private String uploadDirectory = String.Empty;
+        private bool justify = false;
 
         #endregion Variables
 
@@ -152,8 +156,7 @@ namespace Astrodon.Controls
             allBuildings = new Buildings(false).buildings;
             pmBuildings = new List<Building>();
             spellCheck = new Spelling(this.components);
-            dictionary = new NetSpell.SpellChecker.Dictionary.WordDictionary(this.components);
-            dictionary.DictionaryFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dic");
+            dictionary = new NetSpell.SpellChecker.Dictionary.WordDictionary(this.components) { DictionaryFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dic") };
             spellCheck.Dictionary = dictionary;
             spellCheck.EndOfText += spellCheck_EndOfText;
             spellCheck.DeletedWord += spellCheck_DeletedWord;
@@ -171,7 +174,7 @@ namespace Astrodon.Controls
                         }
                     }
                 }
-                pmBuildings.Sort(new BuildingComparer("Name", SortOrder.Ascending));
+                pmBuildings = pmBuildings.OrderBy(c => c.Name).ToList();
                 buildingFolder = String.Empty;
             }
         }
@@ -233,23 +236,13 @@ namespace Astrodon.Controls
         {
             if (c.HasChildren)
             {
-                foreach (Control cc in c.Controls)
-                {
-                    DisableControls(cc, disable);
-                }
+                foreach (Control cc in c.Controls) { DisableControls(cc, disable); }
             }
             else
             {
                 try
                 {
-                    if (c.GetType() == typeof(TextBox))
-                    {
-                        (c as TextBox).ReadOnly = disable;
-                    }
-                    else
-                    {
-                        c.Enabled = !disable;
-                    }
+                    if (c.GetType() == typeof(TextBox)) { (c as TextBox).ReadOnly = disable; } else { c.Enabled = !disable; }
                 }
                 catch { }
             }
@@ -396,10 +389,12 @@ namespace Astrodon.Controls
             int selectedCustomers = 0;
             foreach (Customer c in customers)
             {
-                jobCustomers jc = new jobCustomers();
-                jc.Account = c.accNumber;
-                jc.Description = c.description;
-                jc.Include = false;
+                jobCustomers jc = new jobCustomers
+                {
+                    Account = c.accNumber,
+                    Description = c.description,
+                    Include = false
+                };
                 if (c.Email.Length > 0)
                 {
                     jc.email1 = c.Email[0];
@@ -451,22 +446,28 @@ namespace Astrodon.Controls
         {
             cmbLetter.SelectedIndexChanged -= cmbLetter_SelectedIndexChanged;
             cmbLetter.DataSource = null;
-            String templateQuery = "SELECT id, templateName, templateContent FROM tblTemplates WHERE buildingID = " + selectedBuilding.ID.ToString();
+            String templateQuery = "SELECT id, templateName, templateContent, buildingID FROM tblTemplates WHERE buildingID = " + selectedBuilding.ID.ToString();
             DataSet dsTemplates = dataHandler.GetData(templateQuery, null, out status);
             templates = new BindingList<LetterTemplates>();
-            LetterTemplates newLetter = new LetterTemplates();
-            newLetter.id = "0";
-            newLetter.title = "New Letter";
-            newLetter.content = "";
+            LetterTemplates newLetter = new LetterTemplates
+            {
+                id = "0",
+                title = "New Letter",
+                content = "",
+                buildingID = 0
+            };
             templates.Add(newLetter);
             if (dsTemplates != null && dsTemplates.Tables.Count > 0 && dsTemplates.Tables[0].Rows.Count > 0)
             {
                 foreach (DataRow drTemplate in dsTemplates.Tables[0].Rows)
                 {
-                    LetterTemplates template = new LetterTemplates();
-                    template.id = drTemplate["id"].ToString();
-                    template.title = drTemplate["templateName"].ToString();
-                    template.content = drTemplate["templateContent"].ToString();
+                    LetterTemplates template = new LetterTemplates
+                    {
+                        id = drTemplate["id"].ToString(),
+                        title = drTemplate["templateName"].ToString(),
+                        content = drTemplate["templateContent"].ToString(),
+                        buildingID = Convert.ToInt16(drTemplate["buildingID"])
+                    };
                     templates.Add(template);
                 }
             }
@@ -484,6 +485,8 @@ namespace Astrodon.Controls
             public String title { get; set; }
 
             public String content { get; set; }
+
+            public int buildingID { get; set; }
         }
 
         private void LoadDocuments()
@@ -502,8 +505,7 @@ namespace Astrodon.Controls
                     {//support
                         try
                         {
-                            Attachments a = new Attachments();
-                            a.FileName = drDoc["fileName"].ToString();
+                            Attachments a = new Attachments { FileName = drDoc["fileName"].ToString() };
                             supportDocs.Add(a);
                         }
                         catch { }
@@ -512,8 +514,7 @@ namespace Astrodon.Controls
                     { //email
                         try
                         {
-                            Attachments a = new Attachments();
-                            a.FileName = drDoc["fileName"].ToString();
+                            Attachments a = new Attachments { FileName = drDoc["fileName"].ToString() };
                             EmailDocs.Add(a);
                         }
                         catch { }
@@ -740,55 +741,25 @@ namespace Astrodon.Controls
         {
             foreach (Control control in tb.Controls)
             {
-                if (control is TextBox)
-                {
-                    TextBox textBox = (TextBox)control;
-                    textBox.Text = null;
-                }
-
+                if (control is TextBox) { ((TextBox)control).Text = null; }
                 if (control is ComboBox)
                 {
                     ComboBox comboBox = (ComboBox)control;
-                    if (comboBox.Items.Count > 0)
-                        comboBox.SelectedIndex = 0;
+                    if (comboBox.Items.Count > 0) { comboBox.SelectedIndex = 0; }
                 }
-
-                if (control is CheckBox)
-                {
-                    CheckBox checkBox = (CheckBox)control;
-                    checkBox.Checked = false;
-                }
-
-                if (control is RadioButton)
-                {
-                    RadioButton radioButton = (RadioButton)control;
-                    radioButton.Checked = false;
-                }
-                if (control is RichTextBox)
-                {
-                    RichTextBox rtfBox = (RichTextBox)control;
-                    rtfBox.Clear();
-                }
+                if (control is CheckBox) { ((CheckBox)control).Checked = false; }
+                if (control is RadioButton) { ((RadioButton)control).Checked = false; }
+                if (control is RichTextBox) { ((RichTextBox)control).Clear(); }
                 if (tb == tbInstructions)
                 {
-                    foreach (jobCustomers jc in JobCustomers)
-                    {
-                        jc.Include = false;
-                    }
+                    foreach (jobCustomers jc in JobCustomers) { jc.Include = false; }
                 }
             }
         }
 
         private void btnCancel1_Click(object sender, EventArgs e)
         {
-            if (jobID == 0)
-            {
-                ResetForm(tbInstructions);
-            }
-            else
-            {
-                LoadJob();
-            }
+            if (jobID == 0) { ResetForm(tbInstructions); } else { LoadJob(); }
         }
 
         private void btnSave3_Click(object sender, EventArgs e)
@@ -839,52 +810,54 @@ namespace Astrodon.Controls
 
         private void btnAddSupport_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            if (ofd.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(ofd.FileName))
+            using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                String fileName = ofd.FileName;
-                String uploadFileName = Path.GetFileName(fileName);
-                byte[] file;
-                using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) { using (var reader = new BinaryReader(stream)) { file = reader.ReadBytes((int)stream.Length); } }
-                if (MessageBox.Show("Confirm addition of " + uploadFileName + "?", "File Upload", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ofd.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(ofd.FileName))
                 {
-                    Attachments a = new Attachments();
-                    a.FileName = uploadFileName;
-                    supportDocs.Add(a);
-                    String uploadQuery = "INSERT INTO tblAttachments(jobID, fileName, fileContent, attachmentType) VALUES(@jobID, @fileName, @fileContent, 1)";
-                    sqlParms.Clear();
-                    sqlParms.Add("@jobID", jobID);
-                    sqlParms.Add("@fileName", uploadFileName);
-                    sqlParms.Add("@fileContent", file);
-                    dataHandler.SetData(uploadQuery, sqlParms, out status);
-                    if (status != "") { MessageBox.Show(status); }
-                    LoadDocuments();
+                    String fileName = ofd.FileName;
+                    String uploadFileName = Path.GetFileName(fileName);
+                    byte[] file;
+                    using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) { using (var reader = new BinaryReader(stream)) { file = reader.ReadBytes((int)stream.Length); } }
+                    if (MessageBox.Show("Confirm addition of " + uploadFileName + "?", "File Upload", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        Attachments a = new Attachments { FileName = uploadFileName };
+                        supportDocs.Add(a);
+                        String uploadQuery = "INSERT INTO tblAttachments(jobID, fileName, fileContent, attachmentType) VALUES(@jobID, @fileName, @fileContent, 1)";
+                        sqlParms.Clear();
+                        sqlParms.Add("@jobID", jobID);
+                        sqlParms.Add("@fileName", uploadFileName);
+                        sqlParms.Add("@fileContent", file);
+                        dataHandler.SetData(uploadQuery, sqlParms, out status);
+                        if (status != "") { MessageBox.Show(status); }
+                        LoadDocuments();
+                    }
                 }
             }
         }
 
         private void btnEmailAttach_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            if (ofd.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(ofd.FileName))
+            using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                String fileName = ofd.FileName;
-                String uploadFileName = Path.GetFileName(fileName);
-                byte[] file;
-                using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) { using (var reader = new BinaryReader(stream)) { file = reader.ReadBytes((int)stream.Length); } }
-                if (MessageBox.Show("Confirm addition of " + uploadFileName + "?", "File Upload", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (ofd.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(ofd.FileName))
                 {
-                    Attachments a = new Attachments();
-                    a.FileName = uploadFileName;
-                    supportDocs.Add(a);
-                    String uploadQuery = "INSERT INTO tblAttachments(jobID, fileName, fileContent, attachmentType) VALUES(@jobID, @fileName, @fileContent, 2)";
-                    sqlParms.Clear();
-                    sqlParms.Add("@jobID", jobID);
-                    sqlParms.Add("@fileName", uploadFileName);
-                    sqlParms.Add("@fileContent", file);
-                    dataHandler.SetData(uploadQuery, sqlParms, out status);
-                    if (status != "") { MessageBox.Show(status); }
-                    LoadDocuments();
+                    String fileName = ofd.FileName;
+                    String uploadFileName = Path.GetFileName(fileName);
+                    byte[] file;
+                    using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) { using (var reader = new BinaryReader(stream)) { file = reader.ReadBytes((int)stream.Length); } }
+                    if (MessageBox.Show("Confirm addition of " + uploadFileName + "?", "File Upload", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        Attachments a = new Attachments { FileName = uploadFileName };
+                        supportDocs.Add(a);
+                        String uploadQuery = "INSERT INTO tblAttachments(jobID, fileName, fileContent, attachmentType) VALUES(@jobID, @fileName, @fileContent, 2)";
+                        sqlParms.Clear();
+                        sqlParms.Add("@jobID", jobID);
+                        sqlParms.Add("@fileName", uploadFileName);
+                        sqlParms.Add("@fileContent", file);
+                        dataHandler.SetData(uploadQuery, sqlParms, out status);
+                        if (status != "") { MessageBox.Show(status); }
+                        LoadDocuments();
+                    }
                 }
             }
         }
@@ -937,287 +910,7 @@ namespace Astrodon.Controls
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@jobID", jobID);
             DataSet dsHasLetter = dataHandler.GetData(letterQuery, sqlParms, out status);
-            if (dsHasLetter != null && dsHasLetter.Tables.Count > 0 && dsHasLetter.Tables[0].Rows.Count > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private void ProcessDocumentsOld(bool sendNow)
-        {
-            this.Cursor = Cursors.WaitCursor;
-            if (sendNow) { txtStatus.Text += Environment.NewLine + "Starting processing: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine; }
-            String html = ConvertRTFToHtml();
-            //MessageBox.Show(html);
-            PDF pdf = new PDF();
-            int selectedCustomers = 0;
-            List<Customer> includedCustomers = new List<Customer>();
-
-            int rowIncludes = 0;
-            for (int i = 0; i < dgCustomers.Rows.Count; i++)
-            {
-                DataGridViewRow dvr = dgCustomers.Rows[i];
-                bool included = (bool)dvr.Cells[0].Value;
-                jobCustomers jAcc = null;
-                if (included)
-                {
-                    jAcc = JobCustomers[i];
-                    foreach (Customer c in customers)
-                    {
-                        if (c.accNumber == jAcc.Account)
-                        {
-                            try { c.Email[0] = jAcc.sEmail1 ? jAcc.email1 : String.Empty; }
-                            catch { }
-                            try { c.Email[1] = jAcc.sEmail2 ? jAcc.email2 : String.Empty; }
-                            catch { }
-                            try { c.Email[2] = jAcc.sEmail3 ? jAcc.email3 : String.Empty; }
-                            catch { }
-                            try { c.Email[3] = jAcc.sEmail4 ? jAcc.email4 : String.Empty; }
-                            catch { }
-                            try { c.CellPhone = jAcc.sCell ? jAcc.cell : String.Empty; }
-                            catch { }
-                            if (!includedCustomers.Contains(c)) { includedCustomers.Add(c); }
-                            selectedCustomers++;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (includedCustomers.Count == 0)
-            {
-                Customer c = new Customer();
-                c.accNumber = "<Account Number>";
-                c.description = "<Description>";
-                c.address = new string[] { "<Address 1>", "<Address 2>", "<Address 3>", "<Address 4>", "<Address 5>" };
-                c.Email = new string[] { "<Email Address>" };
-                includedCustomers.Clear();
-                includedCustomers.Add(c);
-            }
-
-            String defaultLocation = "K:\\Debtors System";
-            if (!Directory.Exists(defaultLocation)) { defaultLocation = "C:\\Pastel11"; }
-            String attachmentLocation = defaultLocation + "\\PA Attachments";
-            if (!Directory.Exists(attachmentLocation)) { Directory.CreateDirectory(attachmentLocation); }
-            SMS sms = new SMS();
-            if (!sendNow)
-            {
-                if (EmailDocs.Count > 0 && MessageBox.Show("This job has attachments. Display attachments now?", "View Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    foreach (Attachments a in EmailDocs)
-                    {
-                        int fileID;
-                        byte[] aByte = GetAttachment(a.FileName, 2, out fileID);
-                        OpenInAnotherApp(aByte, a.FileName);
-                    }
-                }
-            }
-            int cCount = 1;
-            byte[] fileStream = null;
-            String fileName = String.Empty;
-            if (!chkCustomer.Checked && rtfEditor.Enabled == true)
-            {
-                pdf.CreatePALetter(null, selectedBuilding, GetPM(), txtSubject.Text, DateTime.Now, html, null, justify, chkUseLetterhead.Checked, out fileStream); //.Replace("/", "\\")
-                String tempFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + selectedBuilding.Abbr + "_" + txtSubject.Text + "_" + cCount.ToString();
-                if (tempFileName.Length > 32) { tempFileName = tempFileName.Substring(0, 32); }
-                fileName = tempFileName + ".pdf";
-                fileName = fileName.Replace("\\", "_").Replace("/", "_");
-                string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
-                Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                fileName = r.Replace(fileName, "");
-            }
-
-            foreach (Customer sendCustomer in includedCustomers)
-            {
-                if (rtfEditor.Enabled == true && chkCustomer.Checked)
-                {
-                    fileStream = null;
-                    pdf.CreatePALetter(sendCustomer, selectedBuilding, GetPM(), txtSubject.Text, DateTime.Now, html, null, justify, chkUseLetterhead.Checked, out fileStream); //.Replace("/", "\\")
-                    String tempFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + sendCustomer.accNumber + "_" + txtSubject.Text + "_" + cCount.ToString();
-                    if (tempFileName.Length > 32) { tempFileName = tempFileName.Substring(0, 32); }
-                    fileName = tempFileName + ".pdf";
-                    fileName = fileName.Replace("\\", "_").Replace("/", "_");
-                    string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
-                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                    fileName = r.Replace(fileName, "");
-                }
-                cCount++;
-                if (!sendNow && rtfEditor.Enabled == true)
-                {
-                    bool onlyone = false;
-                    if (includedCustomers.Count > 0)
-                    {
-                        DialogResult drMsg = MessageBox.Show("Multiple customers have been selected. Click Yes to open all documents or No to open first document", "Documents", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (drMsg == DialogResult.No) { onlyone = true; }
-                    }
-                    OpenInAnotherApp(fileStream, fileName);
-                    if (onlyone) { break; }
-                }
-                else
-                {
-                    bool success = true;
-                    bool delay = includedCustomers.Count > 1;
-                    String mailBody = "";
-                    if (!String.IsNullOrEmpty(txtBody.Text))
-                    {
-                        mailBody = txtBody.Text;
-                    }
-                    else
-                    {
-                        mailBody = "Dear Owner" + Environment.NewLine + Environment.NewLine;
-                        mailBody += "Attached please find correspondence for your attention." + Environment.NewLine + Environment.NewLine;
-                    }
-                    mailBody += "Account #: " + sendCustomer.accNumber + ". For any queries on your account, please contact " + Controller.user.name + " on email: " + Controller.user.email + ", tel: " + Controller.user.phone + "." + Environment.NewLine + Environment.NewLine;
-                    mailBody += "Regards" + Environment.NewLine;
-                    mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
-                    mailBody += "You're in good hands";
-                    txtStatus.Text += "Creating documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-
-                    List<String> attachments = new List<string>();
-                    Dictionary<String, byte[]> liveAttachments = new Dictionary<string, byte[]>();
-                    if (HasLetter() && !String.IsNullOrEmpty(fileName) && fileStream != null)
-                    {
-                        if (CreateDocument(attachmentLocation, fileName, fileStream, out status))
-                        {
-                            attachments.Add(Path.Combine(attachmentLocation, fileName));
-                            try { liveAttachments.Add(fileName, fileStream); }
-                            catch { }
-                        }
-                    }
-
-                    foreach (Attachments a in EmailDocs)
-                    {
-                        int fileID;
-                        byte[] aByte = GetAttachment(a.FileName, 2, out fileID);
-                        if (CreateDocument(attachmentLocation, a.FileName, aByte, out status))
-                        {
-                            attachments.Add(Path.Combine(attachmentLocation, a.FileName));
-                            try { liveAttachments.Add(a.FileName, aByte); }
-                            catch { }
-                        }
-                    }
-
-                    SMSMessage m = new SMSMessage();
-                    if (!String.IsNullOrEmpty(txtSMS.Text.Trim()) && !String.IsNullOrEmpty(sendCustomer.CellPhone))
-                    {
-                        m.billable = chkBill.Checked;
-                        m.building = selectedBuilding.Abbr;
-                        m.customer = sendCustomer.accNumber;
-                        m.message = txtSMS.Text;
-                        m.number = sendCustomer.CellPhone;
-                        m.sender = Controller.user.id.ToString();
-                        sms.SendMessage(m, !delay, out status);
-                    }
-
-                    if (attachments.Count > 0)
-                    {
-                        String insertStatus;
-                        bool print = false;
-                        int cEmailCount = sendCustomer.Email.Length;
-                        foreach (String cEmail in sendCustomer.Email) { if (String.IsNullOrEmpty(cEmail)) { cEmailCount--; } }
-                        print = cEmailCount == 0;
-
-                        if (chkBuilding.Checked && cmbFolder.SelectedItem != null)
-                        {
-                            txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                            foreach (String attach in attachments)
-                            {
-                                if (ftpClient.Upload(attach, ftpClient.WorkingDirectory + "/" + Path.GetFileName(attach), false))
-                                {
-                                    txtStatus.Text += Path.GetFileName(attach) + " uploaded: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                }
-                                else
-                                {
-                                    txtStatus.Text += "Error uploading " + Path.GetFileName(attach) + ": " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                    success = false;
-                                    MessageBox.Show("Error processing...");
-                                    return;
-                                }
-                            }
-                            txtStatus.Text += "Completed uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                        }
-
-                        if (!print)
-                        {
-                            txtStatus.Text += "Setting up email: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-
-                            String cc = String.IsNullOrEmpty(txtCC.Text) ? " " : txtCC.Text;
-                            String bcc = String.IsNullOrEmpty(txtBCC.Text) ? " " : txtBCC.Text;
-                            if (delay)
-                            {
-                                if (Controller.user.id != 1)
-                                {
-                                    bool insertSuccess = dataHandler.InsertLetter(selectedBuilding.PM, sendCustomer.Email, txtSubject.Text + ": " + sendCustomer.accNumber + " " + DateTime.Now.ToString(), mailBody, true, cc, bcc, false, attachments.ToArray(), sendCustomer.accNumber, out insertStatus);
-                                    if (!insertSuccess)
-                                    {
-                                        MessageBox.Show("Error processing..." + insertStatus);
-                                        return;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (!Mailer.SendMail(selectedBuilding.PM, sendCustomer.Email, cc, bcc, txtSubject.Text, mailBody, false, out status, liveAttachments))
-                                {
-                                    MessageBox.Show("Error sending mail to " + sendCustomer.Email[0] + ": " + status);
-                                    return;
-                                }
-                                else
-                                {
-                                    txtStatus.Text += "Mail sent: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                }
-                                if (chkInbox.Checked)
-                                {
-                                    txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                    foreach (KeyValuePair<String, byte[]> printAttachment in liveAttachments)
-                                    {
-                                        String uploadFileName = Path.Combine(attachmentLocation, printAttachment.Key);
-                                        File.WriteAllBytes(uploadFileName, printAttachment.Value);
-                                        String actFileTitle = Path.GetFileNameWithoutExtension(uploadFileName);
-                                        String actFile = Path.GetFileName(uploadFileName);
-                                        try
-                                        {
-                                            MySqlConnector mySqlConn = new MySqlConnector();
-                                            mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, sendCustomer.accNumber, sendCustomer.Email);
-                                            Classes.Sftp ftpClient = new Classes.Sftp(null, true);
-                                            ftpClient.Upload(uploadFileName, actFile, false);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            MessageBox.Show("Error uploading documents..." + ex.Message);
-                                            return;
-                                        }
-                                    }
-                                    txtStatus.Text += "Completed Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                }
-                            }
-                        }
-                        else if (!chkDisablePrint.Checked)
-                        {
-                            txtStatus.Text += "Printing documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                            foreach (String attachment in attachments) { SendToPrinter(attachment); }
-                            txtStatus.Text += "Completed printing documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Nothing to print or send");
-                    }
-                }
-            }
-            this.Cursor = Cursors.Arrow;
-            if (sendNow)
-            {
-                String updateJobQuery = "UPDATE tblPMJob SET status = 'APPROVED', completedate = getdate() WHERE id = " + jobID.ToString();
-                if (dataHandler.SetData(updateJobQuery, null, out status) > 0)
-                {
-                    MessageBox.Show("Processing complete");
-                }
-            }
+            return (dsHasLetter != null && dsHasLetter.Tables.Count > 0 && dsHasLetter.Tables[0].Rows.Count > 0);
         }
 
         private void ProcessDocuments(bool sendNow)
@@ -1243,16 +936,11 @@ namespace Astrodon.Controls
                     {
                         if (c.accNumber == jAcc.Account)
                         {
-                            try { c.Email[0] = jAcc.sEmail1 ? jAcc.email1 : String.Empty; }
-                            catch { }
-                            try { c.Email[1] = jAcc.sEmail2 ? jAcc.email2 : String.Empty; }
-                            catch { }
-                            try { c.Email[2] = jAcc.sEmail3 ? jAcc.email3 : String.Empty; }
-                            catch { }
-                            try { c.Email[3] = jAcc.sEmail4 ? jAcc.email4 : String.Empty; }
-                            catch { }
-                            try { c.CellPhone = jAcc.sCell ? jAcc.cell : String.Empty; }
-                            catch { }
+                            try { c.Email[0] = jAcc.sEmail1 ? jAcc.email1 : String.Empty; } catch { }
+                            try { c.Email[1] = jAcc.sEmail2 ? jAcc.email2 : String.Empty; } catch { }
+                            try { c.Email[2] = jAcc.sEmail3 ? jAcc.email3 : String.Empty; } catch { }
+                            try { c.Email[3] = jAcc.sEmail4 ? jAcc.email4 : String.Empty; } catch { }
+                            try { c.CellPhone = jAcc.sCell ? jAcc.cell : String.Empty; } catch { }
                             if (!includedCustomers.Contains(c)) { includedCustomers.Add(c); }
                             selectedCustomers++;
                             break;
@@ -1263,11 +951,13 @@ namespace Astrodon.Controls
 
             if (includedCustomers.Count == 0)
             {
-                Customer c = new Customer();
-                c.accNumber = "<Account Number>";
-                c.description = "<Description>";
-                c.address = new string[] { "<Address 1>", "<Address 2>", "<Address 3>", "<Address 4>", "<Address 5>" };
-                c.Email = new string[] { "<Email Address>" };
+                Customer c = new Customer
+                {
+                    accNumber = "<Account Number>",
+                    description = "<Description>",
+                    address = new string[] { "<Address 1>", "<Address 2>", "<Address 3>", "<Address 4>", "<Address 5>" },
+                    Email = new string[] { "<Email Address>" }
+                };
                 includedCustomers.Clear();
                 includedCustomers.Add(c);
             }
@@ -1276,7 +966,7 @@ namespace Astrodon.Controls
             if (!Directory.Exists(defaultLocation)) { defaultLocation = "C:\\Pastel11"; }
             String attachmentLocation = defaultLocation + "\\PA Attachments";
             if (!Directory.Exists(attachmentLocation)) { Directory.CreateDirectory(attachmentLocation); }
-            SMS sms = new SMS();
+            SMS smsSender = new SMS();
             if (!sendNow)
             {
                 if (EmailDocs.Count > 0 && MessageBox.Show("This job has attachments. Display attachments now?", "View Document", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -1382,7 +1072,7 @@ namespace Astrodon.Controls
                         m.message = txtSMS.Text;
                         m.number = sendCustomer.CellPhone;
                         m.sender = Controller.user.id.ToString();
-                        sms.SendMessage(m, !delay, out status);
+                        smsSender.SendMessage(m, !delay, out status);
                     }
 
                     if (attachments.Count > 0)
@@ -1517,7 +1207,7 @@ namespace Astrodon.Controls
         }
 
         private void SendToPrinter(String fileName)
-        { //C:\statement.pdf
+        {
             if (!printerSet)
             {
                 frmPrintDialog printDialog = new frmPrintDialog();
@@ -1530,13 +1220,18 @@ namespace Astrodon.Controls
                 }
             }
 
-            ProcessStartInfo info = new ProcessStartInfo();
-            info.Verb = "print";
-            info.FileName = fileName;
-            Process p = new Process();
-            p.StartInfo = info;
-            p.Start();
-            System.Threading.Thread.Sleep(5000);
+            using (Process p = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    Verb = "print",
+                    FileName = fileName
+                }
+            })
+            {
+                p.Start();
+                System.Threading.Thread.Sleep(5000);
+            }
         }
 
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
@@ -1719,33 +1414,35 @@ namespace Astrodon.Controls
 
         private void ctxInsertImage_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "";
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
-            String sep = String.Empty;
-            foreach (ImageCodecInfo c in codecs)
+            using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                String codecName = c.CodecName.Substring(8).Replace("Codec", "Files").Trim();
-                ofd.Filter = String.Format("{0}{1}{2} ({3})|{3}", ofd.Filter, sep, codecName, c.FilenameExtension);
-                sep = "|";
-            }
-            ofd.Filter = String.Format("{0}{1}{2} ({3})|{3}", ofd.Filter, sep, "All Files", "*.*");
-            if (ofd.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(ofd.FileName))
-            {
-                Image image = Image.FromFile(ofd.FileName);
-                int orgHeight = image.Height;
-                int orgWidth = image.Width;
-                int rtbWidth = rtfEditor.Width - 15;
-                Bitmap bmp = new Bitmap(image);
-                if (orgWidth > rtbWidth)
+                ofd.Filter = "";
+                ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+                String sep = String.Empty;
+                foreach (ImageCodecInfo c in codecs)
                 {
-                    double ratio = (double)rtbWidth / (double)orgWidth;
-                    double nh = ratio * (double)orgHeight;
-                    int newHeight = (int)nh;
-                    bmp = new Bitmap(image, new Size(rtbWidth, newHeight));
+                    String codecName = c.CodecName.Substring(8).Replace("Codec", "Files").Trim();
+                    ofd.Filter = String.Format("{0}{1}{2} ({3})|{3}", ofd.Filter, sep, codecName, c.FilenameExtension);
+                    sep = "|";
                 }
-                Clipboard.SetImage(bmp);
-                rtfEditor.Paste();
+                ofd.Filter = String.Format("{0}{1}{2} ({3})|{3}", ofd.Filter, sep, "All Files", "*.*");
+                if (ofd.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(ofd.FileName))
+                {
+                    Image image = Image.FromFile(ofd.FileName);
+                    int orgHeight = image.Height;
+                    int orgWidth = image.Width;
+                    int rtbWidth = rtfEditor.Width - 15;
+                    Bitmap bmp = new Bitmap(image);
+                    if (orgWidth > rtbWidth)
+                    {
+                        double ratio = (double)rtbWidth / (double)orgWidth;
+                        double nh = ratio * (double)orgHeight;
+                        int newHeight = (int)nh;
+                        bmp = new Bitmap(image, new Size(rtbWidth, newHeight));
+                    }
+                    Clipboard.SetImage(bmp);
+                    rtfEditor.Paste();
+                }
             }
         }
 
@@ -1905,38 +1602,40 @@ namespace Astrodon.Controls
 
         private void insertSupportingDocumentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Forms.frmSupport supportF = new Forms.frmSupport(supportDocs);
-            supportF.ShowDialog();
-            if (supportF.outFileID != 0)
+            using (Forms.frmSupport supportF = new Forms.frmSupport(supportDocs))
             {
-                String fileQuery = "SELECT fileContent FROM tblAttachments WHERE id = " + supportF.outFileID.ToString();
-                DataSet dsFile = dataHandler.GetData(fileQuery, null, out status);
-                try
+                supportF.ShowDialog();
+                if (supportF.outFileID != 0)
                 {
-                    if (dsFile != null && dsFile.Tables.Count > 0 && dsFile.Tables[0].Rows.Count > 0)
+                    String fileQuery = "SELECT fileContent FROM tblAttachments WHERE id = " + supportF.outFileID.ToString();
+                    DataSet dsFile = dataHandler.GetData(fileQuery, null, out status);
+                    try
                     {
-                        DataRow drFile = dsFile.Tables[0].Rows[0];
-                        byte[] file = (byte[])drFile["fileContent"];
-                        MemoryStream ms = new MemoryStream(file);
-                        Image image = Image.FromStream(ms);
-                        int orgHeight = image.Height;
-                        int orgWidth = image.Width;
-                        int rtbWidth = rtfEditor.Width - 15;
-                        Bitmap bmp = new Bitmap(image);
-                        if (orgWidth > rtbWidth)
+                        if (dsFile != null && dsFile.Tables.Count > 0 && dsFile.Tables[0].Rows.Count > 0)
                         {
-                            double ratio = (double)rtbWidth / (double)orgWidth;
-                            double nh = ratio * (double)orgHeight;
-                            int newHeight = (int)nh;
-                            bmp = new Bitmap(image, new Size(rtbWidth, newHeight));
+                            DataRow drFile = dsFile.Tables[0].Rows[0];
+                            byte[] file = (byte[])drFile["fileContent"];
+                            MemoryStream ms = new MemoryStream(file);
+                            Image image = Image.FromStream(ms);
+                            int orgHeight = image.Height;
+                            int orgWidth = image.Width;
+                            int rtbWidth = rtfEditor.Width - 15;
+                            Bitmap bmp = new Bitmap(image);
+                            if (orgWidth > rtbWidth)
+                            {
+                                double ratio = (double)rtbWidth / (double)orgWidth;
+                                double nh = ratio * (double)orgHeight;
+                                int newHeight = (int)nh;
+                                bmp = new Bitmap(image, new Size(rtbWidth, newHeight));
+                            }
+                            Clipboard.SetImage(bmp);
+                            rtfEditor.Paste();
                         }
-                        Clipboard.SetImage(bmp);
-                        rtfEditor.Paste();
                     }
-                }
-                catch
-                {
-                    MessageBox.Show("Cannot embed this file into the document", "Insert File", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    catch
+                    {
+                        MessageBox.Show("Cannot embed this file into the document", "Insert File", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
             }
         }
@@ -1945,13 +1644,31 @@ namespace Astrodon.Controls
         {
             if (!String.IsNullOrEmpty(rtfEditor.Rtf) && !String.IsNullOrEmpty(txtLetter.Text))
             {
-                String templateQuery = "INSERT INTO tblTemplates(buildingID, templateName, templateContent)";
-                templateQuery += " VALUES(@buildingID, @templateName, @templateContent)";
                 Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-                sqlParms.Add("@buildingID", selectedBuilding.ID);
-                sqlParms.Add("@templateName", txtLetter.Text);
-                sqlParms.Add("@templateContent", rtfEditor.Rtf);
-                if (dataHandler.SetData(templateQuery, sqlParms, out status) > 0)
+                String templateQuery = String.Empty;
+                List<LetterTemplates> lts = templates.Where(c => c.title == txtLetter.Text && c.buildingID == selectedBuilding.ID).ToList();
+                if (lts.Count > 1)
+                {
+                    string deleteQuery = "DELETE FROM tblTemplates WHERE templateName = '" + txtLetter.Text + "' AND buildingID = " + selectedBuilding.ID.ToString();
+                    dataHandler.SetData(deleteQuery, null, out status);
+                    lts.Clear();
+                }
+                if (lts.Count == 1)
+                {
+                    int ltID = Convert.ToInt16(lts[0].id);
+                    templateQuery = "UPDATE tblTemplates SET templateContent = @templateContent WHERE id = @id";
+                    sqlParms.Add("@id", ltID);
+                    sqlParms.Add("@templateContent", rtfEditor.Rtf);
+                }
+                else
+                {
+                    templateQuery = "INSERT INTO tblTemplates(buildingID, templateName, templateContent)";
+                    templateQuery += " VALUES(@buildingID, @templateName, @templateContent)";
+                    sqlParms.Add("@buildingID", selectedBuilding.ID);
+                    sqlParms.Add("@templateName", txtLetter.Text);
+                    sqlParms.Add("@templateContent", rtfEditor.Rtf);
+                }
+                if (!String.IsNullOrEmpty(templateQuery) && dataHandler.SetData(templateQuery, sqlParms, out status) > 0)
                 {
                     LoadTemplates();
                 }
@@ -2003,8 +1720,6 @@ namespace Astrodon.Controls
             e.Cancel = !e.TabPage.Enabled;
         }
 
-        private bool justify = false;
-
         private void btnJustify_Click(object sender, EventArgs e)
         {
             justify = !justify;
@@ -2040,14 +1755,7 @@ namespace Astrodon.Controls
             {
                 try
                 {
-                    if (!String.IsNullOrEmpty(jc.email1) && jc.email1 != "" && chkEmail1.Checked)
-                    {
-                        jc.sEmail1 = true;
-                    }
-                    else if (!chkEmail1.Checked)
-                    {
-                        jc.sEmail1 = false;
-                    }
+                    if (!String.IsNullOrEmpty(jc.email1) && jc.email1 != "" && chkEmail1.Checked) { jc.sEmail1 = true; } else if (!chkEmail1.Checked) { jc.sEmail1 = false; }
                 }
                 catch { }
             }
@@ -2060,14 +1768,7 @@ namespace Astrodon.Controls
             {
                 try
                 {
-                    if (!String.IsNullOrEmpty(jc.email2) && jc.email2 != "" && chkEmail2.Checked)
-                    {
-                        jc.sEmail2 = true;
-                    }
-                    else if (!chkEmail2.Checked)
-                    {
-                        jc.sEmail2 = false;
-                    }
+                    if (!String.IsNullOrEmpty(jc.email2) && jc.email2 != "" && chkEmail2.Checked) { jc.sEmail2 = true; } else if (!chkEmail2.Checked) { jc.sEmail2 = false; }
                 }
                 catch { }
             }
@@ -2080,14 +1781,7 @@ namespace Astrodon.Controls
             {
                 try
                 {
-                    if (!String.IsNullOrEmpty(jc.email3) && jc.email3 != "" && chkEmail3.Checked)
-                    {
-                        jc.sEmail3 = true;
-                    }
-                    else if (!chkEmail3.Checked)
-                    {
-                        jc.sEmail3 = false;
-                    }
+                    if (!String.IsNullOrEmpty(jc.email3) && jc.email3 != "" && chkEmail3.Checked) { jc.sEmail3 = true; } else if (!chkEmail3.Checked) { jc.sEmail3 = false; }
                 }
                 catch { }
             }
@@ -2100,14 +1794,7 @@ namespace Astrodon.Controls
             {
                 try
                 {
-                    if (!String.IsNullOrEmpty(jc.email4) && jc.email4 != "" && chkEmail4.Checked)
-                    {
-                        jc.sEmail4 = true;
-                    }
-                    else if (!chkEmail4.Checked)
-                    {
-                        jc.sEmail4 = false;
-                    }
+                    if (!String.IsNullOrEmpty(jc.email4) && jc.email4 != "" && chkEmail4.Checked) { jc.sEmail4 = true; } else if (!chkEmail4.Checked) { jc.sEmail4 = false; }
                 }
                 catch { }
             }
@@ -2120,23 +1807,11 @@ namespace Astrodon.Controls
             {
                 try
                 {
-                    if (!String.IsNullOrEmpty(jc.cell) && jc.cell != "" && chkSMS.Checked)
-                    {
-                        jc.sCell = true;
-                    }
-                    else if (!chkSMS.Checked)
-                    {
-                        jc.sCell = false;
-                    }
+                    if (!String.IsNullOrEmpty(jc.cell) && jc.cell != "" && chkSMS.Checked) { jc.sCell = true; } else if (!chkSMS.Checked) { jc.sCell = false; }
                 }
                 catch { }
             }
             dgCustomers.Invalidate();
         }
-    }
-
-    public class Attachments
-    {
-        public String FileName { get; set; }
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace Astrodon {
-    partial class usrIndStatements {
+﻿namespace Astrodon
+{
+    partial class usrIndStatements
+    {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -9,8 +11,10 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing) {
-            if (disposing && (components != null)) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -22,7 +26,8 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             this.stmtDatePicker = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -52,7 +57,6 @@
             this.stmtDatePicker.Name = "stmtDatePicker";
             this.stmtDatePicker.Size = new System.Drawing.Size(108, 20);
             this.stmtDatePicker.TabIndex = 28;
-            this.stmtDatePicker.ValueChanged += new System.EventHandler(this.stmtDatePicker_ValueChanged);
             // 
             // label3
             // 
@@ -101,7 +105,6 @@
             this.btnUpload.TabIndex = 23;
             this.btnUpload.Text = "Select File";
             this.btnUpload.UseVisualStyleBackColor = true;
-            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
             // 
             // txtAttachment
             // 

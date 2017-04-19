@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using Astrodon.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Astrodon
@@ -72,23 +75,28 @@ namespace Astrodon
             {
                 building = buildings[cmbBuilding.SelectedIndex];
                 customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
-                txtAccount.Text = txtAddress1.Text = txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = txtCell.Text = txtContact.Text = txtDescription.Text = txtEmail.Text = txtFax.Text = txtTelephone.Text = String.Empty;
+                txtAccount.Text = txtAddress1.Text = txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = String.Empty;
+                txtCell.Text = txtContact.Text = txtDescription.Text = txtEmail.Text = txtFax.Text = txtTelephone.Text = String.Empty;
                 customer = null;
                 ClearCustomer();
                 dgTransactions.DataSource = null;
                 LoadCustomers(-1);
-                if (categories != null) { categories.Clear(); }
                 categories = Controller.pastel.GetCustomerCategories(building.DataPath);
-                List<Categories> myCats = new List<Categories>();
-                Categories stdCat = new Categories();
-                stdCat.categoryID = 0;
-                stdCat.CategoryName = "None / Standard";
+                Categories stdCat = new Categories
+                {
+                    categoryID = 0,
+                    CategoryName = "None / Standard"
+                };
                 categories.Add(stdCat.categoryID, stdCat.CategoryName);
+
+                List<Categories> myCats = new List<Categories>();
                 foreach (KeyValuePair<int, String> category in categories)
                 {
-                    Categories cat = new Categories();
-                    cat.categoryID = category.Key;
-                    cat.CategoryName = category.Value;
+                    Categories cat = new Categories
+                    {
+                        categoryID = category.Key,
+                        CategoryName = category.Value
+                    };
                     myCats.Add(cat);
                 }
                 cmbCategory.DataSource = myCats;
@@ -97,12 +105,6 @@ namespace Astrodon
                 cmbCategory.SelectedIndex = -1;
             }
             catch { }
-        }
-
-        private class Categories
-        {
-            public int categoryID { get; set; }
-            public String CategoryName { get; set; }
         }
 
         private void ClearCustomer()
@@ -146,23 +148,25 @@ namespace Astrodon
                 txtDescription.Text = customer.description;
                 String email = String.Empty;
                 String emailTo = String.Empty;
+                var builder = new System.Text.StringBuilder();
+                builder.Append(emailTo);
                 foreach (String cemail in customer.Email)
                 {
                     if (!String.IsNullOrEmpty(cemail) && !cemail.Contains("imp.ad-one"))
                     {
                         email = cemail;
-                        emailTo += cemail + ";";
+                        builder.Append(cemail + ";");
                         break;
                     }
                 }
+                emailTo = builder.ToString();
                 txtEmail.Text = email;
                 txtEmailTo.Text = emailTo;
                 txtFax.Text = customer.Fax;
                 txtTelephone.Text = customer.Telephone;
                 String category;
                 txtCategory.Text = (categories.TryGetValue(int.Parse(customer.category), out category) ? category : "-");
-                try { cmbCategory.SelectedValue = int.Parse(customer.category); }
-                catch { }
+                try { cmbCategory.SelectedValue = int.Parse(customer.category); } catch { }
                 LoadTransactions();
                 LoadDocuments();
                 LoadAddress();
@@ -190,10 +194,8 @@ namespace Astrodon
                 foreach (AdditionalAddress aa in aas)
                 {
                     TabPage tbAA = new TabPage();
-                    Panel p = new Panel();
-                    p.Dock = DockStyle.Fill;
-                    Astrodon.Controls.usrDelAddress delControl = new Controls.usrDelAddress(aa);
-                    delControl.Dock = DockStyle.Fill;
+                    Panel p = new Panel { Dock = DockStyle.Fill };
+                    Astrodon.Controls.usrDelAddress delControl = new Controls.usrDelAddress(aa) { Dock = DockStyle.Fill };
                     p.Controls.Add(delControl);
                     tbAA.Controls.Add(p);
                     tbAA.Text = "Additional Address " + addCount.ToString();
@@ -215,12 +217,14 @@ namespace Astrodon
             {
                 foreach (DataRow drRem in dsRem.Tables[0].Rows)
                 {
-                    Reminder r = new Reminder();
-                    r.action = bool.Parse(drRem["action"].ToString());
-                    r.User = drRem["name"].ToString();
-                    r.id = int.Parse(drRem["id"].ToString());
-                    r.note = drRem["remNote"].ToString();
-                    r.remDate = DateTime.Parse(drRem["remDate"].ToString());
+                    Reminder r = new Reminder
+                    {
+                        action = bool.Parse(drRem["action"].ToString()),
+                        User = drRem["name"].ToString(),
+                        id = int.Parse(drRem["id"].ToString()),
+                        note = drRem["remNote"].ToString(),
+                        remDate = DateTime.Parse(drRem["remDate"].ToString())
+                    };
                     bsReminders.Add(r);
                     dataGridView1.CellValueChanged -= dataGridView1_CellValueChanged;
                     dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
@@ -236,20 +240,21 @@ namespace Astrodon
             DataSet dsNotes = dh.GetData(noteQuery, null, out status);
             if (dsNotes != null && dsNotes.Tables.Count > 0 && dsNotes.Tables[0].Rows.Count > 0)
             {
+                var builder = new System.Text.StringBuilder();
+                builder.Append(txtNotes.Text);
                 foreach (DataRow drNote in dsNotes.Tables[0].Rows)
                 {
-                    txtNotes.Text += DateTime.Parse(drNote["noteDate"].ToString()).ToString("yyyy/MM/dd HH:mm") + ": " + drNote["notes"].ToString() + Environment.NewLine;
+                    builder.Append(DateTime.Parse(drNote["noteDate"].ToString()).ToString("yyyy/MM/dd HH:mm") + ": " + drNote["notes"].ToString() + Environment.NewLine);
                 }
+                txtNotes.Text = builder.ToString();
             }
         }
 
         private void LoadTransactions()
         {
-            int lineNo = 208;
             try
             {
                 this.Cursor = Cursors.WaitCursor;
-                lineNo = 211;
                 if (cmbCustomer.SelectedIndex >= 0)
                 {
                     customer = customers[cmbCustomer.SelectedIndex];
@@ -259,11 +264,9 @@ namespace Astrodon
                     MessageBox.Show("Please select a customer", "Statements", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
-                lineNo = 218;
                 double totalDue = 0;
                 String trnMsg;
                 List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(building, customer, DateTime.Now, out totalDue, out trnMsg);
-                lineNo = 221;
                 if (transactions != null && transactions.Count > 0)
                 {
                     dgTransactions.DataSource = transactions;
@@ -286,7 +289,6 @@ namespace Astrodon
             }
             catch (Exception ex)
             {
-                MessageBox.Show(lineNo.ToString());
             }
         }
 
@@ -330,18 +332,11 @@ namespace Astrodon
                 String status = String.Empty;
                 mySqlConn.ToggleConnection(true);
                 if (customer.Email.Length == 0) { customer.Email = new string[] { customer.accNumber + "@astrodon.co.za" }; }
-                String[] emails = new string[] { txtEmail.Text };
+                String[] emails = { txtEmail.Text };
                 bool updatedWeb = mySqlConn.UpdateWebCustomer(building.Name, customer.accNumber, emails);
                 //mySqlConn.InsertCustomer(building, txtAccount.Text, new string[] { txtEmail.Text }, out status);
                 mySqlConn.ToggleConnection(false);
-                if (!updatedWeb)
-                {
-                    MessageBox.Show("Pastel updated! Cannot save customer on web!");
-                }
-                else
-                {
-                    MessageBox.Show("Customer updated!");
-                }
+                MessageBox.Show(!updatedWeb ? "Pastel updated! Cannot save customer on web!" : "Customer updated!");
             }
             else
             {
@@ -412,9 +407,9 @@ namespace Astrodon
                         }
                         crDoc.file = drDoc["file"].ToString();
                         docs.Add(crDoc);
-                        docs.Sort(new DocComparer("Date", SortOrder.Ascending));
                     }
                 }
+                docs = docs.OrderBy(c => c.tstamp).ToList();
                 bsDocs.Clear();
                 foreach (CustomerDocument doc in docs) { bsDocs.Add(doc); }
             }
@@ -448,16 +443,18 @@ namespace Astrodon
                         }
                         else if (colIdx == 2)
                         {
-                            Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password");
-                            if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
+                            using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
                             {
-                                deleteFile(cd.file);
+                                if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
+                                {
+                                    deleteFile(cd.file);
+                                }
                             }
                         }
                         else
                         {
                             String status;
-                            String[] att = new String[] { Path.Combine(Path.GetTempPath(), cd.file) };
+                            String[] att = { Path.Combine(Path.GetTempPath(), cd.file) };
                             String[] emailTo = txtEmailTo.Text.Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                             if (Mailer.SendMail("noreply@astrodon.co.za", emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
                             {
@@ -542,7 +539,7 @@ namespace Astrodon
                 if (!String.IsNullOrEmpty(memberName))
                 {
                     sortOrder[colIdx] = !sortOrder[colIdx];
-                    docs.Sort(new DocComparer(memberName, (sortOrder[colIdx] ? SortOrder.Ascending : SortOrder.Descending)));
+                    docs.Sort(new DocsComparer(memberName, (sortOrder[colIdx] ? SortOrder.Ascending : SortOrder.Descending)));
                     bsDocs.Clear();
                     foreach (CustomerDocument doc in docs) { bsDocs.Add(doc); }
                 }
@@ -621,36 +618,10 @@ namespace Astrodon
             }
         }
 
-        private void label18_Click(object sender, EventArgs e)
+        private class Categories
         {
+            public int categoryID { get; set; }
+            public String CategoryName { get; set; }
         }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-        }
-    }
-
-    public class CustomerDocument
-    {
-        public DateTime tstamp { get; set; }
-
-        public String subject { get; set; }
-
-        public String title { get; set; }
-
-        public String file { get; set; }
-    }
-
-    public class Reminder
-    {
-        public int id { get; set; }
-
-        public String User { get; set; }
-
-        public DateTime remDate { get; set; }
-
-        public String note { get; set; }
-
-        public bool action { get; set; }
     }
 }

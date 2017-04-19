@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using Astrodon.Classes;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -42,8 +45,7 @@ namespace Astrodon.Controls
         private void LoadBuildings()
         {
             Buildings bManager = new Buildings(false);
-            buildings = bManager.buildings;
-            buildings.Sort(new BuildingComparer("Name", SortOrder.Ascending));
+            buildings = bManager.buildings.OrderBy(c => c.Name).ToList();
             cmbBuilding.DataSource = buildings;
             cmbBuilding.ValueMember = "Abbr";
             cmbBuilding.DisplayMember = "Name";
@@ -391,28 +393,22 @@ namespace Astrodon.Controls
                 {
                     DataRow dr = dsChecklist.Tables[0].Rows[0];
                     hasValues = true;
-                    PopulateCheckList(int.Parse(dr["accountingFees"].ToString()), int.Parse(dr["bankCharges"].ToString()), int.Parse(dr["bankInterest"].ToString()),
-                        int.Parse(dr["debtors"].ToString()), int.Parse(dr["deliveries"].ToString()), int.Parse(dr["sewageExpense"].ToString()),
-                        int.Parse(dr["sewage"].ToString()), int.Parse(dr["electricityExpense"].ToString()), int.Parse(dr["electricity"].ToString()),
-                        int.Parse(dr["electricityRecon"].ToString()), int.Parse(dr["levies"].ToString()), int.Parse(dr["gardens"].ToString()),
-                        int.Parse(dr["insurance"].ToString()), int.Parse(dr["interestPaid"].ToString()), int.Parse(dr["memberInterest"].ToString()),
-                        int.Parse(dr["investment"].ToString()), int.Parse(dr["managementFees"].ToString()), int.Parse(dr["meterReading"].ToString()),
-                        int.Parse(dr["municipal"].ToString()), int.Parse(dr["municipalAccounts"].ToString()), int.Parse(dr["assets"].ToString()),
-                        int.Parse(dr["otherIncome"].ToString()), int.Parse(dr["liabilities"].ToString()), int.Parse(dr["own"].ToString()),
-                        int.Parse(dr["owners"].ToString()), int.Parse(dr["post"].ToString()), int.Parse(dr["printing"].ToString()),
-                        int.Parse(dr["refuse"].ToString()), int.Parse(dr["repairs"].ToString()), int.Parse(dr["salaries"].ToString()),
-                        int.Parse(dr["security"].ToString()), int.Parse(dr["specialLevies"].ToString()), int.Parse(dr["sundy"].ToString()),
-                        int.Parse(dr["suppliers"].ToString()), int.Parse(dr["telephone"].ToString()), int.Parse(dr["trust"].ToString()),
-                        int.Parse(dr["waterExpense"].ToString()), int.Parse(dr["water"].ToString()), int.Parse(dr["waterRecon"].ToString()),
-                        dr["accountingFeesNotes"].ToString(), dr["sundryNotes"].ToString(), dr["assetsNotes"].ToString(), dr["bankChargesNotes"].ToString(),
-                    dr["bankInterestNotes"].ToString(), dr["debtorsNotes"].ToString(), dr["deliveriesNotes"].ToString(), dr["sewageNotes"].ToString(),
-                    dr["sewageExpenseNotes"].ToString(), dr["electricityExpenseNotes"].ToString(), dr["electricityNotes"].ToString(), dr["gardensNotes"].ToString(),
-                    dr["insuranceNotes"].ToString(), dr["interestPaidNotes"].ToString(), dr["memberInterestNotes"].ToString(), dr["investmentNotes"].ToString(),
-                    dr["leviesReason"].ToString(), dr["liabilitiesNotes"].ToString(), dr["managementFeesNotes"].ToString(), dr["meterReadingNotes"].ToString(),
-                    dr["municipalAccountsNotes"].ToString(), dr["municipalReason"].ToString(), dr["otherIncomeNotes"].ToString(), dr["ownNotes"].ToString(),
-                    dr["ownersNotes"].ToString(), dr["postNotes"].ToString(), dr["printingNotes"].ToString(), dr["refuseNotes"].ToString(), dr["repairsNotes"].ToString(),
-                    dr["salariesNotes"].ToString(), dr["securityNotes"].ToString(), dr["specialLevyNotes"].ToString(), dr["suppliersNotes"].ToString(),
-                    dr["telephoneNotes"].ToString(), dr["trustNotes"].ToString(), dr["waterExpenseNotes"].ToString(), dr["waterNotes"].ToString());
+                    PopulateCheckList(Convert.ToInt16(dr["accountingFees"]), Convert.ToInt16(dr["bankCharges"]), Convert.ToInt16(dr["bankInterest"]),
+                        Convert.ToInt16(dr["debtors"]), Convert.ToInt16(dr["deliveries"]), Convert.ToInt16(dr["sewageExpense"]), Convert.ToInt16(dr["sewage"]), Convert.ToInt16(dr["electricityExpense"]),
+                        Convert.ToInt16(dr["electricity"]), Convert.ToInt16(dr["electricityRecon"]), Convert.ToInt16(dr["levies"]), Convert.ToInt16(dr["gardens"]), Convert.ToInt16(dr["insurance"]),
+                        Convert.ToInt16(dr["interestPaid"]), Convert.ToInt16(dr["memberInterest"]), Convert.ToInt16(dr["investment"]), Convert.ToInt16(dr["managementFees"]), Convert.ToInt16(dr["meterReading"]),
+                        Convert.ToInt16(dr["municipal"]), Convert.ToInt16(dr["municipalAccounts"]), Convert.ToInt16(dr["assets"]), Convert.ToInt16(dr["otherIncome"]), Convert.ToInt16(dr["liabilities"]),
+                        Convert.ToInt16(dr["own"]), Convert.ToInt16(dr["owners"]), Convert.ToInt16(dr["post"]), Convert.ToInt16(dr["printing"]), Convert.ToInt16(dr["refuse"]), Convert.ToInt16(dr["repairs"]),
+                        Convert.ToInt16(dr["salaries"]), Convert.ToInt16(dr["security"]), Convert.ToInt16(dr["specialLevies"]), Convert.ToInt16(dr["sundy"]), Convert.ToInt16(dr["suppliers"]),
+                        Convert.ToInt16(dr["telephone"]), Convert.ToInt16(dr["trust"]), Convert.ToInt16(dr["waterExpense"]), Convert.ToInt16(dr["water"]), Convert.ToInt16(dr["waterRecon"]),
+                        dr["accountingFeesNotes"].ToString(), dr["sundryNotes"].ToString(), dr["assetsNotes"].ToString(), dr["bankChargesNotes"].ToString(), dr["bankInterestNotes"].ToString(),
+                        dr["debtorsNotes"].ToString(), dr["deliveriesNotes"].ToString(), dr["sewageNotes"].ToString(), dr["sewageExpenseNotes"].ToString(), dr["electricityExpenseNotes"].ToString(),
+                        dr["electricityNotes"].ToString(), dr["gardensNotes"].ToString(), dr["insuranceNotes"].ToString(), dr["interestPaidNotes"].ToString(), dr["memberInterestNotes"].ToString(),
+                        dr["investmentNotes"].ToString(), dr["leviesReason"].ToString(), dr["liabilitiesNotes"].ToString(), dr["managementFeesNotes"].ToString(), dr["meterReadingNotes"].ToString(),
+                        dr["municipalAccountsNotes"].ToString(), dr["municipalReason"].ToString(), dr["otherIncomeNotes"].ToString(), dr["ownNotes"].ToString(), dr["ownersNotes"].ToString(),
+                        dr["postNotes"].ToString(), dr["printingNotes"].ToString(), dr["refuseNotes"].ToString(), dr["repairsNotes"].ToString(), dr["salariesNotes"].ToString(), dr["securityNotes"].ToString(),
+                        dr["specialLevyNotes"].ToString(), dr["suppliersNotes"].ToString(), dr["telephoneNotes"].ToString(), dr["trustNotes"].ToString(), dr["waterExpenseNotes"].ToString(),
+                        dr["waterNotes"].ToString());
                 }
                 else
                 {
@@ -421,28 +417,22 @@ namespace Astrodon.Controls
                 if (dsPrev != null && dsPrev.Tables.Count > 0 && dsPrev.Tables[0].Rows.Count > 0)
                 {
                     DataRow dr = dsPrev.Tables[0].Rows[0];
-                    PopulatePrevCheckList(hasValues, int.Parse(dr["accountingFees"].ToString()), int.Parse(dr["bankCharges"].ToString()), int.Parse(dr["bankInterest"].ToString()),
-                        int.Parse(dr["debtors"].ToString()), int.Parse(dr["deliveries"].ToString()), int.Parse(dr["sewageExpense"].ToString()),
-                        int.Parse(dr["sewage"].ToString()), int.Parse(dr["electricityExpense"].ToString()), int.Parse(dr["electricity"].ToString()),
-                        int.Parse(dr["electricityRecon"].ToString()), int.Parse(dr["levies"].ToString()), int.Parse(dr["gardens"].ToString()),
-                        int.Parse(dr["insurance"].ToString()), int.Parse(dr["interestPaid"].ToString()), int.Parse(dr["memberInterest"].ToString()),
-                        int.Parse(dr["investment"].ToString()), int.Parse(dr["managementFees"].ToString()), int.Parse(dr["meterReading"].ToString()),
-                        int.Parse(dr["municipal"].ToString()), int.Parse(dr["municipalAccounts"].ToString()), int.Parse(dr["assets"].ToString()),
-                        int.Parse(dr["otherIncome"].ToString()), int.Parse(dr["liabilities"].ToString()), int.Parse(dr["own"].ToString()),
-                        int.Parse(dr["owners"].ToString()), int.Parse(dr["post"].ToString()), int.Parse(dr["printing"].ToString()),
-                        int.Parse(dr["refuse"].ToString()), int.Parse(dr["repairs"].ToString()), int.Parse(dr["salaries"].ToString()),
-                        int.Parse(dr["security"].ToString()), int.Parse(dr["specialLevies"].ToString()), int.Parse(dr["sundy"].ToString()),
-                        int.Parse(dr["suppliers"].ToString()), int.Parse(dr["telephone"].ToString()), int.Parse(dr["trust"].ToString()),
-                        int.Parse(dr["waterExpense"].ToString()), int.Parse(dr["water"].ToString()), int.Parse(dr["waterRecon"].ToString()),
-                        dr["accountingFeesNotes"].ToString(), dr["sundryNotes"].ToString(), dr["assetsNotes"].ToString(), dr["bankChargesNotes"].ToString(),
-                    dr["bankInterestNotes"].ToString(), dr["debtorsNotes"].ToString(), dr["deliveriesNotes"].ToString(), dr["sewageNotes"].ToString(),
-                    dr["sewageExpenseNotes"].ToString(), dr["electricityExpenseNotes"].ToString(), dr["electricityNotes"].ToString(), dr["gardensNotes"].ToString(),
-                    dr["insuranceNotes"].ToString(), dr["interestPaidNotes"].ToString(), dr["memberInterestNotes"].ToString(), dr["investmentNotes"].ToString(),
-                    dr["leviesReason"].ToString(), dr["liabilitiesNotes"].ToString(), dr["managementFeesNotes"].ToString(), dr["meterReadingNotes"].ToString(),
-                    dr["municipalAccountsNotes"].ToString(), dr["municipalReason"].ToString(), dr["otherIncomeNotes"].ToString(), dr["ownNotes"].ToString(),
-                    dr["ownersNotes"].ToString(), dr["postNotes"].ToString(), dr["printingNotes"].ToString(), dr["refuseNotes"].ToString(), dr["repairsNotes"].ToString(),
-                    dr["salariesNotes"].ToString(), dr["securityNotes"].ToString(), dr["specialLevyNotes"].ToString(), dr["suppliersNotes"].ToString(),
-                    dr["telephoneNotes"].ToString(), dr["trustNotes"].ToString(), dr["waterExpenseNotes"].ToString(), dr["waterNotes"].ToString());
+                    PopulatePrevCheckList(hasValues, Convert.ToInt16(dr["accountingFees"]), Convert.ToInt16(dr["bankCharges"]), Convert.ToInt16(dr["bankInterest"]),
+                        Convert.ToInt16(dr["debtors"]), Convert.ToInt16(dr["deliveries"]), Convert.ToInt16(dr["sewageExpense"]), Convert.ToInt16(dr["sewage"]), Convert.ToInt16(dr["electricityExpense"]),
+                        Convert.ToInt16(dr["electricity"]), Convert.ToInt16(dr["electricityRecon"]), Convert.ToInt16(dr["levies"]), Convert.ToInt16(dr["gardens"]), Convert.ToInt16(dr["insurance"]),
+                        Convert.ToInt16(dr["interestPaid"]), Convert.ToInt16(dr["memberInterest"]), Convert.ToInt16(dr["investment"]), Convert.ToInt16(dr["managementFees"]), Convert.ToInt16(dr["meterReading"]),
+                        Convert.ToInt16(dr["municipal"]), Convert.ToInt16(dr["municipalAccounts"]), Convert.ToInt16(dr["assets"]), Convert.ToInt16(dr["otherIncome"]), Convert.ToInt16(dr["liabilities"]),
+                        Convert.ToInt16(dr["own"]), Convert.ToInt16(dr["owners"]), Convert.ToInt16(dr["post"]), Convert.ToInt16(dr["printing"]), Convert.ToInt16(dr["refuse"]), Convert.ToInt16(dr["repairs"]),
+                        Convert.ToInt16(dr["salaries"]), Convert.ToInt16(dr["security"]), Convert.ToInt16(dr["specialLevies"]), Convert.ToInt16(dr["sundy"]), Convert.ToInt16(dr["suppliers"]),
+                        Convert.ToInt16(dr["telephone"]), Convert.ToInt16(dr["trust"]), Convert.ToInt16(dr["waterExpense"]), Convert.ToInt16(dr["water"]), Convert.ToInt16(dr["waterRecon"]),
+                        dr["accountingFeesNotes"].ToString(), dr["sundryNotes"].ToString(), dr["assetsNotes"].ToString(), dr["bankChargesNotes"].ToString(), dr["bankInterestNotes"].ToString(),
+                        dr["debtorsNotes"].ToString(), dr["deliveriesNotes"].ToString(), dr["sewageNotes"].ToString(), dr["sewageExpenseNotes"].ToString(), dr["electricityExpenseNotes"].ToString(),
+                        dr["electricityNotes"].ToString(), dr["gardensNotes"].ToString(), dr["insuranceNotes"].ToString(), dr["interestPaidNotes"].ToString(), dr["memberInterestNotes"].ToString(),
+                        dr["investmentNotes"].ToString(), dr["leviesReason"].ToString(), dr["liabilitiesNotes"].ToString(), dr["managementFeesNotes"].ToString(), dr["meterReadingNotes"].ToString(),
+                        dr["municipalAccountsNotes"].ToString(), dr["municipalReason"].ToString(), dr["otherIncomeNotes"].ToString(), dr["ownNotes"].ToString(), dr["ownersNotes"].ToString(),
+                        dr["postNotes"].ToString(), dr["printingNotes"].ToString(), dr["refuseNotes"].ToString(), dr["repairsNotes"].ToString(), dr["salariesNotes"].ToString(), dr["securityNotes"].ToString(),
+                        dr["specialLevyNotes"].ToString(), dr["suppliersNotes"].ToString(), dr["telephoneNotes"].ToString(), dr["trustNotes"].ToString(), dr["waterExpenseNotes"].ToString(),
+                        dr["waterNotes"].ToString());
                 }
             }
             else
@@ -453,123 +443,24 @@ namespace Astrodon.Controls
 
         private void ClearCheckList()
         {
-            chkAccExpN.Checked = false;
-            chkAccExpY.Checked = false;
-            chkBankExpN.Checked = false;
-            chkBankExpY.Checked = false;
-            chkBankIncN.Checked = false;
-            chkBankIncY.Checked = false;
-            chkDebtLiaN.Checked = false;
-            chkDebtLiaY.Checked = false;
-            chkDelExpN.Checked = false;
-            chkDelExpY.Checked = false;
-            chkDomExpN.Checked = false;
-            chkDomExpY.Checked = false;
-            chkDomIncN.Checked = false;
-            chkDomIncY.Checked = false;
-            chkElecExpN.Checked = false;
-            chkElecExpY.Checked = false;
-            chkElecIncN.Checked = false;
-            chkElecIncY.Checked = false;
-            chkElecInline.Checked = false;
-            chkElecOver.Checked = false;
-            chkElecUnder.Checked = false;
-            chkGardensExpN.Checked = false;
-            chkGardensExpY.Checked = false;
-            chkInsExpN.Checked = false;
-            chkInsExpY.Checked = false;
-            chkIntExpN.Checked = false;
-            chkIntExpY.Checked = false;
-            chkIntIncN.Checked = false;
-            chkIntIncY.Checked = false;
-            chkInvestAssN.Checked = false;
-            chkInvestAssY.Checked = false;
-            chkLeviesIncN.Checked = false;
-            chkLeviesIncY.Checked = false;
-            chkManExpN.Checked = false;
-            chkManExpY.Checked = false;
-            chkMeterExpN.Checked = false;
-            chkMeterExpY.Checked = false;
-            chkMunAssetN.Checked = false;
-            chkMunAssetY.Checked = false;
-            chkMunLiaN.Checked = false;
-            chkMunLiaY.Checked = false;
-            chkOtherAssN.Checked = false;
-            chkOtherAssY.Checked = false;
-            chkOtherIncN.Checked = false;
-            chkOtherIncY.Checked = false;
-            chkOtherLiaN.Checked = false;
-            chkOtherLiaY.Checked = false;
-            chkOwnAccAssN.Checked = false;
-            chkOwnAccAssY.Checked = false;
-            chkOwnLiaN.Checked = false;
-            chkOwnLiaY.Checked = false;
-            chkPostExpN.Checked = false;
-            chkPostExpY.Checked = false;
-            chkPrintExpN.Checked = false;
-            chkPrintExpY.Checked = false;
-            chkRefuseExpN.Checked = false;
-            chkRefuseExpY.Checked = false;
-            chkRepairsExpN.Checked = false;
-            chkRepairsExpY.Checked = false;
-            chkSalExpN.Checked = false;
-            chkSalExpY.Checked = false;
-            chkSecExpN.Checked = false;
-            chkSecExpY.Checked = false;
-            chkSpecialIncN.Checked = false;
-            chkSpecialIncY.Checked = false;
-            chkSunAssN.Checked = false;
-            chkSunAssY.Checked = false;
-            chkSunLiaN.Checked = false;
-            chkSunLiaY.Checked = false;
-            chkTelExpN.Checked = false;
-            chkTelExpY.Checked = false;
-            chkTrustAssN.Checked = false;
-            chkTrustAssY.Checked = false;
-            chkWaterExpN.Checked = false;
-            chkWaterExpY.Checked = false;
-            chkWaterIncN.Checked = false;
-            chkWaterIncY.Checked = false;
-            chkWaterInline.Checked = false;
-            chkWaterOver.Checked = false;
-            chkWaterUnder.Checked = false;
-            txtAccountFees.Text = String.Empty;
-            txtAccruals.Text = String.Empty;
-            txtAssets.Text = String.Empty;
-            txtBankCharges.Text = String.Empty;
-            txtBankIncome.Text = String.Empty;
-            txtDebtors.Text = String.Empty;
-            txtDeliveries.Text = String.Empty;
-            txtDomesticIncome.Text = String.Empty;
-            txtDomExpense.Text = String.Empty;
-            txtElectricity.Text = String.Empty;
-            txtElectricityIncome.Text = String.Empty;
-            txtGardens.Text = String.Empty;
-            txtInsurance.Text = String.Empty;
-            txtInterest.Text = String.Empty;
-            txtInterestIncome.Text = String.Empty;
-            txtInvestment.Text = String.Empty;
-            txtLevies.Text = String.Empty;
-            txtLiabilities.Text = String.Empty;
-            txtManagementFees.Text = String.Empty;
-            txtMeter.Text = String.Empty;
-            txtMunAcc.Text = String.Empty;
-            txtMunDep.Text = String.Empty;
-            txtOtherIncome.Text = String.Empty;
-            txtOwnAccount.Text = String.Empty;
-            txtOwnerDep.Text = String.Empty;
-            txtPost.Text = String.Empty;
-            txtPrinting.Text = String.Empty;
-            txtRefuse.Text = String.Empty;
-            txtRepairs.Text = String.Empty;
-            txtSalaries.Text = String.Empty;
-            txtSecurity.Text = String.Empty;
-            txtSpecialIncome.Text = String.Empty;
-            txtSuppliers.Text = String.Empty;
-            txtTelephone.Text = String.Empty;
-            txtTrust.Text = String.Empty;
-            txtWater.Text = String.Empty;
-            txtWaterIncome.Text = String.Empty;
+            chkAccExpN.Checked = chkAccExpY.Checked = chkBankExpN.Checked = chkBankExpY.Checked = chkBankIncN.Checked = chkBankIncY.Checked = chkDebtLiaN.Checked = false;
+            chkDebtLiaY.Checked = chkDelExpN.Checked = chkDelExpY.Checked = chkDomExpN.Checked = chkDomExpY.Checked = chkDomIncN.Checked = chkDomIncY.Checked = chkWaterUnder.Checked = false;
+            chkElecExpN.Checked = chkElecExpY.Checked = chkElecIncN.Checked = chkElecIncY.Checked = chkElecInline.Checked = chkElecOver.Checked = chkElecUnder.Checked = false;
+            chkGardensExpN.Checked = chkGardensExpY.Checked = chkInsExpN.Checked = chkInsExpY.Checked = chkIntExpN.Checked = chkIntExpY.Checked = chkIntIncN.Checked = chkIntIncY.Checked = false;
+            chkInvestAssN.Checked = chkInvestAssY.Checked = chkLeviesIncN.Checked = chkLeviesIncY.Checked = chkManExpN.Checked = chkManExpY.Checked = chkMeterExpN.Checked = false;
+            chkMeterExpY.Checked = chkMunAssetN.Checked = chkMunAssetY.Checked = chkMunLiaN.Checked = chkMunLiaY.Checked = chkOtherAssN.Checked = chkOtherAssY.Checked = false;
+            chkOtherIncN.Checked = chkOtherIncY.Checked = chkOtherLiaN.Checked = chkOtherLiaY.Checked = chkOwnAccAssN.Checked = chkOwnAccAssY.Checked = chkOwnLiaN.Checked = false;
+            chkOwnLiaY.Checked = chkPostExpN.Checked = chkPostExpY.Checked = chkPrintExpN.Checked = chkPrintExpY.Checked = chkRefuseExpN.Checked = chkRefuseExpY.Checked = false;
+            chkRepairsExpN.Checked = chkRepairsExpY.Checked = chkSalExpN.Checked = chkSalExpY.Checked = chkSecExpN.Checked = chkSecExpY.Checked = chkSpecialIncN.Checked = false;
+            chkSpecialIncY.Checked = chkSunAssN.Checked = chkSunAssY.Checked = chkSunLiaN.Checked = chkSunLiaY.Checked = chkTelExpN.Checked = chkTelExpY.Checked = chkWaterOver.Checked = false;
+            chkTrustAssN.Checked = chkTrustAssY.Checked = chkWaterExpN.Checked = chkWaterExpY.Checked = chkWaterIncN.Checked = chkWaterIncY.Checked = chkWaterInline.Checked = false;
+
+            txtAccountFees.Text = txtAccruals.Text = txtAssets.Text = txtBankCharges.Text = txtBankIncome.Text = txtDebtors.Text = txtDeliveries.Text = String.Empty;
+            txtDomesticIncome.Text = txtDomExpense.Text = txtElectricity.Text = txtElectricityIncome.Text = txtGardens.Text = txtInsurance.Text = txtInterest.Text = String.Empty;
+            txtInterestIncome.Text = txtInvestment.Text = txtLevies.Text = txtLiabilities.Text = txtManagementFees.Text = txtMeter.Text = txtMunAcc.Text = String.Empty;
+            txtMunDep.Text = txtOtherIncome.Text = txtOwnAccount.Text = txtOwnerDep.Text = txtPost.Text = txtPrinting.Text = txtRefuse.Text = String.Empty;
+            txtRepairs.Text = txtSalaries.Text = txtSecurity.Text = txtSpecialIncome.Text = txtSuppliers.Text = txtTelephone.Text = txtTrust.Text = String.Empty;
+            txtWater.Text = txtWaterIncome.Text = String.Empty;
         }
 
         private void PopulateCheckList(int accExp, int bankExp, int bankInc, int debtLia, int delExp, int domExp, int domInc, int elecExp, int elecInc, int elecRecover,

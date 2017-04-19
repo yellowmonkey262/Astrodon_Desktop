@@ -115,23 +115,27 @@
     </Compile>
     <Compile Include="Classes\Building.cs" />
     <Compile Include="Classes\CashDepositFee.cs" />
+    <Compile Include="Classes\ClearanceValues.cs" />
     <Compile Include="Classes\CommClient.cs" />
+    <Compile Include="Classes\Comparers.cs" />
     <Compile Include="Classes\Controller.cs" />
-    <Compile Include="Classes\Customer.cs" />
     <Compile Include="Classes\DataHandler.cs" />
+    <Compile Include="Classes\Detail.cs" />
     <Compile Include="Classes\FTP.cs" />
     <Compile Include="Classes\IMEvents.cs" />
     <Compile Include="Classes\LoadTransactions.cs" />
     <Compile Include="Classes\Mailer.cs" />
+    <Compile Include="Classes\MonthlyFinancials.cs" />
     <Compile Include="Classes\MySqlConnector.cs" />
+    <Compile Include="Classes\ParentDetail.cs" />
     <Compile Include="Classes\Pastel.cs" />
     <Compile Include="Classes\PDF.cs" />
     <Compile Include="Classes\PrintDGV.cs" />
+    <Compile Include="Classes\ReportWriter.cs" />
     <Compile Include="Classes\RtfConvertor.cs" />
     <Compile Include="Classes\SFTP.cs" />
     <Compile Include="Classes\SMS.cs" />
-    <Compile Include="Classes\SMSCustomers.cs" />
-    <Compile Include="Classes\Statement.cs" />
+    <Compile Include="Classes\Prompt.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\webreport.cs" />
@@ -379,6 +383,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Clearances.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Forms\CustomerDocument.cs" />
     <Compile Include="Forms\frmBuildingTrans.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -444,6 +449,12 @@
     </Compile>
     <Compile Include="Forms\frmPrompt.Designer.cs">
       <DependentUpon>frmPrompt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmReqTrans.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmReqTrans.Designer.cs">
+      <DependentUpon>frmReqTrans.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSupport.cs">
       <SubType>Form</SubType>
@@ -627,6 +638,9 @@
     <EmbeddedResource Include="Forms\frmPrompt.resx">
       <DependentUpon>frmPrompt.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmReqTrans.resx">
+      <DependentUpon>frmReqTrans.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSupport.resx">
       <DependentUpon>frmSupport.cs</DependentUpon>
     </EmbeddedResource>
@@ -782,6 +796,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ReportService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AstroLibrary\AstroLibrary.csproj">
+      <Project>{ce7d8e45-b945-4013-8633-c2add2ac8876}</Project>
+      <Name>AstroLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

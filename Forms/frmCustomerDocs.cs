@@ -1,60 +1,77 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Astrodon.Forms {
-
-    public partial class frmCustomerDocs : Form {
+namespace Astrodon.Forms
+{
+    public partial class frmCustomerDocs : Form
+    {
         private MySqlConnector mySql = new MySqlConnector();
         private BindingList<CustomerDocument> docs = new BindingList<CustomerDocument>();
         private Building building;
 
-        public frmCustomerDocs(Building Building) {
+        public frmCustomerDocs(Building Building)
+        {
             building = Building;
             InitializeComponent();
         }
 
-        private void frmCustomerDocs_Load(object sender, EventArgs e) {
+        private void frmCustomerDocs_Load(object sender, EventArgs e)
+        {
             this.Cursor = Cursors.WaitCursor;
             String status;
-            try {
+            try
+            {
                 DataSet dsFiles = mySql.GetCustomerDocs(building.Name, out status);
-                if (dsFiles != null && dsFiles.Tables.Count > 0 && dsFiles.Tables[0].Rows.Count > 0) {
-                    foreach (DataRow drFile in dsFiles.Tables[0].Rows) {
-                        CustomerDocument cd = new CustomerDocument();
-                        cd.Select = false;
-                        cd.FileID = drFile["uid"].ToString();
-                        cd.Customer = drFile["unitno"].ToString();
-                        cd.Title = drFile["title"].ToString();
-                        cd.FileName = drFile["file"].ToString();
-                        cd.Upload_Date = UnixTimeStampToDateTime(double.Parse(drFile["tstamp"].ToString()));
+                if (dsFiles != null && dsFiles.Tables.Count > 0 && dsFiles.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow drFile in dsFiles.Tables[0].Rows)
+                    {
+                        CustomerDocument cd = new CustomerDocument
+                        {
+                            Select = false,
+                            FileID = drFile["uid"].ToString(),
+                            Customer = drFile["unitno"].ToString(),
+                            Title = drFile["title"].ToString(),
+                            FileName = drFile["file"].ToString(),
+                            Upload_Date = UnixTimeStampToDateTime(double.Parse(drFile["tstamp"].ToString()))
+                        };
                         docs.Add(cd);
                     }
                     dgDocs.DataSource = docs;
-                } else {
+                }
+                else
+                {
                     MessageBox.Show(status);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message);
             }
             this.Cursor = Cursors.Arrow;
         }
 
-        public DateTime UnixTimeStampToDateTime(double unixTimeStamp) {
+        public DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
             // Unix timestamp is seconds past epoch
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
             return dtDateTime;
         }
 
-        private void btnDelete_Click(object sender, EventArgs e) {
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
             List<String> myFiles = new List<string>();
             List<String> myIDS = new List<string>();
-            foreach (CustomerDocument cd in docs) {
-                if (cd.Select) {
+            foreach (CustomerDocument cd in docs)
+            {
+                if (cd.Select)
+                {
                     myFiles.Add(cd.FileName);
                     myIDS.Add(cd.FileID);
                 }
@@ -67,12 +84,14 @@ namespace Astrodon.Forms {
             mySql.SetData(query, null, out status);
         }
 
-        private void TransferFiles(List<String> myFiles) {
+        private void TransferFiles(List<String> myFiles)
+        {
             String status;
             String buildPath = "Y:\\Buildings Managed\\" + building.Name;
             if (!Directory.Exists(buildPath)) { try { Directory.CreateDirectory(buildPath); } catch { } }
             Classes.Sftp transferClient = new Classes.Sftp(String.Empty, true);
-            foreach (String remoteFile in myFiles) {
+            foreach (String remoteFile in myFiles)
+            {
                 String fileName = remoteFile;
                 String localPath = Path.Combine(buildPath, fileName);
                 transferClient.Download(localPath, transferClient.WorkingDirectory + "//" + remoteFile, false, out status);
@@ -80,12 +99,15 @@ namespace Astrodon.Forms {
             }
         }
 
-        private void btnPurge_Click(object sender, EventArgs e) {
+        private void btnPurge_Click(object sender, EventArgs e)
+        {
             List<String> myFiles = new List<string>();
             List<String> myIDS = new List<string>();
             DateTime checkDate = DateTime.Now.AddMonths(-16);
-            foreach (CustomerDocument cd in docs) {
-                if (cd.Upload_Date <= checkDate) {
+            foreach (CustomerDocument cd in docs)
+            {
+                if (cd.Upload_Date <= checkDate)
+                {
                     myFiles.Add(cd.FileName);
                     myIDS.Add(cd.FileID);
                 }
@@ -98,32 +120,23 @@ namespace Astrodon.Forms {
             mySql.SetData(query, null, out status);
         }
 
-        private void dgDocs_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e) {
-            if (e.Button == System.Windows.Forms.MouseButtons.Right && e.ColumnIndex == 3 && e.RowIndex >= 0) {
-                try {
+        private void dgDocs_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right && e.ColumnIndex == 3 && e.RowIndex >= 0)
+            {
+                try
+                {
                     String localPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dgDocs.Rows[e.RowIndex].Cells[3].Value.ToString());
                     Classes.Sftp ftpClient = new Classes.Sftp(String.Empty, true);
                     String status;
                     ftpClient.Download(localPath, ftpClient.WorkingDirectory + "//" + dgDocs.Rows[e.RowIndex].Cells[3].Value.ToString(), false, out status);
                     System.Diagnostics.Process.Start(localPath);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     MessageBox.Show(ex.Message);
                 }
             }
         }
-    }
-
-    public class CustomerDocument {
-        public bool Select { get; set; }
-
-        public String FileID { get; set; }
-
-        public String Customer { get; set; }
-
-        public String Title { get; set; }
-
-        public DateTime Upload_Date { get; set; }
-
-        public String FileName { get; set; }
     }
 }

@@ -1,18 +1,44 @@
-﻿using PasSDK;
+﻿using Astro.Library.Entities;
+using Astrodon.Classes;
+using PasSDK;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Astrodon
 {
     public class Pastel
     {
         private PastelPartnerSDK SDK;
-        public String pastelDirectory;
         private short keyNumber = 0;
+        public String pastelDirectory;
+        public volatile bool runSearch = false;
+
+        #region Event Handler
+
+        public delegate void MessageHandler(object sender, MessageArgs e);
+
+        public event MessageHandler Message;
+
+        private void RaiseEvent(String message)
+        {
+            if (Message != null) { Message(this, new MessageArgs(message)); }
+        }
+
+        public delegate void CustomerFoundEventHandler(object sender, CustomerArgs e);
+
+        public event CustomerFoundEventHandler CustomerFound;
+
+        private void RaiseCustomerFoundEvent(Customer c, String b)
+        {
+            if (CustomerFound != null) { CustomerFound(this, new CustomerArgs(c, b)); }
+        }
+
+        #endregion Event Handler
 
         public Pastel()
         {
@@ -32,6 +58,8 @@ namespace Astrodon
             }
             SDK.SetLicense(lc, auth);
         }
+
+        #region Customer
 
         public List<Customer> AddCustomers(String buildKey, String buildPath)
         {
@@ -59,6 +87,10 @@ namespace Astrodon
                     foreach (String customer in customerStrings)
                     {
                         Customer newCustomer = new Customer(customer);
+                        String lastCrDate = customer.Split(new String[] { "|" }, StringSplitOptions.None)[66];
+                        String createDate = customer.Split(new String[] { "|" }, StringSplitOptions.None)[127];
+                        newCustomer.lastCrDate = convertDate(lastCrDate).ToString("yyyy/MM/dd");
+                        newCustomer.createDate = convertDate(createDate).ToString("yyyy/MM/dd");
                         newCustomer.SetDeliveryInfo(DeliveryInfo(newCustomer.accNumber));
                         customers.Add(newCustomer);
                     }
@@ -68,33 +100,9 @@ namespace Astrodon
                     MessageBox.Show("Pastel Add Customers: " + returner + " - " + records.ToString());
                 }
             }
-            customers.Sort(new CustomerComparer("AccNo", SortOrder.Ascending));
+            customers = customers.OrderBy(c => c.accNumber).ToList();
             return customers;
         }
-
-        #region Event Handler
-
-        public delegate void MessageHandler(object sender, MessageArgs e);
-
-        public event MessageHandler Message;
-
-        private void RaiseEvent(String message)
-        {
-            if (Message != null) { Message(this, new MessageArgs(message)); }
-        }
-
-        public delegate void CustomerFoundEventHandler(object sender, CustomerArgs e);
-
-        public event CustomerFoundEventHandler CustomerFound;
-
-        private void RaiseCustomerFoundEvent(Customer c, String b)
-        {
-            if (CustomerFound != null) { CustomerFound(this, new CustomerArgs(c, b)); }
-        }
-
-        #endregion Event Handler
-
-        public volatile bool runSearch = false;
 
         public void SearchCustomers(List<String> searchCriteria, Dictionary<String, String> buildings)
         {
@@ -121,6 +129,11 @@ namespace Astrodon
                             Parallel.ForEach(customerStrings, customer =>
                             {
                                 Customer newCustomer = new Customer(customer);
+                                String lastCrDate = customer.Split(new String[] { "|" }, StringSplitOptions.None)[66];
+                                String createDate = customer.Split(new String[] { "|" }, StringSplitOptions.None)[127];
+                                newCustomer.lastCrDate = convertDate(lastCrDate).ToString("yyyy/MM/dd");
+                                newCustomer.createDate = convertDate(createDate).ToString("yyyy/MM/dd");
+
                                 newCustomer.SetDeliveryInfo(DeliveryInfo(newCustomer.accNumber));
                                 bool foundCustomer = false;
                                 foreach (String searchCrit in searchCriteria)
@@ -195,7 +208,13 @@ namespace Astrodon
 
         public Customer GetOneCustomer(String buildPath, String accNumber)
         {
-            return new Customer(GetCustomer(buildPath, accNumber));
+            String customerString = GetCustomer(buildPath, accNumber);
+            Customer newCustomer = new Customer(customerString);
+            String lastCrDate = customerString.Split(new String[] { "|" }, StringSplitOptions.None)[66];
+            String createDate = customerString.Split(new String[] { "|" }, StringSplitOptions.None)[127];
+            newCustomer.lastCrDate = convertDate(lastCrDate).ToString("yyyy/MM/dd");
+            newCustomer.createDate = convertDate(createDate).ToString("yyyy/MM/dd");
+            return newCustomer;
         }
 
         public String GetCustomer(String buildPath, String accNumber)
@@ -360,6 +379,100 @@ namespace Astrodon
             // try { Email = delBits[13]; } catch { Email = ""; }
             return delBits;
         }
+
+        public Dictionary<int, String> GetCustomerCategories(String buildPath)
+        {
+            Dictionary<int, String> categories = new Dictionary<int, string>();
+            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            if (returner == "0")
+            {
+                try
+                {
+                    String fileName = "ACCDCAT";
+                    String keyValue = SDK.MKI(-1);
+                    returner = SDK.GetNearest(fileName, keyNumber, keyValue);
+                    if ((Regex.Matches(returner, "|").Count > 1) && (!returner.StartsWith("9|")))
+                    {
+                        String[] rBits = returner.Split(new String[] { "|" }, StringSplitOptions.None);
+                        if (!categories.ContainsKey(int.Parse(rBits[1]))) { categories.Add(int.Parse(rBits[1]), rBits[2]); }
+                    }
+                    while (!returner.StartsWith("9|"))
+                    {
+                        returner = SDK.GetNext(fileName, keyNumber);
+                        if ((Regex.Matches(returner, "|").Count > 1) && (!returner.StartsWith("9|")))
+                        {
+                            String[] rBits = returner.Split(new String[] { "|" }, StringSplitOptions.None);
+                            if (!categories.ContainsKey(int.Parse(rBits[1]))) { categories.Add(int.Parse(rBits[1]), rBits[2]); }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    returner = "error:" + ex.Message;
+                }
+            }
+            return categories;
+        }
+
+        public List<String> getNotes(String customerCode, String buildPath)
+        {
+            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            List<String> notes = new List<string>();
+            if (returner.Contains("99"))
+            {
+            }
+            else
+            {
+                short[] nTypes = new short[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+                try
+                {
+                    String fileName = "ACCNOTE";
+                    short keyNumber = 2;
+                    foreach (short nType in nTypes)
+                    {
+                        String keyValue = SDK.MKI(nType) + "|" + customerCode;
+                        String record = SDK.GetNearest(fileName, keyNumber, keyValue);
+                        if (record != "")
+                        {
+                            notes.Add(record);
+                            while (record != "")
+                            {
+                                record = SDK.GetNext(fileName, keyNumber);
+                                if (record != "") { notes.Add(record); }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.StackTrace);
+                }
+            }
+            return notes;
+        }
+
+        public String UpdateCustomer(String customer, String buildPath)
+        {
+            String pathReturner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = String.Empty;
+            if (pathReturner.Contains("99"))
+            {
+            }
+            else
+            {
+                returner = SDK.ImportCustomer(customer);
+                if (returner != "0")
+                {
+                    MessageBox.Show("Error updating customer:" + returner, "Pastel", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            return returner;
+        }
+
+        #endregion Customer
+
+        #region Transactions
 
         public List<Detail> GetTransactions(String buildPath, short period, String acc)
         {
@@ -576,102 +689,9 @@ namespace Astrodon
             return rs;
         }
 
-        public int GetPeriod(String buildPath)
-        {
-            int period = 0;
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
-            if (returner == "0")
-            {
-                try
-                {
-                    String fileName = "ACCUSER";
-                    String keyValue = "B";
-                    String response = SDK.GetNearest(fileName, 0, keyValue);
-                    String[] responseBits = response.Split(new String[] { "|" }, StringSplitOptions.None);
-                    if (responseBits.Length >= 83)
-                    {
-                        for (int i = 73; i <= 83; i++)
-                        {
-                            period = (int.Parse(responseBits[i]) > period ? int.Parse(responseBits[i]) : period);
-                        }
-                    }
-                    else
-                    {
-                        // MessageBox.Show(response);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    returner = "error:" + ex.Message;
-                }
-            }
-            else
-            {
-                // MessageBox.Show(returner);
-            }
-            return period;
-        }
+        #endregion Transactions
 
-        public String GetBankDetails(String buildPath)
-        {
-            String bankDetails = String.Empty;
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
-            if (returner == "0")
-            {
-                try
-                {
-                    String fileName = "ACCPRMDC";
-                    String keyValue = "0";
-                    String response = SDK.GetNearest(fileName, 0, keyValue);
-                    //MessageBox.Show(response);
-                    String[] responseBits = response.Split(new String[] { "|" }, StringSplitOptions.None);
-                    bankDetails = responseBits[17];
-                }
-                catch (Exception ex)
-                {
-                    bankDetails = ex.Message;
-                }
-            }
-            return bankDetails;
-        }
-
-        public Dictionary<String, String> GetCategories(String buildPath)
-        {
-            Dictionary<String, String> categories = new Dictionary<string, string>();
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
-            if (returner == "0")
-            {
-                try
-                {
-                    String fileName = "ACCDCAT";
-                    String keyValue = "001";
-                    String response = SDK.GetNearest(fileName, 0, keyValue);
-                    int cats = SDK.NumberOfRecords(fileName);
-                    if (response.StartsWith("0|"))
-                    {
-                        String[] responseBits = response.Split(new String[] { "|" }, StringSplitOptions.None);
-                        String categoryID = responseBits[1];
-                        String categoryName = responseBits[2];
-                        if (!categories.ContainsKey(categoryID)) { categories.Add(categoryID, categoryName); }
-                    }
-                    while (response.StartsWith("0|"))
-                    {
-                        response = SDK.GetNext(fileName, 0);
-                        if (response.StartsWith("0|"))
-                        {
-                            String[] responseBits = response.Split(new String[] { "|" }, StringSplitOptions.None);
-                            String categoryID = responseBits[1];
-                            String categoryName = responseBits[2];
-                            if (!categories.ContainsKey(categoryID)) { categories.Add(categoryID, categoryName); }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                }
-            }
-            return categories;
-        }
+        #region Accounts
 
         public String GetAccount(String buildPath)
         {
@@ -779,6 +799,10 @@ namespace Astrodon
             return accounts;
         }
 
+        #endregion Accounts
+
+        #region Utilities
+
         public String SetPath(String buildPath, out String myPath)
         {
             String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
@@ -791,35 +815,98 @@ namespace Astrodon
             return returner;
         }
 
-        public Dictionary<int, String> GetCustomerCategories(String buildPath)
+        public int GetPeriod(String buildPath)
         {
-            Dictionary<int, String> categories = new Dictionary<int, string>();
+            int period = 0;
+            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            if (returner == "0")
+            {
+                try
+                {
+                    String fileName = "ACCUSER";
+                    String keyValue = "B";
+                    String response = SDK.GetNearest(fileName, 0, keyValue);
+                    String[] responseBits = response.Split(new String[] { "|" }, StringSplitOptions.None);
+                    if (responseBits.Length >= 83)
+                    {
+                        for (int i = 73; i <= 83; i++)
+                        {
+                            period = (int.Parse(responseBits[i]) > period ? int.Parse(responseBits[i]) : period);
+                        }
+                    }
+                    else
+                    {
+                        // MessageBox.Show(response);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    returner = "error:" + ex.Message;
+                }
+            }
+            else
+            {
+                // MessageBox.Show(returner);
+            }
+            return period;
+        }
+
+        public String GetBankDetails(String buildPath)
+        {
+            String bankDetails = String.Empty;
+            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            if (returner == "0")
+            {
+                try
+                {
+                    String fileName = "ACCPRMDC";
+                    String keyValue = "0";
+                    String response = SDK.GetNearest(fileName, 0, keyValue);
+                    //MessageBox.Show(response);
+                    String[] responseBits = response.Split(new String[] { "|" }, StringSplitOptions.None);
+                    bankDetails = responseBits[17];
+                }
+                catch (Exception ex)
+                {
+                    bankDetails = ex.Message;
+                }
+            }
+            return bankDetails;
+        }
+
+        public Dictionary<String, String> GetCategories(String buildPath)
+        {
+            Dictionary<String, String> categories = new Dictionary<string, string>();
             String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
             if (returner == "0")
             {
                 try
                 {
                     String fileName = "ACCDCAT";
-                    String keyValue = SDK.MKI(-1);
-                    returner = SDK.GetNearest(fileName, keyNumber, keyValue);
-                    if ((Regex.Matches(returner, "|").Count > 1) && (!returner.StartsWith("9|")))
+                    String keyValue = "001";
+                    String response = SDK.GetNearest(fileName, 0, keyValue);
+                    int cats = SDK.NumberOfRecords(fileName);
+                    if (response.StartsWith("0|"))
                     {
-                        String[] rBits = returner.Split(new String[] { "|" }, StringSplitOptions.None);
-                        if (!categories.ContainsKey(int.Parse(rBits[1]))) { categories.Add(int.Parse(rBits[1]), rBits[2]); }
+                        String[] responseBits = response.Split(new String[] { "|" }, StringSplitOptions.None);
+                        String categoryID = responseBits[1];
+                        String categoryName = responseBits[2];
+                        if (!categories.ContainsKey(categoryID)) { categories.Add(categoryID, categoryName); }
                     }
-                    while (!returner.StartsWith("9|"))
+                    while (response.StartsWith("0|"))
                     {
-                        returner = SDK.GetNext(fileName, keyNumber);
-                        if ((Regex.Matches(returner, "|").Count > 1) && (!returner.StartsWith("9|")))
+                        response = SDK.GetNext(fileName, 0);
+                        if (response.StartsWith("0|"))
                         {
-                            String[] rBits = returner.Split(new String[] { "|" }, StringSplitOptions.None);
-                            if (!categories.ContainsKey(int.Parse(rBits[1]))) { categories.Add(int.Parse(rBits[1]), rBits[2]); }
+                            String[] responseBits = response.Split(new String[] { "|" }, StringSplitOptions.None);
+                            String categoryID = responseBits[1];
+                            String categoryName = responseBits[2];
+                            if (!categories.ContainsKey(categoryID)) { categories.Add(categoryID, categoryName); }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    returner = "error:" + ex.Message;
                 }
             }
             return categories;
@@ -830,50 +917,16 @@ namespace Astrodon
             return SDK.BtrieveToVBDate(inDate);
         }
 
-        public List<String> getNotes(String customerCode, String buildPath)
-        {
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
-            List<String> notes = new List<string>();
-            if (returner.Contains("99"))
-            {
-            }
-            else
-            {
-                short[] nTypes = new short[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
-                try
-                {
-                    String fileName = "ACCNOTE";
-                    short keyNumber = 2;
-                    foreach (short nType in nTypes)
-                    {
-                        String keyValue = SDK.MKI(nType) + "|" + customerCode;
-                        String record = SDK.GetNearest(fileName, keyNumber, keyValue);
-                        if (record != "")
-                        {
-                            notes.Add(record);
-                            while (record != "")
-                            {
-                                record = SDK.GetNext(fileName, keyNumber);
-                                if (record != "") { notes.Add(record); }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.StackTrace);
-                }
-            }
-            return notes;
-        }
-
         public DateTime convertDate(String inDate)
         {
             DateTime outDate = DateTime.Now;
             DateTime.TryParse(inDate, out outDate);
             return outDate;
         }
+
+        #endregion Utilities
+
+        #region Post
 
         private String PostBatch(String buildPath, String StrIn, int entryType)
         {
@@ -1100,44 +1153,6 @@ namespace Astrodon
             //MessageBox.Show(returner);
         }
 
-        public String UpdateCustomer(String customer, String buildPath)
-        {
-            String pathReturner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
-            String returner = String.Empty;
-            if (pathReturner.Contains("99"))
-            {
-            }
-            else
-            {
-                returner = SDK.ImportCustomer(customer);
-                if (returner != "0")
-                {
-                    MessageBox.Show("Error updating customer:" + returner, "Pastel", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            return returner;
-        }
-    }
-
-    public class MessageArgs : EventArgs
-    {
-        public String message { get; set; }
-
-        public MessageArgs(String Message)
-        {
-            message = Message;
-        }
-    }
-
-    public class CustomerArgs : EventArgs
-    {
-        public Customer customer { get; set; }
-
-        public String building { get; set; }
-
-        public CustomerArgs(Customer c, String b)
-        {
-            customer = c; building = b;
-        }
+        #endregion Post
     }
 }

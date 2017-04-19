@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using Astrodon.Classes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Astrodon
 {
@@ -31,7 +34,7 @@ namespace Astrodon
                     }
                 }
             }
-            buildings.Sort(new BuildingComparer("Name", SortOrder.Ascending));
+            buildings = buildings.OrderBy(c => c.Name).ToList();
         }
 
         private void usrIndStatements_Load(object sender, EventArgs e)
@@ -60,32 +63,23 @@ namespace Astrodon
                 cmbCustomer.SelectedIndexChanged += cmbCustomer_SelectedIndexChanged;
 
                 stmtBuilding = new StatementBuilding(building.Name, building.DataPath, building.Period, DateTime.Now);
-                stmt = new Statement();
-                stmt.pm = building.PM;
-                stmt.bankName = building.Bank_Name;
-                stmt.accName = building.Acc_Name;
-                stmt.accNumber = building.Bank_Acc_Number;
-                stmt.branch = building.Branch_Code;
-                stmt.DebtorEmail = building.Debtor;
+                stmt = new Statement
+                {
+                    pm = building.PM,
+                    bankName = building.Bank_Name,
+                    accName = building.Acc_Name,
+                    accNumber = building.Bank_Acc_Number,
+                    branch = building.Branch_Code,
+                    DebtorEmail = building.Debtor
+                };
             }
             catch { }
-        }
-
-        private void btnUpload_Click(object sender, EventArgs e)
-        {
         }
 
         private void btnGenView_Click(object sender, EventArgs e)
         {
             String fileName = String.Empty;
-            if (CreateStatement(true, out fileName))
-            {
-                Process.Start(fileName);
-            }
-            else
-            {
-                MessageBox.Show("Unable to create statement");
-            }
+            if (CreateStatement(true, out fileName)) { Process.Start(fileName); } else { MessageBox.Show("Unable to create statement"); }
         }
 
         private void btnGenSend_Click(object sender, EventArgs e)
@@ -145,13 +139,11 @@ namespace Astrodon
 
         private bool CreateStatement(bool makeFile, out String fileName, bool excludeStationery = false)
         {
-            int lineNo = 123;
             this.Cursor = Cursors.WaitCursor;
             bool success = false;
             try
             {
                 double totalDue = 0;
-                lineNo = 128;
                 String trnMsg;
                 stmt.Transactions = (new Classes.LoadTrans()).LoadTransactions(building, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
                 //MessageBox.Show(trnMsg);
@@ -159,14 +151,11 @@ namespace Astrodon
                 stmt.totalDue = totalDue;
                 stmt.AccNo = customer.accNumber;
                 List<String> addList = new List<string>();
-                lineNo = 133;
                 addList.Add(customer.description);
                 foreach (String addy in customer.address) { addList.Add(addy); }
                 stmt.Address = addList.ToArray();
-                lineNo = 137;
                 stmt.DebtorEmail = building.Debtor;
                 stmt.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 ? false : true);
-                lineNo = 140;
                 try
                 {
                     if (customer.Email != null && customer.Email.Length > 0)
@@ -194,18 +183,15 @@ namespace Astrodon
                         stmt.email1 = new String[] { "" };
                     }
                 }
-                lineNo = 148;
                 stmt.BankDetails = Controller.pastel.GetBankDetails(stmtBuilding.DataPath);
                 stmt.BuildingName = building.Name;
                 stmt.LevyMessage1 = (stmtBuilding.HOA ? HOAMessage1 : BCMessage1);
                 stmt.LevyMessage2 = Message2;
                 stmt.Message = txtMessage.Text;
                 stmt.StmtDate = stmtDatePicker.Value;
-                lineNo = 155;
                 fileName = String.Empty;
                 if (makeFile)
                 {
-                    lineNo = 158;
                     PDF generator = new PDF(true);
                     generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, isStd);
                     //generator.CreateStatement(stmt, out fileName);
@@ -213,7 +199,6 @@ namespace Astrodon
                 }
                 else
                 {
-                    lineNo = 164;
                     success = true;
                     dgTransactions.DataSource = stmt.Transactions;
                     dgTransactions.Columns[3].DefaultCellStyle.Format = "N2";
@@ -224,7 +209,7 @@ namespace Astrodon
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Create statement - " + lineNo.ToString() + ":" + ex.Message);
+                MessageBox.Show("Create statement :" + ex.Message);
                 fileName = String.Empty;
             }
             this.Cursor = Cursors.Arrow;
@@ -235,8 +220,7 @@ namespace Astrodon
         {
             get
             {
-                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
-                return hoaMessage;
+                return "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
             }
         }
 
@@ -244,8 +228,7 @@ namespace Astrodon
         {
             get
             {
-                String hoaMessage = "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
-                return hoaMessage;
+                return "Levies are due and payable on the 1st of every month in advance.  Failure to compy will result in penalties being charged and electricity supply to the unit being suspended and or restricted.";
             }
         }
 
@@ -253,8 +236,7 @@ namespace Astrodon
         {
             get
             {
-                String hoaMessage = "***PLEASE ENSURE THAT ALL PAYMENTS REFLECTS IN OUR NOMINATED ACCOUNT ON OR BEFORE DUE DATE TO AVOID ANY PENALTIES, REFER TO TERMS AND CONDITIONS.***";
-                return hoaMessage;
+                return "***PLEASE ENSURE THAT ALL PAYMENTS REFLECTS IN OUR NOMINATED ACCOUNT ON OR BEFORE DUE DATE TO AVOID ANY PENALTIES, REFER TO TERMS AND CONDITIONS.***";
             }
         }
 
@@ -267,23 +249,6 @@ namespace Astrodon
                 CreateStatement(false, out fileName);
             }
             catch { }
-        }
-
-        private void stmtDatePicker_ValueChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            String fileName = String.Empty;
-            if (CreateStatement(true, out fileName, true))
-            {
-                Process.Start(fileName);
-            }
-            else
-            {
-                MessageBox.Show("Unable to create statement");
-            }
         }
     }
 }

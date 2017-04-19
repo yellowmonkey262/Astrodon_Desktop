@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Astro.Library;
+using Astro.Library.Entities;
+using Astrodon.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -23,8 +26,7 @@ namespace Astrodon
             InitializeComponent();
             buildings = new Buildings(false).buildings;
             dh = new SqlDataHandler();
-            smsCustomers = new SMSCustomers();
-            smsCustomers.customers = new List<SMSCustomer>();
+            smsCustomers = new SMSCustomers { customers = new List<SMSCustomer>() };
             bs = new BindingList<SMSCustomer>();
         }
 
@@ -54,10 +56,12 @@ namespace Astrodon
             List<Customer> customers = Controller.pastel.AddCustomers(selectedBuilding.Name, selectedBuilding.DataPath);
             foreach (Customer c in customers)
             {
-                SMSCustomer smsc = new SMSCustomer();
-                smsc.customerName = c.description;
-                smsc.customerAccount = c.accNumber;
-                smsc.customerNumber = c.CellPhone;
+                SMSCustomer smsc = new SMSCustomer
+                {
+                    customerName = c.description,
+                    customerAccount = c.accNumber,
+                    customerNumber = c.CellPhone
+                };
                 if (!String.IsNullOrEmpty(smsc.customerNumber))
                 {
                     smsCustomers.customers.Add(smsc);
@@ -69,14 +73,8 @@ namespace Astrodon
 
         private void chkAll_CheckedChanged(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow dvr in dgCustomers.Rows)
-            {
-                dvr.Cells[0].Value = chkAll.Checked;
-            }
-            foreach (SMSCustomer smsc in smsCustomers.customers)
-            {
-                smsc.include = chkAll.Checked;
-            }
+            foreach (DataGridViewRow dvr in dgCustomers.Rows) { dvr.Cells[0].Value = chkAll.Checked; }
+            foreach (SMSCustomer smsc in smsCustomers.customers) { smsc.include = chkAll.Checked; }
         }
 
         private void chkBillBuilding_CheckedChanged(object sender, EventArgs e)
@@ -132,12 +130,16 @@ namespace Astrodon
 
                 if (!String.IsNullOrEmpty(txtMessage.Text) && txtMessage.Text.Length <= 160)
                 {
+                    var builder = new System.Text.StringBuilder();
+                    builder.Append(sendTo);
+                    var builder1 = new System.Text.StringBuilder();
+                    builder1.Append(sendName);
                     foreach (SMSCustomer smsc in smsCustomers.customers)
                     {
                         if (smsc.include && !chkBillCustomer.Checked)
                         {
-                            sendTo += smsc.customerNumber + ";";
-                            sendName += smsc.customerName + ";";
+                            builder.Append(smsc.customerNumber + ";");
+                            builder1.Append(smsc.customerName + ";");
                             entries++;
                         }
                         else if (smsc.include)
@@ -146,6 +148,8 @@ namespace Astrodon
                             messages.Add(m);
                         }
                     }
+                    sendName = builder1.ToString();
+                    sendTo = builder.ToString();
                 }
                 else
                 {
@@ -199,9 +203,7 @@ namespace Astrodon
             double ramt = entries * 2;
             String amt = ramt.ToString("#0.00");
             int buildPeriod;
-            int trustPeriod = Utilities.getPeriod(DateTime.Now, selectedBuilding.Period, out buildPeriod);
-            //String pastelReturn = Controller.pastel.PostBatch(DateTime.Now, buildPeriod, values.centrec, selectedBuilding.DataPath, 5, selectedBuilding.Journal, selectedBuilding.Centrec_Account, selectedBuilding.Centrec_Building, "1115000", "9250000", "SMS", reference, amt, selectedBuilding.Centrec_Building, "", out pastelString);
-
+            int trustPeriod = Methods.getPeriod(DateTime.Now, selectedBuilding.Period, out buildPeriod);
             String pastelReturn1 = Controller.pastel.PostBatch(DateTime.Now, buildPeriod, "CENTRE18", selectedBuilding.DataPath, 5, selectedBuilding.Journal, selectedBuilding.Centrec_Account, "9250000", "1115000", "1115000", "SMS", reference, amt, selectedBuilding.Centrec_Building, "", out pastelString);
         }
 
@@ -234,19 +236,12 @@ namespace Astrodon
             return m;
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-        }
-
         private void dgCustomers_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             messageCount = 0;
             foreach (DataGridViewRow dvr in dgCustomers.Rows)
             {
-                if ((bool)dvr.Cells[0].Value)
-                {
-                    messageCount++;
-                }
+                if ((bool)dvr.Cells[0].Value) { messageCount++; }
             }
         }
     }

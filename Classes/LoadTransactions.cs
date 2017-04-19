@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Astro.Library.Entities;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
+using Astro.Library;
 
 namespace Astrodon.Classes
 {
@@ -12,7 +15,7 @@ namespace Astrodon.Classes
             try
             {
                 int bPeriod;
-                int tPeriod = Utilities.getPeriod(transDate, building.Period, out bPeriod);
+                int tPeriod = Methods.getPeriod(transDate, building.Period, out bPeriod);
                 int startperiod = 0;
                 int thisYear = DateTime.Now.Year - 2000;
                 int endperiod = 0;
@@ -148,24 +151,26 @@ namespace Astrodon.Classes
 
                     DateTime trnDate = trnEndDate.AddMonths(-2);
 
-                    Transaction optran = new Transaction();
-                    optran.AccAmt = os;
-                    optran.Description = "Balance Brought Forward";
-                    optran.Reference = "";
-                    optran.TrnAmt = os;
-
-                    optran.TrnDate = trnDate;
-                    transactions = Controller.pastel.GetTransactions(building.DataPath, startperiod, endperiod, customer.accNumber);
-                    transactions.Sort(new TrnsComparer("Date", SortOrder.Ascending));
+                    Transaction optran = new Transaction
+                    {
+                        AccAmt = os,
+                        Description = "Balance Brought Forward",
+                        Reference = "",
+                        TrnAmt = os,
+                        TrnDate = trnDate
+                    };
+                    transactions = Controller.pastel.GetTransactions(building.DataPath, startperiod, endperiod, customer.accNumber).OrderBy(c => c.Date).ToList();
 
                     double subtractAmount = 0;
                     foreach (Trns trn in transactions)
                     {
-                        Transaction tran = new Transaction();
-                        tran.Description = trn.Description;
-                        tran.Reference = trn.Reference;
-                        tran.TrnAmt = double.Parse(trn.Amount);
-                        tran.TrnDate = DateTime.Parse(trn.Date);
+                        Transaction tran = new Transaction
+                        {
+                            Description = trn.Description,
+                            Reference = trn.Reference,
+                            TrnAmt = double.Parse(trn.Amount),
+                            TrnDate = DateTime.Parse(trn.Date)
+                        };
                         subtractAmount += double.Parse(trn.Amount);
                         trans.Add(tran);
                     }

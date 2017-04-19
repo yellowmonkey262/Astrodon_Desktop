@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Astro.Library.Entities;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,16 +9,6 @@ using System.Windows.Forms;
 
 namespace Astrodon
 {
-    public class SqlArgs : EventArgs
-    {
-        public String msgArgs;
-
-        public SqlArgs(String args)
-        {
-            msgArgs = args;
-        }
-    }
-
     public class MySqlConnector
     {
         private MySqlConnection mysqlConn;
