@@ -63,6 +63,18 @@ namespace Astrodon
             DependencyInitialization();
         }
 
+
+        internal static void HandleError(Exception e, string title = "Application Error")
+        {
+            HandleError(e.Message, title);
+        }
+
+        internal static void HandleError(string error, string title = "Application Error")
+        {
+            MessageBox.Show(error, title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+
+
         private static void commClient_LoginOK(object sender, EventArgs e)
         {
             commClient.SendMessage("hello server");

@@ -13,6 +13,7 @@ using System.IO;
 using System.Diagnostics;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Astro.Library.Entities;
 
 namespace Astrodon.Reports.MaintenanceReport
 {
