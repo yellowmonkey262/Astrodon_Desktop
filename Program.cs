@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Astrodon {
 
@@ -13,7 +14,9 @@ namespace Astrodon {
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
             Controller.RunProgram();
+            SqlDataHandler.MigrateEFDataBase();
             Application.Run();
         }
     }
