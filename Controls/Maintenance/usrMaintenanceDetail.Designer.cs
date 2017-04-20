@@ -56,9 +56,7 @@
             this.lblContactNumber = new System.Windows.Forms.Label();
             this.lblEmail = new System.Windows.Forms.Label();
             this.lblEmailTitle = new System.Windows.Forms.Label();
-            this.lblInvoiceNumber = new System.Windows.Forms.Label();
             this.lblInvoiceNumberTitle = new System.Windows.Forms.Label();
-            this.lblInvoiceDate = new System.Windows.Forms.Label();
             this.lblInvoiceDateTitle = new System.Windows.Forms.Label();
             this.lblWarranty = new System.Windows.Forms.Label();
             this.lblWarrantyExpiresTitle = new System.Windows.Forms.Label();
@@ -81,6 +79,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.sfdDownloadAttachment = new System.Windows.Forms.SaveFileDialog();
+            this.tbInvoiceNumber = new System.Windows.Forms.TextBox();
+            this.dtpInvoiceDate = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.numWarrantyDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgSupportingDocuments)).BeginInit();
             this.SuspendLayout();
@@ -336,15 +336,6 @@
             this.lblEmailTitle.TabIndex = 27;
             this.lblEmailTitle.Text = "Email Address";
             // 
-            // lblInvoiceNumber
-            // 
-            this.lblInvoiceNumber.AutoSize = true;
-            this.lblInvoiceNumber.Location = new System.Drawing.Point(162, 470);
-            this.lblInvoiceNumber.Name = "lblInvoiceNumber";
-            this.lblInvoiceNumber.Size = new System.Drawing.Size(35, 13);
-            this.lblInvoiceNumber.TabIndex = 30;
-            this.lblInvoiceNumber.Text = "label2";
-            // 
             // lblInvoiceNumberTitle
             // 
             this.lblInvoiceNumberTitle.AutoSize = true;
@@ -353,15 +344,6 @@
             this.lblInvoiceNumberTitle.Size = new System.Drawing.Size(82, 13);
             this.lblInvoiceNumberTitle.TabIndex = 29;
             this.lblInvoiceNumberTitle.Text = "Invoice Number";
-            // 
-            // lblInvoiceDate
-            // 
-            this.lblInvoiceDate.AutoSize = true;
-            this.lblInvoiceDate.Location = new System.Drawing.Point(162, 496);
-            this.lblInvoiceDate.Name = "lblInvoiceDate";
-            this.lblInvoiceDate.Size = new System.Drawing.Size(35, 13);
-            this.lblInvoiceDate.TabIndex = 32;
-            this.lblInvoiceDate.Text = "label2";
             // 
             // lblInvoiceDateTitle
             // 
@@ -563,10 +545,29 @@
             this.sfdDownloadAttachment.InitialDirectory = "c:\\\\";
             this.sfdDownloadAttachment.RestoreDirectory = true;
             // 
+            // tbInvoiceNumber
+            // 
+            this.tbInvoiceNumber.Location = new System.Drawing.Point(165, 467);
+            this.tbInvoiceNumber.Name = "tbInvoiceNumber";
+            this.tbInvoiceNumber.Size = new System.Drawing.Size(194, 20);
+            this.tbInvoiceNumber.TabIndex = 57;
+            // 
+            // dtpInvoiceDate
+            // 
+            this.dtpInvoiceDate.CustomFormat = "yyyy/MM/dd";
+            this.dtpInvoiceDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpInvoiceDate.Location = new System.Drawing.Point(165, 490);
+            this.dtpInvoiceDate.Name = "dtpInvoiceDate";
+            this.dtpInvoiceDate.Size = new System.Drawing.Size(194, 20);
+            this.dtpInvoiceDate.TabIndex = 58;
+            this.dtpInvoiceDate.ValueChanged += new System.EventHandler(this.dtpInvoiceDate_ValueChanged);
+            // 
             // usrMaintenanceDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.dtpInvoiceDate);
+            this.Controls.Add(this.tbInvoiceNumber);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.dgSupportingDocuments);
@@ -586,9 +587,7 @@
             this.Controls.Add(this.lblWarrantyExpires);
             this.Controls.Add(this.lblWarrantyExpiresTitle);
             this.Controls.Add(this.lblWarranty);
-            this.Controls.Add(this.lblInvoiceDate);
             this.Controls.Add(this.lblInvoiceDateTitle);
-            this.Controls.Add(this.lblInvoiceNumber);
             this.Controls.Add(this.lblInvoiceNumberTitle);
             this.Controls.Add(this.lblEmail);
             this.Controls.Add(this.lblEmailTitle);
@@ -657,9 +656,7 @@
         private System.Windows.Forms.Label lblContactNumber;
         private System.Windows.Forms.Label lblEmail;
         private System.Windows.Forms.Label lblEmailTitle;
-        private System.Windows.Forms.Label lblInvoiceNumber;
         private System.Windows.Forms.Label lblInvoiceNumberTitle;
-        private System.Windows.Forms.Label lblInvoiceDate;
         private System.Windows.Forms.Label lblInvoiceDateTitle;
         private System.Windows.Forms.Label lblWarranty;
         private System.Windows.Forms.Label lblWarrantyExpiresTitle;
@@ -682,5 +679,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.SaveFileDialog sfdDownloadAttachment;
+        private System.Windows.Forms.TextBox tbInvoiceNumber;
+        private System.Windows.Forms.DateTimePicker dtpInvoiceDate;
     }
 }

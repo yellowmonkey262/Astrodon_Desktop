@@ -22,6 +22,7 @@ namespace Astrodon.Controls.Maintenance
         private DataContext _DataContext;
         private Astrodon.Data.MaintenanceData.Maintenance _Maintenance;
         private List<SupportingDocument> _Documents;
+        private tblRequisition _requisition;
 
         public usrMaintenanceDetail(DataContext context, int maintenanceId)
         {
@@ -37,6 +38,8 @@ namespace Astrodon.Controls.Maintenance
                                .Include(a => a.BuildingMaintenanceConfiguration)
                                .Single(a => a.id == maintenanceId);
 
+                _requisition = _DataContext.tblRequisitions.Single(a => a.id == _Maintenance.RequisitionId);
+             
                 _Documents = _DataContext.MaintenanceDocumentSet
                              .Where(a => a.MaintenanceId == maintenanceId)
                              .Select(a => new SupportingDocument
@@ -54,19 +57,23 @@ namespace Astrodon.Controls.Maintenance
             }
         }
 
-        public usrMaintenanceDetail(DataContext context, tblRequisition requisition, BuildingMaintenanceConfiguration config)
+        public usrMaintenanceDetail(DataContext context, tblRequisition requisition, BuildingMaintenanceConfiguration config, bool ignoreInvoiceNumber = false)
         {
             this.Cursor = Cursors.WaitCursor;
 
             try
             {
                 _DataContext = context;
+                _requisition = requisition;
 
-                if (string.IsNullOrEmpty(requisition.InvoiceNumber))
-                    throw new MaintenanceException("No Invoice Number found.");
+                if (!ignoreInvoiceNumber)
+                {
+                    if (string.IsNullOrEmpty(requisition.InvoiceNumber))
+                        throw new MaintenanceException("No Invoice Number found.");
 
-                if (!requisition.InvoiceDate.HasValue)
-                    throw new MaintenanceException("No Invoice Date found.");
+                    if (!requisition.InvoiceDate.HasValue)
+                        throw new MaintenanceException("No Invoice Date found.");
+                }
 
                 if (requisition.SupplierId == null)
                     throw new MaintenanceException("No Supplier found.");
@@ -80,10 +87,12 @@ namespace Astrodon.Controls.Maintenance
                     Requisition = requisition,
                     Supplier = requisition.Supplier,
                     InvoiceNumber = requisition.InvoiceNumber,
-                    InvoiceDate = requisition.InvoiceDate.Value,
+                    InvoiceDate = requisition.InvoiceDate == null ? requisition.trnDate : requisition.InvoiceDate.Value,
                     TotalAmount = requisition.amount,
-                    WarrentyExpires = requisition.InvoiceDate.Value
+                    WarrentyExpires = requisition.InvoiceDate == null ? requisition.trnDate : requisition.InvoiceDate.Value,
                 };
+
+                
 
                 _DataContext.MaintenanceSet.Add(_Maintenance);
 
@@ -212,6 +221,14 @@ namespace Astrodon.Controls.Maintenance
             {
                 var selectedUnit = cbUnit.SelectedItem as StringKeyValue;
 
+                if (string.IsNullOrEmpty(tbInvoiceNumber.Text))
+                {
+                    this.Cursor = Cursors.Default;
+                    Controller.HandleError("No Invoice Number found.");
+                    return;
+                }
+
+
                 if (string.IsNullOrEmpty(selectedUnit.Id))
                 {
                     _Maintenance.IsForBodyCorporate = true;
@@ -229,6 +246,11 @@ namespace Astrodon.Controls.Maintenance
                 _Maintenance.WarrentyExpires = CalculateWarrantyExpires();
                 _Maintenance.WarrantySerialNumber = txtSerialNumber.Text;
                 _Maintenance.WarrantyNotes = txtWarrantyNotes.Text;
+                _Maintenance.InvoiceDate = dtpInvoiceDate.Value;
+                _Maintenance.InvoiceNumber = tbInvoiceNumber.Text;
+                _requisition.InvoiceDate = dtpInvoiceDate.Value;
+                _requisition.InvoiceNumber = tbInvoiceNumber.Text;
+
 
                 _DataContext.SaveChanges();
 
@@ -243,6 +265,7 @@ namespace Astrodon.Controls.Maintenance
 
                     _DataContext.SaveChanges();
                 }
+                RaiseSaveSuccess();
             }
             catch (Exception ex)
             {
@@ -251,7 +274,6 @@ namespace Astrodon.Controls.Maintenance
             finally
             {
                 this.Cursor = Cursors.Default;
-                RaiseSaveSuccess();
             }
         }
 
@@ -276,8 +298,8 @@ namespace Astrodon.Controls.Maintenance
             lblContactPerson.Text = _Maintenance.Supplier.ContactPerson;
             lblContactNumber.Text = _Maintenance.Supplier.ContactNumber;
             lblEmail.Text = _Maintenance.Supplier.EmailAddress;
-            lblInvoiceNumber.Text = _Maintenance.InvoiceNumber;
-            lblInvoiceDate.Text = _Maintenance.InvoiceDate.ToString("yyyy/MM/dd");
+            tbInvoiceNumber.Text = _Maintenance.InvoiceNumber;
+            dtpInvoiceDate.Value = _Maintenance.InvoiceDate;
             lblWarrantyExpires.Text = _Maintenance.WarrentyExpires.Value.ToString("yyyy/MM/dd");
             txtSerialNumber.Text = _Maintenance.WarrantySerialNumber;
             txtWarrantyNotes.Text = _Maintenance.WarrantyNotes;
@@ -375,25 +397,35 @@ namespace Astrodon.Controls.Maintenance
 
         private DateTime CalculateWarrantyExpires()
         {
+            var warrantyDurationType = DurationType.Day;
+
             int warrantyDuration = Convert.ToInt32(numWarrantyDuration.Value);
-            var warrantyDurationType = ((KeyValuePair<DurationType, string>)cbWarrantyDurationType.SelectedItem).Key;
+            if (cbWarrantyDurationType.SelectedItem != null)
+                warrantyDurationType = ((KeyValuePair<DurationType, string>)cbWarrantyDurationType.SelectedItem).Key;
+
+            var dateUsed = dtpInvoiceDate.Value;
 
             switch (warrantyDurationType)
             {
                 case DurationType.Day:
-                    return _Maintenance.InvoiceDate.AddDays(warrantyDuration);
+                    return dateUsed.AddDays(warrantyDuration);
                 case DurationType.Week:
-                    return _Maintenance.InvoiceDate.AddDays(warrantyDuration * 7);
+                    return dateUsed.AddDays(warrantyDuration * 7);
                 case DurationType.Month:
-                    return _Maintenance.InvoiceDate.AddMonths(warrantyDuration);
+                    return dateUsed.AddMonths(warrantyDuration);
                 case DurationType.Year:
-                    return _Maintenance.InvoiceDate.AddYears(warrantyDuration);
+                    return dateUsed.AddYears(warrantyDuration);
                 default:
                     throw new Exception("Unsupported Duration Type supplied.");
             }
         }
 
         #endregion
+
+        private void dtpInvoiceDate_ValueChanged(object sender, EventArgs e)
+        {
+            lblWarrantyExpires.Text = CalculateWarrantyExpires().ToString("yyyy/MM/dd");
+        }
     }
 
     public class SupportingDocument

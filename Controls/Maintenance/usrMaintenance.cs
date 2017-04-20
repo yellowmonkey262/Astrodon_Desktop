@@ -11,6 +11,7 @@ using Astrodon.Data.Base;
 using Astrodon.Forms;
 using Astrodon.Data.MaintenanceData;
 using Astradon.Data.Utility;
+using System.Data.Entity;
 
 namespace Astrodon.Controls.Maintenance
 {
@@ -34,23 +35,68 @@ namespace Astrodon.Controls.Maintenance
             var fromDate = dtpFromDate.Value.Date;
             var toDate = dtpToDate.Value.Date.AddDays(1).AddMinutes(-1);
 
-            _MaintenanceRecords = (from m in _DataContext.MaintenanceSet
-                                   where m.BuildingMaintenanceConfiguration.BuildingId == buildingId
-                                   && m.DateLogged >= fromDate
-                                   && m.DateLogged <= toDate
+            var config = _DataContext.BuildingMaintenanceConfigurationSet.Where(a => a.BuildingId == buildingId).ToList();
+            var ledgerAccounts = config.Select(a => a.PastelAccountNumber).ToArray();
+
+
+            var tmp = (from r in _DataContext.tblRequisitions
+                                   join maint in _DataContext.MaintenanceSet on r.id equals maint.RequisitionId into mx
+                                   where r.building == buildingId
+                                   && r.trnDate >= fromDate
+                                   && r.trnDate <= toDate
+                                   from m in mx.DefaultIfEmpty()
                                    select new MaintenanceResult()
                                    {
-                                       Id = m.id,
-                                       DateLogged = m.DateLogged,
-                                       ConfigClassification = m.BuildingMaintenanceConfiguration.MaintenanceClassificationType,
-                                       ConfigName = m.BuildingMaintenanceConfiguration.Name,
-                                       CustomerAccount = m.CustomerAccount,
-                                       SupplierName = m.Supplier.CompanyName,
-                                       SupplierContactPerson = m.Supplier.ContactPerson,
-                                       TotalAmount = m.TotalAmount
-                                   }).OrderBy(a => a.DateLogged).ToList();
+                                       RequisitionId = r.id,
+                                       RequsitionDate = r.trnDate,
+                                       Reference = r.reference,
+                                       PaymentReference = r.payreference,
+                                       Account = r.account,
+                                       Ledger = r.ledger,
+                                       Paid = r.paid,
+                                       MaintenanceId = m == null ? (int?)null : m.id,
+                                       DateLogged = m == null ? (DateTime?)null : m.DateLogged,
+                                       ConfigClassification = m == null ? (MaintenanceClassificationType?)null : m.BuildingMaintenanceConfiguration.MaintenanceClassificationType,
+                                       ConfigName = m == null ? null : m.BuildingMaintenanceConfiguration.Name,
+                                       CustomerAccount = m == null ? null : m.CustomerAccount,
+                                       SupplierName = m == null ? null : m.Supplier.CompanyName,
+                                       SupplierContactPerson = m == null ? null : m.Supplier.ContactPerson,
+                                       TotalAmount = m == null ? (decimal?)null : m.TotalAmount,
+                                       ConfigItemId = m == null ? (int?)null : m.BuildingMaintenanceConfiguration.id,
+                                   }).OrderBy(a => a.RequsitionDate).ToList();
+
+            _MaintenanceRecords = (from s in tmp
+                                   join c in config on s.LedgerAccountNumber equals c.PastelAccountNumber into mx
+                                   from d in mx.DefaultIfEmpty()
+                                   select new MaintenanceResult()
+                                   {
+                                       RequisitionId = s.RequisitionId,
+                                       RequsitionDate = s.RequsitionDate,
+                                       Reference = s.Reference,
+                                       PaymentReference = s.PaymentReference,
+                                       Account = s.Account,
+                                       Ledger = s.Ledger,
+                                       Paid = s.Paid,
+                                       MaintenanceId = s.MaintenanceId,
+                                       DateLogged = s.DateLogged,
+                                       ConfigClassification = s.ConfigClassification != null ? s.ConfigClassification : d == null ? (MaintenanceClassificationType?)null : d.MaintenanceClassificationType,
+                                       ConfigName = s.ConfigName != null ? s.ConfigName : d == null ? null : d.Name,
+                                       CustomerAccount = s.CustomerAccount,
+                                       SupplierName = s.SupplierName,
+                                       SupplierContactPerson = s.SupplierContactPerson,
+                                       TotalAmount = s.TotalAmount,
+                                       ConfigItemId = s.ConfigItemId != null ? s.ConfigItemId : d == null ? (int?)null : d.id
+                                   }).Where(a => a.ConfigItemId != null &&
+                                   
+                                   (cbUnlinked.Checked == false || a.HasMaintenance == false)
+                                   ).OrderBy(a => a.RequsitionDate).ToList();
 
             BindMaintenanceDataGrid();
+
+            if(_MaintenanceRecords.Count == 0)
+            {
+                Controller.HandleError("Your search did not return any result", "Empty Search");
+            }
 
             this.Cursor = Cursors.Default;
         }
@@ -89,10 +135,58 @@ namespace Astrodon.Controls.Maintenance
                 bs.DataSource = _MaintenanceRecords;
                 dgMaintenance.DataSource = bs;
 
+                dgMaintenance.Columns.Add(new DataGridViewButtonColumn()
+                {
+                    HeaderText = "Action",
+                    DataPropertyName = "ButtonText",
+                });
+
                 dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
                 {
                     DataPropertyName = "DateLoggedDisplay",
                     HeaderText = "Date",
+                    ReadOnly = true
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Reference",
+                    HeaderText = "Reference",
+                    ReadOnly = true
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "PaymentReference",
+                    HeaderText = "Payment Reference",
+                    ReadOnly = true
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Account",
+                    HeaderText = "Account",
+                    ReadOnly = true
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Ledger",
+                    HeaderText = "Ledger",
+                    ReadOnly = true
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "PaidString",
+                    HeaderText = "Paid",
+                    ReadOnly = true
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "MaintenanceLinked",
+                    HeaderText = "Has Maintenance",
                     ReadOnly = true
                 });
 
@@ -138,12 +232,7 @@ namespace Astrodon.Controls.Maintenance
                     ReadOnly = true
                 });
 
-                dgMaintenance.Columns.Add(new DataGridViewButtonColumn()
-                {
-                    HeaderText = "Action",
-                    Text = "Edit",
-                    UseColumnTextForButtonValue = true,
-                });
+              
 
                 dgMaintenance.AutoResizeColumns();
             }
@@ -154,7 +243,7 @@ namespace Astrodon.Controls.Maintenance
         private void dgMaintenance_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             var senderGrid = (DataGridView)sender;
-            var editColumnIndex = senderGrid.Columns.Count - 1;
+            var editColumnIndex = 0;
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
@@ -164,28 +253,120 @@ namespace Astrodon.Controls.Maintenance
                 {
                     if (e.ColumnIndex == editColumnIndex)
                     {
-                        var frmMaintenanceDetail = new frmMaintenanceDetail(_DataContext, selectedItem.Id);
-                        var dialogResult = frmMaintenanceDetail.ShowDialog();
+                        if (selectedItem.MaintenanceId != null)
+                        {
+                            var frmMaintenanceDetail = new frmMaintenanceDetail(_DataContext, selectedItem.MaintenanceId.Value);
+                            var dialogResult = frmMaintenanceDetail.ShowDialog();
 
-                        if (dialogResult == DialogResult.OK)
-                            btnSearch.PerformClick();
+                            if (dialogResult == DialogResult.OK)
+                                btnSearch.PerformClick();
+                        }
+                        else
+                        {
+                            var reqItem = _DataContext.tblRequisitions.Where(a => a.id == selectedItem.RequisitionId).Single();
+                            var configItem = _DataContext.BuildingMaintenanceConfigurationSet.Single(a => a.id == selectedItem.ConfigItemId.Value);
+
+                            if(reqItem.SupplierId == null)
+                            {
+                                //lets find the supplier id
+
+
+                                var frmSupplierLookup = new frmSupplierLookup(_DataContext);
+
+                                var supplierResult = frmSupplierLookup.ShowDialog();
+                                var supplier = frmSupplierLookup.SelectedSupplier;
+
+                                if (supplierResult == DialogResult.OK && supplier != null)
+                                {
+                                    reqItem.SupplierId = supplier.id;
+                                    reqItem.Supplier = supplier;
+                                    reqItem.BankName =  supplier.BankName;
+                                    reqItem.BranchCode =  supplier.BranceCode;
+                                    reqItem.BranchName =  supplier.BranchName;
+                                    reqItem.AccountNumber = supplier.AccountNumber;
+                                }
+                                else
+                                {
+                                    Controller.HandleError("Supplier required for Maintenance. Please select a supplier.", "Validation Error");
+                                    return;
+                                }
+                            }
+
+                            var frmMaintenanceDetail = new frmMaintenanceDetail(_DataContext, reqItem, configItem,true);
+                            var dialogResult = frmMaintenanceDetail.ShowDialog();
+                            if(dialogResult == DialogResult.OK)
+                            {
+                                _DataContext.SaveChanges();
+                                btnSearch.PerformClick();
+                            }
+                            else
+                            {
+                                //reject changes
+                                foreach (var entry in _DataContext.ChangeTracker.Entries())
+                                {
+                                    switch (entry.State)
+                                    {
+                                        case EntityState.Modified:
+                                        case EntityState.Deleted:
+                                            entry.State = EntityState.Modified; //Revert changes made to deleted entity.
+                                            entry.State = EntityState.Unchanged;
+                                            break;
+                                        case EntityState.Added:
+                                            entry.State = EntityState.Detached;
+                                            break;
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
     public class MaintenanceResult
     {
-        public int Id { get; set; }
+        #region Requisition
+        public int RequisitionId { get; set; }
+        public DateTime RequsitionDate { get; set; }
+        public string Reference { get; set; }
+        public string PaymentReference { get; set; }
+        public string Account { get; set; }
+        public string Ledger { get; set; }
+        public string LedgerAccountNumber
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(Ledger))
+                    return Ledger;
+                if (!Ledger.Contains(":"))
+                    return Ledger;
 
-        public DateTime DateLogged { get; set; }
+                return Ledger.Substring(0, Ledger.IndexOf(":"));
+            }
+        }
+        public bool Paid { get; set; }
+        public string PaidString { get { return Paid ? "Yes" : "No"; } }
+        public string MaintenanceLinked { get { return MaintenanceId == null ? "No" : "Yes"; } }
+        public string ButtonText { get { return MaintenanceId == null ? "New" : "Edit"; } }
+        public int? ConfigItemId { get;  set; }
 
-        public string DateLoggedDisplay { get { return DateLogged.ToString("yyyy-MM-dd"); } }
+        #endregion
 
-        public MaintenanceClassificationType ConfigClassification { get; set; }
+        #region Maintenance
+        public int? MaintenanceId { get; set; }
 
-        public string ConfigClassificationDisplay { get { return NameSplitting.SplitCamelCase(ConfigClassification); } }
+        public DateTime? DateLogged { get; set; }
+        public string DateLoggedDisplay { get { return RequsitionDate.ToString("yyyy-MM-dd"); } }
+
+        public MaintenanceClassificationType? ConfigClassification { get; set; }
+        public string ConfigClassificationDisplay { get { return ConfigClassification == null ? string.Empty : NameSplitting.SplitCamelCase(ConfigClassification); } }
 
         public string ConfigName { get; set; }
 
@@ -195,8 +376,15 @@ namespace Astrodon.Controls.Maintenance
 
         public string SupplierContactPerson { get; set; }
 
-        public decimal TotalAmount { get; set; }
+        public decimal? TotalAmount { get; set; }
+        public string TotalAmountDisplay { get { return TotalAmount == null ? string.Empty : TotalAmount.Value.ToString("#,###.00"); } }
 
-        public string TotalAmountDisplay { get { return TotalAmount.ToString("#,###.00"); } }
+        public bool HasMaintenance
+        {
+            get { return MaintenanceId != null; }
+        }
+
+        #endregion
+
     }
 }

@@ -37,6 +37,8 @@
             this.lblToDate = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
             this.dgMaintenance = new System.Windows.Forms.DataGridView();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbUnlinked = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,7 +107,7 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(343, 103);
+            this.btnSearch.Location = new System.Drawing.Point(338, 131);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 8;
@@ -117,19 +119,40 @@
             // 
             this.dgMaintenance.AllowUserToAddRows = false;
             this.dgMaintenance.AllowUserToDeleteRows = false;
-            this.dgMaintenance.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgMaintenance.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgMaintenance.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgMaintenance.Location = new System.Drawing.Point(21, 141);
+            this.dgMaintenance.Location = new System.Drawing.Point(21, 167);
             this.dgMaintenance.Name = "dgMaintenance";
             this.dgMaintenance.ReadOnly = true;
             this.dgMaintenance.Size = new System.Drawing.Size(1093, 327);
             this.dgMaintenance.TabIndex = 9;
             this.dgMaintenance.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgMaintenance_CellContentClick);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(21, 136);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Unlinked Only";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // cbUnlinked
+            // 
+            this.cbUnlinked.AutoSize = true;
+            this.cbUnlinked.Location = new System.Drawing.Point(126, 136);
+            this.cbUnlinked.Name = "cbUnlinked";
+            this.cbUnlinked.Size = new System.Drawing.Size(15, 14);
+            this.cbUnlinked.TabIndex = 11;
+            this.cbUnlinked.UseVisualStyleBackColor = true;
+            // 
             // usrMaintenance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cbUnlinked);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.dgMaintenance);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.dtpToDate);
@@ -140,7 +163,7 @@
             this.Controls.Add(this.lblSelectBuilding);
             this.Controls.Add(this.lblTitle);
             this.Name = "usrMaintenance";
-            this.Size = new System.Drawing.Size(1132, 494);
+            this.Size = new System.Drawing.Size(1248, 494);
             ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -158,5 +181,7 @@
         private System.Windows.Forms.Label lblToDate;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.DataGridView dgMaintenance;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox cbUnlinked;
     }
 }

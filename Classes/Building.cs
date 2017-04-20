@@ -22,8 +22,7 @@ namespace Astrodon
         {
             get
             {
-                String query = "SELECT id, Building, Code, AccNumber, DataPath, Period, Contra, ownbank, cashbook3, payments, receipts, journals, bc, centrec, business, bank, pm, bankName, accName, bankAccNumber, branch, isBuilding,addy1, ";
-                query += " addy2, addy3, addy4, addy5, web, letterName, pid, hoa FROM tblBuildings ORDER BY Building";
+                String query = "* FROM tblBuildings ORDER BY Building";
                 return query;
             }
         }
@@ -32,8 +31,7 @@ namespace Astrodon
         {
             get
             {
-                String query = "SELECT reminderFee, reminderSplit, finalFee, finalSplit, disconnectionNoticefee, disconnectionNoticeSplit, summonsFee, summonsSplit, disconnectionFee, disconnectionSplit, handoverFee, handoverSplit, ";
-                query += " reminderTemplate, finalTemplate, diconnectionNoticeTemplate, summonsTemplate, reminderSMS, finalSMS, disconnectionNoticeSMS, summonsSMS, disconnectionSMS, handoverSMS FROM tblBuildingSettings ";
+                String query = "SELECT * FROM tblBuildingSettings ";
                 query += " WHERE (buildingID = @buildID)";
                 return query;
             }
@@ -43,8 +41,7 @@ namespace Astrodon
         {
             get
             {
-                String query = "SELECT b.id, b.Building, b.Code, b.AccNumber, b.DataPath, b.Period, b.Contra, b.ownbank, b.cashbook3, b.payments, b.receipts, b.journals, b.bc, b.centrec, b.business, b.bank, b.pm, b.bankName, b.accName, ";
-                query += " b.bankAccNumber, b.branch, b.isBuilding, b.addy1, b.addy2, b.addy3, b.addy4, b.addy5, b.web, b.letterName, b.pid FROM tblBuildings b INNER JOIN tblUserBuildings u ON b.id = u.buildingid ";
+                String query = "SELECT b.* FROM tblBuildings b INNER JOIN tblUserBuildings u ON b.id = u.buildingid ";
                 query += " WHERE u.userid = @userid ORDER BY b.Building";
                 return query;
             }

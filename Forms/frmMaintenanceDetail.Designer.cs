@@ -52,7 +52,7 @@
             this.MinimizeBox = false;
             this.Name = "frmMaintenanceDetail";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Maintenance Detail";
             this.ResumeLayout(false);
 

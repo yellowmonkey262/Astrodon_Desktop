@@ -18,7 +18,7 @@ namespace Astrodon.Forms
     {
         private usrMaintenanceDetail _MaintenanceDetailControl;
      
-        public frmMaintenanceDetail(DataContext context, tblRequisition item, BuildingMaintenanceConfiguration config)
+        public frmMaintenanceDetail(DataContext context, tblRequisition item, BuildingMaintenanceConfiguration config, bool ignoreInvoiceNumber = false)
         {
             DialogResult = DialogResult.Cancel;
             
@@ -26,7 +26,7 @@ namespace Astrodon.Forms
             {
                 InitializeComponent();
 
-                _MaintenanceDetailControl = new usrMaintenanceDetail(context, item, config);
+                _MaintenanceDetailControl = new usrMaintenanceDetail(context, item, config, ignoreInvoiceNumber);
                 _MaintenanceDetailControl.Dock = DockStyle.Fill;
                 pnlContents.Controls.Add(_MaintenanceDetailControl);
 
