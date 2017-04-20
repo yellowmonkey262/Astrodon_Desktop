@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.PasSDK">
-      <HintPath>..\DLL\Interop.PasSDK.dll</HintPath>
+      <HintPath>DLL\Interop.PasSDK.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Itenso.Rtf.Converter.Html, Version=1.7.0.0, Culture=neutral, processorArchitecture=x86">
@@ -745,7 +745,7 @@
     <COMReference Include="Microsoft.Office.Interop.Excel">
       <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>1</VersionMajor>
-      <VersionMinor>7</VersionMinor>
+      <VersionMinor>6</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
@@ -754,7 +754,7 @@
     <COMReference Include="Microsoft.Office.Interop.Word">
       <Guid>{00020905-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>8</VersionMajor>
-      <VersionMinor>5</VersionMinor>
+      <VersionMinor>4</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
@@ -798,7 +798,7 @@
     <WCFMetadataStorage Include="Service References\ReportService\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AstroLibrary\AstroLibrary.csproj">
+    <ProjectReference Include="AstroLibrary\AstroLibrary.csproj">
       <Project>{ce7d8e45-b945-4013-8633-c2add2ac8876}</Project>
       <Name>AstroLibrary</Name>
     </ProjectReference>
