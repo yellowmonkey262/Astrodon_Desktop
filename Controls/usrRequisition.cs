@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Data.Entity;
 using Astro.Library.Entities;
+using Astrodon.Classes;
 
 namespace Astrodon.Controls
 {
@@ -99,7 +100,7 @@ namespace Astrodon.Controls
                             String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : _MyBuildings[cmbBuilding.SelectedIndex].DataPath);
                             String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? _MyBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : _MyBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
                             transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc);
-                            transactions.Sort(new TrnsComparer("Date", SortOrder.Descending));
+                            transactions = transactions.OrderByDescending(a => a.Date).ToList();
                         }
                     }
 
@@ -743,8 +744,8 @@ namespace Astrodon.Controls
 
         private void btnViewTrans_Click(object sender, EventArgs e)
         {
-            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
-            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : _MyBuildings[cmbBuilding.SelectedIndex].DataPath);
+            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? _MyBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : _MyBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
             List<Trns> transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).OrderByDescending(c => c.Date).ToList();
             Forms.frmReqTrans fTrans = new Forms.frmReqTrans(transactions);
             fTrans.Show();
