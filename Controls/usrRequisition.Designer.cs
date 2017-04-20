@@ -59,6 +59,7 @@
             this.colAccount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnViewTrans = new System.Windows.Forms.Button();
             this.dgUnpaid = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -92,7 +93,6 @@
             this.lbInvoiceNumber = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.dtInvoiceDate = new System.Windows.Forms.DateTimePicker();
-            this.btnViewTrans = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgUnprocessed)).BeginInit();
@@ -334,6 +334,7 @@
             this.dgUnprocessed.ReadOnly = true;
             this.dgUnprocessed.Size = new System.Drawing.Size(818, 250);
             this.dgUnprocessed.TabIndex = 10;
+            this.dgUnprocessed.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dg_CellContentClick);
             this.dgUnprocessed.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgUnprocessed_DataBindingComplete);
             // 
             // colID
@@ -406,6 +407,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Unpaid";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // btnViewTrans
+            // 
+            this.btnViewTrans.Location = new System.Drawing.Point(657, 8);
+            this.btnViewTrans.Name = "btnViewTrans";
+            this.btnViewTrans.Size = new System.Drawing.Size(167, 23);
+            this.btnViewTrans.TabIndex = 32;
+            this.btnViewTrans.Text = "View Transactions";
+            this.btnViewTrans.UseVisualStyleBackColor = true;
+            this.btnViewTrans.Click += new System.EventHandler(this.btnViewTrans_Click);
             // 
             // dgUnpaid
             // 
@@ -706,16 +717,6 @@
             this.dtInvoiceDate.Name = "dtInvoiceDate";
             this.dtInvoiceDate.Size = new System.Drawing.Size(198, 20);
             this.dtInvoiceDate.TabIndex = 40;
-            // 
-            // btnViewTrans
-            // 
-            this.btnViewTrans.Location = new System.Drawing.Point(657, 8);
-            this.btnViewTrans.Name = "btnViewTrans";
-            this.btnViewTrans.Size = new System.Drawing.Size(167, 23);
-            this.btnViewTrans.TabIndex = 32;
-            this.btnViewTrans.Text = "View Transactions";
-            this.btnViewTrans.UseVisualStyleBackColor = true;
-            this.btnViewTrans.Click += new System.EventHandler(this.btnViewTrans_Click);
             // 
             // usrRequisition
             // 
