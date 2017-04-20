@@ -92,6 +92,7 @@
             this.lbInvoiceNumber = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.dtInvoiceDate = new System.Windows.Forms.DateTimePicker();
+            this.btnViewTrans = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgUnprocessed)).BeginInit();
@@ -396,6 +397,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnViewTrans);
             this.tabPage2.Controls.Add(this.dgUnpaid);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -420,10 +422,10 @@
             this.dataGridViewTextBoxColumn6,
             this.dataGridViewTextBoxColumn7,
             this.dataGridViewTextBoxColumn8});
-            this.dgUnpaid.Location = new System.Drawing.Point(6, 6);
+            this.dgUnpaid.Location = new System.Drawing.Point(6, 37);
             this.dgUnpaid.Name = "dgUnpaid";
             this.dgUnpaid.ReadOnly = true;
-            this.dgUnpaid.Size = new System.Drawing.Size(818, 250);
+            this.dgUnpaid.Size = new System.Drawing.Size(818, 219);
             this.dgUnpaid.TabIndex = 11;
             // 
             // dataGridViewTextBoxColumn1
@@ -705,6 +707,16 @@
             this.dtInvoiceDate.Size = new System.Drawing.Size(198, 20);
             this.dtInvoiceDate.TabIndex = 40;
             // 
+            // btnViewTrans
+            // 
+            this.btnViewTrans.Location = new System.Drawing.Point(657, 8);
+            this.btnViewTrans.Name = "btnViewTrans";
+            this.btnViewTrans.Size = new System.Drawing.Size(167, 23);
+            this.btnViewTrans.TabIndex = 32;
+            this.btnViewTrans.Text = "View Transactions";
+            this.btnViewTrans.UseVisualStyleBackColor = true;
+            this.btnViewTrans.Click += new System.EventHandler(this.btnViewTrans_Click);
+            // 
             // usrRequisition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -826,5 +838,6 @@
         private System.Windows.Forms.Label lbInvoiceNumber;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.DateTimePicker dtInvoiceDate;
+        private System.Windows.Forms.Button btnViewTrans;
     }
 }
