@@ -715,9 +715,14 @@ namespace Astrodon
         public DataSet GetFiles(String unitno, String buildingName)
         {
             String query = "SELECT d.tstamp, d.title, d.file FROM tx_astro_docs d inner join tx_astro_account_user_mapping m on d.unitno = m.account_no and d.cruser_id = m.cruser_id";
-            query += " where d.unitno = '" + unitno + "' and m.complex_name = '" + buildingName + "' ORDER BY d.tstamp DESC";
+            query += " where d.unitno = @unitno and m.complex_name = @buildingName ORDER BY d.tstamp DESC";
+            Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
+            sqlParms.Add("@unitno", unitno);
+            sqlParms.Add("@buildingName", buildingName);
             String status = "";
-            return GetData(query, null, out status);
+            DataSet fileDS = GetData(query, sqlParms, out status);
+            //MessageBox.Show(status);
+            return fileDS;
         }
 
         public DataSet GetCustomerDocs(String buildingName, out String status)
