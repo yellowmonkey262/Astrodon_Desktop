@@ -132,6 +132,7 @@
     <Compile Include="Entities\tblUser.cs" />
     <Compile Include="Entities\tblUserBuilding.cs" />
     <Compile Include="Entities\tblUserLog.cs" />
+    <Compile Include="Requisition\RequisitionDocument.cs" />
     <Compile Include="SupplierData\Supplier.cs" />
     <Compile Include="SupplierData\SupplierAudit.cs" />
     <Compile Include="Utility\NameSplitting.cs" />

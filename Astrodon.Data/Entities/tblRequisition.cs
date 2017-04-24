@@ -1,5 +1,6 @@
 namespace Astrodon.Data
 {
+    using MaintenanceData;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -52,5 +53,7 @@ namespace Astrodon.Data
         public string BranchName { get; set; }
         public string BranchCode { get; set; }
         public string AccountNumber { get; set; }
+
+        public virtual ICollection<RequisitionDocument> Documents { get; set; }
     }
 }

@@ -71,5 +71,7 @@ namespace Astrodon.Data
         public DbSet<SupplierAudit> SupplierAuditSet { get; set; }
         public DbSet<Maintenance> MaintenanceSet { get; set; }
         public DbSet<MaintenanceDocument> MaintenanceDocumentSet { get; set; }
+
+        public DbSet<RequisitionDocument> RequisitionDocumentSet { get; set; }
     }
 }

@@ -23,9 +23,9 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -93,6 +93,8 @@
             this.lbInvoiceNumber = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.dtInvoiceDate = new System.Windows.Forms.DateTimePicker();
+            this.btnUploadInvoice = new System.Windows.Forms.Button();
+            this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgUnprocessed)).BeginInit();
@@ -184,7 +186,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(289, 301);
+            this.btnSave.Location = new System.Drawing.Point(371, 331);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 7;
@@ -275,7 +277,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(15, 330);
+            this.tabControl1.Location = new System.Drawing.Point(15, 358);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(841, 326);
@@ -296,7 +298,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(589, 262);
+            this.btnDelete.Location = new System.Drawing.Point(688, 262);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(136, 23);
             this.btnDelete.TabIndex = 12;
@@ -306,12 +308,13 @@
             // 
             // btnSubmit
             // 
-            this.btnSubmit.Location = new System.Drawing.Point(731, 262);
+            this.btnSubmit.Location = new System.Drawing.Point(590, 262);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(75, 23);
             this.btnSubmit.TabIndex = 11;
             this.btnSubmit.Text = "Submit";
             this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Visible = false;
             this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // dgUnprocessed
@@ -389,9 +392,9 @@
             // colAmount
             // 
             this.colAmount.DataPropertyName = "amount";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N2";
-            this.colAmount.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Format = "N2";
+            this.colAmount.DefaultCellStyle = dataGridViewCellStyle7;
             this.colAmount.HeaderText = "Amount";
             this.colAmount.Name = "colAmount";
             this.colAmount.ReadOnly = true;
@@ -491,9 +494,9 @@
             // dataGridViewTextBoxColumn8
             // 
             this.dataGridViewTextBoxColumn8.DataPropertyName = "amount";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N2";
-            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Format = "N2";
+            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridViewTextBoxColumn8.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
             this.dataGridViewTextBoxColumn8.ReadOnly = true;
@@ -582,9 +585,9 @@
             // dataGridViewTextBoxColumn16
             // 
             this.dataGridViewTextBoxColumn16.DataPropertyName = "amount";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.Format = "N2";
+            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridViewTextBoxColumn16.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
             this.dataGridViewTextBoxColumn16.ReadOnly = true;
@@ -597,6 +600,7 @@
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 26;
             this.label1.Text = "Set as recurring:";
+            this.label1.Visible = false;
             // 
             // cmbRecur
             // 
@@ -610,6 +614,7 @@
             this.cmbRecur.Name = "cmbRecur";
             this.cmbRecur.Size = new System.Drawing.Size(122, 21);
             this.cmbRecur.TabIndex = 27;
+            this.cmbRecur.Visible = false;
             // 
             // label6
             // 
@@ -619,6 +624,7 @@
             this.label6.Size = new System.Drawing.Size(50, 13);
             this.label6.TabIndex = 29;
             this.label6.Text = "End date";
+            this.label6.Visible = false;
             // 
             // dtEndDate
             // 
@@ -628,6 +634,7 @@
             this.dtEndDate.Name = "dtEndDate";
             this.dtEndDate.Size = new System.Drawing.Size(198, 20);
             this.dtEndDate.TabIndex = 28;
+            this.dtEndDate.Visible = false;
             // 
             // label12
             // 
@@ -703,7 +710,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(370, 269);
+            this.label14.Location = new System.Drawing.Point(16, 300);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(68, 13);
             this.label14.TabIndex = 39;
@@ -713,15 +720,34 @@
             // 
             this.dtInvoiceDate.CustomFormat = "yyyy/MM/dd";
             this.dtInvoiceDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtInvoiceDate.Location = new System.Drawing.Point(460, 269);
+            this.dtInvoiceDate.Location = new System.Drawing.Point(158, 294);
             this.dtInvoiceDate.Name = "dtInvoiceDate";
-            this.dtInvoiceDate.Size = new System.Drawing.Size(198, 20);
+            this.dtInvoiceDate.Size = new System.Drawing.Size(204, 20);
             this.dtInvoiceDate.TabIndex = 40;
+            // 
+            // btnUploadInvoice
+            // 
+            this.btnUploadInvoice.Location = new System.Drawing.Point(371, 294);
+            this.btnUploadInvoice.Name = "btnUploadInvoice";
+            this.btnUploadInvoice.Size = new System.Drawing.Size(101, 23);
+            this.btnUploadInvoice.TabIndex = 41;
+            this.btnUploadInvoice.Text = "Upload Invoice";
+            this.btnUploadInvoice.UseVisualStyleBackColor = true;
+            this.btnUploadInvoice.Click += new System.EventHandler(this.btnUploadInvoice_Click);
+            // 
+            // ofdAttachment
+            // 
+            this.ofdAttachment.FileName = "openFileDialog1";
+            this.ofdAttachment.Filter = "PDF Files (*.pdf)|*.pdf";
+            this.ofdAttachment.InitialDirectory = "c:\\\\";
+            this.ofdAttachment.Multiselect = true;
+            this.ofdAttachment.RestoreDirectory = true;
             // 
             // usrRequisition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnUploadInvoice);
             this.Controls.Add(this.dtInvoiceDate);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.txtInvoiceNumber);
@@ -840,5 +866,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.DateTimePicker dtInvoiceDate;
         private System.Windows.Forms.Button btnViewTrans;
+        private System.Windows.Forms.Button btnUploadInvoice;
+        private System.Windows.Forms.OpenFileDialog ofdAttachment;
     }
 }

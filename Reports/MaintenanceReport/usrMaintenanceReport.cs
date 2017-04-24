@@ -114,13 +114,25 @@ namespace Astrodon.Reports.MaintenanceReport
                         {
                             byte[] combinedReport = null;
 
+                            DateTime startDate = new DateTime(dDate.Year, dDate.Month, 1);
+                            DateTime endDate = startDate.AddMonths(1).AddSeconds(-1);
+
+
                             using (var dataContext = SqlDataHandler.GetDataContext())
                             {
                                 var documentIds = (from m in dataContext.MaintenanceSet
                                                             from d in m.MaintenanceDocuments
                                                             where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
+                                                               && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
                                                             orderby m.DateLogged
                                                             select d.id).ToList();
+
+                                var reqDocIds = (from m in dataContext.MaintenanceSet
+                                                   from d in m.Requisition.Documents
+                                                   where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
+                                                      && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
+                                                   orderby m.DateLogged
+                                                   select d.id).ToList();
 
                                 using (MemoryStream ms = new MemoryStream())
                                 {
@@ -132,11 +144,18 @@ namespace Astrodon.Reports.MaintenanceReport
 
                                             AddPdfDocument(copy, reportData);
 
+                                            foreach (var documentId in reqDocIds)
+                                            {
+                                                var document = dataContext.RequisitionDocumentSet.Where(a => a.id == documentId).Select(a => a.FileData).Single();
+                                                AddPdfDocument(copy, document);
+                                            }
+
                                             foreach (var documentId in documentIds)
                                             {
                                                 var document = dataContext.MaintenanceDocumentSet.Where(a => a.id == documentId).Select(a => a.FileData).Single();
                                                 AddPdfDocument(copy, document);
                                             }
+                                           
                                         }
                                     }
 

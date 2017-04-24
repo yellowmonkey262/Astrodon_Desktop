@@ -9,6 +9,8 @@ using System.Linq;
 using System.Data.Entity;
 using Astro.Library.Entities;
 using Astrodon.Classes;
+using Astrodon.Data.MaintenanceData;
+using System.IO;
 
 namespace Astrodon.Controls
 {
@@ -25,11 +27,14 @@ namespace Astrodon.Controls
         private SqlDataHandler dh = new SqlDataHandler();
         private Dictionary<String, double> avAmts = new Dictionary<string, double>();
         private String status;
+        private DateTime _minDate = new DateTime(2000, 1, 1);
+            
 
         public usrRequisition()
         {
             InitializeComponent();
-
+            dtInvoiceDate.MinDate = _minDate;
+            dtInvoiceDate.Value = _minDate;
             dtInvoiceDate.MaxDate = DateTime.Today.AddDays(7);
         }
 
@@ -79,6 +84,7 @@ namespace Astrodon.Controls
             unProcessedRequisitions.Clear();
             unPaidRequisitions.Clear();
             paidRequisitions.Clear();
+            _Documents.Clear();
             String lineNumber = "0";
 
             try
@@ -471,26 +477,55 @@ namespace Astrodon.Controls
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            double amt;
+            decimal amt;
 
-            if (double.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null 
+            if (decimal.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null 
                 && cmbLedger.SelectedItem != null && cmbAccount.SelectedItem != null)
             {
+                if(dtInvoiceDate.Value <= _minDate)
+                {
+                    Controller.HandleError("Invoice Date required for Maintenance. Please select a date.", "Validation Error");
+                    return;
+                }
+                if (String.IsNullOrWhiteSpace(txtInvoiceNumber.Text))
+                {
+                    Controller.HandleError("Invoice Number required for Maintenance. Please supply an invoice number.", "Validation Error");
+                    return;
+                }
+
+                if(_Documents.Count == 0)
+                {
+                    Controller.HandleError("Invoice attachment required, please upload Invoice PDF", "Validation Error");
+                    return;
+                }
                 using (var context = SqlDataHandler.GetDataContext())
                 {
+
+                    var q = (from r in context.tblRequisitions
+                             where r.SupplierId == _Supplier.id
+                             && r.InvoiceNumber == txtInvoiceNumber.Text
+                             && r.amount == amt
+                             select r);
+                    if(q.Count() > 0)
+                    {
+                        Controller.HandleError("Duplicate requisition detected.\n"+
+                           txtInvoiceNumber.Text + " invoice has already been processed", "Validation Error");
+                        return;
+                    }
+
                     var item = new tblRequisition()
                     {
                         trnDate = trnDatePicker.Value.Date,
                         account = cmbAccount.SelectedItem.ToString(),
                         reference = _MyBuildings[cmbBuilding.SelectedIndex].Abbr + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + _MyBuildings[cmbBuilding.SelectedIndex].Trust + ")" : ""),
                         ledger = cmbLedger.SelectedItem.ToString(),
-                        amount = decimal.Parse(txtAmount.Text),
+                        amount = amt,
                         payreference = txtPaymentRef.Text,
                         userID = Controller.user.id,
                         building = _MyBuildings[cmbBuilding.SelectedIndex].ID,
                         SupplierId = _Supplier == null ? (int?)null : _Supplier.id,
                         InvoiceNumber = txtInvoiceNumber.Text,
-                        InvoiceDate = dtInvoiceDate.Value.Date,
+                        InvoiceDate = dtInvoiceDate.Value,
                         BankName = _Supplier == null ? (string)null : _Supplier.BankName,
                         BranchCode = _Supplier == null ? (string)null : _Supplier.BranceCode,
                         BranchName = _Supplier == null ? (string)null : _Supplier.BranchName,
@@ -498,6 +533,16 @@ namespace Astrodon.Controls
                     };
 
                     context.tblRequisitions.Add(item);
+                    foreach (var key in _Documents.Keys)
+                    {
+                        context.RequisitionDocumentSet.Add(new RequisitionDocument()
+                        {
+                            Requisition = item,
+                            FileData = _Documents[key],
+                            FileName = key,
+                            IsInvoice = true
+                        });
+                    }
 
                     string ledgerAccount = item.ledger;
                     
@@ -610,7 +655,7 @@ namespace Astrodon.Controls
             lblBalance.Text = "";
             lblAvAmt.Text = "";
             txtInvoiceNumber.Text = "";
-            dtInvoiceDate.Value = DateTime.Today;
+            dtInvoiceDate.Value = _minDate;
 
             ClearSupplier();
 
@@ -784,7 +829,18 @@ namespace Astrodon.Controls
         {
         }
 
-       
+        private Dictionary<string,byte[]> _Documents = new Dictionary<string, byte[]>();
+
+        private void btnUploadInvoice_Click(object sender, EventArgs e)
+        {
+            if (ofdAttachment.ShowDialog() == DialogResult.OK)
+            {
+                for (int i = 0; i < ofdAttachment.FileNames.Count(); i++)
+                {
+                    _Documents.Add(ofdAttachment.SafeFileNames[i], File.ReadAllBytes(ofdAttachment.FileNames[i]));
+                }
+            }
+        }
     }
 
     public class Requisition
@@ -808,6 +864,8 @@ namespace Astrodon.Controls
         public double amount { get; set; }
 
     }
+
+    
 
     public class RequisitionList
     {
