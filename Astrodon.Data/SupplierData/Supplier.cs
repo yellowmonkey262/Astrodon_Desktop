@@ -30,25 +30,7 @@ namespace Astrodon.Data.SupplierData
         [MaxLength(200)]
         public virtual string ContactNumber { get; set; }
 
-        #region Banking Details
-
-        [MaxLength(200)]
-        [Required]
-        public virtual string BankName { get; set; }
-
-        [MaxLength(200)]
-        [Required]
-        public virtual string BranchName { get; set; }
-
-        [MaxLength(200)]
-        [Required]
-        public virtual string BranceCode { get; set; }
-
-        [MaxLength(200)]
-        [Required]
-        public virtual string AccountNumber { get; set; }
-
-        #endregion
+     
 
         #region Blacklisted
 
@@ -63,7 +45,7 @@ namespace Astrodon.Data.SupplierData
         #endregion
 
         public virtual ICollection<MaintenanceData.Maintenance> Maintenance { get; set; }
-
+        public virtual ICollection<SupplierBuilding> Buildings { get; set; }
         public virtual ICollection<SupplierAudit> AuditRecords { get; set; }
         public virtual ICollection<tblRequisition> Requisitions { get; set; }
     }

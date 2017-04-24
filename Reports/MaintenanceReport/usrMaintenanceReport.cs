@@ -110,7 +110,7 @@ namespace Astrodon.Reports.MaintenanceReport
                             return;
                         }
 
-                        if(repType == MaintenanceReportType.DetailedReportWithSupportingDocuments)
+                        if (repType == MaintenanceReportType.DetailedReportWithSupportingDocuments)
                         {
                             byte[] combinedReport = null;
 
@@ -121,18 +121,20 @@ namespace Astrodon.Reports.MaintenanceReport
                             using (var dataContext = SqlDataHandler.GetDataContext())
                             {
                                 var documentIds = (from m in dataContext.MaintenanceSet
-                                                            from d in m.MaintenanceDocuments
-                                                            where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
-                                                               && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
-                                                            orderby m.DateLogged
-                                                            select d.id).ToList();
-
-                                var reqDocIds = (from m in dataContext.MaintenanceSet
-                                                   from d in m.Requisition.Documents
+                                                   from d in m.MaintenanceDocuments
                                                    where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
                                                       && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
+                                                      && m.Requisition.paid == true
                                                    orderby m.DateLogged
                                                    select d.id).ToList();
+
+                                var reqDocIds = (from m in dataContext.MaintenanceSet
+                                                 from d in m.Requisition.Documents
+                                                 where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
+                                                    && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
+                                                    && m.Requisition.paid == true
+                                                 orderby m.DateLogged
+                                                 select d.id).ToList();
 
                                 using (MemoryStream ms = new MemoryStream())
                                 {
@@ -155,7 +157,7 @@ namespace Astrodon.Reports.MaintenanceReport
                                                 var document = dataContext.MaintenanceDocumentSet.Where(a => a.id == documentId).Select(a => a.FileData).Single();
                                                 AddPdfDocument(copy, document);
                                             }
-                                           
+
                                         }
                                     }
 

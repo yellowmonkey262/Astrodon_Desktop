@@ -109,10 +109,10 @@ namespace Astrodon.Controls.Supplier
                     supplier.ContactNumber = txtContactNumber.Text.Trim();
                     supplier.BlackListed = chkIsBlackListed.Checked;
                     supplier.BlackListReason = txtBlackListReason.Text.Trim();
-                    supplier.BankName = txtBank.Text.Trim();
-                    supplier.BranchName = txtBranch.Text.Trim();
-                    supplier.BranceCode = txtBranchCode.Text.Trim();
-                    supplier.AccountNumber = txtAccountNumber.Text.Trim();
+                    //supplier.BankName = txtBank.Text.Trim();
+                    //supplier.BranchName = txtBranch.Text.Trim();
+                    //supplier.BranceCode = txtBranchCode.Text.Trim();
+                    //supplier.AccountNumber = txtAccountNumber.Text.Trim();
 
                     TrackSupplierChanges(_Supplier, supplier);
 
@@ -141,10 +141,10 @@ namespace Astrodon.Controls.Supplier
                             ContactNumber = txtContactNumber.Text.Trim(),
                             BlackListed = chkIsBlackListed.Checked,
                             BlackListReason = txtBlackListReason.Text.Trim(),
-                            BankName = txtBank.Text.Trim(),
-                            BranchName = txtBranch.Text.Trim(),
-                            BranceCode = txtBranchCode.Text.Trim(),
-                            AccountNumber = txtAccountNumber.Text.Trim()
+                            //BankName = txtBank.Text.Trim(),
+                            //BranchName = txtBranch.Text.Trim(),
+                            //BranceCode = txtBranchCode.Text.Trim(),
+                            //AccountNumber = txtAccountNumber.Text.Trim()
                         });
 
                         _DataContext.SaveChanges();
@@ -172,10 +172,10 @@ namespace Astrodon.Controls.Supplier
             txtContactNumber.Text = _Supplier.ContactNumber;
             chkIsBlackListed.Checked = _Supplier.BlackListed;
             txtBlackListReason.Text = _Supplier.BlackListReason;
-            txtBank.Text = _Supplier.BankName;
-            txtBranch.Text = _Supplier.BranchName;
-            txtBranchCode.Text = _Supplier.BranceCode;
-            txtAccountNumber.Text = _Supplier.AccountNumber;
+            //txtBank.Text = _Supplier.BankName;
+            //txtBranch.Text = _Supplier.BranchName;
+            //txtBranchCode.Text = _Supplier.BranceCode;
+            //txtAccountNumber.Text = _Supplier.AccountNumber;
         }
 
         private void BindAuditTrailDataGrid()

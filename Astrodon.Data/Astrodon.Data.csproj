@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BankData\Bank.cs" />
+    <Compile Include="BankData\BankAudit.cs" />
     <Compile Include="Base\DbEntity.cs" />
     <Compile Include="Base\IdValue.cs" />
     <Compile Include="Base\StringKeyValue.cs" />
@@ -79,6 +81,10 @@
     <Compile Include="Migrations\201701231347353_RequisitionSupplierBankDetails.cs" />
     <Compile Include="Migrations\201701231347353_RequisitionSupplierBankDetails.Designer.cs">
       <DependentUpon>201701231347353_RequisitionSupplierBankDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704241209441_MaintenanceReportPhase2.cs" />
+    <Compile Include="Migrations\201704241209441_MaintenanceReportPhase2.Designer.cs">
+      <DependentUpon>201704241209441_MaintenanceReportPhase2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,9 +138,10 @@
     <Compile Include="Entities\tblUser.cs" />
     <Compile Include="Entities\tblUserBuilding.cs" />
     <Compile Include="Entities\tblUserLog.cs" />
-    <Compile Include="Requisition\RequisitionDocument.cs" />
+    <Compile Include="RequisitionData\RequisitionDocument.cs" />
     <Compile Include="SupplierData\Supplier.cs" />
     <Compile Include="SupplierData\SupplierAudit.cs" />
+    <Compile Include="SupplierData\SupplierBuilding.cs" />
     <Compile Include="Utility\NameSplitting.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701231347353_RequisitionSupplierBankDetails.resx">
       <DependentUpon>201701231347353_RequisitionSupplierBankDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704241209441_MaintenanceReportPhase2.resx">
+      <DependentUpon>201704241209441_MaintenanceReportPhase2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,5 @@
-﻿using Astrodon.Controls.Maintenance;
+﻿using Astrodon.Controls.Bank;
+using Astrodon.Controls.Maintenance;
 using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using Astrodon.Reports;
@@ -523,7 +524,7 @@ namespace Astrodon
         private void suppliersToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext);
+            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext,null);
             supplierLookup.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(supplierLookup);
             toolStripStatusLabel1.Text = "Supplier Maintenance";
@@ -536,6 +537,15 @@ namespace Astrodon
             maintenance.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(maintenance);
             toolStripStatusLabel1.Text = "Building Maintenance";
+        }
+
+        private void bankConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrBankConfiguration control = new usrBankConfiguration(_DataContext);
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Bank Configuration";
         }
     }
 }

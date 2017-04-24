@@ -1,6 +1,8 @@
 ﻿
 //using Astrodon.Data.Maintenance;
+using Astrodon.Data.BankData;
 using Astrodon.Data.MaintenanceData;
+using Astrodon.Data.RequisitionData;
 using Astrodon.Data.SupplierData;
 using System;
 using System.Configuration;
@@ -67,11 +69,37 @@ namespace Astrodon.Data
         #endregion
 
         public DbSet<BuildingMaintenanceConfiguration> BuildingMaintenanceConfigurationSet { get; set; }
+        public DbSet<SupplierBuilding> SupplierBuildingSet { get; set; }
         public DbSet<Supplier> SupplierSet { get; set; }
         public DbSet<SupplierAudit> SupplierAuditSet { get; set; }
         public DbSet<Maintenance> MaintenanceSet { get; set; }
         public DbSet<MaintenanceDocument> MaintenanceDocumentSet { get; set; }
 
         public DbSet<RequisitionDocument> RequisitionDocumentSet { get; set; }
+
+        public DbSet<Bank> BankSet { get; set; }
+        public DbSet<BankAudit> BankAuditSet { get; set; }
+
+        public void ClearChanges()
+        {
+            var changedEntries = ChangeTracker.Entries().Where(x => x.State != EntityState.Unchanged).ToList();
+
+            foreach (var entry in changedEntries)
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Modified:
+                        entry.CurrentValues.SetValues(entry.OriginalValues);
+                        entry.State = EntityState.Unchanged;
+                        break;
+                    case EntityState.Added:
+                        entry.State = EntityState.Detached;
+                        break;
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Unchanged;
+                        break;
+                }
+            }
+        }
     }
 }

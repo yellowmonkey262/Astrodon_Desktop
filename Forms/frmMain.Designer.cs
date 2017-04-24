@@ -86,6 +86,7 @@
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.bankConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -115,6 +116,7 @@
             this.configToolStripMenuItem,
             this.buildingsToolStripMenuItem,
             this.tbMaintenanceConfig,
+            this.bankConfigurationToolStripMenuItem,
             this.usersToolStripMenuItem,
             this.bulkSMSToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -585,6 +587,13 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
+            // bankConfigurationToolStripMenuItem
+            // 
+            this.bankConfigurationToolStripMenuItem.Name = "bankConfigurationToolStripMenuItem";
+            this.bankConfigurationToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.bankConfigurationToolStripMenuItem.Text = "Bank Configuration";
+            this.bankConfigurationToolStripMenuItem.Click += new System.EventHandler(this.bankConfigurationToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -673,5 +682,6 @@
         private System.Windows.Forms.ToolStripMenuItem maintenanceReportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem buildingMaintenanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem suppliersToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem bankConfigurationToolStripMenuItem;
     }
 }

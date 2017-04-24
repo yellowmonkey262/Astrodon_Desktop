@@ -1,6 +1,7 @@
 namespace Astrodon.Data
 {
     using MaintenanceData;
+    using RequisitionData;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

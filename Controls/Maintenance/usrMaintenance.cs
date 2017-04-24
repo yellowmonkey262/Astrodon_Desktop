@@ -271,19 +271,29 @@ namespace Astrodon.Controls.Maintenance
                                 //lets find the supplier id
 
 
-                                var frmSupplierLookup = new frmSupplierLookup(_DataContext);
+                                var frmSupplierLookup = new frmSupplierLookup(_DataContext, configItem.BuildingId);
 
                                 var supplierResult = frmSupplierLookup.ShowDialog();
                                 var supplier = frmSupplierLookup.SelectedSupplier;
 
                                 if (supplierResult == DialogResult.OK && supplier != null)
                                 {
-                                    reqItem.SupplierId = supplier.id;
-                                    reqItem.Supplier = supplier;
-                                    reqItem.BankName =  supplier.BankName;
-                                    reqItem.BranchCode =  supplier.BranceCode;
-                                    reqItem.BranchName =  supplier.BranchName;
-                                    reqItem.AccountNumber = supplier.AccountNumber;
+                                    var bankDetails = _DataContext.SupplierBuildingSet.Include(a => a.Bank).SingleOrDefault(a => a.BuildingId == configItem.BuildingId && a.SupplierId == supplier.id);
+                                    if (bankDetails != null)
+                                    {
+                                        reqItem.SupplierId = supplier.id;
+                                        reqItem.Supplier = supplier;
+                                        reqItem.BankName = bankDetails.Bank.Name;
+                                        reqItem.BranchCode = bankDetails.BranceCode;
+                                        reqItem.BranchName = bankDetails.BranchName;
+                                        reqItem.AccountNumber = bankDetails.AccountNumber;
+                                    }
+                                    else
+                                    {
+                                        Controller.HandleError("Supplier banking details for this building is not configured.\n"+
+                                            "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
+                                        return;
+                                    }
                                 }
                                 else
                                 {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 
 
-namespace Astrodon.Data.MaintenanceData
+namespace Astrodon.Data.RequisitionData
 {
     [Table("RequisitionDocument")]
     public class RequisitionDocument : DbEntity

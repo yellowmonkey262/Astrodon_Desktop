@@ -18,12 +18,12 @@ namespace Astrodon.Forms
 
         public Data.SupplierData.Supplier SelectedSupplier { get ; private set; }
 
-        public frmSupplierLookup(DataContext context)
+        public frmSupplierLookup(DataContext context, int buildingId)
         {
             InitializeComponent();
             DialogResult = DialogResult.Cancel;
 
-            _LookupControl = new usrSupplierLookup(context, true);
+            _LookupControl = new usrSupplierLookup(context, buildingId, true);
             _LookupControl.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(_LookupControl);
 

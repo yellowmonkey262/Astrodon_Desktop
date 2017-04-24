@@ -11,6 +11,7 @@ using Astro.Library.Entities;
 using Astrodon.Classes;
 using Astrodon.Data.MaintenanceData;
 using System.IO;
+using Astrodon.Data.RequisitionData;
 
 namespace Astrodon.Controls
 {
@@ -513,6 +514,17 @@ namespace Astrodon.Controls
                         return;
                     }
 
+                    var buildingId = _MyBuildings[cmbBuilding.SelectedIndex].ID;
+
+                    var bankDetails = context.SupplierBuildingSet
+                                             .Include(a => a.Bank)
+                                             .SingleOrDefault(a => a.BuildingId == buildingId && a.SupplierId == _Supplier.id);
+                    if(bankDetails == null)
+                    {
+                        Controller.HandleError("Supplier banking details for this building is not configured.\n" +
+                                            "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
+                        return;
+                    }
                     var item = new tblRequisition()
                     {
                         trnDate = trnDatePicker.Value.Date,
@@ -522,14 +534,14 @@ namespace Astrodon.Controls
                         amount = amt,
                         payreference = txtPaymentRef.Text,
                         userID = Controller.user.id,
-                        building = _MyBuildings[cmbBuilding.SelectedIndex].ID,
+                        building = buildingId,
                         SupplierId = _Supplier == null ? (int?)null : _Supplier.id,
                         InvoiceNumber = txtInvoiceNumber.Text,
                         InvoiceDate = dtInvoiceDate.Value,
-                        BankName = _Supplier == null ? (string)null : _Supplier.BankName,
-                        BranchCode = _Supplier == null ? (string)null : _Supplier.BranceCode,
-                        BranchName = _Supplier == null ? (string)null : _Supplier.BranchName,
-                        AccountNumber = _Supplier == null ? (string)null : _Supplier.AccountNumber
+                        BankName = _Supplier == null ? (string)null : bankDetails.Bank.Name,
+                        BranchCode = _Supplier == null ? (string)null : bankDetails.BranceCode,
+                        BranchName = _Supplier == null ? (string)null : bankDetails.BranchName,
+                        AccountNumber = _Supplier == null ? (string)null : bankDetails.AccountNumber
                     };
 
                     context.tblRequisitions.Add(item);
@@ -578,66 +590,73 @@ namespace Astrodon.Controls
                     //dh.SetData(query, sqlParms, out status);
                 }
 
-                if (cmbRecur.SelectedIndex > 0)
-                {
-                    DateTime startDate = trnDatePicker.Value;
-                    List<DateTime> dates = new List<DateTime>();
-                    switch (cmbRecur.SelectedIndex)
-                    {
-                        case 1: //weekly
-                            while (startDate.AddDays(7) <= dtEndDate.Value)
-                            {
-                                dates.Add(startDate.AddDays(7));
-                                startDate = startDate.AddDays(7);
-                            }
-                            break;
+                #region Recurring
+                //recurring is disabled
 
-                        case 2: //month
-                            while (startDate.AddMonths(1) <= dtEndDate.Value)
-                            {
-                                dates.Add(startDate.AddMonths(1));
-                                startDate = startDate.AddMonths(1);
-                            }
-                            break;
+                //if (cmbRecur.SelectedIndex > 0)
+                //{
 
-                        case 3: //yearly
-                            while (startDate.AddYears(1) <= dtEndDate.Value)
-                            {
-                                dates.Add(startDate.AddYears(1));
-                                startDate = startDate.AddYears(1);
-                            }
-                            break;
-                    }
+                //    DateTime startDate = trnDatePicker.Value;
+                //    List<DateTime> dates = new List<DateTime>();
+                //    switch (cmbRecur.SelectedIndex)
+                //    {
+                //        case 1: //weekly
+                //            while (startDate.AddDays(7) <= dtEndDate.Value)
+                //            {
+                //                dates.Add(startDate.AddDays(7));
+                //                startDate = startDate.AddDays(7);
+                //            }
+                //            break;
 
-                    #region Build Up SQL Query
+                //        case 2: //month
+                //            while (startDate.AddMonths(1) <= dtEndDate.Value)
+                //            {
+                //                dates.Add(startDate.AddMonths(1));
+                //                startDate = startDate.AddMonths(1);
+                //            }
+                //            break;
 
-                    String query = "INSERT INTO tblRequisition(trnDate, account, reference, payreference, ledger, amount, userID, building,SupplierId,InvoiceNumber,InvoiceDate,BankName,BranchCode,AccountNumber,BranchName)";
-                    query += " VALUES(@trnDate, @account, @reference, @payment, @ledger, @amount, @userID, @building,@SupplierId,@InvoiceNumber,@InvoiceDate,@BankName,@BranchCode,@AccountNumber,@BranchName)";
-                    Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-                    sqlParms.Add("@trnDate", DateTime.Parse(trnDatePicker.Value.ToString("yyyy/MM/dd")));
-                    sqlParms.Add("@account", cmbAccount.SelectedItem.ToString());
-                    sqlParms.Add("@reference", _MyBuildings[cmbBuilding.SelectedIndex].Abbr + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + _MyBuildings[cmbBuilding.SelectedIndex].Trust + ")" : ""));
-                    sqlParms.Add("@ledger", cmbLedger.SelectedItem.ToString());
-                    sqlParms.Add("@amount", double.Parse(txtAmount.Text));
-                    sqlParms.Add("@payment", txtPaymentRef.Text);
-                    sqlParms.Add("@userID", Controller.user.id);
-                    sqlParms.Add("@building", _MyBuildings[cmbBuilding.SelectedIndex].ID);
-                    sqlParms.Add("@SupplierId", _Supplier == null ? (int?)null : _Supplier.id);
-                    sqlParms.Add("@InvoiceNumber", txtInvoiceNumber.Text);
-                    sqlParms.Add("@InvoiceDate", dtInvoiceDate.Value.ToString("yyyy/MM/dd"));
-                    sqlParms.Add("@BankName", _Supplier == null ? (string)null : _Supplier.BankName);
-                    sqlParms.Add("@BranchCode", _Supplier == null ? (string)null : _Supplier.BranceCode);
-                    sqlParms.Add("@AccountNumber", _Supplier == null ? (string)null : _Supplier.AccountNumber);
-                    sqlParms.Add("@BranchName", _Supplier == null ? (string)null : _Supplier.BranchName);
+                //        case 3: //yearly
+                //            while (startDate.AddYears(1) <= dtEndDate.Value)
+                //            {
+                //                dates.Add(startDate.AddYears(1));
+                //                startDate = startDate.AddYears(1);
+                //            }
+                //            break;
+                //    }
 
-                    #endregion
+                //    #region Build Up SQL Query
 
-                    foreach (DateTime dt in dates)
-                    {
-                        sqlParms["@trnDate"] = dt;
-                        dh.SetData(query, sqlParms, out status);
-                    }
-                }
+                //    String query = "INSERT INTO tblRequisition(trnDate, account, reference, payreference, ledger, amount, userID, building,SupplierId,InvoiceNumber,InvoiceDate,BankName,BranchCode,AccountNumber,BranchName)";
+                //    query += " VALUES(@trnDate, @account, @reference, @payment, @ledger, @amount, @userID, @building,@SupplierId,@InvoiceNumber,@InvoiceDate,@BankName,@BranchCode,@AccountNumber,@BranchName)";
+                //    Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
+                //    sqlParms.Add("@trnDate", DateTime.Parse(trnDatePicker.Value.ToString("yyyy/MM/dd")));
+                //    sqlParms.Add("@account", cmbAccount.SelectedItem.ToString());
+                //    sqlParms.Add("@reference", _MyBuildings[cmbBuilding.SelectedIndex].Abbr + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + _MyBuildings[cmbBuilding.SelectedIndex].Trust + ")" : ""));
+                //    sqlParms.Add("@ledger", cmbLedger.SelectedItem.ToString());
+                //    sqlParms.Add("@amount", double.Parse(txtAmount.Text));
+                //    sqlParms.Add("@payment", txtPaymentRef.Text);
+                //    sqlParms.Add("@userID", Controller.user.id);
+                //    sqlParms.Add("@building", _MyBuildings[cmbBuilding.SelectedIndex].ID);
+                //    sqlParms.Add("@SupplierId", _Supplier == null ? (int?)null : _Supplier.id);
+                //    sqlParms.Add("@InvoiceNumber", txtInvoiceNumber.Text);
+                //    sqlParms.Add("@InvoiceDate", dtInvoiceDate.Value.ToString("yyyy/MM/dd"));
+
+                //    sqlParms.Add("@BankName", _Supplier == null ? (string)null : _Supplier.BankName);
+                //    sqlParms.Add("@BranchCode", _Supplier == null ? (string)null : _Supplier.BranceCode);
+                //    sqlParms.Add("@AccountNumber", _Supplier == null ? (string)null : _Supplier.AccountNumber);
+                //    sqlParms.Add("@BranchName", _Supplier == null ? (string)null : _Supplier.BranchName);
+
+                //    #endregion
+
+                //    foreach (DateTime dt in dates)
+                //    {
+                //        sqlParms["@trnDate"] = dt;
+                //        dh.SetData(query, sqlParms, out status);
+                //    }
+
+                //}
+                #endregion
 
                 LoadRequisitions();
                 ClearRequisitions();
@@ -765,9 +784,17 @@ namespace Astrodon.Controls
 
         private void btnSupplierLookup_Click(object sender, EventArgs e)
         {
+            if(cmbBuilding.SelectedIndex < 0)
+            {
+                Controller.HandleError("Please select a building first.", "Validation Error");
+                return;
+
+            }
+            var buildingId = _MyBuildings[cmbBuilding.SelectedIndex].ID;
+
             using (var context = SqlDataHandler.GetDataContext())
             {
-                var frmSupplierLookup = new frmSupplierLookup(context);
+                var frmSupplierLookup = new frmSupplierLookup(context,buildingId);
 
                 var dialogResult = frmSupplierLookup.ShowDialog();
                 var supplier = frmSupplierLookup.SelectedSupplier;
@@ -776,8 +803,20 @@ namespace Astrodon.Controls
                 {
                     _Supplier = supplier;
                     lbSupplierName.Text = _Supplier.CompanyName;
-                    lbBankName.Text = _Supplier.BankName + " (" + supplier.BranceCode + ")";
-                    lbAccountNumber.Text = _Supplier.AccountNumber;
+
+
+                    var bankDetails = context.SupplierBuildingSet
+                                             .Include(a => a.Bank)
+                                             .SingleOrDefault(a => a.BuildingId == buildingId && a.SupplierId == _Supplier.id);
+                    if (bankDetails == null)
+                    {
+                        Controller.HandleError("Supplier banking details for this building is not configured.\n" +
+                                            "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
+                        return;
+                    }
+
+                    lbBankName.Text = bankDetails.Bank.Name + " (" + bankDetails.BranceCode + ")";
+                    lbAccountNumber.Text = bankDetails.AccountNumber;
                     btnSave.Enabled = true;
                 }
                 else

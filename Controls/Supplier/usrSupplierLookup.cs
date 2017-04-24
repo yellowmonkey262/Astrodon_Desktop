@@ -17,11 +17,13 @@ namespace Astrodon.Controls.Supplier
         private List<SupplierResult> _SupplierData;
         private SupplierResult _SelectedSupplier;
         private bool _IsSelectDialog;
+        private int? _buildingId;
 
-        public usrSupplierLookup(DataContext context, bool isSelectDialog = false)
+        public usrSupplierLookup(DataContext context, int? buildingId, bool isSelectDialog = false)
         {
             _DataContext = context;
             _IsSelectDialog = isSelectDialog;
+            _buildingId = buildingId;
 
             InitializeComponent();
 

@@ -152,6 +152,12 @@
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\webreport.cs" />
     <Compile Include="Classes\WordProcessor.cs" />
+    <Compile Include="Controls\Bank\usrBankConfiguration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Bank\usrBankConfiguration.Designer.cs">
+      <DependentUpon>usrBankConfiguration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Maintenance\MaintenanceException.cs" />
     <Compile Include="Controls\Maintenance\usrBuildingMaintenanceConfiguration.cs">
       <SubType>UserControl</SubType>
@@ -567,6 +573,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controls\Bank\usrBankConfiguration.resx">
+      <DependentUpon>usrBankConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Maintenance\usrBuildingMaintenanceConfiguration.resx">
       <DependentUpon>usrBuildingMaintenanceConfiguration.cs</DependentUpon>
     </EmbeddedResource>
