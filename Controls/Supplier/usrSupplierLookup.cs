@@ -35,8 +35,24 @@ namespace Astrodon.Controls.Supplier
 
         private void SupplierSelected(Astrodon.Data.SupplierData.Supplier selectedItem)
         {
-            if (SupplierSelectedEvent != null)
-                SupplierSelectedEvent(this, new SupplierSelectEventArgs(selectedItem));
+            if (selectedItem.BlackListed == false)
+            {
+
+                if (SupplierSelectedEvent != null)
+                    SupplierSelectedEvent(this, new SupplierSelectEventArgs(selectedItem));
+            }
+            else
+            {
+                string username = "Unknown";
+                if (selectedItem.BlacklistedUserId != null)
+                    username = _DataContext.tblUsers.Where(a => a.id == selectedItem.BlacklistedUserId.Value).Select(a => a.name).SingleOrDefault();
+
+                if (String.IsNullOrWhiteSpace(username))
+                    username = "Unknown";
+
+                Controller.HandleError("The supplier was blacklisted by "+username + " for " + selectedItem.BlackListReason + "\n"+
+                    "Please cleare the blacklist to proceeding.", "Validation Error");
+            }
         }
 
         #endregion

@@ -55,7 +55,11 @@ namespace Astrodon.Data.SupplierData
         public virtual bool BlackListed { get; set; }
 
         public virtual string BlackListReason { get; set; }
-        
+
+        public virtual int? BlacklistedUserId { get; set; }
+        [ForeignKey("BlacklistedUserId")]
+        public virtual tblUser BlacklistedUser { get; set; }
+
         #endregion
 
         public virtual ICollection<MaintenanceData.Maintenance> Maintenance { get; set; }
