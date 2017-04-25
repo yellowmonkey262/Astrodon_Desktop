@@ -52,7 +52,7 @@ namespace Astrodon.Data.Migrations
                     })
                 .PrimaryKey(t => t.id)
                 .ForeignKey("dbo.Bank", t => t.BankId)
-                .ForeignKey("dbo.tblBuildings", t => t.SupplierId)
+                .ForeignKey("dbo.tblBuildings", t => t.BuildingId)
                 .ForeignKey("dbo.Supplier", t => t.SupplierId)
                 .Index(t => new { t.SupplierId, t.BuildingId }, unique: true, name: "IDX_SupplierBuilding")
                 .Index(t => t.BankId);

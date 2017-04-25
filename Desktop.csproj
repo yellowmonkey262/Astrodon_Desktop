@@ -1107,15 +1107,13 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ReportService\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="Astrodon.Data\Astrodon.Data.csproj">
       <Project>{89422917-7104-43aa-b124-bccabf3c733b}</Project>
       <Name>Astrodon.Data</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\ReportService\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="AstroLibrary\AstroLibrary.csproj">
       <Project>{ce7d8e45-b945-4013-8633-c2add2ac8876}</Project>
       <Name>AstroLibrary</Name>

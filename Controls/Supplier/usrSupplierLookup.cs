@@ -67,6 +67,7 @@ namespace Astrodon.Controls.Supplier
             string companyReg = txtCompanyReg.Text.Trim();
             string contactPerson = txtContactPerson.Text.Trim();
             string contactNumber = txtContactNumber.Text.Trim();
+            int checkBuildingId = _buildingId == null ? 0 : _buildingId.Value;
 
             _SupplierData = _DataContext.SupplierSet
                             .Where(a => (a.CompanyName.StartsWith(companyName) || companyName == "")
@@ -81,7 +82,7 @@ namespace Astrodon.Controls.Supplier
                                 CompanyRegistration = a.CompanyRegistration,
                                 ContactPerson = a.ContactPerson,
                                 ContactNumber = a.ContactNumber,
-                                IsLinkedToBuilding = a.Maintenance.Any()
+                                IsLinkedToBuilding = checkBuildingId > 0 && a.Buildings.Any(f => f.BuildingId == checkBuildingId)
                             })
                             .OrderBy(a => a.CompanyName).ToList();
 
@@ -94,7 +95,7 @@ namespace Astrodon.Controls.Supplier
 
         private void btnNewSupplier_Click(object sender, EventArgs e)
         {
-            var frmSupplierDetail = new frmSupplierDetail(_DataContext, 0);
+            var frmSupplierDetail = new frmSupplierDetail(_DataContext, 0, _buildingId);
             var dialogResult = frmSupplierDetail.ShowDialog();
 
             if (dialogResult == DialogResult.OK)
@@ -131,7 +132,7 @@ namespace Astrodon.Controls.Supplier
                     }
                     else if (e.ColumnIndex == editColumnIndex)
                     {
-                        var frmSupplierDetail = new frmSupplierDetail(_DataContext, _SelectedSupplier.SupplierId);
+                        var frmSupplierDetail = new frmSupplierDetail(_DataContext, _SelectedSupplier.SupplierId, _buildingId);
                         var dialogResult = frmSupplierDetail.ShowDialog();
 
                         if (dialogResult == DialogResult.OK)
@@ -189,13 +190,15 @@ namespace Astrodon.Controls.Supplier
                 ReadOnly = true
             });
 
-            dgSuppliers.Columns.Add(new DataGridViewTextBoxColumn()
+            if (_buildingId != null)
             {
-                DataPropertyName = "LinkedToBuildingString",
-                HeaderText = "Linked To Building",
-                ReadOnly = true
-            });
-
+                dgSuppliers.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "LinkedToBuildingString",
+                    HeaderText = "Linked To Building",
+                    ReadOnly = true
+                });
+            }
             if (_IsSelectDialog)
             {
                 dgSuppliers.Columns.Add(new DataGridViewButtonColumn()

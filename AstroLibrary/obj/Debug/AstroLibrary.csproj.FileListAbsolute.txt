@@ -9,4 +9,3 @@ C:\Dev\repos\YellowMonkey\Astrodon_Desktop\AstroLibrary\bin\Debug\Astro.Library.
 C:\Dev\repos\YellowMonkey\Astrodon_Desktop\AstroLibrary\bin\Debug\Astro.Library.pdb
 C:\Dev\repos\YellowMonkey\Astrodon_Desktop\AstroLibrary\obj\Debug\Astro.Library.dll
 C:\Dev\repos\YellowMonkey\Astrodon_Desktop\AstroLibrary\obj\Debug\Astro.Library.pdb
-C:\Dev\repos\YellowMonkey\Astrodon_Desktop\AstroLibrary\obj\Debug\AstroLibrary.csprojResolveAssemblyReference.cache

@@ -22,7 +22,7 @@ namespace Astrodon
         {
             get
             {
-                String query = "* FROM tblBuildings ORDER BY Building";
+                String query = "SELECT * FROM tblBuildings ORDER BY Building";
                 return query;
             }
         }

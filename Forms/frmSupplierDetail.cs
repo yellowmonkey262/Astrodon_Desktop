@@ -17,14 +17,14 @@ namespace Astrodon.Forms
         private DataContext _DataContext;
         private usrSupplierDetail _SupplierDetailControl;
 
-        public frmSupplierDetail(DataContext context, int supplierId)
+        public frmSupplierDetail(DataContext context, int supplierId, int? buildingId)
         {
             InitializeComponent();
             DialogResult = DialogResult.Cancel;
 
             _DataContext = context;
 
-            _SupplierDetailControl = new usrSupplierDetail(_DataContext, supplierId);
+            _SupplierDetailControl = new usrSupplierDetail(_DataContext, supplierId, buildingId,buildingId != null);
             _SupplierDetailControl.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(_SupplierDetailControl);
 

@@ -21,7 +21,7 @@ namespace Astrodon.Data.SupplierData
 
         [Index("IDX_SupplierBuilding", Order = 1,IsUnique =true)]
         public virtual int BuildingId { get; set; }
-        [ForeignKey("SupplierId")]
+        [ForeignKey("BuildingId")]
         public virtual tblBuilding Building { get; set; }
 
         #region Banking Details
@@ -43,5 +43,8 @@ namespace Astrodon.Data.SupplierData
         public virtual string AccountNumber { get; set; }
 
         #endregion
-    }
+
+        public virtual ICollection<SupplierBuildingAudit> AuditRecords { get; set; }
+
+     }
 }

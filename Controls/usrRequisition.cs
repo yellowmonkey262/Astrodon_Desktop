@@ -812,7 +812,20 @@ namespace Astrodon.Controls
                     {
                         Controller.HandleError("Supplier banking details for this building is not configured.\n" +
                                             "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
-                        return;
+
+
+                        var frmSupplierDetail = new frmSupplierDetail(context, _Supplier.id, buildingId);
+                        frmSupplierDetail.ShowDialog();
+
+                        bankDetails = context.SupplierBuildingSet
+                                       .Include(a => a.Bank)
+                                       .SingleOrDefault(a => a.BuildingId == buildingId && a.SupplierId == _Supplier.id);
+                        if (bankDetails == null)
+                        {
+                            _Supplier = null;
+                            return;
+                        }
+
                     }
 
                     lbBankName.Text = bankDetails.Bank.Name + " (" + bankDetails.BranceCode + ")";

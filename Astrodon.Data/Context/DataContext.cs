@@ -70,6 +70,8 @@ namespace Astrodon.Data
 
         public DbSet<BuildingMaintenanceConfiguration> BuildingMaintenanceConfigurationSet { get; set; }
         public DbSet<SupplierBuilding> SupplierBuildingSet { get; set; }
+        public DbSet<SupplierBuildingAudit> SupplierBuildingAuditSet { get; set; }
+
         public DbSet<Supplier> SupplierSet { get; set; }
         public DbSet<SupplierAudit> SupplierAuditSet { get; set; }
         public DbSet<Maintenance> MaintenanceSet { get; set; }
