@@ -11,6 +11,7 @@ using System.Globalization;
 using Astrodon.ReportService;
 using System.IO;
 using System.Diagnostics;
+using Astro.Library.Entities;
 
 namespace Astrodon.Reports.SupplierReport
 {
@@ -19,10 +20,38 @@ namespace Astrodon.Reports.SupplierReport
         private List<IdValue> _Years;
         private List<IdValue> _Months;
 
+        private List<IdValue> _ToYears;
+        private List<IdValue> _ToMonths;
+
+        private List<Building> _Buildings;
+
         public usrSupplierReport()
         {
             InitializeComponent();
             LoadYears();
+            LoadBuildings();
+        }
+
+        private void LoadBuildings()
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                var userid = Controller.user.id;
+                Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
+                _Buildings = bManager.buildings.ToList();
+                _Buildings.Insert(0, new Building() { Name = " -- All Buildings --", ID = 0 });
+                cmbBuilding.DataSource = _Buildings;
+                cmbBuilding.ValueMember = "ID";
+                cmbBuilding.DisplayMember = "Name";
+                if (_Buildings.Count > 0)
+                    cmbBuilding.SelectedIndex = 0;
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void LoadYears()
@@ -42,15 +71,28 @@ namespace Astrodon.Reports.SupplierReport
                 });
             }
 
-            cmbYear.DataSource = _Years;
-            cmbYear.ValueMember = "Id";
-            cmbYear.DisplayMember = "Value";
-            cmbYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
+            _ToYears = _Years.ToList();
+            _ToMonths = _Months.ToList();
 
-            cmbMonth.DataSource = _Months;
-            cmbMonth.ValueMember = "Id";
-            cmbMonth.DisplayMember = "Value";
-            cmbMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
+            cmbFromYear.DataSource = _Years;
+            cmbFromYear.ValueMember = "Id";
+            cmbFromYear.DisplayMember = "Value";
+            cmbFromYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
+
+            cmbFromMonth.DataSource = _Months;
+            cmbFromMonth.ValueMember = "Id";
+            cmbFromMonth.DisplayMember = "Value";
+            cmbFromMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
+
+            cmbToYear.DataSource = _ToYears;
+            cmbToYear.ValueMember = "Id";
+            cmbToYear.DisplayMember = "Value";
+            cmbToYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
+
+            cmbToMonth.DataSource = _ToMonths;
+            cmbToMonth.ValueMember = "Id";
+            cmbToMonth.DisplayMember = "Value";
+            cmbToMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -64,11 +106,19 @@ namespace Astrodon.Reports.SupplierReport
                 {
                     using (var reportService = new ReportServiceClient())
                     {
-                        DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
-                        var reportData = reportService.SupplierReport(SqlDataHandler.GetConnectionString(), dDate);
+                        DateTime dtFrom = new DateTime((cmbFromYear.SelectedItem as IdValue).Id, (cmbFromMonth.SelectedItem as IdValue).Id, 1);
+                        DateTime dtTo = new DateTime((cmbToYear.SelectedItem as IdValue).Id, (cmbToMonth.SelectedItem as IdValue).Id, 1);
+                        if(dtFrom > dtTo)
+                        {
+                            Controller.HandleError("Invalid date range", "Supplier Report");
+                            return;
+                        }
+                        var building = cmbBuilding.SelectedItem as Building;
+
+                        var reportData = reportService.SupplierReport(SqlDataHandler.GetConnectionString(), dtFrom,dtTo, building.ID);
                         if(reportData == null)
                         {
-                            Controller.HandleError("No data found for " + dDate.ToString("MMM yyyy"), "Supplier Report");
+                            Controller.HandleError("No data found", "Supplier Report");
                             return;
                         }
                         File.WriteAllBytes(dlgSave.FileName, reportData);
