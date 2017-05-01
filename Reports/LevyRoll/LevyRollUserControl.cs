@@ -82,7 +82,7 @@ namespace Astrodon.Reports
                     using (var reportService = new ReportServiceClient())
                     {
                         DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
-                        var reportData = reportService.LevyRollReport(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
+                        var reportData = reportService.LevyRollReport(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath,cbIncludeSundries.Checked);
                         File.WriteAllBytes(dlgSave.FileName, reportData);
                         Process.Start(dlgSave.FileName);
                     }

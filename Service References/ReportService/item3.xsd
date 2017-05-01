@@ -8,6 +8,7 @@
         <xs:element minOccurs="0" name="processMonth" type="xs:dateTime" />
         <xs:element minOccurs="0" name="buildingName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="dataPath" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="includeSundries" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

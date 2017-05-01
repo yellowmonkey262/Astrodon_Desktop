@@ -261,7 +261,7 @@ namespace Astrodon.ReportService {
     public interface IReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/LevyRollReport", ReplyAction="http://tempuri.org/IReportService/LevyRollReportResponse")]
-        byte[] LevyRollReport(System.DateTime processMonth, string buildingName, string dataPath);
+        byte[] LevyRollReport(System.DateTime processMonth, string buildingName, string dataPath, bool includeSundries);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/SupplierReport", ReplyAction="http://tempuri.org/IReportService/SupplierReportResponse")]
         byte[] SupplierReport(string sqlConnectionString, System.DateTime processMonth);
@@ -300,8 +300,8 @@ namespace Astrodon.ReportService {
                 base(binding, remoteAddress) {
         }
         
-        public byte[] LevyRollReport(System.DateTime processMonth, string buildingName, string dataPath) {
-            return base.Channel.LevyRollReport(processMonth, buildingName, dataPath);
+        public byte[] LevyRollReport(System.DateTime processMonth, string buildingName, string dataPath, bool includeSundries) {
+            return base.Channel.LevyRollReport(processMonth, buildingName, dataPath, includeSundries);
         }
         
         public byte[] SupplierReport(string sqlConnectionString, System.DateTime processMonth) {
