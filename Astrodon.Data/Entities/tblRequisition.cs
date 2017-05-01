@@ -76,6 +76,15 @@ namespace Astrodon.Data
         [MaxLength(200)]
         public string PastelDataPath { get; set; }
 
+        [Index("IDX_tblRequisitionPaymentPastelLink", Order = 0)]
+        public int? PaymentLedgerAutoNumber { get; set; } //linked pastel auto number
+
+        [Index("IDX_tblRequisitionPaymentPastelLink", Order = 1)]
+        [MaxLength(200)]
+        public string PaymentDataPath { get; set; }
+
+
         public virtual ICollection<RequisitionDocument> Documents { get; set; }
+
     }
 }

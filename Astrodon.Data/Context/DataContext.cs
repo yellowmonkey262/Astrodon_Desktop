@@ -1,6 +1,7 @@
 ﻿
 //using Astrodon.Data.Maintenance;
 using Astrodon.Data.BankData;
+using Astrodon.Data.Log;
 using Astrodon.Data.MaintenanceData;
 using Astrodon.Data.RequisitionData;
 using Astrodon.Data.SupplierData;
@@ -63,6 +64,14 @@ namespace Astrodon.Data
             }
         }
 
+        public static void HouseKeepSystemLog()
+        {
+            using (var dbContext = new DataContext())
+            {
+                dbContext.Database.ExecuteSqlCommand("delete from SystemLogs where EventTime < GetDate() - 100");
+            }
+        }
+
 
 
         #endregion
@@ -80,6 +89,7 @@ namespace Astrodon.Data
 
         public DbSet<Bank> BankSet { get; set; }
         public DbSet<BankAudit> BankAuditSet { get; set; }
+        public DbSet<SystemLog> SystemLogSet { get; set; }
 
         public void ClearChanges()
         {

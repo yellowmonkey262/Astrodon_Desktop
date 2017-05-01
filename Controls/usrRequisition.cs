@@ -148,91 +148,33 @@ namespace Astrodon.Controls
                         {
                             foreach (RequisitionList r in requisitions)
                             {
-                                //r.building = r.buildingId.ToString();
-                                // r.amount = Convert.ToDouble(r.amountD);
-
-                                bool matched = false;
                                 bool paid = r.paid;
                                 bool processed = r.processed;
-                                String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
-                                if (r.account.ToUpper() == "TRUST" && !paid)
-                                {
-                                    matched = GetTransactions(r.trnDate, r.amount, transactions);
-                                }
-                                else if (!paid)
-                                {
-                                    matched = GetTransactions(r.trnDate, r.amount * -1, transactions);
-                                }
+
+                                //handled by a batch processed
+
+                                //String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
+                                //if (r.account.ToUpper() == "TRUST" && !paid)
+                                //{
+                                //    matched = GetTransactions(r.trnDate, r.amount, transactions);
+                                //}
+                                //else if (!paid)
+                                //{
+                                //    matched = GetTransactions(r.trnDate, r.amount * -1, transactions);
+                                //}
                                 if (!processed)
                                 {
                                     unProcessedRequisitions.Add(r);
                                 }
-                                else if (!matched && !paid)
+                                else if (!paid)
                                 {
                                     unPaidRequisitions.Add(r);
                                 }
-                                else
-                                {
-                                    String updateQuery = "UPDATE tblRequisition SET paid = 'True' WHERE id = " + r.ID;
-                                    r.paid = true;
-                                    paidRequisitions.Add(r);
-                                    dh.SetData(updateQuery, null, out status);
-                                }
+                              
                             }
                         }
                     }
 
-                    #region Old Select Query
-
-                    //String query = "SELECT r.id, r.trnDate, b.Building, r.account, r.processed, r.paid, r.reference, r.contractor, r.payreference, r.amount, r.ledger, b.acc, b.ownbank, b.datapath";
-                    //query += " FROM tblRequisition AS r INNER JOIN tblBuildings AS b ON r.building = b.id";
-                    //query += " WHERE b.id = " + buildingID + " ORDER BY trnDate";
-                    //Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-                    //DataSet dsRequisitions = dh.GetData(query, null, out status);
-                    //lineNumber = "117";
-                    //if (dsRequisitions != null && dsRequisitions.Tables.Count > 0 && dsRequisitions.Tables[0].Rows.Count > 0)
-                    //{
-                    //    foreach (DataRow dr in dsRequisitions.Tables[0].Rows)
-                    //    {
-                    //        RequisitionList r = new RequisitionList();
-                    //        r.ID = dr["id"].ToString();
-                    //        r.trnDate = DateTime.Parse(dr["trnDate"].ToString());
-                    //        r.building = dr["Building"].ToString();
-                    //        r.account = dr["account"].ToString();
-                    //        r.reference = dr["reference"].ToString();
-                    //        r.payreference = dr["payreference"].ToString();
-                    //        r.amount = double.Parse(dr["amount"].ToString());
-                    //        r.ledger = dr["ledger"].ToString();
-                    //        bool matched = false;
-                    //        bool paid = bool.Parse(dr["paid"].ToString());
-                    //        bool processed = bool.Parse(dr["processed"].ToString());
-                    //        String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
-                    //        if (r.account.ToUpper() == "TRUST" && !paid)
-                    //        {
-                    //            matched = GetTransactions(r.trnDate, r.amount, transactions);
-                    //        }
-                    //        else if (!paid)
-                    //        {
-                    //            matched = GetTransactions(r.trnDate, r.amount * -1, transactions);
-                    //        }
-                    //        if (!processed)
-                    //        {
-                    //            unProcessedRequisitions.Add(r);
-                    //        }
-                    //        else if (!matched && !paid)
-                    //        {
-                    //            unPaidRequisitions.Add(r);
-                    //        }
-                    //        else
-                    //        {
-                    //            String updateQuery = "UPDATE tblRequisition SET paid = 'True' WHERE id = " + r.ID;
-                    //            paidRequisitions.Add(r);
-                    //            dh.SetData(updateQuery, null, out status);
-                    //        }
-                    //    }
-                    //}
-
-                    #endregion
                 }
             }
             catch (Exception ex)

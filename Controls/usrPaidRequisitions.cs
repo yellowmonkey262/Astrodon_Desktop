@@ -107,15 +107,17 @@ namespace Astrodon.Controls
                     bool paid = r.paid;
                     bool matched = false;
                     bool processed = Convert.ToBoolean(dr["processed"]);
-                    String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
-                    if (r.account.ToUpper() == "TRUST" && !paid)
-                    {
-                        matched = GetTransactions(Utilities.GetTrustPath(), r.trnDate, dr["acc"].ToString(), ledger, r.amount);
-                    }
-                    else if (!paid)
-                    {
-                        matched = GetTransactions(Convert.ToString(dr["datapath"]), r.trnDate, Convert.ToString(dr["ownbank"]), ledger, r.amount * -1);
-                    }
+                    //handled by a batch process now
+
+                    //String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
+                    //if (r.account.ToUpper() == "TRUST" && !paid)
+                    //{
+                    //    matched = GetTransactions(Utilities.GetTrustPath(), r.trnDate, dr["acc"].ToString(), ledger, r.amount);
+                    //}
+                    //else if (!paid)
+                    //{
+                    //    matched = GetTransactions(Convert.ToString(dr["datapath"]), r.trnDate, Convert.ToString(dr["ownbank"]), ledger, r.amount * -1);
+                    //}
                     if (!processed)
                     {
                         unProcessedRequisitions.Add(r);
@@ -124,12 +126,7 @@ namespace Astrodon.Controls
                     {
                         unPaidRequisitions.Add(r);
                     }
-                    else
-                    {
-                        String updateQuery = "UPDATE tblRequisition SET paid = 'True' WHERE paid <> 'True' AND id = " + r.ID;
-                        paidRequisitions.Add(r);
-                        dh.SetData(updateQuery, null, out status);
-                    }
+                  
                 }
             }
         }

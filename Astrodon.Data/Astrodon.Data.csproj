@@ -57,6 +57,7 @@
     <Compile Include="Base\StringKeyValue.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
+    <Compile Include="Log\SystemLog.cs" />
     <Compile Include="MaintenanceData\BuildingMaintenanceConfiguration.cs" />
     <Compile Include="MaintenanceData\DurationType.cs" />
     <Compile Include="MaintenanceData\Maintenance.cs" />
@@ -94,9 +95,13 @@
     <Compile Include="Migrations\201704251327219_SupplierBuildingAuditUnique.Designer.cs">
       <DependentUpon>201704251327219_SupplierBuildingAuditUnique.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705010743536_RequisitionLinkedPastelTransaction.cs" />
-    <Compile Include="Migrations\201705010743536_RequisitionLinkedPastelTransaction.Designer.cs">
-      <DependentUpon>201705010743536_RequisitionLinkedPastelTransaction.cs</DependentUpon>
+    <Compile Include="Migrations\201705011121505_RequisitionTransactionMatching.cs" />
+    <Compile Include="Migrations\201705011121505_RequisitionTransactionMatching.Designer.cs">
+      <DependentUpon>201705011121505_RequisitionTransactionMatching.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705011127069_SystemLog.cs" />
+    <Compile Include="Migrations\201705011127069_SystemLog.Designer.cs">
+      <DependentUpon>201705011127069_SystemLog.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -186,8 +191,11 @@
     <EmbeddedResource Include="Migrations\201704251327219_SupplierBuildingAuditUnique.resx">
       <DependentUpon>201704251327219_SupplierBuildingAuditUnique.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705010743536_RequisitionLinkedPastelTransaction.resx">
-      <DependentUpon>201705010743536_RequisitionLinkedPastelTransaction.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201705011121505_RequisitionTransactionMatching.resx">
+      <DependentUpon>201705011121505_RequisitionTransactionMatching.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705011127069_SystemLog.resx">
+      <DependentUpon>201705011127069_SystemLog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

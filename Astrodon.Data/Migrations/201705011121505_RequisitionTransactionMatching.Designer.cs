@@ -7,13 +7,13 @@ namespace Astrodon.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class RequisitionLinkedPastelTransaction : IMigrationMetadata
+    public sealed partial class RequisitionTransactionMatching : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(RequisitionLinkedPastelTransaction));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(RequisitionTransactionMatching));
         
         string IMigrationMetadata.Id
         {
-            get { return "201705010743536_RequisitionLinkedPastelTransaction"; }
+            get { return "201705011121505_RequisitionTransactionMatching"; }
         }
         
         string IMigrationMetadata.Source

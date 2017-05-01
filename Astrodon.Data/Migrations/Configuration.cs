@@ -15,6 +15,7 @@ namespace Astrodon.Data.Migrations
                this.TargetDatabase = new System.Data.Entity.Infrastructure.DbConnectionInfo(Configuration.MigrationConnectionString, "System.Data.SqlClient");
 
             AutomaticMigrationsEnabled = false;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(Astrodon.Data.DataContext context)
