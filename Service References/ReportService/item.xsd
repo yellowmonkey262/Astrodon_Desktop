@@ -8,4 +8,8 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="MaintenanceReportType" nillable="true" type="tns:MaintenanceReportType" />
+  <xs:complexType name="PervasiveItem">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="PervasiveItem" nillable="true" type="tns:PervasiveItem" />
 </xs:schema>

@@ -10,6 +10,7 @@
 
 namespace Astrodon.ReportService {
     using System.Runtime.Serialization;
+    using System;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -26,6 +27,235 @@ namespace Astrodon.ReportService {
         DetailedReportWithSupportingDocuments = 2,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PastelMaintenanceTransaction", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts.Maintenance")]
+    [System.SerializableAttribute()]
+    public partial class PastelMaintenanceTransaction : Astrodon.ReportService.PervasiveItem {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AccountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AccountNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AccountTypeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal AmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AutoNumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DataPathField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DescriptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LedgerAccountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LedgerAccountNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ReferenceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime TransactionDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool TrustAccountField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Account {
+            get {
+                return this.AccountField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountField, value) != true)) {
+                    this.AccountField = value;
+                    this.RaisePropertyChanged("Account");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AccountName {
+            get {
+                return this.AccountNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountNameField, value) != true)) {
+                    this.AccountNameField = value;
+                    this.RaisePropertyChanged("AccountName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AccountType {
+            get {
+                return this.AccountTypeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountTypeField, value) != true)) {
+                    this.AccountTypeField = value;
+                    this.RaisePropertyChanged("AccountType");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Amount {
+            get {
+                return this.AmountField;
+            }
+            set {
+                if ((this.AmountField.Equals(value) != true)) {
+                    this.AmountField = value;
+                    this.RaisePropertyChanged("Amount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AutoNumber {
+            get {
+                return this.AutoNumberField;
+            }
+            set {
+                if ((this.AutoNumberField.Equals(value) != true)) {
+                    this.AutoNumberField = value;
+                    this.RaisePropertyChanged("AutoNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DataPath {
+            get {
+                return this.DataPathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DataPathField, value) != true)) {
+                    this.DataPathField = value;
+                    this.RaisePropertyChanged("DataPath");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Description {
+            get {
+                return this.DescriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DescriptionField, value) != true)) {
+                    this.DescriptionField = value;
+                    this.RaisePropertyChanged("Description");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LedgerAccount {
+            get {
+                return this.LedgerAccountField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LedgerAccountField, value) != true)) {
+                    this.LedgerAccountField = value;
+                    this.RaisePropertyChanged("LedgerAccount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LedgerAccountName {
+            get {
+                return this.LedgerAccountNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LedgerAccountNameField, value) != true)) {
+                    this.LedgerAccountNameField = value;
+                    this.RaisePropertyChanged("LedgerAccountName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Reference {
+            get {
+                return this.ReferenceField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ReferenceField, value) != true)) {
+                    this.ReferenceField = value;
+                    this.RaisePropertyChanged("Reference");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime TransactionDate {
+            get {
+                return this.TransactionDateField;
+            }
+            set {
+                if ((this.TransactionDateField.Equals(value) != true)) {
+                    this.TransactionDateField = value;
+                    this.RaisePropertyChanged("TransactionDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool TrustAccount {
+            get {
+                return this.TrustAccountField;
+            }
+            set {
+                if ((this.TrustAccountField.Equals(value) != true)) {
+                    this.TrustAccountField = value;
+                    this.RaisePropertyChanged("TrustAccount");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PervasiveItem", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Astrodon.ReportService.PastelMaintenanceTransaction))]
+    public partial class PervasiveItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
@@ -38,6 +268,9 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MaintenanceReport", ReplyAction="http://tempuri.org/IReportService/MaintenanceReportResponse")]
         byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime processMonth, int buildingId, string buildingName, string dataPath);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MissingMaintenanceRecordsGet", ReplyAction="http://tempuri.org/IReportService/MissingMaintenanceRecordsGetResponse")]
+        Astrodon.ReportService.PastelMaintenanceTransaction[] MissingMaintenanceRecordsGet(string sqlConnectionString, int buildingId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -77,6 +310,10 @@ namespace Astrodon.ReportService {
         
         public byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime processMonth, int buildingId, string buildingName, string dataPath) {
             return base.Channel.MaintenanceReport(sqlConnectionString, reportType, processMonth, buildingId, buildingName, dataPath);
+        }
+        
+        public Astrodon.ReportService.PastelMaintenanceTransaction[] MissingMaintenanceRecordsGet(string sqlConnectionString, int buildingId) {
+            return base.Channel.MissingMaintenanceRecordsGet(sqlConnectionString, buildingId);
         }
     }
 }

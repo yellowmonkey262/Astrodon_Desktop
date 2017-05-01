@@ -30,6 +30,7 @@
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tbMaintenanceConfig = new System.Windows.Forms.ToolStripMenuItem();
+            this.bankConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkSMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,7 +87,7 @@
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.bankConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.missingMaintenanceRequisitionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -145,6 +146,13 @@
             this.tbMaintenanceConfig.Text = "Building Maintenance Configuration";
             this.tbMaintenanceConfig.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.tbMaintenanceConfig.Click += new System.EventHandler(this.tbMaintenanceConfig_Click);
+            // 
+            // bankConfigurationToolStripMenuItem
+            // 
+            this.bankConfigurationToolStripMenuItem.Name = "bankConfigurationToolStripMenuItem";
+            this.bankConfigurationToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.bankConfigurationToolStripMenuItem.Text = "Bank Configuration";
+            this.bankConfigurationToolStripMenuItem.Click += new System.EventHandler(this.bankConfigurationToolStripMenuItem_Click);
             // 
             // usersToolStripMenuItem
             // 
@@ -431,7 +439,8 @@
             // 
             this.requisitionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.paymentRequisitionsToolStripMenuItem,
-            this.unpaidRequisitionsToolStripMenuItem});
+            this.unpaidRequisitionsToolStripMenuItem,
+            this.missingMaintenanceRequisitionsToolStripMenuItem});
             this.requisitionsToolStripMenuItem.Name = "requisitionsToolStripMenuItem";
             this.requisitionsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.requisitionsToolStripMenuItem.Text = "Requisitions";
@@ -587,12 +596,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // bankConfigurationToolStripMenuItem
+            // missingMaintenanceRequisitionsToolStripMenuItem
             // 
-            this.bankConfigurationToolStripMenuItem.Name = "bankConfigurationToolStripMenuItem";
-            this.bankConfigurationToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
-            this.bankConfigurationToolStripMenuItem.Text = "Bank Configuration";
-            this.bankConfigurationToolStripMenuItem.Click += new System.EventHandler(this.bankConfigurationToolStripMenuItem_Click);
+            this.missingMaintenanceRequisitionsToolStripMenuItem.Name = "missingMaintenanceRequisitionsToolStripMenuItem";
+            this.missingMaintenanceRequisitionsToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.missingMaintenanceRequisitionsToolStripMenuItem.Text = "Missing Maintenance Requisitions";
+            this.missingMaintenanceRequisitionsToolStripMenuItem.Click += new System.EventHandler(this.missingMaintenanceRequisitionsToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -683,5 +692,6 @@
         private System.Windows.Forms.ToolStripMenuItem buildingMaintenanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem suppliersToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem bankConfigurationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem missingMaintenanceRequisitionsToolStripMenuItem;
     }
 }

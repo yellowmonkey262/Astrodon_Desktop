@@ -45,7 +45,6 @@ namespace Astrodon.Data
         {
             Migrations.Configuration.MigrationConnectionString = connectionString;
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<DataContext, Migrations.Configuration>());
-
             using (var context = new DataContext(Migrations.Configuration.MigrationConnectionString))
             {
                 try

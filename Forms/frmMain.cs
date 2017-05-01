@@ -547,5 +547,14 @@ namespace Astrodon
             pnlContents.Controls.Add(control);
             toolStripStatusLabel1.Text = "Bank Configuration";
         }
+
+        private void missingMaintenanceRequisitionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrMissingRequisitions control = new usrMissingRequisitions(_DataContext);
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Missing Maintenance Requisitions";
+        }
     }
 }

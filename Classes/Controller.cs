@@ -75,6 +75,11 @@ namespace Astrodon
         }
 
 
+        internal static void ShowMessage(string message, string title = "Information")
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private static void commClient_LoginOK(object sender, EventArgs e)
         {
             commClient.SendMessage("hello server");

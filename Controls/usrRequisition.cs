@@ -29,7 +29,7 @@ namespace Astrodon.Controls
         private Dictionary<String, double> avAmts = new Dictionary<string, double>();
         private String status;
         private DateTime _minDate = new DateTime(2000, 1, 1);
-            
+
 
         public usrRequisition()
         {
@@ -149,7 +149,7 @@ namespace Astrodon.Controls
                             foreach (RequisitionList r in requisitions)
                             {
                                 //r.building = r.buildingId.ToString();
-                               // r.amount = Convert.ToDouble(r.amountD);
+                                // r.amount = Convert.ToDouble(r.amountD);
 
                                 bool matched = false;
                                 bool paid = r.paid;
@@ -480,10 +480,10 @@ namespace Astrodon.Controls
         {
             decimal amt;
 
-            if (decimal.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null 
+            if (decimal.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null
                 && cmbLedger.SelectedItem != null && cmbAccount.SelectedItem != null)
             {
-                if(dtInvoiceDate.Value <= _minDate)
+                if (dtInvoiceDate.Value <= _minDate)
                 {
                     Controller.HandleError("Invoice Date required for Maintenance. Please select a date.", "Validation Error");
                     return;
@@ -494,7 +494,7 @@ namespace Astrodon.Controls
                     return;
                 }
 
-                if(_Documents.Count == 0)
+                if (_Documents.Count == 0)
                 {
                     Controller.HandleError("Invoice attachment required, please upload Invoice PDF", "Validation Error");
                     return;
@@ -507,9 +507,9 @@ namespace Astrodon.Controls
                              && r.InvoiceNumber == txtInvoiceNumber.Text
                              && r.amount == amt
                              select r);
-                    if(q.Count() > 0)
+                    if (q.Count() > 0)
                     {
-                        Controller.HandleError("Duplicate requisition detected.\n"+
+                        Controller.HandleError("Duplicate requisition detected.\n" +
                            txtInvoiceNumber.Text + " invoice has already been processed", "Validation Error");
                         return;
                     }
@@ -519,7 +519,7 @@ namespace Astrodon.Controls
                     var bankDetails = context.SupplierBuildingSet
                                              .Include(a => a.Bank)
                                              .SingleOrDefault(a => a.BuildingId == buildingId && a.SupplierId == _Supplier.id);
-                    if(bankDetails == null)
+                    if (bankDetails == null)
                     {
                         Controller.HandleError("Supplier banking details for this building is not configured.\n" +
                                             "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
@@ -557,8 +557,8 @@ namespace Astrodon.Controls
                     }
 
                     string ledgerAccount = item.ledger;
-                    
-                    if(ledgerAccount.Contains(":"))
+
+                    if (ledgerAccount.Contains(":"))
                         ledgerAccount = ledgerAccount.Split(":".ToCharArray())[0];
 
                     var config = (from c in context.BuildingMaintenanceConfigurationSet.Include(a => a.Building)
@@ -663,7 +663,7 @@ namespace Astrodon.Controls
             }
             else
             {
-                Controller.HandleError("Please enter all fields","Validation Error");
+                Controller.HandleError("Please enter all fields", "Validation Error");
             }
         }
 
@@ -784,7 +784,7 @@ namespace Astrodon.Controls
 
         private void btnSupplierLookup_Click(object sender, EventArgs e)
         {
-            if(cmbBuilding.SelectedIndex < 0)
+            if (cmbBuilding.SelectedIndex < 0)
             {
                 Controller.HandleError("Please select a building first.", "Validation Error");
                 return;
@@ -794,12 +794,12 @@ namespace Astrodon.Controls
 
             using (var context = SqlDataHandler.GetDataContext())
             {
-                var frmSupplierLookup = new frmSupplierLookup(context,buildingId);
+                var frmSupplierLookup = new frmSupplierLookup(context, buildingId);
 
                 var dialogResult = frmSupplierLookup.ShowDialog();
                 var supplier = frmSupplierLookup.SelectedSupplier;
 
-                if(dialogResult == DialogResult.OK && supplier != null)
+                if (dialogResult == DialogResult.OK && supplier != null)
                 {
                     _Supplier = supplier;
                     lbSupplierName.Text = _Supplier.CompanyName;
@@ -881,7 +881,7 @@ namespace Astrodon.Controls
         {
         }
 
-        private Dictionary<string,byte[]> _Documents = new Dictionary<string, byte[]>();
+        private Dictionary<string, byte[]> _Documents = new Dictionary<string, byte[]>();
 
         private void btnUploadInvoice_Click(object sender, EventArgs e)
         {
@@ -917,7 +917,7 @@ namespace Astrodon.Controls
 
     }
 
-    
+
 
     public class RequisitionList
     {
@@ -960,7 +960,8 @@ namespace Astrodon.Controls
         public double amount { get; set; }
     }
 
-    public class ReqAccount {
+    public class ReqAccount
+    {
         public String accNumber { get; set; }
 
         private void dgUnpaid_CellValueChanged(object sender, DataGridViewCellEventArgs e)

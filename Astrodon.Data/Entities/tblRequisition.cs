@@ -18,12 +18,26 @@ namespace Astrodon.Data
         public DateTime trnDate { get; set; }
 
         public int building { get; set; }
- 
+
         [Required]
         [StringLength(50)]
         public string account { get; set; }
 
         public string ledger { get; set; }
+
+        [NotMapped]
+        public string LedgerAccountNumber
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(ledger))
+                    return ledger;
+                if (!ledger.Contains(":"))
+                    return ledger;
+
+                return ledger.Substring(0, ledger.IndexOf(":"));
+            }
+        }
 
         [Required]
         [StringLength(50)]
@@ -54,6 +68,13 @@ namespace Astrodon.Data
         public string BranchName { get; set; }
         public string BranchCode { get; set; }
         public string AccountNumber { get; set; }
+
+        [Index("IDX_tblRequisitionPastelLink", Order = 0)]
+        public int? PastelLedgerAutoNumber { get; set; } //linked pastel auto number
+
+        [Index("IDX_tblRequisitionPastelLink", Order = 1)]
+        [MaxLength(200)]
+        public string PastelDataPath { get; set; }
 
         public virtual ICollection<RequisitionDocument> Documents { get; set; }
     }

@@ -178,6 +178,12 @@
       <DependentUpon>usrMaintenanceDetail.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Events\SaveSuccessEventArgs.cs" />
+    <Compile Include="Controls\Maintenance\usrMissingRequisitions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Maintenance\usrMissingRequisitions.Designer.cs">
+      <DependentUpon>usrMissingRequisitions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Supplier\SupplierSelectEventArgs.cs" />
     <Compile Include="Controls\Supplier\usrSupplierDetail.cs">
       <SubType>UserControl</SubType>
@@ -538,6 +544,7 @@
       <DependentUpon>PrintOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="Lib\SQL\PervasiveSqlUtilities.cs" />
+    <Compile Include="Partial\PastelMaintenanceTransaction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataSets\TAstrodonDataSet1.Designer.cs">
@@ -584,6 +591,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Maintenance\usrMaintenanceDetail.resx">
       <DependentUpon>usrMaintenanceDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Maintenance\usrMissingRequisitions.resx">
+      <DependentUpon>usrMissingRequisitions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Supplier\usrSupplierDetail.resx">
       <DependentUpon>usrSupplierDetail.cs</DependentUpon>
@@ -941,6 +951,9 @@
     <None Include="SEK001_env.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Service References\ReportService\Astrodon.ReportService.PastelMaintenanceTransaction.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ReportService\item.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -948,6 +961,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\item3.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />
@@ -1107,9 +1123,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\ReportService\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="Astrodon.Data\Astrodon.Data.csproj">
       <Project>{89422917-7104-43aa-b124-bccabf3c733b}</Project>
       <Name>Astrodon.Data</Name>
@@ -1118,6 +1131,9 @@
       <Project>{ce7d8e45-b945-4013-8633-c2add2ac8876}</Project>
       <Name>AstroLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ReportService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
