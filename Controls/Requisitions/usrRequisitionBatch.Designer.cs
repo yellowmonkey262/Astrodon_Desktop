@@ -32,6 +32,7 @@
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.btnDownload = new System.Windows.Forms.Button();
             this.dgItems = new System.Windows.Forms.DataGridView();
+            this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
             this.SuspendLayout();
             // 
@@ -77,6 +78,14 @@
             this.dgItems.TabIndex = 59;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             // 
+            // dlgSave
+            // 
+            this.dlgSave.CheckPathExists = false;
+            this.dlgSave.DefaultExt = "pdf";
+            this.dlgSave.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            this.dlgSave.InitialDirectory = "Y:\\";
+            this.dlgSave.Title = "Levy Roll Report";
+            // 
             // usrRequisitionBatch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -99,5 +108,6 @@
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.DataGridView dgItems;
+        private System.Windows.Forms.SaveFileDialog dlgSave;
     }
 }

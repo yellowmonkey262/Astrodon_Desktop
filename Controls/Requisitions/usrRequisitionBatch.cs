@@ -9,6 +9,9 @@ using System.Windows.Forms;
 using Astrodon.Data;
 using Astro.Library.Entities;
 using Astrodon.Data.RequisitionData;
+using Astrodon.ReportService;
+using System.IO;
+using System.Diagnostics;
 
 namespace Astrodon.Controls.Requisitions
 {
@@ -55,8 +58,8 @@ namespace Astrodon.Controls.Requisitions
             {
                 var building = cmbBuilding.SelectedItem as Building;
                 var batch = CreateRequisitionBatch(building.ID);
-                DownloadReport(batch.id);
                 LoadGrid();
+                DownloadReport(batch.id);
             }
             finally
             {
@@ -71,7 +74,7 @@ namespace Astrodon.Controls.Requisitions
             {
                 int batchNumber = 0;
                 var requisitions = context.tblRequisitions.Where(a => a.building == buildingId && a.processed == false).ToList();
-                if(requisitions.Count <= 0)
+                if (requisitions.Count <= 0)
                 {
                     Controller.ShowMessage("There are no outstanding requisitions to process.");
                     return null;
@@ -93,7 +96,7 @@ namespace Astrodon.Controls.Requisitions
                     Entries = requisitions.Count()
                 };
 
-                foreach(var requisition in requisitions)
+                foreach (var requisition in requisitions)
                 {
                     requisition.RequisitionBatch = batch;
                     requisition.processed = true;
@@ -104,7 +107,7 @@ namespace Astrodon.Controls.Requisitions
                 context.SaveChanges();
 
                 return batch;
-                
+
 
             }
         }
@@ -173,7 +176,7 @@ namespace Astrodon.Controls.Requisitions
                 HeaderText = "Entries",
                 ReadOnly = true
             });
-          
+
 
             dgItems.AutoResizeColumns();
         }
@@ -186,7 +189,7 @@ namespace Astrodon.Controls.Requisitions
             {
                 var item = senderGrid.Rows[e.RowIndex].DataBoundItem as BatchItem;
                 DownloadReport(item.Id);
-               
+
             }
         }
 
@@ -210,9 +213,17 @@ namespace Astrodon.Controls.Requisitions
             BindDataGrid();
         }
 
-        private void DownloadReport(int id)
+        private void DownloadReport(int requisitionBatchId)
         {
-          
+            if (dlgSave.ShowDialog() == DialogResult.OK)
+            {
+                using (var reportService = new ReportServiceClient())
+                {
+                    var reportData = reportService.RequisitionBatchReport(requisitionBatchId);
+                    File.WriteAllBytes(dlgSave.FileName, reportData);
+                    Process.Start(dlgSave.FileName);
+                }
+            }
         }
     }
 
