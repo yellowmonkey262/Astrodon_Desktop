@@ -14,6 +14,12 @@
   <wsdl:message name="IReportService_LevyRollReport_OutputMessage">
     <wsdl:part name="parameters" element="tns:LevyRollReportResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_LevyRollExcludeSundries_InputMessage">
+    <wsdl:part name="parameters" element="tns:LevyRollExcludeSundries" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_LevyRollExcludeSundries_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LevyRollExcludeSundriesResponse" />
+  </wsdl:message>
   <wsdl:message name="IReportService_SupplierReport_InputMessage">
     <wsdl:part name="parameters" element="tns:SupplierReport" />
   </wsdl:message>
@@ -37,6 +43,10 @@
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/LevyRollReport" message="tns:IReportService_LevyRollReport_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/IReportService/LevyRollReportResponse" message="tns:IReportService_LevyRollReport_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="LevyRollExcludeSundries">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/LevyRollExcludeSundries" message="tns:IReportService_LevyRollExcludeSundries_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/LevyRollExcludeSundriesResponse" message="tns:IReportService_LevyRollExcludeSundries_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SupplierReport">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/SupplierReport" message="tns:IReportService_SupplierReport_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/IReportService/SupplierReportResponse" message="tns:IReportService_SupplierReport_OutputMessage" />
@@ -54,6 +64,15 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="LevyRollReport">
       <soap:operation soapAction="http://tempuri.org/IReportService/LevyRollReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LevyRollExcludeSundries">
+      <soap:operation soapAction="http://tempuri.org/IReportService/LevyRollExcludeSundries" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

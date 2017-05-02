@@ -1,5 +1,6 @@
 ﻿using Astrodon.Controls.Bank;
 using Astrodon.Controls.Maintenance;
+using Astrodon.Controls.Requisitions;
 using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using Astrodon.Reports;
@@ -555,6 +556,15 @@ namespace Astrodon
             control.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(control);
             toolStripStatusLabel1.Text = "Missing Maintenance Requisitions";
+        }
+
+        private void downloadRequisitionBatchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrRequisitionBatch control = new usrRequisitionBatch();
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Requisition Batch";
         }
     }
 }

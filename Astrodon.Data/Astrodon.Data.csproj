@@ -103,6 +103,10 @@
     <Compile Include="Migrations\201705011127069_SystemLog.Designer.cs">
       <DependentUpon>201705011127069_SystemLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705020819192_RequisitionBatch.cs" />
+    <Compile Include="Migrations\201705020819192_RequisitionBatch.Designer.cs">
+      <DependentUpon>201705020819192_RequisitionBatch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -155,6 +159,7 @@
     <Compile Include="Entities\tblUser.cs" />
     <Compile Include="Entities\tblUserBuilding.cs" />
     <Compile Include="Entities\tblUserLog.cs" />
+    <Compile Include="RequisitionData\RequisitionBatch.cs" />
     <Compile Include="RequisitionData\RequisitionDocument.cs" />
     <Compile Include="SupplierData\Supplier.cs" />
     <Compile Include="SupplierData\SupplierAudit.cs" />
@@ -196,6 +201,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705011127069_SystemLog.resx">
       <DependentUpon>201705011127069_SystemLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705020819192_RequisitionBatch.resx">
+      <DependentUpon>201705020819192_RequisitionBatch.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

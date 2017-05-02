@@ -83,8 +83,11 @@ namespace Astrodon.Data
         [MaxLength(200)]
         public string PaymentDataPath { get; set; }
 
+        [Index("IDX_tblRequisitionBatchId")]
+        public virtual int? RequisitionBatchId { get; set; }
+        [ForeignKey("RequisitionBatchId")]
+        public virtual RequisitionBatch RequisitionBatch { get; set; }
 
         public virtual ICollection<RequisitionDocument> Documents { get; set; }
-
     }
 }

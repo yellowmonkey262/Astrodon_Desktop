@@ -184,6 +184,12 @@
     <Compile Include="Controls\Maintenance\usrMissingRequisitions.Designer.cs">
       <DependentUpon>usrMissingRequisitions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Requisitions\usrRequisitionBatch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Requisitions\usrRequisitionBatch.Designer.cs">
+      <DependentUpon>usrRequisitionBatch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Supplier\SupplierSelectEventArgs.cs" />
     <Compile Include="Controls\Supplier\usrSupplierDetail.cs">
       <SubType>UserControl</SubType>
@@ -347,10 +353,10 @@
     <Compile Include="Controls\usrMonthReport.Designer.cs">
       <DependentUpon>usrMonthReport.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\usrPaidRequisitions.cs">
+    <Compile Include="Controls\Requisitions\usrPaidRequisitions.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\usrPaidRequisitions.Designer.cs">
+    <Compile Include="Controls\Requisitions\usrPaidRequisitions.Designer.cs">
       <DependentUpon>usrPaidRequisitions.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\usrPMJobs.cs">
@@ -365,10 +371,10 @@
     <Compile Include="Controls\usrReminders.Designer.cs">
       <DependentUpon>usrReminders.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\usrRequisition.cs">
+    <Compile Include="Controls\Requisitions\usrRequisition.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\usrRequisition.Designer.cs">
+    <Compile Include="Controls\Requisitions\usrRequisition.Designer.cs">
       <DependentUpon>usrRequisition.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\usrSearch.cs">
@@ -595,6 +601,9 @@
     <EmbeddedResource Include="Controls\Maintenance\usrMissingRequisitions.resx">
       <DependentUpon>usrMissingRequisitions.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Requisitions\usrRequisitionBatch.resx">
+      <DependentUpon>usrRequisitionBatch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Supplier\usrSupplierDetail.resx">
       <DependentUpon>usrSupplierDetail.cs</DependentUpon>
     </EmbeddedResource>
@@ -676,7 +685,7 @@
     <EmbeddedResource Include="Controls\usrMonthReport.resx">
       <DependentUpon>usrMonthReport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\usrPaidRequisitions.resx">
+    <EmbeddedResource Include="Controls\Requisitions\usrPaidRequisitions.resx">
       <DependentUpon>usrPaidRequisitions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\usrPMJobs.resx">
@@ -685,7 +694,7 @@
     <EmbeddedResource Include="Controls\usrReminders.resx">
       <DependentUpon>usrReminders.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\usrRequisition.resx">
+    <EmbeddedResource Include="Controls\Requisitions\usrRequisition.resx">
       <DependentUpon>usrRequisition.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\usrSearch.resx">
@@ -1135,6 +1144,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ReportService\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -261,7 +261,10 @@ namespace Astrodon.ReportService {
     public interface IReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/LevyRollReport", ReplyAction="http://tempuri.org/IReportService/LevyRollReportResponse")]
-        byte[] LevyRollReport(System.DateTime processMonth, string buildingName, string dataPath, bool includeSundries);
+        byte[] LevyRollReport(System.DateTime processMonth, string buildingName, string dataPath);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/LevyRollExcludeSundries", ReplyAction="http://tempuri.org/IReportService/LevyRollExcludeSundriesResponse")]
+        byte[] LevyRollExcludeSundries(System.DateTime processMonth, string buildingName, string dataPath);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/SupplierReport", ReplyAction="http://tempuri.org/IReportService/SupplierReportResponse")]
         byte[] SupplierReport(string sqlConnectionString, System.DateTime fromDate, System.DateTime toDate, int buildingId);
@@ -300,8 +303,12 @@ namespace Astrodon.ReportService {
                 base(binding, remoteAddress) {
         }
         
-        public byte[] LevyRollReport(System.DateTime processMonth, string buildingName, string dataPath, bool includeSundries) {
-            return base.Channel.LevyRollReport(processMonth, buildingName, dataPath, includeSundries);
+        public byte[] LevyRollReport(System.DateTime processMonth, string buildingName, string dataPath) {
+            return base.Channel.LevyRollReport(processMonth, buildingName, dataPath);
+        }
+        
+        public byte[] LevyRollExcludeSundries(System.DateTime processMonth, string buildingName, string dataPath) {
+            return base.Channel.LevyRollExcludeSundries(processMonth, buildingName, dataPath);
         }
         
         public byte[] SupplierReport(string sqlConnectionString, System.DateTime fromDate, System.DateTime toDate, int buildingId) {

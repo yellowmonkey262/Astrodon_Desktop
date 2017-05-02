@@ -86,6 +86,7 @@ namespace Astrodon.Data
         public DbSet<MaintenanceDocument> MaintenanceDocumentSet { get; set; }
 
         public DbSet<RequisitionDocument> RequisitionDocumentSet { get; set; }
+        public DbSet<RequisitionBatch> RequisitionBatchSet { get; set; }
 
         public DbSet<Bank> BankSet { get; set; }
         public DbSet<BankAudit> BankAuditSet { get; set; }

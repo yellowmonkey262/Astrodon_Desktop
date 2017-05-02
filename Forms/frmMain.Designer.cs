@@ -69,6 +69,7 @@
             this.requisitionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.paymentRequisitionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unpaidRequisitionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.missingMaintenanceRequisitionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildingMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.suppliersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.debtorsReportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,7 +88,7 @@
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.missingMaintenanceRequisitionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadRequisitionBatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -440,7 +441,8 @@
             this.requisitionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.paymentRequisitionsToolStripMenuItem,
             this.unpaidRequisitionsToolStripMenuItem,
-            this.missingMaintenanceRequisitionsToolStripMenuItem});
+            this.missingMaintenanceRequisitionsToolStripMenuItem,
+            this.downloadRequisitionBatchToolStripMenuItem});
             this.requisitionsToolStripMenuItem.Name = "requisitionsToolStripMenuItem";
             this.requisitionsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.requisitionsToolStripMenuItem.Text = "Requisitions";
@@ -448,16 +450,23 @@
             // paymentRequisitionsToolStripMenuItem
             // 
             this.paymentRequisitionsToolStripMenuItem.Name = "paymentRequisitionsToolStripMenuItem";
-            this.paymentRequisitionsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.paymentRequisitionsToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.paymentRequisitionsToolStripMenuItem.Text = "Payment Requisitions";
             this.paymentRequisitionsToolStripMenuItem.Click += new System.EventHandler(this.paymentRequisitionsToolStripMenuItem_Click);
             // 
             // unpaidRequisitionsToolStripMenuItem
             // 
             this.unpaidRequisitionsToolStripMenuItem.Name = "unpaidRequisitionsToolStripMenuItem";
-            this.unpaidRequisitionsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.unpaidRequisitionsToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.unpaidRequisitionsToolStripMenuItem.Text = "Requisition Log";
             this.unpaidRequisitionsToolStripMenuItem.Click += new System.EventHandler(this.unpaidRequisitionsToolStripMenuItem_Click);
+            // 
+            // missingMaintenanceRequisitionsToolStripMenuItem
+            // 
+            this.missingMaintenanceRequisitionsToolStripMenuItem.Name = "missingMaintenanceRequisitionsToolStripMenuItem";
+            this.missingMaintenanceRequisitionsToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.missingMaintenanceRequisitionsToolStripMenuItem.Text = "Missing Maintenance Requisitions";
+            this.missingMaintenanceRequisitionsToolStripMenuItem.Click += new System.EventHandler(this.missingMaintenanceRequisitionsToolStripMenuItem_Click);
             // 
             // buildingMaintenanceToolStripMenuItem
             // 
@@ -596,12 +605,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // missingMaintenanceRequisitionsToolStripMenuItem
+            // downloadRequisitionBatchToolStripMenuItem
             // 
-            this.missingMaintenanceRequisitionsToolStripMenuItem.Name = "missingMaintenanceRequisitionsToolStripMenuItem";
-            this.missingMaintenanceRequisitionsToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
-            this.missingMaintenanceRequisitionsToolStripMenuItem.Text = "Missing Maintenance Requisitions";
-            this.missingMaintenanceRequisitionsToolStripMenuItem.Click += new System.EventHandler(this.missingMaintenanceRequisitionsToolStripMenuItem_Click);
+            this.downloadRequisitionBatchToolStripMenuItem.Name = "downloadRequisitionBatchToolStripMenuItem";
+            this.downloadRequisitionBatchToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.downloadRequisitionBatchToolStripMenuItem.Text = "Download Requisition Batch";
+            this.downloadRequisitionBatchToolStripMenuItem.Click += new System.EventHandler(this.downloadRequisitionBatchToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -693,5 +702,6 @@
         private System.Windows.Forms.ToolStripMenuItem suppliersToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem bankConfigurationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem missingMaintenanceRequisitionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem downloadRequisitionBatchToolStripMenuItem;
     }
 }
