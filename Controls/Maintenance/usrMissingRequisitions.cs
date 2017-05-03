@@ -83,7 +83,9 @@ namespace Astrodon.Controls.Maintenance
             }
             catch (Exception e)
             {
-                Controller.HandleError("Error loading requisitions, please confirm the ODBC setup for " + building.DataPath + "\n" +
+                var settings = dataContext.tblSettings.FirstOrDefault();
+
+                Controller.HandleError("Error loading requisitions, please confirm the ODBC setup for \n" + building.DataPath + "\n as well as \n" + settings.trust + "\n"+
                                        e.Message);
 
             }
