@@ -52,8 +52,8 @@ namespace Astrodon.Controls.Supplier
                 if (String.IsNullOrWhiteSpace(username))
                     username = "Unknown";
 
-                Controller.HandleError("The supplier was blacklisted by "+username + " for " + selectedItem.BlackListReason + "\n"+
-                    "Please cleare the blacklist to proceeding.", "Validation Error");
+                Controller.HandleError("The supplier was black listed by '"+username + "' for '" + selectedItem.BlackListReason + "'\n"+
+                    "To select this supplier the black list must be cleared.", "Validation Error");
             }
         }
 

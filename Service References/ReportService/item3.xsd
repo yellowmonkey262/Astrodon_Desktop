@@ -88,6 +88,7 @@
   <xs:element name="RequisitionBatchReport">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="sqlConnectionString" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="requisitionBatchId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>

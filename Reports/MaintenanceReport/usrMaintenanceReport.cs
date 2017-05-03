@@ -189,6 +189,7 @@ namespace Astrodon.Reports.MaintenanceReport
             {
                 copy.AddPage(copy.GetImportedPage(reader, ++page));
             }
+            Application.DoEvents();
         }
     }
 }

@@ -276,7 +276,7 @@ namespace Astrodon.ReportService {
         Astrodon.ReportService.PastelMaintenanceTransaction[] MissingMaintenanceRecordsGet(string sqlConnectionString, int buildingId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/RequisitionBatchReport", ReplyAction="http://tempuri.org/IReportService/RequisitionBatchReportResponse")]
-        byte[] RequisitionBatchReport(int requisitionBatchId);
+        byte[] RequisitionBatchReport(string sqlConnectionString, int requisitionBatchId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -326,8 +326,8 @@ namespace Astrodon.ReportService {
             return base.Channel.MissingMaintenanceRecordsGet(sqlConnectionString, buildingId);
         }
         
-        public byte[] RequisitionBatchReport(int requisitionBatchId) {
-            return base.Channel.RequisitionBatchReport(requisitionBatchId);
+        public byte[] RequisitionBatchReport(string sqlConnectionString, int requisitionBatchId) {
+            return base.Channel.RequisitionBatchReport(sqlConnectionString, requisitionBatchId);
         }
     }
 }

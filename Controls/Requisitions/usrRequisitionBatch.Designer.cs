@@ -53,15 +53,16 @@
             this.cmbBuilding.Name = "cmbBuilding";
             this.cmbBuilding.Size = new System.Drawing.Size(241, 21);
             this.cmbBuilding.TabIndex = 16;
+            this.cmbBuilding.SelectedIndexChanged += new System.EventHandler(this.cmbBuilding_SelectedIndexChanged);
             // 
             // btnDownload
             // 
             this.btnDownload.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnDownload.Location = new System.Drawing.Point(337, 14);
             this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(75, 23);
+            this.btnDownload.Size = new System.Drawing.Size(144, 23);
             this.btnDownload.TabIndex = 17;
-            this.btnDownload.Text = "Download";
+            this.btnDownload.Text = "Create New Batch";
             this.btnDownload.UseVisualStyleBackColor = true;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
@@ -71,10 +72,10 @@
             this.dgItems.AllowUserToDeleteRows = false;
             this.dgItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgItems.Location = new System.Drawing.Point(3, 74);
+            this.dgItems.Location = new System.Drawing.Point(4, 43);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(795, 336);
+            this.dgItems.Size = new System.Drawing.Size(795, 368);
             this.dgItems.TabIndex = 59;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             // 

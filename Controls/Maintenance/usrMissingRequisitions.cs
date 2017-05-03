@@ -199,6 +199,10 @@ namespace Astrodon.Controls.Maintenance
             lbAmount.Text = _Item.Amount.ToString("###,##0.00");
             txtPaymentRef.Text = _Item.Reference;
             lbAccount.Text = _Item.AccountType;
+
+            btnSave.Enabled = true;
+            btnUploadInvoice.Visible = true;
+            btnSupplierLookup.Visible = true;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -320,6 +324,9 @@ namespace Astrodon.Controls.Maintenance
             lbSupplierName.Text = "";
             lbAccountNumber.Text = "";
             lbBankName.Text = "";
+            btnSave.Enabled = false;
+            btnUploadInvoice.Visible = false;
+            btnSupplierLookup.Visible = false;
         }
 
         private void btnSupplierLookup_Click(object sender, EventArgs e)

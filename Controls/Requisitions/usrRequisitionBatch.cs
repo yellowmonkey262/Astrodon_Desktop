@@ -12,6 +12,8 @@ using Astrodon.Data.RequisitionData;
 using Astrodon.ReportService;
 using System.IO;
 using System.Diagnostics;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace Astrodon.Controls.Requisitions
 {
@@ -58,8 +60,11 @@ namespace Astrodon.Controls.Requisitions
             {
                 var building = cmbBuilding.SelectedItem as Building;
                 var batch = CreateRequisitionBatch(building.ID);
-                LoadGrid();
-                DownloadReport(batch.id);
+                if (batch != null)
+                {
+                    LoadGrid();
+                    DownloadReport(batch.id);
+                }
             }
             finally
             {
@@ -188,14 +193,26 @@ namespace Astrodon.Controls.Requisitions
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
                 var item = senderGrid.Rows[e.RowIndex].DataBoundItem as BatchItem;
-                DownloadReport(item.Id);
+                if (item != null)
+                {
+                    try
+                    {
 
+                        DownloadReport(item.Id);
+                    }
+                    finally
+                    {
+                        this.Cursor = Cursors.Default;
+                    }
+                }
             }
         }
 
         private void LoadGrid()
         {
             var building = cmbBuilding.SelectedItem as Building;
+            if (building == null)
+                return;
             using (var context = SqlDataHandler.GetDataContext())
             {
                 _Data = context.RequisitionBatchSet
@@ -208,7 +225,7 @@ namespace Astrodon.Controls.Requisitions
                             BatchNumber = b.BatchNumber,
                             Entries = b.Entries,
                             CreatedBy = b.UserCreated.name
-                        }).OrderByDescending(a => a.Created).Take(200).ToList();
+                        }).OrderByDescending(a => a.Created).Take(400).ToList();
             }
             BindDataGrid();
         }
@@ -219,9 +236,63 @@ namespace Astrodon.Controls.Requisitions
             {
                 using (var reportService = new ReportServiceClient())
                 {
-                    var reportData = reportService.RequisitionBatchReport(requisitionBatchId);
-                    File.WriteAllBytes(dlgSave.FileName, reportData);
+                    var reportData = reportService.RequisitionBatchReport(SqlDataHandler.GetConnectionString(),requisitionBatchId);
+
+                    byte[] combinedReport;
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        using (Document doc = new Document())
+                        {
+                            using (PdfCopy copy = new PdfCopy(doc, ms))
+                            {
+                                doc.Open();
+
+                                AddPdfDocument(copy, reportData);
+
+                                using (var context = SqlDataHandler.GetDataContext())
+                                {
+                                    foreach (var requisitionId in context.tblRequisitions.Where(a => a.RequisitionBatchId == requisitionBatchId).OrderBy(a => a.trnDate).Select(a => a.id).ToList())
+                                    {
+                                        foreach (var invoice in context.RequisitionDocumentSet.Where(a => a.RequisitionId == requisitionId && a.IsInvoice == true).Select(a => a.FileData).ToList())
+                                        {
+                                            AddPdfDocument(copy, invoice);
+                                            Application.DoEvents();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        combinedReport = ms.ToArray();
+                        File.WriteAllBytes(dlgSave.FileName, combinedReport);
+                    }
                     Process.Start(dlgSave.FileName);
+                }
+            }
+        }
+
+        private void AddPdfDocument(PdfCopy copy, byte[] document)
+        {
+            PdfReader reader = new PdfReader(document);
+            int n = reader.NumberOfPages;
+            for (int page = 0; page < n;)
+            {
+                copy.AddPage(copy.GetImportedPage(reader, ++page));
+            }
+        }
+
+        private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(cmbBuilding.SelectedItem != null)
+            {
+
+                try
+                {
+                    this.Cursor = Cursors.WaitCursor;
+                    LoadGrid();
+                }
+                finally
+                {
+                    this.Cursor = Cursors.Default;
                 }
             }
         }
