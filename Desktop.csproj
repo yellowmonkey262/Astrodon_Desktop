@@ -353,10 +353,10 @@
     <Compile Include="Controls\usrMonthReport.Designer.cs">
       <DependentUpon>usrMonthReport.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Requisitions\usrPaidRequisitions.cs">
+    <Compile Include="Controls\usrPaidRequisitions.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Requisitions\usrPaidRequisitions.Designer.cs">
+    <Compile Include="Controls\usrPaidRequisitions.Designer.cs">
       <DependentUpon>usrPaidRequisitions.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\usrPMJobs.cs">
@@ -371,10 +371,10 @@
     <Compile Include="Controls\usrReminders.Designer.cs">
       <DependentUpon>usrReminders.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Requisitions\usrRequisition.cs">
+    <Compile Include="Controls\usrRequisition.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Requisitions\usrRequisition.Designer.cs">
+    <Compile Include="Controls\usrRequisition.Designer.cs">
       <DependentUpon>usrRequisition.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\usrSearch.cs">
@@ -685,7 +685,7 @@
     <EmbeddedResource Include="Controls\usrMonthReport.resx">
       <DependentUpon>usrMonthReport.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Requisitions\usrPaidRequisitions.resx">
+    <EmbeddedResource Include="Controls\usrPaidRequisitions.resx">
       <DependentUpon>usrPaidRequisitions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\usrPMJobs.resx">
@@ -694,7 +694,7 @@
     <EmbeddedResource Include="Controls\usrReminders.resx">
       <DependentUpon>usrReminders.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Requisitions\usrRequisition.resx">
+    <EmbeddedResource Include="Controls\usrRequisition.resx">
       <DependentUpon>usrRequisition.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\usrSearch.resx">
