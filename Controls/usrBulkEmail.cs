@@ -441,6 +441,11 @@ namespace Astrodon
                         {
                             String[] emailAddys = rrece["recipient"].ToString().Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                             bool success = Mailer.SendMail(fromAddress, emailAddys, subject, message, false, false, false, out status, attachments);
+                            if (success)
+                            {
+                                String updateQuery = "UPDATE tblMsgRecipients SET sentDate = getdate() WHERE id = " + rrece["id"].ToString();
+                                dh.SetData(updateQuery, null, out status);
+                            }
                             if (!emails.ContainsKey(rrece["accNo"].ToString())) { emails.Add(rrece["accNo"].ToString(), success); }
                         }
                     }

@@ -372,7 +372,7 @@ namespace Astrodon
             {
                 String customerCode = customer.accNumber;
                 MySqlConnector mySqlConnector = new MySqlConnector();
-                DataSet dsDocs = mySqlConnector.GetFiles(customerCode, building.Name);
+                DataSet dsDocs = building.Name != "ASTRODON RENTALS" ? mySqlConnector.GetFiles(customerCode, building.Name) : mySqlConnector.GetFilesRental(customerCode);
                 docs = new List<CustomerDocument>();
                 if (dsDocs != null && dsDocs.Tables.Count > 0 && dsDocs.Tables[0].Rows.Count > 0)
                 {

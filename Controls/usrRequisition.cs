@@ -18,6 +18,8 @@ namespace Astrodon.Controls
 
         private SqlDataHandler dh = new SqlDataHandler();
         private Dictionary<String, double> avAmts = new Dictionary<string, double>();
+
+        private List<Trns> buildTransactions = new List<Trns>();
         private String status;
 
         public usrRequisition()
@@ -58,6 +60,13 @@ namespace Astrodon.Controls
             cmbBuilding.SelectedIndexChanged += cmbBuilding_SelectedIndexChanged;
         }
 
+        //private double LoadBuildingTransactions()
+        //{
+        //    String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
+        //    String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+        //    buildTransactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).Where(c => Convert.ToDouble(c.Amount) < 0).OrderByDescending(c => c.Date).ToList();
+        //}
+
         private void LoadRequisitions()
         {
             unProcessedRequisitions.Clear();
@@ -68,6 +77,7 @@ namespace Astrodon.Controls
             {
                 if (cmbBuilding.SelectedIndex > -1)
                 {
+                    //LoadBuildingTransactions();
                     String buildingID = myBuildings[cmbBuilding.SelectedIndex].ID.ToString();
                     String unpaidQuery = "SELECT count(*) as unpaids FROM tblRequisition WHERE paid = 'False' AND building = " + buildingID;
                     DataSet unpaidDS = dh.GetData(unpaidQuery, null, out status);
@@ -345,8 +355,76 @@ namespace Astrodon.Controls
             return os;
         }
 
+        private void CheckLimits(double requestedAmt, out bool d, out bool m)
+        {
+            double limitD = myBuildings[cmbBuilding.SelectedIndex].limitD;
+            double limitM = myBuildings[cmbBuilding.SelectedIndex].limitM;
+            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
+            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+            DateTime cDate = DateTime.Now;
+            DateTime dsDate = new DateTime(cDate.Year, cDate.Month, cDate.Day, 0, 0, 0);
+            DateTime deDate = new DateTime(cDate.Year, cDate.Month, cDate.Day, 23, 59, 59);
+            DateTime sDate = new DateTime(cDate.Year, cDate.Month, 1, 0, 0, 0);
+            DateTime eDate = new DateTime(cDate.Year, cDate.Month, DateTime.DaysInMonth(cDate.Year, cDate.Month), 23, 59, 59);
+            List<Trns> mTransactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).Where(c => DateTime.Parse(c.Date) >= sDate && DateTime.Parse(c.Date) <= eDate).ToList();
+            double dTotal = paidRequisitions.Where(c => c.trnDate >= dsDate && c.trnDate <= deDate).ToList().Sum(c => c.amount);
+            //.Sum(c=>c.amount) Controller.pastel.GetTransactions(path, "G", 101, 112, acc).Where(c => DateTime.Parse(c.Date) >= dsDate && DateTime.Parse(c.Date) <= deDate).ToList();
+            double mTotal = 0;
+            if (cmbAccount.SelectedItem.ToString() == "TRUST")
+            {
+                mTransactions = mTransactions.Where(c => double.Parse(c.Amount) > 0).ToList();
+                mTotal = mTransactions.Sum(c => double.Parse(c.Amount));
+            }
+            else
+            {
+                mTransactions = mTransactions.Where(c => double.Parse(c.Amount) < 0).ToList();
+                mTotal = mTransactions.Sum(c => double.Parse(c.Amount)) * -1;
+            }
+            double unp = unProcessedRequisitions.Sum(c => c.amount);
+            m = (mTotal + unp + dTotal) + requestedAmt < limitM;
+            d = dTotal + requestedAmt < limitD;
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
+            bool dLimit, mLimit;
+            CheckLimits(double.Parse(txtAmount.Text), out dLimit, out mLimit);
+            bool showPassword = false;
+            if (!dLimit)
+            {
+                if (MessageBox.Show("Daily limit exceeded. Enter password to continue?", "Requisitions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    showPassword = true;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else if (!mLimit)
+            {
+                if (MessageBox.Show("Monthly limit exceeded. Enter password to continue?", "Requisitions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    showPassword = true;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            if (showPassword)
+            {
+                String password = "";
+                using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
+                {
+                    if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
+                    {
+                        MessageBox.Show("Invalid password entered", "Requisitions", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+                }
+            }
             double amt;
             if (double.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null && cmbLedger.SelectedItem != null && cmbAccount.SelectedItem != null)
             {
@@ -400,9 +478,11 @@ namespace Astrodon.Controls
                 }
                 LoadRequisitions();
                 ClearRequisitions();
+                this.Cursor = Cursors.Arrow;
             }
             else
             {
+                this.Cursor = Cursors.Arrow;
                 MessageBox.Show("Please enter all fields");
             }
         }

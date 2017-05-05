@@ -798,7 +798,7 @@
     <WCFMetadataStorage Include="Service References\ReportService\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="AstroLibrary\AstroLibrary.csproj">
+    <ProjectReference Include="..\AstroLibrary\AstroLibrary.csproj">
       <Project>{ce7d8e45-b945-4013-8633-c2add2ac8876}</Project>
       <Name>AstroLibrary</Name>
     </ProjectReference>
