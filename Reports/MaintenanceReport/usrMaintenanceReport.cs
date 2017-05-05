@@ -20,8 +20,11 @@ namespace Astrodon.Reports.MaintenanceReport
     public partial class usrMaintenanceReport : UserControl
     {
         private List<Building> _Buildings;
-        private List<IdValue> _Years;
-        private List<IdValue> _Months;
+        private List<IdValue> _FromYears;
+        private List<IdValue> _FromMonths;
+
+        private List<IdValue> _ToYears;
+        private List<IdValue> _ToMonths;
 
 
         public usrMaintenanceReport()
@@ -54,30 +57,43 @@ namespace Astrodon.Reports.MaintenanceReport
 
         private void LoadYears()
         {
-            _Years = new List<IdValue>();
-            _Years.Add(new IdValue() { Id = DateTime.Now.Year - 1, Value = (DateTime.Now.Year - 1).ToString() });
-            _Years.Add(new IdValue() { Id = DateTime.Now.Year, Value = (DateTime.Now.Year).ToString() });
-            _Years.Add(new IdValue() { Id = DateTime.Now.Year + 1, Value = (DateTime.Now.Year + 1).ToString() });
+            _FromYears = new List<IdValue>();
+            _FromYears.Add(new IdValue() { Id = DateTime.Now.Year - 1, Value = (DateTime.Now.Year - 1).ToString() });
+            _FromYears.Add(new IdValue() { Id = DateTime.Now.Year, Value = (DateTime.Now.Year).ToString() });
+            _FromYears.Add(new IdValue() { Id = DateTime.Now.Year + 1, Value = (DateTime.Now.Year + 1).ToString() });
 
-            _Months = new List<IdValue>();
+            _FromMonths = new List<IdValue>();
             for (int x = 1; x <= 12; x++)
             {
-                _Months.Add(new IdValue()
+                _FromMonths.Add(new IdValue()
                 {
                     Id = x,
                     Value = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x)
                 });
             }
 
-            cmbYear.DataSource = _Years;
-            cmbYear.ValueMember = "Id";
-            cmbYear.DisplayMember = "Value";
-            cmbYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
+            cmbFromYear.DataSource = _FromYears;
+            cmbFromYear.ValueMember = "Id";
+            cmbFromYear.DisplayMember = "Value";
+            cmbFromYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
 
-            cmbMonth.DataSource = _Months;
-            cmbMonth.ValueMember = "Id";
-            cmbMonth.DisplayMember = "Value";
-            cmbMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
+            cmbFromMonth.DataSource = _FromMonths;
+            cmbFromMonth.ValueMember = "Id";
+            cmbFromMonth.DisplayMember = "Value";
+            cmbFromMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
+
+            _ToYears = _FromYears.ToList();
+            _ToMonths = _FromMonths.ToList();
+
+            cmbToYear.DataSource = _ToYears;
+            cmbToYear.ValueMember = "Id";
+            cmbToYear.DisplayMember = "Value";
+            cmbToYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
+
+            cmbToMonth.DataSource = _ToMonths;
+            cmbToMonth.ValueMember = "Id";
+            cmbToMonth.DisplayMember = "Value";
+            cmbToMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -91,7 +107,8 @@ namespace Astrodon.Reports.MaintenanceReport
                 {
                     using (var reportService = new ReportServiceClient())
                     {
-                        DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+                        DateTime startDate = new DateTime((cmbFromYear.SelectedItem as IdValue).Id, (cmbFromMonth.SelectedItem as IdValue).Id, 1);
+                        DateTime endDate = new DateTime((cmbToYear.SelectedItem as IdValue).Id, (cmbToMonth.SelectedItem as IdValue).Id, 1).AddMonths(1).AddSeconds(-1);
 
                         MaintenanceReportType repType;
                         if (rbDetailed.Checked)
@@ -103,19 +120,16 @@ namespace Astrodon.Reports.MaintenanceReport
 
                         var building = cmbBuilding.SelectedItem as Building;
 
-                        var reportData = reportService.MaintenanceReport(SqlDataHandler.GetConnectionString(), repType, dDate, building.ID, building.Name, (cmbBuilding.SelectedItem as Building).DataPath);
+                        var reportData = reportService.MaintenanceReport(SqlDataHandler.GetConnectionString(), repType, startDate, endDate, building.ID, building.Name, (cmbBuilding.SelectedItem as Building).DataPath);
                         if (reportData == null)
                         {
-                            Controller.HandleError("No data found for " + dDate.ToString("MMM yyyy"), "Maintenance Report");
+                            Controller.HandleError("No data found for " + startDate.ToString("MMM yyyy") + " - " + endDate.ToString("MMM yyyy"), "Maintenance Report");
                             return;
                         }
 
                         if (repType == MaintenanceReportType.DetailedReportWithSupportingDocuments)
                         {
                             byte[] combinedReport = null;
-
-                            DateTime startDate = new DateTime(dDate.Year, dDate.Month, 1);
-                            DateTime endDate = startDate.AddMonths(1).AddSeconds(-1);
 
 
                             using (var dataContext = SqlDataHandler.GetDataContext())
@@ -124,7 +138,7 @@ namespace Astrodon.Reports.MaintenanceReport
                                                    from d in m.MaintenanceDocuments
                                                    where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
                                                       && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
-                                                      && m.Requisition.paid == true
+                                               //       && m.Requisition.paid == true
                                                    orderby m.DateLogged
                                                    select d.id).ToList();
 
@@ -132,7 +146,7 @@ namespace Astrodon.Reports.MaintenanceReport
                                                  from d in m.Requisition.Documents
                                                  where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
                                                     && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
-                                                    && m.Requisition.paid == true
+                                                //    && m.Requisition.paid == true
                                                  orderby m.DateLogged
                                                  select d.id).ToList();
 

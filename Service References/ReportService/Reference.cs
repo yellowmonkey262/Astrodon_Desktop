@@ -270,7 +270,7 @@ namespace Astrodon.ReportService {
         byte[] SupplierReport(string sqlConnectionString, System.DateTime fromDate, System.DateTime toDate, int buildingId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MaintenanceReport", ReplyAction="http://tempuri.org/IReportService/MaintenanceReportResponse")]
-        byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime processMonth, int buildingId, string buildingName, string dataPath);
+        byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime fromDate, System.DateTime toDate, int buildingId, string buildingName, string dataPath);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MissingMaintenanceRecordsGet", ReplyAction="http://tempuri.org/IReportService/MissingMaintenanceRecordsGetResponse")]
         Astrodon.ReportService.PastelMaintenanceTransaction[] MissingMaintenanceRecordsGet(string sqlConnectionString, int buildingId);
@@ -318,8 +318,8 @@ namespace Astrodon.ReportService {
             return base.Channel.SupplierReport(sqlConnectionString, fromDate, toDate, buildingId);
         }
         
-        public byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime processMonth, int buildingId, string buildingName, string dataPath) {
-            return base.Channel.MaintenanceReport(sqlConnectionString, reportType, processMonth, buildingId, buildingName, dataPath);
+        public byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime fromDate, System.DateTime toDate, int buildingId, string buildingName, string dataPath) {
+            return base.Channel.MaintenanceReport(sqlConnectionString, reportType, fromDate, toDate, buildingId, buildingName, dataPath);
         }
         
         public Astrodon.ReportService.PastelMaintenanceTransaction[] MissingMaintenanceRecordsGet(string sqlConnectionString, int buildingId) {
