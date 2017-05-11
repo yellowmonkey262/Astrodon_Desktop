@@ -138,12 +138,6 @@ namespace Astrodon.Controls.Maintenance
                 HeaderText = "Type",
                 ReadOnly = true
             });
-            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "LedgerDesc",
-                HeaderText = "Ledger",
-                ReadOnly = true
-            });
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -197,7 +191,7 @@ namespace Astrodon.Controls.Maintenance
             _Documents.Clear();
             ClearSupplier();
             lbDate.Text = _Item.TransactionDate.ToString("yyyy/MM/dd");
-            lbLedger.Text = _Item.LedgerDesc;
+            lbLedger.Text = _Item.AccountDesc;
             lbAmount.Text = _Item.Amount.ToString("###,##0.00");
             txtPaymentRef.Text = _Item.Reference;
             lbAccount.Text = _Item.AccountType;
@@ -247,8 +241,8 @@ namespace Astrodon.Controls.Maintenance
                     PastelLedgerAutoNumber = _Item.AutoNumber,
                     PastelDataPath = _Item.DataPath,
                     account = _Item.AccountType,
-                    reference = building.Abbr + " (" + _Item.LedgerAccount + ")",
-                    ledger = _Item.LedgerDesc,
+                    reference = building.Abbr + " (" + _Item.Account + ")",
+                    ledger = _Item.AccountDesc,
                     amount = _Item.Amount,
                     payreference = txtPaymentRef.Text,
                     userID = Controller.user.id,
@@ -277,7 +271,7 @@ namespace Astrodon.Controls.Maintenance
 
                 var config = (from c in context.BuildingMaintenanceConfigurationSet.Include(a => a.Building)
                               where c.BuildingId == item.building
-                              && c.PastelAccountNumber == _Item.LedgerAccount
+                              && c.PastelAccountNumber == _Item.AccountDesc
                               select c).SingleOrDefault();
 
                 if (config != null)

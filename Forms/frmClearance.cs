@@ -136,19 +136,17 @@ namespace Astrodon
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 clickedRow = e.RowIndex;
-                using (ContextMenu m = new ContextMenu())
-                {
-                    MenuItem deleteMe = new MenuItem("Delete Clearance");
-                    MenuItem deleteMeNoJournal = new MenuItem("Delete Clearance without journal");
-                    MenuItem viewMe = new MenuItem("View Clearance");
-                    deleteMe.Click += new EventHandler(deleteMe_Click);
-                    deleteMeNoJournal.Click += new EventHandler(deleteMeNoJournal_Click);
-                    viewMe.Click += new EventHandler(viewMe_Click);
-                    m.MenuItems.Add(deleteMe);
-                    m.MenuItems.Add(deleteMeNoJournal);
-                    m.MenuItems.Add(viewMe);
-                    m.Show(dgProcessed, new Point(e.X, e.Y));
-                }
+                ContextMenu m = new ContextMenu();
+                MenuItem deleteMe = new MenuItem("Delete Clearance");
+                MenuItem deleteMeNoJournal = new MenuItem("Delete Clearance without journal");
+                MenuItem viewMe = new MenuItem("View Clearance");
+                deleteMe.Click += new EventHandler(deleteMe_Click);
+                deleteMeNoJournal.Click += new EventHandler(deleteMeNoJournal_Click);
+                viewMe.Click += new EventHandler(viewMe_Click);
+                m.MenuItems.Add(deleteMe);
+                m.MenuItems.Add(deleteMeNoJournal);
+                m.MenuItems.Add(viewMe);
+                m.Show(dgProcessed, new Point(e.X, e.Y));
             }
         }
 

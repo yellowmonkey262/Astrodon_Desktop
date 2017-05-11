@@ -44,19 +44,26 @@ namespace Astrodon
         {
             String lc, auth;
             SDK = new PastelPartnerSDK();
-            if (Environment.MachineName != "STEPHEN-PC")
+            if (Environment.MachineName == "PASTELPARTNER")
             {
                 lc = "DK11110068";
                 auth = "4228113";
-                pastelDirectory = (Directory.Exists("K:\\") ? "K:\\" : "C:\\Pastel11\\");
-            }
-            else
+                pastelDirectory = "C:\\Pastel11\\";
+                SDK.SetLicense(lc, auth);
+            }else if (Environment.MachineName == "STEPHEN-PC")
             {
                 lc = "DK12111473";
                 auth = "3627008";
                 pastelDirectory = "C:\\Pastel12\\";
+                SDK.SetLicense(lc, auth);
             }
-            SDK.SetLicense(lc, auth);
+            else 
+            {
+                lc = "DK11110068";
+                auth = "4228113";
+                pastelDirectory = (Directory.Exists("K:\\") ? "K:\\" : "C:\\Pastel11\\");
+                SDK.SetLicense(lc, auth);
+            }
         }
 
         #region Customer

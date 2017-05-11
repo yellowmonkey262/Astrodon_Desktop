@@ -7,14 +7,6 @@ namespace Astrodon.ReportService
 {
     public partial class PastelMaintenanceTransaction : Astrodon.ReportService.PervasiveItem
     {
-        public string LedgerDesc
-        {
-            get
-            {
-                return LedgerAccount + ": " + LedgerAccountName;
-            }
-        }
-
         public string AccountDesc
         {
             get

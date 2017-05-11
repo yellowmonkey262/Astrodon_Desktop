@@ -725,6 +725,18 @@ namespace Astrodon
             return fileDS;
         }
 
+        public DataSet GetFilesRental(String unitno)
+        {
+            unitno += "R";
+            String query = "SELECT d.tstamp, d.title, d.file FROM tx_astro_docs d where d.unitno = @unitno ORDER BY d.tstamp DESC";
+            Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
+            sqlParms.Add("@unitno", unitno);
+            String status = "";
+            DataSet fileDS = GetData(query, sqlParms, out status);
+            //MessageBox.Show(status);
+            return fileDS;
+        }
+
         public DataSet GetCustomerDocs(String buildingName, out String status)
         {
             if (buildingName.ToUpper().StartsWith("VILLAGE GREEN")) { buildingName = "VILLAGE GREEN B/C"; }

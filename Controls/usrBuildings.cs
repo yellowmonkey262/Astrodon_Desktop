@@ -81,6 +81,9 @@ namespace Astrodon
             txtAddress3.Text = selectedBuilding.addy3;
             txtAddress4.Text = selectedBuilding.addy4;
             txtAddress5.Text = selectedBuilding.addy5;
+            txtLimitM.Text = selectedBuilding.limitM.ToString("#,##0.00");
+            txtLimitW.Text = selectedBuilding.limitW.ToString("#,##0.00");
+            txtLimitD.Text = selectedBuilding.limitD.ToString("#,##0.00");
             btnSave.Enabled = true;
         }
 
@@ -137,6 +140,13 @@ namespace Astrodon
             selectedBuilding.addy3 = txtAddress3.Text;
             selectedBuilding.addy4 = txtAddress4.Text;
             selectedBuilding.addy5 = txtAddress5.Text;
+
+            double value = 0;
+            selectedBuilding.limitM = double.TryParse(txtLimitM.Text, out value) ? value : 0;
+            value = 0;
+            selectedBuilding.limitW = double.TryParse(txtLimitW.Text, out value) ? value : 0;
+            value = 0;
+            selectedBuilding.limitD = double.TryParse(txtLimitD.Text, out value) ? value : 0;
 
             try
             {

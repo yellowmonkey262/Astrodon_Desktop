@@ -55,12 +55,6 @@ namespace Astrodon.ReportService {
         private string DescriptionField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string LedgerAccountField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string LedgerAccountNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ReferenceField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -156,32 +150,6 @@ namespace Astrodon.ReportService {
                 if ((object.ReferenceEquals(this.DescriptionField, value) != true)) {
                     this.DescriptionField = value;
                     this.RaisePropertyChanged("Description");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string LedgerAccount {
-            get {
-                return this.LedgerAccountField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LedgerAccountField, value) != true)) {
-                    this.LedgerAccountField = value;
-                    this.RaisePropertyChanged("LedgerAccount");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string LedgerAccountName {
-            get {
-                return this.LedgerAccountNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LedgerAccountNameField, value) != true)) {
-                    this.LedgerAccountNameField = value;
-                    this.RaisePropertyChanged("LedgerAccountName");
                 }
             }
         }

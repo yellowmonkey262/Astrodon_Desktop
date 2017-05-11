@@ -18,8 +18,6 @@
           <xs:element minOccurs="0" name="AutoNumber" type="xs:int" />
           <xs:element minOccurs="0" name="DataPath" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LedgerAccount" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LedgerAccountName" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="TransactionDate" type="xs:dateTime" />
           <xs:element minOccurs="0" name="TrustAccount" type="xs:boolean" />

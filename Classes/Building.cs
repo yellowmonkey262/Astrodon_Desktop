@@ -88,8 +88,15 @@ namespace Astrodon
                         addy4 = dr["addy4"].ToString(),
                         addy5 = dr["addy5"].ToString(),
                         pid = dr["pid"].ToString(),
-                        isHOA = bool.Parse(dr["hoa"].ToString())
+                        isHOA = bool.Parse(dr["hoa"].ToString()),
                     };
+                    try
+                    {
+                        b.limitM = Convert.ToDouble(dr["limitM"]);
+                        b.limitW = Convert.ToDouble(dr["limitW"]);
+                        b.limitD = Convert.ToDouble(dr["limitD"]);
+                    }
+                    catch { }
                     Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
                     sqlParms.Add("@buildID", b.ID);
                     DataSet dsFee = dh.GetData(feeQuery, sqlParms, out status);
@@ -226,18 +233,27 @@ namespace Astrodon
             sqlParms.Add("@addy4", buildings[idx].addy4);
             sqlParms.Add("@addy5", buildings[idx].addy5);
 
+            sqlParms.Add("@limitM", buildings[idx].limitM);
+            sqlParms.Add("@limitW", buildings[idx].limitW);
+            sqlParms.Add("@limitD", buildings[idx].limitD);
+
             if (buildings[idx].ID == 0 && !remove)
             {
                 updateQuery = "INSERT INTO tblBuildings(Building, Code, AccNumber, DataPath, Period, Acc, Contra, ownbank, cashbook3, payments, receipts, journals, bc, centrec, business, bank, pm, bankName, accName, ";
-                updateQuery += " bankAccNumber, branch, isBuilding, addy1, addy2, addy3, addy4, addy5, letterName)";
+                updateQuery += " bankAccNumber, branch, isBuilding, addy1, addy2, addy3, addy4, addy5, letterName";
+                updateQuery += " , limitM, limitW, limitD";
+                updateQuery += " )";
                 updateQuery += " VALUES(@Name, @Abbr, @Trust, @DataPath, @Period, @Trust, @Cash, @ownbank, @cashbook3, @Payments, @Receipts, @Journal, @centrec, @cbuild, @business, @Bank, @PM, @BankName, @AccName, ";
-                updateQuery += " @BankAccNumber, @Branch, @web, @addy1, @addy2, @addy3, @addy4, @addy5, @ln)";
+                updateQuery += " @BankAccNumber, @Branch, @web, @addy1, @addy2, @addy3, @addy4, @addy5, @ln ";
+                updateQuery += " ,@limitM, @limitW, @limitD";
+                updateQuery += " )";
             }
             else if (!remove)
             {
                 updateQuery = "UPDATE tblBuildings SET Building = @Name, Code = @Abbr, AccNumber = @Trust, DataPath = @DataPath, Period = @Period, Contra = @Cash, payments = @Payments, ownbank = @ownbank, cashbook3 = @cashbook3, ";
                 updateQuery += " receipts = @Receipts, journals = @Journal, bc = @centrec, centrec = @cbuild, business = @business, bank = @Bank, pm = @PM, bankName = @BankName, accName = @AccName, ";
                 updateQuery += " bankAccNumber = @BankAccNumber, branch = @Branch, isBuilding = @web, addy1 = @addy1, addy2 = @addy2, addy3 = @addy3, addy4 = @addy4, addy5 = @addy5, letterName = @ln ";
+                updateQuery += " ,limitM = @limitM, limitW = @limitW, limitD = @limitD";
                 updateQuery += " WHERE id = @ID";
             }
             else
@@ -310,18 +326,25 @@ namespace Astrodon
             sqlParms.Add("@addy4", b.addy4);
             sqlParms.Add("@addy5", b.addy5);
 
+            sqlParms.Add("@limitM", b.limitM);
+            sqlParms.Add("@limitW", b.limitW);
+            sqlParms.Add("@limitD", b.limitD);
+
             if (b.ID == 0)
             {
                 updateQuery = "INSERT INTO tblBuildings(Building, Code, AccNumber, DataPath, Period, Acc, Contra, ownbank, cashbook3, payments, receipts, journals, bc, centrec, business, bank, pm, bankName, accName, ";
-                updateQuery += " bankAccNumber, branch, isBuilding, addy1, addy2, addy3, addy4, addy5, letterName, web, pid)";
+                updateQuery += " bankAccNumber, branch, isBuilding, addy1, addy2, addy3, addy4, addy5, letterName, web, pid, limitM, limitW, limitD)";
                 updateQuery += " VALUES(@Name, @Abbr, @Trust, @DataPath, @Period, @Trust, @Cash, @ownbank, @cashbook3, @Payments, @Receipts, @Journal, @centrec, @cbuild, @business, @Bank, @PM, @BankName, @AccName, ";
-                updateQuery += " @BankAccNumber, @Branch, @web, @addy1, @addy2, @addy3, @addy4, @addy5, @ln, @webfolder, @pid)";
+                updateQuery += " @BankAccNumber, @Branch, @web, @addy1, @addy2, @addy3, @addy4, @addy5, @ln, @webfolder, @pid";
+                updateQuery += " , @limitM, @limitW, @limitD";
+                updateQuery += " )";
             }
             else
             {
                 updateQuery = "UPDATE tblBuildings SET Building = @Name, Code = @Abbr, AccNumber = @Trust, DataPath = @DataPath, Period = @Period, Contra = @Cash, payments = @Payments, pid = @pid,";
                 updateQuery += " receipts = @Receipts, journals = @Journal, bc = @centrec, centrec = @cbuild, business = @business, bank = @Bank, pm = @PM, bankName = @BankName, accName = @AccName, ownbank = @ownbank, cashbook3 = @cashbook3,";
                 updateQuery += " bankAccNumber = @BankAccNumber, branch = @Branch, isBuilding = @web, addy1 = @addy1, addy2 = @addy2, addy3 = @addy3, addy4 = @addy4, addy5 = @addy5, letterName = @ln, web = @webfolder ";
+                updateQuery += " ,limitM = @limitM, limitW = @limitW, limitD = @limitD";
                 updateQuery += " WHERE id = @ID";
             }
 

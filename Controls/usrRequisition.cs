@@ -19,7 +19,7 @@ namespace Astrodon.Controls
     public partial class usrRequisition : UserControl
     {
         private List<Building> _AllBuildings;
-        private List<Building> _MyBuildings = new List<Building>();
+        private List<Building> myBuildings = new List<Building>();
         private BindingList<RequisitionList> unProcessedRequisitions = new BindingList<RequisitionList>();
         private BindingList<RequisitionList> unPaidRequisitions = new BindingList<RequisitionList>();
         private BindingList<RequisitionList> paidRequisitions = new BindingList<RequisitionList>();
@@ -27,6 +27,8 @@ namespace Astrodon.Controls
 
         private SqlDataHandler dh = new SqlDataHandler();
         private Dictionary<String, double> avAmts = new Dictionary<string, double>();
+
+        private List<Trns> buildTransactions = new List<Trns>();
         private String status;
         private DateTime _minDate = new DateTime(2000, 1, 1);
 
@@ -62,23 +64,30 @@ namespace Astrodon.Controls
             {
                 foreach (Building b in _AllBuildings)
                 {
-                    if (bid == b.ID && b.Web_Building && !_MyBuildings.Contains(b))
+                    if (bid == b.ID && b.Web_Building && !myBuildings.Contains(b))
                     {
-                        _MyBuildings.Add(b);
+                        myBuildings.Add(b);
                         break;
                     }
                 }
             }
 
-            _MyBuildings.Sort(new BuildingComparer("Name", SortOrder.Ascending));
+            myBuildings.Sort(new BuildingComparer("Name", SortOrder.Ascending));
 
             cmbBuilding.SelectedIndexChanged -= cmbBuilding_SelectedIndexChanged;
-            cmbBuilding.DataSource = _MyBuildings;
+            cmbBuilding.DataSource = myBuildings;
             cmbBuilding.ValueMember = "ID";
             cmbBuilding.DisplayMember = "Name";
             cmbBuilding.SelectedItem = null;
             cmbBuilding.SelectedIndexChanged += cmbBuilding_SelectedIndexChanged;
         }
+
+        //private double LoadBuildingTransactions()
+        //{
+        //    String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
+        //    String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+        //    buildTransactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).Where(c => Convert.ToDouble(c.Amount) < 0).OrderByDescending(c => c.Date).ToList();
+        //}
 
         private void LoadRequisitions()
         {
@@ -92,7 +101,7 @@ namespace Astrodon.Controls
             {
                 if (cmbBuilding.SelectedIndex > -1)
                 {
-                    String buildingID = _MyBuildings[cmbBuilding.SelectedIndex].ID.ToString();
+                    String buildingID = myBuildings[cmbBuilding.SelectedIndex].ID.ToString();
                     String unpaidQuery = "SELECT count(*) as unpaids FROM tblRequisition WHERE paid = 'False' AND building = " + buildingID;
                     DataSet unpaidDS = dh.GetData(unpaidQuery, null, out status);
                     lineNumber = "98";
@@ -104,8 +113,8 @@ namespace Astrodon.Controls
                         if (unpaids > 0)
                         {
                             hasUnpaids = true;
-                            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : _MyBuildings[cmbBuilding.SelectedIndex].DataPath);
-                            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? _MyBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : _MyBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+                            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
+                            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
                             transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc);
                             transactions = transactions.OrderByDescending(a => a.Date).ToList();
                         }
@@ -115,7 +124,7 @@ namespace Astrodon.Controls
 
                     using (var context = SqlDataHandler.GetDataContext())
                     {
-                        var buildingId = _MyBuildings[cmbBuilding.SelectedIndex].ID;
+                        var buildingId = myBuildings[cmbBuilding.SelectedIndex].ID;
                         var requisitions = (from r in context.tblRequisitions.Include(a => a.Supplier)
                                             where r.building == buildingId
                                             select new RequisitionList
@@ -283,7 +292,7 @@ namespace Astrodon.Controls
                         if (message != "")
                         {
                             String[] attachments = null;
-                            String email = _MyBuildings[cmbBuilding.SelectedIndex].PM;
+                            String email = myBuildings[cmbBuilding.SelectedIndex].PM;
                             //email = "stephen@metathought.co.za";
                             Mailer.SendMail("noreply@astrodon.co.za", new string[] { email }, "Payment Requisitions", message, false, false, false, out status, attachments);
                         }
@@ -336,7 +345,7 @@ namespace Astrodon.Controls
 
             try
             {
-                lblBank.Text = _MyBuildings[cmbBuilding.SelectedIndex].Bank.ToUpper();
+                lblBank.Text = myBuildings[cmbBuilding.SelectedIndex].Bank.ToUpper();
                 cmbAccount.Items.Add("TRUST");
                 cmbAccount.Items.Add("OWN");
                 cmbAccount.SelectedItem = lblBank.Text;
@@ -347,7 +356,7 @@ namespace Astrodon.Controls
 
             try
             {
-                Dictionary<String, String> accounts = Controller.pastel.GetAccountList(_MyBuildings[cmbBuilding.SelectedIndex].DataPath);
+                Dictionary<String, String> accounts = Controller.pastel.GetAccountList(myBuildings[cmbBuilding.SelectedIndex].DataPath);
                 foreach (KeyValuePair<String, String> reqAcc in accounts)
                 {
                     cmbLedger.Items.Add(reqAcc.Key + ": " + reqAcc.Value);
@@ -384,11 +393,11 @@ namespace Astrodon.Controls
                 {
                     if (cmbAccount.SelectedItem.ToString() == "TRUST")
                     {
-                        return (!String.IsNullOrEmpty(GetTrustPath()) ? GetBalance(GetTrustPath(), _MyBuildings[cmbBuilding.SelectedIndex].Trust) : 0) * -1;
+                        return (!String.IsNullOrEmpty(GetTrustPath()) ? GetBalance(GetTrustPath(), myBuildings[cmbBuilding.SelectedIndex].Trust) : 0) * -1;
                     }
                     else
                     {
-                        return GetBalance(_MyBuildings[cmbBuilding.SelectedIndex].DataPath, _MyBuildings[cmbBuilding.SelectedIndex].OwnBank);
+                        return GetBalance(myBuildings[cmbBuilding.SelectedIndex].DataPath, myBuildings[cmbBuilding.SelectedIndex].OwnBank);
                     }
                 }
                 else
@@ -398,7 +407,7 @@ namespace Astrodon.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show("b count = " + _MyBuildings.Count.ToString() + " b idx = " + cmbBuilding.SelectedIndex);
+                MessageBox.Show("b count = " + myBuildings.Count.ToString() + " b idx = " + cmbBuilding.SelectedIndex);
                 return 0;
             }
         }
@@ -418,12 +427,79 @@ namespace Astrodon.Controls
             return os;
         }
 
+        private void CheckLimits(double requestedAmt, out bool d, out bool m)
+        {
+            double limitD = myBuildings[cmbBuilding.SelectedIndex].limitD;
+            double limitM = myBuildings[cmbBuilding.SelectedIndex].limitM;
+            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
+            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+            DateTime cDate = DateTime.Now;
+            DateTime dsDate = new DateTime(cDate.Year, cDate.Month, cDate.Day, 0, 0, 0);
+            DateTime deDate = new DateTime(cDate.Year, cDate.Month, cDate.Day, 23, 59, 59);
+            DateTime sDate = new DateTime(cDate.Year, cDate.Month, 1, 0, 0, 0);
+            DateTime eDate = new DateTime(cDate.Year, cDate.Month, DateTime.DaysInMonth(cDate.Year, cDate.Month), 23, 59, 59);
+            List<Trns> mTransactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).Where(c => DateTime.Parse(c.Date) >= sDate && DateTime.Parse(c.Date) <= eDate).ToList();
+            double dTotal = paidRequisitions.Where(c => c.trnDate >= dsDate && c.trnDate <= deDate).ToList().Sum(c => c.amount);
+            //.Sum(c=>c.amount) Controller.pastel.GetTransactions(path, "G", 101, 112, acc).Where(c => DateTime.Parse(c.Date) >= dsDate && DateTime.Parse(c.Date) <= deDate).ToList();
+            double mTotal = 0;
+            if (cmbAccount.SelectedItem.ToString() == "TRUST")
+            {
+                mTransactions = mTransactions.Where(c => double.Parse(c.Amount) > 0).ToList();
+                mTotal = mTransactions.Sum(c => double.Parse(c.Amount));
+            }
+            else
+            {
+                mTransactions = mTransactions.Where(c => double.Parse(c.Amount) < 0).ToList();
+                mTotal = mTransactions.Sum(c => double.Parse(c.Amount)) * -1;
+            }
+            double unp = unProcessedRequisitions.Sum(c => c.amount);
+            m = (mTotal + unp + dTotal) + requestedAmt < limitM;
+            d = dTotal + requestedAmt < limitD;
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
-            decimal amt;
+            this.Cursor = Cursors.WaitCursor;
+            bool dLimit, mLimit;
+            CheckLimits(double.Parse(txtAmount.Text), out dLimit, out mLimit);
+            bool showPassword = false;
+            if (!dLimit)
+            {
+                if (MessageBox.Show("Daily limit exceeded. Enter password to continue?", "Requisitions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    showPassword = true;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else if (!mLimit)
+            {
+                if (MessageBox.Show("Monthly limit exceeded. Enter password to continue?", "Requisitions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    showPassword = true;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            if (showPassword)
+            {
+                String password;
+                using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
+                {
+                    if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
+                    {
+                        MessageBox.Show("Invalid password entered", "Requisitions", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+                }
+            }
 
-            if (decimal.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null
-                && cmbLedger.SelectedItem != null && cmbAccount.SelectedItem != null)
+            decimal amt;
+            if (decimal.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null && cmbLedger.SelectedItem != null && cmbAccount.SelectedItem != null)
             {
                 if (dtInvoiceDate.Value <= _minDate)
                 {
@@ -456,7 +532,7 @@ namespace Astrodon.Controls
                         return;
                     }
 
-                    var buildingId = _MyBuildings[cmbBuilding.SelectedIndex].ID;
+                    var buildingId = myBuildings[cmbBuilding.SelectedIndex].ID;
 
                     var bankDetails = context.SupplierBuildingSet
                                              .Include(a => a.Bank)
@@ -471,7 +547,7 @@ namespace Astrodon.Controls
                     {
                         trnDate = trnDatePicker.Value.Date,
                         account = cmbAccount.SelectedItem.ToString(),
-                        reference = _MyBuildings[cmbBuilding.SelectedIndex].Abbr + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + _MyBuildings[cmbBuilding.SelectedIndex].Trust + ")" : ""),
+                        reference = myBuildings[cmbBuilding.SelectedIndex].Abbr + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + myBuildings[cmbBuilding.SelectedIndex].Trust + ")" : ""),
                         ledger = cmbLedger.SelectedItem.ToString(),
                         amount = amt,
                         payreference = txtPaymentRef.Text,
@@ -602,10 +678,12 @@ namespace Astrodon.Controls
 
                 LoadRequisitions();
                 ClearRequisitions();
+                this.Cursor = Cursors.Arrow;
             }
             else
             {
-                Controller.HandleError("Please enter all fields", "Validation Error");
+                this.Cursor = Cursors.Arrow;
+                MessageBox.Show("Please enter all fields");
             }
         }
 
@@ -732,7 +810,7 @@ namespace Astrodon.Controls
                 return;
 
             }
-            var buildingId = _MyBuildings[cmbBuilding.SelectedIndex].ID;
+            var buildingId = myBuildings[cmbBuilding.SelectedIndex].ID;
 
             using (var context = SqlDataHandler.GetDataContext())
             {
@@ -783,8 +861,8 @@ namespace Astrodon.Controls
 
         private void btnViewTrans_Click(object sender, EventArgs e)
         {
-            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : _MyBuildings[cmbBuilding.SelectedIndex].DataPath);
-            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? _MyBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : _MyBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
+            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
             List<Trns> transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).OrderByDescending(c => c.Date).ToList();
             Forms.frmReqTrans fTrans = new Forms.frmReqTrans(transactions);
             fTrans.Show();

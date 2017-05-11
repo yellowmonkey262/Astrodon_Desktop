@@ -217,7 +217,8 @@ namespace Astrodon
         private void clearancesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            using (frmClearance clearanceF = new frmClearance()) { clearanceF.Show(); }
+            frmClearance clearanceF = new frmClearance();
+            clearanceF.Show();
         }
 
         private void bulkStatementsToolStripMenuItem_Click(object sender, EventArgs e)
