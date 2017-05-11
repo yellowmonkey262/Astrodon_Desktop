@@ -138,7 +138,6 @@ namespace Astrodon.Reports.MaintenanceReport
                                                    from d in m.MaintenanceDocuments
                                                    where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
                                                       && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
-                                               //       && m.Requisition.paid == true
                                                    orderby m.DateLogged
                                                    select d.id).ToList();
 
@@ -146,7 +145,6 @@ namespace Astrodon.Reports.MaintenanceReport
                                                  from d in m.Requisition.Documents
                                                  where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
                                                     && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
-                                                //    && m.Requisition.paid == true
                                                  orderby m.DateLogged
                                                  select d.id).ToList();
 

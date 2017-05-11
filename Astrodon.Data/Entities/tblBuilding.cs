@@ -5,6 +5,7 @@ namespace Astrodon.Data
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.IO;
 
     public partial class tblBuilding
     {
@@ -84,5 +85,18 @@ namespace Astrodon.Data
         public string pid { get; set; }
 
         public bool hoa { get; set; }
+
+        [NotMapped]
+        public string DataFolder
+        {
+            get
+            {
+                string basePath = @"Y:\USERS - DO NOT MOVE!!\Buildings Managed (Do not Remove)\"+this.Building.Replace("/","").Replace(@"\","") + @"\";
+
+                if (!Directory.Exists(basePath))
+                    Directory.CreateDirectory(basePath);
+                return basePath;
+            }
+        }
     }
 }
