@@ -67,6 +67,7 @@
             this.btnDownload.TabIndex = 17;
             this.btnDownload.Text = "Create Requisiton Batch";
             this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Visible = false;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
             // dgItems
