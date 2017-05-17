@@ -14,6 +14,7 @@ using System.IO;
 using System.Diagnostics;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using System.Data.Entity;
 
 namespace Astrodon.Controls.Requisitions
 {
@@ -21,13 +22,16 @@ namespace Astrodon.Controls.Requisitions
     {
         private List<Building> _Buildings;
         private List<BatchItem> _Data;
+        private List<RequisitionItem> _PendingRequisitions;
 
         public usrRequisitionBatch()
         {
             InitializeComponent();
+            lbProcessing.Text = "";
             _Data = new List<BatchItem>();
             LoadBuildings();
             LoadGrid();
+            LoadPendingRequisions();
         }
 
         private void LoadBuildings()
@@ -238,31 +242,33 @@ namespace Astrodon.Controls.Requisitions
             using (var reportService = new ReportServiceClient())
             {
                 var reportData = reportService.RequisitionBatchReport(SqlDataHandler.GetConnectionString(), requisitionBatchId);
-
-                using (MemoryStream ms = new MemoryStream())
+                if (reportData != null)
                 {
-                    using (Document doc = new Document())
+                    using (MemoryStream ms = new MemoryStream())
                     {
-                        using (PdfCopy copy = new PdfCopy(doc, ms))
+                        using (Document doc = new Document())
                         {
-                            doc.Open();
-
-                            AddPdfDocument(copy, reportData);
-
-                            using (var context = SqlDataHandler.GetDataContext())
+                            using (PdfCopy copy = new PdfCopy(doc, ms))
                             {
-                                foreach (var requisitionId in context.tblRequisitions.Where(a => a.RequisitionBatchId == requisitionBatchId).OrderBy(a => a.trnDate).Select(a => a.id).ToList())
+                                doc.Open();
+
+                                AddPdfDocument(copy, reportData);
+
+                                using (var context = SqlDataHandler.GetDataContext())
                                 {
-                                    foreach (var invoice in context.RequisitionDocumentSet.Where(a => a.RequisitionId == requisitionId && a.IsInvoice == true).Select(a => a.FileData).ToList())
+                                    foreach (var requisitionId in context.tblRequisitions.Where(a => a.RequisitionBatchId == requisitionBatchId).OrderBy(a => a.trnDate).Select(a => a.id).ToList())
                                     {
-                                        AddPdfDocument(copy, invoice);
-                                        Application.DoEvents();
+                                        foreach (var invoice in context.RequisitionDocumentSet.Where(a => a.RequisitionId == requisitionId && a.IsInvoice == true).Select(a => a.FileData).ToList())
+                                        {
+                                            AddPdfDocument(copy, invoice);
+                                            Application.DoEvents();
+                                        }
                                     }
                                 }
                             }
                         }
+                        combinedReport = ms.ToArray();
                     }
-                    combinedReport = ms.ToArray();
                 }
                 return reportData;
             }
@@ -306,9 +312,111 @@ namespace Astrodon.Controls.Requisitions
             }
         }
 
+        private void LoadPendingRequisions()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var qry = from b in context.tblBuildings
+                          join r in context.tblRequisitions on b.id equals r.building
+                          where r.processed == false
+                          && b.pm == Controller.user.email
+                          select new RequisitionItem()
+                          {
+                              Building = b.Building,
+                              BuildingCode = b.Code,
+                              Bank = r.BankName,
+                              BranchCode = r.BranchCode,
+                              AccountNumber = r.AccountNumber,
+                              SupplierName = r.Supplier != null ? r.Supplier.CompanyName : r.contractor,
+                              LedgerAccount = r.ledger,
+                              Amount = r.amount,
+                              SupplierReference = r.payreference,
+                              InvoiceNumber = r.InvoiceNumber
+                          };
+                _PendingRequisitions = qry.OrderBy(a => a.Building).ThenBy(a => a.SupplierName).ToList();
+                LoadPendingRequisitionsGrid();
+            }
+        }
+
+        private void LoadPendingRequisitionsGrid()
+        {
+            dgPendingTransactions.ClearSelection();
+            dgPendingTransactions.MultiSelect = false;
+            dgPendingTransactions.AutoGenerateColumns = false;
+
+            var dateColumnStyle = new DataGridViewCellStyle();
+            dateColumnStyle.Format = "yyyy/MM/dd";
+
+
+            var currencyColumnStyle = new DataGridViewCellStyle();
+            currencyColumnStyle.Format = "###,##0.00";
+            currencyColumnStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            BindingSource bs = new BindingSource();
+            bs.DataSource = _PendingRequisitions;
+
+            dgPendingTransactions.Columns.Clear();
+
+            dgPendingTransactions.DataSource = bs;
+
+            dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Building",
+                HeaderText = "Building",
+                ReadOnly = true,
+            });
+            dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "InvoiceNumber",
+                HeaderText = "Invoice",
+                ReadOnly = true,
+            });
+            dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "LedgerAccount",
+                HeaderText = "Ledger",
+                ReadOnly = true
+            });
+            dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "SupplierName",
+                HeaderText = "Supplier",
+                ReadOnly = true
+            });
+
+            dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "SupplierReference",
+                HeaderText = "Reference",
+                ReadOnly = true
+            });
+
+            dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Amount",
+                HeaderText = "Amount",
+                ReadOnly = true,
+                DefaultCellStyle = currencyColumnStyle
+            });
+
+            dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Bank",
+                HeaderText = "Bank",
+                ReadOnly = true
+            });
+            dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "AccountNumber",
+                HeaderText = "Account",
+                ReadOnly = true
+            });
+            dgPendingTransactions.AutoResizeColumns();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure you want to create these batches", "Question", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to process these requisitions?", "Question", MessageBoxButtons.YesNo);
             if (dialogResult != DialogResult.Yes)
                 return;
             this.Cursor = Cursors.WaitCursor;
@@ -346,22 +454,21 @@ namespace Astrodon.Controls.Requisitions
                                         {
                                             byte[] combinedReport;
                                             var reportData = CreateReport(batch.id, out combinedReport);
+                                            if (combinedReport != null && reportData != null)
+                                            {
+                                                string fileName = building.Code + "-" + batch.BatchNumber.ToString().PadLeft(6, '0') + ".pdf";
+                                                string folder = DateTime.Today.ToString("MMM yyyy");
+                                                string outputPath = building.DataFolder + folder + @"\";
+                                                if (!Directory.Exists(outputPath))
+                                                    Directory.CreateDirectory(outputPath);
+                                                string outputFilename = outputPath + fileName;
+                                                if (File.Exists(outputFilename))
+                                                    File.Delete(outputFilename);
 
-                                            string fileName = building.Code + "-" + batch.BatchNumber.ToString().PadLeft(6, '0') + ".pdf";
-                                            string folder = DateTime.Today.ToString("MMM yyyy");
-                                            string outputPath = building.DataFolder + folder + @"\";
-                                            if (!Directory.Exists(outputPath))
-                                                Directory.CreateDirectory(outputPath);
-                                            string outputFilename = outputPath + fileName;
-                                            if (File.Exists(outputFilename))
-                                                File.Delete(outputFilename);
-
-                                            File.WriteAllBytes(outputFilename, combinedReport);
-
-                                            //add the slim down version of the report to the email list
-                                            emailCount++;
-                                            AddPdfDocument(copy, reportData);
-
+                                                File.WriteAllBytes(outputFilename, combinedReport);
+                                                emailCount++;
+                                                AddPdfDocument(copy, reportData);
+                                            }
                                         }
 
                                     }
@@ -410,6 +517,8 @@ namespace Astrodon.Controls.Requisitions
                 Controller.HandleError("Error seding email " + status, "Email error");
             }
         }
+
+      
     }
 
     class BatchItem
@@ -420,5 +529,19 @@ namespace Astrodon.Controls.Requisitions
         public int BatchNumber { get; set; }
         public int Entries { get; set; }
         public string CreatedBy { get;  set; }
+    }
+
+    class RequisitionItem
+    {
+        public string AccountNumber { get;  set; }
+        public decimal Amount { get;  set; }
+        public string Bank { get;  set; }
+        public string BranchCode { get;  set; }
+        public string Building { get;  set; }
+        public string BuildingCode { get;  set; }
+        public string InvoiceNumber { get;  set; }
+        public string LedgerAccount { get;  set; }
+        public string SupplierName { get;  set; }
+        public string SupplierReference { get;  set; }
     }
 }

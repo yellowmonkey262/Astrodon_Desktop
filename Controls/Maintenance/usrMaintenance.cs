@@ -129,6 +129,11 @@ namespace Astrodon.Controls.Maintenance
             dgMaintenance.Columns.Clear();
             dgMaintenance.DataSource = null;
 
+            var currencyColumnStyle = new DataGridViewCellStyle();
+            currencyColumnStyle.Format = "###,##0.00";
+            currencyColumnStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+
             if (_MaintenanceRecords.Count > 0)
             {
                 BindingSource bs = new BindingSource();
@@ -147,6 +152,15 @@ namespace Astrodon.Controls.Maintenance
                     HeaderText = "Date",
                     ReadOnly = true
                 });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "TotalAmount",
+                    HeaderText = "Amount",
+                    ReadOnly = true,
+                    DefaultCellStyle = currencyColumnStyle
+                });
+
 
                 dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
                 {
@@ -225,13 +239,7 @@ namespace Astrodon.Controls.Maintenance
                     ReadOnly = true
                 });
 
-                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "TotalAmount",
-                    HeaderText = "Amount",
-                    ReadOnly = true
-                });
-
+              
               
 
                 dgMaintenance.AutoResizeColumns();
@@ -364,7 +372,7 @@ namespace Astrodon.Controls.Maintenance
         public bool Paid { get; set; }
         public string PaidString { get { return Paid ? "Yes" : "No"; } }
         public string MaintenanceLinked { get { return MaintenanceId == null ? "No" : "Yes"; } }
-        public string ButtonText { get { return MaintenanceId == null ? "New" : "Edit"; } }
+        public string ButtonText { get { return MaintenanceId == null ? "Edit" : "Edit"; } }
         public int? ConfigItemId { get;  set; }
 
         #endregion

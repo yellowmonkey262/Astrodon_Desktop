@@ -30,7 +30,7 @@ namespace Astrodon.Reports.MaintenanceReport
         public usrMaintenanceReport()
         {
             InitializeComponent();
-            LoadYears();
+            lbFinancialYear.Text = "";
             LoadBuildings();
         }
 
@@ -55,7 +55,7 @@ namespace Astrodon.Reports.MaintenanceReport
             }
         }
 
-        private void LoadYears()
+        private void LoadYears(DateTime dtStart, DateTime dtEnd)
         {
             _FromYears = new List<IdValue>();
             _FromYears.Add(new IdValue() { Id = DateTime.Now.Year - 1, Value = (DateTime.Now.Year - 1).ToString() });
@@ -63,6 +63,7 @@ namespace Astrodon.Reports.MaintenanceReport
             _FromYears.Add(new IdValue() { Id = DateTime.Now.Year + 1, Value = (DateTime.Now.Year + 1).ToString() });
 
             _FromMonths = new List<IdValue>();
+            int startMonth = dtStart.Month;
             for (int x = 1; x <= 12; x++)
             {
                 _FromMonths.Add(new IdValue()
@@ -70,30 +71,42 @@ namespace Astrodon.Reports.MaintenanceReport
                     Id = x,
                     Value = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x)
                 });
+              
             }
 
             cmbFromYear.DataSource = _FromYears;
             cmbFromYear.ValueMember = "Id";
             cmbFromYear.DisplayMember = "Value";
-            cmbFromYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
+            cmbFromYear.SelectedValue = dtStart.Year;
 
             cmbFromMonth.DataSource = _FromMonths;
             cmbFromMonth.ValueMember = "Id";
             cmbFromMonth.DisplayMember = "Value";
-            cmbFromMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
+            cmbFromMonth.SelectedValue = dtStart.Month;
 
             _ToYears = _FromYears.ToList();
             _ToMonths = _FromMonths.ToList();
 
+            _ToMonths = new List<IdValue>();
+            for (int x = 1; x <= 12; x++)
+            {
+                _ToMonths.Add(new IdValue()
+                {
+                    Id = x,
+                    Value = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x)
+                });
+            
+            }
+
             cmbToYear.DataSource = _ToYears;
             cmbToYear.ValueMember = "Id";
             cmbToYear.DisplayMember = "Value";
-            cmbToYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
+            cmbToYear.SelectedValue = dtEnd.Year;
 
             cmbToMonth.DataSource = _ToMonths;
             cmbToMonth.ValueMember = "Id";
             cmbToMonth.DisplayMember = "Value";
-            cmbToMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
+            cmbToMonth.SelectedValue = dtEnd.Month;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -202,6 +215,36 @@ namespace Astrodon.Reports.MaintenanceReport
                 copy.AddPage(copy.GetImportedPage(reader, ++page));
             }
             Application.DoEvents();
+        }
+
+        private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var building = (cmbBuilding.SelectedItem as Building);
+            if(building != null)
+            {
+                int month = 2; //feb
+                for(int x=0; x< building.Period; x++)
+                {
+                    month++;
+                    if (month > 12)
+                        month = 1;
+                }
+
+                var dtEnd = new DateTime(DateTime.Now.Year+1, month, 1);
+                var dtStart = dtEnd.AddMonths(-11);
+                dtEnd = dtEnd.AddMonths(1).AddDays(-1);
+
+                if(dtStart > DateTime.Today)
+                {
+                    dtStart = dtStart.AddYears(-1);
+                    dtEnd = dtEnd.AddYears(-1); 
+                }
+
+                lbFinancialYear.Text = dtStart.ToString("dd MMM") + " - " + dtEnd.ToString("dd MMM");
+
+                LoadYears(dtStart, dtEnd);
+
+            }
         }
     }
 }

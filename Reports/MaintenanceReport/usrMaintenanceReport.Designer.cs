@@ -30,10 +30,6 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.cmbFromMonth = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cmbFromYear = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.gbReportType = new System.Windows.Forms.GroupBox();
@@ -41,14 +37,19 @@
             this.rbDetailed = new System.Windows.Forms.RadioButton();
             this.rbSummaryReport = new System.Windows.Forms.RadioButton();
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
-            this.cmbToMonth = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cmbFromYear = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cmbFromMonth = new System.Windows.Forms.ComboBox();
             this.cmbToYear = new System.Windows.Forms.ComboBox();
+            this.cmbToMonth = new System.Windows.Forms.ComboBox();
+            this.lbFinancialYear = new System.Windows.Forms.Label();
             this.gbReportType.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(248, 216);
+            this.button1.Location = new System.Drawing.Point(248, 225);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 13;
@@ -59,61 +60,26 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 66);
+            this.label3.Location = new System.Drawing.Point(8, 8);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(44, 13);
             this.label3.TabIndex = 12;
             this.label3.Text = "Building";
             // 
-            // cmbFromMonth
-            // 
-            this.cmbFromMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFromMonth.FormattingEnabled = true;
-            this.cmbFromMonth.Location = new System.Drawing.Point(165, 12);
-            this.cmbFromMonth.Name = "cmbFromMonth";
-            this.cmbFromMonth.Size = new System.Drawing.Size(69, 21);
-            this.cmbFromMonth.TabIndex = 11;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 39);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(20, 13);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "To";
-            // 
-            // cmbFromYear
-            // 
-            this.cmbFromYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFromYear.FormattingEnabled = true;
-            this.cmbFromYear.Location = new System.Drawing.Point(90, 12);
-            this.cmbFromYear.Name = "cmbFromYear";
-            this.cmbFromYear.Size = new System.Drawing.Size(69, 21);
-            this.cmbFromYear.TabIndex = 9;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(30, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "From";
-            // 
             // cmbBuilding
             // 
             this.cmbBuilding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbBuilding.FormattingEnabled = true;
-            this.cmbBuilding.Location = new System.Drawing.Point(90, 66);
+            this.cmbBuilding.Location = new System.Drawing.Point(90, 8);
             this.cmbBuilding.Name = "cmbBuilding";
             this.cmbBuilding.Size = new System.Drawing.Size(241, 21);
             this.cmbBuilding.TabIndex = 14;
+            this.cmbBuilding.SelectedIndexChanged += new System.EventHandler(this.cmbBuilding_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(11, 100);
+            this.label4.Location = new System.Drawing.Point(11, 109);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(66, 13);
             this.label4.TabIndex = 15;
@@ -124,7 +90,7 @@
             this.gbReportType.Controls.Add(this.rbDetailWithDocs);
             this.gbReportType.Controls.Add(this.rbDetailed);
             this.gbReportType.Controls.Add(this.rbSummaryReport);
-            this.gbReportType.Location = new System.Drawing.Point(90, 100);
+            this.gbReportType.Location = new System.Drawing.Point(90, 109);
             this.gbReportType.Name = "gbReportType";
             this.gbReportType.Size = new System.Drawing.Size(241, 100);
             this.gbReportType.TabIndex = 16;
@@ -171,28 +137,74 @@
             this.dlgSave.InitialDirectory = "Y:\\";
             this.dlgSave.Title = "Levy Roll Report";
             // 
-            // cmbToMonth
+            // label1
             // 
-            this.cmbToMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbToMonth.FormattingEnabled = true;
-            this.cmbToMonth.Location = new System.Drawing.Point(165, 39);
-            this.cmbToMonth.Name = "cmbToMonth";
-            this.cmbToMonth.Size = new System.Drawing.Size(69, 21);
-            this.cmbToMonth.TabIndex = 18;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 54);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(30, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "From";
+            // 
+            // cmbFromYear
+            // 
+            this.cmbFromYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFromYear.FormattingEnabled = true;
+            this.cmbFromYear.Location = new System.Drawing.Point(90, 54);
+            this.cmbFromYear.Name = "cmbFromYear";
+            this.cmbFromYear.Size = new System.Drawing.Size(69, 21);
+            this.cmbFromYear.TabIndex = 9;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 81);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(20, 13);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "To";
+            // 
+            // cmbFromMonth
+            // 
+            this.cmbFromMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFromMonth.FormattingEnabled = true;
+            this.cmbFromMonth.Location = new System.Drawing.Point(165, 54);
+            this.cmbFromMonth.Name = "cmbFromMonth";
+            this.cmbFromMonth.Size = new System.Drawing.Size(69, 21);
+            this.cmbFromMonth.TabIndex = 11;
             // 
             // cmbToYear
             // 
             this.cmbToYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbToYear.FormattingEnabled = true;
-            this.cmbToYear.Location = new System.Drawing.Point(90, 39);
+            this.cmbToYear.Location = new System.Drawing.Point(90, 81);
             this.cmbToYear.Name = "cmbToYear";
             this.cmbToYear.Size = new System.Drawing.Size(69, 21);
             this.cmbToYear.TabIndex = 17;
+            // 
+            // cmbToMonth
+            // 
+            this.cmbToMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbToMonth.FormattingEnabled = true;
+            this.cmbToMonth.Location = new System.Drawing.Point(165, 81);
+            this.cmbToMonth.Name = "cmbToMonth";
+            this.cmbToMonth.Size = new System.Drawing.Size(69, 21);
+            this.cmbToMonth.TabIndex = 18;
+            // 
+            // lbFinancialYear
+            // 
+            this.lbFinancialYear.AutoSize = true;
+            this.lbFinancialYear.Location = new System.Drawing.Point(90, 35);
+            this.lbFinancialYear.Name = "lbFinancialYear";
+            this.lbFinancialYear.Size = new System.Drawing.Size(42, 13);
+            this.lbFinancialYear.TabIndex = 19;
+            this.lbFinancialYear.Text = "XXXXX";
             // 
             // usrMaintenanceReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbFinancialYear);
             this.Controls.Add(this.cmbToMonth);
             this.Controls.Add(this.cmbToYear);
             this.Controls.Add(this.gbReportType);
@@ -205,7 +217,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbBuilding);
             this.Name = "usrMaintenanceReport";
-            this.Size = new System.Drawing.Size(348, 261);
+            this.Size = new System.Drawing.Size(495, 345);
             this.gbReportType.ResumeLayout(false);
             this.gbReportType.PerformLayout();
             this.ResumeLayout(false);
@@ -217,10 +229,6 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox cmbFromMonth;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cmbFromYear;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox gbReportType;
@@ -228,7 +236,12 @@
         private System.Windows.Forms.RadioButton rbDetailed;
         private System.Windows.Forms.RadioButton rbSummaryReport;
         private System.Windows.Forms.SaveFileDialog dlgSave;
-        private System.Windows.Forms.ComboBox cmbToMonth;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cmbFromYear;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cmbFromMonth;
         private System.Windows.Forms.ComboBox cmbToYear;
+        private System.Windows.Forms.ComboBox cmbToMonth;
+        private System.Windows.Forms.Label lbFinancialYear;
     }
 }
