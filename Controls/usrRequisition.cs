@@ -179,7 +179,7 @@ namespace Astrodon.Controls
                                 {
                                     unPaidRequisitions.Add(r);
                                 }
-                              
+
                             }
                         }
                     }
@@ -457,13 +457,97 @@ namespace Astrodon.Controls
             d = dTotal + requestedAmt < limitD;
         }
 
+
+        int? editRequisitonId = null;
+
+        private void EditRequisition(RequisitionList req)
+        {
+            _Documents = new Dictionary<string, byte[]>();
+            btnCancel.Visible = true;
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                editRequisitonId = Convert.ToInt32(req.ID);
+
+                var requisition = context.tblRequisitions.Single(a => a.id == editRequisitonId.Value);
+
+                int buildingId = requisition.building;
+
+                trnDatePicker.Value = requisition.trnDate;
+                //       cmbBuilding.SelectedItem = myBuildings.Where(a => a.ID == buildingId);
+
+                //       cmbBuilding_SelectedIndexChanged(this, EventArgs.Empty);
+
+                cmbAccount.SelectedValue = requisition.account;
+                cmbAccount_SelectedIndexChanged(this, EventArgs.Empty);
+                if (requisition.InvoiceDate != null)
+                {
+                    dtInvoiceDate.Value = requisition.InvoiceDate.Value;
+                }
+
+
+                for (int x = 0; x < cmbLedger.Items.Count; x++)
+                {
+                    if (cmbLedger.Items[x].ToString() == requisition.ledger)
+                    {
+                        cmbLedger.SelectedIndex = x;
+                        cmbLedger_SelectedIndexChanged(this, EventArgs.Empty);
+                        break;
+                    }
+                }
+
+                _Supplier = null;
+                if (requisition.SupplierId != null)
+                {
+                    _Supplier = context.SupplierSet.Single(a => a.id == requisition.SupplierId);
+                    lbSupplierName.Text = _Supplier.CompanyName;
+
+                    var bankDetails = context.SupplierBuildingSet
+                                          .Include(a => a.Bank)
+                                          .SingleOrDefault(a => a.BuildingId == buildingId && a.SupplierId == _Supplier.id);
+                    if (bankDetails == null)
+                    {
+                        Controller.HandleError("Supplier banking details for this building is not configured.\n" +
+                                            "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
+
+
+                        var frmSupplierDetail = new frmSupplierDetail(context, _Supplier.id, buildingId);
+                        frmSupplierDetail.ShowDialog();
+
+                        bankDetails = context.SupplierBuildingSet
+                                       .Include(a => a.Bank)
+                                       .SingleOrDefault(a => a.BuildingId == buildingId && a.SupplierId == _Supplier.id);
+                        if (bankDetails == null)
+                        {
+                            _Supplier = null;
+                            return;
+                        }
+                        else
+                        {
+                            lbBankName.Text = bankDetails.Bank.Name + " (" + bankDetails.BranceCode + ")";
+                            lbAccountNumber.Text = bankDetails.AccountNumber;
+                            btnSave.Enabled = true;
+                        }
+                    }
+                }
+
+                txtInvoiceNumber.Text = requisition.InvoiceNumber;
+                txtPaymentRef.Text = requisition.payreference;
+                txtAmount.Text = requisition.amount.ToString();
+
+            }
+
+
+
+        }
+
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
             bool dLimit, mLimit;
             CheckLimits(double.Parse(txtAmount.Text), out dLimit, out mLimit);
             bool showPassword = false;
-            if (!dLimit)
+            if (!dLimit && editRequisitonId == null)
             {
                 if (MessageBox.Show("Daily limit exceeded. Enter password to continue?", "Requisitions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
@@ -471,10 +555,11 @@ namespace Astrodon.Controls
                 }
                 else
                 {
+                    this.Cursor = Cursors.Arrow;
                     return;
                 }
             }
-            else if (!mLimit)
+            else if (!mLimit && editRequisitonId == null)
             {
                 if (MessageBox.Show("Monthly limit exceeded. Enter password to continue?", "Requisitions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
@@ -482,6 +567,7 @@ namespace Astrodon.Controls
                 }
                 else
                 {
+                    this.Cursor = Cursors.Arrow;
                     return;
                 }
             }
@@ -493,6 +579,7 @@ namespace Astrodon.Controls
                     if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
                     {
                         MessageBox.Show("Invalid password entered", "Requisitions", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        this.Cursor = Cursors.Arrow;
                         return;
                     }
                 }
@@ -503,66 +590,93 @@ namespace Astrodon.Controls
             {
                 if (dtInvoiceDate.Value <= _minDate)
                 {
-                    Controller.HandleError("Invoice Date required for Maintenance. Please select a date.", "Validation Error");
+                    Controller.HandleError("Invoice Date required. Please select a date.", "Validation Error");
+                    this.Cursor = Cursors.Arrow;
                     return;
                 }
                 if (String.IsNullOrWhiteSpace(txtInvoiceNumber.Text))
                 {
-                    Controller.HandleError("Invoice Number required for Maintenance. Please supply an invoice number.", "Validation Error");
-                    return;
-                }
-
-                if (_Documents.Count == 0)
-                {
-                    Controller.HandleError("Invoice attachment required, please upload Invoice PDF", "Validation Error");
+                    Controller.HandleError("Invoice Number required. Please supply an invoice number.", "Validation Error");
+                    this.Cursor = Cursors.Arrow;
                     return;
                 }
                 using (var context = SqlDataHandler.GetDataContext())
                 {
-
-                    var q = (from r in context.tblRequisitions
-                             where r.SupplierId == _Supplier.id
-                             && r.InvoiceNumber == txtInvoiceNumber.Text
-                             && r.amount == amt
-                             select r);
-                    if (q.Count() > 0)
+                    if (_Documents.Count == 0 && editRequisitonId == null)
                     {
-                        Controller.HandleError("Duplicate requisition detected.\n" +
-                           txtInvoiceNumber.Text + " invoice has already been processed", "Validation Error");
+                        Controller.HandleError("Invoice attachment required, please upload Invoice PDF", "Validation Error");
+                        this.Cursor = Cursors.Arrow;
                         return;
+                    }
+                    else if (editRequisitonId != null && _Documents.Count == 0)
+                    {
+                        var docCount = context.RequisitionDocumentSet.Count(a => a.RequisitionId == editRequisitonId.Value);
+
+                        if (docCount < 0)
+                        {
+                            Controller.HandleError("Invoice attachment required, please upload Invoice PDF", "Validation Error");
+                            this.Cursor = Cursors.Arrow;
+                            return;
+                        }
                     }
 
                     var buildingId = myBuildings[cmbBuilding.SelectedIndex].ID;
-
-                    var bankDetails = context.SupplierBuildingSet
-                                             .Include(a => a.Bank)
-                                             .SingleOrDefault(a => a.BuildingId == buildingId && a.SupplierId == _Supplier.id);
-                    if (bankDetails == null)
+                    Data.SupplierData.SupplierBuilding bankDetails = null;
+                    if (_Supplier != null)
                     {
-                        Controller.HandleError("Supplier banking details for this building is not configured.\n" +
-                                            "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
-                        return;
+                        var q = (from r in context.tblRequisitions
+                                 where r.SupplierId == _Supplier.id
+                                 && r.InvoiceNumber == txtInvoiceNumber.Text
+                                 && r.amount == amt
+                                 select r);
+                        if (q.Count() > 0)
+                        {
+                            Controller.HandleError("Duplicate requisition detected.\n" +
+                               txtInvoiceNumber.Text + " invoice has already been processed", "Validation Error");
+                            this.Cursor = Cursors.Arrow;
+                            return;
+                        }
+
+
+                        bankDetails = context.SupplierBuildingSet
+                                                .Include(a => a.Bank)
+                                                .SingleOrDefault(a => a.BuildingId == buildingId && a.SupplierId == _Supplier.id);
+                        if (bankDetails == null)
+                        {
+                            Controller.HandleError("Supplier banking details for this building is not configured.\n" +
+                                                "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
+                            this.Cursor = Cursors.Arrow;
+                            return;
+                        }
                     }
-                    var item = new tblRequisition()
+                    tblRequisition item = null;
+                    if (editRequisitonId == null)
                     {
-                        trnDate = trnDatePicker.Value.Date,
-                        account = cmbAccount.SelectedItem.ToString(),
-                        reference = myBuildings[cmbBuilding.SelectedIndex].Abbr + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + myBuildings[cmbBuilding.SelectedIndex].Trust + ")" : ""),
-                        ledger = cmbLedger.SelectedItem.ToString(),
-                        amount = amt,
-                        payreference = txtPaymentRef.Text,
-                        userID = Controller.user.id,
-                        building = buildingId,
-                        SupplierId = _Supplier == null ? (int?)null : _Supplier.id,
-                        InvoiceNumber = txtInvoiceNumber.Text,
-                        InvoiceDate = dtInvoiceDate.Value,
-                        BankName = _Supplier == null ? (string)null : bankDetails.Bank.Name,
-                        BranchCode = _Supplier == null ? (string)null : bankDetails.BranceCode,
-                        BranchName = _Supplier == null ? (string)null : bankDetails.BranchName,
-                        AccountNumber = _Supplier == null ? (string)null : bankDetails.AccountNumber
-                    };
 
-                    context.tblRequisitions.Add(item);
+                        item = new tblRequisition();
+                        context.tblRequisitions.Add(item);
+                    }
+                    else
+                    {
+                        item = context.tblRequisitions.Single(a => a.id == editRequisitonId.Value);
+                    }
+
+                    item.trnDate = trnDatePicker.Value.Date;
+                    item.account = cmbAccount.SelectedItem.ToString();
+                    item.reference = myBuildings[cmbBuilding.SelectedIndex].Abbr + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + myBuildings[cmbBuilding.SelectedIndex].Trust + ")" : "");
+                    item.ledger = cmbLedger.SelectedItem.ToString();
+                    item.amount = amt;
+                    item.payreference = txtPaymentRef.Text;
+                    item.userID = Controller.user.id;
+                    item.building = buildingId;
+                    item.SupplierId = _Supplier == null ? (int?)null : _Supplier.id;
+                    item.InvoiceNumber = txtInvoiceNumber.Text;
+                    item.InvoiceDate = dtInvoiceDate.Value;
+                    item.BankName = bankDetails == null ? (string)null : bankDetails.Bank.Name;
+                    item.BranchCode = bankDetails == null ? (string)null : bankDetails.BranceCode;
+                    item.BranchName = bankDetails == null ? (string)null : bankDetails.BranchName;
+                    item.AccountNumber = bankDetails == null ? (string)null : bankDetails.AccountNumber;
+
                     foreach (var key in _Documents.Keys)
                     {
                         context.RequisitionDocumentSet.Add(new RequisitionDocument()
@@ -589,6 +703,7 @@ namespace Astrodon.Controls
                         if (item.SupplierId == null)
                         {
                             Controller.HandleError("Supplier required for Maintenance. Please select a supplier.", "Validation Error");
+                            this.Cursor = Cursors.Arrow;
                             return;
                         }
 
@@ -702,6 +817,9 @@ namespace Astrodon.Controls
             txtAmount.Text = "";
             txtAmount.TextChanged += txtAmount_TextChanged;
             this.Invalidate();
+
+            editRequisitonId = null;
+            btnCancel.Visible = false;
         }
 
         private void ClearSupplier()
@@ -851,6 +969,29 @@ namespace Astrodon.Controls
                     lbBankName.Text = bankDetails.Bank.Name + " (" + bankDetails.BranceCode + ")";
                     lbAccountNumber.Text = bankDetails.AccountNumber;
                     btnSave.Enabled = true;
+
+                    if (_Supplier != null)
+                    {
+                        //find previous requisition for this building and this supplier
+                        var q = from m in context.tblRequisitions
+                                where m.building == buildingId
+                                && m.SupplierId == _Supplier.id
+                                orderby m.id descending
+                                select m;
+                        var prevRequisition = q.FirstOrDefault();
+                        if (prevRequisition != null)
+                        {
+                            for (int x = 0; x < cmbLedger.Items.Count; x++)
+                            {
+                                if (cmbLedger.Items[x].ToString() == prevRequisition.ledger)
+                                {
+                                    cmbLedger.SelectedIndex = x;
+                                    cmbLedger_SelectedIndexChanged(this, EventArgs.Empty);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
                 else
                 {
@@ -880,16 +1021,21 @@ namespace Astrodon.Controls
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
                 RequisitionList req = (senderGrid.DataSource as BindingList<RequisitionList>)[e.RowIndex];
+                EditRequisition(req);
+                /*
                 String query = "DELETE FROM tblRequisition WHERE ID = " + req.ID;
                 String status = "";
                 dh.SetData(query, null, out status);
                 LoadRequisitions();
+                */
             }
             else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
             {
                 UpdatePaidStatus(e.RowIndex);
             }
         }
+
+
 
         private void UpdatePaidStatus(int idx)
         {
@@ -918,6 +1064,12 @@ namespace Astrodon.Controls
                     _Documents.Add(ofdAttachment.SafeFileNames[i], File.ReadAllBytes(ofdAttachment.FileNames[i]));
                 }
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            LoadRequisitions();
+            ClearRequisitions();
         }
     }
 

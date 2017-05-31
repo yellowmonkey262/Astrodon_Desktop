@@ -23,11 +23,12 @@ namespace Astrodon.Controls.Maintenance
         private Astrodon.Data.MaintenanceData.Maintenance _Maintenance;
         private List<SupportingDocument> _Documents;
         private tblRequisition _requisition;
+        private bool _Readonly = false;
 
-        public usrMaintenanceDetail(DataContext context, int maintenanceId)
+        public usrMaintenanceDetail(DataContext context, int maintenanceId, bool readonlyScreen)
         {
             this.Cursor = Cursors.WaitCursor;
-
+            _Readonly = readonlyScreen;
             try
             {
                 _DataContext = context;
@@ -60,7 +61,6 @@ namespace Astrodon.Controls.Maintenance
         public usrMaintenanceDetail(DataContext context, tblRequisition requisition, BuildingMaintenanceConfiguration config, bool ignoreInvoiceNumber = false)
         {
             this.Cursor = Cursors.WaitCursor;
-
             try
             {
                 _DataContext = context;
@@ -80,23 +80,32 @@ namespace Astrodon.Controls.Maintenance
                 else if (requisition.Supplier == null)
                     requisition.Supplier = _DataContext.SupplierSet.Single(a => a.id == requisition.SupplierId);
 
-                _Maintenance = new Data.MaintenanceData.Maintenance()
+                Data.MaintenanceData.Maintenance _Maintenance;
+                _Maintenance = _DataContext.MaintenanceSet.SingleOrDefault(a => a.RequisitionId == requisition.id);
+                if (_Maintenance == null)
                 {
-                    DateLogged = DateTime.Now,
-                    BuildingMaintenanceConfiguration = config,
-                    Requisition = requisition,
-                    Supplier = requisition.Supplier,
-                    InvoiceNumber = requisition.InvoiceNumber,
-                    InvoiceDate = requisition.InvoiceDate == null ? requisition.trnDate : requisition.InvoiceDate.Value,
-                    TotalAmount = requisition.amount,
-                    WarrentyExpires = requisition.InvoiceDate == null ? requisition.trnDate : requisition.InvoiceDate.Value,
-                };
-
-                
-
-                _DataContext.MaintenanceSet.Add(_Maintenance);
-
-                _Documents = new List<SupportingDocument>();
+                    _Maintenance = new Data.MaintenanceData.Maintenance()
+                    {
+                        DateLogged = DateTime.Now,
+                        BuildingMaintenanceConfiguration = config,
+                        Requisition = requisition,
+                        Supplier = requisition.Supplier,
+                        InvoiceNumber = requisition.InvoiceNumber,
+                        InvoiceDate = requisition.InvoiceDate == null ? requisition.trnDate : requisition.InvoiceDate.Value,
+                        TotalAmount = requisition.amount,
+                        WarrentyExpires = requisition.InvoiceDate == null ? requisition.trnDate : requisition.InvoiceDate.Value,
+                    };
+                    _DataContext.MaintenanceSet.Add(_Maintenance);
+                }
+                else
+                {
+                    _Documents = _DataContext.MaintenanceDocumentSet.Where(a => a.MaintenanceId == _Maintenance.id)
+                        .Select(d => new SupportingDocument()
+                        {
+                            Id = d.id,
+                            FileName = d.FileName
+                        }).ToList();
+                }
 
                 SetupControl();
             }
@@ -117,6 +126,19 @@ namespace Astrodon.Controls.Maintenance
             BindCustomers();
             BindWarrantyDurationType();
             BindDocumentsDataGrid();
+            if (_Readonly)
+            {
+                btnSave.Enabled = false;
+                btnBrowse.Enabled = false;
+                dtpInvoiceDate.Enabled = false;
+                txtDescription.Enabled = false;
+                txtSerialNumber.Enabled = false;
+                txtWarrantyNotes.Enabled = false;
+                cbUnit.Enabled = false;
+                tbInvoiceNumber.Enabled = false;
+                cbWarrantyDurationType.Enabled = false;
+                numWarrantyDuration.Enabled = false;
+            }
         }
 
         #region Custom Events

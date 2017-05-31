@@ -196,7 +196,6 @@ namespace Astrodon.Controls.Maintenance
             txtPaymentRef.Text = _Item.Reference;
             lbAccount.Text = _Item.AccountType;
 
-            btnSave.Enabled = true;
             btnUploadInvoice.Visible = true;
             btnSupplierLookup.Visible = true;
         }
@@ -216,6 +215,12 @@ namespace Astrodon.Controls.Maintenance
             if (_Documents.Count == 0)
             {
                 Controller.HandleError("Invoice attachment required, please upload Invoice PDF", "Validation Error");
+                return;
+            }
+
+            if(_Supplier == null)
+            {
+                Controller.HandleError("Supplier not selected, please select a supplier.", "Validation Error");
                 return;
             }
 
@@ -271,7 +276,7 @@ namespace Astrodon.Controls.Maintenance
 
                 var config = (from c in context.BuildingMaintenanceConfigurationSet.Include(a => a.Building)
                               where c.BuildingId == item.building
-                              && c.PastelAccountNumber == _Item.AccountDesc
+                              && c.PastelAccountNumber == _Item.Account
                               select c).SingleOrDefault();
 
                 if (config != null)
@@ -311,7 +316,6 @@ namespace Astrodon.Controls.Maintenance
             lbAccount.Text = "";
             txtInvoiceNumber.Text = "";
             dtInvoiceDate.Value = _minDate;
-
         }
 
         private void ClearSupplier()

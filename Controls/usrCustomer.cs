@@ -172,6 +172,8 @@ namespace Astrodon
                 LoadAddress();
                 LoadReminders();
                 LoadNotes();
+                LoadMaintenance();
+                    
                 this.Cursor = Cursors.Default;
             }
             catch (Exception ex)
@@ -180,6 +182,120 @@ namespace Astrodon
                 this.Cursor = Cursors.Default;
             }
         }
+
+        private List<UnitMaintenance> _UnitMaintenance;
+        private void LoadMaintenance()
+        {
+            DateTime cutoff = DateTime.Today.AddYears(-2);
+            using (var dataContext = SqlDataHandler.GetDataContext())
+            {
+                var q = from m in dataContext.MaintenanceSet
+                        where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
+                        && m.CustomerAccount == customer.accNumber
+                        && (m.WarrentyExpires > DateTime.Today || m.DateLogged >= cutoff)
+                        select new UnitMaintenance
+                        {
+                            MaintenanceId = m.id,
+                            DateLogged = m.DateLogged,
+                            IsForBodyCorporate = m.IsForBodyCorporate,
+                            TotalAmount = m.TotalAmount,
+                            Description = m.Description,
+                            WarrentyExpires = m.WarrentyExpires,
+                            WarrantyNotes = m.WarrantyNotes,
+                            SupplierName = m.Supplier.CompanyName
+                        };
+
+                _UnitMaintenance = q.OrderByDescending(a => a.DateLogged).ToList();
+            }
+            BindMaintenanceDataGrid();
+        }
+
+        private void BindMaintenanceDataGrid()
+        {
+            dgMaintenance.ClearSelection();
+            dgMaintenance.MultiSelect = false;
+            dgMaintenance.AutoGenerateColumns = false;
+
+            dgMaintenance.Columns.Clear();
+            dgMaintenance.DataSource = null;
+
+            var currencyColumnStyle = new DataGridViewCellStyle();
+            currencyColumnStyle.Format = "###,##0.00";
+            currencyColumnStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+
+            if (_UnitMaintenance.Count > 0)
+            {
+                BindingSource bs = new BindingSource();
+                bs.DataSource = _UnitMaintenance;
+                dgMaintenance.DataSource = bs;
+
+                dgMaintenance.Columns.Add(new DataGridViewButtonColumn()
+                {
+                    HeaderText = "Action",
+                    DataPropertyName = "ButtonText",
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "DateLoggedDisplay",
+                    HeaderText = "Date",
+                    ReadOnly = true
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "SupplierName",
+                    HeaderText = "Supplier",
+                    ReadOnly = true
+                });
+
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "Description",
+                    HeaderText = "Description",
+                    ReadOnly = true
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "IsBodyCorporate",
+                    HeaderText = "Body Corporate",
+                    ReadOnly = true
+                });
+
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "TotalAmount",
+                    HeaderText = "Amount",
+                    ReadOnly = true,
+                    DefaultCellStyle = currencyColumnStyle
+                });
+
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "WarrentyExpiresDisplay",
+                    HeaderText = "Warrenty Expires",
+                    ReadOnly = true
+                });
+
+                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "WarrantyNotes",
+                    HeaderText = "Warranty Notes",
+                    ReadOnly = true
+                });
+
+            
+         
+
+                dgMaintenance.AutoResizeColumns();
+            }
+        }
+
 
         private void LoadAddress()
         {
@@ -622,6 +738,43 @@ namespace Astrodon
         {
             public int categoryID { get; set; }
             public String CategoryName { get; set; }
+        }
+
+        private class UnitMaintenance
+        {
+            public int MaintenanceId { get; set; }
+            public DateTime DateLogged { get; set; }
+            public string DateLoggedDisplay { get { return DateLogged.ToString("yyyy-MM-dd"); } }
+
+            public bool IsForBodyCorporate { get; set; }
+            public string IsBodyCorporate { get { return IsForBodyCorporate ? "Yes" : "No"; } }
+
+            public decimal TotalAmount { get; set; }
+            public string WarrantyNotes { get; set; }
+            public DateTime? WarrentyExpires { get; set; }
+            public string WarrentyExpiresDisplay { get { return WarrentyExpires == null ? "" : WarrentyExpires.Value.ToString("yyyy/MM/dd"); } }
+            public string Description { get; set; }
+
+            public string SupplierName { get; set; }
+            public string ButtonText { get { return "View"; } }
+
+        }
+
+        private void dgMaintenance_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+            {
+                var selectedItem = senderGrid.Rows[e.RowIndex].DataBoundItem as UnitMaintenance;
+                if(selectedItem != null)
+                {
+                    using (var dataContext = SqlDataHandler.GetDataContext())
+                    {
+                        var frmMaintenanceDetail = new Astrodon.Forms.frmMaintenanceDetail(dataContext, selectedItem.MaintenanceId,true);
+                        var dialogResult = frmMaintenanceDetail.ShowDialog();
+                    }
+                }
+            }
         }
     }
 }

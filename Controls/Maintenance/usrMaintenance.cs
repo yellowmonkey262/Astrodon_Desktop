@@ -263,7 +263,7 @@ namespace Astrodon.Controls.Maintenance
                     {
                         if (selectedItem.MaintenanceId != null)
                         {
-                            var frmMaintenanceDetail = new frmMaintenanceDetail(_DataContext, selectedItem.MaintenanceId.Value);
+                            var frmMaintenanceDetail = new frmMaintenanceDetail(_DataContext, selectedItem.MaintenanceId.Value,false);
                             var dialogResult = frmMaintenanceDetail.ShowDialog();
 
                             if (dialogResult == DialogResult.OK)

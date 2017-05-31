@@ -50,6 +50,7 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.dgUnprocessed = new System.Windows.Forms.DataGridView();
+            this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBuilding = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -95,6 +96,7 @@
             this.dtInvoiceDate = new System.Windows.Forms.DateTimePicker();
             this.btnUploadInvoice = new System.Windows.Forms.Button();
             this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgUnprocessed)).BeginInit();
@@ -186,7 +188,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(371, 331);
+            this.btnSave.Location = new System.Drawing.Point(397, 329);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 7;
@@ -215,7 +217,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 128);
+            this.label9.Location = new System.Drawing.Point(12, 189);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(116, 13);
             this.label9.TabIndex = 20;
@@ -224,10 +226,10 @@
             // cmbLedger
             // 
             this.cmbLedger.FormattingEnabled = true;
-            this.cmbLedger.Location = new System.Drawing.Point(158, 128);
+            this.cmbLedger.Location = new System.Drawing.Point(158, 189);
             this.cmbLedger.Name = "cmbLedger";
             this.cmbLedger.Size = new System.Drawing.Size(293, 21);
-            this.cmbLedger.TabIndex = 4;
+            this.cmbLedger.TabIndex = 5;
             this.cmbLedger.SelectedIndexChanged += new System.EventHandler(this.cmbLedger_SelectedIndexChanged);
             // 
             // lblBank
@@ -324,6 +326,7 @@
             this.dgUnprocessed.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgUnprocessed.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgUnprocessed.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Edit,
             this.colID,
             this.colDate,
             this.colBuilding,
@@ -340,12 +343,25 @@
             this.dgUnprocessed.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dg_CellContentClick);
             this.dgUnprocessed.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgUnprocessed_DataBindingComplete);
             // 
+            // Edit
+            // 
+            this.Edit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Edit.Frozen = true;
+            this.Edit.HeaderText = "Select";
+            this.Edit.Name = "Edit";
+            this.Edit.ReadOnly = true;
+            this.Edit.Text = "Edit";
+            this.Edit.UseColumnTextForButtonValue = true;
+            // 
             // colID
             // 
+            this.colID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.colID.DataPropertyName = "ID";
+            this.colID.Frozen = true;
             this.colID.HeaderText = "ID";
             this.colID.Name = "colID";
             this.colID.ReadOnly = true;
+            this.colID.Width = 97;
             // 
             // colDate
             // 
@@ -639,7 +655,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(12, 161);
+            this.label12.Location = new System.Drawing.Point(12, 129);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(78, 13);
             this.label12.TabIndex = 31;
@@ -648,7 +664,7 @@
             // lbSupplierName
             // 
             this.lbSupplierName.AutoSize = true;
-            this.lbSupplierName.Location = new System.Drawing.Point(158, 161);
+            this.lbSupplierName.Location = new System.Drawing.Point(158, 129);
             this.lbSupplierName.Name = "lbSupplierName";
             this.lbSupplierName.Size = new System.Drawing.Size(92, 13);
             this.lbSupplierName.TabIndex = 32;
@@ -656,10 +672,10 @@
             // 
             // btnSupplierLookup
             // 
-            this.btnSupplierLookup.Location = new System.Drawing.Point(376, 161);
+            this.btnSupplierLookup.Location = new System.Drawing.Point(376, 129);
             this.btnSupplierLookup.Name = "btnSupplierLookup";
             this.btnSupplierLookup.Size = new System.Drawing.Size(75, 23);
-            this.btnSupplierLookup.TabIndex = 33;
+            this.btnSupplierLookup.TabIndex = 4;
             this.btnSupplierLookup.Text = "Find";
             this.btnSupplierLookup.UseVisualStyleBackColor = true;
             this.btnSupplierLookup.Click += new System.EventHandler(this.btnSupplierLookup_Click);
@@ -667,7 +683,7 @@
             // lbBankName
             // 
             this.lbBankName.AutoSize = true;
-            this.lbBankName.Location = new System.Drawing.Point(158, 184);
+            this.lbBankName.Location = new System.Drawing.Point(158, 148);
             this.lbBankName.Name = "lbBankName";
             this.lbBankName.Size = new System.Drawing.Size(81, 13);
             this.lbBankName.TabIndex = 34;
@@ -676,7 +692,7 @@
             // lbAccountNumber
             // 
             this.lbAccountNumber.AutoSize = true;
-            this.lbAccountNumber.Location = new System.Drawing.Point(158, 200);
+            this.lbAccountNumber.Location = new System.Drawing.Point(158, 164);
             this.lbAccountNumber.Name = "lbAccountNumber";
             this.lbAccountNumber.Size = new System.Drawing.Size(105, 13);
             this.lbAccountNumber.TabIndex = 35;
@@ -685,7 +701,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(12, 184);
+            this.label13.Location = new System.Drawing.Point(12, 148);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(81, 13);
             this.label13.TabIndex = 36;
@@ -743,10 +759,22 @@
             this.ofdAttachment.Multiselect = true;
             this.ofdAttachment.RestoreDirectory = true;
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(316, 329);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 42;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Visible = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // usrRequisition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnUploadInvoice);
             this.Controls.Add(this.dtInvoiceDate);
             this.Controls.Add(this.label14);
@@ -822,14 +850,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.DataGridView dgUnprocessed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colBuilding;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPayment;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colRef;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colLedger;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colAccount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView dgUnpaid;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
@@ -868,5 +888,15 @@
         private System.Windows.Forms.Button btnViewTrans;
         private System.Windows.Forms.Button btnUploadInvoice;
         private System.Windows.Forms.OpenFileDialog ofdAttachment;
+        private System.Windows.Forms.DataGridViewButtonColumn Edit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBuilding;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPayment;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRef;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLedger;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAccount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
+        private System.Windows.Forms.Button btnCancel;
     }
 }

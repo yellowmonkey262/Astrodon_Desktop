@@ -17,7 +17,7 @@ namespace Astrodon.Forms
     public partial class frmMaintenanceDetail : Form
     {
         private usrMaintenanceDetail _MaintenanceDetailControl;
-     
+
         public frmMaintenanceDetail(DataContext context, tblRequisition item, BuildingMaintenanceConfiguration config, bool ignoreInvoiceNumber = false)
         {
             DialogResult = DialogResult.Cancel;
@@ -42,7 +42,7 @@ namespace Astrodon.Forms
             }
         }
 
-        public frmMaintenanceDetail(DataContext context, int maintenanceId)
+        public frmMaintenanceDetail(DataContext context, int maintenanceId, bool readonlyScreen)
         {
             DialogResult = DialogResult.Cancel;
             
@@ -50,10 +50,9 @@ namespace Astrodon.Forms
             {
                 InitializeComponent();
 
-                _MaintenanceDetailControl = new usrMaintenanceDetail(context, maintenanceId);
+                _MaintenanceDetailControl = new usrMaintenanceDetail(context, maintenanceId, readonlyScreen);
                 _MaintenanceDetailControl.Dock = DockStyle.Fill;
                 pnlContents.Controls.Add(_MaintenanceDetailControl);
-
                 _MaintenanceDetailControl.SaveResultEvent += _MaintenanceDetailControl_SaveResultEvent;
             }
             catch (MaintenanceException e)

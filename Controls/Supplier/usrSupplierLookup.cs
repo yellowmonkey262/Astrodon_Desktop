@@ -29,7 +29,10 @@ namespace Astrodon.Controls.Supplier
 
             if (!_IsSelectDialog)
                 lblTitle.Text = "Supplier Maintenance";
+
+            LoadSuppliersLinkedTo(buildingId);
         }
+
 
         #region Supplier Lookup Events
 
@@ -89,6 +92,34 @@ namespace Astrodon.Controls.Supplier
             BindSupplierDataGrid();
 
             btnNewSupplier.Visible = true;
+
+            this.Cursor = Cursors.Default;
+        }
+
+
+        private void LoadSuppliersLinkedTo(int? buildingId)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            if (buildingId == null)
+                return;
+
+            int checkBuildingId = buildingId.Value;
+
+            _SupplierData = _DataContext.SupplierSet
+                            .Where(a => a.Buildings.Any(g => g.BuildingId == checkBuildingId))
+                            .Select(a => new SupplierResult()
+                            {
+                                SupplierId = a.id,
+                                IsBlackListed = a.BlackListed,
+                                CompanyName = a.CompanyName,
+                                CompanyRegistration = a.CompanyRegistration,
+                                ContactPerson = a.ContactPerson,
+                                ContactNumber = a.ContactNumber,
+                                IsLinkedToBuilding = true
+                            })
+                            .OrderBy(a => a.CompanyName).ToList();
+
+            BindSupplierDataGrid();
 
             this.Cursor = Cursors.Default;
         }
