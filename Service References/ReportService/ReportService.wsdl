@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ReportService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ReportService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:54995/ReportService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:54995/ReportService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts.Maintenance" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IReportService_LevyRollReport_InputMessage">
@@ -12,13 +14,63 @@
   <wsdl:message name="IReportService_LevyRollReport_OutputMessage">
     <wsdl:part name="parameters" element="tns:LevyRollReportResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_LevyRollExcludeSundries_InputMessage">
+    <wsdl:part name="parameters" element="tns:LevyRollExcludeSundries" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_LevyRollExcludeSundries_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LevyRollExcludeSundriesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_SupplierReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:SupplierReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_SupplierReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SupplierReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_MaintenanceReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:MaintenanceReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_MaintenanceReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MaintenanceReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_MissingMaintenanceRecordsGet_InputMessage">
+    <wsdl:part name="parameters" element="tns:MissingMaintenanceRecordsGet" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_MissingMaintenanceRecordsGet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MissingMaintenanceRecordsGetResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_RequisitionBatchReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:RequisitionBatchReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_RequisitionBatchReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RequisitionBatchReportResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="LevyRollReport">
-      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/LevyRollReport" message="tns:IReportService_LevyRollReport_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/LevyRollReportResponse" message="tns:IReportService_LevyRollReport_OutputMessage" />
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/LevyRollReport" message="tns:IReportService_LevyRollReport_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/LevyRollReportResponse" message="tns:IReportService_LevyRollReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LevyRollExcludeSundries">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/LevyRollExcludeSundries" message="tns:IReportService_LevyRollExcludeSundries_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/LevyRollExcludeSundriesResponse" message="tns:IReportService_LevyRollExcludeSundries_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SupplierReport">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/SupplierReport" message="tns:IReportService_SupplierReport_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/SupplierReportResponse" message="tns:IReportService_SupplierReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MaintenanceReport">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/MaintenanceReport" message="tns:IReportService_MaintenanceReport_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/MaintenanceReportResponse" message="tns:IReportService_MaintenanceReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MissingMaintenanceRecordsGet">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/MissingMaintenanceRecordsGet" message="tns:IReportService_MissingMaintenanceRecordsGet_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/MissingMaintenanceRecordsGetResponse" message="tns:IReportService_MissingMaintenanceRecordsGet_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RequisitionBatchReport">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/RequisitionBatchReport" message="tns:IReportService_RequisitionBatchReport_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/RequisitionBatchReportResponse" message="tns:IReportService_RequisitionBatchReport_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="BasicHttpEndpoint" type="tns:IReportService">
+  <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="LevyRollReport">
       <soap:operation soapAction="http://tempuri.org/IReportService/LevyRollReport" style="document" />
@@ -29,10 +81,55 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="LevyRollExcludeSundries">
+      <soap:operation soapAction="http://tempuri.org/IReportService/LevyRollExcludeSundries" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SupplierReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/SupplierReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MaintenanceReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/MaintenanceReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MissingMaintenanceRecordsGet">
+      <soap:operation soapAction="http://tempuri.org/IReportService/MissingMaintenanceRecordsGet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequisitionBatchReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/RequisitionBatchReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="ReportService">
-    <wsdl:port name="BasicHttpEndpoint" binding="tns:BasicHttpEndpoint">
-      <soap:address location="http://localhost:54995/ReportService.svc" />
+    <wsdl:port name="BasicHttpBinding_IReportService" binding="tns:BasicHttpBinding_IReportService">
+      <soap:address location="http://localhost:8080/" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

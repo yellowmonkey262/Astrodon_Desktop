@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts.Maintenance" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts.Maintenance" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" />
+  <xs:complexType name="ArrayOfPastelMaintenanceTransaction">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PastelMaintenanceTransaction" nillable="true" type="tns:PastelMaintenanceTransaction" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPastelMaintenanceTransaction" nillable="true" type="tns:ArrayOfPastelMaintenanceTransaction" />
+  <xs:complexType name="PastelMaintenanceTransaction">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" base="q1:PervasiveItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Account" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="AccountName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="AccountType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="AutoNumber" type="xs:int" />
+          <xs:element minOccurs="0" name="DataPath" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TransactionDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="TrustAccount" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PastelMaintenanceTransaction" nillable="true" type="tns:PastelMaintenanceTransaction" />
+</xs:schema>

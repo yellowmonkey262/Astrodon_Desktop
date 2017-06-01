@@ -114,6 +114,9 @@ namespace Astro.Library.Entities
         public String addy5 { get; set; }
 
         public bool isHOA { get; set; }
+        public double limitM { get; set; }
+        public double limitW { get; set; }
+        public double limitD { get; set; }
 
         public Building()
         {

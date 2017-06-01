@@ -1,4 +1,11 @@
-﻿using Astrodon.Reports;
+﻿using Astrodon.Controls.Bank;
+using Astrodon.Controls.Maintenance;
+using Astrodon.Controls.Requisitions;
+using Astrodon.Controls.Supplier;
+using Astrodon.Data;
+using Astrodon.Reports;
+using Astrodon.Reports.MaintenanceReport;
+using Astrodon.Reports.SupplierReport;
 using NotificationWindow;
 using System;
 using System.Collections.Generic;
@@ -10,12 +17,15 @@ namespace Astrodon
     public partial class frmMain : Form
     {
         private Timer tmrRem = new Timer();
+        private DataContext _DataContext;
 
         public delegate void PopupDelegate(String notification);
 
         public frmMain()
         {
             InitializeComponent();
+
+            _DataContext = SqlDataHandler.GetDataContext();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -492,6 +502,78 @@ namespace Astrodon
             trustCtl.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(trustCtl);
             toolStripStatusLabel1.Text = "Levy Roll Report";
+        }
+
+        private void tbMaintenanceConfig_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrBuildingMaintenanceConfiguration buildingMaintenance = new usrBuildingMaintenanceConfiguration(_DataContext);
+            buildingMaintenance.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(buildingMaintenance);
+            toolStripStatusLabel1.Text = "Building Maintenance Configuration";
+        }
+
+        private void supplierReportToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrSupplierReport suppReport = new usrSupplierReport();
+            suppReport.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(suppReport);
+            toolStripStatusLabel1.Text = "Supplier Report";
+        }
+
+        private void maintenanceReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrMaintenanceReport report = new usrMaintenanceReport();
+            report.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(report);
+            toolStripStatusLabel1.Text = "Maintenance Report";
+        }
+
+        private void suppliersToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext,null);
+            supplierLookup.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(supplierLookup);
+            toolStripStatusLabel1.Text = "Supplier Maintenance";
+        }
+
+        private void buildingMaintenanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            var maintenance = new usrMaintenance(_DataContext);
+            maintenance.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(maintenance);
+            toolStripStatusLabel1.Text = "Building Maintenance";
+        }
+
+        private void bankConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrBankConfiguration control = new usrBankConfiguration(_DataContext);
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Bank Configuration";
+        }
+
+        private void missingMaintenanceRequisitionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrMissingRequisitions control = new usrMissingRequisitions(_DataContext);
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Missing Maintenance Requisitions";
+        }
+
+        private void downloadRequisitionBatchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrRequisitionBatch control = new usrRequisitionBatch();
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Requisition Batch";
         }
     }
 }

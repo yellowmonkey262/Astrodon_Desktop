@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="MaintenanceReportType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SummaryReport" />
+      <xs:enumeration value="DetailedReport" />
+      <xs:enumeration value="DetailedReportWithSupportingDocuments" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="MaintenanceReportType" nillable="true" type="tns:MaintenanceReportType" />
+  <xs:complexType name="PervasiveItem">
+    <xs:sequence />
+  </xs:complexType>
+  <xs:element name="PervasiveItem" nillable="true" type="tns:PervasiveItem" />
+</xs:schema>

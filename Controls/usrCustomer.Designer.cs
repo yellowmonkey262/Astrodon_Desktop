@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmbCustomer = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
@@ -72,6 +72,13 @@
             this.txtEmailTo = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.dgDocs = new System.Windows.Forms.DataGridView();
+            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSubject = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colView = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.colSend = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.colRemove = new System.Windows.Forms.DataGridViewButtonColumn();
             this.label13 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
@@ -93,13 +100,8 @@
             this.dtRemTime = new System.Windows.Forms.DateTimePicker();
             this.dtRemDate = new System.Windows.Forms.DateTimePicker();
             this.label14 = new System.Windows.Forms.Label();
-            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSubject = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colView = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.colSend = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.colRemove = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.tbMaintenance = new System.Windows.Forms.TabPage();
+            this.dgMaintenance = new System.Windows.Forms.DataGridView();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -110,6 +112,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgTransactions)).BeginInit();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.tbMaintenance.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbCustomer
@@ -173,10 +177,11 @@
             this.tabControl2.Controls.Add(this.tabPage3);
             this.tabControl2.Controls.Add(this.tabPage4);
             this.tabControl2.Controls.Add(this.tabPage5);
+            this.tabControl2.Controls.Add(this.tbMaintenance);
             this.tabControl2.Location = new System.Drawing.Point(9, 100);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(879, 560);
+            this.tabControl2.Size = new System.Drawing.Size(939, 560);
             this.tabControl2.TabIndex = 72;
             // 
             // tabPage2
@@ -194,7 +199,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(871, 534);
+            this.tabPage2.Size = new System.Drawing.Size(1040, 534);
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "Customer Details";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -479,7 +484,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(871, 534);
+            this.tabPage3.Size = new System.Drawing.Size(1040, 534);
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "Documents";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -522,6 +527,65 @@
             this.dgDocs.TabIndex = 58;
             this.dgDocs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgDocs_CellContentClick);
             // 
+            // colDate
+            // 
+            this.colDate.DataPropertyName = "tstamp";
+            dataGridViewCellStyle16.Format = "d";
+            dataGridViewCellStyle16.NullValue = null;
+            this.colDate.DefaultCellStyle = dataGridViewCellStyle16;
+            this.colDate.HeaderText = "Date";
+            this.colDate.Name = "colDate";
+            this.colDate.ReadOnly = true;
+            this.colDate.Width = 55;
+            // 
+            // colSubject
+            // 
+            this.colSubject.DataPropertyName = "subject";
+            this.colSubject.HeaderText = "Subject";
+            this.colSubject.Name = "colSubject";
+            this.colSubject.Width = 68;
+            // 
+            // colTitle
+            // 
+            this.colTitle.DataPropertyName = "title";
+            this.colTitle.HeaderText = "Title";
+            this.colTitle.Name = "colTitle";
+            this.colTitle.ReadOnly = true;
+            this.colTitle.Width = 52;
+            // 
+            // colFileName
+            // 
+            this.colFileName.DataPropertyName = "file";
+            this.colFileName.HeaderText = "File Name";
+            this.colFileName.Name = "colFileName";
+            this.colFileName.ReadOnly = true;
+            this.colFileName.Visible = false;
+            this.colFileName.Width = 79;
+            // 
+            // colView
+            // 
+            this.colView.HeaderText = "";
+            this.colView.Name = "colView";
+            this.colView.Text = "View";
+            this.colView.UseColumnTextForButtonValue = true;
+            this.colView.Width = 5;
+            // 
+            // colSend
+            // 
+            this.colSend.HeaderText = "";
+            this.colSend.Name = "colSend";
+            this.colSend.Text = "Send";
+            this.colSend.UseColumnTextForButtonValue = true;
+            this.colSend.Width = 5;
+            // 
+            // colRemove
+            // 
+            this.colRemove.HeaderText = "";
+            this.colRemove.Name = "colRemove";
+            this.colRemove.Text = "Remove";
+            this.colRemove.UseColumnTextForButtonValue = true;
+            this.colRemove.Width = 5;
+            // 
             // label13
             // 
             this.label13.AutoSize = true;
@@ -537,7 +601,7 @@
             this.tabPage4.Controls.Add(this.dgTransactions);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(871, 534);
+            this.tabPage4.Size = new System.Drawing.Size(1040, 534);
             this.tabPage4.TabIndex = 2;
             this.tabPage4.Text = "Transactions";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -576,7 +640,7 @@
             this.tabPage5.Controls.Add(this.label14);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(871, 534);
+            this.tabPage5.Size = new System.Drawing.Size(627, 534);
             this.tabPage5.TabIndex = 3;
             this.tabPage5.Text = "Notes";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -647,9 +711,9 @@
             // colRemDate
             // 
             this.colRemDate.DataPropertyName = "remDate";
-            dataGridViewCellStyle2.Format = "g";
-            dataGridViewCellStyle2.NullValue = null;
-            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle17.Format = "g";
+            dataGridViewCellStyle17.NullValue = null;
+            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle17;
             this.colRemDate.HeaderText = "Date / Time";
             this.colRemDate.Name = "colRemDate";
             this.colRemDate.ReadOnly = true;
@@ -663,8 +727,8 @@
             // colNote
             // 
             this.colNote.DataPropertyName = "note";
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colNote.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colNote.DefaultCellStyle = dataGridViewCellStyle18;
             this.colNote.HeaderText = "Note";
             this.colNote.Name = "colNote";
             this.colNote.ReadOnly = true;
@@ -730,64 +794,29 @@
             this.label14.TabIndex = 68;
             this.label14.Text = "Reminder Date:";
             // 
-            // colDate
+            // tbMaintenance
             // 
-            this.colDate.DataPropertyName = "tstamp";
-            dataGridViewCellStyle1.Format = "d";
-            dataGridViewCellStyle1.NullValue = null;
-            this.colDate.DefaultCellStyle = dataGridViewCellStyle1;
-            this.colDate.HeaderText = "Date";
-            this.colDate.Name = "colDate";
-            this.colDate.ReadOnly = true;
-            this.colDate.Width = 55;
+            this.tbMaintenance.Controls.Add(this.dgMaintenance);
+            this.tbMaintenance.Location = new System.Drawing.Point(4, 22);
+            this.tbMaintenance.Name = "tbMaintenance";
+            this.tbMaintenance.Padding = new System.Windows.Forms.Padding(3);
+            this.tbMaintenance.Size = new System.Drawing.Size(931, 534);
+            this.tbMaintenance.TabIndex = 4;
+            this.tbMaintenance.Text = "Maintenance";
+            this.tbMaintenance.UseVisualStyleBackColor = true;
             // 
-            // colSubject
+            // dgMaintenance
             // 
-            this.colSubject.DataPropertyName = "subject";
-            this.colSubject.HeaderText = "Subject";
-            this.colSubject.Name = "colSubject";
-            this.colSubject.Width = 68;
-            // 
-            // colTitle
-            // 
-            this.colTitle.DataPropertyName = "title";
-            this.colTitle.HeaderText = "Title";
-            this.colTitle.Name = "colTitle";
-            this.colTitle.ReadOnly = true;
-            this.colTitle.Width = 52;
-            // 
-            // colFileName
-            // 
-            this.colFileName.DataPropertyName = "file";
-            this.colFileName.HeaderText = "File Name";
-            this.colFileName.Name = "colFileName";
-            this.colFileName.ReadOnly = true;
-            this.colFileName.Visible = false;
-            this.colFileName.Width = 79;
-            // 
-            // colView
-            // 
-            this.colView.HeaderText = "";
-            this.colView.Name = "colView";
-            this.colView.Text = "View";
-            this.colView.UseColumnTextForButtonValue = true;
-            this.colView.Width = 5;
-            // 
-            // colSend
-            // 
-            this.colSend.HeaderText = "";
-            this.colSend.Name = "colSend";
-            this.colSend.Text = "Send";
-            this.colSend.UseColumnTextForButtonValue = true;
-            this.colSend.Width = 5;
-            // 
-            // colRemove
-            // 
-            this.colRemove.HeaderText = "";
-            this.colRemove.Name = "colRemove";
-            this.colRemove.Text = "Remove";
-            this.colRemove.UseColumnTextForButtonValue = true;
-            this.colRemove.Width = 5;
+            this.dgMaintenance.AllowUserToAddRows = false;
+            this.dgMaintenance.AllowUserToDeleteRows = false;
+            this.dgMaintenance.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgMaintenance.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgMaintenance.Location = new System.Drawing.Point(6, 3);
+            this.dgMaintenance.Name = "dgMaintenance";
+            this.dgMaintenance.ReadOnly = true;
+            this.dgMaintenance.Size = new System.Drawing.Size(919, 522);
+            this.dgMaintenance.TabIndex = 10;
+            this.dgMaintenance.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgMaintenance_CellContentClick);
             // 
             // usrCustomer
             // 
@@ -801,7 +830,7 @@
             this.Controls.Add(this.cmbBuilding);
             this.Controls.Add(this.label1);
             this.Name = "usrCustomer";
-            this.Size = new System.Drawing.Size(909, 663);
+            this.Size = new System.Drawing.Size(951, 663);
             this.Load += new System.EventHandler(this.usrCustomer_Load);
             this.tabControl2.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -818,6 +847,8 @@
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.tbMaintenance.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -894,5 +925,7 @@
         private System.Windows.Forms.DataGridViewButtonColumn colView;
         private System.Windows.Forms.DataGridViewButtonColumn colSend;
         private System.Windows.Forms.DataGridViewButtonColumn colRemove;
+        private System.Windows.Forms.TabPage tbMaintenance;
+        private System.Windows.Forms.DataGridView dgMaintenance;
     }
 }

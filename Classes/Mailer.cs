@@ -33,6 +33,130 @@ namespace Astrodon {
             return html;
         }
 
+        public static bool SendMailWithAttachments(String fromEmail, String[] toMail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, Dictionary<string, byte[]> attachments)
+        {
+            Dictionary<string, MemoryStream> attachmentStreams = new Dictionary<string, MemoryStream>();
+            foreach(string key in attachments.Keys)
+            {
+                attachmentStreams.Add(key, new MemoryStream(attachments[key]));
+            }
+            String mailBody = "";
+            status = String.Empty;
+            if (htmlMail)
+            {
+                mailBody = generatHTMLEmail(subject, message);
+            }
+            else
+            {
+                mailBody = message;
+            }
+            try
+            {
+                SmtpClient smtpClient = new SmtpClient();
+                MailMessage objMail = new MailMessage();
+                MailAddress objMail_fromaddress = new MailAddress(fromEmail);
+                try
+                {
+                    foreach (String emailAddress in toMail)
+                    {
+                        if (!emailAddress.Contains("@imp.ad-one.co.za"))
+                        {
+                            MailAddress objMail_toaddress = new MailAddress(emailAddress);
+                            objMail.To.Add(objMail_toaddress);
+                        }
+                    }
+                }
+                catch
+                {
+                    status = "Invalid email address";
+                    foreach (var stream in attachmentStreams.Values)
+                    {
+                        stream.Close();
+                        stream.Dispose();
+                    }
+                    return false;
+                }
+                objMail.From = objMail_fromaddress;
+                objMail.IsBodyHtml = htmlMail;
+                objMail.Body = mailBody;
+                objMail.Priority = MailPriority.High;
+                if (addcc)
+                {
+                    MailAddress cc = new MailAddress(fromEmail);
+                    objMail.CC.Add(cc);
+                }
+                try
+                {
+
+                    foreach(string key in attachmentStreams.Keys)
+                    {
+                        objMail.Attachments.Add(new Attachment(attachmentStreams[key], key));
+                    }
+                  
+                }
+                catch
+                {
+                    status = "Invalid attachment";
+                    foreach (var stream in attachmentStreams.Values)
+                    {
+                        stream.Close();
+                        stream.Dispose();
+                    }
+                    return false;
+                }
+                if (Environment.MachineName == "STEPHEN-PC")
+                {
+                    smtpClient.Host = "mail.npsa.co.za";
+                    smtpClient.Credentials = new NetworkCredential("info@metathought.co.za", "info01");
+                }
+                else if(Environment.MachineName == "PASTELPARTNER")
+                {
+                    smtpClient.Host = "mail.123staff.co.za";
+                    smtpClient.Credentials = new NetworkCredential("willie@123staff.co.za", "M1xu5er");
+                }
+                else
+                {
+                    smtpClient.Host = "10.0.1.1";
+                }
+
+                try
+                {
+                    objMail.Subject = subject;
+                    if (readreceipt)
+                    {
+                        objMail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnSuccess;
+                    }
+                    smtpClient.Send(objMail);
+                }
+                catch (Exception ex)
+                {
+                    status = ex.Message;
+                    foreach(var stream in attachmentStreams.Values)
+                    {
+                        stream.Close();
+                        stream.Dispose();
+                    }
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                status = ex.Message;
+                foreach (var stream in attachmentStreams.Values)
+                {
+                    stream.Close();
+                    stream.Dispose();
+                }
+                return false;
+            }
+            foreach (var stream in attachmentStreams.Values)
+            {
+                stream.Close();
+                stream.Dispose();
+            }
+            return true;
+        }
+
         public static bool SendMail(String fromEmail, String[] toMail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, String[] attachments = null) {
             String mailBody = "";
             status = String.Empty;
