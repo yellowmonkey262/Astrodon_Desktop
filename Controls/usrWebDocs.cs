@@ -1222,10 +1222,7 @@ namespace Astrodon.Controls
                 String newImage = (imgWeb != imgLocal1 && !String.IsNullOrEmpty(copyPic1) ? Path.GetFileName(copyPic2) : Path.GetFileName(webPic2));
                 String status;
 
-                Classes.Sftp sftpClient = new Classes.Sftp(String.Empty, true)
-                {
-                    WorkingDirectory = "/srv/www/htdocs/uploads/pics"
-                };
+                Classes.Sftp sftpClient = new Classes.Sftp(String.Empty, true) { WorkingDirectory = "/srv/www/htdocs/uploads/pics" };
                 picWeb.Image = null;
                 if (sftpClient.Upload((imgWeb != imgLocal1 && !String.IsNullOrEmpty(copyPic1) ? copyPic2 : webPic1), newImage, false))
                 {
@@ -1307,19 +1304,22 @@ namespace Astrodon.Controls
                         imgLocal1 = null;
                         try
                         {
-                            Utilities.ProcessKiller(copyPic1);
-                            if (File.Exists(copyPic1)) { File.Delete(copyPic1); }
-                            File.Copy(ofd.FileName, copyPic1);
-                            imgLocal1 = Image.FromFile(copyPic1);
+                            imgLocal1 = (Image)Image.FromFile(ofd.FileName).Clone();
+                            imgLocal1.Save(copyPic1);
+                            imgLocal1.Save(copyPic2);
+                            //Utilities.ProcessKiller(copyPic1);
+                            //if (File.Exists(copyPic1)) { File.Delete(copyPic1); }
+                            //File.Copy(ofd.FileName, copyPic1);
+                            //imgLocal1 = Image.FromFile(copyPic1);
                         }
                         catch
                         {
                         }
                         try
                         {
-                            Utilities.ProcessKiller(copyPic2);
-                            if (File.Exists(copyPic2)) { File.Delete(copyPic2); }
-                            File.Copy(ofd.FileName, copyPic2);
+                            //Utilities.ProcessKiller(copyPic2);
+                            //if (File.Exists(copyPic2)) { File.Delete(copyPic2); }
+                            //File.Copy(ofd.FileName, copyPic2);
                         }
                         catch
                         {
