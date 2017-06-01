@@ -41,8 +41,7 @@ namespace Astrodon
         {
             get
             {
-                String query = "SELECT b.* FROM tblBuildings b INNER JOIN tblUserBuildings u ON b.id = u.buildingid ";
-                query += " WHERE u.userid = @userid ORDER BY b.Building";
+                String query = "SELECT distinct b.* FROM tblBuildings b  LEFT JOIN tblUserBuildings u ON b.id = u.buildingid LEFT JOIN tblUsers u2 on b.pm = u2.email WHERE u.userid = @userid or u2.id = @userid ORDER BY b.Building";
                 return query;
             }
         }

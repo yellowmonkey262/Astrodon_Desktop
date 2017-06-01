@@ -99,29 +99,33 @@ namespace Astrodon.Controls.Supplier
 
         private void LoadSuppliersLinkedTo(int? buildingId)
         {
-            this.Cursor = Cursors.WaitCursor;
             if (buildingId == null)
                 return;
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+                int checkBuildingId = buildingId.Value;
 
-            int checkBuildingId = buildingId.Value;
+                _SupplierData = _DataContext.SupplierSet
+                                .Where(a => a.Buildings.Any(g => g.BuildingId == checkBuildingId))
+                                .Select(a => new SupplierResult()
+                                {
+                                    SupplierId = a.id,
+                                    IsBlackListed = a.BlackListed,
+                                    CompanyName = a.CompanyName,
+                                    CompanyRegistration = a.CompanyRegistration,
+                                    ContactPerson = a.ContactPerson,
+                                    ContactNumber = a.ContactNumber,
+                                    IsLinkedToBuilding = true
+                                })
+                                .OrderBy(a => a.CompanyName).ToList();
 
-            _SupplierData = _DataContext.SupplierSet
-                            .Where(a => a.Buildings.Any(g => g.BuildingId == checkBuildingId))
-                            .Select(a => new SupplierResult()
-                            {
-                                SupplierId = a.id,
-                                IsBlackListed = a.BlackListed,
-                                CompanyName = a.CompanyName,
-                                CompanyRegistration = a.CompanyRegistration,
-                                ContactPerson = a.ContactPerson,
-                                ContactNumber = a.ContactNumber,
-                                IsLinkedToBuilding = true
-                            })
-                            .OrderBy(a => a.CompanyName).ToList();
-
-            BindSupplierDataGrid();
-
-            this.Cursor = Cursors.Default;
+                BindSupplierDataGrid();
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void btnNewSupplier_Click(object sender, EventArgs e)
