@@ -69,7 +69,7 @@ namespace Astrodon.Controls.Maintenance
             try
             {
                 _Data = new List<PastelMaintenanceTransaction>();
-                using (var reportService = new ReportServiceClient())
+                using (var reportService = ReportServiceClient.CreateInstance())
                 {
                     var items = reportService.MissingMaintenanceRecordsGet(SqlDataHandler.GetConnectionString(), building.ID);
                     if (items == null || items.Length == 0)

@@ -239,7 +239,7 @@ namespace Astrodon.Controls.Requisitions
         private byte[] CreateReport(int requisitionBatchId, out byte[] combinedReport)
         {
             combinedReport = null;
-            using (var reportService = new ReportServiceClient())
+            using (var reportService = ReportServiceClient.CreateInstance())
             {
                 var reportData = reportService.RequisitionBatchReport(SqlDataHandler.GetConnectionString(), requisitionBatchId);
                 if (reportData != null)
@@ -316,10 +316,11 @@ namespace Astrodon.Controls.Requisitions
         {
             using (var context = SqlDataHandler.GetDataContext())
             {
+                var buildingIds = _Buildings.Select(a => a.ID).ToArray();
                 var qry = from b in context.tblBuildings
                           join r in context.tblRequisitions on b.id equals r.building
                           where r.processed == false
-                          && b.pm == Controller.user.email
+                          && buildingIds.Contains(b.id)
                           select new RequisitionItem()
                           {
                               Building = b.Building,
@@ -427,13 +428,25 @@ namespace Astrodon.Controls.Requisitions
 
                 using (var context = SqlDataHandler.GetDataContext())
                 {
+
+                    var buildingIds = _Buildings.Select(a => a.ID).ToArray();
                     var qry = from b in context.tblBuildings
                               join r in context.tblRequisitions on b.id equals r.building
                               where r.processed == false
-                              && b.pm == Controller.user.email
-                              select b;
+                              && buildingIds.Contains(b.id)
+                             select b;
 
                     var buildings = qry.Distinct().ToList();
+                    foreach(var b in buildings)
+                    {
+                        if(!b.CheckIfFolderExists())
+                        {
+                            Controller.HandleError("Unable to access " + b.DataFolder);
+                            button1.Enabled = true;
+                            this.Cursor = Cursors.Default;
+                            return;
+                        }
+                    }
 
                     using (MemoryStream ms = new MemoryStream())
                     {

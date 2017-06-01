@@ -79,7 +79,7 @@ namespace Astrodon.Reports
                 button1.Enabled = false;
                 try
                 {
-                    using (var reportService = new ReportServiceClient())
+                    using (var reportService = ReportServiceClient.CreateInstance())
                     {
                         DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
                         byte[] reportData = null;

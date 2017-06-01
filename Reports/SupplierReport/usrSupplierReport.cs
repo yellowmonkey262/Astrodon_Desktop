@@ -104,7 +104,7 @@ namespace Astrodon.Reports.SupplierReport
 
                 try
                 {
-                    using (var reportService = new ReportServiceClient())
+                    using (var reportService = ReportServiceClient.CreateInstance())
                     {
                         DateTime dtFrom = new DateTime((cmbFromYear.SelectedItem as IdValue).Id, (cmbFromMonth.SelectedItem as IdValue).Id, 1);
                         DateTime dtTo = new DateTime((cmbToYear.SelectedItem as IdValue).Id, (cmbToMonth.SelectedItem as IdValue).Id, 1);

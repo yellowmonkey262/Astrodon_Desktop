@@ -91,11 +91,26 @@ namespace Astrodon.Data
         {
             get
             {
-                string basePath = @"Y:\USERS - DO NOT MOVE!!\Buildings Managed (Do not Remove)\"+this.Building.Replace("/","").Replace(@"\","") + @"\";
+                string basePath = @"Y:\USERS - DO NOT MOVE!!\Buildings Managed (Do not Remove)\" + this.Building.Replace("/", "").Replace(@"\", "") + @"\";
 
-                if (!Directory.Exists(basePath))
-                    Directory.CreateDirectory(basePath);
+                
+
                 return basePath;
+            }
+        }
+
+        public bool CheckIfFolderExists()
+        {
+            try
+            {
+                if (!Directory.Exists(DataFolder))
+                    Directory.CreateDirectory(DataFolder);
+
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

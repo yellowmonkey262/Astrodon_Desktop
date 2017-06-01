@@ -118,7 +118,7 @@ namespace Astrodon.Reports.MaintenanceReport
 
                 try
                 {
-                    using (var reportService = new ReportServiceClient())
+                    using (var reportService = ReportServiceClient.CreateInstance())
                     {
                         DateTime startDate = new DateTime((cmbFromYear.SelectedItem as IdValue).Id, (cmbFromMonth.SelectedItem as IdValue).Id, 1);
                         DateTime endDate = new DateTime((cmbToYear.SelectedItem as IdValue).Id, (cmbToMonth.SelectedItem as IdValue).Id, 1).AddMonths(1).AddSeconds(-1);

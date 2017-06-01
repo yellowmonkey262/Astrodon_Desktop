@@ -143,6 +143,7 @@
     <Compile Include="Classes\Pastel.cs" />
     <Compile Include="Classes\PDF.cs" />
     <Compile Include="Classes\PrintDGV.cs" />
+    <Compile Include="Classes\ReportServiceClient.cs" />
     <Compile Include="Classes\ReportWriter.cs" />
     <Compile Include="Classes\RtfConvertor.cs" />
     <Compile Include="Classes\SFTP.cs" />
