@@ -80,7 +80,6 @@ namespace Astrodon.Controls.Maintenance
                 else if (requisition.Supplier == null)
                     requisition.Supplier = _DataContext.SupplierSet.Single(a => a.id == requisition.SupplierId);
 
-                Data.MaintenanceData.Maintenance _Maintenance;
                 _Maintenance = _DataContext.MaintenanceSet.SingleOrDefault(a => a.RequisitionId == requisition.id);
                 if (_Maintenance == null)
                 {
@@ -96,6 +95,7 @@ namespace Astrodon.Controls.Maintenance
                         WarrentyExpires = requisition.InvoiceDate == null ? requisition.trnDate : requisition.InvoiceDate.Value,
                     };
                     _DataContext.MaintenanceSet.Add(_Maintenance);
+                    _Documents = new List<SupportingDocument>();
                 }
                 else
                 {
@@ -387,7 +387,7 @@ namespace Astrodon.Controls.Maintenance
             dgSupportingDocuments.Columns.Clear();
             dgSupportingDocuments.DataSource = null;
 
-            if (_Documents.Count > 0)
+            if (_Documents != null && _Documents.Count > 0)
             {
                 BindingSource bs = new BindingSource();
                 bs.DataSource = _Documents;

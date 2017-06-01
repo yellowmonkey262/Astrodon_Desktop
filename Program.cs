@@ -16,7 +16,7 @@ namespace Astrodon {
             Application.SetCompatibleTextRenderingDefault(false);
 
             Controller.RunProgram();
-            SqlDataHandler.MigrateEFDataBase();
+         //   SqlDataHandler.MigrateEFDataBase();
             Application.Run();
         }
     }
