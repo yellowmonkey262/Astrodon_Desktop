@@ -450,7 +450,7 @@ namespace Astrodon
                     break;
 
                 case 3:
-                    docType = "Disconnect Notice";
+                    docType = "Restriction Notice";
                     break;
 
                 case 5:
@@ -465,7 +465,7 @@ namespace Astrodon
             #endregion Get Doc Type
 
             DateTime disconDate = DateTime.Now.AddDays(3);
-            if (docType == "Disconnect Notice") { disconDate = dateTimePicker1.Value; }
+            if (docType == "Restriction Notice") { disconDate = dateTimePicker1.Value; }
             String fileName = "";
             DateTime letterDate = DateTime.Now;
             List<Customer> checkedCustomers = new List<Customer>();
@@ -561,7 +561,7 @@ namespace Astrodon
                         }
                         break;
 
-                    case "Disconnect Notice":
+                    case "Restriction Notice":
                         created = true;
                         c.setAgeing(c.ageing[0] + values.disconnectionNoticefee, 0);
                         fileName = wp.disconGen(c, letterDate, disconDate, values.disconnectionFee, values.disconnectionNoticefee, uName, uPhone, uFax, docStatement, building.Abbr);
@@ -600,7 +600,6 @@ namespace Astrodon
 
                 if ((c.statPrintorEmail <= 3) && created)
                 {
-                    docType = (docType == "Disconnect Notice" ? "Restriction Notice" : docType);
                     String msgStatus = String.Empty;
                     //if (Controller.user.id != 1) {
                     String mailBody = "Dear Owner" + Environment.NewLine + Environment.NewLine;
@@ -623,7 +622,7 @@ namespace Astrodon
                     }
                     if (Controller.user.id == 1) { MessageBox.Show(msgStatus); }
                     //}
-                    if ((c.statPrintorEmail == 1 || c.statPrintorEmail == 3) || docType == "Disconnect Notice" || docType == "Restriction Notice")
+                    if ((c.statPrintorEmail == 1 || c.statPrintorEmail == 3) || docType == "Restriction Notice")
                     {
                         try
                         {
@@ -634,13 +633,12 @@ namespace Astrodon
                         }
                     }
                 }
-                else if (docType == "Disconnect Notice")
+                else if (docType == "Restriction Notice")
                 {
                     SendToPrinter(fileName);
                 }
                 if (Controller.user.id != 1)
                 {
-                    docType = (docType == "Disconnect Notice" ? "Restriction Notice" : docType);
                     pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
                         building.Centrec_Building, docType, docType, amt.ToString("#0.00"), trustAcc, "", out pastelString);
                     if (regPost != 0)

@@ -8,6 +8,7 @@ using Astrodon.Reports.MaintenanceReport;
 using Astrodon.Reports.SupplierReport;
 using NotificationWindow;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 
@@ -37,6 +38,13 @@ namespace Astrodon
                 allocationsToolStripMenuItem.Enabled = false;
             }
             if (Controller.user.usertype != 1 && Controller.user.usertype != 2) { reportingToolStripMenuItem.Enabled = false; }
+
+            List<int> allowedUsers = new List<int>() { 43 };
+            if (allowedUsers.Contains(Controller.user.id))
+            {
+                reportingToolStripMenuItem.Enabled = true;
+            }
+
             if (Controller.user.usertype == 1 || Controller.user.usertype == 2)
             {
                 pMJobListToolStripMenuItem.Enabled = true;
