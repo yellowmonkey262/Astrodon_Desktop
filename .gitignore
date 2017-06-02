@@ -257,3 +257,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Astrodon Pastel System-cache
+/Astrodon Pastel System.back.aip
+/Astrodon.msi

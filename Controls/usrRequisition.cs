@@ -629,13 +629,20 @@ namespace Astrodon.Controls
                                  && r.InvoiceNumber == txtInvoiceNumber.Text
                                  && r.amount == amt
                                  select r);
-                        if (q.Count() > 0)
+                        bool showDuplicate = false;
+                        if (editRequisitonId != null)
+                            showDuplicate = q.Where(a => a.id != editRequisitonId.Value).Count() > 0;
+                        else
+                            showDuplicate = q.Count() > 0;
+
+                        if (showDuplicate)
                         {
                             Controller.HandleError("Duplicate requisition detected.\n" +
                                txtInvoiceNumber.Text + " invoice has already been processed", "Validation Error");
                             this.Cursor = Cursors.Arrow;
                             return;
                         }
+                        
 
 
                         bankDetails = context.SupplierBuildingSet
@@ -866,18 +873,57 @@ namespace Astrodon.Controls
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            List<int> requisitionIds = new List<int>();
             foreach (DataGridViewRow dvr in dgUnprocessed.SelectedRows)
             {
                 RequisitionList r = unProcessedRequisitions[dvr.Index];
-                String query = "DELETE FROM tblRequisition WHERE id = " + r.ID;
-                dh.SetData(query, null, out status);
+                requisitionIds.Add(Convert.ToInt32(r.ID));
             }
-            LoadRequisitions();
-            dgUnprocessed.Invalidate();
-            UpdateBalanceLabel();
-            foreach (DataGridViewRow dvr in dgUnprocessed.SelectedRows)
+
+            if (requisitionIds.Count > 0)
             {
-                dvr.Selected = false;
+                if (Controller.AskQuestion("Are you sure you want to delete " + requisitionIds.Count + " requisitions?" + Environment.NewLine
+                                         + "Please note that this will also delete linked documents and maintenance records"))
+                {
+                    foreach (var requisitionId in requisitionIds)
+                        DeleteRequisition(requisitionId);
+
+                    LoadRequisitions();
+                    dgUnprocessed.Invalidate();
+                    UpdateBalanceLabel();
+                  
+                }
+
+                foreach (DataGridViewRow dvr in dgUnprocessed.SelectedRows)
+                {
+                    dvr.Selected = false;
+                }
+            }
+        }
+
+        private void DeleteRequisition(int id)
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var requisition = context.tblRequisitions.Single(a => a.id == id);
+                //delete all requisition documents
+                var docs = context.RequisitionDocumentSet.Where(a => a.RequisitionId == id).ToList();
+                if (docs.Count() > 0)
+                    context.RequisitionDocumentSet.RemoveRange(docs);
+
+                var maintenanceRecords = context.MaintenanceSet.Where(a => a.RequisitionId == id).ToList();
+                if (maintenanceRecords.Count > 0)
+                {
+                    var maintIds = maintenanceRecords.Select(a => a.id).ToArray();
+                    var maintenanceDocs = context.MaintenanceDocumentSet.Where(a => maintIds.Contains(a.MaintenanceId)).ToList();
+
+                    if (maintenanceDocs.Count > 0)
+                        context.MaintenanceDocumentSet.RemoveRange(maintenanceDocs);
+                    context.MaintenanceSet.RemoveRange(maintenanceRecords);
+                }
+
+                context.tblRequisitions.Remove(requisition);
+                context.SaveChanges();
             }
         }
 

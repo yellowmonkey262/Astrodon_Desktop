@@ -80,6 +80,11 @@ namespace Astrodon
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        internal static bool AskQuestion(string message, string title = "Confirmation")
+        {
+            return MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes;
+        }
+
         private static void commClient_LoginOK(object sender, EventArgs e)
         {
             commClient.SendMessage("hello server");
