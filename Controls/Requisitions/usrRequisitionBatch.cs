@@ -287,11 +287,15 @@ namespace Astrodon.Controls.Requisitions
 
         private void AddPdfDocument(PdfCopy copy, byte[] document)
         {
-            PdfReader reader = new PdfReader(document);
-            int n = reader.NumberOfPages;
-            for (int page = 0; page < n;)
+            PdfReader.unethicalreading = true;
+            using (PdfReader reader = new PdfReader(document))
             {
-                copy.AddPage(copy.GetImportedPage(reader, ++page));
+                PdfReader.unethicalreading = true;
+                int n = reader.NumberOfPages;
+                for (int page = 0; page < n;)
+                {
+                    copy.AddPage(copy.GetImportedPage(reader, ++page));
+                }
             }
         }
 
@@ -448,11 +452,14 @@ namespace Astrodon.Controls.Requisitions
                         }
                     }
 
-                    using (MemoryStream ms = new MemoryStream())
+                    MemoryStream ms;
+                    Document doc;
+                    PdfCopy copy;
+                    using (ms = new MemoryStream())
                     {
-                        using (Document doc = new Document())
+                        using (doc = new Document())
                         {
-                            using (PdfCopy copy = new PdfCopy(doc, ms))
+                            using (copy = new PdfCopy(doc, ms))
                             {
                                 doc.Open();
 
@@ -518,6 +525,7 @@ namespace Astrodon.Controls.Requisitions
                 button1.Enabled = true;
                 this.Cursor = Cursors.Default;
             }
+            LoadPendingRequisions();
         }
 
         private void SendEmail(DataContext context, string emailAddress,  Dictionary<string, byte[]> attachments)
@@ -531,7 +539,10 @@ namespace Astrodon.Controls.Requisitions
             }
         }
 
-      
+        private void btnDownload_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 
     class BatchItem
