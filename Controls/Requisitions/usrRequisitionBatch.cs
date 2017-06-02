@@ -477,7 +477,7 @@ namespace Astrodon.Controls.Requisitions
                                             if (combinedReport != null && reportData != null)
                                             {
                                                 string fileName = building.Code + "-" + batch.BatchNumber.ToString().PadLeft(6, '0') + ".pdf";
-                                                string folder = DateTime.Today.ToString("MMM yyyy");
+                                                string folder = "Invoices"+@"\"+ DateTime.Today.ToString("MMM yyyy");
                                                 string outputPath = building.DataFolder + folder + @"\";
                                                 if (!Directory.Exists(outputPath))
                                                     Directory.CreateDirectory(outputPath);

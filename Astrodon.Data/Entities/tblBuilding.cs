@@ -91,7 +91,8 @@ namespace Astrodon.Data
         {
             get
             {
-                string basePath = @"Y:\USERS - DO NOT MOVE!!\Buildings Managed (Do not Remove)\" + this.Building.Replace("/", "").Replace(@"\", "") + @"\";
+               
+                string basePath = @" Y:\Buildings Managed (Do not Remove)\" + this.Building.Replace("/", "").Replace(@"\", "") + @"\";
 
                 
 
