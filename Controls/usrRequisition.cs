@@ -536,6 +536,14 @@ namespace Astrodon.Controls
             bool dLimit, mLimit;
             CheckLimits(double.Parse(txtAmount.Text), out dLimit, out mLimit);
             bool showPassword = false;
+
+            if (_Supplier == null)
+            {
+                Controller.HandleError("Supplier not selected, please select a supplier", "Validation Error");
+                this.Cursor = Cursors.Arrow;
+                return;
+            }
+
             if (!dLimit && editRequisitonId == null)
             {
                 if (MessageBox.Show("Daily limit exceeded. Enter password to continue?", "Requisitions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
