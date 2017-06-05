@@ -907,6 +907,12 @@
     <None Include="DataSets\TAstrodonDataSet1.xss">
       <DependentUpon>TAstrodonDataSet1.xsd</DependentUpon>
     </None>
+    <None Include="rem_HOA_template.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="rem_template.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Service References\ReportService\Astrodon.ReportService.PastelMaintenanceTransaction.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -923,6 +929,18 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />
+    <None Include="stmt_template.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="stmt_template2.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="svt_remind_template.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="wbg_reminder_template.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Excel">
@@ -960,6 +978,33 @@
     <Content Include=".gitignore">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="astbackground.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="astlogo.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="astrodon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="astroenvelope.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="astrofooter.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="astroheader.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="astroWindow.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="centrec.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="centrec.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="DLL\Interop.PasSDK.dll" />
     <Content Include="DLL\Itenso.Rtf.Converter.Html.dll" />
     <Content Include="DLL\Itenso.Rtf.Converter.Xml.dll" />
@@ -975,8 +1020,26 @@
     <Content Include="DLL\NotificationWindow.dll" />
     <Content Include="DLL\OpenPop.dll" />
     <Content Include="DLL\Renci.SshNet.dll" />
+    <None Include="Envelope-footer.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="envfooter.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Handle.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="rem_HOA_template.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Resources\AstradonNewLogo.jpg" />
     <Content Include="Resources\stdmd5.jpg" />
+    <None Include="signature.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="stmt_template.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Service References\ReportService\item.disco" />
     <None Include="Service References\ReportService\configuration91.svcinfo" />
     <None Include="Service References\ReportService\configuration.svcinfo" />
