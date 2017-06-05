@@ -63,7 +63,7 @@
             this.tbBatches.Location = new System.Drawing.Point(6, 3);
             this.tbBatches.Name = "tbBatches";
             this.tbBatches.SelectedIndex = 0;
-            this.tbBatches.Size = new System.Drawing.Size(829, 512);
+            this.tbBatches.Size = new System.Drawing.Size(948, 512);
             this.tbBatches.TabIndex = 63;
             // 
             // tbNewBatch
@@ -76,7 +76,7 @@
             this.tbNewBatch.Location = new System.Drawing.Point(4, 22);
             this.tbNewBatch.Name = "tbNewBatch";
             this.tbNewBatch.Padding = new System.Windows.Forms.Padding(3);
-            this.tbNewBatch.Size = new System.Drawing.Size(821, 486);
+            this.tbNewBatch.Size = new System.Drawing.Size(940, 486);
             this.tbNewBatch.TabIndex = 0;
             this.tbNewBatch.Text = "New Batch";
             this.tbNewBatch.UseVisualStyleBackColor = true;
@@ -117,7 +117,7 @@
             this.dgPendingTransactions.Location = new System.Drawing.Point(13, 59);
             this.dgPendingTransactions.Name = "dgPendingTransactions";
             this.dgPendingTransactions.ReadOnly = true;
-            this.dgPendingTransactions.Size = new System.Drawing.Size(795, 421);
+            this.dgPendingTransactions.Size = new System.Drawing.Size(921, 421);
             this.dgPendingTransactions.TabIndex = 68;
             // 
             // button1
@@ -139,7 +139,7 @@
             this.tbBatchesTab.Location = new System.Drawing.Point(4, 22);
             this.tbBatchesTab.Name = "tbBatchesTab";
             this.tbBatchesTab.Padding = new System.Windows.Forms.Padding(3);
-            this.tbBatchesTab.Size = new System.Drawing.Size(821, 486);
+            this.tbBatchesTab.Size = new System.Drawing.Size(940, 486);
             this.tbBatchesTab.TabIndex = 1;
             this.tbBatchesTab.Text = "Batch History";
             this.tbBatchesTab.UseVisualStyleBackColor = true;
@@ -153,7 +153,7 @@
             this.dgItems.Location = new System.Drawing.Point(18, 49);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(795, 368);
+            this.dgItems.Size = new System.Drawing.Size(916, 431);
             this.dgItems.TabIndex = 67;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             // 
@@ -194,7 +194,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tbBatches);
             this.Name = "usrRequisitionBatch";
-            this.Size = new System.Drawing.Size(858, 528);
+            this.Size = new System.Drawing.Size(957, 528);
             this.tbBatches.ResumeLayout(false);
             this.tbNewBatch.ResumeLayout(false);
             this.tbNewBatch.PerformLayout();
