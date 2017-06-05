@@ -173,7 +173,7 @@ namespace Astrodon
                 LoadReminders();
                 LoadNotes();
                 LoadMaintenance();
-                    
+
                 this.Cursor = Cursors.Default;
             }
             catch (Exception ex)
@@ -184,6 +184,7 @@ namespace Astrodon
         }
 
         private List<UnitMaintenance> _UnitMaintenance;
+
         private void LoadMaintenance()
         {
             DateTime cutoff = DateTime.Today.AddYears(-2);
@@ -223,7 +224,6 @@ namespace Astrodon
             currencyColumnStyle.Format = "###,##0.00";
             currencyColumnStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-
             if (_UnitMaintenance.Count > 0)
             {
                 BindingSource bs = new BindingSource();
@@ -250,7 +250,6 @@ namespace Astrodon
                     ReadOnly = true
                 });
 
-
                 dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
                 {
                     DataPropertyName = "Description",
@@ -265,7 +264,6 @@ namespace Astrodon
                     ReadOnly = true
                 });
 
-
                 dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
                 {
                     DataPropertyName = "TotalAmount",
@@ -273,7 +271,6 @@ namespace Astrodon
                     ReadOnly = true,
                     DefaultCellStyle = currencyColumnStyle
                 });
-
 
                 dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
                 {
@@ -289,13 +286,9 @@ namespace Astrodon
                     ReadOnly = true
                 });
 
-            
-         
-
                 dgMaintenance.AutoResizeColumns();
             }
         }
-
 
         private void LoadAddress()
         {
@@ -442,6 +435,7 @@ namespace Astrodon
             customerString += customer.taxCode.ToString() + "|" + customer.cashAccount;
             txtEntry.Text = customerString;
             String result = Controller.pastel.UpdateCustomer(customerString, building.DataPath);
+            if (Controller.user.id == 1) { MessageBox.Show(building.DataPath + " === " + customerString); }
             if (result == "0")
             {
                 MySqlConnector mySqlConn = new MySqlConnector();
@@ -757,7 +751,6 @@ namespace Astrodon
 
             public string SupplierName { get; set; }
             public string ButtonText { get { return "View"; } }
-
         }
 
         private void dgMaintenance_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -766,11 +759,11 @@ namespace Astrodon
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
                 var selectedItem = senderGrid.Rows[e.RowIndex].DataBoundItem as UnitMaintenance;
-                if(selectedItem != null)
+                if (selectedItem != null)
                 {
                     using (var dataContext = SqlDataHandler.GetDataContext())
                     {
-                        var frmMaintenanceDetail = new Astrodon.Forms.frmMaintenanceDetail(dataContext, selectedItem.MaintenanceId,true);
+                        var frmMaintenanceDetail = new Astrodon.Forms.frmMaintenanceDetail(dataContext, selectedItem.MaintenanceId, true);
                         var dialogResult = frmMaintenanceDetail.ShowDialog();
                     }
                 }
