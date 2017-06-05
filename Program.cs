@@ -16,7 +16,10 @@ namespace Astrodon {
             Application.SetCompatibleTextRenderingDefault(false);
 
             Controller.RunProgram();
-         //   SqlDataHandler.MigrateEFDataBase();
+            //   SqlDataHandler.MigrateEFDataBase();
+
+            iTextSharp.text.pdf.PdfReader.unethicalreading = true;
+
             Application.Run();
         }
     }

@@ -208,13 +208,15 @@ namespace Astrodon.Reports.MaintenanceReport
 
         private void AddPdfDocument(PdfCopy copy, byte[] document)
         {
-            PdfReader reader = new PdfReader(document);
-            int n = reader.NumberOfPages;
-            for (int page = 0; page < n;)
+            using (PdfReader reader = new PdfReader(document))
             {
-                copy.AddPage(copy.GetImportedPage(reader, ++page));
+                int n = reader.NumberOfPages;
+                for (int page = 0; page < n;)
+                {
+                    copy.AddPage(copy.GetImportedPage(reader, ++page));
+                }
+                Application.DoEvents();
             }
-            Application.DoEvents();
         }
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)

@@ -66,7 +66,7 @@ namespace Astrodon
 
         internal static void HandleError(Exception e, string title = "Application Error")
         {
-            HandleError(e.Message, title);
+            HandleError(e.Message+ Environment.NewLine + e.StackTrace, title);
         }
 
         internal static void HandleError(string error, string title = "Application Error")

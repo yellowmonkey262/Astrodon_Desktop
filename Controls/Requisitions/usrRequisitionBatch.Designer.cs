@@ -31,6 +31,7 @@
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.tbBatches = new System.Windows.Forms.TabControl();
             this.tbNewBatch = new System.Windows.Forms.TabPage();
+            this.lbProcessing = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dgPendingTransactions = new System.Windows.Forms.DataGridView();
@@ -40,7 +41,6 @@
             this.btnDownload = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
-            this.lbProcessing = new System.Windows.Forms.Label();
             this.tbBatches.SuspendLayout();
             this.tbNewBatch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgPendingTransactions)).BeginInit();
@@ -80,6 +80,15 @@
             this.tbNewBatch.TabIndex = 0;
             this.tbNewBatch.Text = "New Batch";
             this.tbNewBatch.UseVisualStyleBackColor = true;
+            // 
+            // lbProcessing
+            // 
+            this.lbProcessing.AutoSize = true;
+            this.lbProcessing.Location = new System.Drawing.Point(138, 35);
+            this.lbProcessing.Name = "lbProcessing";
+            this.lbProcessing.Size = new System.Drawing.Size(77, 13);
+            this.lbProcessing.TabIndex = 71;
+            this.lbProcessing.Text = "XXXXXXXXXX";
             // 
             // label2
             // 
@@ -146,6 +155,7 @@
             this.dgItems.ReadOnly = true;
             this.dgItems.Size = new System.Drawing.Size(795, 368);
             this.dgItems.TabIndex = 67;
+            this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             // 
             // btnDownload
             // 
@@ -157,6 +167,7 @@
             this.btnDownload.Text = "Create Requisiton Batch";
             this.btnDownload.UseVisualStyleBackColor = true;
             this.btnDownload.Visible = false;
+            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click_1);
             // 
             // label3
             // 
@@ -175,15 +186,7 @@
             this.cmbBuilding.Name = "cmbBuilding";
             this.cmbBuilding.Size = new System.Drawing.Size(241, 21);
             this.cmbBuilding.TabIndex = 65;
-            // 
-            // lbProcessing
-            // 
-            this.lbProcessing.AutoSize = true;
-            this.lbProcessing.Location = new System.Drawing.Point(138, 35);
-            this.lbProcessing.Name = "lbProcessing";
-            this.lbProcessing.Size = new System.Drawing.Size(77, 13);
-            this.lbProcessing.TabIndex = 71;
-            this.lbProcessing.Text = "XXXXXXXXXX";
+            this.cmbBuilding.SelectedIndexChanged += new System.EventHandler(this.cmbBuilding_SelectedIndexChanged);
             // 
             // usrRequisitionBatch
             // 
