@@ -534,6 +534,17 @@ namespace Astrodon.Controls
         {
             this.Cursor = Cursors.WaitCursor;
             bool dLimit, mLimit;
+            try
+            {
+                double.Parse(txtAmount.Text);
+            }
+            catch
+            {
+                Controller.HandleError("Invalid invoice amount", "Validation Error");
+                this.Cursor = Cursors.Arrow;
+                return;
+            }
+
             CheckLimits(double.Parse(txtAmount.Text), out dLimit, out mLimit);
             bool showPassword = false;
 
