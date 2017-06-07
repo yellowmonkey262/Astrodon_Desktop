@@ -560,20 +560,30 @@ namespace Astrodon.Controls.Requisitions
                                                 {
                                                     if (combinedReport != null)
                                                     {
-                                                        string fileName = building.Code + "-" + batch.BatchNumber.ToString().PadLeft(6, '0') + ".pdf";
-                                                        string folder = "Invoices" + @"\" + DateTime.Today.ToString("MMM yyyy");
-                                                        string outputPath = building.DataFolder + folder + @"\";
-                                                        if (!Directory.Exists(outputPath))
-                                                            Directory.CreateDirectory(outputPath);
-                                                        string outputFilename = outputPath + fileName;
-                                                        if (File.Exists(outputFilename))
-                                                            File.Delete(outputFilename);
+                                                        try
+                                                        {
+                                                            string fileName = building.Code + "-" + batch.BatchNumber.ToString().PadLeft(6, '0') + ".pdf";
+                                                            string folder = "Invoices" + @"\" + DateTime.Today.ToString("MMM yyyy");
+                                                            string outputPath = building.DataFolder + folder + @"\";
+                                                            if (!Directory.Exists(outputPath))
+                                                                Directory.CreateDirectory(outputPath);
+                                                            string outputFilename = outputPath + fileName;
+                                                            if (File.Exists(outputFilename))
+                                                                File.Delete(outputFilename);
 
-                                                        File.WriteAllBytes(outputFilename, combinedReport);
-                                                        emailCount++;
-                                                        AddPdfDocument(copy, reportData);
+                                                            File.WriteAllBytes(outputFilename, combinedReport);
+                                                            emailCount++;
+                                                            AddPdfDocument(copy, reportData);
+
+                                                            CommitRequisitionBatch(batch);
+                                                        }
+                                                        catch (Exception exr)
+                                                        {
+                                                            Controller.HandleError(exr);
+                                                            RollbackRequsitionBatch(batch);// an error occured in this batch rollback it
+
+                                                        }
                                                     }
-                                                    CommitRequisitionBatch(batch);
                                                 }
                                                 else
                                                 {
@@ -586,7 +596,6 @@ namespace Astrodon.Controls.Requisitions
                                         {
                                             Controller.HandleError(er);
                                             this.Cursor = Cursors.Default;
-                                            return;
                                         }
 
                                         Application.DoEvents();
