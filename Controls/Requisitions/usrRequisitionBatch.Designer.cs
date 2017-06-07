@@ -38,7 +38,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tbBatchesTab = new System.Windows.Forms.TabPage();
             this.dgItems = new System.Windows.Forms.DataGridView();
-            this.btnDownload = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.tbBatches.SuspendLayout();
@@ -133,7 +132,6 @@
             // tbBatchesTab
             // 
             this.tbBatchesTab.Controls.Add(this.dgItems);
-            this.tbBatchesTab.Controls.Add(this.btnDownload);
             this.tbBatchesTab.Controls.Add(this.label3);
             this.tbBatchesTab.Controls.Add(this.cmbBuilding);
             this.tbBatchesTab.Location = new System.Drawing.Point(4, 22);
@@ -156,18 +154,6 @@
             this.dgItems.Size = new System.Drawing.Size(916, 431);
             this.dgItems.TabIndex = 67;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
-            // 
-            // btnDownload
-            // 
-            this.btnDownload.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnDownload.Location = new System.Drawing.Point(369, 20);
-            this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(144, 23);
-            this.btnDownload.TabIndex = 66;
-            this.btnDownload.Text = "Create Requisiton Batch";
-            this.btnDownload.UseVisualStyleBackColor = true;
-            this.btnDownload.Visible = false;
-            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click_1);
             // 
             // label3
             // 
@@ -216,7 +202,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabPage tbBatchesTab;
         private System.Windows.Forms.DataGridView dgItems;
-        private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.Label lbProcessing;

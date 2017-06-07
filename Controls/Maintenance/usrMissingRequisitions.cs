@@ -13,6 +13,7 @@ using System.Data.Entity;
 using Astrodon.Data.RequisitionData;
 using Astrodon.Forms;
 using System.IO;
+using iTextSharp.text.pdf;
 
 namespace Astrodon.Controls.Maintenance
 {
@@ -394,9 +395,40 @@ namespace Astrodon.Controls.Maintenance
             {
                 for (int i = 0; i < ofdAttachment.FileNames.Count(); i++)
                 {
-                    _Documents.Add(ofdAttachment.SafeFileNames[i], File.ReadAllBytes(ofdAttachment.FileNames[i]));
+                    if (IsValidPdf(ofdAttachment.FileNames[i]))
+                    {
+                        if (_Documents.Keys.Contains(ofdAttachment.SafeFileNames[i]))
+                            _Documents[ofdAttachment.SafeFileNames[i]] = File.ReadAllBytes(ofdAttachment.FileNames[i]);
+                        else
+                            _Documents.Add(ofdAttachment.SafeFileNames[i], File.ReadAllBytes(ofdAttachment.FileNames[i]));
+                    }
+                    else
+                    {
+                        Controller.HandleError("Invalid PDF\n" + ofdAttachment.FileNames[i] + "\n Please load a different pdf");
+                    }
                 }
             }
+        }
+
+        private bool IsValidPdf(string filepath)
+        {
+            bool Ret = true;
+
+            PdfReader reader = null;
+
+            try
+            {
+                using (reader = new PdfReader(filepath))
+                {
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                Ret = false;
+            }
+
+            return Ret;
         }
     }
 }
