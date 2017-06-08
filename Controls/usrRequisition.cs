@@ -690,6 +690,13 @@ namespace Astrodon.Controls
                     item.BranchName = bankDetails == null ? (string)null : bankDetails.BranchName;
                     item.AccountNumber = bankDetails == null ? (string)null : bankDetails.AccountNumber;
 
+                    if(editRequisitonId != null)
+                    {
+                        //clear all invoice attachments and load again
+                        var docs = context.RequisitionDocumentSet.Where(a => a.RequisitionId == editRequisitonId && a.IsInvoice == true).ToList();
+                        context.RequisitionDocumentSet.RemoveRange(docs);
+                    }
+
                     foreach (var key in _Documents.Keys)
                     {
                         context.RequisitionDocumentSet.Add(new RequisitionDocument()

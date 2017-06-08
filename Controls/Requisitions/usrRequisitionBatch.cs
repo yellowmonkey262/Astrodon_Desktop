@@ -65,7 +65,7 @@ namespace Astrodon.Controls.Requisitions
             }
         }
 
-      
+
 
         private RequisitionBatch CreateRequisitionBatch(int buildingId, bool warnIfNoRequisitions = true)
         {
@@ -227,19 +227,19 @@ namespace Astrodon.Controls.Requisitions
             BindDataGrid();
         }
 
-        private byte[] CreateReport(int requisitionBatchId, out byte[] combinedReport)
+        private byte[] CreateReport(int requisitionBatchId, string combinedFilePath)
         {
             bool processedOk = true;
 
             byte[] reportData = null;
-            combinedReport = null;
-            try {
+            try
+            {
                 using (var reportService = ReportServiceClient.CreateInstance())
                 {
                     reportData = reportService.RequisitionBatchReport(SqlDataHandler.GetConnectionString(), requisitionBatchId);
                     if (reportData != null)
                     {
-                        using (MemoryStream ms = new MemoryStream())
+                        using (FileStream ms = new FileStream(combinedFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
                             using (Document doc = new Document())
                             {
@@ -276,13 +276,15 @@ namespace Astrodon.Controls.Requisitions
                                             }
                                         }
                                     }
+                                    //write output file
+                                    ms.Flush();
                                 }
+                               
                             }
-                            combinedReport = ms.ToArray();
+                          
                         }
                     }
                 }
-              
             }
             catch (Exception exp)
             {
@@ -295,6 +297,27 @@ namespace Astrodon.Controls.Requisitions
 
             return reportData;
 
+        }
+
+        private string GetATempFile(string ext)
+        {
+            var workFile = System.IO.Path.GetTempPath();
+            if (string.IsNullOrWhiteSpace(workFile))
+            {
+                workFile = @"C:\Temp\";
+                if (!Directory.Exists(workFile))
+                    Directory.CreateDirectory(workFile);
+            }
+            if (!workFile.EndsWith("\\"))
+                workFile = workFile + "\\";
+
+            if (string.IsNullOrWhiteSpace(ext))
+                ext = ".temp";
+
+            if (!ext.StartsWith("."))
+                ext = "." + ext;
+            workFile = workFile + System.Guid.NewGuid().ToString("N") + ext;
+            return workFile;
         }
 
         private bool IsValidPdf(byte[] filepath)
@@ -322,9 +345,7 @@ namespace Astrodon.Controls.Requisitions
         {
             if (dlgSave.ShowDialog() == DialogResult.OK)
             {
-                byte[] combinedReport;
-                var reportData = CreateReport(requisitionBatchId, out combinedReport);
-                File.WriteAllBytes(dlgSave.FileName, combinedReport);
+                var reportData = CreateReport(requisitionBatchId, dlgSave.FileName);
                 Process.Start(dlgSave.FileName);
             }
         }
@@ -487,7 +508,7 @@ namespace Astrodon.Controls.Requisitions
 
         private void button1_Click(object sender, EventArgs e)
         {
-          
+
             try
             {
                 int emailCount = 0;
@@ -502,7 +523,7 @@ namespace Astrodon.Controls.Requisitions
                               select b;
 
                     var buildings = qry.Distinct().ToList();
-                    if(buildings.Count <= 0)
+                    if (buildings.Count <= 0)
                     {
                         DialogResult dialogResult = MessageBox.Show("There are no requisitions to process for " + Controller.user.name, "Information", MessageBoxButtons.OK);
                         return;
@@ -534,82 +555,107 @@ namespace Astrodon.Controls.Requisitions
                             }
                         }
 
-                        MemoryStream ms;
                         Document doc;
                         PdfCopy copy;
-                        using (ms = new MemoryStream())
+
+                        var tempCombinedReport = GetATempFile(".pdf");
+                        try
                         {
-                            using (doc = new Document())
+                            using (var ms = new FileStream(tempCombinedReport, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                             {
-                                using (copy = new PdfCopy(doc, ms))
+                             
+                                using (doc = new Document())
                                 {
-                                    doc.Open();
-
-                                    foreach (var building in buildings)
+                                    using (copy = new PdfCopy(doc, ms))
                                     {
-                                        try
+                                        doc.Open();
+
+                                        foreach (var building in buildings)
                                         {
-                                            lbProcessing.Text = "Processing " + building.Building;
-                                            Application.DoEvents();
-                                            var batch = CreateRequisitionBatch(building.id, false);
-                                            if (batch != null)
+                                            try
                                             {
-                                                byte[] combinedReport;
-                                                var reportData = CreateReport(batch.id, out combinedReport);
-                                                if (reportData != null)
+                                                lbProcessing.Text = "Processing " + building.Building;
+                                                Application.DoEvents();
+                                                var batch = CreateRequisitionBatch(building.id, false);
+                                                if (batch != null)
                                                 {
-                                                    if (combinedReport != null)
+                                                    var tempFile = GetATempFile(".pdf");
+                                                    try
                                                     {
-                                                        try
+                                                        var reportData = CreateReport(batch.id, tempFile);
+                                                        if (reportData != null)
                                                         {
-                                                            string fileName = building.Code + "-" + batch.BatchNumber.ToString().PadLeft(6, '0') + ".pdf";
-                                                            string folder = "Invoices" + @"\" + DateTime.Today.ToString("MMM yyyy");
-                                                            string outputPath = building.DataFolder + folder + @"\";
-                                                            if (!Directory.Exists(outputPath))
-                                                                Directory.CreateDirectory(outputPath);
-                                                            string outputFilename = outputPath + fileName;
-                                                            if (File.Exists(outputFilename))
-                                                                File.Delete(outputFilename);
 
-                                                            File.WriteAllBytes(outputFilename, combinedReport);
-                                                            emailCount++;
-                                                            AddPdfDocument(copy, reportData);
+                                                            try
+                                                            {
+                                                                string fileName = building.Code + "-" + batch.BatchNumber.ToString().PadLeft(6, '0') + ".pdf";
+                                                                string folder = "Invoices" + @"\" + DateTime.Today.ToString("MMM yyyy");
+                                                                string outputPath = building.DataFolder + folder + @"\";
+                                                                if (!Directory.Exists(outputPath))
+                                                                    Directory.CreateDirectory(outputPath);
+                                                                string outputFilename = outputPath + fileName;
+                                                                if (File.Exists(outputFilename))
+                                                                    File.Delete(outputFilename);
+                                                                try
+                                                                {
+                                                                    File.Copy(tempFile, outputFilename);
+                                                                }
+                                                                catch (Exception fEx)
+                                                                {
+                                                                    Controller.HandleError(fEx);
+                                                                }
 
-                                                            CommitRequisitionBatch(batch);
+                                                                emailCount++;
+                                                                AddPdfDocument(copy, reportData);
+
+                                                                CommitRequisitionBatch(batch);
+                                                            }
+                                                            catch (Exception exr)
+                                                            {
+                                                                Controller.HandleError(exr);
+                                                                RollbackRequsitionBatch(batch);// an error occured in this batch rollback it
+
+                                                            }
                                                         }
-                                                        catch (Exception exr)
+                                                        else
                                                         {
-                                                            Controller.HandleError(exr);
                                                             RollbackRequsitionBatch(batch);// an error occured in this batch rollback it
-
                                                         }
                                                     }
+                                                    finally
+                                                    {
+                                                        if (File.Exists(tempFile))
+                                                            File.Delete(tempFile);
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    RollbackRequsitionBatch(batch);// an error occured in this batch rollback it
-                                                }
+
                                             }
-
+                                            catch (Exception er)
+                                            {
+                                                Controller.HandleError(er);
+                                                this.Cursor = Cursors.Default;
+                                            }
+                                            ms.Flush();
+                                            Application.DoEvents();
                                         }
-                                        catch (Exception er)
-                                        {
-                                            Controller.HandleError(er);
-                                            this.Cursor = Cursors.Default;
-                                        }
 
-                                        Application.DoEvents();
                                     }
-
                                 }
+                              
                             }
+
                             if (emailCount > 0)
                             {
-                                var combinedEmailPDF = ms.ToArray();
+
                                 var attachments = new Dictionary<string, byte[]>();
-                                attachments.Add("Requisitions.pdf", combinedEmailPDF);
+                                attachments.Add("Requisitions.pdf",File.ReadAllBytes(tempCombinedReport));
                                 SendEmail(context, Controller.user.email, attachments);
                             }
+                        }
+                        finally
+                        {
+                            if(File.Exists(tempCombinedReport))
+                                File.Delete(tempCombinedReport);
                         }
                     }
 
