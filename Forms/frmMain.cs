@@ -590,5 +590,14 @@ namespace Astrodon
             pnlContents.Controls.Add(control);
             toolStripStatusLabel1.Text = "Requisition Batch";
         }
+
+        private void supplierBatchRequisitionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrSupplierBatchRequisition control = new usrSupplierBatchRequisition();
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Supplier Bulk Requisition";
+        }
     }
 }

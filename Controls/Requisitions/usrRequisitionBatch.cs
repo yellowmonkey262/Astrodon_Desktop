@@ -72,7 +72,9 @@ namespace Astrodon.Controls.Requisitions
             using (var context = SqlDataHandler.GetDataContext())
             {
                 int batchNumber = 0;
-                var requisitions = context.tblRequisitions.Where(a => a.building == buildingId && a.processed == false && a.RequisitionBatchId == null).ToList();
+                var requisitions = context.tblRequisitions.Where(a => a.building == buildingId 
+                && a.processed == false 
+                && a.RequisitionBatchId == null).ToList();
                 if (requisitions.Count <= 0)
                 {
                     if (warnIfNoRequisitions)
@@ -404,7 +406,8 @@ namespace Astrodon.Controls.Requisitions
                               SupplierReference = r.payreference,
                               InvoiceNumber = r.InvoiceNumber,
                               PortfolioManager = pmUser.name,
-                              PortfolioUserId = pmUser.id
+                              PortfolioUserId = pmUser.id,
+                              InvoiceCount = r.Documents.Count(a => a.IsInvoice == true)
                           };
 
                 if (_allBuildings)
@@ -435,11 +438,18 @@ namespace Astrodon.Controls.Requisitions
             currencyColumnStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
             BindingSource bs = new BindingSource();
-            bs.DataSource = _PendingRequisitions;
 
             dgPendingTransactions.Columns.Clear();
 
             dgPendingTransactions.DataSource = bs;
+
+            //HasInvoice
+            dgPendingTransactions.Columns.Add(new DataGridViewCheckBoxColumn()
+            {
+                DataPropertyName = "HasInvoice",
+                HeaderText = "Invoice Uploaded",
+                ReadOnly = true,
+            });
 
             dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -502,12 +512,37 @@ namespace Astrodon.Controls.Requisitions
 
 
 
+            bs.DataSource = _PendingRequisitions;
 
             dgPendingTransactions.AutoResizeColumns();
+
+            foreach(DataGridViewRow row in dgPendingTransactions.Rows)
+            {
+                var itm = row.DataBoundItem as RequisitionItem;
+                if(itm.HasInvoice == false)
+                {
+                    foreach(DataGridViewCell cell in row.Cells)
+                    {
+                        cell.Style.BackColor = System.Drawing.Color.Yellow;
+                    }
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+            if (_PendingRequisitions != null)
+            {
+                var cnt = _PendingRequisitions.Where(a => a.HasInvoice == false).Count();
+                if (cnt > 0)
+                {
+                    Controller.HandleError("There are " + cnt.ToString() + " requisitions without an attached invoice.\n" +
+                        "Please go to the requisition edit screen to upload the corresponding invoice documents.", "Validation Error");
+                    return;
+                }
+            }
+
 
             try
             {
@@ -739,6 +774,9 @@ namespace Astrodon.Controls.Requisitions
 
     class RequisitionItem
     {
+        public int InvoiceCount { get; set; }
+        public bool HasInvoice { get { return InvoiceCount > 0; } }
+
         public string AccountNumber { get;  set; }
         public decimal Amount { get;  set; }
         public string Bank { get;  set; }
@@ -747,8 +785,8 @@ namespace Astrodon.Controls.Requisitions
         public string BuildingCode { get;  set; }
         public string InvoiceNumber { get;  set; }
         public string LedgerAccount { get;  set; }
-        public string PortfolioManager { get; internal set; }
-        public int PortfolioUserId { get; internal set; }
+        public string PortfolioManager { get;  set; }
+        public int PortfolioUserId { get;  set; }
         public string SupplierName { get;  set; }
         public string SupplierReference { get;  set; }
     }

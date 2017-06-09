@@ -191,6 +191,12 @@
     <Compile Include="Controls\Requisitions\usrRequisitionBatch.Designer.cs">
       <DependentUpon>usrRequisitionBatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Requisitions\usrSupplierBatchRequisition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Requisitions\usrSupplierBatchRequisition.Designer.cs">
+      <DependentUpon>usrSupplierBatchRequisition.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Supplier\SupplierSelectEventArgs.cs" />
     <Compile Include="Controls\Supplier\usrSupplierDetail.cs">
       <SubType>UserControl</SubType>
@@ -604,6 +610,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Requisitions\usrRequisitionBatch.resx">
       <DependentUpon>usrRequisitionBatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Requisitions\usrSupplierBatchRequisition.resx">
+      <DependentUpon>usrSupplierBatchRequisition.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Supplier\usrSupplierDetail.resx">
       <DependentUpon>usrSupplierDetail.cs</DependentUpon>
