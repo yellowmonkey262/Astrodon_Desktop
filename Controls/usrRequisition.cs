@@ -381,6 +381,13 @@ namespace Astrodon.Controls
             double requestedAmt = double.TryParse(txtAmount.Text, out requestedAmt) ? requestedAmt : 0;
             lblAvAmt.Text = (double.Parse(lblBalance.Text) - requestedAmt - (requestedAmt > 0 ? GetEFTFee() : 0)).ToString("#,##0.00");
             lblAvAmt.Refresh();
+            bool dailyExceed, monthExceed;
+            double monthLimit, dailyLimit = 0;
+            CheckLimits(requestedAmt, out dailyExceed, out monthExceed, out monthLimit, out dailyLimit);
+            lblDayLimit.Text = dailyLimit.ToString("#,##0.00");
+            lblMonthLimit.Text = monthLimit.ToString("#,##0.00");
+            lblDayLimit.Refresh();
+            lblMonthLimit.Refresh();
         }
 
         private double GetBuildingBalance()
@@ -425,34 +432,59 @@ namespace Astrodon.Controls
             return os;
         }
 
-        private void CheckLimits(double requestedAmt, out bool d, out bool m)
+        private void CheckLimits(double requestedAmt, out bool d, out bool m, out double md, out double dd)
         {
             double limitD = myBuildings[cmbBuilding.SelectedIndex].limitD;
             double limitM = myBuildings[cmbBuilding.SelectedIndex].limitM;
             String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
             String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
             DateTime cDate = DateTime.Now;
-            DateTime dsDate = new DateTime(cDate.Year, cDate.Month, cDate.Day, 0, 0, 0);
-            DateTime deDate = new DateTime(cDate.Year, cDate.Month, cDate.Day, 23, 59, 59);
+
             DateTime sDate = new DateTime(cDate.Year, cDate.Month, 1, 0, 0, 0);
             DateTime eDate = new DateTime(cDate.Year, cDate.Month, DateTime.DaysInMonth(cDate.Year, cDate.Month), 23, 59, 59);
             List<Trns> mTransactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).Where(c => DateTime.Parse(c.Date) >= sDate && DateTime.Parse(c.Date) <= eDate).ToList();
-            double dTotal = paidRequisitions.Where(c => c.trnDate >= dsDate && c.trnDate <= deDate).ToList().Sum(c => c.amount);
+
+            DateTime dsDate = new DateTime(cDate.Year, cDate.Month, cDate.Day, 0, 0, 0);
+            DateTime deDate = new DateTime(cDate.Year, cDate.Month, cDate.Day, 23, 59, 59);
+            List<Trns> dTransactions = mTransactions.Where(c => DateTime.Parse(c.Date) >= dsDate && DateTime.Parse(c.Date) <= deDate).ToList();
+
+            //double dTotal = paidRequisitions.Where(c => c.trnDate >= dsDate && c.trnDate <= deDate).ToList().Sum(c => c.amount);
             //.Sum(c=>c.amount) Controller.pastel.GetTransactions(path, "G", 101, 112, acc).Where(c => DateTime.Parse(c.Date) >= dsDate && DateTime.Parse(c.Date) <= deDate).ToList();
-            double mTotal = 0;
+
+            double mPastelTotal = 0;
+            double dPastelTotal = 0;
             if (cmbAccount.SelectedItem.ToString() == "TRUST")
             {
                 mTransactions = mTransactions.Where(c => double.Parse(c.Amount) > 0).ToList();
-                mTotal = mTransactions.Sum(c => double.Parse(c.Amount));
+                dTransactions = dTransactions.Where(c => double.Parse(c.Amount) > 0).ToList();
+                mPastelTotal = mTransactions.Sum(c => double.Parse(c.Amount));
+                dPastelTotal = dTransactions.Sum(c => double.Parse(c.Amount));
             }
             else
             {
                 mTransactions = mTransactions.Where(c => double.Parse(c.Amount) < 0).ToList();
-                mTotal = mTransactions.Sum(c => double.Parse(c.Amount)) * -1;
+                dTransactions = dTransactions.Where(c => double.Parse(c.Amount) < 0).ToList();
+                mPastelTotal = mTransactions.Sum(c => double.Parse(c.Amount)) * -1;
+                dPastelTotal = dTransactions.Sum(c => double.Parse(c.Amount)) * -1;
             }
-            double unp = unProcessedRequisitions.Sum(c => c.amount);
-            m = (mTotal + unp + dTotal) + requestedAmt < limitM;
-            d = dTotal + requestedAmt < limitD;
+
+            double unprocDaily = unProcessedRequisitions.Where(c => c.trnDate >= dsDate && c.trnDate <= deDate).Sum(c => c.amount);
+            double unprocMonth = unProcessedRequisitions.Where(c => c.trnDate >= sDate && c.trnDate <= eDate).Sum(c => c.amount);
+
+            double unpaidDaily = unPaidRequisitions.Where(c => c.trnDate >= dsDate && c.trnDate <= deDate).Sum(c => c.amount);
+            double unpaidMonth = unPaidRequisitions.Where(c => c.trnDate >= sDate && c.trnDate <= eDate).Sum(c => c.amount);
+
+            if (Controller.user.id == 1)
+            {
+                MessageBox.Show("Monthly = " + (mPastelTotal + unprocMonth + unpaidMonth).ToString());
+                MessageBox.Show("Daily = " + (dPastelTotal + unprocDaily + unpaidDaily).ToString());
+            }
+
+            m = (mPastelTotal + unprocMonth +  unpaidMonth) + requestedAmt < limitM;
+            d = (dPastelTotal + unprocDaily + unpaidDaily) + requestedAmt < limitD;
+
+            md = limitM - (mPastelTotal + unprocMonth + unpaidMonth);
+            dd = limitD - (dPastelTotal + unprocDaily + unpaidDaily);
         }
 
         private int? editRequisitonId = null;
@@ -545,8 +577,8 @@ namespace Astrodon.Controls
                 this.Cursor = Cursors.Arrow;
                 return;
             }
-
-            CheckLimits(double.Parse(txtAmount.Text), out dLimit, out mLimit);
+            double md, dd;
+            CheckLimits(double.Parse(txtAmount.Text), out dLimit, out mLimit, out md, out dd);
             bool showPassword = false;
 
             if (_Supplier == null)
