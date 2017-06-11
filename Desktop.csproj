@@ -780,22 +780,10 @@
     <EmbeddedResource Include="Reports\SupplierReport\usrSupplierReport.resx">
       <DependentUpon>usrSupplierReport.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ADL001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="AGI001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="app.manifest" />
-    <None Include="ASP001 - statement - 17-July-2014.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="AST001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="AstrodonDataSet.xsc">
       <DependentUpon>AstrodonDataSet.xsd</DependentUpon>
     </None>
@@ -806,18 +794,6 @@
     </None>
     <None Include="AstrodonDataSet.xss">
       <DependentUpon>AstrodonDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="astroheader.psd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BOT001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BRI001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="CIS001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Clearances\Body Corporate Clearance certificate - SGA056.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -894,28 +870,7 @@
     <None Include="dic\it-IT.dic">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="EAS001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="envelopes\2015-05-13_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="ERI001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="fName.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="GEN001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="HOC001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="LIF001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="OPT001_env.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -950,9 +905,6 @@
     <None Include="rem_template.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="SEK001_env.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Service References\ReportService\Astrodon.ReportService.PastelMaintenanceTransaction.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -978,13 +930,7 @@
     <None Include="svt_remind_template.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="test.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="wbg_reminder_template.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="_env.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -1006,45 +952,33 @@
     <Content Include=".gitignore">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Arlene-Place.jpg">
+    <None Include="astbackground.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Ashford_01.jpg">
+    </None>
+    <None Include="astlogo.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="astbackground.png">
+    </None>
+    <None Include="astrodon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="astlogo.jpg">
+    </None>
+    <None Include="astroenvelope.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="astroA4.jpg">
+    </None>
+    <None Include="astrofooter.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="astroC5.jpg">
+    </None>
+    <None Include="astroheader.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="astrodon.png">
+    </None>
+    <None Include="astroWindow.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="astroenvelope.jpg">
+    </None>
+    <None Include="centrec.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="astrofooter.png">
+    </None>
+    <None Include="centrec.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="astroheader.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="astroWindow.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="centrec.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="centrec.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="DLL\Interop.PasSDK.dll" />
     <Content Include="DLL\Itenso.Rtf.Converter.Html.dll" />
     <Content Include="DLL\Itenso.Rtf.Converter.Xml.dll" />
@@ -1060,22 +994,26 @@
     <Content Include="DLL\NotificationWindow.dll" />
     <Content Include="DLL\OpenPop.dll" />
     <Content Include="DLL\Renci.SshNet.dll" />
-    <Content Include="Envelope-footer.png">
+    <None Include="Envelope-footer.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="envfooter.jpg">
+    </None>
+    <None Include="envfooter.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Handle.exe">
+    </None>
+    <None Include="Handle.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="NHunspell.dll" />
-    <Content Include="NHunspellExtender.dll" />
-    <Content Include="rem_HOA_template.jpg">
+    </None>
+    <None Include="rem_HOA_template.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="Resources\AstradonNewLogo.jpg" />
     <Content Include="Resources\stdmd5.jpg" />
+    <None Include="signature.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="stmt_template.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Service References\ReportService\item.disco" />
     <None Include="Service References\ReportService\configuration91.svcinfo" />
     <None Include="Service References\ReportService\configuration.svcinfo" />
@@ -1083,17 +1021,10 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="signature.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="stmt_template.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\stdmd5.png" />
     <None Include="Resources\astrodon.png" />
     <Content Include="astrodon_favicon.ico" />
     <None Include="Resources\centrec.png" />
-    <Content Include="Project.txt" />
     <None Include="Resources\1446_envelope_stamp_clsd_32.png" />
     <None Include="Resources\paste.png" />
     <None Include="Resources\cut.png" />

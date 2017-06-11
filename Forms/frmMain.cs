@@ -59,6 +59,21 @@ namespace Astrodon
             {
                 pMPAToolStripMenuItem.Enabled = false;
             }
+
+            List<int> allowReqUsers = new List<int>() { 15 };
+            if (allowReqUsers.Contains(Controller.user.id))
+            {
+                pMPAToolStripMenuItem.Enabled = true;
+                pMJobListToolStripMenuItem.Enabled = false;
+                this.jobListToolStripMenuItem.Enabled = false;
+                this.webMaintenanceToolStripMenuItem.Enabled = false;
+                this.webReportToolStripMenuItem.Enabled = false;
+                this.bulkEmailToolStripMenuItem.Enabled = false;
+                this.managementReportToolStripMenuItem.Enabled = false;
+                this.requisitionsToolStripMenuItem.Enabled = true;
+                this.buildingMaintenanceToolStripMenuItem.Enabled = false;
+                this.suppliersToolStripMenuItem1.Enabled = false;
+            }
             Controller.DependencyInitialization();
             LoadReminders();
             notifyIcon1.Visible = false;
@@ -534,7 +549,7 @@ namespace Astrodon
         private void suppliersToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext,null);
+            usrSupplierLookup supplierLookup = new usrSupplierLookup(_DataContext, null);
             supplierLookup.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(supplierLookup);
             toolStripStatusLabel1.Text = "Supplier Maintenance";

@@ -50,14 +50,15 @@ namespace Astrodon
                 auth = "4228113";
                 pastelDirectory = "C:\\Pastel11\\";
                 SDK.SetLicense(lc, auth);
-            }else if (Environment.MachineName == "STEPHEN-PC")
+            }
+            else if (Environment.MachineName == "STEPHEN-PC")
             {
                 lc = "DK12111473";
                 auth = "3627008";
                 pastelDirectory = "C:\\Pastel12\\";
                 SDK.SetLicense(lc, auth);
             }
-            else 
+            else
             {
                 lc = "DK11110068";
                 auth = "4228113";
@@ -465,6 +466,7 @@ namespace Astrodon
             String returner = String.Empty;
             if (pathReturner.Contains("99"))
             {
+                MessageBox.Show("Pastel SNAFU", "Pastel", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {

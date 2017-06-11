@@ -12,10 +12,10 @@ using Astrodon.Classes;
 using Astrodon.Data.MaintenanceData;
 using System.IO;
 using Astrodon.Data.RequisitionData;
+using iTextSharp.text.pdf;
 
 namespace Astrodon.Controls
 {
-
     public partial class usrRequisition : UserControl
     {
         private List<Building> _AllBuildings;
@@ -31,7 +31,6 @@ namespace Astrodon.Controls
         private List<Trns> buildTransactions = new List<Trns>();
         private String status;
         private DateTime _minDate = new DateTime(2000, 1, 1);
-
 
         public usrRequisition()
         {
@@ -66,7 +65,14 @@ namespace Astrodon.Controls
                 {
                     if (bid == b.ID && b.Web_Building && !myBuildings.Contains(b))
                     {
-                        myBuildings.Add(b);
+                        if (Controller.user.id == 15 && b.ID == 127)
+                        {
+                            myBuildings.Add(b);
+                        }
+                        else if (Controller.user.id != 15)
+                        {
+                            myBuildings.Add(b);
+                        }
                         break;
                     }
                 }
@@ -179,11 +185,9 @@ namespace Astrodon.Controls
                                 {
                                     unPaidRequisitions.Add(r);
                                 }
-
                             }
                         }
                     }
-
                 }
             }
             catch (Exception ex)
@@ -260,7 +264,6 @@ namespace Astrodon.Controls
 
                         if (!String.IsNullOrWhiteSpace(r.supplierName))
                         {
-
                             message += Environment.NewLine;
 
                             message += "Supplier Details" + Environment.NewLine;
@@ -269,9 +272,6 @@ namespace Astrodon.Controls
                             message += "VAT: " + r.supplierVat + Environment.NewLine;
                             message += "Contact Person: " + r.supplierContact + Environment.NewLine;
                             message += "Email :" + r.supplierEmail + Environment.NewLine;
-
-
-
                         }
 
                         if (!String.IsNullOrWhiteSpace(r.supplierBank))
@@ -285,8 +285,6 @@ namespace Astrodon.Controls
                         }
 
                         message += "-----------------------" + "." + Environment.NewLine + Environment.NewLine;
-
-
 
                         String query = "UPDATE tblRequisition SET processed = 'True' WHERE id = " + id;
                         if (message != "")
@@ -457,8 +455,7 @@ namespace Astrodon.Controls
             d = dTotal + requestedAmt < limitD;
         }
 
-
-        int? editRequisitonId = null;
+        private int? editRequisitonId = null;
 
         private void EditRequisition(RequisitionList req)
         {
@@ -473,9 +470,9 @@ namespace Astrodon.Controls
                 int buildingId = requisition.building;
 
                 trnDatePicker.Value = requisition.trnDate;
-                //       cmbBuilding.SelectedItem = myBuildings.Where(a => a.ID == buildingId);
+                // cmbBuilding.SelectedItem = myBuildings.Where(a => a.ID == buildingId);
 
-                //       cmbBuilding_SelectedIndexChanged(this, EventArgs.Empty);
+                // cmbBuilding_SelectedIndexChanged(this, EventArgs.Empty);
 
                 cmbAccount.SelectedValue = requisition.account;
                 cmbAccount_SelectedIndexChanged(this, EventArgs.Empty);
@@ -483,7 +480,6 @@ namespace Astrodon.Controls
                 {
                     dtInvoiceDate.Value = requisition.InvoiceDate.Value;
                 }
-
 
                 for (int x = 0; x < cmbLedger.Items.Count; x++)
                 {
@@ -509,7 +505,6 @@ namespace Astrodon.Controls
                         Controller.HandleError("Supplier banking details for this building is not configured.\n" +
                                             "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
 
-
                         var frmSupplierDetail = new frmSupplierDetail(context, _Supplier.id, buildingId);
                         frmSupplierDetail.ShowDialog();
 
@@ -533,20 +528,34 @@ namespace Astrodon.Controls
                 txtInvoiceNumber.Text = requisition.InvoiceNumber;
                 txtPaymentRef.Text = requisition.payreference;
                 txtAmount.Text = requisition.amount.ToString();
-
             }
-
-
-
         }
-
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
             bool dLimit, mLimit;
+            try
+            {
+                double.Parse(txtAmount.Text);
+            }
+            catch
+            {
+                Controller.HandleError("Invalid invoice amount", "Validation Error");
+                this.Cursor = Cursors.Arrow;
+                return;
+            }
+
             CheckLimits(double.Parse(txtAmount.Text), out dLimit, out mLimit);
             bool showPassword = false;
+
+            if (_Supplier == null)
+            {
+                Controller.HandleError("Supplier not selected, please select a supplier", "Validation Error");
+                this.Cursor = Cursors.Arrow;
+                return;
+            }
+
             if (!dLimit && editRequisitonId == null)
             {
                 if (MessageBox.Show("Daily limit exceeded. Enter password to continue?", "Requisitions", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -642,8 +651,6 @@ namespace Astrodon.Controls
                             this.Cursor = Cursors.Arrow;
                             return;
                         }
-                        
-
 
                         bankDetails = context.SupplierBuildingSet
                                                 .Include(a => a.Bank)
@@ -659,7 +666,6 @@ namespace Astrodon.Controls
                     tblRequisition item = null;
                     if (editRequisitonId == null)
                     {
-
                         item = new tblRequisition();
                         context.tblRequisitions.Add(item);
                     }
@@ -683,6 +689,13 @@ namespace Astrodon.Controls
                     item.BranchCode = bankDetails == null ? (string)null : bankDetails.BranceCode;
                     item.BranchName = bankDetails == null ? (string)null : bankDetails.BranchName;
                     item.AccountNumber = bankDetails == null ? (string)null : bankDetails.AccountNumber;
+
+                    if(editRequisitonId != null)
+                    {
+                        //clear all invoice attachments and load again
+                        var docs = context.RequisitionDocumentSet.Where(a => a.RequisitionId == editRequisitonId && a.IsInvoice == true).ToList();
+                        context.RequisitionDocumentSet.RemoveRange(docs);
+                    }
 
                     foreach (var key in _Documents.Keys)
                     {
@@ -731,11 +744,11 @@ namespace Astrodon.Controls
                 }
 
                 #region Recurring
+
                 //recurring is disabled
 
                 //if (cmbRecur.SelectedIndex > 0)
                 //{
-
                 //    DateTime startDate = trnDatePicker.Value;
                 //    List<DateTime> dates = new List<DateTime>();
                 //    switch (cmbRecur.SelectedIndex)
@@ -748,55 +761,49 @@ namespace Astrodon.Controls
                 //            }
                 //            break;
 
-                //        case 2: //month
-                //            while (startDate.AddMonths(1) <= dtEndDate.Value)
-                //            {
-                //                dates.Add(startDate.AddMonths(1));
-                //                startDate = startDate.AddMonths(1);
-                //            }
-                //            break;
+                // case 2: //month while (startDate.AddMonths(1) <= dtEndDate.Value) {
+                // dates.Add(startDate.AddMonths(1)); startDate = startDate.AddMonths(1); } break;
 
-                //        case 3: //yearly
-                //            while (startDate.AddYears(1) <= dtEndDate.Value)
-                //            {
-                //                dates.Add(startDate.AddYears(1));
-                //                startDate = startDate.AddYears(1);
-                //            }
-                //            break;
-                //    }
+                // case 3: //yearly while (startDate.AddYears(1) <= dtEndDate.Value) {
+                // dates.Add(startDate.AddYears(1)); startDate = startDate.AddYears(1); } break; }
 
-                //    #region Build Up SQL Query
+                // #region Build Up SQL Query
 
-                //    String query = "INSERT INTO tblRequisition(trnDate, account, reference, payreference, ledger, amount, userID, building,SupplierId,InvoiceNumber,InvoiceDate,BankName,BranchCode,AccountNumber,BranchName)";
-                //    query += " VALUES(@trnDate, @account, @reference, @payment, @ledger, @amount, @userID, @building,@SupplierId,@InvoiceNumber,@InvoiceDate,@BankName,@BranchCode,@AccountNumber,@BranchName)";
-                //    Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-                //    sqlParms.Add("@trnDate", DateTime.Parse(trnDatePicker.Value.ToString("yyyy/MM/dd")));
-                //    sqlParms.Add("@account", cmbAccount.SelectedItem.ToString());
-                //    sqlParms.Add("@reference", _MyBuildings[cmbBuilding.SelectedIndex].Abbr + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + _MyBuildings[cmbBuilding.SelectedIndex].Trust + ")" : ""));
-                //    sqlParms.Add("@ledger", cmbLedger.SelectedItem.ToString());
-                //    sqlParms.Add("@amount", double.Parse(txtAmount.Text));
-                //    sqlParms.Add("@payment", txtPaymentRef.Text);
-                //    sqlParms.Add("@userID", Controller.user.id);
-                //    sqlParms.Add("@building", _MyBuildings[cmbBuilding.SelectedIndex].ID);
-                //    sqlParms.Add("@SupplierId", _Supplier == null ? (int?)null : _Supplier.id);
-                //    sqlParms.Add("@InvoiceNumber", txtInvoiceNumber.Text);
-                //    sqlParms.Add("@InvoiceDate", dtInvoiceDate.Value.ToString("yyyy/MM/dd"));
+                // String query = "INSERT INTO tblRequisition(trnDate, account, reference,
+                // payreference, ledger, amount, userID,
+                // building,SupplierId,InvoiceNumber,InvoiceDate,BankName,BranchCode,AccountNumber,BranchName)";
+                // query += " VALUES(@trnDate, @account, @reference, @payment, @ledger, @amount,
+                // @userID,
+                // @building,@SupplierId,@InvoiceNumber,@InvoiceDate,@BankName,@BranchCode,@AccountNumber,@BranchName)";
+                // Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
+                // sqlParms.Add("@trnDate",
+                // DateTime.Parse(trnDatePicker.Value.ToString("yyyy/MM/dd")));
+                // sqlParms.Add("@account", cmbAccount.SelectedItem.ToString());
+                // sqlParms.Add("@reference", _MyBuildings[cmbBuilding.SelectedIndex].Abbr +
+                // (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" +
+                // _MyBuildings[cmbBuilding.SelectedIndex].Trust + ")" : ""));
+                // sqlParms.Add("@ledger", cmbLedger.SelectedItem.ToString());
+                // sqlParms.Add("@amount", double.Parse(txtAmount.Text)); sqlParms.Add("@payment",
+                // txtPaymentRef.Text); sqlParms.Add("@userID", Controller.user.id);
+                // sqlParms.Add("@building", _MyBuildings[cmbBuilding.SelectedIndex].ID);
+                // sqlParms.Add("@SupplierId", _Supplier == null ? (int?)null : _Supplier.id);
+                // sqlParms.Add("@InvoiceNumber", txtInvoiceNumber.Text);
+                // sqlParms.Add("@InvoiceDate", dtInvoiceDate.Value.ToString("yyyy/MM/dd"));
 
-                //    sqlParms.Add("@BankName", _Supplier == null ? (string)null : _Supplier.BankName);
-                //    sqlParms.Add("@BranchCode", _Supplier == null ? (string)null : _Supplier.BranceCode);
-                //    sqlParms.Add("@AccountNumber", _Supplier == null ? (string)null : _Supplier.AccountNumber);
-                //    sqlParms.Add("@BranchName", _Supplier == null ? (string)null : _Supplier.BranchName);
+                // sqlParms.Add("@BankName", _Supplier == null ? (string)null : _Supplier.BankName);
+                // sqlParms.Add("@BranchCode", _Supplier == null ? (string)null :
+                // _Supplier.BranceCode); sqlParms.Add("@AccountNumber", _Supplier == null ?
+                // (string)null : _Supplier.AccountNumber); sqlParms.Add("@BranchName", _Supplier ==
+                // null ? (string)null : _Supplier.BranchName);
 
-                //    #endregion
+                // #endregion
 
-                //    foreach (DateTime dt in dates)
-                //    {
-                //        sqlParms["@trnDate"] = dt;
-                //        dh.SetData(query, sqlParms, out status);
-                //    }
+                // foreach (DateTime dt in dates) { sqlParms["@trnDate"] = dt; dh.SetData(query,
+                // sqlParms, out status); }
 
                 //}
-                #endregion
+
+                #endregion Recurring
 
                 LoadRequisitions();
                 ClearRequisitions();
@@ -891,7 +898,6 @@ namespace Astrodon.Controls
                     LoadRequisitions();
                     dgUnprocessed.Invalidate();
                     UpdateBalanceLabel();
-                  
                 }
 
                 foreach (DataGridViewRow dvr in dgUnprocessed.SelectedRows)
@@ -972,7 +978,6 @@ namespace Astrodon.Controls
             {
                 Controller.HandleError("Please select a building first.", "Validation Error");
                 return;
-
             }
             var buildingId = myBuildings[cmbBuilding.SelectedIndex].ID;
 
@@ -988,7 +993,6 @@ namespace Astrodon.Controls
                     _Supplier = supplier;
                     lbSupplierName.Text = _Supplier.CompanyName;
 
-
                     var bankDetails = context.SupplierBuildingSet
                                              .Include(a => a.Bank)
                                              .SingleOrDefault(a => a.BuildingId == buildingId && a.SupplierId == _Supplier.id);
@@ -996,7 +1000,6 @@ namespace Astrodon.Controls
                     {
                         Controller.HandleError("Supplier banking details for this building is not configured.\n" +
                                             "Please capture bank details for this building on the suppier detail screen.", "Validation Error");
-
 
                         var frmSupplierDetail = new frmSupplierDetail(context, _Supplier.id, buildingId);
                         frmSupplierDetail.ShowDialog();
@@ -1009,7 +1012,6 @@ namespace Astrodon.Controls
                             _Supplier = null;
                             return;
                         }
-
                     }
 
                     lbBankName.Text = bankDetails.Bank.Name + " (" + bankDetails.BranceCode + ")";
@@ -1052,7 +1054,6 @@ namespace Astrodon.Controls
             {
                 Controller.HandleError("Please select a building first.", "Validation Error");
                 return;
-
             }
             String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
             String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
@@ -1081,8 +1082,6 @@ namespace Astrodon.Controls
             }
         }
 
-
-
         private void UpdatePaidStatus(int idx)
         {
             RequisitionList req = unPaidRequisitions[idx];
@@ -1107,9 +1106,40 @@ namespace Astrodon.Controls
             {
                 for (int i = 0; i < ofdAttachment.FileNames.Count(); i++)
                 {
-                    _Documents.Add(ofdAttachment.SafeFileNames[i], File.ReadAllBytes(ofdAttachment.FileNames[i]));
+                    if (IsValidPdf(ofdAttachment.FileNames[i]))
+                    {
+                        if (_Documents.Keys.Contains(ofdAttachment.SafeFileNames[i]))
+                            _Documents[ofdAttachment.SafeFileNames[i]] = File.ReadAllBytes(ofdAttachment.FileNames[i]);
+                        else
+                            _Documents.Add(ofdAttachment.SafeFileNames[i], File.ReadAllBytes(ofdAttachment.FileNames[i]));
+                    }
+                    else
+                    {
+                        Controller.HandleError("Invalid PDF\n" + ofdAttachment.FileNames[i] + "\n Please load a different pdf");
+                    }
                 }
             }
+        }
+
+        private bool IsValidPdf(string filepath)
+        {
+            bool Ret = true;
+
+            PdfReader reader = null;
+
+            try
+            {
+                using (reader = new PdfReader(filepath))
+                {
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                Ret = false;
+            }
+
+            return Ret;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -1138,10 +1168,7 @@ namespace Astrodon.Controls
         public double accBalance { get; set; }
 
         public double amount { get; set; }
-
     }
-
-
 
     public class RequisitionList
     {

@@ -38,7 +38,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tbBatchesTab = new System.Windows.Forms.TabPage();
             this.dgItems = new System.Windows.Forms.DataGridView();
-            this.btnDownload = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.tbBatches.SuspendLayout();
@@ -63,7 +62,7 @@
             this.tbBatches.Location = new System.Drawing.Point(6, 3);
             this.tbBatches.Name = "tbBatches";
             this.tbBatches.SelectedIndex = 0;
-            this.tbBatches.Size = new System.Drawing.Size(829, 512);
+            this.tbBatches.Size = new System.Drawing.Size(948, 512);
             this.tbBatches.TabIndex = 63;
             // 
             // tbNewBatch
@@ -76,7 +75,7 @@
             this.tbNewBatch.Location = new System.Drawing.Point(4, 22);
             this.tbNewBatch.Name = "tbNewBatch";
             this.tbNewBatch.Padding = new System.Windows.Forms.Padding(3);
-            this.tbNewBatch.Size = new System.Drawing.Size(821, 486);
+            this.tbNewBatch.Size = new System.Drawing.Size(940, 486);
             this.tbNewBatch.TabIndex = 0;
             this.tbNewBatch.Text = "New Batch";
             this.tbNewBatch.UseVisualStyleBackColor = true;
@@ -117,7 +116,7 @@
             this.dgPendingTransactions.Location = new System.Drawing.Point(13, 59);
             this.dgPendingTransactions.Name = "dgPendingTransactions";
             this.dgPendingTransactions.ReadOnly = true;
-            this.dgPendingTransactions.Size = new System.Drawing.Size(795, 421);
+            this.dgPendingTransactions.Size = new System.Drawing.Size(921, 421);
             this.dgPendingTransactions.TabIndex = 68;
             // 
             // button1
@@ -133,13 +132,12 @@
             // tbBatchesTab
             // 
             this.tbBatchesTab.Controls.Add(this.dgItems);
-            this.tbBatchesTab.Controls.Add(this.btnDownload);
             this.tbBatchesTab.Controls.Add(this.label3);
             this.tbBatchesTab.Controls.Add(this.cmbBuilding);
             this.tbBatchesTab.Location = new System.Drawing.Point(4, 22);
             this.tbBatchesTab.Name = "tbBatchesTab";
             this.tbBatchesTab.Padding = new System.Windows.Forms.Padding(3);
-            this.tbBatchesTab.Size = new System.Drawing.Size(821, 486);
+            this.tbBatchesTab.Size = new System.Drawing.Size(940, 486);
             this.tbBatchesTab.TabIndex = 1;
             this.tbBatchesTab.Text = "Batch History";
             this.tbBatchesTab.UseVisualStyleBackColor = true;
@@ -153,21 +151,9 @@
             this.dgItems.Location = new System.Drawing.Point(18, 49);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(795, 368);
+            this.dgItems.Size = new System.Drawing.Size(916, 431);
             this.dgItems.TabIndex = 67;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
-            // 
-            // btnDownload
-            // 
-            this.btnDownload.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnDownload.Location = new System.Drawing.Point(369, 20);
-            this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(144, 23);
-            this.btnDownload.TabIndex = 66;
-            this.btnDownload.Text = "Create Requisiton Batch";
-            this.btnDownload.UseVisualStyleBackColor = true;
-            this.btnDownload.Visible = false;
-            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click_1);
             // 
             // label3
             // 
@@ -194,7 +180,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tbBatches);
             this.Name = "usrRequisitionBatch";
-            this.Size = new System.Drawing.Size(858, 528);
+            this.Size = new System.Drawing.Size(957, 528);
             this.tbBatches.ResumeLayout(false);
             this.tbNewBatch.ResumeLayout(false);
             this.tbNewBatch.PerformLayout();
@@ -216,7 +202,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabPage tbBatchesTab;
         private System.Windows.Forms.DataGridView dgItems;
-        private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.Label lbProcessing;

@@ -113,5 +113,17 @@ namespace Astrodon.Data
                 }
             }
         }
+
+
+        public void CommitRequisitionBatch(int requisitionBatchId)
+        {
+            Database.ExecuteSqlCommand("update tblRequisition set processed = 1 where RequisitionBatchId = " + requisitionBatchId.ToString());
+        }
+
+        public void RequisitionBatchRollback(int requisitionBatchId)
+        {
+            Database.ExecuteSqlCommand("update tblRequisition set processed = 0, RequisitionBatchId = null where RequisitionBatchId = " + requisitionBatchId.ToString());
+            Database.ExecuteSqlCommand("delete from RequisitionBatch where id =" + requisitionBatchId.ToString());
+        }
     }
 }
