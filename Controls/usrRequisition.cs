@@ -383,11 +383,11 @@ namespace Astrodon.Controls
             lblAvAmt.Refresh();
             bool dailyExceed, monthExceed;
             double monthLimit, dailyLimit = 0;
-            CheckLimits(requestedAmt, out dailyExceed, out monthExceed, out monthLimit, out dailyLimit);
-            lblDayLimit.Text = dailyLimit.ToString("#,##0.00");
-            lblMonthLimit.Text = monthLimit.ToString("#,##0.00");
-            lblDayLimit.Refresh();
-            lblMonthLimit.Refresh();
+            //CheckLimits(requestedAmt, out dailyExceed, out monthExceed, out monthLimit, out dailyLimit);
+            //lblDayLimit.Text = dailyLimit.ToString("#,##0.00");
+            //lblMonthLimit.Text = monthLimit.ToString("#,##0.00");
+            //lblDayLimit.Refresh();
+            //lblMonthLimit.Refresh();
         }
 
         private double GetBuildingBalance()
@@ -480,7 +480,7 @@ namespace Astrodon.Controls
                 MessageBox.Show("Daily = " + (dPastelTotal + unprocDaily + unpaidDaily).ToString());
             }
 
-            m = (mPastelTotal + unprocMonth +  unpaidMonth) + requestedAmt < limitM;
+            m = (mPastelTotal + unprocMonth + unpaidMonth) + requestedAmt < limitM;
             d = (dPastelTotal + unprocDaily + unpaidDaily) + requestedAmt < limitD;
 
             md = limitM - (mPastelTotal + unprocMonth + unpaidMonth);
@@ -722,7 +722,7 @@ namespace Astrodon.Controls
                     item.BranchName = bankDetails == null ? (string)null : bankDetails.BranchName;
                     item.AccountNumber = bankDetails == null ? (string)null : bankDetails.AccountNumber;
 
-                    if(editRequisitonId != null)
+                    if (editRequisitonId != null)
                     {
                         //clear all invoice attachments and load again
                         var docs = context.RequisitionDocumentSet.Where(a => a.RequisitionId == editRequisitonId && a.IsInvoice == true).ToList();
