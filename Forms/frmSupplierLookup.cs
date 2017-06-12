@@ -18,7 +18,7 @@ namespace Astrodon.Forms
 
         public Data.SupplierData.Supplier SelectedSupplier { get ; private set; }
 
-        public frmSupplierLookup(DataContext context, int buildingId)
+        public frmSupplierLookup(DataContext context, int? buildingId = null)
         {
             InitializeComponent();
             DialogResult = DialogResult.Cancel;

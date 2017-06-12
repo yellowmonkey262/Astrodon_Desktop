@@ -756,7 +756,6 @@
             this.ofdAttachment.FileName = "openFileDialog1";
             this.ofdAttachment.Filter = "PDF Files (*.pdf)|*.pdf";
             this.ofdAttachment.InitialDirectory = "c:\\\\";
-            this.ofdAttachment.Multiselect = true;
             this.ofdAttachment.RestoreDirectory = true;
             // 
             // btnCancel
