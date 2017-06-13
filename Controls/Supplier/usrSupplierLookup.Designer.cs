@@ -126,7 +126,7 @@
             this.dgSuppliers.Location = new System.Drawing.Point(26, 190);
             this.dgSuppliers.Name = "dgSuppliers";
             this.dgSuppliers.ReadOnly = true;
-            this.dgSuppliers.Size = new System.Drawing.Size(795, 369);
+            this.dgSuppliers.Size = new System.Drawing.Size(951, 369);
             this.dgSuppliers.TabIndex = 9;
             this.dgSuppliers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgSuppliers_CellContentClick);
             // 
@@ -168,7 +168,7 @@
             this.Controls.Add(this.lblCompanyName);
             this.Controls.Add(this.lblTitle);
             this.Name = "usrSupplierLookup";
-            this.Size = new System.Drawing.Size(844, 578);
+            this.Size = new System.Drawing.Size(980, 578);
             ((System.ComponentModel.ISupportInitialize)(this.dgSuppliers)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

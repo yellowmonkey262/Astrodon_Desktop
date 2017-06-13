@@ -115,14 +115,25 @@ namespace Astrodon.Controls
                     List<Trns> transactions = new List<Trns>();
                     if (unpaidDS != null && unpaidDS.Tables.Count > 0 && unpaidDS.Tables[0].Rows.Count > 0)
                     {
+                        lineNumber = "99";
                         int unpaids = (int.TryParse(unpaidDS.Tables[0].Rows[0]["unpaids"].ToString(), out unpaids) ? unpaids : 0);
+                        lineNumber = "100";
                         if (unpaids > 0)
                         {
+                            lineNumber = "101";
                             hasUnpaids = true;
-                            String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
-                            String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
-                            transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc);
-                            transactions = transactions.OrderByDescending(a => a.Date).ToList();
+                            if (cmbAccount.SelectedItem != null)
+                            {
+                                String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
+                                lineNumber = "102";
+                                String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
+                                lineNumber = "103";
+                                transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc);
+                                lineNumber = "104";
+                                if (transactions != null)
+                                    transactions = transactions.OrderByDescending(a => a.Date).ToList();
+                                lineNumber = "105";
+                            }
                         }
                     }
 
@@ -192,7 +203,7 @@ namespace Astrodon.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Loading " + lineNumber + ":" + ex.Message);
+                MessageBox.Show("Loading " + lineNumber + ":" + ex.Message + "\n" + ex.StackTrace);
             }
         }
 

@@ -30,6 +30,8 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cbSupplierBankAccount = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.dtInvoiceDate = new System.Windows.Forms.DateTimePicker();
             this.label14 = new System.Windows.Forms.Label();
             this.btnSupplierLookup = new System.Windows.Forms.Button();
@@ -42,6 +44,7 @@
             this.dgItems = new System.Windows.Forms.DataGridView();
             this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
             this.btnSave = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
             this.SuspendLayout();
@@ -57,6 +60,9 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.cbSupplierBankAccount);
+            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.dtInvoiceDate);
             this.panel1.Controls.Add(this.label14);
             this.panel1.Controls.Add(this.btnSupplierLookup);
@@ -68,8 +74,25 @@
             this.panel1.Controls.Add(this.cmbLedger);
             this.panel1.Location = new System.Drawing.Point(9, 33);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(529, 136);
+            this.panel1.Size = new System.Drawing.Size(621, 165);
             this.panel1.TabIndex = 53;
+            // 
+            // cbSupplierBankAccount
+            // 
+            this.cbSupplierBankAccount.FormattingEnabled = true;
+            this.cbSupplierBankAccount.Location = new System.Drawing.Point(156, 134);
+            this.cbSupplierBankAccount.Name = "cbSupplierBankAccount";
+            this.cbSupplierBankAccount.Size = new System.Drawing.Size(293, 21);
+            this.cbSupplierBankAccount.TabIndex = 63;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 137);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(112, 13);
+            this.label2.TabIndex = 62;
+            this.label2.Text = "Default Bank Account";
             // 
             // dtInvoiceDate
             // 
@@ -164,7 +187,7 @@
             this.dgItems.Location = new System.Drawing.Point(9, 204);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(1226, 426);
+            this.dgItems.Size = new System.Drawing.Size(1338, 426);
             this.dgItems.TabIndex = 69;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             this.dgItems.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgItems_DataBindingComplete);
@@ -179,13 +202,23 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(1160, 636);
+            this.btnSave.Location = new System.Drawing.Point(1275, 636);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 70;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(455, 132);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(107, 23);
+            this.button1.TabIndex = 64;
+            this.button1.Text = "Set as default";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // usrSupplierBatchRequisition
             // 
@@ -196,7 +229,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Name = "usrSupplierBatchRequisition";
-            this.Size = new System.Drawing.Size(1238, 664);
+            this.Size = new System.Drawing.Size(1350, 664);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).EndInit();
@@ -220,5 +253,8 @@
         private System.Windows.Forms.DataGridView dgItems;
         private System.Windows.Forms.OpenFileDialog ofdAttachment;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.ComboBox cbSupplierBankAccount;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button1;
     }
 }

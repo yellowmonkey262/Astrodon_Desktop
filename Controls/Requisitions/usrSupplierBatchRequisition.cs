@@ -27,6 +27,7 @@ namespace Astrodon.Controls.Requisitions
         private List<PastelAccount> _DefaultList = null;
         private bool _AttachmentRequired = true;
         private List<Astrodon.Data.BankData.Bank> _BankList = null;
+        private List<SupplierBankAccountDetail> _SupplierBankAccounts = null;
 
         public usrSupplierBatchRequisition()
         {
@@ -167,7 +168,8 @@ namespace Astrodon.Controls.Requisitions
                                 BranchName = bank.BranchName,
                                 BankId = bank.id,
                                 BankAlreadyLinked = true,
-                                OwnTrustAccount = "OWN"
+                                OwnTrustAccount = "OWN",
+                                IsOwnAccount = b.bank == "OWN" ? true: false
                             };
 
                     _SupplierBuildingList = q.ToList();
@@ -193,12 +195,28 @@ namespace Astrodon.Controls.Requisitions
                                  BranchCode = null,
                                  BranchName = null,
                                  BankAlreadyLinked = false,
-                                 OwnTrustAccount = "OWN"
+                                 OwnTrustAccount = "OWN",
+                                 IsOwnAccount = b.bank == "OWN" ? true : false
                              };
 
                     _SupplierBuildingList.AddRange(q2.ToList());
 
                     _SupplierBuildingList = _SupplierBuildingList.OrderBy(a => a.BuildingName).ToList();
+
+                    var qBank = from sb in context.SupplierBuildingSet
+                            select new SupplierBankAccountDetail()
+                            {
+                                BankId = sb.BankId,
+                                BankName = sb.Bank.Name,
+                                BranchCode = sb.BranceCode,
+                                AccountNumber = sb.AccountNumber,
+                                BranchName = sb.BranchName
+                            };
+
+                    _SupplierBankAccounts = qBank.Distinct().OrderBy(a => a.BankName).ToList();
+                    cbSupplierBankAccount.DataSource = _SupplierBankAccounts;
+                    cbSupplierBankAccount.ValueMember = "BankId";
+                    cbSupplierBankAccount.DisplayMember = "DisplayString";
 
                     LoadBuildingsGrid();
                 }
@@ -415,6 +433,7 @@ namespace Astrodon.Controls.Requisitions
                 var trustCombo = row.Cells["OwnTrust"] as DataGridViewComboBoxCell;
                 trustCombo.ReadOnly = false;
                 trustCombo.DataSource = new List<string>() { "OWN", "TRUST" };
+                reqItem.OwnTrustAccount = reqItem.IsOwnAccount ? "OWN" : "TRUST";
 
                 var tbc = row.Cells["BranchCode"] as DataGridViewTextBoxCell;
                 tbc.ReadOnly = reqItem.BankAlreadyLinked;
@@ -655,6 +674,28 @@ namespace Astrodon.Controls.Requisitions
                 NewValue = updatedBuildingItem.AccountNumber,
             });
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var selItem = cbSupplierBankAccount.SelectedItem as SupplierBankAccountDetail;
+
+            if (selItem != null)
+            {
+                if (_SupplierBuildingList != null && _SupplierBuildingList.Count > 0)
+                {
+                    var items = _SupplierBuildingList.Where(a => a.BankAlreadyLinked == false).ToList();
+                    foreach (var itm in items)
+                    {
+                        itm.BankId = selItem.BankId;
+                        itm.BranchCode = selItem.BranchCode;
+                        itm.BranchName = selItem.BranchName;
+                        itm.SupplierBankAccount = selItem.AccountNumber;
+                        itm.Refresh();
+                    }
+                }
+            }
+
+        }
     }
 
 
@@ -808,6 +849,7 @@ namespace Astrodon.Controls.Requisitions
 
         public List<Data.BankData.Bank> BankList { get;  set; }
         public bool BankAlreadyLinked { get; internal set; }
+        public bool IsOwnAccount { get; internal set; }
 
         public void Refresh()
         {
@@ -829,6 +871,20 @@ namespace Astrodon.Controls.Requisitions
                 return AccountNumber + ": " + AccountName;
             }
         }
+    }
 
+    class SupplierBankAccountDetail
+    {
+        public int BankId { get; set; }
+
+        public string BranchCode { get; set; }
+
+        public string BankName { get; set; }
+
+        public string AccountNumber { get; set; }
+
+        public string DisplayString { get { return BankName + ": " + AccountNumber; } }
+
+        public string BranchName { get; internal set; }
     }
 }

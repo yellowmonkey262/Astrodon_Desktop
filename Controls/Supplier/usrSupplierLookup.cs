@@ -241,6 +241,8 @@ namespace Astrodon.Controls.Supplier
                     HeaderText = "Action",
                     Text = "Select",
                     UseColumnTextForButtonValue = true,
+                    Width = 100,
+                    MinimumWidth = 100
                 });
             }
             
@@ -248,7 +250,9 @@ namespace Astrodon.Controls.Supplier
             {
                 HeaderText = "Action",
                 Text = "Edit",
-                UseColumnTextForButtonValue = true
+                UseColumnTextForButtonValue = true,
+                Width = 100,
+                MinimumWidth = 100
             });
 
             dgSuppliers.AutoResizeColumns();
