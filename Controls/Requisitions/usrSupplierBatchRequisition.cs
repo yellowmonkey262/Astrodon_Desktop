@@ -13,6 +13,8 @@ using iTextSharp.text.pdf;
 using Astrodon.Data;
 using Astrodon.Data.RequisitionData;
 using System.IO;
+using Astrodon.Data.BankData;
+using Astrodon.Data.SupplierData;
 
 namespace Astrodon.Controls.Requisitions
 {
@@ -24,15 +26,24 @@ namespace Astrodon.Controls.Requisitions
         private List<BuildingRequisitionItem> _SupplierBuildingList = null;
         private List<PastelAccount> _DefaultList = null;
         private bool _AttachmentRequired = true;
+        private List<Astrodon.Data.BankData.Bank> _BankList = null;
 
         public usrSupplierBatchRequisition()
         {
             InitializeComponent();
-            LoadDropDowns();
             LoadBuildings();
             LoadAccountList();
+            LoadBanks();
             dtInvoiceDate.Value = _minDate;
             dtInvoiceDate.MinDate = _minDate;
+        }
+
+        private void LoadBanks()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                _BankList = context.BankSet.OrderBy(a => a.Name).ToList();
+            }
         }
 
         private void LoadAccountList()
@@ -49,9 +60,9 @@ namespace Astrodon.Controls.Requisitions
 
         private void cmbLedger_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(_SupplierBuildingList != null)
+            if (_SupplierBuildingList != null)
             {
-                foreach(var itm in _SupplierBuildingList)
+                foreach (var itm in _SupplierBuildingList)
                 {
                     itm.SetSelectedAccount(cmbLedger.SelectedValue as string);
                 }
@@ -89,13 +100,6 @@ namespace Astrodon.Controls.Requisitions
                 Controller.HandleError(e);
                 return new List<PastelAccount>();
             }
-        }
-
-        private void LoadDropDowns()
-        {
-            cmbAccount.Items.Clear();
-            cmbAccount.Items.Add("TRUST");
-            cmbAccount.Items.Add("OWN");
         }
 
 
@@ -160,10 +164,42 @@ namespace Astrodon.Controls.Requisitions
                                 SupplierBank = bank.Name,
                                 InvoiceAttachmentRequired = _AttachmentRequired,
                                 BranchCode = bank.BranchCode,
-                                BranchName = bank.BranchName
+                                BranchName = bank.BranchName,
+                                BankId = bank.id,
+                                BankAlreadyLinked = true,
+                                OwnTrustAccount = "OWN"
                             };
 
-                    _SupplierBuildingList = q.OrderBy(a => a.BuildingName).ToList();
+                    _SupplierBuildingList = q.ToList();
+
+                    //now add all the buildings not in the list
+                    int[] exclude = _SupplierBuildingList.Select(a => a.BuildingId).Distinct().ToArray();
+                    int[] buldingList = buildings.Except(exclude).ToArray();
+
+                    var q2 = from b in context.tblBuildings
+                             where buldingList.Contains(b.id)
+                             select new BuildingRequisitionItem()
+                             {
+                                 BuildingId = b.id,
+                                 BuildingName = b.Building,
+                                 BuildingAbreviatio = b.Code,
+                                 BuildingTrustAccount = b.AccNumber,
+                                 BuildingDataPath = b.DataPath,
+                                 InvoiceDate = invoiceDate,
+                                 InvoiceAttachmentRequired = _AttachmentRequired,
+                                 BankId = null,
+                                 SupplierBankAccount = null,
+                                 SupplierBank = null,
+                                 BranchCode = null,
+                                 BranchName = null,
+                                 BankAlreadyLinked = false,
+                                 OwnTrustAccount = "OWN"
+                             };
+
+                    _SupplierBuildingList.AddRange(q2.ToList());
+
+                    _SupplierBuildingList = _SupplierBuildingList.OrderBy(a => a.BuildingName).ToList();
+
                     LoadBuildingsGrid();
                 }
                 else
@@ -193,6 +229,7 @@ namespace Astrodon.Controls.Requisitions
             {
                 sb.PastelAccountList = LoadPastelAccountsForBuilding(sb.BuildingDataPath);
                 sb.SetSelectedAccount(cmbLedger.SelectedValue as string);
+                sb.BankList = _BankList.ToList();
             }
             BindDataGrid();
         }
@@ -239,8 +276,17 @@ namespace Astrodon.Controls.Requisitions
             dgItems.Columns.Add(new DataGridViewComboBoxColumn()
             {
                 Name = "Account",
+                HeaderText = "Ledger",
                 ReadOnly = false,
                 MinimumWidth = 120
+            });
+
+            dgItems.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                Name = "OwnTrust",
+                DataPropertyName = "OwnTrustAccount",
+                HeaderText = "Account",
+                ReadOnly = false
             });
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
@@ -296,15 +342,34 @@ namespace Astrodon.Controls.Requisitions
                 ReadOnly = true
             });
 
-            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            dgItems.Columns.Add(new DataGridViewComboBoxColumn()
             {
-                DataPropertyName = "SupplierBank",
-                HeaderText = "Supplier Bank",
-                ReadOnly = true
+                Name = "Bank",
+                DataPropertyName = "BankId",
+                HeaderText = "Bank",
+                ReadOnly = false
             });
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
             {
+                Name = "BranchName",
+                DataPropertyName = "BranchName",
+                HeaderText = "Branch",
+                ReadOnly = false
+            });
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                Name = "BranchCode",
+                DataPropertyName = "BranchCode",
+                HeaderText = "Branch Code",
+                ReadOnly = false
+            });
+
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                Name = "SupplierBankAccount",
                 DataPropertyName = "SupplierBankAccount",
                 HeaderText = "Account Number",
                 ReadOnly = true
@@ -334,9 +399,31 @@ namespace Astrodon.Controls.Requisitions
                 reqItem.InvoiceDateControl = row.Cells["InvoiceDateX"] as DataGridViewTextBoxCell;
 
                 if (reqItem.SelectedAccount != null)
-                  comboBox.Value = reqItem.SelectedAccount.AccountNumber;
+                    comboBox.Value = reqItem.SelectedAccount.AccountNumber;
 
                 reqItem.ComboBox = comboBox;
+
+                //load bank combo
+
+
+                var bankCombo = row.Cells["Bank"] as DataGridViewComboBoxCell;
+                bankCombo.ReadOnly = reqItem.BankAlreadyLinked;
+                bankCombo.DataSource = reqItem.BankList;
+                bankCombo.DisplayMember = "Name";
+                bankCombo.ValueMember = "id";
+
+                var trustCombo = row.Cells["OwnTrust"] as DataGridViewComboBoxCell;
+                trustCombo.ReadOnly = false;
+                trustCombo.DataSource = new List<string>() { "OWN", "TRUST" };
+
+                var tbc = row.Cells["BranchCode"] as DataGridViewTextBoxCell;
+                tbc.ReadOnly = reqItem.BankAlreadyLinked;
+
+                tbc = row.Cells["BranchName"] as DataGridViewTextBoxCell;
+                tbc.ReadOnly = reqItem.BankAlreadyLinked;
+
+                tbc = row.Cells["SupplierBankAccount"] as DataGridViewTextBoxCell;
+                tbc.ReadOnly = reqItem.BankAlreadyLinked;
 
             }
         }
@@ -413,21 +500,15 @@ namespace Astrodon.Controls.Requisitions
                 return;
             }
 
-            if (cmbAccount.SelectedItem == null)
-            {
-                Controller.HandleError("Please select OWN/TRUST account", "Validation Error");
-                return;
-            }
 
             var requisitionsToSave = _SupplierBuildingList.Where(a => a.Amount > 0).ToList();
 
 
-
             var x = requisitionsToSave.Where(a => a.IsValid == false).Count();
-            if(x > 0)
+            if (x > 0)
             {
-                Controller.HandleError("There are " + x.ToString() + 
-                    " invalid requisitions.\n Please check that all items\n"+
+                Controller.HandleError("There are " + x.ToString() +
+                    " invalid requisitions.\n Please check that all items\n" +
                     "To ignore a building clear the Amount column");
                 return;
             }
@@ -477,14 +558,14 @@ namespace Astrodon.Controls.Requisitions
                         context.tblRequisitions.Add(item);
 
                         item.trnDate = trnDatePicker.Value.Date;
-                        item.account = cmbAccount.SelectedItem.ToString();
-                        item.reference = requisition.BuildingAbreviatio + (cmbAccount.SelectedItem.ToString() == "TRUST" ? " (" + requisition.BuildingTrustAccount + ")" : "");
+                        item.account = requisition.OwnTrustAccount;
+                        item.reference = requisition.BuildingAbreviatio + (requisition.OwnTrustAccount == "TRUST" ? " (" + requisition.BuildingTrustAccount + ")" : "");
                         item.ledger = requisition.AccountNumberToDisplay;
                         item.amount = requisition.Amount.Value;
                         item.payreference = requisition.SupplierReference;
                         item.userID = Controller.user.id;
                         item.building = requisition.BuildingId;
-                        item.SupplierId =  _Supplier.id;
+                        item.SupplierId = _Supplier.id;
                         item.InvoiceNumber = requisition.InvoiceNumber;
                         item.InvoiceDate = dtInvoiceDate.Value;
                         item.BankName = requisition.SupplierBank;
@@ -502,6 +583,22 @@ namespace Astrodon.Controls.Requisitions
                                 IsInvoice = true
                             });
                         }
+
+                        if (!requisition.BankAlreadyLinked)
+                        {
+                            //link the bank to the supplier
+                            var supBank = new SupplierBuilding()
+                            {
+                                BuildingId = requisition.BuildingId,
+                                AccountNumber = requisition.SupplierBankAccount,
+                                BankId = requisition.BankId.Value,
+                                BranceCode = requisition.BranchCode,
+                                BranchName = requisition.BranchName,
+                                SupplierId = _Supplier.id
+                            };
+                            context.SupplierBuildingSet.Add(supBank);
+                            LoadBuildingAudit(supBank, context);
+                        }
                     }
 
                     context.SaveChanges();
@@ -514,6 +611,49 @@ namespace Astrodon.Controls.Requisitions
             {
                 this.Cursor = Cursors.Default;
             }
+        }
+
+
+        private void LoadBuildingAudit(SupplierBuilding updatedBuildingItem, DataContext context)
+        {
+            var bank = context.BankSet.Single(a => a.id == updatedBuildingItem.BankId);
+
+            context.SupplierBuildingAuditSet.Add(new SupplierBuildingAudit()
+            {
+                SupplierBuilding = updatedBuildingItem,
+                UserId = Controller.user.id,
+                AuditTimeStamp = DateTime.Now,
+                FieldName = "Bank",
+                OldValue = null,
+                NewValue = bank.Name
+            });
+            context.SupplierBuildingAuditSet.Add(new SupplierBuildingAudit()
+            {
+                SupplierBuilding = updatedBuildingItem,
+                UserId = Controller.user.id,
+                AuditTimeStamp = DateTime.Now,
+                FieldName = "BranchName",
+                OldValue = null,
+                NewValue = updatedBuildingItem.BranchName
+            });
+            context.SupplierBuildingAuditSet.Add(new SupplierBuildingAudit()
+            {
+                SupplierBuilding = updatedBuildingItem,
+                UserId = Controller.user.id,
+                AuditTimeStamp = DateTime.Now,
+                FieldName = "BranceCode",
+                OldValue = null,
+                NewValue = updatedBuildingItem.BranceCode
+            });
+            context.SupplierBuildingAuditSet.Add(new SupplierBuildingAudit()
+            {
+                SupplierBuilding = updatedBuildingItem,
+                UserId = Controller.user.id,
+                AuditTimeStamp = DateTime.Now,
+                FieldName = "AccountNumber",
+                OldValue = null,
+                NewValue = updatedBuildingItem.AccountNumber,
+            });
         }
     }
 
@@ -623,8 +763,14 @@ namespace Astrodon.Controls.Requisitions
                     && fileOk
                     && ComboBox != null && ComboBox.Value != null
                     && !String.IsNullOrWhiteSpace( AccountNumberToUse)
+                    && !String.IsNullOrWhiteSpace(OwnTrustAccount)
                     )
-                    return true;
+                {
+                    if (BankAlreadyLinked)
+                        return true;
+
+                    return BankId > 0 && !String.IsNullOrWhiteSpace(BranchName) && !String.IsNullOrWhiteSpace(BranchCode) && !String.IsNullOrWhiteSpace(SupplierBankAccount);
+                }
                 else
                     return false;
             }
@@ -632,10 +778,36 @@ namespace Astrodon.Controls.Requisitions
 
         public DataGridViewRow DataRow { get;  set; }
         public bool InvoiceAttachmentRequired { get;  set; }
-        public string BuildingAbreviatio { get; internal set; }
-        public string BuildingTrustAccount { get; internal set; }
-        public string BranchCode { get; internal set; }
-        public string BranchName { get; internal set; }
+        public string BuildingAbreviatio { get;  set; }
+        public string BuildingTrustAccount { get;  set; }
+        public string BranchCode { get;  set; }
+        public string BranchName { get;  set; }
+        public string OwnTrustAccount { get; set; }
+        private int? _BankId;
+        public int? BankId
+        {
+            get
+            {
+                return _BankId;
+            }
+            set
+            {
+                _BankId = value;
+                if(value != null && String.IsNullOrWhiteSpace(BranchCode) && String.IsNullOrWhiteSpace(BranchName))
+                {
+                    var b = BankList.SingleOrDefault(a => a.id == _BankId);
+                    if(b != null && !String.IsNullOrWhiteSpace( b.BranchCode))
+                    {
+                        this.BranchCode = b.BranchCode;
+                        this.BranchName = b.BranchName;
+                        Refresh();
+                    }
+                }
+            }
+        }
+
+        public List<Data.BankData.Bank> BankList { get;  set; }
+        public bool BankAlreadyLinked { get; internal set; }
 
         public void Refresh()
         {

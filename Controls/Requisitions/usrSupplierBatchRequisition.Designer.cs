@@ -39,8 +39,6 @@
             this.trnDatePicker = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
             this.cmbLedger = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.cmbAccount = new System.Windows.Forms.ComboBox();
             this.dgItems = new System.Windows.Forms.DataGridView();
             this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
             this.btnSave = new System.Windows.Forms.Button();
@@ -68,18 +66,16 @@
             this.panel1.Controls.Add(this.trnDatePicker);
             this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.cmbLedger);
-            this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.cmbAccount);
             this.panel1.Location = new System.Drawing.Point(9, 33);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(529, 165);
+            this.panel1.Size = new System.Drawing.Size(529, 136);
             this.panel1.TabIndex = 53;
             // 
             // dtInvoiceDate
             // 
             this.dtInvoiceDate.CustomFormat = "yyyy/MM/dd";
             this.dtInvoiceDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtInvoiceDate.Location = new System.Drawing.Point(156, 137);
+            this.dtInvoiceDate.Location = new System.Drawing.Point(156, 108);
             this.dtInvoiceDate.Name = "dtInvoiceDate";
             this.dtInvoiceDate.Size = new System.Drawing.Size(204, 20);
             this.dtInvoiceDate.TabIndex = 4;
@@ -88,7 +84,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(14, 143);
+            this.label14.Location = new System.Drawing.Point(14, 114);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(105, 13);
             this.label14.TabIndex = 61;
@@ -144,7 +140,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(14, 106);
+            this.label9.Location = new System.Drawing.Point(14, 77);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(120, 13);
             this.label9.TabIndex = 57;
@@ -153,28 +149,11 @@
             // cmbLedger
             // 
             this.cmbLedger.FormattingEnabled = true;
-            this.cmbLedger.Location = new System.Drawing.Point(156, 106);
+            this.cmbLedger.Location = new System.Drawing.Point(156, 77);
             this.cmbLedger.Name = "cmbLedger";
             this.cmbLedger.Size = new System.Drawing.Size(293, 21);
             this.cmbLedger.TabIndex = 3;
             this.cmbLedger.SelectedIndexChanged += new System.EventHandler(this.cmbLedger_SelectedIndexChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 74);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(80, 13);
-            this.label4.TabIndex = 56;
-            this.label4.Text = "Select Account";
-            // 
-            // cmbAccount
-            // 
-            this.cmbAccount.FormattingEnabled = true;
-            this.cmbAccount.Location = new System.Drawing.Point(156, 74);
-            this.cmbAccount.Name = "cmbAccount";
-            this.cmbAccount.Size = new System.Drawing.Size(204, 21);
-            this.cmbAccount.TabIndex = 2;
             // 
             // dgItems
             // 
@@ -185,7 +164,7 @@
             this.dgItems.Location = new System.Drawing.Point(9, 204);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(1000, 426);
+            this.dgItems.Size = new System.Drawing.Size(1226, 426);
             this.dgItems.TabIndex = 69;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             this.dgItems.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgItems_DataBindingComplete);
@@ -200,7 +179,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(934, 636);
+            this.btnSave.Location = new System.Drawing.Point(1160, 636);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 70;
@@ -217,7 +196,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Name = "usrSupplierBatchRequisition";
-            this.Size = new System.Drawing.Size(1012, 664);
+            this.Size = new System.Drawing.Size(1238, 664);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).EndInit();
@@ -238,8 +217,6 @@
         private System.Windows.Forms.DateTimePicker trnDatePicker;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox cmbLedger;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox cmbAccount;
         private System.Windows.Forms.DataGridView dgItems;
         private System.Windows.Forms.OpenFileDialog ofdAttachment;
         private System.Windows.Forms.Button btnSave;
