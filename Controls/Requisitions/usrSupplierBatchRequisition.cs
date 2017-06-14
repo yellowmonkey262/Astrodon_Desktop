@@ -591,7 +591,7 @@ namespace Astrodon.Controls.Requisitions
                         item.building = requisition.BuildingId;
                         item.SupplierId = _Supplier.id;
                         item.InvoiceNumber = requisition.InvoiceNumber;
-                        item.InvoiceDate = dtInvoiceDate.Value;
+                        item.InvoiceDate = requisition.InvoiceDate;
                         item.BankName = requisition.SupplierBank;
                         item.BranchCode = requisition.BranchCode;
                         item.BranchName = requisition.BranchName;
