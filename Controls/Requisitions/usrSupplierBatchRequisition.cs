@@ -576,6 +576,11 @@ namespace Astrodon.Controls.Requisitions
                         var item = new tblRequisition();
                         context.tblRequisitions.Add(item);
 
+                        if (!requisition.BankAlreadyLinked)
+                        {
+                            requisition.SupplierBank = _BankList.Where(a => a.id == requisition.BankId).Single().Name;
+                        }
+
                         item.trnDate = trnDatePicker.Value.Date;
                         item.account = requisition.OwnTrustAccount;
                         item.reference = requisition.BuildingAbreviatio + (requisition.OwnTrustAccount == "TRUST" ? " (" + requisition.BuildingTrustAccount + ")" : "");
