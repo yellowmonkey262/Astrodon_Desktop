@@ -40,7 +40,7 @@ namespace Astrodon.Controls.Maintenance
 
 
             var tmp = (from r in _DataContext.tblRequisitions
-                                   join maint in _DataContext.MaintenanceSet on r.id equals maint.RequisitionId into mx
+                                   join maint in _DataContext.MaintenanceSet.Include(a =>a.DetailItems) on r.id equals maint.RequisitionId into mx
                                    where r.building == buildingId
                                    && r.trnDate >= fromDate
                                    && r.trnDate <= toDate
@@ -58,7 +58,6 @@ namespace Astrodon.Controls.Maintenance
                                        DateLogged = m == null ? (DateTime?)null : m.DateLogged,
                                        ConfigClassification = m == null ? (MaintenanceClassificationType?)null : m.BuildingMaintenanceConfiguration.MaintenanceClassificationType,
                                        ConfigName = m == null ? null : m.BuildingMaintenanceConfiguration.Name,
-                                       CustomerAccount = m == null ? null : m.CustomerAccount,
                                        SupplierName = m == null ? null : m.Supplier.CompanyName,
                                        SupplierContactPerson = m == null ? null : m.Supplier.ContactPerson,
                                        TotalAmount = m == null ? (decimal?)null : m.TotalAmount,
@@ -81,11 +80,10 @@ namespace Astrodon.Controls.Maintenance
                                        DateLogged = s.DateLogged,
                                        ConfigClassification = s.ConfigClassification != null ? s.ConfigClassification : d == null ? (MaintenanceClassificationType?)null : d.MaintenanceClassificationType,
                                        ConfigName = s.ConfigName != null ? s.ConfigName : d == null ? null : d.Name,
-                                       CustomerAccount = s.CustomerAccount,
                                        SupplierName = s.SupplierName,
                                        SupplierContactPerson = s.SupplierContactPerson,
                                        TotalAmount = s.TotalAmount,
-                                       ConfigItemId = s.ConfigItemId != null ? s.ConfigItemId : d == null ? (int?)null : d.id
+                                       ConfigItemId = s.ConfigItemId != null ? s.ConfigItemId : d == null ? (int?)null : d.id,
                                    }).Where(a => a.ConfigItemId != null &&
                                    
                                    (cbUnlinked.Checked == false || a.HasMaintenance == false)
@@ -215,13 +213,6 @@ namespace Astrodon.Controls.Maintenance
                 {
                     DataPropertyName = "ConfigName",
                     HeaderText = "Type",
-                    ReadOnly = true
-                });
-
-                dgMaintenance.Columns.Add(new DataGridViewTextBoxColumn()
-                {
-                    DataPropertyName = "CustomerAccount",
-                    HeaderText = "Unit",
                     ReadOnly = true
                 });
 
@@ -388,8 +379,6 @@ namespace Astrodon.Controls.Maintenance
 
         public string ConfigName { get; set; }
 
-        public string CustomerAccount { get; set; }
-
         public string SupplierName { get; set; }
 
         public string SupplierContactPerson { get; set; }
@@ -401,6 +390,8 @@ namespace Astrodon.Controls.Maintenance
         {
             get { return MaintenanceId != null; }
         }
+
+        public List<MaintenanceDetailItem> Units { get;  set; }
 
         #endregion
 

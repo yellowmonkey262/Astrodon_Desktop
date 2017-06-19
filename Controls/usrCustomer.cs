@@ -191,15 +191,16 @@ namespace Astrodon
             using (var dataContext = SqlDataHandler.GetDataContext())
             {
                 var q = from m in dataContext.MaintenanceSet
+                        from md in m.DetailItems
                         where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
-                        && m.CustomerAccount == customer.accNumber
+                        && md.CustomerAccount == customer.accNumber
                         && (m.WarrentyExpires > DateTime.Today || m.DateLogged >= cutoff)
                         select new UnitMaintenance
                         {
                             MaintenanceId = m.id,
                             DateLogged = m.DateLogged,
-                            IsForBodyCorporate = m.IsForBodyCorporate,
-                            TotalAmount = m.TotalAmount,
+                            IsForBodyCorporate = md.IsForBodyCorporate,
+                            TotalAmount = md.Amount,
                             Description = m.Description,
                             WarrentyExpires = m.WarrentyExpires,
                             WarrantyNotes = m.WarrantyNotes,

@@ -70,6 +70,7 @@
             this.paymentRequisitionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unpaidRequisitionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missingMaintenanceRequisitionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.supplierBatchRequisitionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadRequisitionBatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildingMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.suppliersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,7 +90,7 @@
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.supplierBatchRequisitionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.upgradeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -122,6 +123,7 @@
             this.bankConfigurationToolStripMenuItem,
             this.usersToolStripMenuItem,
             this.bulkSMSToolStripMenuItem,
+            this.upgradeDatabaseToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
             this.systemToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
@@ -470,6 +472,13 @@
             this.missingMaintenanceRequisitionsToolStripMenuItem.Text = "Missing Maintenance Requisitions";
             this.missingMaintenanceRequisitionsToolStripMenuItem.Click += new System.EventHandler(this.missingMaintenanceRequisitionsToolStripMenuItem_Click);
             // 
+            // supplierBatchRequisitionToolStripMenuItem
+            // 
+            this.supplierBatchRequisitionToolStripMenuItem.Name = "supplierBatchRequisitionToolStripMenuItem";
+            this.supplierBatchRequisitionToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.supplierBatchRequisitionToolStripMenuItem.Text = "Supplier Bulk Requisition";
+            this.supplierBatchRequisitionToolStripMenuItem.Click += new System.EventHandler(this.supplierBatchRequisitionToolStripMenuItem_Click);
+            // 
             // downloadRequisitionBatchToolStripMenuItem
             // 
             this.downloadRequisitionBatchToolStripMenuItem.Name = "downloadRequisitionBatchToolStripMenuItem";
@@ -614,12 +623,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // supplierBatchRequisitionToolStripMenuItem
+            // upgradeDatabaseToolStripMenuItem
             // 
-            this.supplierBatchRequisitionToolStripMenuItem.Name = "supplierBatchRequisitionToolStripMenuItem";
-            this.supplierBatchRequisitionToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
-            this.supplierBatchRequisitionToolStripMenuItem.Text = "Supplier Bulk Requisition";
-            this.supplierBatchRequisitionToolStripMenuItem.Click += new System.EventHandler(this.supplierBatchRequisitionToolStripMenuItem_Click);
+            this.upgradeDatabaseToolStripMenuItem.Name = "upgradeDatabaseToolStripMenuItem";
+            this.upgradeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.upgradeDatabaseToolStripMenuItem.Text = "Upgrade Database";
+            this.upgradeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.upgradeDatabaseToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -713,5 +722,6 @@
         private System.Windows.Forms.ToolStripMenuItem missingMaintenanceRequisitionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem downloadRequisitionBatchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem supplierBatchRequisitionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem upgradeDatabaseToolStripMenuItem;
     }
 }

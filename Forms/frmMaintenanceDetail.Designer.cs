@@ -37,14 +37,14 @@
             this.pnlContents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContents.Location = new System.Drawing.Point(0, 0);
             this.pnlContents.Name = "pnlContents";
-            this.pnlContents.Size = new System.Drawing.Size(815, 571);
+            this.pnlContents.Size = new System.Drawing.Size(844, 615);
             this.pnlContents.TabIndex = 4;
             // 
             // frmMaintenanceDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(815, 571);
+            this.ClientSize = new System.Drawing.Size(844, 615);
             this.Controls.Add(this.pnlContents);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
