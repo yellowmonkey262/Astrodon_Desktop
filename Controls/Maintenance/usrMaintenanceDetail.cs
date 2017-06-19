@@ -445,7 +445,6 @@ namespace Astrodon.Controls.Maintenance
                     {
                         if (_Maintenance.DetailItems.Count() == 1)
                         {
-                            cbUnit.Enabled = true;
                             var item = _Maintenance.DetailItems.First();
                             if (item.IsForBodyCorporate)
                                 cbUnit.SelectedIndex = 0;
@@ -457,7 +456,6 @@ namespace Astrodon.Controls.Maintenance
                         {
                             cbUnit.SelectedIndex = 1;
                             tbUnits.Show();
-                            cbUnit.Enabled = false;
                         }
                     }
                     LoadBuildingCustomers();
