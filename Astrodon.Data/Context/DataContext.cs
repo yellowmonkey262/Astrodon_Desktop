@@ -79,7 +79,7 @@ namespace Astrodon.Data
         public DbSet<BuildingMaintenanceConfiguration> BuildingMaintenanceConfigurationSet { get; set; }
         public DbSet<SupplierBuilding> SupplierBuildingSet { get; set; }
         public DbSet<SupplierBuildingAudit> SupplierBuildingAuditSet { get; set; }
-        public DbSet<MaintenanceDetailItem> MaintenanceDetailItem { get; set; }
+        public DbSet<MaintenanceDetailItem> MaintenanceDetailItemSet { get; set; }
 
         public DbSet<Supplier> SupplierSet { get; set; }
         public DbSet<SupplierAudit> SupplierAuditSet { get; set; }

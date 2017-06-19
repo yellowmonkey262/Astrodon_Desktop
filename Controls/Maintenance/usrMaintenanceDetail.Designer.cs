@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tbMain = new System.Windows.Forms.TabControl();
             this.tbDetail = new System.Windows.Forms.TabPage();
             this.dtpInvoiceDate = new System.Windows.Forms.DateTimePicker();
@@ -85,6 +86,8 @@
             this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
+            this.lbTotalAmount = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tbMain.SuspendLayout();
             this.tbDetail.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgSupportingDocuments)).BeginInit();
@@ -490,15 +493,16 @@
             // 
             this.cbUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbUnit.FormattingEnabled = true;
-            this.cbUnit.Location = new System.Drawing.Point(160, 156);
+            this.cbUnit.Location = new System.Drawing.Point(160, 150);
             this.cbUnit.Name = "cbUnit";
             this.cbUnit.Size = new System.Drawing.Size(191, 21);
             this.cbUnit.TabIndex = 71;
+            this.cbUnit.SelectedIndexChanged += new System.EventHandler(this.cbUnit_SelectedIndexChanged);
             // 
             // lblTotalAmount
             // 
             this.lblTotalAmount.AutoSize = true;
-            this.lblTotalAmount.Location = new System.Drawing.Point(157, 131);
+            this.lblTotalAmount.Location = new System.Drawing.Point(157, 118);
             this.lblTotalAmount.Name = "lblTotalAmount";
             this.lblTotalAmount.Size = new System.Drawing.Size(35, 13);
             this.lblTotalAmount.TabIndex = 70;
@@ -507,7 +511,7 @@
             // lblClassification
             // 
             this.lblClassification.AutoSize = true;
-            this.lblClassification.Location = new System.Drawing.Point(157, 107);
+            this.lblClassification.Location = new System.Drawing.Point(157, 94);
             this.lblClassification.Name = "lblClassification";
             this.lblClassification.Size = new System.Drawing.Size(35, 13);
             this.lblClassification.TabIndex = 69;
@@ -516,7 +520,7 @@
             // lblLedgerAccount
             // 
             this.lblLedgerAccount.AutoSize = true;
-            this.lblLedgerAccount.Location = new System.Drawing.Point(157, 84);
+            this.lblLedgerAccount.Location = new System.Drawing.Point(157, 71);
             this.lblLedgerAccount.Name = "lblLedgerAccount";
             this.lblLedgerAccount.Size = new System.Drawing.Size(35, 13);
             this.lblLedgerAccount.TabIndex = 68;
@@ -525,7 +529,7 @@
             // lblMaintenanceType
             // 
             this.lblMaintenanceType.AutoSize = true;
-            this.lblMaintenanceType.Location = new System.Drawing.Point(157, 63);
+            this.lblMaintenanceType.Location = new System.Drawing.Point(157, 50);
             this.lblMaintenanceType.Name = "lblMaintenanceType";
             this.lblMaintenanceType.Size = new System.Drawing.Size(35, 13);
             this.lblMaintenanceType.TabIndex = 67;
@@ -534,7 +538,7 @@
             // lblBuildingName
             // 
             this.lblBuildingName.AutoSize = true;
-            this.lblBuildingName.Location = new System.Drawing.Point(157, 41);
+            this.lblBuildingName.Location = new System.Drawing.Point(157, 28);
             this.lblBuildingName.Name = "lblBuildingName";
             this.lblBuildingName.Size = new System.Drawing.Size(35, 13);
             this.lblBuildingName.TabIndex = 66;
@@ -543,7 +547,7 @@
             // lblMaintenanceForTitle
             // 
             this.lblMaintenanceForTitle.AutoSize = true;
-            this.lblMaintenanceForTitle.Location = new System.Drawing.Point(11, 159);
+            this.lblMaintenanceForTitle.Location = new System.Drawing.Point(11, 153);
             this.lblMaintenanceForTitle.Name = "lblMaintenanceForTitle";
             this.lblMaintenanceForTitle.Size = new System.Drawing.Size(143, 13);
             this.lblMaintenanceForTitle.TabIndex = 65;
@@ -552,7 +556,7 @@
             // lblTotalAmountTitle
             // 
             this.lblTotalAmountTitle.AutoSize = true;
-            this.lblTotalAmountTitle.Location = new System.Drawing.Point(11, 131);
+            this.lblTotalAmountTitle.Location = new System.Drawing.Point(11, 118);
             this.lblTotalAmountTitle.Name = "lblTotalAmountTitle";
             this.lblTotalAmountTitle.Size = new System.Drawing.Size(70, 13);
             this.lblTotalAmountTitle.TabIndex = 64;
@@ -561,7 +565,7 @@
             // lblClassificationTitle
             // 
             this.lblClassificationTitle.AutoSize = true;
-            this.lblClassificationTitle.Location = new System.Drawing.Point(11, 107);
+            this.lblClassificationTitle.Location = new System.Drawing.Point(11, 94);
             this.lblClassificationTitle.Name = "lblClassificationTitle";
             this.lblClassificationTitle.Size = new System.Drawing.Size(68, 13);
             this.lblClassificationTitle.TabIndex = 63;
@@ -570,7 +574,7 @@
             // lblLedgerAccountTitle
             // 
             this.lblLedgerAccountTitle.AutoSize = true;
-            this.lblLedgerAccountTitle.Location = new System.Drawing.Point(11, 84);
+            this.lblLedgerAccountTitle.Location = new System.Drawing.Point(11, 71);
             this.lblLedgerAccountTitle.Name = "lblLedgerAccountTitle";
             this.lblLedgerAccountTitle.Size = new System.Drawing.Size(83, 13);
             this.lblLedgerAccountTitle.TabIndex = 62;
@@ -579,7 +583,7 @@
             // lblMaintenanceTypeTitle
             // 
             this.lblMaintenanceTypeTitle.AutoSize = true;
-            this.lblMaintenanceTypeTitle.Location = new System.Drawing.Point(11, 62);
+            this.lblMaintenanceTypeTitle.Location = new System.Drawing.Point(11, 49);
             this.lblMaintenanceTypeTitle.Name = "lblMaintenanceTypeTitle";
             this.lblMaintenanceTypeTitle.Size = new System.Drawing.Size(96, 13);
             this.lblMaintenanceTypeTitle.TabIndex = 61;
@@ -588,7 +592,7 @@
             // lblBuildingNameTitle
             // 
             this.lblBuildingNameTitle.AutoSize = true;
-            this.lblBuildingNameTitle.Location = new System.Drawing.Point(11, 41);
+            this.lblBuildingNameTitle.Location = new System.Drawing.Point(11, 28);
             this.lblBuildingNameTitle.Name = "lblBuildingNameTitle";
             this.lblBuildingNameTitle.Size = new System.Drawing.Size(75, 13);
             this.lblBuildingNameTitle.TabIndex = 60;
@@ -606,6 +610,7 @@
             // 
             // tbUnits
             // 
+            this.tbUnits.Controls.Add(this.lbTotalAmount);
             this.tbUnits.Controls.Add(this.dgItems);
             this.tbUnits.Location = new System.Drawing.Point(4, 22);
             this.tbUnits.Name = "tbUnits";
@@ -621,10 +626,10 @@
             this.dgItems.AllowUserToDeleteRows = false;
             this.dgItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgItems.Location = new System.Drawing.Point(6, 6);
+            this.dgItems.Location = new System.Drawing.Point(6, 38);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(823, 524);
+            this.dgItems.Size = new System.Drawing.Size(823, 492);
             this.dgItems.TabIndex = 70;
             this.dgItems.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgItems_DataBindingComplete);
             this.dgItems.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgItems_DataError);
@@ -663,6 +668,20 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // lbTotalAmount
+            // 
+            this.lbTotalAmount.AutoSize = true;
+            this.lbTotalAmount.Location = new System.Drawing.Point(7, 19);
+            this.lbTotalAmount.Name = "lbTotalAmount";
+            this.lbTotalAmount.Size = new System.Drawing.Size(73, 13);
+            this.lbTotalAmount.TabIndex = 71;
+            this.lbTotalAmount.Text = "Total Amount:";
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // usrMaintenanceDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -678,6 +697,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgSupportingDocuments)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWarrantyDuration)).EndInit();
             this.tbUnits.ResumeLayout(false);
+            this.tbUnits.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).EndInit();
             this.ResumeLayout(false);
 
@@ -742,5 +762,7 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.DataGridView dgItems;
+        private System.Windows.Forms.Label lbTotalAmount;
+        private System.Windows.Forms.Timer timer1;
     }
 }
