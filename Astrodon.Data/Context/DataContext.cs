@@ -68,7 +68,7 @@ namespace Astrodon.Data
         {
             using (var dbContext = new DataContext())
             {
-                dbContext.Database.ExecuteSqlCommand("delete from SystemLogs where EventTime < GetDate() - 100");
+                dbContext.Database.ExecuteSqlCommand("delete from SystemLogs where EventTime < GetDate() - 14");
             }
         }
 
@@ -126,5 +126,7 @@ namespace Astrodon.Data
             Database.ExecuteSqlCommand("update tblRequisition set processed = 0, RequisitionBatchId = null where RequisitionBatchId = " + requisitionBatchId.ToString());
             Database.ExecuteSqlCommand("delete from RequisitionBatch where id =" + requisitionBatchId.ToString());
         }
+
+      
     }
 }
