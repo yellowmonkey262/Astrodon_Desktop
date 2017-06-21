@@ -822,7 +822,7 @@ namespace Astrodon
                     document.Add(paragraphSpacer);
                     document.Add(CreateParagraph("I, the undersigned, Sheldon Terry, in my capacity as duly authorized representative of the", fontCert, Element.ALIGN_LEFT));
                     document.Add(paragraphSpacer);
-                    document.Add(CreateParagraph(String.Format("{0} HOA (NPC)", clr.complex), fontCertTB, Element.ALIGN_CENTER));
+                    document.Add(CreateParagraph(String.Format("{0} HOA (NPC)", clr.complex.Replace(" HOA", "")), fontCertTB, Element.ALIGN_CENTER));
                     document.Add(paragraphSpacer);
                     document.Add(CreateParagraph("ASTRODON (PTY) LTD", fontCertTB, Element.ALIGN_CENTER));
                     document.Add(paragraphSpacer);
@@ -854,7 +854,7 @@ namespace Astrodon
                     document.Add(paragraphSpacer);
                     document.Add(CreateParagraph("Astrodon as Managing Agent for", fontCert, Element.ALIGN_CENTER));
                     document.Add(paragraphSpacer);
-                    document.Add(CreateParagraph(String.Format("{0} HOA (NPC)", clr.complex), fontCertB, Element.ALIGN_CENTER));
+                    document.Add(CreateParagraph(String.Format("{0} HOA (NPC)", clr.complex.Replace(" HOA", "")), fontCertB, Element.ALIGN_CENTER));
                     document.Add(new Chunk(line));
 
                     writer.Flush();
@@ -1003,8 +1003,6 @@ namespace Astrodon
                     document.Add(table);
 
                     document.Add(paragraphSpacer);
-                    document.Add(CreateParagraph("Dear Sirs", fontCert, Element.ALIGN_LEFT));
-                    document.Add(paragraphSpacer);
 
                     table = new PdfPTable(3);
                     table.TotalWidth = 510;
@@ -1055,6 +1053,11 @@ namespace Astrodon
                     document.Add(table);
 
                     document.Add(paragraphSpacer);
+
+                    //.Replace(" HOA","")
+                    document.Add(CreateParagraph("Dear Sirs", fontCert, Element.ALIGN_LEFT));
+                    document.Add(paragraphSpacer);
+
                     document.Add(CreateParagraph("As requested, we enclose herewith our Clearance Certificate as requested by you in terms of the Articles of Association.", fontCert, Element.ALIGN_LEFT));
                     document.Add(paragraphSpacer);
                     document.Add(CreateParagraph("It is a condition of the issuing of the Clearance Certificate that should transfer not have taken place during the validity of this Clearance Certificate, you undertake to request an updated Certificate, failing which we will look to you for the recovery of any amount whatsoever due to the HOA at date of transfer, from your client.", fontCert, Element.ALIGN_LEFT));
@@ -1069,7 +1072,7 @@ namespace Astrodon
                     document.Add(paragraphSpacer);
                     document.Add(CreateParagraph("Yours faithfully", fontCertB, Element.ALIGN_LEFT));
                     document.Add(CreateParagraph("ASTRODON (PTY) LTD", fontCertB, Element.ALIGN_LEFT));
-                    document.Add(CreateParagraph(String.Format("As Managing Agents for {0} HOA", clr.complex), fontCert, Element.ALIGN_LEFT));
+                    document.Add(CreateParagraph(String.Format("As Managing Agents for {0} HOA", clr.complex.Replace(" HOA", "")), fontCert, Element.ALIGN_LEFT));
                     document.Add(paragraphSpacer);
                     document.Add(paragraphSpacer);
                     document.Add(paragraphSpacer);

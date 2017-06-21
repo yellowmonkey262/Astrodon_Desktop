@@ -105,6 +105,7 @@ namespace Astrodon
         {
             if (!String.IsNullOrEmpty(txtName.Text) && txtName.Text != "Add new user" && txtName.Text != "" && !String.IsNullOrEmpty(txtEmail.Text) && txtEmail.Text != "")
             {
+                if (MessageBox.Show("Warning: Continuing with the save process may overwrite other user settings.  Do you wish to continue?", "User Settings", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) { return; }
                 int userType;
                 try { userType = (int)cmbType.SelectedValue; } catch { userType = 3; }
                 selectedUser.usertype = userType;
