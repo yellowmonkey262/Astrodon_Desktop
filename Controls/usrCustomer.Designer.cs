@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmbCustomer = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
@@ -102,6 +102,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.tbMaintenance = new System.Windows.Forms.TabPage();
             this.dgMaintenance = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -199,7 +200,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1040, 534);
+            this.tabPage2.Size = new System.Drawing.Size(931, 534);
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "Customer Details";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -298,12 +299,14 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(499, 136);
+            this.btnSave.BackColor = System.Drawing.Color.Lime;
+            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSave.Location = new System.Drawing.Point(10, 136);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.Size = new System.Drawing.Size(564, 23);
             this.btnSave.TabIndex = 71;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Text = "UPDATE";
+            this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // txtEmail
@@ -477,6 +480,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.button1);
             this.tabPage3.Controls.Add(this.txtEmailTo);
             this.tabPage3.Controls.Add(this.label19);
             this.tabPage3.Controls.Add(this.dgDocs);
@@ -484,14 +488,14 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1040, 534);
+            this.tabPage3.Size = new System.Drawing.Size(931, 534);
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "Documents";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // txtEmailTo
             // 
-            this.txtEmailTo.Location = new System.Drawing.Point(352, 12);
+            this.txtEmailTo.Location = new System.Drawing.Point(352, 35);
             this.txtEmailTo.Name = "txtEmailTo";
             this.txtEmailTo.Size = new System.Drawing.Size(513, 20);
             this.txtEmailTo.TabIndex = 60;
@@ -499,7 +503,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(244, 15);
+            this.label19.Location = new System.Drawing.Point(244, 38);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(102, 13);
             this.label19.TabIndex = 59;
@@ -521,18 +525,18 @@
             this.colView,
             this.colSend,
             this.colRemove});
-            this.dgDocs.Location = new System.Drawing.Point(6, 44);
+            this.dgDocs.Location = new System.Drawing.Point(6, 61);
             this.dgDocs.Name = "dgDocs";
-            this.dgDocs.Size = new System.Drawing.Size(859, 484);
+            this.dgDocs.Size = new System.Drawing.Size(859, 467);
             this.dgDocs.TabIndex = 58;
             this.dgDocs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgDocs_CellContentClick);
             // 
             // colDate
             // 
             this.colDate.DataPropertyName = "tstamp";
-            dataGridViewCellStyle16.Format = "d";
-            dataGridViewCellStyle16.NullValue = null;
-            this.colDate.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle1.Format = "d";
+            dataGridViewCellStyle1.NullValue = null;
+            this.colDate.DefaultCellStyle = dataGridViewCellStyle1;
             this.colDate.HeaderText = "Date";
             this.colDate.Name = "colDate";
             this.colDate.ReadOnly = true;
@@ -589,7 +593,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 15);
+            this.label13.Location = new System.Drawing.Point(6, 38);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(64, 13);
             this.label13.TabIndex = 57;
@@ -601,7 +605,7 @@
             this.tabPage4.Controls.Add(this.dgTransactions);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1040, 534);
+            this.tabPage4.Size = new System.Drawing.Size(931, 534);
             this.tabPage4.TabIndex = 2;
             this.tabPage4.Text = "Transactions";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -640,7 +644,7 @@
             this.tabPage5.Controls.Add(this.label14);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(627, 534);
+            this.tabPage5.Size = new System.Drawing.Size(931, 534);
             this.tabPage5.TabIndex = 3;
             this.tabPage5.Text = "Notes";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -711,9 +715,9 @@
             // colRemDate
             // 
             this.colRemDate.DataPropertyName = "remDate";
-            dataGridViewCellStyle17.Format = "g";
-            dataGridViewCellStyle17.NullValue = null;
-            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle2.Format = "g";
+            dataGridViewCellStyle2.NullValue = null;
+            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle2;
             this.colRemDate.HeaderText = "Date / Time";
             this.colRemDate.Name = "colRemDate";
             this.colRemDate.ReadOnly = true;
@@ -727,8 +731,8 @@
             // colNote
             // 
             this.colNote.DataPropertyName = "note";
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colNote.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colNote.DefaultCellStyle = dataGridViewCellStyle3;
             this.colNote.HeaderText = "Note";
             this.colNote.Name = "colNote";
             this.colNote.ReadOnly = true;
@@ -817,6 +821,18 @@
             this.dgMaintenance.Size = new System.Drawing.Size(919, 522);
             this.dgMaintenance.TabIndex = 10;
             this.dgMaintenance.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgMaintenance_CellContentClick);
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Lime;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(9, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(856, 23);
+            this.button1.TabIndex = 72;
+            this.button1.Text = "UPDATE";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // usrCustomer
             // 
@@ -927,5 +943,6 @@
         private System.Windows.Forms.DataGridViewButtonColumn colRemove;
         private System.Windows.Forms.TabPage tbMaintenance;
         private System.Windows.Forms.DataGridView dgMaintenance;
+        private System.Windows.Forms.Button button1;
     }
 }

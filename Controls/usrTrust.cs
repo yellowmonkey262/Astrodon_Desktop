@@ -227,7 +227,7 @@ namespace Astrodon.Controls
                     };
                     transactions.Add(closingTrns);
                     transactions = transactions.OrderBy(t => t.Date).ToList();
-                    if (transactions.Count > 2) { buildingTrans.Add(b.Abbr, transactions); }
+                    if (transactions.Count > 2) { buildingTrans.Add(b.Name, transactions); }
                 }
             }
             String pdfFile = new PDF().TrustMovement(buildingTrans);
