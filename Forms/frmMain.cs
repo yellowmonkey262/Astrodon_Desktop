@@ -25,11 +25,15 @@ namespace Astrodon
         {
             InitializeComponent();
 
+            upgradeDatabaseToolStripMenuItem.Visible = false;
+
             _DataContext = SqlDataHandler.GetDataContext();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            upgradeDatabaseToolStripMenuItem.Visible = Controller.user.username == "sheldon";
+
             if (Controller.user.usertype != 1 && Controller.user.usertype != 2)
             {
                 systemToolStripMenuItem.Enabled = false;
@@ -598,6 +602,12 @@ namespace Astrodon
             control.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(control);
             toolStripStatusLabel1.Text = "Supplier Bulk Requisition";
+        }
+
+        private void upgradeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SqlDataHandler.MigrateEFDataBase();
+            Controller.ShowMessage("Migration completed");
         }
     }
 }

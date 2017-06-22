@@ -16,9 +16,6 @@ C:\Projects\Stephen\Astrodon\Desktop\AstroLibrary\obj\Debug\Astro.Library.dll
 C:\Projects\Stephen\Astrodon\Desktop\AstroLibrary\obj\Debug\Astro.Library.pdb
 C:\Dev\repos\YellowMonkey\Desktop\AstroLibrary\bin\Debug\Astro.Library.dll
 C:\Dev\repos\YellowMonkey\Desktop\AstroLibrary\bin\Debug\Astro.Library.pdb
-C:\Dev\repos\YellowMonkey\Desktop\AstroLibrary\obj\Debug\AstroLibrary.csprojResolveAssemblyReference.cache
-C:\Dev\repos\YellowMonkey\Desktop\AstroLibrary\obj\Debug\Astro.Library.dll
-C:\Dev\repos\YellowMonkey\Desktop\AstroLibrary\obj\Debug\Astro.Library.pdb
 C:\Users\Stephen\Source\Repos\Astrodon_Desktop\AstroLibrary\bin\Debug\Astro.Library.dll
 C:\Users\Stephen\Source\Repos\Astrodon_Desktop\AstroLibrary\bin\Debug\Astro.Library.pdb
 C:\Users\Stephen\Source\Repos\Astrodon_Desktop\AstroLibrary\obj\Debug\AstroLibrary.csprojResolveAssemblyReference.cache
@@ -28,4 +25,6 @@ C:\Projects\Stephen\Astrodon\Desktop\bin\Debug\Astro.Library.dll
 C:\Projects\Stephen\Astrodon\Desktop\bin\Debug\Astro.Library.pdb
 C:\Dev\repos\YellowMonkey\AstroLibrary\bin\Debug\Astro.Library.dll
 C:\Dev\repos\YellowMonkey\AstroLibrary\bin\Debug\Astro.Library.pdb
-C:\Projects\Stephen\Astrodon\Desktop\AstroLibrary\obj\Debug\AstroLibrary.csprojResolveAssemblyReference.cache
+C:\Dev\repos\YellowMonkey\Desktop\AstroLibrary\obj\Debug\Astro.Library.dll
+C:\Dev\repos\YellowMonkey\Desktop\AstroLibrary\obj\Debug\Astro.Library.pdb
+C:\Dev\repos\YellowMonkey\Desktop\AstroLibrary\obj\Debug\AstroLibrary.csprojResolveAssemblyReference.cache

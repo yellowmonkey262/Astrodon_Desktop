@@ -62,6 +62,7 @@
     <Compile Include="MaintenanceData\DurationType.cs" />
     <Compile Include="MaintenanceData\Maintenance.cs" />
     <Compile Include="MaintenanceData\MaintenanceClassificationType.cs" />
+    <Compile Include="MaintenanceData\MaintenanceDetailItem.cs" />
     <Compile Include="MaintenanceData\MaintenanceDocument.cs" />
     <Compile Include="Migrations\201701191057016_InitialCreate.cs" />
     <Compile Include="Migrations\201701191057016_InitialCreate.Designer.cs">
@@ -106,6 +107,10 @@
     <Compile Include="Migrations\201705020819192_RequisitionBatch.cs" />
     <Compile Include="Migrations\201705020819192_RequisitionBatch.Designer.cs">
       <DependentUpon>201705020819192_RequisitionBatch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706190839449_MaintenanceMultipleItems.cs" />
+    <Compile Include="Migrations\201706190839449_MaintenanceMultipleItems.Designer.cs">
+      <DependentUpon>201706190839449_MaintenanceMultipleItems.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -204,6 +209,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705020819192_RequisitionBatch.resx">
       <DependentUpon>201705020819192_RequisitionBatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706190839449_MaintenanceMultipleItems.resx">
+      <DependentUpon>201706190839449_MaintenanceMultipleItems.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

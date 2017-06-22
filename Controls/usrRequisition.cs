@@ -141,9 +141,11 @@ namespace Astrodon.Controls
 
                     using (var context = SqlDataHandler.GetDataContext())
                     {
+                        DateTime startDate = DateTime.Today.AddDays(-60);
                         var buildingId = myBuildings[cmbBuilding.SelectedIndex].ID;
                         var requisitions = (from r in context.tblRequisitions.Include(a => a.Supplier)
                                             where r.building == buildingId
+                                            && (r.processed == false || r.paid == false || (r.paid && r.trnDate > startDate))
                                             select new RequisitionList
                                             {
                                                 ID = r.id.ToString(),
@@ -176,26 +178,13 @@ namespace Astrodon.Controls
                             {
                                 bool paid = r.paid;
                                 bool processed = r.processed;
-
-                                //handled by a batch processed
-
-                                //String ledger = r.ledger.Split(new String[] { ":" }, StringSplitOptions.None)[0];
-                                //if (r.account.ToUpper() == "TRUST" && !paid)
-                                //{
-                                //    matched = GetTransactions(r.trnDate, r.amount, transactions);
-                                //}
-                                //else if (!paid)
-                                //{
-                                //    matched = GetTransactions(r.trnDate, r.amount * -1, transactions);
-                                //}
+                               
                                 if (!processed)
-                                {
                                     unProcessedRequisitions.Add(r);
-                                }
                                 else if (!paid)
-                                {
                                     unPaidRequisitions.Add(r);
-                                }
+                                else
+                                    paidRequisitions.Add(r);
                             }
                         }
                     }

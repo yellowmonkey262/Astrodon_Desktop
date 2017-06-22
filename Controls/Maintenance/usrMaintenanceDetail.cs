@@ -14,6 +14,7 @@ using Astradon.Data.Utility;
 using Astrodon.Data.Base;
 using Astrodon.Controls.Events;
 using System.IO;
+using System.Globalization;
 
 namespace Astrodon.Controls.Maintenance
 {
@@ -37,10 +38,11 @@ namespace Astrodon.Controls.Maintenance
                                .Include(a => a.Supplier)
                                .Include(a => a.Requisition)
                                .Include(a => a.BuildingMaintenanceConfiguration)
+                               .Include(a => a.DetailItems)
                                .Single(a => a.id == maintenanceId);
 
                 _requisition = _DataContext.tblRequisitions.Single(a => a.id == _Maintenance.RequisitionId);
-             
+
                 _Documents = _DataContext.MaintenanceDocumentSet
                              .Where(a => a.MaintenanceId == maintenanceId)
                              .Select(a => new SupportingDocument
@@ -80,7 +82,7 @@ namespace Astrodon.Controls.Maintenance
                 else if (requisition.Supplier == null)
                     requisition.Supplier = _DataContext.SupplierSet.Single(a => a.id == requisition.SupplierId);
 
-                _Maintenance = _DataContext.MaintenanceSet.SingleOrDefault(a => a.RequisitionId == requisition.id);
+                _Maintenance = _DataContext.MaintenanceSet.Include(a => a.DetailItems).SingleOrDefault(a => a.RequisitionId == requisition.id);
                 if (_Maintenance == null)
                 {
                     _Maintenance = new Data.MaintenanceData.Maintenance()
@@ -93,6 +95,7 @@ namespace Astrodon.Controls.Maintenance
                         InvoiceDate = requisition.InvoiceDate == null ? requisition.trnDate : requisition.InvoiceDate.Value,
                         TotalAmount = requisition.amount,
                         WarrentyExpires = requisition.InvoiceDate == null ? requisition.trnDate : requisition.InvoiceDate.Value,
+                        DetailItems = new List<MaintenanceDetailItem>()
                     };
                     _DataContext.MaintenanceSet.Add(_Maintenance);
                     _Documents = new List<SupportingDocument>();
@@ -122,6 +125,7 @@ namespace Astrodon.Controls.Maintenance
 
             InitializeComponent();
 
+
             BindInputs();
             BindCustomers();
             BindWarrantyDurationType();
@@ -139,6 +143,7 @@ namespace Astrodon.Controls.Maintenance
                 cbWarrantyDurationType.Enabled = false;
                 numWarrantyDuration.Enabled = false;
             }
+            timer1.Enabled = true;
         }
 
         #region Custom Events
@@ -166,7 +171,7 @@ namespace Astrodon.Controls.Maintenance
 
         private void cbWarrantyDurationType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lblWarrantyExpires.Text =  CalculateWarrantyExpires().ToString("yyyy/MM/dd");
+            lblWarrantyExpires.Text = CalculateWarrantyExpires().ToString("yyyy/MM/dd");
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -202,12 +207,12 @@ namespace Astrodon.Controls.Maintenance
                 {
                     if (e.ColumnIndex == removeColumnIndex)
                     {
-                        if(selectedDocument.Id.HasValue)
+                        if (selectedDocument.Id.HasValue)
                         {
                             var document = _DataContext.MaintenanceDocumentSet.Single(a => a.id == selectedDocument.Id);
                             _DataContext.MaintenanceDocumentSet.Remove(document);
                         }
-                        
+
                         _Documents.Remove(selectedDocument);
 
                         BindDocumentsDataGrid();
@@ -241,7 +246,99 @@ namespace Astrodon.Controls.Maintenance
 
             try
             {
-                var selectedUnit = cbUnit.SelectedItem as StringKeyValue;
+                if(cbUnit.SelectedIndex == 1)
+                {
+                    //multiple items
+                    //remove all items assigned to the unit and clear all amounts
+                    List<MaintenanceDetailItem> toRemove = new List<MaintenanceDetailItem>();
+                    foreach (var dcurr in _Maintenance.DetailItems)
+                    {
+                        var x = _MaintenanceCustomers.Where(a => a.Id == dcurr.id).SingleOrDefault();
+                        if (x != null)
+                        {
+                            if (x.Amount > 0)
+                            {
+                                dcurr.Amount = x.Amount.Value;
+                                dcurr.CustomerAccount = x.Account;
+                                dcurr.IsForBodyCorporate = x.IsBodyCorporate;
+                            }
+                            else
+                                toRemove.Add(dcurr);
+
+                        }
+                    }
+                    foreach (var dcurr in toRemove)
+                        _Maintenance.DetailItems.Remove(dcurr);
+
+                    _DataContext.MaintenanceDetailItemSet.RemoveRange(toRemove);
+
+                    //add all items not yet in the list
+                    foreach(var itm in _MaintenanceCustomers.Where(a => a.Amount > 0 && a.Id == null))
+                    {
+                        _DataContext.MaintenanceDetailItemSet.Add(new MaintenanceDetailItem()
+                        {
+                            MaintenanceId = _Maintenance.id,
+                            Maintenance = _Maintenance,
+                            Amount = itm.Amount.Value,
+                            CustomerAccount = itm.Account,
+                            IsForBodyCorporate = itm.IsBodyCorporate
+                        });
+                    }
+                }
+                else
+                {
+                    //single item
+                    var item = _Maintenance.DetailItems.FirstOrDefault();
+
+                    if(item != null)
+                    {
+                        var allOthers = _Maintenance.DetailItems.Where(a => a.id != item.id).ToList();
+                        _DataContext.MaintenanceDetailItemSet.RemoveRange(allOthers);
+                        foreach (var itm in allOthers)
+                            _Maintenance.DetailItems.Remove(itm);
+                    }
+                    else
+                    {
+                        item = new MaintenanceDetailItem()
+                        {
+                            MaintenanceId = _Maintenance.id,
+                            Maintenance = _Maintenance
+                        };
+                        _Maintenance.DetailItems.Add(item);
+                    }
+
+                    if (cbUnit.SelectedIndex == 0)
+                    {
+                        //body corporate
+                        item.CustomerAccount = MaintenanceDetailItem.BodyCorporateAccountName;
+                        item.IsForBodyCorporate = true;
+                        item.Amount = _Maintenance.TotalAmount;
+                    }
+                    else
+                    {
+                        var selectedUnit = cbUnit.SelectedItem as StringKeyValue;
+                        item.CustomerAccount = selectedUnit.Id;
+                        item.IsForBodyCorporate = false;
+                        item.Amount = _Maintenance.TotalAmount;
+                    }
+                }
+
+                if(_Maintenance.TotalAmount != _Maintenance.DetailItems.Sum(a => a.Amount))
+                {
+
+                    this.Cursor = Cursors.Default;
+                    Controller.HandleError("Full amount not assigned, please check the total split");
+                    return;
+                }
+
+                var cntNegative = _MaintenanceCustomers.Count(a => a.Amount < 0);
+                if (cntNegative > 0)
+                {
+                    btnSave.Enabled = false;
+                    this.Cursor = Cursors.Default;
+                    Controller.HandleError("Negative maintenance amounts are not allowed");
+                    return;
+                }
 
                 if (string.IsNullOrEmpty(tbInvoiceNumber.Text))
                 {
@@ -250,17 +347,7 @@ namespace Astrodon.Controls.Maintenance
                     return;
                 }
 
-
-                if (string.IsNullOrEmpty(selectedUnit.Id))
-                {
-                    _Maintenance.IsForBodyCorporate = true;
-                    _Maintenance.CustomerAccount = string.Empty;
-                }
-                else
-                {
-                    _Maintenance.IsForBodyCorporate = false;
-                    _Maintenance.CustomerAccount = selectedUnit.Id;
-                }
+           
 
                 _Maintenance.Description = txtDescription.Text;
                 _Maintenance.WarrantyDuration = Convert.ToInt32(numWarrantyDuration.Value);
@@ -291,7 +378,7 @@ namespace Astrodon.Controls.Maintenance
             }
             catch (Exception ex)
             {
-                Controller.HandleError("An error occured saving the record.");
+                Controller.HandleError("An error occured saving the record." + " " + ex.Message);
             }
             finally
             {
@@ -327,6 +414,9 @@ namespace Astrodon.Controls.Maintenance
             txtWarrantyNotes.Text = _Maintenance.WarrantyNotes;
         }
 
+        private List<MaintenanceCustomer> _MaintenanceCustomers = new List<MaintenanceCustomer>();
+        private List<string> _BuildingCustomers = new List<string>();
+
         private void BindCustomers()
         {
             this.Cursor = Cursors.WaitCursor;
@@ -337,10 +427,11 @@ namespace Astrodon.Controls.Maintenance
                 {
                     var customers = new List<StringKeyValue>();
                     customers.Add(new StringKeyValue() { Id = string.Empty, Value = "Body Corporate" });
+                    customers.Add(new StringKeyValue() { Id = string.Empty, Value = "Multiple Units" });
 
-                    var loadedCustomers = Controller.pastel.GetCustomers(_Maintenance.BuildingMaintenanceConfiguration.Building.DataPath);
+                    _BuildingCustomers = Controller.pastel.GetCustomers(_Maintenance.BuildingMaintenanceConfiguration.Building.DataPath);
 
-                    customers.AddRange(loadedCustomers.Select(a => new StringKeyValue()
+                    customers.AddRange(_BuildingCustomers.Select(a => new StringKeyValue()
                     {
                         Id = a.Split('|')[2],
                         Value = a.Split('|')[3]
@@ -349,9 +440,26 @@ namespace Astrodon.Controls.Maintenance
                     cbUnit.DataSource = customers;
                     cbUnit.ValueMember = "Id";
                     cbUnit.DisplayMember = "Display";
+                    LoadBuildingCustomers();
+                    if (_Maintenance.DetailItems.Count > 0)
+                    {
+                        if (_Maintenance.DetailItems.Count() == 1)
+                        {
+                            var item = _Maintenance.DetailItems.First();
+                            if (item.IsForBodyCorporate)
+                                cbUnit.SelectedIndex = 0;
+                            else
+                                cbUnit.SelectedIndex = cbUnit.FindString(item.CustomerAccount);
 
-                    if (!string.IsNullOrEmpty(_Maintenance.CustomerAccount))
-                        cbUnit.SelectedIndex = cbUnit.FindString(_Maintenance.CustomerAccount);
+                        }
+                        else
+                        {
+                            cbUnit.SelectedIndex = 1;
+                            tbUnits.Show();
+                        }
+                    }
+                    LoadBuildingCustomers();
+
                 }
                 catch (Exception e)
                 {
@@ -362,6 +470,85 @@ namespace Astrodon.Controls.Maintenance
             {
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        private void LoadBuildingCustomers()
+        {
+
+            _MaintenanceCustomers = _BuildingCustomers.Select(a => new MaintenanceCustomer()
+            {
+                Account = a.Split('|')[2],
+                Name = a.Split('|')[3],
+                IsBodyCorporate = false,
+                Amount = null
+            }).OrderBy(a => a.Account).ToList();
+
+            _MaintenanceCustomers.Insert(0, new MaintenanceCustomer()
+            {
+                Account = MaintenanceDetailItem.BodyCorporateAccountName,
+                IsBodyCorporate = true,
+                Name = "Body Corporate"
+            });
+
+            //merge with existing items
+
+            foreach (var item in _Maintenance.DetailItems)
+            {
+                var x = _MaintenanceCustomers.Where(a => a.Account == item.CustomerAccount).SingleOrDefault();
+                if (x != null)
+                {
+                    x.Id = item.id;
+                    x.Amount = item.Amount;
+                }
+            }
+            BindCustomerGrid();
+        }
+
+        private void BindCustomerGrid()
+        {
+            dgItems.ClearSelection();
+            dgItems.MultiSelect = false;
+            dgItems.AutoGenerateColumns = false;
+
+            var dateColumnStyle = new DataGridViewCellStyle();
+            dateColumnStyle.Format = "yyyy/MM/dd";
+
+
+            var currencyColumnStyle = new DataGridViewCellStyle();
+            currencyColumnStyle.Format = "###,##0.00";
+            currencyColumnStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            BindingSource bs = new BindingSource();
+            bs.DataSource = _MaintenanceCustomers;
+
+            dgItems.Columns.Clear();
+            dgItems.ReadOnly = false;
+            dgItems.EditMode = DataGridViewEditMode.EditOnEnter;
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Account",
+                HeaderText = "Account",
+                ReadOnly = true,
+            });
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Name",
+                HeaderText = "Name",
+                ReadOnly = true,
+            });
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Amount",
+                HeaderText = "Amount",
+                ReadOnly = _Readonly,
+            });
+
+            dgItems.DataSource = bs;
+
+         
         }
 
         private void BindWarrantyDurationType()
@@ -448,6 +635,83 @@ namespace Astrodon.Controls.Maintenance
         {
             lblWarrantyExpires.Text = CalculateWarrantyExpires().ToString("yyyy/MM/dd");
         }
+
+        private void dgItems_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            Controller.HandleError("Invalid value added");
+
+            e.Cancel = true;
+        }
+
+        private void dgItems_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            foreach (DataGridViewRow row in dgItems.Rows)
+            {
+                MaintenanceCustomer reqItem = row.DataBoundItem as MaintenanceCustomer;
+                reqItem.DataRow = row;
+                reqItem.Form = this;
+            }
+        }
+
+        private void cbUnit_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbUnit.SelectedIndex == 1)
+                ShowUnits();
+            else
+                HideUnits();
+        }
+
+        private void HideUnits()
+        {
+            UpdateTotalAmount();
+            if (tbMain.TabPages.Count > 1)
+                tbMain.TabPages.Remove(tbUnits);
+        }
+
+        private void ShowUnits()
+        {
+            if (tbMain.TabPages.Count < 2)
+                tbMain.TabPages.Add(tbUnits);
+            UpdateTotalAmount();
+        }
+
+        public void UpdateTotalAmount()
+        {
+            if (cbUnit.SelectedIndex == 1)
+            {
+                btnSave.Enabled = false;
+                var total = _MaintenanceCustomers.Where(a => a.Amount > 0).Sum(a => a.Amount.Value);
+                lbTotalAmount.Text ="R" + total.ToString("#,##0.00", CultureInfo.InvariantCulture) + " of R" + _Maintenance.TotalAmount.ToString("#,##0.00", CultureInfo.InvariantCulture) + " assigned";
+                btnSave.Enabled = false;
+                if (total < _Maintenance.TotalAmount)
+                {
+                    lbTotalAmount.Text = lbTotalAmount.Text + " R" + (_Maintenance.TotalAmount - total).ToString("#,##0.00", CultureInfo.InvariantCulture) + " short";
+                }
+                else if (total > _Maintenance.TotalAmount)
+                    lbTotalAmount.Text = lbTotalAmount.Text + " R" + (total - _Maintenance.TotalAmount).ToString("#,##0.00", CultureInfo.InvariantCulture) + " over";
+                else
+                    btnSave.Enabled = true;
+
+                var x = _MaintenanceCustomers.Count(a => a.Amount < 0);
+                if(x > 0)
+                {
+                    btnSave.Enabled = false;
+                    Controller.HandleError("Negative maintenance amounts are not allowed");
+                }
+            }
+            else
+            {
+                btnSave.Enabled = true;
+                lbTotalAmount.Text = " not applicable";
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Enabled = false;
+            dgItems.AutoResizeColumns();
+            cbUnit_SelectedIndexChanged(this, EventArgs.Empty);
+        }
     }
 
     public class SupportingDocument
@@ -458,4 +722,40 @@ namespace Astrodon.Controls.Maintenance
 
         public string FilePath { get; set; }
     }
+
+    class MaintenanceCustomer
+    {
+        public int? Id { get; set; }
+
+        public string Account { get; set; }
+
+        public string Name { get; set; }
+
+        public bool IsBodyCorporate { get; set; }
+
+        private decimal? _Amount;
+        public decimal? Amount
+        {
+            get { return _Amount; }
+            set
+            {
+                _Amount = value;
+                if (Form != null)
+                {
+                    Form.UpdateTotalAmount();
+
+                }
+            }
+        }
+
+        public DataGridViewRow DataRow { get; set; }
+        public usrMaintenanceDetail Form { get; set; }
+
+        public void Refresh()
+        {
+            if (DataRow != null)
+                DataRow.DataGridView.Refresh();
+        }
+    }
 }
+

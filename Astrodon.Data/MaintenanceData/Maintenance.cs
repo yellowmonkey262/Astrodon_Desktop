@@ -26,11 +26,6 @@ namespace Astrodon.Data.MaintenanceData
         [ForeignKey("BuildingMaintenanceConfigurationId")]
         public virtual BuildingMaintenanceConfiguration BuildingMaintenanceConfiguration { get; set; }
 
-        [MaxLength(10)]
-        public virtual string CustomerAccount { get; set; } //nullable as unit/customer account record in pastel
-
-        public virtual bool IsForBodyCorporate { get; set; }
-
         public virtual DateTime DateLogged { get; set; }
 
         public virtual DateTime InvoiceDate { get; set; }
@@ -56,6 +51,7 @@ namespace Astrodon.Data.MaintenanceData
         #endregion
 
         public virtual ICollection<MaintenanceDocument> MaintenanceDocuments { get; set; } 
+        public virtual ICollection<MaintenanceDetailItem> DetailItems { get; set; }
 
     }
 }

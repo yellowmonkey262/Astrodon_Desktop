@@ -525,7 +525,7 @@
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(833, 300);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Paid";
+            this.tabPage3.Text = "Paid in last 60 days";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // dgPaid
