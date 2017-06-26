@@ -245,12 +245,15 @@ namespace Astrodon
             if (u.usertype != 2)
             {
                 String buildDeleteQuery = "DELETE FROM tblUserBuildings WHERE userid = @userid";
-                String clearOldBuildingQuery = "DELETE FROM tblUserBuildings WHERE buildingid in (" + String.Join(",", u.buildings) + ")";
+                String clearOldBuildingQuery = "delete ub from tblUserBuildings ub inner join tblUsers u on ub.userid = u.id where u.usertype = 3 and ub.buildingid in (" + String.Join(",", u.buildings) + ")";
                 String buildQuery = "INSERT INTO tblUserBuildings(userid, buildingid) VALUES(@userid, @buildID)";
                 dh.SetData(buildDeleteQuery, sqlParms, out status);
                 if (Controller.user.id == 1) { MessageBox.Show(status); }
-                dh.SetData(clearOldBuildingQuery, null, out status);
-                if (Controller.user.id == 1) { MessageBox.Show(status); }
+                if (u.usertype == 3)
+                {
+                    dh.SetData(clearOldBuildingQuery, null, out status);
+                    if (Controller.user.id == 1) { MessageBox.Show(status); }
+                }
                 foreach (int bid in u.buildings)
                 {
                     sqlParms["@buildID"] = bid;

@@ -358,8 +358,12 @@ namespace Astrodon
             if (customer != null)
             {
                 String query = "";
+
+                String clearOldClearances = "";
+
                 if (id == 0)
                 {
+                    clearOldClearances = "DELETE FROM tblClearances WHERE buildingCode = @buildingCode AND customerCode = @customerCode";
                     query = "INSERT INTO tblClearances(buildingCode, customerCode, preparedBy, trfAttorneys, attReference, fax, certDate, complex, unitNo, seller, purchaser, purchaserAddress, purchaserTel, ";
                     query += " purchaserEmail, regDate, notes, clearanceFee, astrodonTotal, validDate, processed, registered, extClearance)";
                     query += " VALUES(@buildingCode, @customerCode, @preparedBy, @trfAttorneys, @attReference, @fax, @certDate, @complex, @unitNo, @seller, @purchaser, @purchaserAddress, @purchaserTel, ";
@@ -398,10 +402,15 @@ namespace Astrodon
                 sqlParms.Add("@id", id);
                 sqlParms.Add("@extClearance", chkExClearance.Checked);
                 String status = String.Empty;
+                if (!String.IsNullOrEmpty(clearOldClearances))
+                {
+                    dh.SetData(clearOldClearances, sqlParms, out status);
+                }
+
                 dh.SetData(query, sqlParms, out status);
                 if (id == 0) { id = GetClearanceID(); }
 
-                String transQuery = "DELETE FROM tblClearanceTransactions WHERE clearanceID = " + id.ToString();
+                String transQuery = "DELETE FROM tblClearanceTransactions WHERE clearanceID NOT IN (SELECT id FROM tblClearances) OR id = " + id.ToString();
                 dh.SetData(transQuery, null, out status);
                 //MessageBox.Show("CLID = " + id.ToString());
                 transQuery = "INSERT INTO tblClearanceTransactions(clearanceID, description, qty, rate, markup, amount) VALUES(@clearanceID, @description, @qty, @rate, @markup, @amount)";

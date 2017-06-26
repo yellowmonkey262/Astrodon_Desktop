@@ -139,22 +139,20 @@ namespace Astrodon
             }
             else
             {
-                using (PopupNotifier popup = new PopupNotifier())
-                {
-                    popup.TitleText = "Message from Astrodon Server";
-                    popup.ContentText = notification;
-                    popup.ShowCloseButton = false;
-                    popup.ShowOptionsButton = false;
-                    popup.ShowGrip = true;
-                    popup.Delay = 10000;
-                    popup.AnimationInterval = 5;
-                    popup.AnimationDuration = 15;
-                    popup.TitlePadding = new Padding(3);
-                    popup.ContentPadding = new Padding(3);
-                    popup.ImagePadding = new Padding(3);
-                    popup.Scroll = true;
-                    popup.Popup();
-                }
+                PopupNotifier popup = new PopupNotifier();
+                popup.TitleText = "Message from Astrodon Server";
+                popup.ContentText = notification;
+                popup.ShowCloseButton = false;
+                popup.ShowOptionsButton = false;
+                popup.ShowGrip = true;
+                popup.Delay = 10000;
+                popup.AnimationInterval = 5;
+                popup.AnimationDuration = 15;
+                popup.TitlePadding = new Padding(3);
+                popup.ContentPadding = new Padding(3);
+                popup.ImagePadding = new Padding(3);
+                popup.Scroll = true;
+                popup.Popup();
             }
         }
 
