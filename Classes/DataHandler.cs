@@ -9,7 +9,7 @@ namespace Astrodon
 {
     public class SqlDataHandler
     {
-        private static String connStringDefault = "Data Source=SERVER2\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=sa"; //Astrodon
+        private static String connStringDefault = "Data Source=SERVER-SQL;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=@str0d0n"; //Astrodon
         private static String connStringL = "Data Source=STEPHEN-PC\\MTDNDSQL;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=m3t@p@$$"; //Local
 
       

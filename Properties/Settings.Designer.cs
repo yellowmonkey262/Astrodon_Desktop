@@ -12,7 +12,7 @@ namespace Astrodon.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -38,8 +38,8 @@ namespace Astrodon.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SERVER2\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=Tru" +
-            "e;User ID=sa;Password=sa")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SERVER-SQL;Initial Catalog=Astrodon;Persist Security Info=True;User I" +
+            "D=sa;Password=@str0d0n")]
         public string AstrodonConnectionString {
             get {
                 return ((string)(this["AstrodonConnectionString"]));
@@ -49,8 +49,8 @@ namespace Astrodon.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SERVER2\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=Tru" +
-            "e;User ID=sa;Password=sa")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SERVER-SQL;Initial Catalog=Astrodon;Persist Security Info=True;User I" +
+            "D=sa;Password=@str0d0n")]
         public string AstrodonConnectionStringS {
             get {
                 return ((string)(this["AstrodonConnectionStringS"]));
@@ -71,8 +71,8 @@ namespace Astrodon.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SERVER2\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=Tru" +
-            "e;User ID=sa;Password=sa")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SERVER-SQL;Initial Catalog=Astrodon;Persist Security Info=True;User I" +
+            "D=sa;Password=@str0d0n")]
         public string AstrodonConnectionString1 {
             get {
                 return ((string)(this["AstrodonConnectionString1"]));
