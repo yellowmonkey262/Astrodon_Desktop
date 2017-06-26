@@ -16,6 +16,14 @@ namespace Astrodon
         public static Pastel pastel;
         public static Classes.CommClient commClient;
         private static SqlDataHandler dataHandler;
+        private static System.Timers.Timer tmrDependency;
+        private static DataSet dsDependency;
+        private static DataSet newDSDependency;
+        public static bool ShowingJobList = false;
+        private static DateTime lastCheckedDate = DateTime.Now.AddDays(-1);
+        public static bool FiredUpdate = false;
+
+        public static event EventHandler<EventArgs> JobUpdateEvent;
 
         public static void RunProgram()
         {
@@ -54,26 +62,20 @@ namespace Astrodon
             commClient.MessageReceived += commClient_MessageReceived;
             commClient.LoginOK += commClient_LoginOK;
             commClient.Login(user.username, user.password);
-            if (user.id == 2)
-            {
-                pastel.pastelDirectory = "\\\\SERVER2\\Pastel11\\";
-                //pastelDirectory = "C:\\Pastel12";
-            }
+            if (user.id == 2) { pastel.pastelDirectory = "\\\\SERVER2\\Pastel11\\"; }
             mainF.Show();
             DependencyInitialization();
         }
 
-
         internal static void HandleError(Exception e, string title = "Application Error")
         {
-            HandleError(e.Message+ Environment.NewLine + e.StackTrace, title);
+            HandleError(e.Message + Environment.NewLine + e.StackTrace, title);
         }
 
         internal static void HandleError(string error, string title = "Application Error")
         {
             MessageBox.Show(error, title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
-
 
         internal static void ShowMessage(string message, string title = "Information")
         {
@@ -89,10 +91,6 @@ namespace Astrodon
         {
             commClient.SendMessage("hello server");
         }
-
-        private static System.Timers.Timer tmrDependency;
-        private static DataSet dsDependency;
-        private static DataSet newDSDependency;
 
         public static void DependencyInitialization()
         {
@@ -116,8 +114,6 @@ namespace Astrodon
             }
             tmrDependency.Enabled = true;
         }
-
-        public static event EventHandler<EventArgs> JobUpdateEvent;
 
         private static void JobHandler()
         {
@@ -152,9 +148,6 @@ namespace Astrodon
                 if (connection.State != ConnectionState.Closed) { connection.Close(); }
             }
         }
-
-        public static bool ShowingJobList = false;
-        private static DateTime lastCheckedDate = DateTime.Now.AddDays(-1);
 
         public static void CheckStatus()
         {
@@ -224,8 +217,6 @@ namespace Astrodon
             // Release the dependency.
             SqlDependency.Stop(dataHandler.connString);
         }
-
-        public static bool FiredUpdate = false;
 
         private static void commClient_MessageReceived(object sender, Classes.IMReceivedEventArgs e)
         {

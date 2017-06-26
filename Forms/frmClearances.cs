@@ -9,6 +9,8 @@ namespace Astrodon
 {
     public partial class frmClearances : Form
     {
+        #region Variables
+
         private SqlDataHandler dh = new SqlDataHandler();
         private Building build;
         private Customer customer;
@@ -27,6 +29,10 @@ namespace Astrodon
         private BindingSource bs = new BindingSource();
         private int id;
         private List<ClearanceTransactions> clrTrans = new List<ClearanceTransactions>();
+
+        #endregion Variables
+
+        #region Constructor
 
         public frmClearances(int clearanceID)
         {
@@ -80,6 +86,8 @@ namespace Astrodon
                 CalcTotals();
             }
         }
+
+        #endregion Constructor
 
         private void LoadExtraBuilding()
         {

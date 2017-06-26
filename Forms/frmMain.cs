@@ -10,6 +10,7 @@ using NotificationWindow;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Astrodon
@@ -19,22 +20,21 @@ namespace Astrodon
         private Timer tmrRem = new Timer();
         private DataContext _DataContext;
         private PopupNotifier popup = null;
+        private Astrodon.Controls.usrPMJobs jobList;
 
         public delegate void PopupDelegate(String notification);
 
         public frmMain()
         {
             InitializeComponent();
-
             upgradeDatabaseToolStripMenuItem.Visible = false;
-
             _DataContext = SqlDataHandler.GetDataContext();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            lblVersion.Text = "Version " + Assembly.GetExecutingAssembly().GetName().Version;
             upgradeDatabaseToolStripMenuItem.Visible = Controller.user.username == "sheldon";
-
             if (Controller.user.usertype != 1 && Controller.user.usertype != 2)
             {
                 systemToolStripMenuItem.Enabled = false;
@@ -43,17 +43,9 @@ namespace Astrodon
                 allocationsToolStripMenuItem.Enabled = false;
             }
             if (Controller.user.usertype != 1 && Controller.user.usertype != 2) { reportingToolStripMenuItem.Enabled = false; }
-
             List<int> allowedUsers = new List<int>() { 43 };
-            if (allowedUsers.Contains(Controller.user.id))
-            {
-                reportingToolStripMenuItem.Enabled = true;
-            }
-
-            if (Controller.user.usertype == 1 || Controller.user.usertype == 2)
-            {
-                pMJobListToolStripMenuItem.Enabled = true;
-            }
+            if (allowedUsers.Contains(Controller.user.id)) { reportingToolStripMenuItem.Enabled = true; }
+            if (Controller.user.usertype == 1 || Controller.user.usertype == 2) { pMJobListToolStripMenuItem.Enabled = true; }
             else if (Controller.user.usertype == 4)
             {
                 pMJobListToolStripMenuItem.Enabled = false;
@@ -64,7 +56,6 @@ namespace Astrodon
             {
                 pMPAToolStripMenuItem.Enabled = false;
             }
-
             List<int> allowReqUsers = new List<int>() { 15 };
             if (allowReqUsers.Contains(Controller.user.id))
             {
@@ -86,9 +77,9 @@ namespace Astrodon
 
         public void LoadReminders()
         {
+            String status;
             String remQuery = "SELECT COUNT(*) as rems FROM tblReminders WHERE userid = " + Controller.user.id.ToString() + " AND action = 'False' AND remDate <= getdate()";
             SqlDataHandler dh = new SqlDataHandler();
-            String status;
             DataSet dsRems = dh.GetData(remQuery, null, out status);
             if (dsRems != null && dsRems.Tables.Count > 0 && dsRems.Tables[0].Rows.Count > 0)
             {
@@ -332,8 +323,6 @@ namespace Astrodon
             pnlContents.Controls.Add(jobReport);
             toolStripStatusLabel1.Text = "Jobs";
         }
-
-        private Astrodon.Controls.usrPMJobs jobList;
 
         private void jobListToolStripMenuItem_Click(object sender, EventArgs e)
         {

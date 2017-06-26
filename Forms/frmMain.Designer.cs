@@ -33,6 +33,7 @@
             this.bankConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkSMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.upgradeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.summaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,7 +91,7 @@
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.upgradeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -171,6 +172,13 @@
             this.bulkSMSToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.bulkSMSToolStripMenuItem.Text = "Bulk SMS";
             this.bulkSMSToolStripMenuItem.Click += new System.EventHandler(this.bulkSMSToolStripMenuItem_Click);
+            // 
+            // upgradeDatabaseToolStripMenuItem
+            // 
+            this.upgradeDatabaseToolStripMenuItem.Name = "upgradeDatabaseToolStripMenuItem";
+            this.upgradeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.upgradeDatabaseToolStripMenuItem.Text = "Upgrade Database";
+            this.upgradeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.upgradeDatabaseToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -588,7 +596,8 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
-            this.lblNotifications});
+            this.lblNotifications,
+            this.lblVersion});
             this.statusStrip1.Location = new System.Drawing.Point(0, 568);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1015, 22);
@@ -605,7 +614,7 @@
             // 
             this.lblNotifications.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.lblNotifications.Name = "lblNotifications";
-            this.lblNotifications.Size = new System.Drawing.Size(955, 17);
+            this.lblNotifications.Size = new System.Drawing.Size(876, 17);
             this.lblNotifications.Spring = true;
             // 
             // pnlContents
@@ -623,12 +632,11 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // upgradeDatabaseToolStripMenuItem
+            // lblVersion
             // 
-            this.upgradeDatabaseToolStripMenuItem.Name = "upgradeDatabaseToolStripMenuItem";
-            this.upgradeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
-            this.upgradeDatabaseToolStripMenuItem.Text = "Upgrade Database";
-            this.upgradeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.upgradeDatabaseToolStripMenuItem_Click);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(48, 17);
+            this.lblVersion.Text = "Version ";
             // 
             // frmMain
             // 
@@ -723,5 +731,6 @@
         private System.Windows.Forms.ToolStripMenuItem downloadRequisitionBatchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem supplierBatchRequisitionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem upgradeDatabaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel lblVersion;
     }
 }

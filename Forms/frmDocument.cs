@@ -16,6 +16,7 @@ namespace Astrodon.Forms
         private Building building;
         private NetSpell.SpellChecker.Spelling spellCheck;
         private NetSpell.SpellChecker.Dictionary.WordDictionary dictionary;
+        private int selectionPos;
 
         public frmDocument(String template, Building build)
         {
@@ -23,10 +24,7 @@ namespace Astrodon.Forms
             InitializeComponent();
             if (!String.IsNullOrEmpty(template)) { content = template; }
             spellCheck = new Spelling();
-            dictionary = new NetSpell.SpellChecker.Dictionary.WordDictionary
-            {
-                DictionaryFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dic")
-            };
+            dictionary = new NetSpell.SpellChecker.Dictionary.WordDictionary { DictionaryFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dic") };
             spellCheck.Dictionary = dictionary;
             spellCheck.EndOfText += spellCheck_EndOfText;
             spellCheck.DeletedWord += spellCheck_DeletedWord;
@@ -37,14 +35,10 @@ namespace Astrodon.Forms
         {
             int start = this.rtfEditor.SelectionStart;
             int length = this.rtfEditor.SelectionLength;
-
             this.rtfEditor.Select(e.TextIndex, e.Word.Length);
             this.rtfEditor.SelectedText = e.ReplacementWord;
-
             if (start > this.rtfEditor.Text.Length) { start = this.rtfEditor.Text.Length; }
-
             if ((start + length) > this.rtfEditor.Text.Length) { length = 0; }
-
             this.rtfEditor.Select(start, length);
         }
 
@@ -52,13 +46,10 @@ namespace Astrodon.Forms
         {
             int start = this.rtfEditor.SelectionStart;
             int length = this.rtfEditor.SelectionLength;
-
             this.rtfEditor.Select(e.TextIndex, e.Word.Length);
             this.rtfEditor.SelectedText = "";
-
             if (start > this.rtfEditor.Text.Length) { start = this.rtfEditor.Text.Length; }
             if ((start + length) > this.rtfEditor.Text.Length) { length = 0; }
-
             this.rtfEditor.Select(start, length);
         }
 
@@ -136,8 +127,6 @@ namespace Astrodon.Forms
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.Close();
         }
-
-        private int selectionPos;
 
         private void rtfEditor_TextChanged(object sender, EventArgs e)
         {

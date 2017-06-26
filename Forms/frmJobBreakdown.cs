@@ -25,8 +25,7 @@ namespace Astrodon.Forms
         private void LoadBreakdown()
         {
             bs.Clear();
-            String query = " SELECT u.name, ps.status, ps.actionDate FROM tblPMJobStatus AS ps INNER JOIN tblUsers AS u ON ps.actioned = u.id ";
-            query += " WHERE (ps.jobID = @jid) ORDER BY ps.actionDate";
+            String query = " SELECT u.name, ps.status, ps.actionDate FROM tblPMJobStatus AS ps INNER JOIN tblUsers AS u ON ps.actioned = u.id WHERE (ps.jobID = @jid) ORDER BY ps.actionDate";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@jid", jobID);
             SqlDataHandler dh = new SqlDataHandler();
@@ -44,16 +43,8 @@ namespace Astrodon.Forms
                         status = dr["status"].ToString(),
                         date = dr["actionDate"].ToString()
                     };
-                    if (i == 0)
-                    {
-                        jb.delay = "";
-                        iniDate = DateTime.Parse(jb.date);
-                    }
-                    else
-                    {
-                        jb.delay = CalcDiff(iniDate, DateTime.Parse(jb.date)).ToString();
-                        iniDate = DateTime.Parse(jb.date);
-                    }
+                    jb.delay = i == 0 ? "" : CalcDiff(iniDate, DateTime.Parse(jb.date)).ToString();
+                    iniDate = DateTime.Parse(jb.date);
                     bs.Add(jb);
                 }
             }
