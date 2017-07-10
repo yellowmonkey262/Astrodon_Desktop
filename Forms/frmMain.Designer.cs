@@ -89,9 +89,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
+            this.unPaidRequisitionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -454,7 +455,8 @@
             this.unpaidRequisitionsToolStripMenuItem,
             this.missingMaintenanceRequisitionsToolStripMenuItem,
             this.supplierBatchRequisitionToolStripMenuItem,
-            this.downloadRequisitionBatchToolStripMenuItem});
+            this.downloadRequisitionBatchToolStripMenuItem,
+            this.unPaidRequisitionsMenuItem});
             this.requisitionsToolStripMenuItem.Name = "requisitionsToolStripMenuItem";
             this.requisitionsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.requisitionsToolStripMenuItem.Text = "Requisitions";
@@ -614,8 +616,14 @@
             // 
             this.lblNotifications.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.lblNotifications.Name = "lblNotifications";
-            this.lblNotifications.Size = new System.Drawing.Size(876, 17);
+            this.lblNotifications.Size = new System.Drawing.Size(907, 17);
             this.lblNotifications.Spring = true;
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(48, 17);
+            this.lblVersion.Text = "Version ";
             // 
             // pnlContents
             // 
@@ -632,11 +640,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // lblVersion
+            // unPaidRequisitionsMenuItem
             // 
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(48, 17);
-            this.lblVersion.Text = "Version ";
+            this.unPaidRequisitionsMenuItem.Name = "unPaidRequisitionsMenuItem";
+            this.unPaidRequisitionsMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.unPaidRequisitionsMenuItem.Text = "Unpaid Requisitions";
+            this.unPaidRequisitionsMenuItem.Click += new System.EventHandler(this.unPaidRequisitionsMenuItem_Click);
             // 
             // frmMain
             // 
@@ -732,5 +741,6 @@
         private System.Windows.Forms.ToolStripMenuItem supplierBatchRequisitionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem upgradeDatabaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel lblVersion;
+        private System.Windows.Forms.ToolStripMenuItem unPaidRequisitionsMenuItem;
     }
 }
