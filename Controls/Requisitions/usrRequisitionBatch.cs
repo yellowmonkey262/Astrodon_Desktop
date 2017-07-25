@@ -650,23 +650,23 @@ namespace Astrodon.Controls.Requisitions
 
                                                                 CommitRequisitionBatch(batch);
 
-                                                                string csvFileName = "";
-                                                                var csvFile = CreateCSVForBuildingBatch(building, batch, out csvFileName);
-                                                                if (!String.IsNullOrWhiteSpace(csvFileName))
-                                                                {
-                                                                    attachments.Add(csvFileName, csvFile);
+                                                                //string csvFileName = "";
+                                                                //var csvFile = CreateCSVForBuildingBatch(building, batch, out csvFileName);
+                                                                //if (!String.IsNullOrWhiteSpace(csvFileName))
+                                                                //{
+                                                                //    attachments.Add(csvFileName, csvFile);
 
-                                                                    string csvOutputPath = outputPath + csvFile;
-                                                                    try
-                                                                    {
-                                                                        File.WriteAllBytes(outputFilename, csvFile);
-                                                                    }
-                                                                    catch (Exception fEx)
-                                                                    {
-                                                                        Controller.HandleError(fEx);
-                                                                    }
+                                                                //    string csvOutputPath = outputPath + csvFile;
+                                                                //    try
+                                                                //    {
+                                                                //        File.WriteAllBytes(outputFilename, csvFile);
+                                                                //    }
+                                                                //    catch (Exception fEx)
+                                                                //    {
+                                                                //        Controller.HandleError(fEx);
+                                                                //    }
 
-                                                                }
+                                                                //}
 
                                                             }
                                                             catch (Exception exr)
