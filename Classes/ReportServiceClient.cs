@@ -31,6 +31,9 @@ namespace Astrodon.ReportService
             binding.TextEncoding = System.Text.Encoding.UTF8;
             binding.MaxReceivedMessageSize = int.MaxValue;
             binding.MaxBufferSize = int.MaxValue;
+            binding.MaxBufferPoolSize = int.MaxValue;
+            binding.ReaderQuotas.MaxArrayLength = int.MaxValue;
+            binding.ReaderQuotas.MaxDepth = int.MaxValue;
             //"BasicHttpBinding_IReportService"
             return new ReportServiceClient(binding, new EndpointAddress("http://" + url + ":8080"));
         }
