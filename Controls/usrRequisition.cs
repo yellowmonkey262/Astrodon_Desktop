@@ -1087,6 +1087,13 @@ namespace Astrodon.Controls
                 Controller.HandleError("Please select a building first.", "Validation Error");
                 return;
             }
+
+            if (cmbAccount.SelectedItem == null || cmbAccount.SelectedIndex < 0)
+            {
+                Controller.HandleError("Please select an account.", "Validation Error");
+                return;
+            }
+
             String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
             String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
             List<Trns> transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).OrderByDescending(c => c.Date).ToList();
