@@ -762,13 +762,13 @@ namespace Astrodon.Controls.Requisitions
                         select new NedbankCSVRecord
                         {
                             FromAccountNumber = fromAccountNumber,
-                            FromAccountDescription = fromAccountDescription,
+                            FromAccountDescription = r.reference,
                             FromAccountSubAccountNumber = fromAccountSubAccountNumber,
-                            FromAccountStatementDescription = r.reference,
-                            ToAccountNumber = r.AccountNumber,
+                            MyStatementDescription = r.reference,
+                            BeneficiaryAccountNumber = r.AccountNumber,
                             ToAccountSubAccountNumber = "",
                             ToAccountDescription = r.AccountNumber,
-                            ToAccountStatementDescription = r.payreference,
+                            BeneficiaryStatementDescription = r.payreference,
                             Amount = r.amount
                         };
                 var transactions = q.ToList();
@@ -855,35 +855,31 @@ namespace Astrodon.Controls.Requisitions
     class NedbankCSVRecord
     {
         public string FromAccountNumber { get; internal set; }
-        public string FromAccountSubAccountNumber { get; internal set; }
         public string FromAccountDescription { get; internal set; }
-        public string FromAccountStatementDescription { get; internal set; }
+        public string MyStatementDescription { get; internal set; }
 
-        public string ToAccountNumber { get; internal set; }
-        public string ToAccountSubAccountNumber { get; internal set; }
-        public string ToAccountDescription { get; internal set; }
-        public string ToAccountStatementDescription { get; internal set; }
+
+        public string BeneficiaryAccountNumber { get; internal set; }
+        public string BeneficiaryStatementDescription { get; internal set; }
 
         public decimal Amount { get; internal set; }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(FromAccountNumber);
-            sb.Append(",");
-            sb.Append(FromAccountSubAccountNumber);
+            sb.Append(Clean(FromAccountNumber));
             sb.Append(",");
             sb.Append("'"+ Clean(FromAccountDescription) +"'");
             sb.Append(",");
-            sb.Append("'" + Clean(FromAccountStatementDescription) + "'");
+            sb.Append("'" + Clean(MyStatementDescription) + "'");
             sb.Append(",");
-            sb.Append(ToAccountNumber);
+            sb.Append(Clean(BeneficiaryAccountNumber));
             sb.Append(",");
             sb.Append(ToAccountSubAccountNumber);
             sb.Append(",");
             sb.Append("'"+Clean(ToAccountDescription)+"'");
             sb.Append(",");
-            sb.Append("'" + Clean(ToAccountStatementDescription) + "'");
+            sb.Append("'" + Clean(BeneficiaryStatementDescription) + "'");
             sb.Append(",");
             sb.Append(Amount.ToString("0.00",CultureInfo.InvariantCulture));
             return sb.ToString();
