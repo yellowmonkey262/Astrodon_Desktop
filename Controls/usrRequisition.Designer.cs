@@ -26,6 +26,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrRequisition));
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -97,6 +98,8 @@
             this.btnUploadInvoice = new System.Windows.Forms.Button();
             this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.astrodonDataSet1 = new Astrodon.AstrodonDataSet();
+            this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgUnprocessed)).BeginInit();
@@ -104,6 +107,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgUnpaid)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgPaid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.astrodonDataSet1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbBuilding
@@ -769,10 +774,25 @@
             this.btnCancel.Visible = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // astrodonDataSet1
+            // 
+            this.astrodonDataSet1.DataSetName = "AstrodonDataSet";
+            this.astrodonDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // axAcroPDF1
+            // 
+            this.axAcroPDF1.Enabled = true;
+            this.axAcroPDF1.Location = new System.Drawing.Point(478, 15);
+            this.axAcroPDF1.Name = "axAcroPDF1";
+            this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
+            this.axAcroPDF1.Size = new System.Drawing.Size(374, 359);
+            this.axAcroPDF1.TabIndex = 43;
+            // 
             // usrRequisition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.axAcroPDF1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnUploadInvoice);
             this.Controls.Add(this.dtInvoiceDate);
@@ -810,7 +830,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbBuilding);
             this.Name = "usrRequisition";
-            this.Size = new System.Drawing.Size(862, 664);
+            this.Size = new System.Drawing.Size(873, 664);
             this.Load += new System.EventHandler(this.usrRequisition_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -819,6 +839,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgUnpaid)).EndInit();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgPaid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.astrodonDataSet1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -897,5 +919,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colAccount;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
         private System.Windows.Forms.Button btnCancel;
+        private AstrodonDataSet astrodonDataSet1;
+        private AxAcroPDFLib.AxAcroPDF axAcroPDF1;
     }
 }

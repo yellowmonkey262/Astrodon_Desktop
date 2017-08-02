@@ -751,6 +751,9 @@ namespace Astrodon.Controls.Requisitions
 
         private static byte[] CreateNedbankCSV(tblBuilding building, RequisitionBatch batch, out string fileName)
         {
+            fileName = null;
+            return null;
+            
             string fromAccountNumber = building.bankAccNumber;
             string fromAccountDescription = building.accName;
             string fromAccountSubAccountNumber = string.Empty;
@@ -763,12 +766,12 @@ namespace Astrodon.Controls.Requisitions
                         {
                             FromAccountNumber = fromAccountNumber,
                             FromAccountDescription = r.reference,
-                            FromAccountSubAccountNumber = fromAccountSubAccountNumber,
-                            MyStatementDescription = r.reference,
-                            BeneficiaryAccountNumber = r.AccountNumber,
-                            ToAccountSubAccountNumber = "",
-                            ToAccountDescription = r.AccountNumber,
-                            BeneficiaryStatementDescription = r.payreference,
+                            //FromAccountSubAccountNumber = fromAccountSubAccountNumber,
+                            //MyStatementDescription = r.reference,
+                            //BeneficiaryAccountNumber = r.AccountNumber,
+                            //ToAccountSubAccountNumber = "",
+                            //ToAccountDescription = r.AccountNumber,
+                            //BeneficiaryStatementDescription = r.payreference,
                             Amount = r.amount
                         };
                 var transactions = q.ToList();
@@ -874,10 +877,6 @@ namespace Astrodon.Controls.Requisitions
             sb.Append("'" + Clean(MyStatementDescription) + "'");
             sb.Append(",");
             sb.Append(Clean(BeneficiaryAccountNumber));
-            sb.Append(",");
-            sb.Append(ToAccountSubAccountNumber);
-            sb.Append(",");
-            sb.Append("'"+Clean(ToAccountDescription)+"'");
             sb.Append(",");
             sb.Append("'" + Clean(BeneficiaryStatementDescription) + "'");
             sb.Append(",");
