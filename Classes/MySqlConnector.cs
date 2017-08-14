@@ -731,6 +731,7 @@ namespace Astrodon
             String query = "SELECT d.tstamp, d.title, d.file FROM tx_astro_docs d where (d.unitno = @rentalUnitNo) OR (d.unitno = @unitno AND cruser_id = 0) ORDER BY d.tstamp DESC";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@unitno", unitno);
+            sqlParms.Add("@rentalUnitNo", rentalUnitNo);
             String status = "";
             DataSet fileDS = GetData(query, sqlParms, out status);
             //MessageBox.Show(status);
