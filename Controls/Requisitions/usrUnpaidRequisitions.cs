@@ -95,6 +95,12 @@ namespace Astrodon.Controls.Requisitions
                 Text = "Set Paid",
                 UseColumnTextForButtonValue = true,
             });
+            dgItems.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "Delete",
+                Text = "Delete",
+                UseColumnTextForButtonValue = true,
+            });
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -262,22 +268,53 @@ namespace Astrodon.Controls.Requisitions
             {
                 var item = senderGrid.Rows[e.RowIndex].DataBoundItem as RequistitionGridItem;
 
-                if (item != null && item.Paid == false)
+                if (e.ColumnIndex == 0)
                 {
-                    if (Controller.AskQuestion("Are you sure you want to mark this item as Paid?"
-                                          + Environment.NewLine + item.ToString()))
+                    MarkAsPaid(item);
+                }
+                else
+                {
+                    DeleteRequisition(item);
+                }
+            }
+        }
+
+        private void DeleteRequisition(RequistitionGridItem item)
+        {
+            if (item == null || item.Paid)
+                return;
+
+            if(Controller.AskQuestion("Are you sure you want to delete this requisition?"
+                  + Environment.NewLine + item.ToString()))
+            {
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    context.DeleteRequisition(item.Id);
+                    _DataItems.Remove(item);
+                    var bindingSource = new BindingSource();
+                    bindingSource.DataSource = _DataItems;
+                    dgItems.DataSource = bindingSource;
+                }
+            }
+        }
+
+        private void MarkAsPaid(RequistitionGridItem item)
+        {
+            if (item != null && item.Paid == false)
+            {
+                if (Controller.AskQuestion("Are you sure you want to mark this item as Paid?"
+                                      + Environment.NewLine + item.ToString()))
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
                     {
-                        using (var context = SqlDataHandler.GetDataContext())
-                        {
-                            var req = context.tblRequisitions.Single(a => a.id == item.Id);
-                            req.paid = true;
-                            req.PaymentDataPath = "Manual-" + Controller.user.username + "-" + DateTime.Now.ToString("yyyy/MM/dd HH:mm");
-                            context.SaveChanges();
-                            _DataItems.Remove(item);
-                            var bindingSource = new BindingSource();
-                            bindingSource.DataSource = _DataItems;
-                            dgItems.DataSource = bindingSource;
-                        }
+                        var req = context.tblRequisitions.Single(a => a.id == item.Id);
+                        req.paid = true;
+                        req.PaymentDataPath = "Manual-" + Controller.user.username + "-" + DateTime.Now.ToString("yyyy/MM/dd HH:mm");
+                        context.SaveChanges();
+                        _DataItems.Remove(item);
+                        var bindingSource = new BindingSource();
+                        bindingSource.DataSource = _DataItems;
+                        dgItems.DataSource = bindingSource;
                     }
                 }
             }

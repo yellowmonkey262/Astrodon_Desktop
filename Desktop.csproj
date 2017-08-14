@@ -1025,6 +1025,8 @@
     <None Include="centrec.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="DLL\AxInterop.AcroPDFLib.dll" />
+    <Content Include="DLL\Interop.AcroPDFLib.dll" />
     <Content Include="DLL\Interop.PasSDK.dll" />
     <Content Include="DLL\Itenso.Rtf.Converter.Html.dll" />
     <Content Include="DLL\Itenso.Rtf.Converter.Xml.dll" />

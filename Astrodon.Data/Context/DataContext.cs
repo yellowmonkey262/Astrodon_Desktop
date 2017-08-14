@@ -79,12 +79,13 @@ namespace Astrodon.Data
         public DbSet<BuildingMaintenanceConfiguration> BuildingMaintenanceConfigurationSet { get; set; }
         public DbSet<SupplierBuilding> SupplierBuildingSet { get; set; }
         public DbSet<SupplierBuildingAudit> SupplierBuildingAuditSet { get; set; }
-        public DbSet<MaintenanceDetailItem> MaintenanceDetailItemSet { get; set; }
 
         public DbSet<Supplier> SupplierSet { get; set; }
         public DbSet<SupplierAudit> SupplierAuditSet { get; set; }
+
         public DbSet<Maintenance> MaintenanceSet { get; set; }
         public DbSet<MaintenanceDocument> MaintenanceDocumentSet { get; set; }
+        public DbSet<MaintenanceDetailItem> MaintenanceDetailItemSet { get; set; }
 
         public DbSet<RequisitionDocument> RequisitionDocumentSet { get; set; }
         public DbSet<RequisitionBatch> RequisitionBatchSet { get; set; }
@@ -127,6 +128,23 @@ namespace Astrodon.Data
             Database.ExecuteSqlCommand("delete from RequisitionBatch where id =" + requisitionBatchId.ToString());
         }
 
-      
+        public void DeleteMaintenance(int maintenanceId)
+        {
+            Database.ExecuteSqlCommand("delete from MaintenanceDocument where MaintenanceId=" + maintenanceId.ToString());
+            Database.ExecuteSqlCommand("delete from MaintenanceDetailItem where MaintenanceId=" + maintenanceId.ToString());
+            Database.ExecuteSqlCommand("delete from Maintenance where Id=" + maintenanceId.ToString());
+        }
+
+        public void DeleteRequisition(int requisitionId)
+        {
+            //all maintenance records
+            foreach(var maintenanceId in this.MaintenanceSet.Where(a => a.RequisitionId == requisitionId).Select(a => a.id).ToList())
+            {
+                DeleteMaintenance(maintenanceId);
+            }
+
+            Database.ExecuteSqlCommand("delete from RequisitionDocument where RequisitionId=" + requisitionId.ToString());
+            Database.ExecuteSqlCommand("delete from tblRequisition where Id=" + requisitionId.ToString());
+        }
     }
 }

@@ -38,6 +38,7 @@ namespace Astrodon.Controls
             dtInvoiceDate.MinDate = _minDate;
             dtInvoiceDate.Value = _minDate;
             dtInvoiceDate.MaxDate = DateTime.Today.AddDays(7);
+            this.axAcroPDF1.Visible = false;
         }
 
         private void usrRequisition_Load(object sender, EventArgs e)

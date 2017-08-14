@@ -84,7 +84,6 @@ namespace Astrodon.Data
                 .IsFixedLength();
         }
 
-      
     }
 
    
