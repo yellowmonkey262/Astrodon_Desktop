@@ -52,6 +52,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblLinkedBuildings = new System.Windows.Forms.Label();
             this.pnlBank = new System.Windows.Forms.Panel();
+            this.btnNewBuilding = new System.Windows.Forms.Button();
+            this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.lbBuildingName = new System.Windows.Forms.Label();
             this.cbBanks = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -65,8 +67,7 @@
             this.lblBankingDetail = new System.Windows.Forms.Label();
             this.dgBuildingAuditTrail = new System.Windows.Forms.DataGridView();
             this.lbBuildingAuditTrail = new System.Windows.Forms.Label();
-            this.cmbBuilding = new System.Windows.Forms.ComboBox();
-            this.btnNewBuilding = new System.Windows.Forms.Button();
+            this.btnChangeAll = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgBuildings)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAuditTrail)).BeginInit();
             this.pnlBank.SuspendLayout();
@@ -293,6 +294,24 @@
             this.pnlBank.Size = new System.Drawing.Size(358, 178);
             this.pnlBank.TabIndex = 33;
             // 
+            // btnNewBuilding
+            // 
+            this.btnNewBuilding.Location = new System.Drawing.Point(280, 8);
+            this.btnNewBuilding.Name = "btnNewBuilding";
+            this.btnNewBuilding.Size = new System.Drawing.Size(75, 23);
+            this.btnNewBuilding.TabIndex = 37;
+            this.btnNewBuilding.Text = "New Building";
+            this.btnNewBuilding.UseVisualStyleBackColor = true;
+            this.btnNewBuilding.Click += new System.EventHandler(this.btnNewBuilding_Click);
+            // 
+            // cmbBuilding
+            // 
+            this.cmbBuilding.FormattingEnabled = true;
+            this.cmbBuilding.Location = new System.Drawing.Point(127, 38);
+            this.cmbBuilding.Name = "cmbBuilding";
+            this.cmbBuilding.Size = new System.Drawing.Size(228, 21);
+            this.cmbBuilding.TabIndex = 18;
+            // 
             // lbBuildingName
             // 
             this.lbBuildingName.AutoSize = true;
@@ -405,28 +424,21 @@
             this.lbBuildingAuditTrail.TabIndex = 35;
             this.lbBuildingAuditTrail.Text = "Building Audit Trail";
             // 
-            // cmbBuilding
+            // btnChangeAll
             // 
-            this.cmbBuilding.FormattingEnabled = true;
-            this.cmbBuilding.Location = new System.Drawing.Point(127, 38);
-            this.cmbBuilding.Name = "cmbBuilding";
-            this.cmbBuilding.Size = new System.Drawing.Size(228, 21);
-            this.cmbBuilding.TabIndex = 18;
-            // 
-            // btnNewBuilding
-            // 
-            this.btnNewBuilding.Location = new System.Drawing.Point(280, 8);
-            this.btnNewBuilding.Name = "btnNewBuilding";
-            this.btnNewBuilding.Size = new System.Drawing.Size(75, 23);
-            this.btnNewBuilding.TabIndex = 37;
-            this.btnNewBuilding.Text = "New Building";
-            this.btnNewBuilding.UseVisualStyleBackColor = true;
-            this.btnNewBuilding.Click += new System.EventHandler(this.btnNewBuilding_Click);
+            this.btnChangeAll.Location = new System.Drawing.Point(713, 186);
+            this.btnChangeAll.Name = "btnChangeAll";
+            this.btnChangeAll.Size = new System.Drawing.Size(127, 23);
+            this.btnChangeAll.TabIndex = 36;
+            this.btnChangeAll.Text = "Change All Buildings";
+            this.btnChangeAll.UseVisualStyleBackColor = true;
+            this.btnChangeAll.Click += new System.EventHandler(this.btnChangeAll_Click);
             // 
             // usrSupplierDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnChangeAll);
             this.Controls.Add(this.lbBuildingAuditTrail);
             this.Controls.Add(this.dgBuildingAuditTrail);
             this.Controls.Add(this.pnlBank);
@@ -506,5 +518,6 @@
         private System.Windows.Forms.Label lbBuildingAuditTrail;
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.Button btnNewBuilding;
+        private System.Windows.Forms.Button btnChangeAll;
     }
 }

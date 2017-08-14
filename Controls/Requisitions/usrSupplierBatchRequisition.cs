@@ -112,7 +112,7 @@ namespace Astrodon.Controls.Requisitions
             {
                 var userid = Controller.user.id;
 
-                if (Controller.user.username == "sheldon" || Controller.user.username == "tertia")
+                if (Controller.UserIsSheldon())
                 {
                     _AttachmentRequired = false;
                     _Buildings = new Buildings(false).buildings; //all buildings
@@ -416,7 +416,7 @@ namespace Astrodon.Controls.Requisitions
 
                 reqItem.InvoiceDateControl = row.Cells["InvoiceDateX"] as DataGridViewTextBoxCell;
 
-                if (reqItem.SelectedAccount != null)
+                if (reqItem.SelectedAccount != null && comboBox.Value == null)
                     comboBox.Value = reqItem.SelectedAccount.AccountNumber;
 
                 reqItem.ComboBox = comboBox;

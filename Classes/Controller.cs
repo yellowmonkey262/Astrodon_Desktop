@@ -25,6 +25,17 @@ namespace Astrodon
 
         public static event EventHandler<EventArgs> JobUpdateEvent;
 
+        public static bool UserIsSheldon()
+        {
+            if (user == null)
+                return false;
+
+            if (string.IsNullOrWhiteSpace(user.username))
+                return false;
+
+            return user.username.ToLower() == "sheldon" || user.username.ToLower() == "tertia";
+        }
+
         public static void RunProgram()
         {
             try

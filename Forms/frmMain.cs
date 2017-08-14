@@ -74,7 +74,7 @@ namespace Astrodon
             LoadReminders();
             notifyIcon1.Visible = false;
 
-            unPaidRequisitionsMenuItem.Enabled = Controller.user.id == 2 || Controller.user.id == 27; //Sheldon and Tertia
+            unPaidRequisitionsMenuItem.Enabled = Controller.UserIsSheldon(); //Sheldon and Tertia
 
         }
 

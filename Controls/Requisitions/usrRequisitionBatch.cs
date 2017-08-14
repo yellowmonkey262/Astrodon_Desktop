@@ -45,7 +45,7 @@ namespace Astrodon.Controls.Requisitions
                 var userid = Controller.user.id;
                 Buildings bManager = new Buildings(false);
 
-                if (Controller.user.username == "sheldon" || Controller.user.username == "tertia")
+                if (Controller.UserIsSheldon())
                 {
                     _Buildings = bManager.buildings; //all buildings
                     _allBuildings = true;

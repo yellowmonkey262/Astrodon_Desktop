@@ -39,12 +39,13 @@ namespace Astrodon.Controls.Supplier
             _SupplierId = supplierId;
             btnNewBuilding.Visible = closeOnSave == false;
             dgBuildings.Enabled = closeOnSave == false;
+       
             LoadBanks();
             LoadBuildings();
 
             PopulateForm();
             if (buildingId != null)
-              LoadSupplierBuilding(supplierId, buildingId.Value);
+                LoadSupplierBuilding(supplierId, buildingId.Value);
 
             promptBankEnabled = true;
 
@@ -101,7 +102,7 @@ namespace Astrodon.Controls.Supplier
             }
         }
 
-      
+
 
         #region Events
 
@@ -123,6 +124,8 @@ namespace Astrodon.Controls.Supplier
 
         private void PopulateForm()
         {
+            btnChangeAll.Enabled = Controller.UserIsSheldon() && _SupplierId > 0; //Sheldon and Tertia
+
             if (_SupplierId > 0)
             {
                 _Supplier = _DataContext.SupplierSet.Single(a => a.id == _SupplierId);
@@ -181,7 +184,7 @@ namespace Astrodon.Controls.Supplier
             }
             else
             {
-                if(_SupplierId > 0)
+                if (_SupplierId > 0)
                 {
                     var supplier = _DataContext.SupplierSet.Single(a => a.id == _SupplierId);
                     supplier.CompanyName = txtCompanyName.Text.Trim();
@@ -194,7 +197,7 @@ namespace Astrodon.Controls.Supplier
                         supplier.BlacklistedUserId = Controller.user.id;
                     supplier.BlackListed = chkIsBlackListed.Checked;
                     supplier.BlackListReason = txtBlackListReason.Text.Trim();
-                   
+
 
                     if (cmbBuilding.SelectedItem != null && cbBanks.SelectedItem != null)
                     {
@@ -230,7 +233,7 @@ namespace Astrodon.Controls.Supplier
                 {
                     var supplier = _DataContext.SupplierSet.FirstOrDefault(a => a.CompanyName == txtCompanyName.Text.Trim());
 
-                    if(supplier != null)
+                    if (supplier != null)
                     {
                         Controller.HandleError("Supplier with the same name already exists.", "Save Error");
                         return;
@@ -251,7 +254,7 @@ namespace Astrodon.Controls.Supplier
 
                         _DataContext.SupplierSet.Add(supplierItem);
 
-                        if(cmbBuilding.SelectedItem != null && cbBanks.SelectedItem != null)
+                        if (cmbBuilding.SelectedItem != null && cbBanks.SelectedItem != null)
                         {
                             var bank = cbBanks.SelectedItem as Astrodon.Data.BankData.Bank;
                             var buildingId = (cmbBuilding.SelectedItem as Building).ID;
@@ -272,8 +275,8 @@ namespace Astrodon.Controls.Supplier
 
                     }
                 }
-                if(_closeOnSave)
-                  RaiseSaveSuccess();
+                if (_closeOnSave)
+                    RaiseSaveSuccess();
                 else
                 {
                     _buildingId = null;
@@ -356,12 +359,12 @@ namespace Astrodon.Controls.Supplier
             txtBlackListReason.Text = _Supplier.BlackListReason;
 
             cbBanks.SelectedIndex = -1;
-            if(_Buildings.Count > 0)
-              cmbBuilding.SelectedIndex = -1;
+            if (_Buildings.Count > 0)
+                cmbBuilding.SelectedIndex = -1;
             txtBranch.Text = "";
             txtBranchCode.Text = "";
             txtAccountNumber.Text = "";
-          
+
         }
 
         private void LoadSupplierBuilding(int supplierId, int buildingId)
@@ -377,7 +380,7 @@ namespace Astrodon.Controls.Supplier
 
 
             _BuildingAuditTrailData = _DataContext.SupplierBuildingAuditSet
-                             .Where(a => a.SupplierBuilding.SupplierId  == supplierId && a.SupplierBuilding.BuildingId == buildingId)
+                             .Where(a => a.SupplierBuilding.SupplierId == supplierId && a.SupplierBuilding.BuildingId == buildingId)
                              .Select(a => new SupplierAuditTrailResult
                              {
                                  AuditDate = a.AuditTimeStamp,
@@ -557,21 +560,7 @@ namespace Astrodon.Controls.Supplier
                 dgBuildings.AutoResizeColumns();
             }
 
-            /*
-               public class BuildingResult
-        {
-            public bool IsLinked { get; set; }
-
-            public string BuildingName { get; set; }
-            public int SupplierBuildingId { get; set; }
-            public string Bank { get;  set; }
-            public int BankId { get;  set; }
-            public string BranchCode { get;  set; }
-            public string BranchName { get;  set; }
-            public string AccountNumber { get;  set; }
-        }
-
- */
+            
         }
 
         private string ValidateForm()
@@ -585,7 +574,7 @@ namespace Astrodon.Controls.Supplier
             if (String.IsNullOrEmpty(txtContactPerson.Text))
                 errors.Add("Contact Person is Required.");
 
-            if(cmbBuilding.SelectedIndex < 0)
+            if (cmbBuilding.SelectedIndex < 0)
                 errors.Add("Building is Required.");
 
             if (cbBanks.SelectedIndex < 0)
@@ -659,9 +648,6 @@ namespace Astrodon.Controls.Supplier
             }
         }
 
-
-
-
         private void cbBanks_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (promptBankEnabled == false)
@@ -704,6 +690,33 @@ namespace Astrodon.Controls.Supplier
             _buildingId = null;
             LoadBuildings();
             PopulateForm();
+        }
+
+        private void btnChangeAll_Click(object sender, EventArgs e)
+        {
+
+            if (_SupplierId <= 0)
+                return;
+            if (cbBanks.SelectedItem == null)
+                return;
+
+            if (!Controller.AskQuestion("Are you sure you want to update the banking details for ALL buildings?"))
+                return;
+
+            var buildingBanks = _DataContext.SupplierBuildingSet.Where(a => a.SupplierId == _SupplierId).ToList();
+            var bank = cbBanks.SelectedItem as Astrodon.Data.BankData.Bank;
+
+            foreach (var building in buildingBanks)
+            {
+                LoadBuildingAudit(building);
+                building.BankId = bank.id;
+                building.AccountNumber = txtAccountNumber.Text;
+                building.BranceCode = txtBranchCode.Text;
+                building.BranchName = txtBranch.Text;
+            }
+            _DataContext.SaveChanges();
+            PopulateForm();
+            Controller.ShowMessage("Banking Details Changed");
         }
     }
 
