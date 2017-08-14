@@ -81,14 +81,22 @@ namespace Astrodon.Reports
                 {
                     using (var reportService = ReportServiceClient.CreateInstance())
                     {
-                        DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
-                        byte[] reportData = null;
-                        if (cbIncludeSundries.Checked)
-                            reportData = reportService.LevyRollReport(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
-                        else
-                            reportData = reportService.LevyRollExcludeSundries(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
-                        File.WriteAllBytes(dlgSave.FileName, reportData);
-                        Process.Start(dlgSave.FileName);
+                        try
+                        {
+                            DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+                            byte[] reportData = null;
+                            if (cbIncludeSundries.Checked)
+                                reportData = reportService.LevyRollReport(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
+                            else
+                                reportData = reportService.LevyRollExcludeSundries(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
+                            File.WriteAllBytes(dlgSave.FileName, reportData);
+                            Process.Start(dlgSave.FileName);
+                        }catch(Exception ex)
+                        {
+                            Controller.HandleError(ex);
+
+                            Controller.ShowMessage(ex.GetType().ToString());
+                        }
                     }
                 }
                 finally

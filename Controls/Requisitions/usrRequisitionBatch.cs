@@ -15,6 +15,7 @@ using System.Diagnostics;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Data.Entity;
+using System.Globalization;
 
 namespace Astrodon.Controls.Requisitions
 {
@@ -594,6 +595,8 @@ namespace Astrodon.Controls.Requisitions
                         PdfCopy copy;
 
                         var tempCombinedReport = GetATempFile(".pdf");
+                        var attachments = new Dictionary<string, byte[]>();
+
                         try
                         {
                             using (var ms = new FileStream(tempCombinedReport, FileMode.OpenOrCreate, FileAccess.ReadWrite))
@@ -607,6 +610,7 @@ namespace Astrodon.Controls.Requisitions
 
                                         foreach (var building in buildings)
                                         {
+                                            #region Requisition Pdf
                                             try
                                             {
                                                 lbProcessing.Text = "Processing " + building.Building;
@@ -614,6 +618,7 @@ namespace Astrodon.Controls.Requisitions
                                                 var batch = CreateRequisitionBatch(building.id, false);
                                                 if (batch != null)
                                                 {
+                                                    #region Create PDF For Batch
                                                     var tempFile = GetATempFile(".pdf");
                                                     try
                                                     {
@@ -644,6 +649,25 @@ namespace Astrodon.Controls.Requisitions
                                                                 AddPdfDocument(copy, reportData);
 
                                                                 CommitRequisitionBatch(batch);
+
+                                                                //string csvFileName = "";
+                                                                //var csvFile = CreateCSVForBuildingBatch(building, batch, out csvFileName);
+                                                                //if (!String.IsNullOrWhiteSpace(csvFileName))
+                                                                //{
+                                                                //    attachments.Add(csvFileName, csvFile);
+
+                                                                //    string csvOutputPath = outputPath + csvFile;
+                                                                //    try
+                                                                //    {
+                                                                //        File.WriteAllBytes(outputFilename, csvFile);
+                                                                //    }
+                                                                //    catch (Exception fEx)
+                                                                //    {
+                                                                //        Controller.HandleError(fEx);
+                                                                //    }
+
+                                                                //}
+
                                                             }
                                                             catch (Exception exr)
                                                             {
@@ -662,6 +686,9 @@ namespace Astrodon.Controls.Requisitions
                                                         if (File.Exists(tempFile))
                                                             File.Delete(tempFile);
                                                     }
+                                                    #endregion
+
+                                                   
                                                 }
 
                                             }
@@ -670,6 +697,8 @@ namespace Astrodon.Controls.Requisitions
                                                 Controller.HandleError(er);
                                                 this.Cursor = Cursors.Default;
                                             }
+                                            #endregion
+
                                             ms.Flush();
                                             Application.DoEvents();
                                         }
@@ -682,7 +711,6 @@ namespace Astrodon.Controls.Requisitions
                             if (emailCount > 0)
                             {
 
-                                var attachments = new Dictionary<string, byte[]>();
                                 attachments.Add("Requisitions.pdf",File.ReadAllBytes(tempCombinedReport));
                                 SendEmail(context, Controller.user.email, attachments);
                             }
@@ -708,6 +736,61 @@ namespace Astrodon.Controls.Requisitions
                 this.Cursor = Cursors.Default;
             }
             LoadPendingRequisions();
+        }
+
+        private byte[] CreateCSVForBuildingBatch(tblBuilding building, RequisitionBatch batch,out string fileName)
+        {
+            fileName = string.Empty;
+            if(!String.IsNullOrWhiteSpace(building.bank) && building.bank.Trim().ToLower() == "nedbank")
+            {
+                return CreateNedbankCSV(building, batch, out fileName);
+            }
+            else
+              return null;
+        }
+
+        private static byte[] CreateNedbankCSV(tblBuilding building, RequisitionBatch batch, out string fileName)
+        {
+            fileName = null;
+            return null;
+            
+            string fromAccountNumber = building.bankAccNumber;
+            string fromAccountDescription = building.accName;
+            string fromAccountSubAccountNumber = string.Empty;
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var q = from r in context.tblRequisitions
+                        where r.RequisitionBatchId == batch.id
+                        select new NedbankCSVRecord
+                        {
+                            FromAccountNumber = fromAccountNumber,
+                            FromAccountDescription = r.reference,
+                            //FromAccountSubAccountNumber = fromAccountSubAccountNumber,
+                            //MyStatementDescription = r.reference,
+                            //BeneficiaryAccountNumber = r.AccountNumber,
+                            //ToAccountSubAccountNumber = "",
+                            //ToAccountDescription = r.AccountNumber,
+                            //BeneficiaryStatementDescription = r.payreference,
+                            Amount = r.amount
+                        };
+                var transactions = q.ToList();
+
+                using (MemoryStream fs = new MemoryStream())
+                {
+                    using (StreamWriter tw = new StreamWriter(fs))
+                    {
+                        foreach (var t in transactions)
+                            tw.WriteLine(t.ToString());
+                    }
+
+                    byte[] result = new byte[fs.Length];
+                    fs.Flush();
+                    fs.Read(result, 0, result.Length);
+                    fileName = "Nedbank - " + building.Code + "-" + batch.BatchNumber.ToString().PadLeft( 6,'0') + ".csv";
+                    return result;
+                }
+            }
         }
 
         private void RollbackRequsitionBatch(RequisitionBatch batch)
@@ -770,6 +853,45 @@ namespace Astrodon.Controls.Requisitions
         public int BatchNumber { get; set; }
         public int Entries { get; set; }
         public string CreatedBy { get;  set; }
+    }
+
+    class NedbankCSVRecord
+    {
+        public string FromAccountNumber { get; internal set; }
+        public string FromAccountDescription { get; internal set; }
+        public string MyStatementDescription { get; internal set; }
+
+
+        public string BeneficiaryAccountNumber { get; internal set; }
+        public string BeneficiaryStatementDescription { get; internal set; }
+
+        public decimal Amount { get; internal set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Clean(FromAccountNumber));
+            sb.Append(",");
+            sb.Append("'"+ Clean(FromAccountDescription) +"'");
+            sb.Append(",");
+            sb.Append("'" + Clean(MyStatementDescription) + "'");
+            sb.Append(",");
+            sb.Append(Clean(BeneficiaryAccountNumber));
+            sb.Append(",");
+            sb.Append("'" + Clean(BeneficiaryStatementDescription) + "'");
+            sb.Append(",");
+            sb.Append(Amount.ToString("0.00",CultureInfo.InvariantCulture));
+            return sb.ToString();
+
+        }
+
+        private string Clean(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return value;
+
+            return value.Replace(",", "").Trim();
+        }
     }
 
     class RequisitionItem

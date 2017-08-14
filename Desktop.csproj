@@ -200,6 +200,12 @@
     <Compile Include="Controls\Requisitions\usrSupplierBatchRequisition.Designer.cs">
       <DependentUpon>usrSupplierBatchRequisition.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Requisitions\usrUnpaidRequisitions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Requisitions\usrUnpaidRequisitions.Designer.cs">
+      <DependentUpon>usrUnpaidRequisitions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Supplier\SupplierSelectEventArgs.cs" />
     <Compile Include="Controls\Supplier\usrSupplierDetail.cs">
       <SubType>UserControl</SubType>
@@ -617,6 +623,9 @@
     <EmbeddedResource Include="Controls\Requisitions\usrSupplierBatchRequisition.resx">
       <DependentUpon>usrSupplierBatchRequisition.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Requisitions\usrUnpaidRequisitions.resx">
+      <DependentUpon>usrUnpaidRequisitions.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Supplier\usrSupplierDetail.resx">
       <DependentUpon>usrSupplierDetail.cs</DependentUpon>
     </EmbeddedResource>
@@ -955,6 +964,23 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="AcroPDFLib">
+      <Guid>{05BFD3F1-6319-4F30-B752-C7A22889BCC4}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="AxAcroPDFLib">
+      <Guid>{05BFD3F1-6319-4F30-B752-C7A22889BCC4}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
     <COMReference Include="VBIDE">
       <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>5</VersionMajor>

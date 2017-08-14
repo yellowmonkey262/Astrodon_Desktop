@@ -73,6 +73,9 @@ namespace Astrodon
             Controller.DependencyInitialization();
             LoadReminders();
             notifyIcon1.Visible = false;
+
+            unPaidRequisitionsMenuItem.Enabled = Controller.user.id == 2 || Controller.user.id == 27; //Sheldon and Tertia
+
         }
 
         public void LoadReminders()
@@ -600,6 +603,15 @@ namespace Astrodon
         {
             SqlDataHandler.MigrateEFDataBase();
             Controller.ShowMessage("Migration completed");
+        }
+
+        private void unPaidRequisitionsMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrUnpaidRequisitions control = new usrUnpaidRequisitions();
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Unpaid Requisitions";
         }
     }
 }

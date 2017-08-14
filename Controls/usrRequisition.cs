@@ -498,6 +498,12 @@ namespace Astrodon.Controls
                 editRequisitonId = Convert.ToInt32(req.ID);
 
                 var requisition = context.tblRequisitions.Single(a => a.id == editRequisitonId.Value);
+                var pdf = context.RequisitionDocumentSet.FirstOrDefault(a => a.RequisitionId == requisition.id);
+
+                if (pdf != null)
+                    DisplayPDF(pdf.FileData);
+                else
+                    DisplayPDF(null);
 
                 int buildingId = requisition.building;
 
@@ -850,6 +856,8 @@ namespace Astrodon.Controls
 
         private void ClearRequisitions()
         {
+            this.axAcroPDF1.Visible = false;
+
             trnDatePicker.Value = DateTime.Now;
             txtPaymentRef.Text = "";
             lblBalance.Text = "";
@@ -1087,6 +1095,13 @@ namespace Astrodon.Controls
                 Controller.HandleError("Please select a building first.", "Validation Error");
                 return;
             }
+
+            if (cmbAccount.SelectedItem == null || cmbAccount.SelectedIndex < 0)
+            {
+                Controller.HandleError("Please select an account.", "Validation Error");
+                return;
+            }
+
             String path = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? GetTrustPath() : myBuildings[cmbBuilding.SelectedIndex].DataPath);
             String acc = (cmbAccount.SelectedItem.ToString().ToUpper() == "TRUST" ? myBuildings[cmbBuilding.SelectedIndex].Trust.Replace("/", "") : myBuildings[cmbBuilding.SelectedIndex].OwnBank.Replace("/", ""));
             List<Trns> transactions = Controller.pastel.GetTransactions(path, "G", 101, 112, acc).OrderByDescending(c => c.Date).ToList();
@@ -1134,16 +1149,19 @@ namespace Astrodon.Controls
 
         private void btnUploadInvoice_Click(object sender, EventArgs e)
         {
+            ofdAttachment.Multiselect = false;
             if (ofdAttachment.ShowDialog() == DialogResult.OK)
             {
                 for (int i = 0; i < ofdAttachment.FileNames.Count(); i++)
                 {
                     if (IsValidPdf(ofdAttachment.FileNames[i]))
                     {
+                        byte[] pdfData = File.ReadAllBytes(ofdAttachment.FileNames[i]);
                         if (_Documents.Keys.Contains(ofdAttachment.SafeFileNames[i]))
-                            _Documents[ofdAttachment.SafeFileNames[i]] = File.ReadAllBytes(ofdAttachment.FileNames[i]);
+                            _Documents[ofdAttachment.SafeFileNames[i]] = pdfData;
                         else
-                            _Documents.Add(ofdAttachment.SafeFileNames[i], File.ReadAllBytes(ofdAttachment.FileNames[i]));
+                            _Documents.Add(ofdAttachment.SafeFileNames[i], pdfData);
+                        DisplayPDF(pdfData);
                     }
                     else
                     {
@@ -1151,6 +1169,44 @@ namespace Astrodon.Controls
                     }
                 }
             }
+        }
+
+        private string _TempPDFFile = string.Empty;
+        private void DisplayPDF(byte[] pdfData)
+        {
+            if(pdfData == null)
+            {
+                this.axAcroPDF1.Visible = false;
+                return;
+            }
+            if (!String.IsNullOrWhiteSpace(_TempPDFFile))
+                File.Delete(_TempPDFFile);
+            _TempPDFFile = Path.GetTempPath();
+            if (!_TempPDFFile.EndsWith(@"\"))
+                _TempPDFFile = _TempPDFFile + @"\";
+
+            _TempPDFFile = _TempPDFFile + System.Guid.NewGuid().ToString("N") + ".pdf";
+            File.WriteAllBytes(_TempPDFFile, pdfData);
+
+
+            try
+            {
+                this.axAcroPDF1.Visible = true;
+                this.axAcroPDF1.LoadFile(_TempPDFFile);
+                this.axAcroPDF1.src = _TempPDFFile;
+                this.axAcroPDF1.setShowToolbar(false);
+                this.axAcroPDF1.setView("FitH");
+                this.axAcroPDF1.setLayoutMode("SinglePage");
+                this.axAcroPDF1.setShowToolbar(false);
+                
+                this.axAcroPDF1.Show();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            File.Delete(_TempPDFFile);
         }
 
         private bool IsValidPdf(string filepath)
@@ -1178,6 +1234,16 @@ namespace Astrodon.Controls
         {
             LoadRequisitions();
             ClearRequisitions();
+        }
+
+        private void browser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            string url = e.Url.ToString();
+            if (url.StartsWith("res://ieframe.dll/navcancl.htm") && url.EndsWith("pdf"))
+            {
+                e.Cancel = true;
+                Controller.HandleError("Unable to Preview PDF");
+            }
         }
     }
 
