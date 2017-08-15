@@ -88,6 +88,11 @@ namespace Astrodon.Data
         [ForeignKey("RequisitionBatchId")]
         public virtual RequisitionBatch RequisitionBatch { get; set; }
 
+        [NotMapped]
+        public virtual bool? NotifySupplierByEmail { get; set; }
+        [NotMapped]
+        public virtual string NotifyEmailAddress { get; set; }
+
         public virtual ICollection<RequisitionDocument> Documents { get; set; }
     }
 }

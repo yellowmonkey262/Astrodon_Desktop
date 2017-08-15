@@ -687,8 +687,6 @@ namespace Astrodon.Controls.Requisitions
                                                             File.Delete(tempFile);
                                                     }
                                                     #endregion
-
-                                                   
                                                 }
 
                                             }
@@ -806,7 +804,47 @@ namespace Astrodon.Controls.Requisitions
             using (var context = SqlDataHandler.GetDataContext())
             {
                 context.CommitRequisitionBatch(batch.id);
+                SendPaymentNotifications(context,batch.id);
             }
+        }
+
+        private void SendPaymentNotifications(DataContext context, int batchId)
+        {
+            var q = (from req in context.tblRequisitions
+                     where req.RequisitionBatchId == batchId
+                     && req.NotifySupplierByEmail == true
+                     select new
+                     {
+                         req.NotifyEmailAddress,
+                         req.payreference
+                     });
+
+            foreach(var itm in q.Distinct().ToList())
+            {
+                if(!String.IsNullOrWhiteSpace(itm.NotifyEmailAddress))
+                {
+                    string status;
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("Good Day");
+                    sb.AppendLine("");
+                    sb.AppendLine("Your payment with reference " + itm.payreference + " has been instruced for processing");
+                    sb.AppendLine("");
+                    sb.AppendLine("Kind Regards");
+                    sb.AppendLine("Astrodon PTY LTD");
+                    try
+                    {
+                        Mailer.SendMail("noreply@astrodon.co.za", new string[] { itm.NotifyEmailAddress }, "Payment Scheduled",
+                            sb.ToString(),false,false,false,out status,new string[] { });
+                    }
+                    catch(Exception e)
+                    {
+                        Controller.HandleError(e);
+                    }
+
+                }
+
+            }
+
         }
 
         private void SendEmail(DataContext context, string emailAddress,  Dictionary<string, byte[]> attachments)

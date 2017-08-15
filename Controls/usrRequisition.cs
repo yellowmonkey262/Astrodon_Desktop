@@ -572,6 +572,16 @@ namespace Astrodon.Controls
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if(cbPaymentNotification.Checked && _Supplier != null)
+            {
+                if(string.IsNullOrWhiteSpace(tbNotificationEmail.Text))
+                {
+                    Controller.HandleError("Supplier does not have an email address."+Environment.NewLine+
+                                           "Please configure an email address to send notifications", "Validation Error");
+                    cbPaymentNotification.Checked = false;
+                    return;
+                }
+            }
             this.Cursor = Cursors.WaitCursor;
             bool dLimit, mLimit;
             try
@@ -728,6 +738,8 @@ namespace Astrodon.Controls
                     item.BranchCode = bankDetails == null ? (string)null : bankDetails.BranceCode;
                     item.BranchName = bankDetails == null ? (string)null : bankDetails.BranchName;
                     item.AccountNumber = bankDetails == null ? (string)null : bankDetails.AccountNumber;
+                    item.NotifySupplierByEmail = cbPaymentNotification.Checked;
+                    item.NotifyEmailAddress = tbNotificationEmail.Text;
 
                     if (editRequisitonId != null)
                     {
@@ -875,6 +887,8 @@ namespace Astrodon.Controls
 
             editRequisitonId = null;
             btnCancel.Visible = false;
+            cbPaymentNotification.Checked = true;
+            tbNotificationEmail.Text = "";
         }
 
         private void ClearSupplier()
@@ -1080,6 +1094,8 @@ namespace Astrodon.Controls
                                 }
                             }
                         }
+                        tbNotificationEmail.Text = _Supplier.EmailAddress;
+                        cbPaymentNotification.Checked = !string.IsNullOrWhiteSpace(tbNotificationEmail.Text);
                     }
                 }
                 else
@@ -1245,6 +1261,11 @@ namespace Astrodon.Controls
                 e.Cancel = true;
                 Controller.HandleError("Unable to Preview PDF");
             }
+        }
+
+        private void cbPaymentNotification_CheckedChanged(object sender, EventArgs e)
+        {
+            tbNotificationEmail.Enabled = cbPaymentNotification.Checked;
         }
     }
 
