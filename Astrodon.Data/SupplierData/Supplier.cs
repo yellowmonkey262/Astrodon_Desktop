@@ -30,8 +30,7 @@ namespace Astrodon.Data.SupplierData
         [MaxLength(200)]
         public virtual string ContactNumber { get; set; }
 
-        [MaxLength(10)]
-        public virtual string BeneficiarReferenceNumber { get; set; }
+   
 
         #region Blacklisted
 

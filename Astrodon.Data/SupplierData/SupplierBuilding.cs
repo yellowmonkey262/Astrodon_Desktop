@@ -42,6 +42,9 @@ namespace Astrodon.Data.SupplierData
         [Required]
         public virtual string AccountNumber { get; set; }
 
+        [MaxLength(10)]
+        public virtual string BeneficiaryReferenceNumber { get; set; }
+
         #endregion
 
         public virtual ICollection<SupplierBuildingAudit> AuditRecords { get; set; }

@@ -613,5 +613,14 @@ namespace Astrodon
             pnlContents.Controls.Add(control);
             toolStripStatusLabel1.Text = "Unpaid Requisitions";
         }
+
+        private void nedbankBeneficiaryMaintenanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrBuildingBenificiaries control = new usrBuildingBenificiaries();
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Building Benificiaries";
+        }
     }
 }
