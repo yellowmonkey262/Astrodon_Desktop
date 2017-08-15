@@ -194,7 +194,7 @@
             this.txtAmount.Location = new System.Drawing.Point(158, 257);
             this.txtAmount.Name = "txtAmount";
             this.txtAmount.Size = new System.Drawing.Size(204, 20);
-            this.txtAmount.TabIndex = 6;
+            this.txtAmount.TabIndex = 9;
             this.txtAmount.TextChanged += new System.EventHandler(this.txtAmount_TextChanged);
             // 
             // btnSave
@@ -202,7 +202,7 @@
             this.btnSave.Location = new System.Drawing.Point(397, 343);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 7;
+            this.btnSave.TabIndex = 13;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -240,7 +240,7 @@
             this.cmbLedger.Location = new System.Drawing.Point(158, 203);
             this.cmbLedger.Name = "cmbLedger";
             this.cmbLedger.Size = new System.Drawing.Size(293, 21);
-            this.cmbLedger.TabIndex = 5;
+            this.cmbLedger.TabIndex = 7;
             this.cmbLedger.SelectedIndexChanged += new System.EventHandler(this.cmbLedger_SelectedIndexChanged);
             // 
             // lblBank
@@ -283,7 +283,7 @@
             this.txtPaymentRef.Location = new System.Drawing.Point(158, 231);
             this.txtPaymentRef.Name = "txtPaymentRef";
             this.txtPaymentRef.Size = new System.Drawing.Size(204, 20);
-            this.txtPaymentRef.TabIndex = 5;
+            this.txtPaymentRef.TabIndex = 8;
             // 
             // tabControl1
             // 
@@ -744,7 +744,7 @@
             this.txtInvoiceNumber.Location = new System.Drawing.Point(158, 283);
             this.txtInvoiceNumber.Name = "txtInvoiceNumber";
             this.txtInvoiceNumber.Size = new System.Drawing.Size(204, 20);
-            this.txtInvoiceNumber.TabIndex = 7;
+            this.txtInvoiceNumber.TabIndex = 10;
             // 
             // lbInvoiceNumber
             // 
@@ -771,14 +771,14 @@
             this.dtInvoiceDate.Location = new System.Drawing.Point(158, 308);
             this.dtInvoiceDate.Name = "dtInvoiceDate";
             this.dtInvoiceDate.Size = new System.Drawing.Size(204, 20);
-            this.dtInvoiceDate.TabIndex = 40;
+            this.dtInvoiceDate.TabIndex = 11;
             // 
             // btnUploadInvoice
             // 
             this.btnUploadInvoice.Location = new System.Drawing.Point(371, 308);
             this.btnUploadInvoice.Name = "btnUploadInvoice";
             this.btnUploadInvoice.Size = new System.Drawing.Size(101, 23);
-            this.btnUploadInvoice.TabIndex = 41;
+            this.btnUploadInvoice.TabIndex = 12;
             this.btnUploadInvoice.Text = "Upload Invoice";
             this.btnUploadInvoice.UseVisualStyleBackColor = true;
             this.btnUploadInvoice.Click += new System.EventHandler(this.btnUploadInvoice_Click);
@@ -830,7 +830,7 @@
             this.cbPaymentNotification.Location = new System.Drawing.Point(158, 174);
             this.cbPaymentNotification.Name = "cbPaymentNotification";
             this.cbPaymentNotification.Size = new System.Drawing.Size(15, 14);
-            this.cbPaymentNotification.TabIndex = 45;
+            this.cbPaymentNotification.TabIndex = 5;
             this.cbPaymentNotification.UseVisualStyleBackColor = true;
             this.cbPaymentNotification.CheckedChanged += new System.EventHandler(this.cbPaymentNotification_CheckedChanged);
             // 
@@ -839,7 +839,7 @@
             this.tbNotificationEmail.Location = new System.Drawing.Point(180, 174);
             this.tbNotificationEmail.Name = "tbNotificationEmail";
             this.tbNotificationEmail.Size = new System.Drawing.Size(271, 20);
-            this.tbNotificationEmail.TabIndex = 46;
+            this.tbNotificationEmail.TabIndex = 6;
             // 
             // usrRequisition
             // 

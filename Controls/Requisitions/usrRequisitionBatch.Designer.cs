@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrRequisitionBatch));
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.tbBatches = new System.Windows.Forms.TabControl();
             this.tbNewBatch = new System.Windows.Forms.TabPage();
@@ -40,11 +41,14 @@
             this.dgItems = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
+            this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
+            this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
             this.tbBatches.SuspendLayout();
             this.tbNewBatch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgPendingTransactions)).BeginInit();
             this.tbBatchesTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
             this.SuspendLayout();
             // 
             // dlgSave
@@ -118,6 +122,7 @@
             this.dgPendingTransactions.ReadOnly = true;
             this.dgPendingTransactions.Size = new System.Drawing.Size(921, 421);
             this.dgPendingTransactions.TabIndex = 68;
+            this.dgPendingTransactions.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgPendingTransactions_CellContentClick);
             // 
             // button1
             // 
@@ -174,13 +179,30 @@
             this.cmbBuilding.TabIndex = 65;
             this.cmbBuilding.SelectedIndexChanged += new System.EventHandler(this.cmbBuilding_SelectedIndexChanged);
             // 
+            // axAcroPDF1
+            // 
+            this.axAcroPDF1.Enabled = true;
+            this.axAcroPDF1.Location = new System.Drawing.Point(956, 25);
+            this.axAcroPDF1.Name = "axAcroPDF1";
+            this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
+            this.axAcroPDF1.Size = new System.Drawing.Size(469, 480);
+            this.axAcroPDF1.TabIndex = 64;
+            // 
+            // ofdAttachment
+            // 
+            this.ofdAttachment.FileName = "openFileDialog1";
+            this.ofdAttachment.Filter = "PDF Files (*.pdf)|*.pdf";
+            this.ofdAttachment.InitialDirectory = "c:\\\\";
+            this.ofdAttachment.RestoreDirectory = true;
+            // 
             // usrRequisitionBatch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.axAcroPDF1);
             this.Controls.Add(this.tbBatches);
             this.Name = "usrRequisitionBatch";
-            this.Size = new System.Drawing.Size(957, 528);
+            this.Size = new System.Drawing.Size(1534, 522);
             this.tbBatches.ResumeLayout(false);
             this.tbNewBatch.ResumeLayout(false);
             this.tbNewBatch.PerformLayout();
@@ -188,6 +210,7 @@
             this.tbBatchesTab.ResumeLayout(false);
             this.tbBatchesTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -205,5 +228,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.Label lbProcessing;
+        private AxAcroPDFLib.AxAcroPDF axAcroPDF1;
+        private System.Windows.Forms.OpenFileDialog ofdAttachment;
     }
 }

@@ -386,6 +386,7 @@ namespace Astrodon.Controls.Requisitions
 
         private void LoadPendingRequisions()
         {
+            this.axAcroPDF1.Visible = false;
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var buildingIds = _Buildings.Select(a => a.ID).ToArray();
@@ -396,6 +397,7 @@ namespace Astrodon.Controls.Requisitions
                           where r.processed == false
                           select new RequisitionItem()
                           {
+                              RequisitionId = r.id,                              
                               Building = b.Building,
                               BuildingCode = b.Code,
                               Bank = r.BankName,
@@ -408,7 +410,7 @@ namespace Astrodon.Controls.Requisitions
                               InvoiceNumber = r.InvoiceNumber,
                               PortfolioManager = pmUser.name,
                               PortfolioUserId = pmUser.id,
-                              InvoiceCount = r.Documents.Count(a => a.IsInvoice == true)
+                              InvoiceCount = r.Documents.Count(a => a.IsInvoice == true),
                           };
 
                 if (_allBuildings)
@@ -438,11 +440,9 @@ namespace Astrodon.Controls.Requisitions
             currencyColumnStyle.Format = "###,##0.00";
             currencyColumnStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-            BindingSource bs = new BindingSource();
-
+          
             dgPendingTransactions.Columns.Clear();
 
-            dgPendingTransactions.DataSource = bs;
 
             //HasInvoice
             dgPendingTransactions.Columns.Add(new DataGridViewCheckBoxColumn()
@@ -451,6 +451,21 @@ namespace Astrodon.Controls.Requisitions
                 HeaderText = "Invoice Uploaded",
                 ReadOnly = true,
             });
+            dgPendingTransactions.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "Invoice",
+                Text = "View",
+                UseColumnTextForButtonValue = true,
+                MinimumWidth = 30
+            });
+            dgPendingTransactions.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "Invoice",
+                Text = "Upload",
+                UseColumnTextForButtonValue = true,
+                MinimumWidth = 30
+            });
+
 
             dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -511,18 +526,24 @@ namespace Astrodon.Controls.Requisitions
                 ReadOnly = true
             });
 
+            RefreshGrid();
+        }
 
+        private void RefreshGrid()
+        {
+            BindingSource bs = new BindingSource();
+            dgPendingTransactions.DataSource = bs;
 
             bs.DataSource = _PendingRequisitions;
 
             dgPendingTransactions.AutoResizeColumns();
 
-            foreach(DataGridViewRow row in dgPendingTransactions.Rows)
+            foreach (DataGridViewRow row in dgPendingTransactions.Rows)
             {
                 var itm = row.DataBoundItem as RequisitionItem;
-                if(itm.HasInvoice == false)
+                if (itm.HasInvoice == false)
                 {
-                    foreach(DataGridViewCell cell in row.Cells)
+                    foreach (DataGridViewCell cell in row.Cells)
                     {
                         cell.Style.BackColor = System.Drawing.Color.Yellow;
                     }
@@ -880,7 +901,134 @@ namespace Astrodon.Controls.Requisitions
             }
         }
 
-      
+        private void dgPendingTransactions_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+
+                if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+                {
+                    var item = senderGrid.Rows[e.RowIndex].DataBoundItem as RequisitionItem;
+                    if (item == null)
+                        return;
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var requisitionDoc = context.RequisitionDocumentSet.FirstOrDefault(a => a.RequisitionId == item.RequisitionId);
+
+                        if (e.ColumnIndex == 1) //view doc
+                        {
+                            this.axAcroPDF1.Visible = false;
+                            if (requisitionDoc != null)
+                            {
+                                DisplayPDF(requisitionDoc.FileData);
+                            }
+                        }
+                        else
+                        {
+                            ofdAttachment.Multiselect = false;
+                            if (ofdAttachment.ShowDialog() == DialogResult.OK)
+                            {
+                                for (int i = 0; i < ofdAttachment.FileNames.Count(); i++)
+                                {
+                                    if (IsValidPdf(ofdAttachment.FileNames[i]))
+                                    {
+                                        byte[] pdfData = File.ReadAllBytes(ofdAttachment.FileNames[i]);
+                                        if (requisitionDoc == null)
+                                        {
+                                            requisitionDoc = new RequisitionDocument()
+                                            {
+                                                RequisitionId = item.RequisitionId,
+                                                IsInvoice = true
+                                            };
+                                            context.RequisitionDocumentSet.Add(requisitionDoc);
+                                        }
+                                        requisitionDoc.FileData = pdfData;
+                                        requisitionDoc.FileName = ofdAttachment.SafeFileNames[i];
+                                        context.SaveChanges();
+                                        DisplayPDF(pdfData);
+                                        item.InvoiceCount = 1;
+                                        RefreshGrid();
+
+                                    }
+                                    else
+                                        Controller.HandleError("Invalid PDF\n" + ofdAttachment.FileNames[i] + "\n Please load a different pdf");
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+                Application.DoEvents();
+            }
+        }
+
+    
+
+        private string _TempPDFFile = string.Empty;
+        private void DisplayPDF(byte[] pdfData)
+        {
+            if (pdfData == null)
+            {
+                this.axAcroPDF1.Visible = false;
+                return;
+            }
+            if (!String.IsNullOrWhiteSpace(_TempPDFFile))
+                File.Delete(_TempPDFFile);
+            _TempPDFFile = Path.GetTempPath();
+            if (!_TempPDFFile.EndsWith(@"\"))
+                _TempPDFFile = _TempPDFFile + @"\";
+
+            _TempPDFFile = _TempPDFFile + System.Guid.NewGuid().ToString("N") + ".pdf";
+            File.WriteAllBytes(_TempPDFFile, pdfData);
+
+
+            try
+            {
+                this.axAcroPDF1.Visible = true;
+                this.axAcroPDF1.LoadFile(_TempPDFFile);
+                this.axAcroPDF1.src = _TempPDFFile;
+                this.axAcroPDF1.setShowToolbar(false);
+                this.axAcroPDF1.setView("FitH");
+                this.axAcroPDF1.setLayoutMode("SinglePage");
+                this.axAcroPDF1.setShowToolbar(false);
+
+                this.axAcroPDF1.Show();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            File.Delete(_TempPDFFile);
+        }
+
+        private bool IsValidPdf(string filepath)
+        {
+            bool Ret = true;
+
+            PdfReader reader = null;
+
+            try
+            {
+                using (reader = new PdfReader(filepath))
+                {
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                Ret = false;
+            }
+
+            return Ret;
+        }
     }
 
     class BatchItem
@@ -934,6 +1082,7 @@ namespace Astrodon.Controls.Requisitions
 
     class RequisitionItem
     {
+        public int RequisitionId { get; set; }
         public int InvoiceCount { get; set; }
         public bool HasInvoice { get { return InvoiceCount > 0; } }
 
