@@ -224,6 +224,84 @@ namespace Astrodon.ReportService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TOCDataItem", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.ManagementReportCoverPag" +
+        "e")]
+    [System.SerializableAttribute()]
+    public partial class TOCDataItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ItemDescriptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ItemNumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PageNumberField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ItemDescription {
+            get {
+                return this.ItemDescriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ItemDescriptionField, value) != true)) {
+                    this.ItemDescriptionField = value;
+                    this.RaisePropertyChanged("ItemDescription");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ItemNumber {
+            get {
+                return this.ItemNumberField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ItemNumberField, value) != true)) {
+                    this.ItemNumberField = value;
+                    this.RaisePropertyChanged("ItemNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int PageNumber {
+            get {
+                return this.PageNumberField;
+            }
+            set {
+                if ((this.PageNumberField.Equals(value) != true)) {
+                    this.PageNumberField = value;
+                    this.RaisePropertyChanged("PageNumber");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
@@ -245,6 +323,9 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/RequisitionBatchReport", ReplyAction="http://tempuri.org/IReportService/RequisitionBatchReportResponse")]
         byte[] RequisitionBatchReport(string sqlConnectionString, int requisitionBatchId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ManagementPackCoverPage", ReplyAction="http://tempuri.org/IReportService/ManagementPackCoverPageResponse")]
+        byte[] ManagementPackCoverPage(string sqlConnectionString, Astrodon.ReportService.TOCDataItem[] tocDataItems);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -296,6 +377,10 @@ namespace Astrodon.ReportService {
         
         public byte[] RequisitionBatchReport(string sqlConnectionString, int requisitionBatchId) {
             return base.Channel.RequisitionBatchReport(sqlConnectionString, requisitionBatchId);
+        }
+        
+        public byte[] ManagementPackCoverPage(string sqlConnectionString, Astrodon.ReportService.TOCDataItem[] tocDataItems) {
+            return base.Channel.ManagementPackCoverPage(sqlConnectionString, tocDataItems);
         }
     }
 }
