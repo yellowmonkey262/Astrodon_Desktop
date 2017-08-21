@@ -622,5 +622,14 @@ namespace Astrodon
             pnlContents.Controls.Add(control);
             toolStripStatusLabel1.Text = "Building Benificiaries";
         }
+
+        private void managementPackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ManangementPackUserControl trustCtl = new ManangementPackUserControl();
+            trustCtl.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(trustCtl);
+            toolStripStatusLabel1.Text = "Manangement Pack Report";
+        }
     }
 }
