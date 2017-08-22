@@ -34,11 +34,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.dgTocGrid = new System.Windows.Forms.DataGridView();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.dlgOpen = new System.Windows.Forms.OpenFileDialog();
+            this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dgTocGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -97,14 +98,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // dlgSave
-            // 
-            this.dlgSave.CheckPathExists = false;
-            this.dlgSave.DefaultExt = "pdf";
-            this.dlgSave.Filter = "Adobe PDF files (*.pdf)|*.pdf";
-            this.dlgSave.InitialDirectory = "Y:\\";
-            this.dlgSave.Title = "Levy Roll Report";
-            // 
             // cmbBuilding
             // 
             this.cmbBuilding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -122,27 +115,41 @@
             this.dgTocGrid.Location = new System.Drawing.Point(19, 145);
             this.dgTocGrid.MultiSelect = false;
             this.dgTocGrid.Name = "dgTocGrid";
-            this.dgTocGrid.Size = new System.Drawing.Size(982, 441);
+            this.dgTocGrid.Size = new System.Drawing.Size(1155, 528);
             this.dgTocGrid.TabIndex = 8;
             this.dgTocGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgTocGrid_CellContentClick);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(19, 592);
+            this.button2.Location = new System.Drawing.Point(19, 679);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(91, 23);
             this.button2.TabIndex = 9;
             this.button2.Text = "Add PDF";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(899, 592);
+            this.button3.Location = new System.Drawing.Point(1072, 679);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(102, 23);
             this.button3.TabIndex = 10;
             this.button3.Text = "Run Report";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // dlgOpen
+            // 
+            this.dlgOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            this.dlgOpen.InitialDirectory = "Y:\\";
+            this.dlgOpen.Title = "Management Pack Open File";
+            // 
+            // dlgSave
+            // 
+            this.dlgSave.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            this.dlgSave.InitialDirectory = "Y:\\";
+            this.dlgSave.Title = "Management Pack Save Report";
             // 
             // ManangementPackUserControl
             // 
@@ -159,7 +166,7 @@
             this.Controls.Add(this.cmbYear);
             this.Controls.Add(this.label1);
             this.Name = "ManangementPackUserControl";
-            this.Size = new System.Drawing.Size(1021, 618);
+            this.Size = new System.Drawing.Size(1192, 720);
             ((System.ComponentModel.ISupportInitialize)(this.dgTocGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -174,10 +181,11 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.SaveFileDialog dlgSave;
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.DataGridView dgTocGrid;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.OpenFileDialog dlgOpen;
+        private System.Windows.Forms.SaveFileDialog dlgSave;
     }
 }

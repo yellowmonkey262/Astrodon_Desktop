@@ -325,7 +325,7 @@ namespace Astrodon.ReportService {
         byte[] RequisitionBatchReport(string sqlConnectionString, int requisitionBatchId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ManagementPackCoverPage", ReplyAction="http://tempuri.org/IReportService/ManagementPackCoverPageResponse")]
-        byte[] ManagementPackCoverPage(string sqlConnectionString, Astrodon.ReportService.TOCDataItem[] tocDataItems);
+        byte[] ManagementPackCoverPage(System.DateTime processMonth, string buildingName, Astrodon.ReportService.TOCDataItem[] tocDataItems);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -379,8 +379,8 @@ namespace Astrodon.ReportService {
             return base.Channel.RequisitionBatchReport(sqlConnectionString, requisitionBatchId);
         }
         
-        public byte[] ManagementPackCoverPage(string sqlConnectionString, Astrodon.ReportService.TOCDataItem[] tocDataItems) {
-            return base.Channel.ManagementPackCoverPage(sqlConnectionString, tocDataItems);
+        public byte[] ManagementPackCoverPage(System.DateTime processMonth, string buildingName, Astrodon.ReportService.TOCDataItem[] tocDataItems) {
+            return base.Channel.ManagementPackCoverPage(processMonth, buildingName, tocDataItems);
         }
     }
 }

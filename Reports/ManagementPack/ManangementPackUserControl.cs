@@ -17,6 +17,7 @@ using Astro.Library.Entities;
 using Astrodon.Data.Base;
 using Astrodon.Classes;
 using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace Astrodon.Reports
 {
@@ -34,6 +35,8 @@ namespace Astrodon.Reports
             InitializeComponent();
             LoadBuildings();
             LoadYears();
+            button2.Enabled = false;
+            button3.Enabled = false;
         }
 
         private void LoadYears()
@@ -78,10 +81,14 @@ namespace Astrodon.Reports
         private void button1_Click(object sender, EventArgs e)
         {
             button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
             try
             {
                 LoadFiles();
                 PopulateTableOfContents();
+                button2.Enabled = true;
+                button3.Enabled = true;
             }
             finally
             {
@@ -89,43 +96,38 @@ namespace Astrodon.Reports
             }
         }
 
-        private List<string> GetFilesInDirectory(string buildingName, string year, string month)
+        private List<string> GetFilesInDirectory(int buildingId, string year, string month)
         {
+            var buildingName = "";
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                buildingName = context.tblBuildings
+                        .FirstOrDefault(a => a.id == buildingId)?.DataFolder;
+            }
             if (string.IsNullOrWhiteSpace(buildingName) ||
                 string.IsNullOrWhiteSpace(month))
                 return null;
-            var fileLocation = $"Y:/USERS - DO NOT MOVE!!/Buildings Managed (Do not Remove)/{StripSpecialCharacters(buildingName)}/Invoices/{month.Substring(0,3)} {year}";
+            var fileLocation = $"{buildingName}\\Invoices\\{month.Substring(0,3)} {year}";
             return Directory.GetFiles(fileLocation).ToList();
         }
 
-        private string StripSpecialCharacters(string value)
+        private int GetTotalPages(byte[] filepath)
         {
-            var returnString = new StringBuilder();
-            foreach (var c in value)
-                if (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))
-                    returnString.Append(c);
-            return returnString.ToString();
-        }
-
-        private bool IsValidPdf(byte[] filepath)
-        {
-            bool Ret = true;
-
             PdfReader reader = null;
-
             try
             {
+                var returnVal = 0;
                 using (reader = new PdfReader(filepath))
                 {
+                    returnVal = reader.NumberOfPages;
                     reader.Close();
                 }
+                return returnVal;
             }
             catch
             {
-                Ret = false;
+                return 0;
             }
-
-            return Ret;
         }
 
         private void LoadFiles()
@@ -136,15 +138,20 @@ namespace Astrodon.Reports
             var month = cmbMonth.SelectedItem as IdValue;
             try
             {
-                var files = GetFilesInDirectory(building.Name, year.Value, month.Value);
+                var files = GetFilesInDirectory(building.ID, year.Value, month.Value);
                 for (int i = 0; i < files?.Count; i++)
                 {
-                    _TableOfContents.Add(new TableOfContentForPdfRecord()
+                    var totalPages = GetTotalPages(File.ReadAllBytes(files[i]));
+                    if (totalPages > 0)
                     {
-                        Path = files[i],
-                        File = files[i].Split('\\').Last(),
-                        Position = i+1
-                    });
+                        _TableOfContents.Add(new TableOfContentForPdfRecord()
+                        {
+                            Path = files[i],
+                            File = files[i].Split('\\').Last(),
+                            Position = i + 1,
+                            Pages = totalPages
+                        });
+                    }
                 }
             }
             catch (Exception)
@@ -164,9 +171,16 @@ namespace Astrodon.Reports
 
             dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
             {
+                DataPropertyName = "Position",
+                HeaderText = "Position",
+                ReadOnly = true,
+            });
+            dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
+            {
                 DataPropertyName = "Path",
                 HeaderText = "Path",
                 ReadOnly = true,
+                Width = 100
             });
             dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -179,6 +193,7 @@ namespace Astrodon.Reports
                 DataPropertyName = "Description",
                 HeaderText = "Description",
                 ReadOnly = false,
+                Width = 200
             });
             dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -192,14 +207,21 @@ namespace Astrodon.Reports
                 HeaderText = "",
                 Text = "Up",
                 UseColumnTextForButtonValue = true,
-                MinimumWidth = 30
+                MinimumWidth = 20,
             });
             dgTocGrid.Columns.Add(new DataGridViewButtonColumn()
             {
                 HeaderText = "",
                 Text = "Down",
                 UseColumnTextForButtonValue = true,
-                MinimumWidth = 30
+                MinimumWidth = 20,
+            });
+            dgTocGrid.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "",
+                Text = "Remove",
+                UseColumnTextForButtonValue = true,
+                MinimumWidth = 20,
             });
 
             RefreshGrid();
@@ -209,9 +231,11 @@ namespace Astrodon.Reports
         {
             BindingSource bs = new BindingSource();
             dgTocGrid.DataSource = bs;
-
+            _TableOfContents = _TableOfContents.OrderBy(a => a.Position).ToList();
+            var pos = 1;
+            foreach (var item in _TableOfContents)
+                item.Position = pos++;
             bs.DataSource = _TableOfContents;
-
             dgTocGrid.AutoResizeColumns();
         }
 
@@ -221,13 +245,32 @@ namespace Astrodon.Reports
             this.Cursor = Cursors.WaitCursor;
             try
             {
-
                 if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
                 {
                     var item = senderGrid.Rows[e.RowIndex].DataBoundItem as TableOfContentForPdfRecord;
                     if (item == null)
                         return;
-                    MessageBox.Show($"C:{e.ColumnIndex} R:{e.RowIndex} I:{item.File}");
+                    switch (e.ColumnIndex)
+                    {
+                        case 5:
+                            if (item.Position == 1)
+                                return;
+                            _TableOfContents.First(a => a.Position == item.Position - 1).Position = item.Position;
+                            item.Position = item.Position - 1;
+                            break;
+                        case 6:
+                            if (item.Position == _TableOfContents.Max(a=>a.Position))
+                                return;
+                            _TableOfContents.First(a => a.Position == item.Position + 1).Position = item.Position;
+                            item.Position = item.Position + 1;
+                            break;
+                        case 7:
+                            _TableOfContents.RemoveAll(a=>a.Position == item.Position);
+                            break;
+                        default:
+                            break;
+                    }
+                    RefreshGrid();
                 }
             }
             finally
@@ -235,6 +278,161 @@ namespace Astrodon.Reports
                 this.Cursor = Cursors.Default;
                 Application.DoEvents();
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var building = cmbBuilding.SelectedItem as Building;
+            var buildingName = "";
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                buildingName = context.tblBuildings
+                        .FirstOrDefault(a => a.id == building.ID)?.DataFolder;
+            }
+            if (Directory.Exists(buildingName))
+                dlgOpen.InitialDirectory = buildingName;
+            if (dlgOpen.ShowDialog() == DialogResult.OK)
+            {
+                button2.Enabled = false;
+                try
+                {
+                    var totalPages = GetTotalPages(File.ReadAllBytes(dlgOpen.FileName));
+                    if (totalPages > 0)
+                    {
+                        _TableOfContents.Add(new TableOfContentForPdfRecord()
+                        {
+                            Path = dlgOpen.FileName,
+                            File = dlgOpen.FileName.Split('\\').Last(),
+                            Position = _TableOfContents.Any() ? _TableOfContents.Max(a => a.Position) + 1 : 1,
+                            Pages = totalPages
+                        });
+                        RefreshGrid();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Corrupted file selected. Please select another file.");
+                    }
+                }
+                finally
+                {
+                    button2.Enabled = true;
+                }
+            }
+        }
+
+        private byte[] CreateReport(List<TableOfContentForPdfRecord> records)
+        {
+            bool processedOk = true;
+            button3.Enabled = false;
+            byte[] reportData = null;
+            try
+            {
+                var building = cmbBuilding.SelectedItem as Building;
+                var year = cmbYear.SelectedItem as IdValue;
+                var month = cmbMonth.SelectedItem as IdValue;
+                var tocList = new List<TOCDataItem>();
+                var pageCount = 1;
+                foreach (var item in records.OrderBy(a => a.Position))
+                {
+                    var toc = new TOCDataItem()
+                    {
+                        ItemNumber = item.Position.ToString(),
+                        ItemDescription = item.Description,
+                        PageNumber = pageCount,
+                    };
+                    tocList.Add(toc);
+                    pageCount += item.Pages;
+                }
+                using (var reportService = ReportServiceClient.CreateInstance())
+                {
+                    reportData = reportService.ManagementPackCoverPage(
+                        new DateTime(year.Id, month.Id, 1), 
+                        building.Name, tocList.ToArray());
+                    if (reportData != null)
+                    {
+                        if (dlgSave.ShowDialog() == DialogResult.OK)
+                        {
+                            using (FileStream ms = new FileStream(dlgSave.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                            {
+                                using (Document doc = new Document())
+                                {
+                                    using (PdfCopy copy = new PdfCopy(doc, ms))
+                                    {
+                                        doc.Open();
+
+                                        AddPdfDocument(copy, reportData);
+                                        foreach (var record in records)
+                                        {
+                                            var fileBytes = File.ReadAllBytes(record.Path);
+                                            if (GetTotalPages(fileBytes) > 0)
+                                            {
+                                                    AddPdfDocument(copy, fileBytes);
+                                            }
+                                            else
+                                            {
+                                                processedOk = false;
+                                                Controller.HandleError("Unable to verify " + record.File + " pdf is invalid");
+                                                throw new Exception("Unable to verify " + record.File + " pdf is invalid");
+                                            }
+                                            Application.DoEvents();
+                                        }
+                                        //write output file
+                                        ms.Flush();
+                                    }
+
+                                }
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Cover page failed to generate.");
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                processedOk = false;
+                Controller.HandleError(exp);
+            }
+            finally
+            {
+                button3.Enabled = true;
+            }
+
+            if (processedOk == false)
+                return null;
+
+            return reportData;
+        }
+
+        private void AddPdfDocument(PdfCopy copy, byte[] document)
+        {
+            PdfReader.unethicalreading = true;
+            using (PdfReader reader = new PdfReader(document))
+            {
+                PdfReader.unethicalreading = true;
+                int n = reader.NumberOfPages;
+                for (int page = 0; page < n;)
+                {
+                    copy.AddPage(copy.GetImportedPage(reader, ++page));
+                }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (_TableOfContents.Any(a=>a.Description == "" || a.Description == null))
+            {
+                MessageBox.Show("All records should contain a Description. Please supply a description for all records");
+                return;
+            }
+            var report = CreateReport(_TableOfContents);
+            if (report == null)
+                MessageBox.Show("Report could not be created.");
+            else
+                MessageBox.Show("Report was created successfully!");
         }
     }
 
