@@ -86,6 +86,32 @@ namespace Astrodon.Data
 
         public bool hoa { get; set; }
 
+        #region Building Insurance
+
+        public decimal CommonPropertyDimensions { get; set; }
+
+        public decimal UnitPropertyDimensions { get; set; }
+
+        public decimal UnitReplacementCost { get; set; }
+
+        public decimal CommonPropertyReplacementCost { get; set; }
+
+        public string InsuranceCompanyName { get; set; }
+
+        public string InsuranceAccountNumber { get; set; }
+
+        public string BrokerName { get; set; }
+
+        public string BrokerTelNumber { get; set; }
+
+        public string BrokerEmail { get; set; }
+
+        public byte[] InsuranceContract { get; set; }
+
+        public byte[] InsuranceClaimForm { get; set; }
+
+        #endregion
+
         [NotMapped]
         public string DataFolder
         {
