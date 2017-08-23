@@ -467,14 +467,12 @@ namespace Astrodon.Controls.Requisitions
                 HeaderText = "Invoice",
                 Text = "View",
                 UseColumnTextForButtonValue = true,
-                MinimumWidth = 30
             });
             dgPendingTransactions.Columns.Add(new DataGridViewButtonColumn()
             {
                 HeaderText = "Invoice",
                 Text = "Upload",
                 UseColumnTextForButtonValue = true,
-                MinimumWidth = 30
             });
 
 
@@ -483,12 +481,13 @@ namespace Astrodon.Controls.Requisitions
                 DataPropertyName = "Building",
                 HeaderText = "Building",
                 ReadOnly = true,
+                MinimumWidth = 30
             });
             dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "PortfolioManager",
                 HeaderText = "PM",
-                ReadOnly = true
+                ReadOnly = true,
             });
             dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -500,20 +499,20 @@ namespace Astrodon.Controls.Requisitions
             {
                 DataPropertyName = "LedgerAccount",
                 HeaderText = "Ledger",
-                ReadOnly = true
+                ReadOnly = true,
             });
             dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "SupplierName",
                 HeaderText = "Supplier",
-                ReadOnly = true
+                ReadOnly = true,
             });
 
             dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "SupplierReference",
                 HeaderText = "Reference",
-                ReadOnly = true
+                ReadOnly = true,
             });
 
             dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
@@ -521,20 +520,20 @@ namespace Astrodon.Controls.Requisitions
                 DataPropertyName = "Amount",
                 HeaderText = "Amount",
                 ReadOnly = true,
-                DefaultCellStyle = currencyColumnStyle
+                DefaultCellStyle = currencyColumnStyle,
             });
 
             dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "Bank",
                 HeaderText = "Bank",
-                ReadOnly = true
+                ReadOnly = true,
             });
             dgPendingTransactions.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "AccountNumber",
                 HeaderText = "Account",
-                ReadOnly = true
+                ReadOnly = true,
             });
 
             RefreshGrid();
@@ -547,7 +546,7 @@ namespace Astrodon.Controls.Requisitions
 
             bs.DataSource = _PendingRequisitions;
 
-            dgPendingTransactions.AutoResizeColumns();
+            //dgPendingTransactions.AutoResizeColumns();
 
             foreach (DataGridViewRow row in dgPendingTransactions.Rows)
             {
