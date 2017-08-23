@@ -597,6 +597,12 @@
     <Compile Include="Reports\MaintenanceReport\usrMaintenanceReport.Designer.cs">
       <DependentUpon>usrMaintenanceReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\ManagementPack\ManangementPackUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reports\ManagementPack\ManangementPackUserControl.Designer.cs">
+      <DependentUpon>ManangementPackUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reports\SupplierReport\usrSupplierReport.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -815,6 +821,9 @@
     <EmbeddedResource Include="Reports\MaintenanceReport\usrMaintenanceReport.resx">
       <DependentUpon>usrMaintenanceReport.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ManagementPack\ManangementPackUserControl.resx">
+      <DependentUpon>ManangementPackUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\SupplierReport\usrSupplierReport.resx">
       <DependentUpon>usrSupplierReport.cs</DependentUpon>
     </EmbeddedResource>
@@ -956,6 +965,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\item4.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />

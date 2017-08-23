@@ -74,6 +74,7 @@
             this.supplierBatchRequisitionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadRequisitionBatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unPaidRequisitionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nedbankBeneficiaryMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildingMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.suppliersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.debtorsReportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,7 +94,7 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.nedbankBeneficiaryMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.managementPackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -505,6 +506,13 @@
             this.unPaidRequisitionsMenuItem.Text = "Unpaid Requisitions";
             this.unPaidRequisitionsMenuItem.Click += new System.EventHandler(this.unPaidRequisitionsMenuItem_Click);
             // 
+            // nedbankBeneficiaryMaintenanceToolStripMenuItem
+            // 
+            this.nedbankBeneficiaryMaintenanceToolStripMenuItem.Name = "nedbankBeneficiaryMaintenanceToolStripMenuItem";
+            this.nedbankBeneficiaryMaintenanceToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.nedbankBeneficiaryMaintenanceToolStripMenuItem.Text = "Nedbank Beneficiary Maintenance";
+            this.nedbankBeneficiaryMaintenanceToolStripMenuItem.Click += new System.EventHandler(this.nedbankBeneficiaryMaintenanceToolStripMenuItem_Click);
+            // 
             // buildingMaintenanceToolStripMenuItem
             // 
             this.buildingMaintenanceToolStripMenuItem.Name = "buildingMaintenanceToolStripMenuItem";
@@ -577,7 +585,8 @@
             this.monthlyFinancialsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.checklistToolStripMenuItem,
             this.reportToolStripMenuItem,
-            this.levyRollToolStripMenuItem});
+            this.levyRollToolStripMenuItem,
+            this.managementPackToolStripMenuItem});
             this.monthlyFinancialsToolStripMenuItem.Name = "monthlyFinancialsToolStripMenuItem";
             this.monthlyFinancialsToolStripMenuItem.Size = new System.Drawing.Size(119, 20);
             this.monthlyFinancialsToolStripMenuItem.Text = "Monthly Financials";
@@ -585,21 +594,21 @@
             // checklistToolStripMenuItem
             // 
             this.checklistToolStripMenuItem.Name = "checklistToolStripMenuItem";
-            this.checklistToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.checklistToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.checklistToolStripMenuItem.Text = "Checklist";
             this.checklistToolStripMenuItem.Click += new System.EventHandler(this.checklistToolStripMenuItem_Click);
             // 
             // reportToolStripMenuItem
             // 
             this.reportToolStripMenuItem.Name = "reportToolStripMenuItem";
-            this.reportToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.reportToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.reportToolStripMenuItem.Text = "Report";
             this.reportToolStripMenuItem.Click += new System.EventHandler(this.reportToolStripMenuItem_Click);
             // 
             // levyRollToolStripMenuItem
             // 
             this.levyRollToolStripMenuItem.Name = "levyRollToolStripMenuItem";
-            this.levyRollToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.levyRollToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.levyRollToolStripMenuItem.Text = "Levy Roll";
             this.levyRollToolStripMenuItem.Click += new System.EventHandler(this.levyRollToolStripMenuItem_Click);
             // 
@@ -649,12 +658,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // nedbankBeneficiaryMaintenanceToolStripMenuItem
+            // managementPackToolStripMenuItem
             // 
-            this.nedbankBeneficiaryMaintenanceToolStripMenuItem.Name = "nedbankBeneficiaryMaintenanceToolStripMenuItem";
-            this.nedbankBeneficiaryMaintenanceToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
-            this.nedbankBeneficiaryMaintenanceToolStripMenuItem.Text = "Nedbank Beneficiary Maintenance";
-            this.nedbankBeneficiaryMaintenanceToolStripMenuItem.Click += new System.EventHandler(this.nedbankBeneficiaryMaintenanceToolStripMenuItem_Click);
+            this.managementPackToolStripMenuItem.Name = "managementPackToolStripMenuItem";
+            this.managementPackToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.managementPackToolStripMenuItem.Text = "Management Pack";
+            this.managementPackToolStripMenuItem.Click += new System.EventHandler(this.managementPackToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -752,5 +761,6 @@
         private System.Windows.Forms.ToolStripStatusLabel lblVersion;
         private System.Windows.Forms.ToolStripMenuItem unPaidRequisitionsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nedbankBeneficiaryMaintenanceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem managementPackToolStripMenuItem;
     }
 }
