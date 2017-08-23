@@ -66,7 +66,7 @@
             this.tbBatches.Location = new System.Drawing.Point(6, 3);
             this.tbBatches.Name = "tbBatches";
             this.tbBatches.SelectedIndex = 0;
-            this.tbBatches.Size = new System.Drawing.Size(948, 512);
+            this.tbBatches.Size = new System.Drawing.Size(1293, 512);
             this.tbBatches.TabIndex = 63;
             // 
             // tbNewBatch
@@ -79,7 +79,7 @@
             this.tbNewBatch.Location = new System.Drawing.Point(4, 22);
             this.tbNewBatch.Name = "tbNewBatch";
             this.tbNewBatch.Padding = new System.Windows.Forms.Padding(3);
-            this.tbNewBatch.Size = new System.Drawing.Size(940, 486);
+            this.tbNewBatch.Size = new System.Drawing.Size(1285, 486);
             this.tbNewBatch.TabIndex = 0;
             this.tbNewBatch.Text = "New Batch";
             this.tbNewBatch.UseVisualStyleBackColor = true;
@@ -120,7 +120,7 @@
             this.dgPendingTransactions.Location = new System.Drawing.Point(13, 59);
             this.dgPendingTransactions.Name = "dgPendingTransactions";
             this.dgPendingTransactions.ReadOnly = true;
-            this.dgPendingTransactions.Size = new System.Drawing.Size(921, 421);
+            this.dgPendingTransactions.Size = new System.Drawing.Size(1266, 421);
             this.dgPendingTransactions.TabIndex = 68;
             this.dgPendingTransactions.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgPendingTransactions_CellContentClick);
             // 
@@ -182,7 +182,7 @@
             // axAcroPDF1
             // 
             this.axAcroPDF1.Enabled = true;
-            this.axAcroPDF1.Location = new System.Drawing.Point(956, 25);
+            this.axAcroPDF1.Location = new System.Drawing.Point(1305, 25);
             this.axAcroPDF1.Name = "axAcroPDF1";
             this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
             this.axAcroPDF1.Size = new System.Drawing.Size(469, 480);
@@ -202,7 +202,7 @@
             this.Controls.Add(this.axAcroPDF1);
             this.Controls.Add(this.tbBatches);
             this.Name = "usrRequisitionBatch";
-            this.Size = new System.Drawing.Size(1534, 522);
+            this.Size = new System.Drawing.Size(1791, 522);
             this.tbBatches.ResumeLayout(false);
             this.tbNewBatch.ResumeLayout(false);
             this.tbNewBatch.PerformLayout();
