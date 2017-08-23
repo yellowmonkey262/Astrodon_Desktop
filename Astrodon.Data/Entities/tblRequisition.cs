@@ -92,6 +92,11 @@ namespace Astrodon.Data
 
         public virtual string NotifyEmailAddress { get; set; }
 
+        public virtual string NedbankCSVBenificiaryReferenceNumber { get; set; }
+
+        public virtual bool? UseNedbankCSV { get; set; }
+
         public virtual ICollection<RequisitionDocument> Documents { get; set; }
+     
     }
 }

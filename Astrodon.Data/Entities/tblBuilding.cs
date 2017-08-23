@@ -100,6 +100,15 @@ namespace Astrodon.Data
             }
         }
 
+        [NotMapped]
+        public bool IsUsingNedbank
+        {
+            get
+            {
+                return !String.IsNullOrWhiteSpace(bank) && !String.IsNullOrWhiteSpace(bankAccNumber) && bank.Trim().ToLower() == "nedbank";// && bankAccNumber.Trim() == "1902226429";
+            }
+        }
+
         public bool CheckIfFolderExists()
         {
             try
