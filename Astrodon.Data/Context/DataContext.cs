@@ -94,6 +94,8 @@ namespace Astrodon.Data
         public DbSet<BankAudit> BankAuditSet { get; set; }
         public DbSet<SystemLog> SystemLogSet { get; set; }
 
+        public DbSet<BuildingUnit> BuildingUnitSet { get; set; }
+
         public void ClearChanges()
         {
             var changedEntries = ChangeTracker.Entries().Where(x => x.State != EntityState.Unchanged).ToList();

@@ -1,6 +1,8 @@
 ﻿using Astro.Library.Entities;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Astrodon
@@ -9,6 +11,7 @@ namespace Astrodon
     {
         private Buildings BuildingManager;
         private Building selectedBuilding = null;
+        private List<InsurancePqRecord> InsurancePqGrid { get; set; }
 
         public usrBuildings()
         {
@@ -84,18 +87,161 @@ namespace Astrodon
             txtLimitM.Text = selectedBuilding.limitM.ToString("#,##0.00");
             txtLimitW.Text = selectedBuilding.limitW.ToString("#,##0.00");
             txtLimitD.Text = selectedBuilding.limitD.ToString("#,##0.00");
+            LoadBuildingInsurance();
             btnSave.Enabled = true;
+        }
+
+        private void LoadBuildingInsurance()
+        {
+            Data.tblBuilding buildingEntity = null;
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                buildingEntity = context.tblBuildings
+                        .FirstOrDefault(a => a.id == selectedBuilding.ID);
+            }
+            if (buildingEntity != null)
+            {
+                txtCommonPropertyDim.Text = buildingEntity.CommonPropertyDimensions.ToString();
+                txtUnitPropertyDim.Text = buildingEntity.UnitPropertyDimensions.ToString();
+                txtReplacementValue.Text = buildingEntity.UnitReplacementCost.ToString("#,##0.00");
+                txtCommonPropertyValue.Text = buildingEntity.CommonPropertyReplacementCost.ToString("#,##0.00");
+                txtBrokerCompany.Text = buildingEntity.InsuranceCompanyName;
+                txtBrokerAccountNumber.Text = buildingEntity.InsuranceAccountNumber;
+                txtBrokerName.Text = buildingEntity.BrokerName;
+                txtBrokerTel.Text = buildingEntity.BrokerTelNumber;
+                txtBrokerEmail.Text = buildingEntity.BrokerEmail;
+                LoadInsuranceUnitPq(buildingEntity);
+            }
+        }
+
+        private void LoadInsuranceUnitPq(Data.tblBuilding buildingEntity)
+        {
+            var unitRecords = Controller.pastel.AddCustomers(buildingEntity.Code, buildingEntity.DataPath);
+            InsurancePqGrid = unitRecords.Select(a => new InsurancePqRecord()
+            {
+                UnitNo = a.accNumber,
+                SquareMeters = buildingEntity.UnitPropertyDimensions,
+                Notes = "*New Unit*"
+            }).ToList();
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var buildingUnits = context.BuildingUnitSet
+                        .Where(a => a.BuildingId == selectedBuilding.ID).ToList();
+                foreach (var unit in buildingUnits)
+                {
+                    var record = InsurancePqGrid.FirstOrDefault(a => a.UnitNo == unit.UnitNo);
+                    if (record != null)
+                    {
+                        record.Id = unit.id;
+                        record.SquareMeters = unit.SquareMeters;
+                        record.Notes = unit.Notes;
+                        record.PQRating = unit.PQRating;
+                        record.AdditionalInsurance = unit.AdditionalInsurance;
+                    }
+                }
+            }
+            PopulateInsurancePq();
+        }
+
+        private void PopulateInsurancePq()
+        {
+            dgInsurancePq.ClearSelection();
+            dgInsurancePq.MultiSelect = false;
+            dgInsurancePq.AutoGenerateColumns = false;
+
+            dgInsurancePq.Columns.Clear();
+
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "UnitNo",
+                HeaderText = "UnitNo",
+                ReadOnly = true,
+            });
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "SquareMeters",
+                HeaderText = "SquareMeters",
+                ReadOnly = false,
+            });
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "AdditionalInsurance",
+                HeaderText = "AdditionalInsurance",
+                ReadOnly = false
+            });
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Notes",
+                HeaderText = "Notes",
+                ReadOnly = false,
+            });
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "PQRating",
+                HeaderText = "PQRating",
+                ReadOnly = true
+            });
+
+            RefreshGrid();
+        }
+
+        private void RefreshGrid()
+        {
+            BindingSource bs = new BindingSource();
+            dgInsurancePq.DataSource = bs;
+            bs.DataSource = InsurancePqGrid;
+            dgInsurancePq.AutoResizeColumns();
+        }
+
+        private void SaveBuildingInsurance()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var buildingEntity = context.tblBuildings
+                        .FirstOrDefault(a => a.id == selectedBuilding.ID);
+
+                buildingEntity.CommonPropertyDimensions = string.IsNullOrWhiteSpace(txtCommonPropertyDim.Text) ? 0 : 
+                    Convert.ToDecimal(txtCommonPropertyDim.Text);
+                buildingEntity.UnitPropertyDimensions = string.IsNullOrWhiteSpace(txtUnitPropertyDim.Text) ? 0 : 
+                    Convert.ToDecimal(txtUnitPropertyDim.Text);
+                buildingEntity.UnitReplacementCost = string.IsNullOrWhiteSpace(txtReplacementValue.Text) ? 0 : 
+                    Convert.ToDecimal(txtReplacementValue.Text);
+                buildingEntity.CommonPropertyReplacementCost = string.IsNullOrWhiteSpace(txtCommonPropertyValue.Text) ? 0 : 
+                    Convert.ToDecimal(txtCommonPropertyValue.Text);
+                buildingEntity.InsuranceCompanyName = txtBrokerCompany.Text;
+                buildingEntity.InsuranceAccountNumber = txtBrokerAccountNumber.Text;
+                buildingEntity.BrokerName = txtBrokerName.Text;
+                buildingEntity.BrokerTelNumber = txtBrokerTel.Text;
+                buildingEntity.BrokerEmail = txtBrokerEmail.Text;
+                context.SaveChanges();
+            }
+        }
+
+        private void RecursiveClearForm(Control c)
+        {
+            foreach (var x in c.Controls)
+            {
+                if (x is TextBox)
+                    ((TextBox)x).Text = "";
+                else if (x is CheckBox)
+                    ((CheckBox)x).Checked = false;
+                else if (((Control)x).Controls != null)
+                    foreach (var y in ((Control)x).Controls)
+                        RecursiveClearForm(y as Control);
+            }
         }
 
         private void clearBuilding()
         {
-            txtID.Text = txtName.Text = txtAbbr.Text = txtTrust.Text = txtPath.Text = txtPeriod.Text = txtCash.Text = txtOwnBank.Text = txtCashbook3.Text = txtPayment.Text = txtReceipt.Text = "";
-            txtJournal.Text = txtCentrec1.Text = txtCentrec2.Text = txtBus.Text = "";
+            foreach (var item in this.Controls)
+                RecursiveClearForm(item as Control);
+            //txtID.Text = txtName.Text = txtAbbr.Text = txtTrust.Text = txtPath.Text = txtPeriod.Text = txtCash.Text = txtOwnBank.Text = txtCashbook3.Text = txtPayment.Text = txtReceipt.Text = "";
+            //txtJournal.Text = txtCentrec1.Text = txtCentrec2.Text = txtBus.Text = "";
             cmbBank.SelectedItem = "PLEASE SELECT";
-            txtPM.Text = txtBankName.Text = txtAccNumber.Text = txtAccName.Text = txtBranch.Text = "";
-            chkWeb.Checked = btnSave.Enabled = false;
-            txtRF.Text = txtRFS.Text = txtFF.Text = txtFFS.Text = txtDCF.Text = txtDCFS.Text = txtSF.Text = txtSFS.Text = txtDF.Text = txtDFS.Text = txtHF.Text = txtHFS.Text = txtAddress1.Text = "";
-            txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = "";
+            //txtPM.Text = txtBankName.Text = txtAccNumber.Text = txtAccName.Text = txtBranch.Text = "";
+            //chkWeb.Checked = btnSave.Enabled = false;
+            //txtRF.Text = txtRFS.Text = txtFF.Text = txtFFS.Text = txtDCF.Text = txtDCFS.Text = txtSF.Text = txtSFS.Text = txtDF.Text = txtDFS.Text = txtHF.Text = txtHFS.Text = txtAddress1.Text = "";
+            //txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = "";
         }
 
         private void SaveBuilding()
@@ -154,9 +300,17 @@ namespace Astrodon
                 if (selectedBuilding.Name != "Add new building" && !String.IsNullOrEmpty(selectedBuilding.Name))
                 {
                     String status = String.Empty;
+                    try
+                    {
+                        SaveBuildingInsurance();
+                    }
+                    catch (Exception)
+                    {
+                    }
                     if (BuildingManager.Update(cmbBuilding.SelectedIndex, false, out status))
                     {
                         SaveWebBuilding(false);
+                        SaveBuildingInsurance();
                         MessageBox.Show("Building updated!", "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         selectedBuilding = null;
                         clearBuilding();
@@ -265,5 +419,15 @@ namespace Astrodon
                 }
             }
         }
+    }
+
+    class InsurancePqRecord
+    {
+        public int? Id { get; set; }
+        public string UnitNo { get; set; }
+        public decimal SquareMeters { get; set; }
+        public decimal AdditionalInsurance { get; set; }
+        public string Notes { get; set; }
+        public decimal PQRating { get; set; }
     }
 }

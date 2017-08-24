@@ -168,7 +168,27 @@ namespace Astrodon.Reports
             dgTocGrid.AutoGenerateColumns = false;
 
             dgTocGrid.Columns.Clear();
-
+            dgTocGrid.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "",
+                Text = "Remove",
+                UseColumnTextForButtonValue = true,
+                MinimumWidth = 20,
+            });
+            dgTocGrid.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "",
+                Text = "Up",
+                UseColumnTextForButtonValue = true,
+                MinimumWidth = 20,
+            });
+            dgTocGrid.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "",
+                Text = "Down",
+                UseColumnTextForButtonValue = true,
+                MinimumWidth = 20,
+            });
             dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "Position",
@@ -202,28 +222,6 @@ namespace Astrodon.Reports
                 ReadOnly = true
             });
 
-            dgTocGrid.Columns.Add(new DataGridViewButtonColumn()
-            {
-                HeaderText = "",
-                Text = "Up",
-                UseColumnTextForButtonValue = true,
-                MinimumWidth = 20,
-            });
-            dgTocGrid.Columns.Add(new DataGridViewButtonColumn()
-            {
-                HeaderText = "",
-                Text = "Down",
-                UseColumnTextForButtonValue = true,
-                MinimumWidth = 20,
-            });
-            dgTocGrid.Columns.Add(new DataGridViewButtonColumn()
-            {
-                HeaderText = "",
-                Text = "Remove",
-                UseColumnTextForButtonValue = true,
-                MinimumWidth = 20,
-            });
-
             RefreshGrid();
         }
 
@@ -252,20 +250,20 @@ namespace Astrodon.Reports
                         return;
                     switch (e.ColumnIndex)
                     {
-                        case 5:
+                        case 0:
+                            _TableOfContents.RemoveAll(a => a.Position == item.Position);
+                            break;
+                        case 1:
                             if (item.Position == 1)
                                 return;
                             _TableOfContents.First(a => a.Position == item.Position - 1).Position = item.Position;
                             item.Position = item.Position - 1;
                             break;
-                        case 6:
+                        case 2:
                             if (item.Position == _TableOfContents.Max(a=>a.Position))
                                 return;
                             _TableOfContents.First(a => a.Position == item.Position + 1).Position = item.Position;
                             item.Position = item.Position + 1;
-                            break;
-                        case 7:
-                            _TableOfContents.RemoveAll(a=>a.Position == item.Position);
                             break;
                         default:
                             break;

@@ -113,37 +113,39 @@
             this.txtLimitD = new System.Windows.Forms.TextBox();
             this.label41 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label42 = new System.Windows.Forms.Label();
-            this.label43 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.label44 = new System.Windows.Forms.Label();
+            this.txtUnitPropertyDim = new System.Windows.Forms.TextBox();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.txtCommonPropertyDim = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label45 = new System.Windows.Forms.Label();
-            this.label46 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label47 = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
+            this.txtCommonPropertyValue = new System.Windows.Forms.TextBox();
+            this.txtReplacementValue = new System.Windows.Forms.TextBox();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label45 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label49 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label50 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label51 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.label52 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.btnViewClaimForm = new System.Windows.Forms.Button();
+            this.btnViewInsuranceContract = new System.Windows.Forms.Button();
+            this.btnUploadClaimForm = new System.Windows.Forms.Button();
+            this.btnUploadInsuranceContract = new System.Windows.Forms.Button();
+            this.txtBrokerTel = new System.Windows.Forms.TextBox();
             this.label53 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.txtBrokerAccountNumber = new System.Windows.Forms.TextBox();
+            this.label52 = new System.Windows.Forms.Label();
+            this.txtBrokerEmail = new System.Windows.Forms.TextBox();
+            this.label51 = new System.Windows.Forms.Label();
+            this.txtBrokerName = new System.Windows.Forms.TextBox();
+            this.label50 = new System.Windows.Forms.Label();
+            this.txtBrokerCompany = new System.Windows.Forms.TextBox();
+            this.label49 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.dgInsurancePq = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -151,6 +153,8 @@
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgInsurancePq)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -490,9 +494,9 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(210, 24);
+            this.btnSave.Location = new System.Drawing.Point(999, 24);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(203, 23);
+            this.btnSave.Size = new System.Drawing.Size(203, 40);
             this.btnSave.TabIndex = 68;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -500,9 +504,9 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(419, 24);
+            this.btnCancel.Location = new System.Drawing.Point(1208, 24);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(138, 23);
+            this.btnCancel.Size = new System.Drawing.Size(138, 40);
             this.btnCancel.TabIndex = 69;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -812,7 +816,7 @@
             // 
             this.btnRemove.Location = new System.Drawing.Point(18, 24);
             this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(123, 23);
+            this.btnRemove.Size = new System.Drawing.Size(123, 40);
             this.btnRemove.TabIndex = 122;
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
@@ -894,10 +898,10 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label44);
-            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Controls.Add(this.txtUnitPropertyDim);
             this.groupBox1.Controls.Add(this.label43);
             this.groupBox1.Controls.Add(this.label42);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.txtCommonPropertyDim);
             this.groupBox1.Controls.Add(this.label41);
             this.groupBox1.Location = new System.Drawing.Point(434, 388);
             this.groupBox1.Name = "groupBox1";
@@ -905,38 +909,6 @@
             this.groupBox1.TabIndex = 131;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Building Dimensions";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(159, 26);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(86, 20);
-            this.textBox1.TabIndex = 131;
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(251, 29);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(18, 13);
-            this.label42.TabIndex = 132;
-            this.label42.Text = "m²";
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(28, 55);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(125, 13);
-            this.label43.TabIndex = 133;
-            this.label43.Text = "Unit Property Dimensions";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(159, 52);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(86, 20);
-            this.textBox2.TabIndex = 134;
             // 
             // label44
             // 
@@ -947,12 +919,44 @@
             this.label44.TabIndex = 135;
             this.label44.Text = "m²";
             // 
+            // txtUnitPropertyDim
+            // 
+            this.txtUnitPropertyDim.Location = new System.Drawing.Point(159, 52);
+            this.txtUnitPropertyDim.Name = "txtUnitPropertyDim";
+            this.txtUnitPropertyDim.Size = new System.Drawing.Size(86, 20);
+            this.txtUnitPropertyDim.TabIndex = 134;
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(28, 55);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(125, 13);
+            this.label43.TabIndex = 133;
+            this.label43.Text = "Unit Property Dimensions";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(251, 29);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(18, 13);
+            this.label42.TabIndex = 132;
+            this.label42.Text = "m²";
+            // 
+            // txtCommonPropertyDim
+            // 
+            this.txtCommonPropertyDim.Location = new System.Drawing.Point(159, 26);
+            this.txtCommonPropertyDim.Name = "txtCommonPropertyDim";
+            this.txtCommonPropertyDim.Size = new System.Drawing.Size(86, 20);
+            this.txtCommonPropertyDim.TabIndex = 131;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label48);
             this.groupBox2.Controls.Add(this.label47);
-            this.groupBox2.Controls.Add(this.textBox4);
-            this.groupBox2.Controls.Add(this.textBox3);
+            this.groupBox2.Controls.Add(this.txtCommonPropertyValue);
+            this.groupBox2.Controls.Add(this.txtReplacementValue);
             this.groupBox2.Controls.Add(this.label46);
             this.groupBox2.Controls.Add(this.label45);
             this.groupBox2.Location = new System.Drawing.Point(725, 388);
@@ -961,47 +965,6 @@
             this.groupBox2.TabIndex = 132;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Building Costs";
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(28, 29);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(100, 13);
-            this.label45.TabIndex = 0;
-            this.label45.Text = "Replacement Value";
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(8, 55);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(120, 13);
-            this.label46.TabIndex = 1;
-            this.label46.Text = "Common Property Value";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(166, 26);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 2;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(166, 52);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 3;
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(145, 29);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(15, 13);
-            this.label47.TabIndex = 133;
-            this.label47.Text = "R";
             // 
             // label48
             // 
@@ -1012,21 +975,62 @@
             this.label48.TabIndex = 134;
             this.label48.Text = "R";
             // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(145, 29);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(15, 13);
+            this.label47.TabIndex = 133;
+            this.label47.Text = "R";
+            // 
+            // txtCommonPropertyValue
+            // 
+            this.txtCommonPropertyValue.Location = new System.Drawing.Point(166, 52);
+            this.txtCommonPropertyValue.Name = "txtCommonPropertyValue";
+            this.txtCommonPropertyValue.Size = new System.Drawing.Size(100, 20);
+            this.txtCommonPropertyValue.TabIndex = 3;
+            // 
+            // txtReplacementValue
+            // 
+            this.txtReplacementValue.Location = new System.Drawing.Point(166, 26);
+            this.txtReplacementValue.Name = "txtReplacementValue";
+            this.txtReplacementValue.Size = new System.Drawing.Size(100, 20);
+            this.txtReplacementValue.TabIndex = 2;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(8, 55);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(120, 13);
+            this.label46.TabIndex = 1;
+            this.label46.Text = "Common Property Value";
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(28, 29);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(100, 13);
+            this.label45.TabIndex = 0;
+            this.label45.Text = "Replacement Value";
+            // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button4);
-            this.groupBox3.Controls.Add(this.button3);
-            this.groupBox3.Controls.Add(this.button2);
-            this.groupBox3.Controls.Add(this.button1);
-            this.groupBox3.Controls.Add(this.textBox9);
+            this.groupBox3.Controls.Add(this.btnViewClaimForm);
+            this.groupBox3.Controls.Add(this.btnViewInsuranceContract);
+            this.groupBox3.Controls.Add(this.btnUploadClaimForm);
+            this.groupBox3.Controls.Add(this.btnUploadInsuranceContract);
+            this.groupBox3.Controls.Add(this.txtBrokerTel);
             this.groupBox3.Controls.Add(this.label53);
-            this.groupBox3.Controls.Add(this.textBox8);
+            this.groupBox3.Controls.Add(this.txtBrokerAccountNumber);
             this.groupBox3.Controls.Add(this.label52);
-            this.groupBox3.Controls.Add(this.textBox7);
+            this.groupBox3.Controls.Add(this.txtBrokerEmail);
             this.groupBox3.Controls.Add(this.label51);
-            this.groupBox3.Controls.Add(this.textBox6);
+            this.groupBox3.Controls.Add(this.txtBrokerName);
             this.groupBox3.Controls.Add(this.label50);
-            this.groupBox3.Controls.Add(this.textBox5);
+            this.groupBox3.Controls.Add(this.txtBrokerCompany);
             this.groupBox3.Controls.Add(this.label49);
             this.groupBox3.Location = new System.Drawing.Point(434, 480);
             this.groupBox3.Name = "groupBox3";
@@ -1035,76 +1039,48 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Insurance Broker Details";
             // 
-            // label49
+            // btnViewClaimForm
             // 
-            this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(30, 27);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(51, 13);
-            this.label49.TabIndex = 0;
-            this.label49.Text = "Company";
+            this.btnViewClaimForm.Location = new System.Drawing.Point(518, 103);
+            this.btnViewClaimForm.Name = "btnViewClaimForm";
+            this.btnViewClaimForm.Size = new System.Drawing.Size(39, 23);
+            this.btnViewClaimForm.TabIndex = 14;
+            this.btnViewClaimForm.Text = "View";
+            this.btnViewClaimForm.UseVisualStyleBackColor = true;
             // 
-            // textBox5
+            // btnViewInsuranceContract
             // 
-            this.textBox5.Location = new System.Drawing.Point(87, 24);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(162, 20);
-            this.textBox5.TabIndex = 2;
+            this.btnViewInsuranceContract.Location = new System.Drawing.Point(518, 74);
+            this.btnViewInsuranceContract.Name = "btnViewInsuranceContract";
+            this.btnViewInsuranceContract.Size = new System.Drawing.Size(39, 23);
+            this.btnViewInsuranceContract.TabIndex = 13;
+            this.btnViewInsuranceContract.Text = "View";
+            this.btnViewInsuranceContract.UseVisualStyleBackColor = true;
             // 
-            // textBox6
+            // btnUploadClaimForm
             // 
-            this.textBox6.Location = new System.Drawing.Point(87, 50);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(162, 20);
-            this.textBox6.TabIndex = 4;
+            this.btnUploadClaimForm.Location = new System.Drawing.Point(302, 103);
+            this.btnUploadClaimForm.Name = "btnUploadClaimForm";
+            this.btnUploadClaimForm.Size = new System.Drawing.Size(210, 23);
+            this.btnUploadClaimForm.TabIndex = 12;
+            this.btnUploadClaimForm.Text = "Upload Claim Form";
+            this.btnUploadClaimForm.UseVisualStyleBackColor = true;
             // 
-            // label50
+            // btnUploadInsuranceContract
             // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(46, 53);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(35, 13);
-            this.label50.TabIndex = 3;
-            this.label50.Text = "Name";
+            this.btnUploadInsuranceContract.Location = new System.Drawing.Point(302, 74);
+            this.btnUploadInsuranceContract.Name = "btnUploadInsuranceContract";
+            this.btnUploadInsuranceContract.Size = new System.Drawing.Size(210, 23);
+            this.btnUploadInsuranceContract.TabIndex = 11;
+            this.btnUploadInsuranceContract.Text = "Upload Insurance Contract";
+            this.btnUploadInsuranceContract.UseVisualStyleBackColor = true;
             // 
-            // textBox7
+            // txtBrokerTel
             // 
-            this.textBox7.Location = new System.Drawing.Point(87, 76);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(162, 20);
-            this.textBox7.TabIndex = 6;
-            // 
-            // label51
-            // 
-            this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(49, 79);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(32, 13);
-            this.label51.TabIndex = 5;
-            this.label51.Text = "Email";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(392, 24);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(165, 20);
-            this.textBox8.TabIndex = 8;
-            // 
-            // label52
-            // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(299, 27);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(87, 13);
-            this.label52.TabIndex = 7;
-            this.label52.Text = "Account Number";
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(87, 102);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(122, 20);
-            this.textBox9.TabIndex = 10;
+            this.txtBrokerTel.Location = new System.Drawing.Point(87, 102);
+            this.txtBrokerTel.Name = "txtBrokerTel";
+            this.txtBrokerTel.Size = new System.Drawing.Size(122, 20);
+            this.txtBrokerTel.TabIndex = 10;
             // 
             // label53
             // 
@@ -1115,41 +1091,69 @@
             this.label53.TabIndex = 9;
             this.label53.Text = "Tel Number";
             // 
-            // button1
+            // txtBrokerAccountNumber
             // 
-            this.button1.Location = new System.Drawing.Point(302, 74);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(210, 23);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "Upload Insurance Contract";
-            this.button1.UseVisualStyleBackColor = true;
+            this.txtBrokerAccountNumber.Location = new System.Drawing.Point(392, 24);
+            this.txtBrokerAccountNumber.Name = "txtBrokerAccountNumber";
+            this.txtBrokerAccountNumber.Size = new System.Drawing.Size(165, 20);
+            this.txtBrokerAccountNumber.TabIndex = 8;
             // 
-            // button2
+            // label52
             // 
-            this.button2.Location = new System.Drawing.Point(302, 103);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(210, 23);
-            this.button2.TabIndex = 12;
-            this.button2.Text = "Upload Claim Form";
-            this.button2.UseVisualStyleBackColor = true;
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(299, 27);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(87, 13);
+            this.label52.TabIndex = 7;
+            this.label52.Text = "Account Number";
             // 
-            // button3
+            // txtBrokerEmail
             // 
-            this.button3.Location = new System.Drawing.Point(518, 74);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(39, 23);
-            this.button3.TabIndex = 13;
-            this.button3.Text = "View";
-            this.button3.UseVisualStyleBackColor = true;
+            this.txtBrokerEmail.Location = new System.Drawing.Point(87, 76);
+            this.txtBrokerEmail.Name = "txtBrokerEmail";
+            this.txtBrokerEmail.Size = new System.Drawing.Size(162, 20);
+            this.txtBrokerEmail.TabIndex = 6;
             // 
-            // button4
+            // label51
             // 
-            this.button4.Location = new System.Drawing.Point(518, 103);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(39, 23);
-            this.button4.TabIndex = 14;
-            this.button4.Text = "View";
-            this.button4.UseVisualStyleBackColor = true;
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(49, 79);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(32, 13);
+            this.label51.TabIndex = 5;
+            this.label51.Text = "Email";
+            // 
+            // txtBrokerName
+            // 
+            this.txtBrokerName.Location = new System.Drawing.Point(87, 50);
+            this.txtBrokerName.Name = "txtBrokerName";
+            this.txtBrokerName.Size = new System.Drawing.Size(162, 20);
+            this.txtBrokerName.TabIndex = 4;
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(46, 53);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(35, 13);
+            this.label50.TabIndex = 3;
+            this.label50.Text = "Name";
+            // 
+            // txtBrokerCompany
+            // 
+            this.txtBrokerCompany.Location = new System.Drawing.Point(87, 24);
+            this.txtBrokerCompany.Name = "txtBrokerCompany";
+            this.txtBrokerCompany.Size = new System.Drawing.Size(162, 20);
+            this.txtBrokerCompany.TabIndex = 2;
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(30, 27);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(51, 13);
+            this.label49.TabIndex = 0;
+            this.label49.Text = "Company";
             // 
             // groupBox4
             // 
@@ -1190,9 +1194,9 @@
             this.groupBox5.Controls.Add(this.btnRemove);
             this.groupBox5.Controls.Add(this.btnSave);
             this.groupBox5.Controls.Add(this.btnCancel);
-            this.groupBox5.Location = new System.Drawing.Point(434, 638);
+            this.groupBox5.Location = new System.Drawing.Point(434, 620);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(576, 58);
+            this.groupBox5.Size = new System.Drawing.Size(1352, 76);
             this.groupBox5.TabIndex = 135;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Actions";
@@ -1273,10 +1277,33 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Building Details";
             // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.dgInsurancePq);
+            this.groupBox8.Location = new System.Drawing.Point(1016, 44);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(770, 570);
+            this.groupBox8.TabIndex = 138;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Insurance PQ";
+            // 
+            // dgInsurancePq
+            // 
+            this.dgInsurancePq.AllowUserToAddRows = false;
+            this.dgInsurancePq.AllowUserToDeleteRows = false;
+            this.dgInsurancePq.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgInsurancePq.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgInsurancePq.Location = new System.Drawing.Point(3, 16);
+            this.dgInsurancePq.MultiSelect = false;
+            this.dgInsurancePq.Name = "dgInsurancePq";
+            this.dgInsurancePq.Size = new System.Drawing.Size(764, 551);
+            this.dgInsurancePq.TabIndex = 0;
+            // 
             // usrBuildings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
@@ -1287,7 +1314,7 @@
             this.Controls.Add(this.cmbBuilding);
             this.Controls.Add(this.label1);
             this.Name = "usrBuildings";
-            this.Size = new System.Drawing.Size(1331, 715);
+            this.Size = new System.Drawing.Size(1789, 715);
             this.Load += new System.EventHandler(this.usrBuildings_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -1302,6 +1329,8 @@
             this.groupBox6.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgInsurancePq)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1400,35 +1429,37 @@
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label44;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtUnitPropertyDim;
         private System.Windows.Forms.Label label43;
         private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtCommonPropertyDim;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label48;
         private System.Windows.Forms.Label label47;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtCommonPropertyValue;
+        private System.Windows.Forms.TextBox txtReplacementValue;
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.Button btnViewClaimForm;
+        private System.Windows.Forms.Button btnViewInsuranceContract;
+        private System.Windows.Forms.Button btnUploadClaimForm;
+        private System.Windows.Forms.Button btnUploadInsuranceContract;
+        private System.Windows.Forms.TextBox txtBrokerTel;
         private System.Windows.Forms.Label label53;
-        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox txtBrokerAccountNumber;
         private System.Windows.Forms.Label label52;
-        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox txtBrokerEmail;
         private System.Windows.Forms.Label label51;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox txtBrokerName;
         private System.Windows.Forms.Label label50;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox txtBrokerCompany;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.DataGridView dgInsurancePq;
     }
 }
