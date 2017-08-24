@@ -189,6 +189,13 @@ namespace Astrodon.Reports
                 UseColumnTextForButtonValue = true,
                 MinimumWidth = 20,
             });
+            dgTocGrid.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "",
+                Text = "Preview",
+                UseColumnTextForButtonValue = true,
+                MinimumWidth = 20,
+            });
             dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "Position",
@@ -265,6 +272,9 @@ namespace Astrodon.Reports
                             _TableOfContents.First(a => a.Position == item.Position + 1).Position = item.Position;
                             item.Position = item.Position + 1;
                             break;
+                        case 3:
+                            DisplayPDF(File.ReadAllBytes(item.Path));
+                            break;
                         default:
                             break;
                     }
@@ -276,6 +286,44 @@ namespace Astrodon.Reports
                 this.Cursor = Cursors.Default;
                 Application.DoEvents();
             }
+        }
+
+        private string _TempPDFFile = string.Empty;
+        private void DisplayPDF(byte[] pdfData)
+        {
+            if (pdfData == null)
+            {
+                this.axAcroPDF1.Visible = false;
+                return;
+            }
+            if (!String.IsNullOrWhiteSpace(_TempPDFFile))
+                File.Delete(_TempPDFFile);
+            _TempPDFFile = Path.GetTempPath();
+            if (!_TempPDFFile.EndsWith(@"\"))
+                _TempPDFFile = _TempPDFFile + @"\";
+
+            _TempPDFFile = _TempPDFFile + System.Guid.NewGuid().ToString("N") + ".pdf";
+            File.WriteAllBytes(_TempPDFFile, pdfData);
+
+
+            try
+            {
+                this.axAcroPDF1.Visible = true;
+                this.axAcroPDF1.LoadFile(_TempPDFFile);
+                this.axAcroPDF1.src = _TempPDFFile;
+                this.axAcroPDF1.setShowToolbar(false);
+                this.axAcroPDF1.setView("FitH");
+                this.axAcroPDF1.setLayoutMode("SinglePage");
+                this.axAcroPDF1.setShowToolbar(false);
+
+                this.axAcroPDF1.Show();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            File.Delete(_TempPDFFile);
         }
 
         private void button2_Click(object sender, EventArgs e)

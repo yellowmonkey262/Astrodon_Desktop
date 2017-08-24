@@ -77,7 +77,7 @@ namespace Astrodon
             {
                 path = Path.Combine(pastelDirectory, buildPath);
             }
-            else if(Directory.Exists(Path.Combine("C:\\Pastel12", buildPath)))
+            else if (Directory.Exists(Path.Combine("C:\\Pastel12", buildPath)))
             {
                 path = Path.Combine("C:\\Pastel12", buildPath);
                 pastelDirectory = "C:\\Pastel12";
