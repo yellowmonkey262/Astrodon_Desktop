@@ -120,8 +120,9 @@ namespace Astrodon
             InsurancePqGrid = unitRecords.Select(a => new InsurancePqRecord()
             {
                 UnitNo = a.accNumber,
-                SquareMeters = buildingEntity.UnitPropertyDimensions,
-                Notes = "*New Unit*"
+                SquareMeters = decimal.Round(buildingEntity.UnitPropertyDimensions / unitRecords.Count, 2),
+                Notes = "*New Unit*",
+                TotalUnitPropertyDimensions = buildingEntity.UnitPropertyDimensions
             }).ToList();
             using (var context = SqlDataHandler.GetDataContext())
             {
@@ -177,8 +178,8 @@ namespace Astrodon
             });
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
-                DataPropertyName = "PQRating",
-                HeaderText = "PQRating",
+                DataPropertyName = "PQCalculated",
+                HeaderText = "PQCalculated",
                 ReadOnly = true
             });
 
@@ -213,6 +214,33 @@ namespace Astrodon
                 buildingEntity.BrokerName = txtBrokerName.Text;
                 buildingEntity.BrokerTelNumber = txtBrokerTel.Text;
                 buildingEntity.BrokerEmail = txtBrokerEmail.Text;
+
+                foreach (var item in InsurancePqGrid)
+                {
+                    if (item.Id == null)
+                    {
+                        context.BuildingUnitSet.Add(new Data.MaintenanceData.BuildingUnit()
+                        {
+                            BuildingId = buildingEntity.id,
+                            AdditionalInsurance = item.AdditionalInsurance,
+                            Notes = item.Notes,
+                            PQRating = item.PQCalculated,
+                            SquareMeters = item.SquareMeters,
+                            UnitNo = item.UnitNo,
+                        });
+                    }
+                    else
+                    {
+                        var update = context.BuildingUnitSet.First(a => a.id == item.Id);
+                        update.BuildingId = buildingEntity.id;
+                        update.AdditionalInsurance = item.AdditionalInsurance;
+                        update.Notes = item.Notes;
+                        update.PQRating = item.PQCalculated;
+                        update.SquareMeters = item.SquareMeters;
+                        update.UnitNo = item.UnitNo;
+                    }
+                }
+
                 context.SaveChanges();
             }
         }
@@ -428,6 +456,15 @@ namespace Astrodon
         public decimal SquareMeters { get; set; }
         public decimal AdditionalInsurance { get; set; }
         public string Notes { get; set; }
-        public decimal PQRating { get; set; }
+        public decimal? PQRating { get; set; }
+
+        public decimal TotalUnitPropertyDimensions { get; set; }
+        public decimal PQCalculated
+        {
+            get
+            {
+                return PQRating == null ? SquareMeters / TotalUnitPropertyDimensions : PQRating.Value;
+            }
+        }
     }
 }

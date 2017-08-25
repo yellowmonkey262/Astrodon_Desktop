@@ -412,7 +412,7 @@ namespace Astrodon.Reports
                                             var fileBytes = File.ReadAllBytes(record.Path);
                                             if (GetTotalPages(fileBytes) > 0)
                                             {
-                                                    AddPdfDocument(copy, fileBytes);
+                                                AddPdfDocument(copy, fileBytes);
                                             }
                                             else
                                             {

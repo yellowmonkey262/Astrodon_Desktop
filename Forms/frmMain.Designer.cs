@@ -88,13 +88,14 @@
             this.checklistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.levyRollToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.managementPackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.managementPackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.insuranceScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -200,7 +201,8 @@
             this.statementRunToolStripMenuItem,
             this.trustToolStripMenuItem,
             this.supplierReportToolStripMenuItem1,
-            this.maintenanceReportToolStripMenuItem});
+            this.maintenanceReportToolStripMenuItem,
+            this.insuranceScheduleToolStripMenuItem});
             this.reportingToolStripMenuItem.Name = "reportingToolStripMenuItem";
             this.reportingToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.reportingToolStripMenuItem.Text = "Reporting";
@@ -612,6 +614,13 @@
             this.levyRollToolStripMenuItem.Text = "Levy Roll";
             this.levyRollToolStripMenuItem.Click += new System.EventHandler(this.levyRollToolStripMenuItem_Click);
             // 
+            // managementPackToolStripMenuItem
+            // 
+            this.managementPackToolStripMenuItem.Name = "managementPackToolStripMenuItem";
+            this.managementPackToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.managementPackToolStripMenuItem.Text = "Management Pack";
+            this.managementPackToolStripMenuItem.Click += new System.EventHandler(this.managementPackToolStripMenuItem_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -658,12 +667,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // managementPackToolStripMenuItem
+            // insuranceScheduleToolStripMenuItem
             // 
-            this.managementPackToolStripMenuItem.Name = "managementPackToolStripMenuItem";
-            this.managementPackToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.managementPackToolStripMenuItem.Text = "Management Pack";
-            this.managementPackToolStripMenuItem.Click += new System.EventHandler(this.managementPackToolStripMenuItem_Click);
+            this.insuranceScheduleToolStripMenuItem.Name = "insuranceScheduleToolStripMenuItem";
+            this.insuranceScheduleToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.insuranceScheduleToolStripMenuItem.Text = "Insurance Schedule";
+            this.insuranceScheduleToolStripMenuItem.Click += new System.EventHandler(this.insuranceScheduleToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -762,5 +771,6 @@
         private System.Windows.Forms.ToolStripMenuItem unPaidRequisitionsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nedbankBeneficiaryMaintenanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem managementPackToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem insuranceScheduleToolStripMenuItem;
     }
 }

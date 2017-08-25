@@ -631,5 +631,14 @@ namespace Astrodon
             pnlContents.Controls.Add(trustCtl);
             toolStripStatusLabel1.Text = "Manangement Pack Report";
         }
+
+        private void insuranceScheduleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            InsuranceScheduleUserControl control = new InsuranceScheduleUserControl();
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Insurance Schedule";
+        }
     }
 }

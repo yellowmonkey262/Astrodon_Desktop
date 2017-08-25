@@ -51,6 +51,12 @@
   <wsdl:message name="IReportService_ManagementPackCoverPage_OutputMessage">
     <wsdl:part name="parameters" element="tns:ManagementPackCoverPageResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_InsuranceSchedule_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsuranceSchedule" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_InsuranceSchedule_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsuranceScheduleResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="LevyRollReport">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/LevyRollReport" message="tns:IReportService_LevyRollReport_InputMessage" />
@@ -79,6 +85,10 @@
     <wsdl:operation name="ManagementPackCoverPage">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/ManagementPackCoverPage" message="tns:IReportService_ManagementPackCoverPage_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/IReportService/ManagementPackCoverPageResponse" message="tns:IReportService_ManagementPackCoverPage_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsuranceSchedule">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/InsuranceSchedule" message="tns:IReportService_InsuranceSchedule_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/InsuranceScheduleResponse" message="tns:IReportService_InsuranceSchedule_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -139,6 +149,15 @@
     </wsdl:operation>
     <wsdl:operation name="ManagementPackCoverPage">
       <soap:operation soapAction="http://tempuri.org/IReportService/ManagementPackCoverPage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsuranceSchedule">
+      <soap:operation soapAction="http://tempuri.org/IReportService/InsuranceSchedule" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

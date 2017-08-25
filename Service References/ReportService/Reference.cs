@@ -326,6 +326,9 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ManagementPackCoverPage", ReplyAction="http://tempuri.org/IReportService/ManagementPackCoverPageResponse")]
         byte[] ManagementPackCoverPage(System.DateTime processMonth, string buildingName, Astrodon.ReportService.TOCDataItem[] tocDataItems);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/InsuranceSchedule", ReplyAction="http://tempuri.org/IReportService/InsuranceScheduleResponse")]
+        byte[] InsuranceSchedule(string sqlConnectionString, int buildingId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -381,6 +384,10 @@ namespace Astrodon.ReportService {
         
         public byte[] ManagementPackCoverPage(System.DateTime processMonth, string buildingName, Astrodon.ReportService.TOCDataItem[] tocDataItems) {
             return base.Channel.ManagementPackCoverPage(processMonth, buildingName, tocDataItems);
+        }
+        
+        public byte[] InsuranceSchedule(string sqlConnectionString, int buildingId) {
+            return base.Channel.InsuranceSchedule(sqlConnectionString, buildingId);
         }
     }
 }
