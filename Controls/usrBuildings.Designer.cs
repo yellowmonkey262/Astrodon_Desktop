@@ -146,6 +146,8 @@
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.dgInsurancePq = new System.Windows.Forms.DataGridView();
+            this.fdOpen = new System.Windows.Forms.OpenFileDialog();
+            this.fdSave = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -1041,39 +1043,43 @@
             // 
             // btnViewClaimForm
             // 
-            this.btnViewClaimForm.Location = new System.Drawing.Point(518, 103);
+            this.btnViewClaimForm.Location = new System.Drawing.Point(466, 103);
             this.btnViewClaimForm.Name = "btnViewClaimForm";
-            this.btnViewClaimForm.Size = new System.Drawing.Size(39, 23);
+            this.btnViewClaimForm.Size = new System.Drawing.Size(91, 23);
             this.btnViewClaimForm.TabIndex = 14;
-            this.btnViewClaimForm.Text = "View";
+            this.btnViewClaimForm.Text = "Download";
             this.btnViewClaimForm.UseVisualStyleBackColor = true;
+            this.btnViewClaimForm.Click += new System.EventHandler(this.btnViewClaimForm_Click);
             // 
             // btnViewInsuranceContract
             // 
-            this.btnViewInsuranceContract.Location = new System.Drawing.Point(518, 74);
+            this.btnViewInsuranceContract.Location = new System.Drawing.Point(466, 74);
             this.btnViewInsuranceContract.Name = "btnViewInsuranceContract";
-            this.btnViewInsuranceContract.Size = new System.Drawing.Size(39, 23);
+            this.btnViewInsuranceContract.Size = new System.Drawing.Size(91, 23);
             this.btnViewInsuranceContract.TabIndex = 13;
-            this.btnViewInsuranceContract.Text = "View";
+            this.btnViewInsuranceContract.Text = "Download";
             this.btnViewInsuranceContract.UseVisualStyleBackColor = true;
+            this.btnViewInsuranceContract.Click += new System.EventHandler(this.btnViewInsuranceContract_Click);
             // 
             // btnUploadClaimForm
             // 
             this.btnUploadClaimForm.Location = new System.Drawing.Point(302, 103);
             this.btnUploadClaimForm.Name = "btnUploadClaimForm";
-            this.btnUploadClaimForm.Size = new System.Drawing.Size(210, 23);
+            this.btnUploadClaimForm.Size = new System.Drawing.Size(158, 23);
             this.btnUploadClaimForm.TabIndex = 12;
             this.btnUploadClaimForm.Text = "Upload Claim Form";
             this.btnUploadClaimForm.UseVisualStyleBackColor = true;
+            this.btnUploadClaimForm.Click += new System.EventHandler(this.btnUploadClaimForm_Click);
             // 
             // btnUploadInsuranceContract
             // 
             this.btnUploadInsuranceContract.Location = new System.Drawing.Point(302, 74);
             this.btnUploadInsuranceContract.Name = "btnUploadInsuranceContract";
-            this.btnUploadInsuranceContract.Size = new System.Drawing.Size(210, 23);
+            this.btnUploadInsuranceContract.Size = new System.Drawing.Size(158, 23);
             this.btnUploadInsuranceContract.TabIndex = 11;
             this.btnUploadInsuranceContract.Text = "Upload Insurance Contract";
             this.btnUploadInsuranceContract.UseVisualStyleBackColor = true;
+            this.btnUploadInsuranceContract.Click += new System.EventHandler(this.btnUploadInsuranceContract_Click);
             // 
             // txtBrokerTel
             // 
@@ -1299,6 +1305,14 @@
             this.dgInsurancePq.Size = new System.Drawing.Size(764, 551);
             this.dgInsurancePq.TabIndex = 0;
             // 
+            // fdOpen
+            // 
+            this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            // 
+            // fdSave
+            // 
+            this.fdSave.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            // 
             // usrBuildings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1461,5 +1475,7 @@
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.DataGridView dgInsurancePq;
+        private System.Windows.Forms.OpenFileDialog fdOpen;
+        private System.Windows.Forms.SaveFileDialog fdSave;
     }
 }

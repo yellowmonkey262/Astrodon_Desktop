@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -444,6 +445,130 @@ namespace Astrodon
                         clearBuilding();
                         LoadCombo();
                     }
+                }
+            }
+        }
+
+        private void btnUploadInsuranceContract_Click(object sender, EventArgs e)
+        {
+            if (fdOpen.ShowDialog() == DialogResult.OK)
+            {
+                btnUploadInsuranceContract.Enabled = false;
+                try
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var buildingEntity = context.tblBuildings
+                                .FirstOrDefault(a => a.id == selectedBuilding.ID);
+
+                        buildingEntity.InsuranceContract = File.ReadAllBytes(fdOpen.FileName);
+                        context.SaveChanges();
+                        MessageBox.Show("Successfully Uploaded Insurance Form");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to upload Insurance Form");
+                }
+                finally
+                {
+                    btnUploadInsuranceContract.Enabled = true;
+                }
+            }
+        }
+
+        private void btnUploadClaimForm_Click(object sender, EventArgs e)
+        {
+            if (fdOpen.ShowDialog() == DialogResult.OK)
+            {
+                btnUploadClaimForm.Enabled = false;
+                try
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var buildingEntity = context.tblBuildings
+                                .FirstOrDefault(a => a.id == selectedBuilding.ID);
+
+                        buildingEntity.InsuranceClaimForm = File.ReadAllBytes(fdOpen.FileName);
+                        context.SaveChanges();
+                        MessageBox.Show("Successfully Uploaded Claim Form");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to upload Claim Form");
+                }
+                finally
+                {
+                    btnUploadClaimForm.Enabled = true;
+                }
+            }
+        }
+
+        private void btnViewInsuranceContract_Click(object sender, EventArgs e)
+        {
+            if (fdSave.ShowDialog() == DialogResult.OK)
+            {
+                btnViewInsuranceContract.Enabled = false;
+                try
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var buildingEntity = context.tblBuildings
+                                .FirstOrDefault(a => a.id == selectedBuilding.ID);
+                        
+                        if(buildingEntity.InsuranceContract == null)
+                        {
+                            MessageBox.Show("No document exits");
+                            return;
+                        }
+
+                        File.WriteAllBytes(fdSave.FileName, buildingEntity.InsuranceContract);
+
+                        MessageBox.Show("Successfully Downloaded Insurance Form");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to download Insurance Form");
+                }
+                finally
+                {
+                    btnViewInsuranceContract.Enabled = true;
+                }
+            }
+        }
+
+        private void btnViewClaimForm_Click(object sender, EventArgs e)
+        {
+            if (fdSave.ShowDialog() == DialogResult.OK)
+            {
+                btnViewClaimForm.Enabled = false;
+                try
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var buildingEntity = context.tblBuildings
+                                .FirstOrDefault(a => a.id == selectedBuilding.ID);
+
+                        if (buildingEntity.InsuranceClaimForm == null)
+                        {
+                            MessageBox.Show("No document exits");
+                            return;
+                        }
+
+                        File.WriteAllBytes(fdSave.FileName, buildingEntity.InsuranceClaimForm);
+
+                        MessageBox.Show("Successfully Downloaded Claim Form");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to download Claim Form");
+                }
+                finally
+                {
+                    btnViewClaimForm.Enabled = true;
                 }
             }
         }
