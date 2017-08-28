@@ -1329,6 +1329,8 @@ namespace Astrodon.Controls
         public String payreference { get; set; }
 
         public double amount { get; set; }
+
+        public string SupplierName { get { return supplierName; } }
     }
 
     public class ReqAccount

@@ -144,15 +144,21 @@ namespace Astrodon.Reports
                     var totalPages = GetTotalPages(File.ReadAllBytes(files[i]));
                     if (totalPages > 0)
                     {
+                        var fileDate = File.GetCreationTime(dlgOpen.FileName);
+
                         _TableOfContents.Add(new TableOfContentForPdfRecord()
                         {
                             Path = files[i],
                             File = files[i].Split('\\').Last(),
-                            Position = i + 1,
-                            Pages = totalPages
+                            Position = 0,
+                            Pages = totalPages,
+                            FileDate = fileDate
                         });
                     }
                 }
+                _TableOfContents = _TableOfContents.OrderBy(a => a.FileDate).ToList();
+                for (int x = 1; x < _TableOfContents.Count; x++)
+                    _TableOfContents[x].Position = x;
             }
             catch (Exception)
             {
@@ -345,12 +351,15 @@ namespace Astrodon.Reports
                     var totalPages = GetTotalPages(File.ReadAllBytes(dlgOpen.FileName));
                     if (totalPages > 0)
                     {
+                        var fileDate = File.GetCreationTime(dlgOpen.FileName);
+
                         _TableOfContents.Add(new TableOfContentForPdfRecord()
                         {
                             Path = dlgOpen.FileName,
                             File = dlgOpen.FileName.Split('\\').Last(),
                             Position = _TableOfContents.Any() ? _TableOfContents.Max(a => a.Position) + 1 : 1,
-                            Pages = totalPages
+                            Pages = totalPages,
+                            FileDate = fileDate
                         });
                         RefreshGrid();
                     }
@@ -475,6 +484,8 @@ namespace Astrodon.Reports
             }
             CreateReport(_TableOfContents);
         }
+
+       
     }
 
     class TableOfContentForPdfRecord
@@ -484,5 +495,6 @@ namespace Astrodon.Reports
         public string Description { get; set; }
         public int Pages { get; set; }
         public int Position { get; set; }
+        public DateTime FileDate { get; set; }
     }
 }

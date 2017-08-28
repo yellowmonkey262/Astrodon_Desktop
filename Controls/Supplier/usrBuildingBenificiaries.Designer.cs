@@ -94,12 +94,12 @@
             this.dgItems.Location = new System.Drawing.Point(6, 75);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(1140, 381);
+            this.dgItems.Size = new System.Drawing.Size(1270, 381);
             this.dgItems.TabIndex = 71;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1071, 462);
+            this.button2.Location = new System.Drawing.Point(1201, 462);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 72;
@@ -119,7 +119,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cmbBuilding);
             this.Name = "usrBuildingBenificiaries";
-            this.Size = new System.Drawing.Size(1149, 500);
+            this.Size = new System.Drawing.Size(1279, 500);
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

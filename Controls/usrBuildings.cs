@@ -633,6 +633,11 @@ namespace Astrodon
                 }
             }
         }
+
+        private void tbInsurance_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     class InsurancePqRecord

@@ -293,7 +293,7 @@
             this.tabControl1.Location = new System.Drawing.Point(15, 384);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1009, 326);
+            this.tabControl1.Size = new System.Drawing.Size(1255, 326);
             this.tabControl1.TabIndex = 25;
             // 
             // tabPage1
@@ -304,7 +304,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1001, 300);
+            this.tabPage1.Size = new System.Drawing.Size(1247, 300);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Unprocessed";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -350,7 +350,7 @@
             this.dgUnprocessed.Location = new System.Drawing.Point(6, 6);
             this.dgUnprocessed.Name = "dgUnprocessed";
             this.dgUnprocessed.ReadOnly = true;
-            this.dgUnprocessed.Size = new System.Drawing.Size(989, 250);
+            this.dgUnprocessed.Size = new System.Drawing.Size(1235, 250);
             this.dgUnprocessed.TabIndex = 10;
             this.dgUnprocessed.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dg_CellContentClick);
             this.dgUnprocessed.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgUnprocessed_DataBindingComplete);
@@ -429,6 +429,7 @@
             // 
             // supplierName
             // 
+            this.supplierName.DataPropertyName = "SupplierName";
             this.supplierName.HeaderText = "Supplier";
             this.supplierName.Name = "supplierName";
             this.supplierName.ReadOnly = true;
@@ -440,14 +441,14 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1001, 300);
+            this.tabPage2.Size = new System.Drawing.Size(1247, 300);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Unpaid";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // btnViewTrans
             // 
-            this.btnViewTrans.Location = new System.Drawing.Point(828, 8);
+            this.btnViewTrans.Location = new System.Drawing.Point(1074, 8);
             this.btnViewTrans.Name = "btnViewTrans";
             this.btnViewTrans.Size = new System.Drawing.Size(167, 23);
             this.btnViewTrans.TabIndex = 32;
@@ -474,7 +475,7 @@
             this.dgUnpaid.Location = new System.Drawing.Point(6, 37);
             this.dgUnpaid.Name = "dgUnpaid";
             this.dgUnpaid.ReadOnly = true;
-            this.dgUnpaid.Size = new System.Drawing.Size(989, 219);
+            this.dgUnpaid.Size = new System.Drawing.Size(1235, 219);
             this.dgUnpaid.TabIndex = 11;
             // 
             // dataGridViewTextBoxColumn1
@@ -538,6 +539,7 @@
             // 
             // dataGridViewTextBoxColumn17
             // 
+            this.dataGridViewTextBoxColumn17.DataPropertyName = "SupplierName";
             this.dataGridViewTextBoxColumn17.HeaderText = "Supplier";
             this.dataGridViewTextBoxColumn17.Name = "dataGridViewTextBoxColumn17";
             this.dataGridViewTextBoxColumn17.ReadOnly = true;
@@ -548,7 +550,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1001, 300);
+            this.tabPage3.Size = new System.Drawing.Size(1247, 300);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Paid in last 60 days";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -572,7 +574,7 @@
             this.dgPaid.Location = new System.Drawing.Point(6, 6);
             this.dgPaid.Name = "dgPaid";
             this.dgPaid.ReadOnly = true;
-            this.dgPaid.Size = new System.Drawing.Size(989, 250);
+            this.dgPaid.Size = new System.Drawing.Size(1235, 250);
             this.dgPaid.TabIndex = 11;
             // 
             // dataGridViewTextBoxColumn9
@@ -636,6 +638,7 @@
             // 
             // dataGridViewTextBoxColumn18
             // 
+            this.dataGridViewTextBoxColumn18.DataPropertyName = "SupplierName";
             this.dataGridViewTextBoxColumn18.HeaderText = "Supplier";
             this.dataGridViewTextBoxColumn18.Name = "dataGridViewTextBoxColumn18";
             this.dataGridViewTextBoxColumn18.ReadOnly = true;
@@ -809,10 +812,10 @@
             // axAcroPDF1
             // 
             this.axAcroPDF1.Enabled = true;
-            this.axAcroPDF1.Location = new System.Drawing.Point(548, 15);
+            this.axAcroPDF1.Location = new System.Drawing.Point(645, 15);
             this.axAcroPDF1.Name = "axAcroPDF1";
             this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
-            this.axAcroPDF1.Size = new System.Drawing.Size(469, 385);
+            this.axAcroPDF1.Size = new System.Drawing.Size(615, 385);
             this.axAcroPDF1.TabIndex = 43;
             // 
             // label15
@@ -886,7 +889,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbBuilding);
             this.Name = "usrRequisition";
-            this.Size = new System.Drawing.Size(1027, 714);
+            this.Size = new System.Drawing.Size(1279, 714);
             this.Load += new System.EventHandler(this.usrRequisition_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -952,6 +955,9 @@
         private System.Windows.Forms.Button btnCancel;
         private AstrodonDataSet astrodonDataSet1;
         private AxAcroPDFLib.AxAcroPDF axAcroPDF1;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.CheckBox cbPaymentNotification;
+        private System.Windows.Forms.TextBox tbNotificationEmail;
         private System.Windows.Forms.DataGridViewButtonColumn Edit;
         private System.Windows.Forms.DataGridViewTextBoxColumn colID;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
@@ -980,8 +986,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn15;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn16;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn18;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.CheckBox cbPaymentNotification;
-        private System.Windows.Forms.TextBox tbNotificationEmail;
     }
 }
