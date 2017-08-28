@@ -141,6 +141,14 @@
     <Compile Include="Migrations\201708241155033_AddedMissingPropertiesForBuildings.Designer.cs">
       <DependentUpon>201708241155033_AddedMissingPropertiesForBuildings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708262052002_LimitMUpdates.cs" />
+    <Compile Include="Migrations\201708262052002_LimitMUpdates.Designer.cs">
+      <DependentUpon>201708262052002_LimitMUpdates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708280802429_LimitMUpdates1.cs" />
+    <Compile Include="Migrations\201708280802429_LimitMUpdates1.Designer.cs">
+      <DependentUpon>201708280802429_LimitMUpdates1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -262,6 +270,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708241155033_AddedMissingPropertiesForBuildings.resx">
       <DependentUpon>201708241155033_AddedMissingPropertiesForBuildings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708262052002_LimitMUpdates.resx">
+      <DependentUpon>201708262052002_LimitMUpdates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708280802429_LimitMUpdates1.resx">
+      <DependentUpon>201708280802429_LimitMUpdates1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

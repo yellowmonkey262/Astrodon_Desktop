@@ -248,7 +248,7 @@ namespace Astrodon.Controls.Maintenance
             _FilteredList = _Accounts.Where(a => !linked.Contains(a.Id)).ToList();
             cmbAccount.DataSource = _Accounts;
             cmbAccount.SelectedItem = _Accounts.Where(a => a.Id == _Item.PastelAccountNumber).FirstOrDefault();
-            cmbAccount.Enabled = false;
+            cmbAccount.Enabled = true;
             btnNew.Visible = false;
             btnCancel.Visible = true;
             btnSave.Visible = true;

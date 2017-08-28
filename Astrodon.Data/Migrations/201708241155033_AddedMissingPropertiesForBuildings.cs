@@ -9,9 +9,9 @@ namespace Astrodon.Data.Migrations
         {
             try
             {
-                AddColumn("dbo.tblBuildings", "limitM", c => c.String());
-                AddColumn("dbo.tblBuildings", "limitW", c => c.String());
-                AddColumn("dbo.tblBuildings", "limitD", c => c.String());
+            //    AddColumn("dbo.tblBuildings", "limitM", c => c.String());
+            //    AddColumn("dbo.tblBuildings", "limitW", c => c.String());
+            //    AddColumn("dbo.tblBuildings", "limitD", c => c.String());
             }
             catch (Exception)
             {

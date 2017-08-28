@@ -87,11 +87,11 @@ namespace Astrodon.Data
 
         public bool hoa { get; set; }
 
-        public string limitM { get; set; }
+        public decimal limitM { get; set; }
 
-        public string limitW { get; set; }
+        public decimal limitW { get; set; }
 
-        public string limitD { get; set; }
+        public decimal limitD { get; set; }
 
         #region Building Insurance
 

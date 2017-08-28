@@ -94,24 +94,30 @@ namespace Astrodon
 
         private void LoadBuildingInsurance()
         {
-            Data.tblBuilding buildingEntity = null;
-            using (var context = SqlDataHandler.GetDataContext())
+            try
             {
-                buildingEntity = context.tblBuildings
-                        .FirstOrDefault(a => a.id == selectedBuilding.ID);
-            }
-            if (buildingEntity != null)
+                Data.tblBuilding buildingEntity = null;
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    buildingEntity = context.tblBuildings
+                            .FirstOrDefault(a => a.id == selectedBuilding.ID);
+                }
+                if (buildingEntity != null)
+                {
+                    txtCommonPropertyDim.Text = buildingEntity.CommonPropertyDimensions.ToString();
+                    txtUnitPropertyDim.Text = buildingEntity.UnitPropertyDimensions.ToString();
+                    txtReplacementValue.Text = buildingEntity.UnitReplacementCost.ToString("#,##0.00");
+                    txtCommonPropertyValue.Text = buildingEntity.CommonPropertyReplacementCost.ToString("#,##0.00");
+                    txtBrokerCompany.Text = buildingEntity.InsuranceCompanyName;
+                    txtBrokerAccountNumber.Text = buildingEntity.InsuranceAccountNumber;
+                    txtBrokerName.Text = buildingEntity.BrokerName;
+                    txtBrokerTel.Text = buildingEntity.BrokerTelNumber;
+                    txtBrokerEmail.Text = buildingEntity.BrokerEmail;
+                    LoadInsuranceUnitPq(buildingEntity);
+                }
+            }catch(Exception e)
             {
-                txtCommonPropertyDim.Text = buildingEntity.CommonPropertyDimensions.ToString();
-                txtUnitPropertyDim.Text = buildingEntity.UnitPropertyDimensions.ToString();
-                txtReplacementValue.Text = buildingEntity.UnitReplacementCost.ToString("#,##0.00");
-                txtCommonPropertyValue.Text = buildingEntity.CommonPropertyReplacementCost.ToString("#,##0.00");
-                txtBrokerCompany.Text = buildingEntity.InsuranceCompanyName;
-                txtBrokerAccountNumber.Text = buildingEntity.InsuranceAccountNumber;
-                txtBrokerName.Text = buildingEntity.BrokerName;
-                txtBrokerTel.Text = buildingEntity.BrokerTelNumber;
-                txtBrokerEmail.Text = buildingEntity.BrokerEmail;
-                LoadInsuranceUnitPq(buildingEntity);
+                Controller.HandleError(e);
             }
         }
 
@@ -241,8 +247,14 @@ namespace Astrodon
                         update.UnitNo = item.UnitNo;
                     }
                 }
-
-                context.SaveChanges();
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Controller.HandleError(e);
+                }
             }
         }
 
@@ -329,13 +341,6 @@ namespace Astrodon
                 if (selectedBuilding.Name != "Add new building" && !String.IsNullOrEmpty(selectedBuilding.Name))
                 {
                     String status = String.Empty;
-                    try
-                    {
-                        SaveBuildingInsurance();
-                    }
-                    catch (Exception)
-                    {
-                    }
                     if (BuildingManager.Update(cmbBuilding.SelectedIndex, false, out status))
                     {
                         SaveWebBuilding(false);
@@ -588,6 +593,8 @@ namespace Astrodon
         {
             get
             {
+                if (TotalUnitPropertyDimensions <= 0 || PQRating <= 0)
+                    return 0;
                 return PQRating == null ? SquareMeters / TotalUnitPropertyDimensions : PQRating.Value;
             }
         }
