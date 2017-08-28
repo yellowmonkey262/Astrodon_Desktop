@@ -69,6 +69,7 @@
             this.txtAccount = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.txtEmailTo = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.dgDocs = new System.Windows.Forms.DataGridView();
@@ -102,7 +103,13 @@
             this.label14 = new System.Windows.Forms.Label();
             this.tbMaintenance = new System.Windows.Forms.TabPage();
             this.dgMaintenance = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
+            this.tbWeb = new System.Windows.Forms.TabPage();
+            this.label21 = new System.Windows.Forms.Label();
+            this.txtWebPassword = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.txtWebLogin = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.lstUnits = new System.Windows.Forms.ListBox();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -115,6 +122,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tbMaintenance.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).BeginInit();
+            this.tbWeb.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmbCustomer
@@ -175,6 +183,7 @@
             // tabControl2
             // 
             this.tabControl2.Controls.Add(this.tabPage2);
+            this.tabControl2.Controls.Add(this.tbWeb);
             this.tabControl2.Controls.Add(this.tabPage3);
             this.tabControl2.Controls.Add(this.tabPage4);
             this.tabControl2.Controls.Add(this.tabPage5);
@@ -492,6 +501,18 @@
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "Documents";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Lime;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(9, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(856, 23);
+            this.button1.TabIndex = 72;
+            this.button1.Text = "UPDATE";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // txtEmailTo
             // 
@@ -822,17 +843,75 @@
             this.dgMaintenance.TabIndex = 10;
             this.dgMaintenance.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgMaintenance_CellContentClick);
             // 
-            // button1
+            // tbWeb
             // 
-            this.button1.BackColor = System.Drawing.Color.Lime;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(9, 6);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(856, 23);
-            this.button1.TabIndex = 72;
-            this.button1.Text = "UPDATE";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.btnSave_Click);
+            this.tbWeb.Controls.Add(this.lstUnits);
+            this.tbWeb.Controls.Add(this.label21);
+            this.tbWeb.Controls.Add(this.txtWebPassword);
+            this.tbWeb.Controls.Add(this.label22);
+            this.tbWeb.Controls.Add(this.txtWebLogin);
+            this.tbWeb.Controls.Add(this.label23);
+            this.tbWeb.Location = new System.Drawing.Point(4, 22);
+            this.tbWeb.Name = "tbWeb";
+            this.tbWeb.Padding = new System.Windows.Forms.Padding(3);
+            this.tbWeb.Size = new System.Drawing.Size(931, 534);
+            this.tbWeb.TabIndex = 5;
+            this.tbWeb.Text = "Web";
+            this.tbWeb.UseVisualStyleBackColor = true;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(11, 43);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(66, 13);
+            this.label21.TabIndex = 85;
+            this.label21.Text = "Linked Units";
+            // 
+            // txtWebPassword
+            // 
+            this.txtWebPassword.Enabled = false;
+            this.txtWebPassword.Location = new System.Drawing.Point(436, 17);
+            this.txtWebPassword.MaxLength = 40;
+            this.txtWebPassword.Name = "txtWebPassword";
+            this.txtWebPassword.ReadOnly = true;
+            this.txtWebPassword.Size = new System.Drawing.Size(141, 20);
+            this.txtWebPassword.TabIndex = 84;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(370, 17);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(53, 13);
+            this.label22.TabIndex = 83;
+            this.label22.Text = "Password";
+            // 
+            // txtWebLogin
+            // 
+            this.txtWebLogin.Enabled = false;
+            this.txtWebLogin.Location = new System.Drawing.Point(104, 17);
+            this.txtWebLogin.Name = "txtWebLogin";
+            this.txtWebLogin.ReadOnly = true;
+            this.txtWebLogin.Size = new System.Drawing.Size(195, 20);
+            this.txtWebLogin.TabIndex = 82;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(11, 17);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(33, 13);
+            this.label23.TabIndex = 81;
+            this.label23.Text = "Login";
+            // 
+            // lstUnits
+            // 
+            this.lstUnits.FormattingEnabled = true;
+            this.lstUnits.Location = new System.Drawing.Point(104, 43);
+            this.lstUnits.Name = "lstUnits";
+            this.lstUnits.Size = new System.Drawing.Size(473, 329);
+            this.lstUnits.TabIndex = 86;
             // 
             // usrCustomer
             // 
@@ -865,6 +944,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tbMaintenance.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).EndInit();
+            this.tbWeb.ResumeLayout(false);
+            this.tbWeb.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -944,5 +1025,12 @@
         private System.Windows.Forms.TabPage tbMaintenance;
         private System.Windows.Forms.DataGridView dgMaintenance;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TabPage tbWeb;
+        private System.Windows.Forms.ListBox lstUnits;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox txtWebPassword;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox txtWebLogin;
+        private System.Windows.Forms.Label label23;
     }
 }

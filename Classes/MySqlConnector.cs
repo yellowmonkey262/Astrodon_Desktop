@@ -659,6 +659,56 @@ namespace Astrodon
             }
         }
 
+        public String GetLoginPassword(String emailAddress, out string uid)
+        {
+            try
+            {
+                String status = String.Empty;
+                Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
+                sqlParms.Add("@emailAddress", emailAddress);
+                String feQuery = "SELECT uid, password FROM fe_users WHERE username = @emailAddress";
+                DataSet dsFE = GetData(feQuery, sqlParms, out status);
+                if (status != "OK") { SqlStatus = "Customer - 247" + status; }
+
+                if (dsFE != null && dsFE.Tables.Count > 0 && dsFE.Tables[0].Rows.Count > 0)
+                {
+                    uid = dsFE.Tables[0].Rows[0]["uid"].ToString();
+                    return dsFE.Tables[0].Rows[0]["password"].ToString();
+                }
+                else
+                {
+                    uid = "0";
+                    return String.Empty;
+                }
+            }
+            catch
+            {
+                uid = "0";
+                return String.Empty;
+            }
+        }
+
+        public List<String> GetLinkedUnits(String cruser_id)
+        {
+            String currentQuery = "select account_no FROM tx_astro_account_user_mapping WHERE cruser_id = " + cruser_id;
+            //MessageBox.Show(currentQuery);
+            List<String> linkedUnits = new List<string>();
+            String status = "";
+            DataSet dsFE = GetData(currentQuery, null, out status);
+            if (dsFE != null && dsFE.Tables.Count > 0 && dsFE.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in dsFE.Tables[0].Rows)
+                {
+                    String linkedUnit = dr["account_no"].ToString();
+                    if (!linkedUnits.Contains(linkedUnit))
+                    {
+                        linkedUnits.Add(linkedUnit);
+                    }
+                }
+            }
+            return linkedUnits;
+        }
+
         private bool CreateLogin(String emailAddress, String acc, out string uid)
         {
             String status = String.Empty;
@@ -734,7 +784,10 @@ namespace Astrodon
             sqlParms.Add("@rentalUnitNo", rentalUnitNo);
             String status = "";
             DataSet fileDS = GetData(query, sqlParms, out status);
-            //MessageBox.Show(status);
+            if (status != "OK")
+            {
+                MessageBox.Show(status);
+            }
             return fileDS;
         }
 

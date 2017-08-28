@@ -173,7 +173,7 @@ namespace Astrodon
                 LoadReminders();
                 LoadNotes();
                 LoadMaintenance();
-
+                LoadWeb();
                 this.Cursor = Cursors.Default;
             }
             catch (Exception ex)
@@ -181,6 +181,48 @@ namespace Astrodon
                 MessageBox.Show(ex.StackTrace);
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        private void LoadWeb()
+        {
+            try
+            {
+                bool loginFound = false;
+                MySqlConnector mySql = new MySqlConnector();
+                //mySql.ToggleConnection(true);
+                String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
+                int i = 0;
+                String uid = "0";
+                List<String> linkedUnits = new List<string>();
+                while (!loginFound)
+                {
+                    String password = mySql.GetLoginPassword(emails[i], out uid);
+                    if (uid != "0")
+                    {
+                        txtWebLogin.Text = emails[i];
+                        txtWebPassword.Text = password;
+                        linkedUnits = mySql.GetLinkedUnits(uid);
+                        loginFound = true;
+                    }
+                    i++;
+                }
+                if (!loginFound)
+                {
+                    txtWebLogin.Text = "Not found";
+                    txtWebPassword.Text = "Not found";
+                }
+                lstUnits.Items.Clear();
+                foreach (String linkedUnit in linkedUnits)
+                {
+                    lstUnits.Items.Add(linkedUnit);
+                }
+            }
+            catch
+            {
+                UpdateCustomer(false);
+                LoadWeb();
+            }
+            lstUnits.Refresh();
         }
 
         private List<UnitMaintenance> _UnitMaintenance;
@@ -404,6 +446,11 @@ namespace Astrodon
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            UpdateCustomer(true);
+        }
+
+        private void UpdateCustomer(bool showMessage)
+        {
             String[] delAddress = customer.getDelAddress();
             String[] uDef = customer.userDefined;
 
@@ -447,7 +494,7 @@ namespace Astrodon
                 bool updatedWeb = mySqlConn.UpdateWebCustomer(building.Name, customer.accNumber, emails);
                 //mySqlConn.InsertCustomer(building, txtAccount.Text, new string[] { txtEmail.Text }, out status);
                 mySqlConn.ToggleConnection(false);
-                MessageBox.Show(!updatedWeb ? "Pastel updated! Cannot save customer on web!" : "Customer updated!");
+                if (showMessage) { MessageBox.Show(!updatedWeb ? "Pastel updated! Cannot save customer on web!" : "Customer updated!"); }
             }
             else
             {
