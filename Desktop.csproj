@@ -976,9 +976,6 @@
     <None Include="Service References\ReportService\item3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\item4.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />
     <None Include="stmt_template.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

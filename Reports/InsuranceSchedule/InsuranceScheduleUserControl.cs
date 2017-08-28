@@ -59,9 +59,11 @@ namespace Astrodon.Reports
             }
         }
 
-        private byte[] CreateReport()
+        private void CreateReport()
         {
-            bool processedOk = true;
+            if (dlgSave.ShowDialog() != DialogResult.OK)
+                return;
+
             byte[] reportData = null;
             try
             {
@@ -71,41 +73,20 @@ namespace Astrodon.Reports
                     reportData = reportService.InsuranceSchedule(SqlDataHandler.GetConnectionString(), building.ID);
                     if (reportData != null)
                     {
-                        if (dlgSave.ShowDialog() == DialogResult.OK)
-                        {
-                            using (FileStream ms = new FileStream(dlgSave.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                            {
-                                using (Document doc = new Document())
-                                {
-                                    using (PdfCopy copy = new PdfCopy(doc, ms))
-                                    {
-                                        doc.Open();
-
-                                        AddPdfDocument(copy, reportData);
-
-                                        //write output file
-                                        ms.Flush();
-                                    }
-                                }
-                            }
-                        }
+                        File.WriteAllBytes(dlgSave.FileName, reportData);
+                        Process.Start(dlgSave.FileName);
                     }
                     else
                     {
-                        MessageBox.Show("Cover page failed to generate.");
+                        MessageBox.Show("No data for report.");
                     }
                 }
             }
             catch (Exception exp)
             {
-                processedOk = false;
                 Controller.HandleError(exp);
             }
 
-            if (processedOk == false)
-                return null;
-
-            return reportData;
         }
 
         private void AddPdfDocument(PdfCopy copy, byte[] document)

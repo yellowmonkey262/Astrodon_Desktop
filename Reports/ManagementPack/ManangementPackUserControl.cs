@@ -366,9 +366,12 @@ namespace Astrodon.Reports
             }
         }
 
-        private byte[] CreateReport(List<TableOfContentForPdfRecord> records)
+        private void CreateReport(List<TableOfContentForPdfRecord> records)
         {
-            bool processedOk = true;
+            if (dlgSave.ShowDialog() != DialogResult.OK)
+                return;
+
+
             button3.Enabled = false;
             byte[] reportData = null;
             try
@@ -396,50 +399,50 @@ namespace Astrodon.Reports
                         building.Name, tocList.ToArray());
                     if (reportData != null)
                     {
-                        if (dlgSave.ShowDialog() == DialogResult.OK)
+
+                        if (File.Exists(dlgSave.FileName))
+                            File.Delete(dlgSave.FileName);
+
+                        using (FileStream ms = new FileStream(dlgSave.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
-                            using (FileStream ms = new FileStream(dlgSave.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                            using (Document doc = new Document())
                             {
-                                using (Document doc = new Document())
+                                using (PdfCopy copy = new PdfCopy(doc, ms))
                                 {
-                                    using (PdfCopy copy = new PdfCopy(doc, ms))
+                                    doc.Open();
+
+                                    AddPdfDocument(copy, reportData);
+                                    foreach (var record in records)
                                     {
-                                        doc.Open();
-
-                                        AddPdfDocument(copy, reportData);
-                                        foreach (var record in records)
+                                        var fileBytes = File.ReadAllBytes(record.Path);
+                                        if (GetTotalPages(fileBytes) > 0)
                                         {
-                                            var fileBytes = File.ReadAllBytes(record.Path);
-                                            if (GetTotalPages(fileBytes) > 0)
-                                            {
-                                                AddPdfDocument(copy, fileBytes);
-                                            }
-                                            else
-                                            {
-                                                processedOk = false;
-                                                Controller.HandleError("Unable to verify " + record.File + " pdf is invalid");
-                                                throw new Exception("Unable to verify " + record.File + " pdf is invalid");
-                                            }
-                                            Application.DoEvents();
+                                            AddPdfDocument(copy, fileBytes);
                                         }
-                                        //write output file
-                                        ms.Flush();
+                                        else
+                                        {
+                                            Controller.HandleError("Unable to verify " + record.File + " pdf is invalid");
+                                            return;
+                                        }
+                                        Application.DoEvents();
                                     }
-
+                                    //write output file
+                                    ms.Flush();
                                 }
 
                             }
+
                         }
+                        Process.Start(dlgSave.FileName);
                     }
                     else
                     {
-                        MessageBox.Show("Cover page failed to generate.");
+                        Controller.HandleError("Cover page failed to generate.");
                     }
                 }
             }
             catch (Exception exp)
             {
-                processedOk = false;
                 Controller.HandleError(exp);
             }
             finally
@@ -447,10 +450,6 @@ namespace Astrodon.Reports
                 button3.Enabled = true;
             }
 
-            if (processedOk == false)
-                return null;
-
-            return reportData;
         }
 
         private void AddPdfDocument(PdfCopy copy, byte[] document)
@@ -469,16 +468,12 @@ namespace Astrodon.Reports
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (_TableOfContents.Any(a=>a.Description == "" || a.Description == null))
+            if (_TableOfContents.Any(a => a.Description == "" || a.Description == null))
             {
                 MessageBox.Show("All records should contain a Description. Please supply a description for all records");
                 return;
             }
-            var report = CreateReport(_TableOfContents);
-            if (report == null)
-                MessageBox.Show("Report could not be created.");
-            else
-                MessageBox.Show("Report was created successfully!");
+            CreateReport(_TableOfContents);
         }
     }
 
