@@ -1,6 +1,7 @@
 ﻿
 //using Astrodon.Data.Maintenance;
 using Astrodon.Data.BankData;
+using Astrodon.Data.InsuranceData;
 using Astrodon.Data.Log;
 using Astrodon.Data.MaintenanceData;
 using Astrodon.Data.RequisitionData;
@@ -95,6 +96,7 @@ namespace Astrodon.Data
         public DbSet<SystemLog> SystemLogSet { get; set; }
 
         public DbSet<BuildingUnit> BuildingUnitSet { get; set; }
+        public DbSet<BuildingDocument> BuildingDocumentSet { get; set; }
 
         public void ClearChanges()
         {

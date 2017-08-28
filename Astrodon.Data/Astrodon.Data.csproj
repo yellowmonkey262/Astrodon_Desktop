@@ -57,8 +57,10 @@
     <Compile Include="Base\StringKeyValue.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
+    <Compile Include="InsuranceData\BuildingDocument.cs" />
+    <Compile Include="InsuranceData\DocumentType.cs" />
     <Compile Include="Log\SystemLog.cs" />
-    <Compile Include="MaintenanceData\BuildingUnit.cs" />
+    <Compile Include="InsuranceData\BuildingUnit.cs" />
     <Compile Include="MaintenanceData\BuildingMaintenanceConfiguration.cs" />
     <Compile Include="MaintenanceData\DurationType.cs" />
     <Compile Include="MaintenanceData\Maintenance.cs" />
@@ -148,6 +150,10 @@
     <Compile Include="Migrations\201708280802429_LimitMUpdates1.cs" />
     <Compile Include="Migrations\201708280802429_LimitMUpdates1.Designer.cs">
       <DependentUpon>201708280802429_LimitMUpdates1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708281212068_InsuranceClaimForms.cs" />
+    <Compile Include="Migrations\201708281212068_InsuranceClaimForms.Designer.cs">
+      <DependentUpon>201708281212068_InsuranceClaimForms.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -276,6 +282,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708280802429_LimitMUpdates1.resx">
       <DependentUpon>201708280802429_LimitMUpdates1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708281212068_InsuranceClaimForms.resx">
+      <DependentUpon>201708281212068_InsuranceClaimForms.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

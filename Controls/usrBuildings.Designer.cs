@@ -148,6 +148,8 @@
             this.dgInsurancePq = new System.Windows.Forms.DataGridView();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
             this.fdSave = new System.Windows.Forms.SaveFileDialog();
+            this.fUploadClaimForm = new System.Windows.Forms.OpenFileDialog();
+            this.fdSaveClaimForm = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -927,6 +929,7 @@
             this.txtUnitPropertyDim.Name = "txtUnitPropertyDim";
             this.txtUnitPropertyDim.Size = new System.Drawing.Size(86, 20);
             this.txtUnitPropertyDim.TabIndex = 134;
+            this.txtUnitPropertyDim.TextChanged += new System.EventHandler(this.txtUnitPropertyDim_TextChanged);
             // 
             // label43
             // 
@@ -1313,6 +1316,14 @@
             // 
             this.fdSave.Filter = "Adobe PDF files (*.pdf)|*.pdf";
             // 
+            // fUploadClaimForm
+            // 
+            this.fUploadClaimForm.Filter = "All document types (*.*)|*.*";
+            // 
+            // fdSaveClaimForm
+            // 
+            this.fdSaveClaimForm.Filter = "All document types (*.*)|*.*";
+            // 
             // usrBuildings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1477,5 +1488,7 @@
         private System.Windows.Forms.DataGridView dgInsurancePq;
         private System.Windows.Forms.OpenFileDialog fdOpen;
         private System.Windows.Forms.SaveFileDialog fdSave;
+        private System.Windows.Forms.OpenFileDialog fUploadClaimForm;
+        private System.Windows.Forms.SaveFileDialog fdSaveClaimForm;
     }
 }

@@ -113,10 +113,6 @@ namespace Astrodon.Data
 
         public string BrokerEmail { get; set; }
 
-        public byte[] InsuranceContract { get; set; }
-
-        public byte[] InsuranceClaimForm { get; set; }
-
         #endregion
 
         [NotMapped]

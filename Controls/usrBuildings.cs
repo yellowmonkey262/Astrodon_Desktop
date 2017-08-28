@@ -201,8 +201,25 @@ namespace Astrodon
             dgInsurancePq.AutoResizeColumns();
         }
 
+        private bool ValidatePQ()
+        {
+            var itms = InsurancePqGrid.Sum(a => a.PQCalculated);
+            var totalSQM = InsurancePqGrid.Sum(a => a.SquareMeters);
+            if(itms > 0 && itms != 1)
+            {
+                Controller.HandleError("Total PQ% (" + itms.ToString() + ") does not equal 1\n" +
+                                       "Please verify that the total sqm " + totalSQM.ToString() + " must equal " + txtUnitPropertyDim.Text );
+
+                return false;
+            }
+            return true;
+        }
+
         private void SaveBuildingInsurance()
         {
+            if (!ValidatePQ())
+                return;
+
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var buildingEntity = context.tblBuildings
@@ -463,10 +480,17 @@ namespace Astrodon
                 {
                     using (var context = SqlDataHandler.GetDataContext())
                     {
-                        var buildingEntity = context.tblBuildings
-                                .FirstOrDefault(a => a.id == selectedBuilding.ID);
-
-                        buildingEntity.InsuranceContract = File.ReadAllBytes(fdOpen.FileName);
+                        var fileEntity = context.BuildingDocumentSet
+                                .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceContract);
+                        if (fileEntity == null)
+                        {
+                            fileEntity = new Data.InsuranceData.BuildingDocument();
+                            fileEntity.BuildingId = selectedBuilding.ID;
+                            fileEntity.DocumentType = Data.InsuranceData.DocumentType.InsuranceContract;
+                            context.BuildingDocumentSet.Add(fileEntity);
+                        }
+                        fileEntity.FileData = File.ReadAllBytes(fdOpen.FileName);
+                        fileEntity.FileName = Path.GetFileName(fdOpen.FileName);
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Insurance Form");
                     }
@@ -484,17 +508,24 @@ namespace Astrodon
 
         private void btnUploadClaimForm_Click(object sender, EventArgs e)
         {
-            if (fdOpen.ShowDialog() == DialogResult.OK)
+            if (fUploadClaimForm.ShowDialog() == DialogResult.OK)
             {
                 btnUploadClaimForm.Enabled = false;
                 try
                 {
                     using (var context = SqlDataHandler.GetDataContext())
                     {
-                        var buildingEntity = context.tblBuildings
-                                .FirstOrDefault(a => a.id == selectedBuilding.ID);
-
-                        buildingEntity.InsuranceClaimForm = File.ReadAllBytes(fdOpen.FileName);
+                        var fileEntity = context.BuildingDocumentSet
+                             .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceClaimForm);
+                        if (fileEntity == null)
+                        {
+                            fileEntity = new Data.InsuranceData.BuildingDocument();
+                            fileEntity.BuildingId = selectedBuilding.ID;
+                            fileEntity.DocumentType = Data.InsuranceData.DocumentType.InsuranceClaimForm;
+                            context.BuildingDocumentSet.Add(fileEntity);
+                        }
+                        fileEntity.FileData = File.ReadAllBytes(fUploadClaimForm.FileName);
+                        fileEntity.FileName = Path.GetFileName(fUploadClaimForm.FileName);
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Claim Form");
                     }
@@ -512,68 +543,93 @@ namespace Astrodon
 
         private void btnViewInsuranceContract_Click(object sender, EventArgs e)
         {
-            if (fdSave.ShowDialog() == DialogResult.OK)
+            btnViewInsuranceContract.Enabled = false;
+            try
             {
-                btnViewInsuranceContract.Enabled = false;
-                try
+                using (var context = SqlDataHandler.GetDataContext())
                 {
-                    using (var context = SqlDataHandler.GetDataContext())
+                    var fileEntity = context.BuildingDocumentSet
+                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceContract);
+                    if (fileEntity != null)
                     {
-                        var buildingEntity = context.tblBuildings
-                                .FirstOrDefault(a => a.id == selectedBuilding.ID);
-                        
-                        if(buildingEntity.InsuranceContract == null)
+                        fdSave.FileName = fileEntity.FileName;
+                        if (fdSave.ShowDialog() == DialogResult.OK)
                         {
-                            MessageBox.Show("No document exits");
-                            return;
+                            File.WriteAllBytes(fdSave.FileName, fileEntity.FileData);
+                            MessageBox.Show("Successfully Downloaded Insurance Form");
+
                         }
-
-                        File.WriteAllBytes(fdSave.FileName, buildingEntity.InsuranceContract);
-
-                        MessageBox.Show("Successfully Downloaded Insurance Form");
                     }
+                    else
+                    {
+                        MessageBox.Show("No document exits");
+                        return;
+                    }
+
                 }
-                catch
-                {
-                    MessageBox.Show("Failed to download Insurance Form");
-                }
-                finally
-                {
-                    btnViewInsuranceContract.Enabled = true;
-                }
+            }
+            catch
+            {
+                MessageBox.Show("Failed to download Insurance Form");
+            }
+            finally
+            {
+                btnViewInsuranceContract.Enabled = true;
             }
         }
 
         private void btnViewClaimForm_Click(object sender, EventArgs e)
         {
-            if (fdSave.ShowDialog() == DialogResult.OK)
+            btnViewClaimForm.Enabled = false;
+            try
             {
-                btnViewClaimForm.Enabled = false;
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    var fileEntity = context.BuildingDocumentSet
+                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceClaimForm);
+                    if (fileEntity != null)
+                    {
+                        fdSaveClaimForm.FileName = fileEntity.FileName;
+                        if (fdSaveClaimForm.ShowDialog() == DialogResult.OK)
+                        {
+                            File.WriteAllBytes(fdSaveClaimForm.FileName, fileEntity.FileData);
+                            MessageBox.Show("Successfully Downloaded Form");
+
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("No document exits");
+                        return;
+                    }
+
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Failed to download Claim Form");
+            }
+            finally
+            {
+                btnViewClaimForm.Enabled = true;
+            }
+
+        }
+
+        private void txtUnitPropertyDim_TextChanged(object sender, EventArgs e)
+        {
+            var d = txtUnitPropertyDim.Text;
+            if (!string.IsNullOrWhiteSpace(d))
+            {
                 try
                 {
-                    using (var context = SqlDataHandler.GetDataContext())
-                    {
-                        var buildingEntity = context.tblBuildings
-                                .FirstOrDefault(a => a.id == selectedBuilding.ID);
-
-                        if (buildingEntity.InsuranceClaimForm == null)
-                        {
-                            MessageBox.Show("No document exits");
-                            return;
-                        }
-
-                        File.WriteAllBytes(fdSave.FileName, buildingEntity.InsuranceClaimForm);
-
-                        MessageBox.Show("Successfully Downloaded Claim Form");
-                    }
+                    var val = Convert.ToDecimal(d);
+                    foreach (var x in InsurancePqGrid)
+                        x.TotalUnitPropertyDimensions = val;
                 }
                 catch
                 {
-                    MessageBox.Show("Failed to download Claim Form");
-                }
-                finally
-                {
-                    btnViewClaimForm.Enabled = true;
+
                 }
             }
         }
@@ -593,9 +649,9 @@ namespace Astrodon
         {
             get
             {
-                if (TotalUnitPropertyDimensions <= 0 || PQRating <= 0)
+                if (TotalUnitPropertyDimensions <= 0)
                     return 0;
-                return PQRating == null ? SquareMeters / TotalUnitPropertyDimensions : PQRating.Value;
+                return SquareMeters / TotalUnitPropertyDimensions;
             }
         }
     }

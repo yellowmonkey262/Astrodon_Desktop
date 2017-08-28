@@ -856,7 +856,7 @@ namespace Astrodon.Controls.Requisitions
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("Good Day");
                     sb.AppendLine("");
-                    sb.AppendLine("Your payment with reference " + itm.payreference + " has been instruced for processing");
+                    sb.AppendLine("Your payment with reference " + itm.payreference + " has been instructed for processing.");
                     sb.AppendLine("");
                     sb.AppendLine("Kind Regards");
                     sb.AppendLine("Astrodon PTY LTD");
