@@ -966,25 +966,7 @@ namespace Astrodon.Controls
         {
             using (var context = SqlDataHandler.GetDataContext())
             {
-                var requisition = context.tblRequisitions.Single(a => a.id == id);
-                //delete all requisition documents
-                var docs = context.RequisitionDocumentSet.Where(a => a.RequisitionId == id).ToList();
-                if (docs.Count() > 0)
-                    context.RequisitionDocumentSet.RemoveRange(docs);
-
-                var maintenanceRecords = context.MaintenanceSet.Where(a => a.RequisitionId == id).ToList();
-                if (maintenanceRecords.Count > 0)
-                {
-                    var maintIds = maintenanceRecords.Select(a => a.id).ToArray();
-                    var maintenanceDocs = context.MaintenanceDocumentSet.Where(a => maintIds.Contains(a.MaintenanceId)).ToList();
-
-                    if (maintenanceDocs.Count > 0)
-                        context.MaintenanceDocumentSet.RemoveRange(maintenanceDocs);
-                    context.MaintenanceSet.RemoveRange(maintenanceRecords);
-                }
-
-                context.tblRequisitions.Remove(requisition);
-                context.SaveChanges();
+                context.DeleteRequisition(id);
             }
         }
 
@@ -1133,12 +1115,6 @@ namespace Astrodon.Controls
             {
                 RequisitionList req = (senderGrid.DataSource as BindingList<RequisitionList>)[e.RowIndex];
                 EditRequisition(req);
-                /*
-                String query = "DELETE FROM tblRequisition WHERE ID = " + req.ID;
-                String status = "";
-                dh.SetData(query, null, out status);
-                LoadRequisitions();
-                */
             }
             else if (senderGrid.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
             {
