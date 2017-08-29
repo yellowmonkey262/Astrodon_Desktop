@@ -839,33 +839,40 @@ namespace Astrodon.Controls.Requisitions
 
         private void SendPaymentNotifications(DataContext context, int batchId)
         {
-            var q = (from req in context.tblRequisitions
+            var q = (from req in context.tblRequisitions.Include(a => a.Supplier)
                      where req.RequisitionBatchId == batchId
                      && req.NotifySupplierByEmail == true
                      select new
                      {
-                         req.NotifyEmailAddress,
-                         req.payreference
+                         NotifyEmailAddress = req.NotifyEmailAddress,
+                         Payreference =  req.payreference,
+                         ContactPerson = req.SupplierId == null ? "" : req.Supplier.ContactPerson,
+                         Amount = req.amount
                      });
 
             foreach(var itm in q.Distinct().ToList())
             {
-                if(!String.IsNullOrWhiteSpace(itm.NotifyEmailAddress))
+                if (!String.IsNullOrWhiteSpace(itm.NotifyEmailAddress))
                 {
                     string status;
                     StringBuilder sb = new StringBuilder();
-                    sb.AppendLine("Good Day");
+                    if (!String.IsNullOrWhiteSpace(itm.ContactPerson))
+                        sb.AppendLine("Good Day " + itm.ContactPerson);
+                    else
+                        sb.AppendLine("Good Day " + itm.ContactPerson);
                     sb.AppendLine("");
-                    sb.AppendLine("Your payment with reference " + itm.payreference + " has been instructed for processing.");
+                    sb.AppendLine("Your payment of R"+itm.Amount.ToString("###,##0.00",CultureInfo.InvariantCulture)+" with reference " + itm.Payreference + " has been instructed for processing.");
+                    sb.AppendLine("");
+                    sb.AppendLine("The payment will be processed within 72 hours.");
                     sb.AppendLine("");
                     sb.AppendLine("Kind Regards");
                     sb.AppendLine("Astrodon PTY LTD");
                     try
                     {
                         Mailer.SendMail("noreply@astrodon.co.za", new string[] { itm.NotifyEmailAddress }, "Payment Scheduled",
-                            sb.ToString(),false,false,false,out status,new string[] { });
+                            sb.ToString(), false, false, false, out status, new string[] { });
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         Controller.HandleError(e);
                     }
