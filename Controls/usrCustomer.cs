@@ -187,34 +187,37 @@ namespace Astrodon
         {
             try
             {
-                bool loginFound = false;
-                MySqlConnector mySql = new MySqlConnector();
-                //mySql.ToggleConnection(true);
-                String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
-                int i = 0;
-                String uid = "0";
-                List<String> linkedUnits = new List<string>();
-                while (!loginFound)
+                if (building.Name != "ASTRODON RENTALS")
                 {
-                    String password = mySql.GetLoginPassword(emails[i], out uid);
-                    if (uid != "0")
+                    bool loginFound = false;
+                    MySqlConnector mySql = new MySqlConnector();
+                    //mySql.ToggleConnection(true);
+                    String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
+                    int i = 0;
+                    String uid = "0";
+                    List<String> linkedUnits = new List<string>();
+                    while (!loginFound)
                     {
-                        txtWebLogin.Text = emails[i];
-                        txtWebPassword.Text = password;
-                        linkedUnits = mySql.GetLinkedUnits(uid);
-                        loginFound = true;
+                        String password = mySql.GetLoginPassword(emails[i], out uid);
+                        if (uid != "0")
+                        {
+                            txtWebLogin.Text = emails[i];
+                            txtWebPassword.Text = password;
+                            linkedUnits = mySql.GetLinkedUnits(uid);
+                            loginFound = true;
+                        }
+                        i++;
                     }
-                    i++;
-                }
-                if (!loginFound)
-                {
-                    txtWebLogin.Text = "Not found";
-                    txtWebPassword.Text = "Not found";
-                }
-                lstUnits.Items.Clear();
-                foreach (String linkedUnit in linkedUnits)
-                {
-                    lstUnits.Items.Add(linkedUnit);
+                    if (!loginFound)
+                    {
+                        txtWebLogin.Text = "Not found";
+                        txtWebPassword.Text = "Not found";
+                    }
+                    lstUnits.Items.Clear();
+                    foreach (String linkedUnit in linkedUnits)
+                    {
+                        lstUnits.Items.Add(linkedUnit);
+                    }
                 }
             }
             catch
