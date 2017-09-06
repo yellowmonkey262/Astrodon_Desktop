@@ -96,28 +96,74 @@ namespace Astrodon.Reports
             }
         }
 
-        private List<string> GetFilesInDirectory(int buildingId, string year, string month)
+        private List<string> GetFilesInDirectory(int buildingId, int year, int month)
         {
-            var buildingName = "";
+            var dataFolder = "";
             using (var context = SqlDataHandler.GetDataContext())
             {
-                buildingName = context.tblBuildings
+                dataFolder = context.tblBuildings
                         .FirstOrDefault(a => a.id == buildingId)?.DataFolder;
             }
-            if (string.IsNullOrWhiteSpace(buildingName) ||
-                string.IsNullOrWhiteSpace(month))
+
+            var dt = new DateTime(year, month, 1);
+
+            if (string.IsNullOrWhiteSpace(dataFolder))
                 return null;
-            var fileLocation = $"{buildingName}\\Invoices\\{month.Substring(0,3)} {year}";
-            return Directory.GetFiles(fileLocation).ToList();
+
+            string folder = "Invoices" + @"\" + dt.ToString("MMM yyyy");
+            string outputPath = (dataFolder + folder).Trim();
+
+
+            textBox1.Text = outputPath;
+            if (Directory.Exists(outputPath))
+            {
+                try
+                {
+                    var items = Directory.GetFiles(outputPath).ToList();
+                    if (items.Count == 0)
+                        Controller.ShowMessage("No files found in [" + outputPath + "]");
+
+                    return items;
+                }
+                catch{
+                    Controller.ShowMessage("Error reading files");
+                    return new List<string>();
+                }
+                
+            }
+            else
+            {
+                Controller.ShowMessage("Folder does not exist [" + outputPath + "]");
+                return new List<string>();
+            }
         }
 
-        private int GetTotalPages(byte[] filepath)
+        private int GetTotalPages(string path)
         {
             PdfReader reader = null;
             try
             {
                 var returnVal = 0;
-                using (reader = new PdfReader(filepath))
+                using (reader = new PdfReader(path))
+                {
+                    returnVal = reader.NumberOfPages;
+                    reader.Close();
+                }
+                return returnVal;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private int GetTotalPages(byte[] path)
+        {
+            PdfReader reader = null;
+            try
+            {
+                var returnVal = 0;
+                using (reader = new PdfReader(path))
                 {
                     returnVal = reader.NumberOfPages;
                     reader.Close();
@@ -138,13 +184,13 @@ namespace Astrodon.Reports
             var month = cmbMonth.SelectedItem as IdValue;
             try
             {
-                var files = GetFilesInDirectory(building.ID, year.Value, month.Value);
+                var files = GetFilesInDirectory(building.ID, year.Id, month.Id);
                 for (int i = 0; i < files?.Count; i++)
                 {
-                    var totalPages = GetTotalPages(File.ReadAllBytes(files[i]));
+                    var totalPages = GetTotalPages(files[i]);
                     if (totalPages > 0)
                     {
-                        var fileDate = File.GetCreationTime(dlgOpen.FileName);
+                        var fileDate = File.GetCreationTime(files[i]);
 
                         _TableOfContents.Add(new TableOfContentForPdfRecord()
                         {
@@ -160,8 +206,9 @@ namespace Astrodon.Reports
                 for (int x = 1; x < _TableOfContents.Count; x++)
                     _TableOfContents[x].Position = x;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Controller.HandleError(e);
                 MessageBox.Show($"No files found for ({building.Name}) in ({month.Value} {year.Value})");
                 return;
             }
@@ -208,13 +255,13 @@ namespace Astrodon.Reports
                 HeaderText = "Position",
                 ReadOnly = true,
             });
-            dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "Path",
-                HeaderText = "Path",
-                ReadOnly = true,
-                Width = 100
-            });
+            //dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
+            //{
+            //    DataPropertyName = "Path",
+            //    HeaderText = "Path",
+            //    ReadOnly = true,
+            //    Width = 100
+            //});
             dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "File",
@@ -348,7 +395,7 @@ namespace Astrodon.Reports
                 button2.Enabled = false;
                 try
                 {
-                    var totalPages = GetTotalPages(File.ReadAllBytes(dlgOpen.FileName));
+                    var totalPages = GetTotalPages(dlgOpen.FileName);
                     if (totalPages > 0)
                     {
                         var fileDate = File.GetCreationTime(dlgOpen.FileName);
