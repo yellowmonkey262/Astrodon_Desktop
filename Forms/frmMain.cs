@@ -5,6 +5,7 @@ using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using Astrodon.Reports;
 using Astrodon.Reports.MaintenanceReport;
+using Astrodon.Reports.ManagementPack;
 using Astrodon.Reports.SupplierReport;
 using NotificationWindow;
 using System;
@@ -639,6 +640,15 @@ namespace Astrodon
             control.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(control);
             toolStripStatusLabel1.Text = "Insurance Schedule";
+        }
+
+        private void managementPackTOCDescriptionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucTOCItem control = new ucTOCItem(_DataContext);
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Management Pack Descriptions";
         }
     }
 }

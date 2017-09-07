@@ -609,6 +609,12 @@
     <Compile Include="Reports\ManagementPack\ManangementPackUserControl.Designer.cs">
       <DependentUpon>ManangementPackUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\ManagementPack\ucTOCItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reports\ManagementPack\ucTOCItem.Designer.cs">
+      <DependentUpon>ucTOCItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reports\SupplierReport\usrSupplierReport.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -832,6 +838,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ManagementPack\ManangementPackUserControl.resx">
       <DependentUpon>ManangementPackUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ManagementPack\ucTOCItem.resx">
+      <DependentUpon>ucTOCItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\SupplierReport\usrSupplierReport.resx">
       <DependentUpon>usrSupplierReport.cs</DependentUpon>

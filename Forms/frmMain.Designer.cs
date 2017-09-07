@@ -44,6 +44,7 @@
             this.trustToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.supplierReportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.maintenanceReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.insuranceScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.processingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rentalImportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lettersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,7 +96,7 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.insuranceScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.managementPackTOCDescriptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -129,6 +130,7 @@
             this.usersToolStripMenuItem,
             this.bulkSMSToolStripMenuItem,
             this.upgradeDatabaseToolStripMenuItem,
+            this.managementPackTOCDescriptionToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
             this.systemToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
@@ -263,6 +265,13 @@
             this.maintenanceReportToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.maintenanceReportToolStripMenuItem.Text = "Maintenance Report";
             this.maintenanceReportToolStripMenuItem.Click += new System.EventHandler(this.maintenanceReportToolStripMenuItem_Click);
+            // 
+            // insuranceScheduleToolStripMenuItem
+            // 
+            this.insuranceScheduleToolStripMenuItem.Name = "insuranceScheduleToolStripMenuItem";
+            this.insuranceScheduleToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.insuranceScheduleToolStripMenuItem.Text = "Insurance Schedule";
+            this.insuranceScheduleToolStripMenuItem.Click += new System.EventHandler(this.insuranceScheduleToolStripMenuItem_Click);
             // 
             // processingToolStripMenuItem
             // 
@@ -667,12 +676,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // insuranceScheduleToolStripMenuItem
+            // managementPackTOCDescriptionToolStripMenuItem
             // 
-            this.insuranceScheduleToolStripMenuItem.Name = "insuranceScheduleToolStripMenuItem";
-            this.insuranceScheduleToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.insuranceScheduleToolStripMenuItem.Text = "Insurance Schedule";
-            this.insuranceScheduleToolStripMenuItem.Click += new System.EventHandler(this.insuranceScheduleToolStripMenuItem_Click);
+            this.managementPackTOCDescriptionToolStripMenuItem.Name = "managementPackTOCDescriptionToolStripMenuItem";
+            this.managementPackTOCDescriptionToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.managementPackTOCDescriptionToolStripMenuItem.Text = "Management Pack TOC Descriptions";
+            this.managementPackTOCDescriptionToolStripMenuItem.Click += new System.EventHandler(this.managementPackTOCDescriptionToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -772,5 +781,6 @@
         private System.Windows.Forms.ToolStripMenuItem nedbankBeneficiaryMaintenanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem managementPackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insuranceScheduleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem managementPackTOCDescriptionToolStripMenuItem;
     }
 }
