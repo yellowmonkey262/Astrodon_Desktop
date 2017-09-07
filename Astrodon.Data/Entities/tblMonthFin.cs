@@ -15,6 +15,7 @@ namespace Astrodon.Data
 
         [Required]
         [StringLength(50)]
+        [Index("IDX_tblMonthFinBuilding",Order =0)]
         public string buildingID { get; set; }
 
         public int userID { get; set; }
@@ -23,6 +24,7 @@ namespace Astrodon.Data
 
         public int? finMonth { get; set; }
 
+        [Index("IDX_tblMonthFinBuilding", Order = 1)]
         public int year { get; set; }
 
         public DateTime findate { get; set; }
@@ -180,5 +182,7 @@ namespace Astrodon.Data
         public int electricityRecon { get; set; }
 
         public int waterRecon { get; set; }
+
+        public virtual byte[] CheckListPDF { get; set; }
     }
 }

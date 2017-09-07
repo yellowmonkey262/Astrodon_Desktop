@@ -3,6 +3,7 @@ using Astrodon.Classes;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -943,6 +944,25 @@ namespace Astrodon.Controls
                 String status;
                 if (dh.SetData(UpdateQuery(), sqlParms, out status) > -1)
                 {
+                    //Generate the PDF
+
+                    var pdfReport = CreateExcel(true);
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        //SELECT id FROM tblMonthFin WHERE buildingID = @buildingID AND finPeriod = @finPeriod AND year = @year
+
+                        int iPeriod = Convert.ToInt32(period);
+                        int iyear = Convert.ToInt32(year);
+                        string building = cmbBuilding.SelectedValue.ToString();
+                        var record = context.tblMonthFins.SingleOrDefault(a => a.buildingID == building
+                                                                            && a.finPeriod == iPeriod
+                                                                            && a.year == iyear);
+
+                        record.CheckListPDF = pdfReport;
+                        context.SaveChanges();
+                    
+                    }
+
                     MessageBox.Show("Record saved!");
                 }
                 else
@@ -1191,7 +1211,7 @@ namespace Astrodon.Controls
             }
         }
 
-        private void CreateExcel()
+        private byte[] CreateExcel(bool createPDF = true)
         {
             try
             {
@@ -1200,17 +1220,20 @@ namespace Astrodon.Controls
                 if (xlApp == null)
                 {
                     MessageBox.Show("EXCEL could not be started. Check that your office installation and project references are correct.");
-                    return;
+                    return null;
                 }
-                xlApp.Visible = true;
+                if (!createPDF)
+                    xlApp.Visible = true;
 
                 Excel.Workbook wb = xlApp.Workbooks.Add(Excel.XlWBATemplate.xlWBATWorksheet);
                 Excel.Worksheet ws = (Excel.Worksheet)wb.Worksheets[1];
 
+               
+
                 if (ws == null)
                 {
                     MessageBox.Show("Worksheet could not be created. Check that your office installation and project references are correct.");
-                    return;
+                    return null;
                 }
                 ws.Name = "Monthly Financial Checklist";
                 ws.Cells[1, "A"].Value2 = "Astrodon (Pty) Ltd";
@@ -1502,12 +1525,48 @@ namespace Astrodon.Controls
 
                 #endregion Recoveries
 
+                if (!string.IsNullOrWhiteSpace(txtComments.Text))
+                {
+                    #region Comments
+                    ws.Cells[49, "B"].Value2 = "COMMENTS";
+                    ws.Cells[49, "A"].EntireRow.Font.Bold = true;
+
+                    ws.get_Range("B50", "E52").Merge(Type.Missing);
+                    ws.get_Range("B50", "E52").WrapText = true;
+
+                    ws.Cells[50, "B"].Value2 = txtComments.Text;
+                    #endregion
+                }
+                ws.Rows.AutoFit();
                 ws.Columns.AutoFit();
+
+                ws.PageSetup.Zoom = false;
+                ws.PageSetup.FitToPagesWide = 1;
+                ws.PageSetup.Orientation = Excel.XlPageOrientation.xlPortrait;
+                ws.PageSetup.PaperSize = Excel.XlPaperSize.xlPaperA4;
+
+
+                if (createPDF)
+                {
+                    string tempFile = @"C:\Temp\test.pdf";// Path.GetTempFileName();
+
+               
+
+                    //Download and install this for the below to work
+                    //https://www.microsoft.com/en-za/download/details.aspx?id=7
+                    wb.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, tempFile);
+                    byte[] result = File.ReadAllBytes(tempFile);
+                   // File.Delete(tempFile);
+                    return result;
+                }
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
+                return null;
             }
+
+            return null;
         }
     }
 }

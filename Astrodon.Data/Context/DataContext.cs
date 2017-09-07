@@ -4,6 +4,7 @@ using Astrodon.Data.BankData;
 using Astrodon.Data.InsuranceData;
 using Astrodon.Data.Log;
 using Astrodon.Data.MaintenanceData;
+using Astrodon.Data.ManagementPackData;
 using Astrodon.Data.RequisitionData;
 using Astrodon.Data.SupplierData;
 using System;
@@ -97,6 +98,13 @@ namespace Astrodon.Data
 
         public DbSet<BuildingUnit> BuildingUnitSet { get; set; }
         public DbSet<BuildingDocument> BuildingDocumentSet { get; set; }
+
+        #region Management Pack
+
+        public DbSet<ManagementPackTOCItem> ManagementPackTOCItemSet { get; set; }
+        public DbSet<ManagementPack> ManagementPackSet { get; set; }
+
+        #endregion
 
         public void ClearChanges()
         {

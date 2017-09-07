@@ -563,6 +563,17 @@ namespace Astrodon.Controls.Requisitions
 
         private void button1_Click(object sender, EventArgs e)
         {
+            DateTime paymentDate = DateTime.Today;
+
+
+            if (paymentDate.DayOfWeek == DayOfWeek.Friday)
+            {
+                while (paymentDate.DayOfWeek != DayOfWeek.Monday)
+                    paymentDate = paymentDate.AddDays(1);
+            }
+            else if (paymentDate.AddDays(1).Month != paymentDate.Month) //I am on the last day of the month
+                paymentDate = paymentDate.AddDays(1);
+
 
             if (_PendingRequisitions != null)
             {
@@ -575,7 +586,10 @@ namespace Astrodon.Controls.Requisitions
                 }
             }
 
-
+            if (paymentDate.Month != DateTime.Today.Month)
+            {
+                Controller.ShowMessage("Please note that this batch falls on the last day of the month.\n The batch will therefore be stored in " + paymentDate.ToString("MMM yyyy") + " folder.");
+            }
             try
             {
                 int emailCount = 0;
@@ -632,7 +646,7 @@ namespace Astrodon.Controls.Requisitions
                         {
                             using (var ms = new FileStream(tempCombinedReport, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                             {
-                             
+
                                 using (doc = new Document())
                                 {
                                     using (copy = new PdfCopy(doc, ms))
@@ -646,7 +660,7 @@ namespace Astrodon.Controls.Requisitions
                                             {
                                                 lbProcessing.Text = "Processing " + building.Building;
                                                 Application.DoEvents();
-                                                var batch = CreateRequisitionBatch(building.id,building.IsUsingNedbank, false);
+                                                var batch = CreateRequisitionBatch(building.id, building.IsUsingNedbank, false);
                                                 if (batch != null)
                                                 {
                                                     #region Create PDF For Batch
@@ -660,7 +674,7 @@ namespace Astrodon.Controls.Requisitions
                                                             try
                                                             {
                                                                 string fileName = building.Code + "-" + batch.BatchNumber.ToString().PadLeft(6, '0') + ".pdf";
-                                                                string folder = "Invoices" + @"\" + DateTime.Today.ToString("MMM yyyy");
+                                                                string folder = "Invoices" + @"\" + paymentDate.ToString("MMM yyyy");
                                                                 string outputPath = building.DataFolder + folder + @"\";
                                                                 if (!Directory.Exists(outputPath))
                                                                     Directory.CreateDirectory(outputPath);
@@ -734,19 +748,19 @@ namespace Astrodon.Controls.Requisitions
 
                                     }
                                 }
-                              
+
                             }
 
                             if (emailCount > 0)
                             {
 
-                                attachments.Add("Requisitions.pdf",File.ReadAllBytes(tempCombinedReport));
+                                attachments.Add("Requisitions.pdf", File.ReadAllBytes(tempCombinedReport));
                                 SendEmail(context, Controller.user.email, attachments);
                             }
                         }
                         finally
                         {
-                            if(File.Exists(tempCombinedReport))
+                            if (File.Exists(tempCombinedReport))
                                 File.Delete(tempCombinedReport);
                         }
                     }

@@ -42,7 +42,10 @@
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
             this.button2 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.cbIncludeSundries = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnAddLevyRoll = new System.Windows.Forms.Button();
+            this.btnCheckList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgTocGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
             this.SuspendLayout();
@@ -69,7 +72,7 @@
             // 
             this.cmbMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMonth.FormattingEnabled = true;
-            this.cmbMonth.Location = new System.Drawing.Point(455, 17);
+            this.cmbMonth.Location = new System.Drawing.Point(109, 75);
             this.cmbMonth.Name = "cmbMonth";
             this.cmbMonth.Size = new System.Drawing.Size(233, 21);
             this.cmbMonth.TabIndex = 3;
@@ -77,7 +80,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(362, 17);
+            this.label2.Location = new System.Drawing.Point(16, 75);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(37, 13);
             this.label2.TabIndex = 2;
@@ -94,10 +97,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(455, 44);
+            this.button1.Location = new System.Drawing.Point(455, 15);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(233, 23);
-            this.button1.TabIndex = 6;
+            this.button1.Size = new System.Drawing.Size(124, 23);
+            this.button1.TabIndex = 4;
             this.button1.Text = "Generate TOC";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -122,14 +125,15 @@
             this.dgTocGrid.Size = new System.Drawing.Size(821, 383);
             this.dgTocGrid.TabIndex = 8;
             this.dgTocGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgTocGrid_CellContentClick);
+            this.dgTocGrid.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgTocGrid_DataBindingComplete);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(455, 102);
+            this.button3.Location = new System.Drawing.Point(590, 102);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(233, 23);
-            this.button3.TabIndex = 10;
-            this.button3.Text = "Run Report";
+            this.button3.Size = new System.Drawing.Size(124, 23);
+            this.button3.TabIndex = 8;
+            this.button3.Text = "Save Report";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -156,26 +160,62 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(455, 73);
+            this.button2.Location = new System.Drawing.Point(455, 44);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(233, 23);
-            this.button2.TabIndex = 66;
-            this.button2.Text = "Add PDF";
+            this.button2.Size = new System.Drawing.Size(124, 23);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "Add Additional PDF";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // textBox1
+            // cbIncludeSundries
             // 
-            this.textBox1.Location = new System.Drawing.Point(109, 76);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(233, 20);
-            this.textBox1.TabIndex = 67;
+            this.cbIncludeSundries.AutoSize = true;
+            this.cbIncludeSundries.Checked = true;
+            this.cbIncludeSundries.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbIncludeSundries.Location = new System.Drawing.Point(680, 78);
+            this.cbIncludeSundries.Name = "cbIncludeSundries";
+            this.cbIncludeSundries.Size = new System.Drawing.Size(15, 14);
+            this.cbIncludeSundries.TabIndex = 7;
+            this.cbIncludeSundries.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(587, 78);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(86, 13);
+            this.label5.TabIndex = 69;
+            this.label5.Text = "Include Sundries";
+            // 
+            // btnAddLevyRoll
+            // 
+            this.btnAddLevyRoll.Location = new System.Drawing.Point(455, 72);
+            this.btnAddLevyRoll.Name = "btnAddLevyRoll";
+            this.btnAddLevyRoll.Size = new System.Drawing.Size(124, 23);
+            this.btnAddLevyRoll.TabIndex = 6;
+            this.btnAddLevyRoll.Text = "Add Levy Roll";
+            this.btnAddLevyRoll.UseVisualStyleBackColor = true;
+            this.btnAddLevyRoll.Click += new System.EventHandler(this.btnAddLevyRoll_Click);
+            // 
+            // btnCheckList
+            // 
+            this.btnCheckList.Location = new System.Drawing.Point(455, 102);
+            this.btnCheckList.Name = "btnCheckList";
+            this.btnCheckList.Size = new System.Drawing.Size(124, 23);
+            this.btnCheckList.TabIndex = 70;
+            this.btnCheckList.Text = "Add Check List";
+            this.btnCheckList.UseVisualStyleBackColor = true;
+            this.btnCheckList.Click += new System.EventHandler(this.btnCheckList_Click);
             // 
             // ManangementPackUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.btnCheckList);
+            this.Controls.Add(this.btnAddLevyRoll);
+            this.Controls.Add(this.cbIncludeSundries);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.axAcroPDF1);
             this.Controls.Add(this.button3);
@@ -188,7 +228,7 @@
             this.Controls.Add(this.cmbYear);
             this.Controls.Add(this.label1);
             this.Name = "ManangementPackUserControl";
-            this.Size = new System.Drawing.Size(1301, 720);
+            this.Size = new System.Drawing.Size(1301, 529);
             ((System.ComponentModel.ISupportInitialize)(this.dgTocGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).EndInit();
             this.ResumeLayout(false);
@@ -211,6 +251,9 @@
         private System.Windows.Forms.SaveFileDialog dlgSave;
         private AxAcroPDFLib.AxAcroPDF axAcroPDF1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.CheckBox cbIncludeSundries;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnAddLevyRoll;
+        private System.Windows.Forms.Button btnCheckList;
     }
 }

@@ -67,6 +67,8 @@
     <Compile Include="MaintenanceData\MaintenanceClassificationType.cs" />
     <Compile Include="MaintenanceData\MaintenanceDetailItem.cs" />
     <Compile Include="MaintenanceData\MaintenanceDocument.cs" />
+    <Compile Include="ManagementPackData\ManagementPack.cs" />
+    <Compile Include="ManagementPackData\ManagementPackTOCItem.cs" />
     <Compile Include="Migrations\201701191057016_InitialCreate.cs" />
     <Compile Include="Migrations\201701191057016_InitialCreate.Designer.cs">
       <DependentUpon>201701191057016_InitialCreate.cs</DependentUpon>
@@ -154,6 +156,10 @@
     <Compile Include="Migrations\201708281212068_InsuranceClaimForms.cs" />
     <Compile Include="Migrations\201708281212068_InsuranceClaimForms.Designer.cs">
       <DependentUpon>201708281212068_InsuranceClaimForms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709071214430_ManagementPackImprovements.cs" />
+    <Compile Include="Migrations\201709071214430_ManagementPackImprovements.Designer.cs">
+      <DependentUpon>201709071214430_ManagementPackImprovements.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -285,6 +291,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708281212068_InsuranceClaimForms.resx">
       <DependentUpon>201708281212068_InsuranceClaimForms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709071214430_ManagementPackImprovements.resx">
+      <DependentUpon>201709071214430_ManagementPackImprovements.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

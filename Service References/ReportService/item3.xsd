@@ -107,6 +107,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="processMonth" type="xs:dateTime" />
         <xs:element minOccurs="0" name="buildingName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="agent" nillable="true" type="xs:string" />
         <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Astrodon.Reports.ManagementReportCoverPage" minOccurs="0" name="tocDataItems" nillable="true" type="q3:ArrayOfTOCDataItem" />
       </xs:sequence>
     </xs:complexType>

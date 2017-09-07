@@ -27,16 +27,59 @@ namespace Astrodon.Reports
         private List<IdValue> _Years;
         private List<IdValue> _Months;
         private List<TableOfContentForPdfRecord> _TableOfContents;
+        private List<string> _DescriptionList = new List<string>();
 
         private SqlDataHandler dh = new SqlDataHandler();
 
         public ManangementPackUserControl()
         {
             InitializeComponent();
+            LoadCheckLists();
             LoadBuildings();
             LoadYears();
             button2.Enabled = false;
             button3.Enabled = false;
+            btnAddLevyRoll.Enabled = false;
+        }
+
+        private void LoadCheckLists()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var itms = context.ManagementPackTOCItemSet.ToList();
+                if (itms == null || itms.Count == 0)
+                {
+                    var tmpItems = new List<string>() {
+                        "Detail income statement",
+                        "Balance sheet",
+                        "Bank statement",
+                        "Sundry customers",
+                        "Sundry suppliers",
+                        "Council reconciliations",
+                        "Cash movement statement",
+                        "Levy Roll",
+                        "Financial checklist",
+                        "Invoicing",
+                        "POP"
+                    };
+
+                    foreach(var itm in tmpItems)
+                    {
+                        context.ManagementPackTOCItemSet.Add(new Data.ManagementPackData.ManagementPackTOCItem(){Description = itm });
+                    }
+                    context.SaveChanges();
+                    _DescriptionList = tmpItems.OrderBy(a => a).ToList();
+                }
+                else
+                {
+                    _DescriptionList = itms.OrderBy(a => a.Description).Select(a => a.Description).ToList();
+                }
+            }
+        }
+
+        private List<string> GetDescriptionList()
+        {
+            return _DescriptionList;
         }
 
         private void LoadYears()
@@ -80,15 +123,22 @@ namespace Astrodon.Reports
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (_TableOfContents != null && _TableOfContents.Count > 0)
+            {
+                if (!Controller.AskQuestion("You have already started with a report, are you sure you want to start again? Please note that your current TOC will be cleared."))
+                    return;
+            }
             button1.Enabled = false;
             button2.Enabled = false;
             button3.Enabled = false;
+            btnAddLevyRoll.Enabled = false;
             try
             {
                 LoadFiles();
                 PopulateTableOfContents();
                 button2.Enabled = true;
                 button3.Enabled = true;
+                btnAddLevyRoll.Enabled = true;
             }
             finally
             {
@@ -113,23 +163,12 @@ namespace Astrodon.Reports
             string folder = "Invoices" + @"\" + dt.ToString("MMM yyyy");
             string outputPath = (dataFolder + folder).Trim();
 
-
-            textBox1.Text = outputPath;
             if (Directory.Exists(outputPath))
             {
-                try
-                {
-                    var items = Directory.GetFiles(outputPath).ToList();
-                    if (items.Count == 0)
-                        Controller.ShowMessage("No files found in [" + outputPath + "]");
-
-                    return items;
-                }
-                catch{
-                    Controller.ShowMessage("Error reading files");
-                    return new List<string>();
-                }
-                
+                var items = Directory.GetFiles(outputPath).ToList();
+                if (items.Count == 0)
+                    Controller.ShowMessage("No files found in [" + outputPath + "]");
+                return items;
             }
             else
             {
@@ -195,7 +234,7 @@ namespace Astrodon.Reports
                         _TableOfContents.Add(new TableOfContentForPdfRecord()
                         {
                             Path = files[i],
-                            File = files[i].Split('\\').Last(),
+                            File = Path.GetFileName( files[i]),
                             Position = 0,
                             Pages = totalPages,
                             FileDate = fileDate
@@ -268,13 +307,25 @@ namespace Astrodon.Reports
                 HeaderText = "File",
                 ReadOnly = true
             });
-            dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
+
+            dgTocGrid.Columns.Add(new DataGridViewComboBoxColumn()
             {
                 DataPropertyName = "Description",
                 HeaderText = "Description",
+                Name = "Description",
                 ReadOnly = false,
-                Width = 200
+                MinimumWidth = 200
             });
+
+            dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Description2",
+                HeaderText = "Description2",
+                Name = "Description2",
+                ReadOnly = false,
+                MinimumWidth = 200
+            });
+
             dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "Pages",
@@ -284,6 +335,21 @@ namespace Astrodon.Reports
 
             RefreshGrid();
         }
+
+        private void dgTocGrid_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+
+            foreach (DataGridViewRow row in dgTocGrid.Rows)
+            {
+                TableOfContentForPdfRecord itm = row.DataBoundItem as TableOfContentForPdfRecord;
+                itm.DataRow = row;
+
+                var comboBox = row.Cells["Description"] as DataGridViewComboBoxCell;
+                comboBox.ReadOnly = false;
+                comboBox.DataSource = GetDescriptionList();
+            }
+        }
+
 
         private void RefreshGrid()
         {
@@ -320,7 +386,7 @@ namespace Astrodon.Reports
                             item.Position = item.Position - 1;
                             break;
                         case 2:
-                            if (item.Position == _TableOfContents.Max(a=>a.Position))
+                            if (item.Position == _TableOfContents.Max(a => a.Position))
                                 return;
                             _TableOfContents.First(a => a.Position == item.Position + 1).Position = item.Position;
                             item.Position = item.Position + 1;
@@ -400,15 +466,16 @@ namespace Astrodon.Reports
                     {
                         var fileDate = File.GetCreationTime(dlgOpen.FileName);
 
-                        _TableOfContents.Add(new TableOfContentForPdfRecord()
+                        _TableOfContents.Insert(0, new TableOfContentForPdfRecord()
                         {
                             Path = dlgOpen.FileName,
-                            File = dlgOpen.FileName.Split('\\').Last(),
-                            Position = _TableOfContents.Any() ? _TableOfContents.Max(a => a.Position) + 1 : 1,
+                            File = Path.GetFileName(dlgOpen.FileName),
+                            Position = -1,
                             Pages = totalPages,
                             FileDate = fileDate
                         });
-                        RefreshGrid();
+
+                        RefreshTOC();
                     }
                     else
                     {
@@ -420,6 +487,14 @@ namespace Astrodon.Reports
                     button2.Enabled = true;
                 }
             }
+        }
+
+        private void RefreshTOC()
+        {
+            var ordered = _TableOfContents.OrderBy(a => a.Position).ToArray();
+            for (int x = 0; x < ordered.Length; x++)
+                ordered[x].Position = x + 1;
+            RefreshGrid();
         }
 
         private void CreateReport(List<TableOfContentForPdfRecord> records)
@@ -436,23 +511,21 @@ namespace Astrodon.Reports
                 var year = cmbYear.SelectedItem as IdValue;
                 var month = cmbMonth.SelectedItem as IdValue;
                 var tocList = new List<TOCDataItem>();
-                var pageCount = 1;
                 foreach (var item in records.OrderBy(a => a.Position))
                 {
                     var toc = new TOCDataItem()
                     {
                         ItemNumber = item.Position.ToString(),
-                        ItemDescription = item.Description,
-                        PageNumber = pageCount,
+                        ItemDescription = item.PrintDescription,
+                        PageNumber = item.Pages,
                     };
                     tocList.Add(toc);
-                    pageCount += item.Pages;
                 }
                 using (var reportService = ReportServiceClient.CreateInstance())
                 {
                     reportData = reportService.ManagementPackCoverPage(
-                        new DateTime(year.Id, month.Id, 1), 
-                        building.Name, tocList.ToArray());
+                        new DateTime(year.Id, month.Id, 1),
+                        building.Name, Controller.user.name, tocList.ToArray());
                     if (reportData != null)
                     {
 
@@ -489,11 +562,33 @@ namespace Astrodon.Reports
                             }
 
                         }
+
+                        var dt = new DateTime(year.Id, month.Id, 1);
+                        DateTime now = DateTime.Now;
+
+                        using (var context = SqlDataHandler.GetDataContext())
+                        {
+                            var managementPackReport = context.ManagementPackSet.SingleOrDefault(a => a.BuildingId == building.ID && a.Period == dt);
+                            if(managementPackReport == null)
+                            {
+                                managementPackReport = new Data.ManagementPackData.ManagementPack()
+                                {
+                                    BuildingId = building.ID,
+                                    Period = dt,
+                                    DateCreated = now,
+                                };
+                                context.ManagementPackSet.Add(managementPackReport);
+                            }
+                            managementPackReport.UserId = Controller.user.id;
+                            managementPackReport.DateUpdated = now;
+                            managementPackReport.ReportData = File.ReadAllBytes(dlgSave.FileName);
+                            context.SaveChanges();
+                        }
                         Process.Start(dlgSave.FileName);
                     }
                     else
                     {
-                        Controller.HandleError("Cover page failed to generate.");
+                        Controller.HandleError("Management pack failed to generate.");
                     }
                 }
             }
@@ -524,7 +619,7 @@ namespace Astrodon.Reports
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (_TableOfContents.Any(a => a.Description == "" || a.Description == null))
+            if (_TableOfContents.Any(a => a.PrintDescription == "" || a.PrintDescription == null))
             {
                 MessageBox.Show("All records should contain a Description. Please supply a description for all records");
                 return;
@@ -532,16 +627,124 @@ namespace Astrodon.Reports
             CreateReport(_TableOfContents);
         }
 
-       
+        private void btnAddLevyRoll_Click(object sender, EventArgs e)
+        {
+            this.Enabled = false;
+            try
+            {
+                using (var reportService = ReportServiceClient.CreateInstance())
+                {
+                    try
+                    {
+                        DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+                        byte[] reportData = null;
+                        if (cbIncludeSundries.Checked)
+                            reportData = reportService.LevyRollReport(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
+                        else
+                            reportData = reportService.LevyRollExcludeSundries(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
+                        var reportFileName = Path.GetTempFileName();
+                        File.WriteAllBytes(reportFileName, reportData);
+
+                        var fileDate = DateTime.Now;
+                        var totalPages = GetTotalPages(reportFileName);
+
+                        _TableOfContents.Insert(0, new TableOfContentForPdfRecord()
+                        {
+                            Path = reportFileName,
+                            File = Path.GetFileName(reportFileName),
+                            Description = GetDescriptionList().Where(a => a.StartsWith("Levy")).FirstOrDefault(),
+                            Position = -1,
+                            Pages = totalPages,
+                            FileDate = fileDate,
+                            IsTempFile = true
+                        });
+
+                        RefreshTOC();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Controller.HandleError(ex);
+                    }
+                }
+            }
+            finally
+            {
+                this.Enabled = true;
+            }
+        }
+
+        private void btnCheckList_Click(object sender, EventArgs e)
+        {
+            var building = cmbBuilding.SelectedItem as Building;
+            var year = cmbYear.SelectedItem as IdValue;
+            var month = cmbMonth.SelectedItem as IdValue;
+            var dt = new DateTime(year.Id, month.Id, 1);
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var checkList = context.tblMonthFins.SingleOrDefault(a => a.buildingID == building.Abbr && a.findate == dt);
+                if(checkList == null || checkList.CheckListPDF == null)
+                {
+                    Controller.ShowMessage("No check list found, please create and save checklist for this building first.");
+                    return;
+                }
+
+                var reportFileName = Path.GetTempFileName();
+                File.WriteAllBytes(reportFileName, checkList.CheckListPDF);
+
+                var fileDate = DateTime.Now;
+                var totalPages = GetTotalPages(reportFileName);
+
+                _TableOfContents.Insert(0, new TableOfContentForPdfRecord()
+                {
+                    Path = reportFileName,
+                    File = Path.GetFileName(reportFileName),
+                    Description = GetDescriptionList().Where(a => a.Contains("checklist")).FirstOrDefault(),
+                    Position = -1,
+                    Pages = totalPages,
+                    FileDate = fileDate,
+                    IsTempFile = true
+                });
+
+                RefreshTOC();
+
+            }
+        }
     }
 
     class TableOfContentForPdfRecord
     {
+        public TableOfContentForPdfRecord()
+        {
+            IsTempFile = false;
+        }
         public string Path { get; set; }
         public string File { get; set; }
         public string Description { get; set; }
+        public string Description2 { get; set; }
+        public string PrintDescription
+        {
+            get
+            {
+                string result = string.Empty;
+                if (!String.IsNullOrWhiteSpace(Description))
+                    result = Description;
+
+                if (!String.IsNullOrWhiteSpace(Description2))
+                {
+                    if (string.IsNullOrWhiteSpace(result))
+                        result = Description2;
+                    else
+                        result = result + " - " + Description2;
+                }
+
+                return result.Trim();
+            }
+        }
         public int Pages { get; set; }
         public int Position { get; set; }
         public DateTime FileDate { get; set; }
+        public DataGridViewRow DataRow { get;  set; }
+        public bool IsTempFile { get;  set; }
     }
 }
