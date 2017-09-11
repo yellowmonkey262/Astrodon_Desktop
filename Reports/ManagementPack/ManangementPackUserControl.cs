@@ -40,6 +40,7 @@ namespace Astrodon.Reports
             button2.Enabled = false;
             button3.Enabled = false;
             btnAddLevyRoll.Enabled = false;
+            btnCheckList.Enabled = false;
         }
 
         private void LoadCheckLists()
@@ -75,6 +76,7 @@ namespace Astrodon.Reports
                     _DescriptionList = itms.OrderBy(a => a.Description).Select(a => a.Description).ToList();
                 }
             }
+            _DescriptionList.Insert(0, "");
         }
 
         private List<string> GetDescriptionList()
@@ -132,6 +134,7 @@ namespace Astrodon.Reports
             button2.Enabled = false;
             button3.Enabled = false;
             btnAddLevyRoll.Enabled = false;
+            btnCheckList.Enabled = false;
             try
             {
                 LoadFiles();
@@ -139,6 +142,7 @@ namespace Astrodon.Reports
                 button2.Enabled = true;
                 button3.Enabled = true;
                 btnAddLevyRoll.Enabled = true;
+                btnCheckList.Enabled = true;
             }
             finally
             {
@@ -173,6 +177,7 @@ namespace Astrodon.Reports
             else
             {
                 Controller.ShowMessage("Folder does not exist [" + outputPath + "]");
+                textBox1.Text = outputPath;
                 return new List<string>();
             }
         }
@@ -237,7 +242,9 @@ namespace Astrodon.Reports
                             File = Path.GetFileName( files[i]),
                             Position = 0,
                             Pages = totalPages,
-                            FileDate = fileDate
+                            FileDate = fileDate,
+                            IsTempFile = false,
+                            IncludeInTOC = true
                         });
                     }
                 }
@@ -287,6 +294,12 @@ namespace Astrodon.Reports
                 Text = "Preview",
                 UseColumnTextForButtonValue = true,
                 MinimumWidth = 20,
+            });
+            dgTocGrid.Columns.Add(new DataGridViewCheckBoxColumn()
+            {
+                DataPropertyName = "IncludeInTOC",
+                HeaderText = "TOC",
+                ReadOnly = false,
             });
             dgTocGrid.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -472,7 +485,8 @@ namespace Astrodon.Reports
                             File = Path.GetFileName(dlgOpen.FileName),
                             Position = -1,
                             Pages = totalPages,
-                            FileDate = fileDate
+                            FileDate = fileDate,
+                            IncludeInTOC = true
                         });
 
                         RefreshTOC();
@@ -511,16 +525,32 @@ namespace Astrodon.Reports
                 var year = cmbYear.SelectedItem as IdValue;
                 var month = cmbMonth.SelectedItem as IdValue;
                 var tocList = new List<TOCDataItem>();
-                foreach (var item in records.OrderBy(a => a.Position))
+                int pos = 1;
+                foreach (var item in records.Where(a => a.IncludeInTOC).OrderBy(a => a.Position))
                 {
                     var toc = new TOCDataItem()
                     {
-                        ItemNumber = item.Position.ToString(),
+                        ItemNumber = pos.ToString(),
                         ItemDescription = item.PrintDescription,
                         PageNumber = item.Pages,
                     };
+                    pos++;
                     tocList.Add(toc);
                 }
+
+                int x = records.Count(a => a.IncludeInTOC == false);
+                if(x > 0)
+                {
+                    int maxPos = tocList.Count();
+                    var toc = new TOCDataItem()
+                    {
+                        ItemNumber = (maxPos+1).ToString(),
+                        ItemDescription = "Invoicing",
+                        PageNumber = x,
+                    };
+                    tocList.Add(toc);
+                }
+
                 using (var reportService = ReportServiceClient.CreateInstance())
                 {
                     reportData = reportService.ManagementPackCoverPage(
@@ -619,11 +649,6 @@ namespace Astrodon.Reports
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (_TableOfContents.Any(a => a.PrintDescription == "" || a.PrintDescription == null))
-            {
-                MessageBox.Show("All records should contain a Description. Please supply a description for all records");
-                return;
-            }
             CreateReport(_TableOfContents);
         }
 
@@ -656,7 +681,8 @@ namespace Astrodon.Reports
                             Position = -1,
                             Pages = totalPages,
                             FileDate = fileDate,
-                            IsTempFile = true
+                            IsTempFile = true,
+                            IncludeInTOC = true
                         });
 
                         RefreshTOC();
@@ -703,11 +729,25 @@ namespace Astrodon.Reports
                     Position = -1,
                     Pages = totalPages,
                     FileDate = fileDate,
-                    IsTempFile = true
+                    IsTempFile = true,
+                    IncludeInTOC = true
                 });
 
                 RefreshTOC();
 
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if(_TableOfContents != null)
+            {
+                foreach(var itm in _TableOfContents.Where( a => a.IsTempFile))
+                {
+                    File.Delete(itm.Path);
+                }
+                _TableOfContents.Clear();
+                RefreshTOC();
             }
         }
     }
@@ -746,5 +786,6 @@ namespace Astrodon.Reports
         public DateTime FileDate { get; set; }
         public DataGridViewRow DataRow { get;  set; }
         public bool IsTempFile { get;  set; }
+        public bool IncludeInTOC { get;  set; }
     }
 }

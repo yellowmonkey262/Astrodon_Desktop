@@ -120,10 +120,13 @@ namespace Astrodon.Data
         {
             get
             {
-               
-                string basePath = @" Y:\Buildings Managed (Do not Remove)\" + this.Building.Replace("/", "").Replace(@"\", "") + @"\";
+                string root = @"Y:\Buildings Managed (Do not Remove)\";
 
-                
+                if (!Directory.Exists(root))
+                    root = @"\\NAS01\Volume_1\USERS - DO NOT MOVE!!\Buildings Managed (Do not Remove)\";
+
+                string basePath = root + this.Building.Replace("/", "").Replace(@"\", "") + @"\";
+
 
                 return basePath;
             }
