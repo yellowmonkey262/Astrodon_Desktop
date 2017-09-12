@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -1211,10 +1212,11 @@ namespace Astrodon.Controls
             }
         }
 
-        private byte[] CreateExcel(bool createPDF = true)
+        private byte[] CreateExcel(bool createPDF = false)
         {
             try
             {
+                this.Cursor = Cursors.WaitCursor;
                 Excel.Application xlApp = new Excel.Application();
 
                 if (xlApp == null)
@@ -1222,8 +1224,8 @@ namespace Astrodon.Controls
                     MessageBox.Show("EXCEL could not be started. Check that your office installation and project references are correct.");
                     return null;
                 }
-                if (!createPDF)
-                    xlApp.Visible = true;
+
+                xlApp.Visible = true;
 
                 Excel.Workbook wb = xlApp.Workbooks.Add(Excel.XlWBATemplate.xlWBATWorksheet);
                 Excel.Worksheet ws = (Excel.Worksheet)wb.Worksheets[1];
@@ -1548,24 +1550,42 @@ namespace Astrodon.Controls
 
                 if (createPDF)
                 {
-                    string tempFile = @"C:\Temp\test.pdf";// Path.GetTempFileName();
+                    if (!Directory.Exists(@"C:\Temp"))
+                        Directory.CreateDirectory(@"C:\Temp");
 
-               
+                    string tempFile = @"C:\Temp\" + Guid.NewGuid().ToString("N") + ".pdf";
+
+                    if (File.Exists(tempFile))
+                        File.Delete(tempFile);
 
                     //Download and install this for the below to work
                     //https://www.microsoft.com/en-za/download/details.aspx?id=7
                     wb.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, tempFile);
+
+                    object missing = Type.Missing;
+
+                    wb.Close(false, missing, missing);
+                    xlApp.Quit();
+                    Marshal.ReleaseComObject(xlApp);
+                    GC.Collect();
                     byte[] result = File.ReadAllBytes(tempFile);
-                   // File.Delete(tempFile);
+
+                     File.Delete(tempFile);
+
+                    this.Cursor = Cursors.Default;
+
+                    Application.DoEvents();
+
                     return result;
                 }
             }
             catch (Exception ex)
             {
+                this.Cursor = Cursors.Default;
                 MessageBox.Show(ex.Message);
                 return null;
             }
-
+            this.Cursor = Cursors.Default;
             return null;
         }
     }

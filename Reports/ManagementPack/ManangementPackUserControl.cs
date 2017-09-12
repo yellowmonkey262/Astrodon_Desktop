@@ -177,7 +177,6 @@ namespace Astrodon.Reports
             else
             {
                 Controller.ShowMessage("Folder does not exist [" + outputPath + "]");
-                textBox1.Text = outputPath;
                 return new List<string>();
             }
         }
