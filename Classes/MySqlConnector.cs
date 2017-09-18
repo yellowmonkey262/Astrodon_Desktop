@@ -834,5 +834,30 @@ namespace Astrodon
             }
             return success;
         }
+
+        public String[] HasLogin(String email)
+        {
+            String query = "SELECT uid, usergroup FROM fe_users WHERE username = '" + email + "' AND usergroup <> '1,2,6'";
+            String[] returners = new string[2];
+            String status;
+            DataSet ds = GetData(query, null, out status);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                returners[0] = ds.Tables[0].Rows[0]["uid"].ToString();
+                returners[1] = ds.Tables[0].Rows[0]["usergroup"].ToString();
+                return returners;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public bool UpdateGroup(String uid, String group)
+        {
+            String query = "UPDATE fe_users SET usergroup = '" + group + "' WHERE uid = " + uid;
+            String status;
+            return SetData(query, null, out status);
+        }
     }
 }

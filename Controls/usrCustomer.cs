@@ -35,6 +35,16 @@ namespace Astrodon
             dgDocs.DataSource = bsDocs;
             dataGridView1.CellValueChanged -= dataGridView1_CellValueChanged;
             dataGridView1.DataSource = bsReminders;
+            int userid = Controller.user.id;
+            if (userid == 1 || userid == 2)
+            {
+                btnTrustees.Visible = true;
+                btnTrustees.Enabled = true;
+            }
+            else
+            {
+                btnTrustees.Visible = false;
+            }
         }
 
         private void LoadBuildings()
@@ -819,6 +829,38 @@ namespace Astrodon
                     }
                 }
             }
+        }
+
+        private void btnTrustees_Click(object sender, EventArgs e)
+        {
+            MySqlConnector myConn = new MySqlConnector();
+            myConn.ToggleConnection(true);
+            String usergroup = "";
+            foreach (Customer c in customers)
+            {
+                foreach (String email in c.Email)
+                {
+                    if (email != "sheldon@astrodon.co.za")
+                    {
+                        String[] login = myConn.HasLogin(email);
+                        bool trustee = false;
+                        if (login != null)
+                        {
+                            if (Convert.ToInt32(c.category) == 7)
+                            {
+                                usergroup = "1,2,4";
+                                trustee = true;
+                            }
+                            else
+                            {
+                                usergroup = "1,2";
+                            }
+                            myConn.UpdateGroup(login[0], usergroup);
+                        }
+                    }
+                }
+            }
+            myConn.ToggleConnection(false);
         }
     }
 }
