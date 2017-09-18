@@ -35,16 +35,6 @@ namespace Astrodon
             dgDocs.DataSource = bsDocs;
             dataGridView1.CellValueChanged -= dataGridView1_CellValueChanged;
             dataGridView1.DataSource = bsReminders;
-            int userid = Controller.user.id;
-            if (userid == 1 || userid == 2)
-            {
-                btnTrustees.Visible = true;
-                btnTrustees.Enabled = true;
-            }
-            else
-            {
-                btnTrustees.Visible = false;
-            }
         }
 
         private void LoadBuildings()
@@ -58,8 +48,24 @@ namespace Astrodon
             cmbBuilding.SelectedIndexChanged += cmbBuilding_SelectedIndexChanged;
         }
 
+        private void ActivateTrustees()
+        {
+            int userid = Controller.user.id;
+            if (userid == 1 || userid == 2 || userid == 27)
+            {
+                btnTrustees.Visible = true;
+                btnTrustees.Enabled = true;
+                btnTrustees.BackColor = System.Drawing.Color.Green;
+            }
+            else
+            {
+                btnTrustees.Visible = false;
+            }
+        }
+
         private void LoadCustomers(int selectedIndex)
         {
+            btnTrustees.BackColor = System.Drawing.Color.Red;
             cmbCustomer.SelectedIndexChanged -= cmbCustomer_SelectedIndexChanged;
             cmbCustomer.DataSource = null;
             cmbCustomer.Items.Clear();
@@ -77,6 +83,7 @@ namespace Astrodon
                 cmbCustomer.SelectedIndex = selectedIndex;
                 cmbCustomer.SelectedIndexChanged += cmbCustomer_SelectedIndexChanged;
             }
+            ActivateTrustees();
         }
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
@@ -833,6 +840,7 @@ namespace Astrodon
 
         private void btnTrustees_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             MySqlConnector myConn = new MySqlConnector();
             myConn.ToggleConnection(true);
             String usergroup = "";
@@ -861,6 +869,8 @@ namespace Astrodon
                 }
             }
             myConn.ToggleConnection(false);
+            this.Cursor = Cursors.Arrow;
+            MessageBox.Show("Complete");
         }
     }
 }
