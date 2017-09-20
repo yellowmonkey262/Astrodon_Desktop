@@ -89,7 +89,16 @@ namespace Astrodon
             txtLimitW.Text = selectedBuilding.limitW.ToString("#,##0.00");
             txtLimitD.Text = selectedBuilding.limitD.ToString("#,##0.00");
             LoadBuildingInsurance();
+            LoadCustomers();
             btnSave.Enabled = true;
+        }
+
+        private void LoadCustomers()
+        {
+            List<Customer> customers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
+            dgTrustees.AutoGenerateColumns = false;
+            dgTrustees.DataSource = customers;
+            dgTrustees.Refresh();
         }
 
         private void LoadBuildingInsurance()
@@ -115,7 +124,8 @@ namespace Astrodon
                     txtBrokerEmail.Text = buildingEntity.BrokerEmail;
                     LoadInsuranceUnitPq(buildingEntity);
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Controller.HandleError(e);
             }
@@ -205,10 +215,10 @@ namespace Astrodon
         {
             var itms = InsurancePqGrid.Sum(a => a.PQCalculated);
             var totalSQM = InsurancePqGrid.Sum(a => a.SquareMeters);
-            if(itms > 0 && itms != 1)
+            if (itms > 0 && itms != 1)
             {
                 Controller.HandleError("Total PQ% (" + itms.ToString() + ") does not equal 1\n" +
-                                       "Please verify that the total sqm " + totalSQM.ToString() + " must equal " + txtUnitPropertyDim.Text );
+                                       "Please verify that the total sqm " + totalSQM.ToString() + " must equal " + txtUnitPropertyDim.Text);
 
                 return false;
             }
@@ -225,13 +235,13 @@ namespace Astrodon
                 var buildingEntity = context.tblBuildings
                         .FirstOrDefault(a => a.id == selectedBuilding.ID);
 
-                buildingEntity.CommonPropertyDimensions = string.IsNullOrWhiteSpace(txtCommonPropertyDim.Text) ? 0 : 
+                buildingEntity.CommonPropertyDimensions = string.IsNullOrWhiteSpace(txtCommonPropertyDim.Text) ? 0 :
                     Convert.ToDecimal(txtCommonPropertyDim.Text);
-                buildingEntity.UnitPropertyDimensions = string.IsNullOrWhiteSpace(txtUnitPropertyDim.Text) ? 0 : 
+                buildingEntity.UnitPropertyDimensions = string.IsNullOrWhiteSpace(txtUnitPropertyDim.Text) ? 0 :
                     Convert.ToDecimal(txtUnitPropertyDim.Text);
-                buildingEntity.UnitReplacementCost = string.IsNullOrWhiteSpace(txtReplacementValue.Text) ? 0 : 
+                buildingEntity.UnitReplacementCost = string.IsNullOrWhiteSpace(txtReplacementValue.Text) ? 0 :
                     Convert.ToDecimal(txtReplacementValue.Text);
-                buildingEntity.CommonPropertyReplacementCost = string.IsNullOrWhiteSpace(txtCommonPropertyValue.Text) ? 0 : 
+                buildingEntity.CommonPropertyReplacementCost = string.IsNullOrWhiteSpace(txtCommonPropertyValue.Text) ? 0 :
                     Convert.ToDecimal(txtCommonPropertyValue.Text);
                 buildingEntity.InsuranceCompanyName = txtBrokerCompany.Text;
                 buildingEntity.InsuranceAccountNumber = txtBrokerAccountNumber.Text;
@@ -296,6 +306,7 @@ namespace Astrodon
             //txtID.Text = txtName.Text = txtAbbr.Text = txtTrust.Text = txtPath.Text = txtPeriod.Text = txtCash.Text = txtOwnBank.Text = txtCashbook3.Text = txtPayment.Text = txtReceipt.Text = "";
             //txtJournal.Text = txtCentrec1.Text = txtCentrec2.Text = txtBus.Text = "";
             cmbBank.SelectedItem = "PLEASE SELECT";
+            dgTrustees.DataSource = null;
             //txtPM.Text = txtBankName.Text = txtAccNumber.Text = txtAccName.Text = txtBranch.Text = "";
             //chkWeb.Checked = btnSave.Enabled = false;
             //txtRF.Text = txtRFS.Text = txtFF.Text = txtFFS.Text = txtDCF.Text = txtDCFS.Text = txtSF.Text = txtSFS.Text = txtDF.Text = txtDFS.Text = txtHF.Text = txtHFS.Text = txtAddress1.Text = "";
@@ -362,6 +373,7 @@ namespace Astrodon
                     {
                         SaveWebBuilding(false);
                         SaveBuildingInsurance();
+                        SaveTrustees();
                         MessageBox.Show("Building updated!", "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         selectedBuilding = null;
                         clearBuilding();
@@ -377,9 +389,66 @@ namespace Astrodon
                     MessageBox.Show("Please enter building name", "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Building update failed", "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Building update failed:" + ex.Message, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SaveTrustees()
+        {
+            this.Cursor = Cursors.WaitCursor;
+            List<Customer> vCustomers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
+            MySqlConnector myConn = new MySqlConnector();
+            myConn.ToggleConnection(true);
+            String usergroup = "";
+            List<Customer> customers = dgTrustees.DataSource as List<Customer>;
+            foreach (Customer customer in customers)
+            {
+                bool trustee = false;
+                foreach (String email in customer.Email)
+                {
+                    if (email != "sheldon@astrodon.co.za")
+                    {
+                        String[] login = myConn.HasLogin(email);
+                        if (login != null)
+                        {
+                            if (Convert.ToInt32(customer.category) == 7)
+                            {
+                                usergroup = "1,2,4";
+                                trustee = true;
+                            }
+                            else
+                            {
+                                usergroup = "1,2";
+                            }
+                            myConn.UpdateGroup(login[0], usergroup);
+                        }
+                    }
+                }
+                Customer vCustomer = vCustomers.SingleOrDefault(c => c.accNumber == customer.accNumber);
+                UpdateCustomer(vCustomer, trustee);
+            }
+            myConn.ToggleConnection(false);
+            this.Cursor = Cursors.Arrow;
+        }
+
+        private void UpdateCustomer(Customer vCustomer, bool isTrustee)
+        {
+            bool changeMe = false;
+            if (Convert.ToInt32(vCustomer.category) == 7 && !isTrustee)
+            {
+                vCustomer.category = "0";
+                changeMe = true;
+            }
+            else if (Convert.ToInt32(vCustomer.category) != 7 && isTrustee)
+            {
+                vCustomer.category = "07";
+                changeMe = true;
+            }
+            if (changeMe)
+            {
+                String result = Controller.pastel.UpdateCustomer(vCustomer.GetCustomer(), selectedBuilding.DataPath);
             }
         }
 
@@ -557,7 +626,6 @@ namespace Astrodon
                         {
                             File.WriteAllBytes(fdSave.FileName, fileEntity.FileData);
                             MessageBox.Show("Successfully Downloaded Insurance Form");
-
                         }
                     }
                     else
@@ -565,7 +633,6 @@ namespace Astrodon
                         MessageBox.Show("No document exits");
                         return;
                     }
-
                 }
             }
             catch
@@ -594,7 +661,6 @@ namespace Astrodon
                         {
                             File.WriteAllBytes(fdSaveClaimForm.FileName, fileEntity.FileData);
                             MessageBox.Show("Successfully Downloaded Form");
-
                         }
                     }
                     else
@@ -602,7 +668,6 @@ namespace Astrodon
                         MessageBox.Show("No document exits");
                         return;
                     }
-
                 }
             }
             catch
@@ -613,7 +678,6 @@ namespace Astrodon
             {
                 btnViewClaimForm.Enabled = true;
             }
-
         }
 
         private void txtUnitPropertyDim_TextChanged(object sender, EventArgs e)
@@ -629,18 +693,16 @@ namespace Astrodon
                 }
                 catch
                 {
-
                 }
             }
         }
 
         private void tbInsurance_Click(object sender, EventArgs e)
         {
-
         }
     }
 
-    class InsurancePqRecord
+    internal class InsurancePqRecord
     {
         public int? Id { get; set; }
         public string UnitNo { get; set; }
@@ -650,6 +712,7 @@ namespace Astrodon
         public decimal? PQRating { get; set; }
 
         public decimal TotalUnitPropertyDimensions { get; set; }
+
         public decimal PQCalculated
         {
             get

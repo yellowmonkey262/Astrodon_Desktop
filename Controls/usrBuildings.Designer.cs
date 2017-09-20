@@ -35,33 +35,32 @@
             this.fdSaveClaimForm = new System.Windows.Forms.SaveFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tbBuilding = new System.Windows.Forms.TabPage();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.txtID = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.txtTrust = new System.Windows.Forms.TextBox();
-            this.txtPath = new System.Windows.Forms.TextBox();
-            this.txtPeriod = new System.Windows.Forms.TextBox();
-            this.txtCash = new System.Windows.Forms.TextBox();
-            this.txtPayment = new System.Windows.Forms.TextBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.txtReceipt = new System.Windows.Forms.TextBox();
-            this.txtLimitM = new System.Windows.Forms.TextBox();
-            this.txtJournal = new System.Windows.Forms.TextBox();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.txtLetter = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtAddress5 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtAddress4 = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.txtAddress3 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.txtAddress2 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.txtAddress1 = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnStandard = new System.Windows.Forms.Button();
+            this.txtRF = new System.Windows.Forms.TextBox();
+            this.txtRFS = new System.Windows.Forms.TextBox();
+            this.txtFF = new System.Windows.Forms.TextBox();
+            this.txtFFS = new System.Windows.Forms.TextBox();
+            this.txtDCF = new System.Windows.Forms.TextBox();
+            this.txtDCFS = new System.Windows.Forms.TextBox();
+            this.txtSF = new System.Windows.Forms.TextBox();
+            this.txtSFS = new System.Windows.Forms.TextBox();
+            this.txtDF = new System.Windows.Forms.TextBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.txtHF = new System.Windows.Forms.TextBox();
+            this.txtHFS = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.txtDFS = new System.Windows.Forms.TextBox();
+            this.label40 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -95,33 +94,36 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.chkWeb = new System.Windows.Forms.CheckBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.btnStandard = new System.Windows.Forms.Button();
-            this.txtRF = new System.Windows.Forms.TextBox();
-            this.txtRFS = new System.Windows.Forms.TextBox();
-            this.txtFF = new System.Windows.Forms.TextBox();
-            this.txtFFS = new System.Windows.Forms.TextBox();
-            this.txtDCF = new System.Windows.Forms.TextBox();
-            this.txtDCFS = new System.Windows.Forms.TextBox();
-            this.txtSF = new System.Windows.Forms.TextBox();
-            this.txtSFS = new System.Windows.Forms.TextBox();
-            this.txtDF = new System.Windows.Forms.TextBox();
-            this.label39 = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
-            this.label37 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
-            this.txtHF = new System.Windows.Forms.TextBox();
-            this.txtHFS = new System.Windows.Forms.TextBox();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.txtDFS = new System.Windows.Forms.TextBox();
-            this.label40 = new System.Windows.Forms.Label();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.txtID = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtTrust = new System.Windows.Forms.TextBox();
+            this.txtPath = new System.Windows.Forms.TextBox();
+            this.txtPeriod = new System.Windows.Forms.TextBox();
+            this.txtCash = new System.Windows.Forms.TextBox();
+            this.txtPayment = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.txtReceipt = new System.Windows.Forms.TextBox();
+            this.txtLimitM = new System.Windows.Forms.TextBox();
+            this.txtJournal = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtLetter = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtAddress5 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtAddress4 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.txtAddress3 = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtAddress2 = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtAddress1 = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
             this.tbInsurance = new System.Windows.Forms.TabPage();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.dgInsurancePq = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnViewClaimForm = new System.Windows.Forms.Button();
             this.btnViewInsuranceContract = new System.Windows.Forms.Button();
@@ -151,20 +153,24 @@
             this.label42 = new System.Windows.Forms.Label();
             this.txtCommonPropertyDim = new System.Windows.Forms.TextBox();
             this.label41 = new System.Windows.Forms.Label();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.dgInsurancePq = new System.Windows.Forms.DataGridView();
+            this.grpTrustees = new System.Windows.Forms.GroupBox();
+            this.dgTrustees = new System.Windows.Forms.DataGridView();
+            this.clmLink = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
-            this.groupBox7.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.tbInsurance.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgInsurancePq)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgInsurancePq)).BeginInit();
+            this.grpTrustees.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -255,6 +261,7 @@
             // 
             // tbBuilding
             // 
+            this.tbBuilding.Controls.Add(this.grpTrustees);
             this.tbBuilding.Controls.Add(this.groupBox4);
             this.tbBuilding.Controls.Add(this.groupBox6);
             this.tbBuilding.Controls.Add(this.groupBox7);
@@ -266,251 +273,242 @@
             this.tbBuilding.Text = "Building Details";
             this.tbBuilding.UseVisualStyleBackColor = true;
             // 
-            // groupBox7
+            // groupBox4
             // 
-            this.groupBox7.Controls.Add(this.txtID);
-            this.groupBox7.Controls.Add(this.label2);
-            this.groupBox7.Controls.Add(this.txtTrust);
-            this.groupBox7.Controls.Add(this.txtPath);
-            this.groupBox7.Controls.Add(this.txtPeriod);
-            this.groupBox7.Controls.Add(this.txtCash);
-            this.groupBox7.Controls.Add(this.txtPayment);
-            this.groupBox7.Controls.Add(this.label26);
-            this.groupBox7.Controls.Add(this.txtReceipt);
-            this.groupBox7.Controls.Add(this.txtLimitM);
-            this.groupBox7.Controls.Add(this.txtJournal);
-            this.groupBox7.Controls.Add(this.label23);
-            this.groupBox7.Controls.Add(this.label8);
-            this.groupBox7.Controls.Add(this.txtLetter);
-            this.groupBox7.Controls.Add(this.label7);
-            this.groupBox7.Controls.Add(this.txtAddress5);
-            this.groupBox7.Controls.Add(this.label6);
-            this.groupBox7.Controls.Add(this.txtAddress4);
-            this.groupBox7.Controls.Add(this.label11);
-            this.groupBox7.Controls.Add(this.txtAddress3);
-            this.groupBox7.Controls.Add(this.label10);
-            this.groupBox7.Controls.Add(this.txtAddress2);
-            this.groupBox7.Controls.Add(this.label9);
-            this.groupBox7.Controls.Add(this.txtAddress1);
-            this.groupBox7.Controls.Add(this.label12);
-            this.groupBox7.Controls.Add(this.label22);
-            this.groupBox7.Location = new System.Drawing.Point(6, 8);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(413, 430);
-            this.groupBox7.TabIndex = 138;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Building Details";
+            this.groupBox4.Controls.Add(this.btnStandard);
+            this.groupBox4.Controls.Add(this.txtRF);
+            this.groupBox4.Controls.Add(this.txtRFS);
+            this.groupBox4.Controls.Add(this.txtFF);
+            this.groupBox4.Controls.Add(this.txtFFS);
+            this.groupBox4.Controls.Add(this.txtDCF);
+            this.groupBox4.Controls.Add(this.txtDCFS);
+            this.groupBox4.Controls.Add(this.txtSF);
+            this.groupBox4.Controls.Add(this.txtSFS);
+            this.groupBox4.Controls.Add(this.txtDF);
+            this.groupBox4.Controls.Add(this.label39);
+            this.groupBox4.Controls.Add(this.label38);
+            this.groupBox4.Controls.Add(this.label37);
+            this.groupBox4.Controls.Add(this.label36);
+            this.groupBox4.Controls.Add(this.label35);
+            this.groupBox4.Controls.Add(this.label34);
+            this.groupBox4.Controls.Add(this.label33);
+            this.groupBox4.Controls.Add(this.label32);
+            this.groupBox4.Controls.Add(this.label31);
+            this.groupBox4.Controls.Add(this.txtHF);
+            this.groupBox4.Controls.Add(this.txtHFS);
+            this.groupBox4.Controls.Add(this.label30);
+            this.groupBox4.Controls.Add(this.label29);
+            this.groupBox4.Controls.Add(this.txtDFS);
+            this.groupBox4.Controls.Add(this.label40);
+            this.groupBox4.Location = new System.Drawing.Point(427, 306);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(413, 216);
+            this.groupBox4.TabIndex = 140;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Fees";
             // 
-            // txtID
+            // btnStandard
             // 
-            this.txtID.Enabled = false;
-            this.txtID.Location = new System.Drawing.Point(127, 22);
-            this.txtID.Name = "txtID";
-            this.txtID.ReadOnly = true;
-            this.txtID.Size = new System.Drawing.Size(201, 20);
-            this.txtID.TabIndex = 3;
+            this.btnStandard.BackColor = System.Drawing.Color.Red;
+            this.btnStandard.Location = new System.Drawing.Point(20, 25);
+            this.btnStandard.Name = "btnStandard";
+            this.btnStandard.Size = new System.Drawing.Size(379, 23);
+            this.btnStandard.TabIndex = 106;
+            this.btnStandard.Text = "Use Standard Settings";
+            this.btnStandard.UseVisualStyleBackColor = false;
+            this.btnStandard.Click += new System.EventHandler(this.btnStandard_Click);
             // 
-            // label2
+            // txtRF
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(103, 24);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(18, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "ID";
+            this.txtRF.Location = new System.Drawing.Point(139, 54);
+            this.txtRF.Name = "txtRF";
+            this.txtRF.Size = new System.Drawing.Size(62, 20);
+            this.txtRF.TabIndex = 70;
             // 
-            // txtTrust
+            // txtRFS
             // 
-            this.txtTrust.Location = new System.Drawing.Point(127, 74);
-            this.txtTrust.Name = "txtTrust";
-            this.txtTrust.Size = new System.Drawing.Size(201, 20);
-            this.txtTrust.TabIndex = 15;
+            this.txtRFS.Location = new System.Drawing.Point(332, 54);
+            this.txtRFS.Name = "txtRFS";
+            this.txtRFS.Size = new System.Drawing.Size(64, 20);
+            this.txtRFS.TabIndex = 71;
             // 
-            // txtPath
+            // txtFF
             // 
-            this.txtPath.Location = new System.Drawing.Point(127, 100);
-            this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(201, 20);
-            this.txtPath.TabIndex = 19;
+            this.txtFF.Location = new System.Drawing.Point(139, 80);
+            this.txtFF.Name = "txtFF";
+            this.txtFF.Size = new System.Drawing.Size(62, 20);
+            this.txtFF.TabIndex = 72;
             // 
-            // txtPeriod
+            // txtFFS
             // 
-            this.txtPeriod.Location = new System.Drawing.Point(127, 178);
-            this.txtPeriod.Name = "txtPeriod";
-            this.txtPeriod.Size = new System.Drawing.Size(201, 20);
-            this.txtPeriod.TabIndex = 23;
+            this.txtFFS.Location = new System.Drawing.Point(332, 80);
+            this.txtFFS.Name = "txtFFS";
+            this.txtFFS.Size = new System.Drawing.Size(64, 20);
+            this.txtFFS.TabIndex = 73;
             // 
-            // txtCash
+            // txtDCF
             // 
-            this.txtCash.Location = new System.Drawing.Point(127, 126);
-            this.txtCash.Name = "txtCash";
-            this.txtCash.Size = new System.Drawing.Size(201, 20);
-            this.txtCash.TabIndex = 27;
+            this.txtDCF.Location = new System.Drawing.Point(139, 106);
+            this.txtDCF.Name = "txtDCF";
+            this.txtDCF.Size = new System.Drawing.Size(62, 20);
+            this.txtDCF.TabIndex = 74;
             // 
-            // txtPayment
+            // txtDCFS
             // 
-            this.txtPayment.Location = new System.Drawing.Point(127, 204);
-            this.txtPayment.Name = "txtPayment";
-            this.txtPayment.Size = new System.Drawing.Size(201, 20);
-            this.txtPayment.TabIndex = 31;
+            this.txtDCFS.Location = new System.Drawing.Point(332, 106);
+            this.txtDCFS.Name = "txtDCFS";
+            this.txtDCFS.Size = new System.Drawing.Size(64, 20);
+            this.txtDCFS.TabIndex = 75;
             // 
-            // label26
+            // txtSF
             // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(10, 155);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(111, 13);
-            this.label26.TabIndex = 125;
-            this.label26.Text = "Payment Limit (Month)";
+            this.txtSF.Location = new System.Drawing.Point(139, 132);
+            this.txtSF.Name = "txtSF";
+            this.txtSF.Size = new System.Drawing.Size(62, 20);
+            this.txtSF.TabIndex = 76;
             // 
-            // txtReceipt
+            // txtSFS
             // 
-            this.txtReceipt.Location = new System.Drawing.Point(127, 230);
-            this.txtReceipt.Name = "txtReceipt";
-            this.txtReceipt.Size = new System.Drawing.Size(201, 20);
-            this.txtReceipt.TabIndex = 35;
+            this.txtSFS.Location = new System.Drawing.Point(332, 132);
+            this.txtSFS.Name = "txtSFS";
+            this.txtSFS.Size = new System.Drawing.Size(64, 20);
+            this.txtSFS.TabIndex = 77;
             // 
-            // txtLimitM
+            // txtDF
             // 
-            this.txtLimitM.Location = new System.Drawing.Point(127, 152);
-            this.txtLimitM.Name = "txtLimitM";
-            this.txtLimitM.Size = new System.Drawing.Size(201, 20);
-            this.txtLimitM.TabIndex = 124;
+            this.txtDF.Location = new System.Drawing.Point(139, 158);
+            this.txtDF.Name = "txtDF";
+            this.txtDF.Size = new System.Drawing.Size(62, 20);
+            this.txtDF.TabIndex = 78;
             // 
-            // txtJournal
+            // label39
             // 
-            this.txtJournal.Location = new System.Drawing.Point(127, 256);
-            this.txtJournal.Name = "txtJournal";
-            this.txtJournal.Size = new System.Drawing.Size(201, 20);
-            this.txtJournal.TabIndex = 39;
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(60, 57);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(73, 13);
+            this.label39.TabIndex = 79;
+            this.label39.Text = "Reminder Fee";
             // 
-            // label23
+            // label38
             // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(56, 51);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(65, 13);
-            this.label23.TabIndex = 117;
-            this.label23.Text = "Letter Name";
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(251, 57);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(75, 13);
+            this.label38.TabIndex = 80;
+            this.label38.Text = "Reminder Split";
             // 
-            // label8
+            // label37
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(47, 77);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(74, 13);
-            this.label8.TabIndex = 42;
-            this.label8.Text = "Trust Account";
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(40, 83);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(93, 13);
+            this.label37.TabIndex = 81;
+            this.label37.Text = "Final Demand Fee";
             // 
-            // txtLetter
+            // label36
             // 
-            this.txtLetter.Location = new System.Drawing.Point(127, 48);
-            this.txtLetter.Name = "txtLetter";
-            this.txtLetter.Size = new System.Drawing.Size(201, 20);
-            this.txtLetter.TabIndex = 116;
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(231, 83);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(95, 13);
+            this.label36.TabIndex = 82;
+            this.label36.Text = "Final Demand Split";
             // 
-            // label7
+            // label35
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(66, 103);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(55, 13);
-            this.label7.TabIndex = 43;
-            this.label7.Text = "Data Path";
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(17, 109);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(116, 13);
+            this.label35.TabIndex = 83;
+            this.label35.Text = "Disconnect Notice Fee";
             // 
-            // txtAddress5
+            // label34
             // 
-            this.txtAddress5.Location = new System.Drawing.Point(127, 397);
-            this.txtAddress5.MaxLength = 30;
-            this.txtAddress5.Name = "txtAddress5";
-            this.txtAddress5.Size = new System.Drawing.Size(271, 20);
-            this.txtAddress5.TabIndex = 115;
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(208, 109);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(118, 13);
+            this.label34.TabIndex = 84;
+            this.label34.Text = "Disconnect Notice Split";
             // 
-            // label6
+            // label33
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(20, 181);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(101, 13);
-            this.label6.TabIndex = 44;
-            this.label6.Text = "Period (behind trust)";
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(59, 135);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(74, 13);
+            this.label33.TabIndex = 85;
+            this.label33.Text = "Summons Fee";
             // 
-            // txtAddress4
+            // label32
             // 
-            this.txtAddress4.Location = new System.Drawing.Point(127, 371);
-            this.txtAddress4.MaxLength = 30;
-            this.txtAddress4.Name = "txtAddress4";
-            this.txtAddress4.Size = new System.Drawing.Size(271, 20);
-            this.txtAddress4.TabIndex = 114;
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(250, 135);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(76, 13);
+            this.label32.TabIndex = 86;
+            this.label32.Text = "Summons Split";
             // 
-            // label11
+            // label31
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(19, 129);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(102, 13);
-            this.label11.TabIndex = 45;
-            this.label11.Text = "Cash Book Account";
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(37, 161);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(96, 13);
+            this.label31.TabIndex = 87;
+            this.label31.Text = "Disconnection Fee";
             // 
-            // txtAddress3
+            // txtHF
             // 
-            this.txtAddress3.Location = new System.Drawing.Point(127, 345);
-            this.txtAddress3.MaxLength = 30;
-            this.txtAddress3.Name = "txtAddress3";
-            this.txtAddress3.Size = new System.Drawing.Size(271, 20);
-            this.txtAddress3.TabIndex = 113;
+            this.txtHF.Location = new System.Drawing.Point(139, 184);
+            this.txtHF.Name = "txtHF";
+            this.txtHF.Size = new System.Drawing.Size(62, 20);
+            this.txtHF.TabIndex = 88;
             // 
-            // label10
+            // txtHFS
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(46, 207);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(75, 13);
-            this.label10.TabIndex = 46;
-            this.label10.Text = "Payment Type";
+            this.txtHFS.Location = new System.Drawing.Point(332, 184);
+            this.txtHFS.Name = "txtHFS";
+            this.txtHFS.Size = new System.Drawing.Size(64, 20);
+            this.txtHFS.TabIndex = 89;
             // 
-            // txtAddress2
+            // label30
             // 
-            this.txtAddress2.Location = new System.Drawing.Point(127, 319);
-            this.txtAddress2.MaxLength = 30;
-            this.txtAddress2.Name = "txtAddress2";
-            this.txtAddress2.Size = new System.Drawing.Size(271, 20);
-            this.txtAddress2.TabIndex = 112;
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(58, 187);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(75, 13);
+            this.label30.TabIndex = 96;
+            this.label30.Text = "Handover Fee";
             // 
-            // label9
+            // label29
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(50, 233);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(71, 13);
-            this.label9.TabIndex = 47;
-            this.label9.Text = "Receipt Type";
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(249, 187);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(77, 13);
+            this.label29.TabIndex = 97;
+            this.label29.Text = "Handover Split";
             // 
-            // txtAddress1
+            // txtDFS
             // 
-            this.txtAddress1.Location = new System.Drawing.Point(127, 293);
-            this.txtAddress1.MaxLength = 30;
-            this.txtAddress1.Name = "txtAddress1";
-            this.txtAddress1.Size = new System.Drawing.Size(271, 20);
-            this.txtAddress1.TabIndex = 111;
+            this.txtDFS.Location = new System.Drawing.Point(332, 158);
+            this.txtDFS.Name = "txtDFS";
+            this.txtDFS.Size = new System.Drawing.Size(64, 20);
+            this.txtDFS.TabIndex = 108;
             // 
-            // label12
+            // label40
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(53, 259);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(68, 13);
-            this.label12.TabIndex = 48;
-            this.label12.Text = "Journal Type";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(76, 296);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(45, 13);
-            this.label22.TabIndex = 110;
-            this.label22.Text = "Address";
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(228, 161);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(98, 13);
+            this.label40.TabIndex = 109;
+            this.label40.Text = "Disconnection Split";
             // 
             // groupBox6
             // 
@@ -820,242 +818,251 @@
             this.chkWeb.TabIndex = 67;
             this.chkWeb.UseVisualStyleBackColor = true;
             // 
-            // groupBox4
+            // groupBox7
             // 
-            this.groupBox4.Controls.Add(this.btnStandard);
-            this.groupBox4.Controls.Add(this.txtRF);
-            this.groupBox4.Controls.Add(this.txtRFS);
-            this.groupBox4.Controls.Add(this.txtFF);
-            this.groupBox4.Controls.Add(this.txtFFS);
-            this.groupBox4.Controls.Add(this.txtDCF);
-            this.groupBox4.Controls.Add(this.txtDCFS);
-            this.groupBox4.Controls.Add(this.txtSF);
-            this.groupBox4.Controls.Add(this.txtSFS);
-            this.groupBox4.Controls.Add(this.txtDF);
-            this.groupBox4.Controls.Add(this.label39);
-            this.groupBox4.Controls.Add(this.label38);
-            this.groupBox4.Controls.Add(this.label37);
-            this.groupBox4.Controls.Add(this.label36);
-            this.groupBox4.Controls.Add(this.label35);
-            this.groupBox4.Controls.Add(this.label34);
-            this.groupBox4.Controls.Add(this.label33);
-            this.groupBox4.Controls.Add(this.label32);
-            this.groupBox4.Controls.Add(this.label31);
-            this.groupBox4.Controls.Add(this.txtHF);
-            this.groupBox4.Controls.Add(this.txtHFS);
-            this.groupBox4.Controls.Add(this.label30);
-            this.groupBox4.Controls.Add(this.label29);
-            this.groupBox4.Controls.Add(this.txtDFS);
-            this.groupBox4.Controls.Add(this.label40);
-            this.groupBox4.Location = new System.Drawing.Point(427, 306);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(413, 216);
-            this.groupBox4.TabIndex = 140;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Fees";
+            this.groupBox7.Controls.Add(this.txtID);
+            this.groupBox7.Controls.Add(this.label2);
+            this.groupBox7.Controls.Add(this.txtTrust);
+            this.groupBox7.Controls.Add(this.txtPath);
+            this.groupBox7.Controls.Add(this.txtPeriod);
+            this.groupBox7.Controls.Add(this.txtCash);
+            this.groupBox7.Controls.Add(this.txtPayment);
+            this.groupBox7.Controls.Add(this.label26);
+            this.groupBox7.Controls.Add(this.txtReceipt);
+            this.groupBox7.Controls.Add(this.txtLimitM);
+            this.groupBox7.Controls.Add(this.txtJournal);
+            this.groupBox7.Controls.Add(this.label23);
+            this.groupBox7.Controls.Add(this.label8);
+            this.groupBox7.Controls.Add(this.txtLetter);
+            this.groupBox7.Controls.Add(this.label7);
+            this.groupBox7.Controls.Add(this.txtAddress5);
+            this.groupBox7.Controls.Add(this.label6);
+            this.groupBox7.Controls.Add(this.txtAddress4);
+            this.groupBox7.Controls.Add(this.label11);
+            this.groupBox7.Controls.Add(this.txtAddress3);
+            this.groupBox7.Controls.Add(this.label10);
+            this.groupBox7.Controls.Add(this.txtAddress2);
+            this.groupBox7.Controls.Add(this.label9);
+            this.groupBox7.Controls.Add(this.txtAddress1);
+            this.groupBox7.Controls.Add(this.label12);
+            this.groupBox7.Controls.Add(this.label22);
+            this.groupBox7.Location = new System.Drawing.Point(6, 8);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(413, 430);
+            this.groupBox7.TabIndex = 138;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Building Details";
             // 
-            // btnStandard
+            // txtID
             // 
-            this.btnStandard.BackColor = System.Drawing.Color.Red;
-            this.btnStandard.Location = new System.Drawing.Point(20, 25);
-            this.btnStandard.Name = "btnStandard";
-            this.btnStandard.Size = new System.Drawing.Size(379, 23);
-            this.btnStandard.TabIndex = 106;
-            this.btnStandard.Text = "Use Standard Settings";
-            this.btnStandard.UseVisualStyleBackColor = false;
-            this.btnStandard.Click += new System.EventHandler(this.btnStandard_Click);
+            this.txtID.Enabled = false;
+            this.txtID.Location = new System.Drawing.Point(127, 22);
+            this.txtID.Name = "txtID";
+            this.txtID.ReadOnly = true;
+            this.txtID.Size = new System.Drawing.Size(201, 20);
+            this.txtID.TabIndex = 3;
             // 
-            // txtRF
+            // label2
             // 
-            this.txtRF.Location = new System.Drawing.Point(139, 54);
-            this.txtRF.Name = "txtRF";
-            this.txtRF.Size = new System.Drawing.Size(62, 20);
-            this.txtRF.TabIndex = 70;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(103, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(18, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "ID";
             // 
-            // txtRFS
+            // txtTrust
             // 
-            this.txtRFS.Location = new System.Drawing.Point(332, 54);
-            this.txtRFS.Name = "txtRFS";
-            this.txtRFS.Size = new System.Drawing.Size(64, 20);
-            this.txtRFS.TabIndex = 71;
+            this.txtTrust.Location = new System.Drawing.Point(127, 74);
+            this.txtTrust.Name = "txtTrust";
+            this.txtTrust.Size = new System.Drawing.Size(201, 20);
+            this.txtTrust.TabIndex = 15;
             // 
-            // txtFF
+            // txtPath
             // 
-            this.txtFF.Location = new System.Drawing.Point(139, 80);
-            this.txtFF.Name = "txtFF";
-            this.txtFF.Size = new System.Drawing.Size(62, 20);
-            this.txtFF.TabIndex = 72;
+            this.txtPath.Location = new System.Drawing.Point(127, 100);
+            this.txtPath.Name = "txtPath";
+            this.txtPath.Size = new System.Drawing.Size(201, 20);
+            this.txtPath.TabIndex = 19;
             // 
-            // txtFFS
+            // txtPeriod
             // 
-            this.txtFFS.Location = new System.Drawing.Point(332, 80);
-            this.txtFFS.Name = "txtFFS";
-            this.txtFFS.Size = new System.Drawing.Size(64, 20);
-            this.txtFFS.TabIndex = 73;
+            this.txtPeriod.Location = new System.Drawing.Point(127, 178);
+            this.txtPeriod.Name = "txtPeriod";
+            this.txtPeriod.Size = new System.Drawing.Size(201, 20);
+            this.txtPeriod.TabIndex = 23;
             // 
-            // txtDCF
+            // txtCash
             // 
-            this.txtDCF.Location = new System.Drawing.Point(139, 106);
-            this.txtDCF.Name = "txtDCF";
-            this.txtDCF.Size = new System.Drawing.Size(62, 20);
-            this.txtDCF.TabIndex = 74;
+            this.txtCash.Location = new System.Drawing.Point(127, 126);
+            this.txtCash.Name = "txtCash";
+            this.txtCash.Size = new System.Drawing.Size(201, 20);
+            this.txtCash.TabIndex = 27;
             // 
-            // txtDCFS
+            // txtPayment
             // 
-            this.txtDCFS.Location = new System.Drawing.Point(332, 106);
-            this.txtDCFS.Name = "txtDCFS";
-            this.txtDCFS.Size = new System.Drawing.Size(64, 20);
-            this.txtDCFS.TabIndex = 75;
+            this.txtPayment.Location = new System.Drawing.Point(127, 204);
+            this.txtPayment.Name = "txtPayment";
+            this.txtPayment.Size = new System.Drawing.Size(201, 20);
+            this.txtPayment.TabIndex = 31;
             // 
-            // txtSF
+            // label26
             // 
-            this.txtSF.Location = new System.Drawing.Point(139, 132);
-            this.txtSF.Name = "txtSF";
-            this.txtSF.Size = new System.Drawing.Size(62, 20);
-            this.txtSF.TabIndex = 76;
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(10, 155);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(111, 13);
+            this.label26.TabIndex = 125;
+            this.label26.Text = "Payment Limit (Month)";
             // 
-            // txtSFS
+            // txtReceipt
             // 
-            this.txtSFS.Location = new System.Drawing.Point(332, 132);
-            this.txtSFS.Name = "txtSFS";
-            this.txtSFS.Size = new System.Drawing.Size(64, 20);
-            this.txtSFS.TabIndex = 77;
+            this.txtReceipt.Location = new System.Drawing.Point(127, 230);
+            this.txtReceipt.Name = "txtReceipt";
+            this.txtReceipt.Size = new System.Drawing.Size(201, 20);
+            this.txtReceipt.TabIndex = 35;
             // 
-            // txtDF
+            // txtLimitM
             // 
-            this.txtDF.Location = new System.Drawing.Point(139, 158);
-            this.txtDF.Name = "txtDF";
-            this.txtDF.Size = new System.Drawing.Size(62, 20);
-            this.txtDF.TabIndex = 78;
+            this.txtLimitM.Location = new System.Drawing.Point(127, 152);
+            this.txtLimitM.Name = "txtLimitM";
+            this.txtLimitM.Size = new System.Drawing.Size(201, 20);
+            this.txtLimitM.TabIndex = 124;
             // 
-            // label39
+            // txtJournal
             // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(60, 57);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(73, 13);
-            this.label39.TabIndex = 79;
-            this.label39.Text = "Reminder Fee";
+            this.txtJournal.Location = new System.Drawing.Point(127, 256);
+            this.txtJournal.Name = "txtJournal";
+            this.txtJournal.Size = new System.Drawing.Size(201, 20);
+            this.txtJournal.TabIndex = 39;
             // 
-            // label38
+            // label23
             // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(251, 57);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(75, 13);
-            this.label38.TabIndex = 80;
-            this.label38.Text = "Reminder Split";
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(56, 51);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(65, 13);
+            this.label23.TabIndex = 117;
+            this.label23.Text = "Letter Name";
             // 
-            // label37
+            // label8
             // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(40, 83);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(93, 13);
-            this.label37.TabIndex = 81;
-            this.label37.Text = "Final Demand Fee";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(47, 77);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(74, 13);
+            this.label8.TabIndex = 42;
+            this.label8.Text = "Trust Account";
             // 
-            // label36
+            // txtLetter
             // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(231, 83);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(95, 13);
-            this.label36.TabIndex = 82;
-            this.label36.Text = "Final Demand Split";
+            this.txtLetter.Location = new System.Drawing.Point(127, 48);
+            this.txtLetter.Name = "txtLetter";
+            this.txtLetter.Size = new System.Drawing.Size(201, 20);
+            this.txtLetter.TabIndex = 116;
             // 
-            // label35
+            // label7
             // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(17, 109);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(116, 13);
-            this.label35.TabIndex = 83;
-            this.label35.Text = "Disconnect Notice Fee";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(66, 103);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(55, 13);
+            this.label7.TabIndex = 43;
+            this.label7.Text = "Data Path";
             // 
-            // label34
+            // txtAddress5
             // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(208, 109);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(118, 13);
-            this.label34.TabIndex = 84;
-            this.label34.Text = "Disconnect Notice Split";
+            this.txtAddress5.Location = new System.Drawing.Point(127, 397);
+            this.txtAddress5.MaxLength = 30;
+            this.txtAddress5.Name = "txtAddress5";
+            this.txtAddress5.Size = new System.Drawing.Size(271, 20);
+            this.txtAddress5.TabIndex = 115;
             // 
-            // label33
+            // label6
             // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(59, 135);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(74, 13);
-            this.label33.TabIndex = 85;
-            this.label33.Text = "Summons Fee";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(20, 181);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(101, 13);
+            this.label6.TabIndex = 44;
+            this.label6.Text = "Period (behind trust)";
             // 
-            // label32
+            // txtAddress4
             // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(250, 135);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(76, 13);
-            this.label32.TabIndex = 86;
-            this.label32.Text = "Summons Split";
+            this.txtAddress4.Location = new System.Drawing.Point(127, 371);
+            this.txtAddress4.MaxLength = 30;
+            this.txtAddress4.Name = "txtAddress4";
+            this.txtAddress4.Size = new System.Drawing.Size(271, 20);
+            this.txtAddress4.TabIndex = 114;
             // 
-            // label31
+            // label11
             // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(37, 161);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(96, 13);
-            this.label31.TabIndex = 87;
-            this.label31.Text = "Disconnection Fee";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(19, 129);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(102, 13);
+            this.label11.TabIndex = 45;
+            this.label11.Text = "Cash Book Account";
             // 
-            // txtHF
+            // txtAddress3
             // 
-            this.txtHF.Location = new System.Drawing.Point(139, 184);
-            this.txtHF.Name = "txtHF";
-            this.txtHF.Size = new System.Drawing.Size(62, 20);
-            this.txtHF.TabIndex = 88;
+            this.txtAddress3.Location = new System.Drawing.Point(127, 345);
+            this.txtAddress3.MaxLength = 30;
+            this.txtAddress3.Name = "txtAddress3";
+            this.txtAddress3.Size = new System.Drawing.Size(271, 20);
+            this.txtAddress3.TabIndex = 113;
             // 
-            // txtHFS
+            // label10
             // 
-            this.txtHFS.Location = new System.Drawing.Point(332, 184);
-            this.txtHFS.Name = "txtHFS";
-            this.txtHFS.Size = new System.Drawing.Size(64, 20);
-            this.txtHFS.TabIndex = 89;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(46, 207);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(75, 13);
+            this.label10.TabIndex = 46;
+            this.label10.Text = "Payment Type";
             // 
-            // label30
+            // txtAddress2
             // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(58, 187);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(75, 13);
-            this.label30.TabIndex = 96;
-            this.label30.Text = "Handover Fee";
+            this.txtAddress2.Location = new System.Drawing.Point(127, 319);
+            this.txtAddress2.MaxLength = 30;
+            this.txtAddress2.Name = "txtAddress2";
+            this.txtAddress2.Size = new System.Drawing.Size(271, 20);
+            this.txtAddress2.TabIndex = 112;
             // 
-            // label29
+            // label9
             // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(249, 187);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(77, 13);
-            this.label29.TabIndex = 97;
-            this.label29.Text = "Handover Split";
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(50, 233);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(71, 13);
+            this.label9.TabIndex = 47;
+            this.label9.Text = "Receipt Type";
             // 
-            // txtDFS
+            // txtAddress1
             // 
-            this.txtDFS.Location = new System.Drawing.Point(332, 158);
-            this.txtDFS.Name = "txtDFS";
-            this.txtDFS.Size = new System.Drawing.Size(64, 20);
-            this.txtDFS.TabIndex = 108;
+            this.txtAddress1.Location = new System.Drawing.Point(127, 293);
+            this.txtAddress1.MaxLength = 30;
+            this.txtAddress1.Name = "txtAddress1";
+            this.txtAddress1.Size = new System.Drawing.Size(271, 20);
+            this.txtAddress1.TabIndex = 111;
             // 
-            // label40
+            // label12
             // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(228, 161);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(98, 13);
-            this.label40.TabIndex = 109;
-            this.label40.Text = "Disconnection Split";
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(53, 259);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(68, 13);
+            this.label12.TabIndex = 48;
+            this.label12.Text = "Journal Type";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(76, 296);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(45, 13);
+            this.label22.TabIndex = 110;
+            this.label22.Text = "Address";
             // 
             // tbInsurance
             // 
@@ -1071,6 +1078,28 @@
             this.tbInsurance.Text = "Insurance";
             this.tbInsurance.UseVisualStyleBackColor = true;
             this.tbInsurance.Click += new System.EventHandler(this.tbInsurance_Click);
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.dgInsurancePq);
+            this.groupBox8.Location = new System.Drawing.Point(591, 6);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(770, 570);
+            this.groupBox8.TabIndex = 139;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Insurance PQ";
+            // 
+            // dgInsurancePq
+            // 
+            this.dgInsurancePq.AllowUserToAddRows = false;
+            this.dgInsurancePq.AllowUserToDeleteRows = false;
+            this.dgInsurancePq.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgInsurancePq.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgInsurancePq.Location = new System.Drawing.Point(3, 16);
+            this.dgInsurancePq.MultiSelect = false;
+            this.dgInsurancePq.Name = "dgInsurancePq";
+            this.dgInsurancePq.Size = new System.Drawing.Size(764, 551);
+            this.dgInsurancePq.TabIndex = 0;
             // 
             // groupBox3
             // 
@@ -1346,27 +1375,46 @@
             this.label41.TabIndex = 130;
             this.label41.Text = "Common Property Dimensions";
             // 
-            // groupBox8
+            // grpTrustees
             // 
-            this.groupBox8.Controls.Add(this.dgInsurancePq);
-            this.groupBox8.Location = new System.Drawing.Point(591, 6);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(770, 570);
-            this.groupBox8.TabIndex = 139;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Insurance PQ";
+            this.grpTrustees.Controls.Add(this.dgTrustees);
+            this.grpTrustees.Location = new System.Drawing.Point(1009, 8);
+            this.grpTrustees.Name = "grpTrustees";
+            this.grpTrustees.Size = new System.Drawing.Size(354, 519);
+            this.grpTrustees.TabIndex = 141;
+            this.grpTrustees.TabStop = false;
+            this.grpTrustees.Text = "Trustees";
             // 
-            // dgInsurancePq
+            // dgTrustees
             // 
-            this.dgInsurancePq.AllowUserToAddRows = false;
-            this.dgInsurancePq.AllowUserToDeleteRows = false;
-            this.dgInsurancePq.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgInsurancePq.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgInsurancePq.Location = new System.Drawing.Point(3, 16);
-            this.dgInsurancePq.MultiSelect = false;
-            this.dgInsurancePq.Name = "dgInsurancePq";
-            this.dgInsurancePq.Size = new System.Drawing.Size(764, 551);
-            this.dgInsurancePq.TabIndex = 0;
+            this.dgTrustees.AllowUserToAddRows = false;
+            this.dgTrustees.AllowUserToDeleteRows = false;
+            this.dgTrustees.AllowUserToResizeColumns = false;
+            this.dgTrustees.AllowUserToResizeRows = false;
+            this.dgTrustees.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgTrustees.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgTrustees.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clmLink,
+            this.clmAcc});
+            this.dgTrustees.Location = new System.Drawing.Point(3, 16);
+            this.dgTrustees.Name = "dgTrustees";
+            this.dgTrustees.Size = new System.Drawing.Size(345, 497);
+            this.dgTrustees.TabIndex = 0;
+            // 
+            // clmLink
+            // 
+            this.clmLink.DataPropertyName = "IsTrustee";
+            this.clmLink.HeaderText = "Trustee";
+            this.clmLink.Name = "clmLink";
+            // 
+            // clmAcc
+            // 
+            this.clmAcc.DataPropertyName = "accNumber";
+            this.clmAcc.HeaderText = "Account";
+            this.clmAcc.Name = "clmAcc";
+            this.clmAcc.ReadOnly = true;
+            this.clmAcc.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.clmAcc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // usrBuildings
             // 
@@ -1382,21 +1430,23 @@
             this.groupBox5.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tbBuilding.ResumeLayout(false);
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.tbInsurance.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgInsurancePq)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgInsurancePq)).EndInit();
+            this.grpTrustees.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1534,5 +1584,9 @@
         private System.Windows.Forms.Label label41;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.DataGridView dgInsurancePq;
+        private System.Windows.Forms.GroupBox grpTrustees;
+        private System.Windows.Forms.DataGridView dgTrustees;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn clmLink;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmAcc;
     }
 }
