@@ -12,6 +12,7 @@ namespace Astrodon
     {
         private Buildings BuildingManager;
         private Building selectedBuilding = null;
+
         private List<InsurancePqRecord> InsurancePqGrid { get; set; }
 
         public usrBuildings()
@@ -96,6 +97,11 @@ namespace Astrodon
         private void LoadCustomers()
         {
             List<Customer> customers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
+            foreach (Customer c in customers)
+            {
+                int iCat = Convert.ToInt32(c.category);
+                c.IsTrustee = iCat == 7;
+            }
             dgTrustees.AutoGenerateColumns = false;
             dgTrustees.DataSource = customers;
             dgTrustees.Refresh();
@@ -413,7 +419,7 @@ namespace Astrodon
                         String[] login = myConn.HasLogin(email);
                         if (login != null)
                         {
-                            if (Convert.ToInt32(customer.category) == 7)
+                            if (customer.IsTrustee)
                             {
                                 usergroup = "1,2,4";
                                 trustee = true;
@@ -699,6 +705,17 @@ namespace Astrodon
 
         private void tbInsurance_Click(object sender, EventArgs e)
         {
+        }
+
+        private void dgTrustees_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            //customers = dgTrustees.DataSource as List<Customer>;
+            //foreach (Customer c in customers)
+            //{
+            //    int iCat = Convert.ToInt32(c.category);
+            //    if (Controller.user.id == 1) { MessageBox.Show(iCat.ToString()); }
+            //    c.IsTrustee = iCat == 7;
+            //}
         }
     }
 

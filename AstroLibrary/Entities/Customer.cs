@@ -379,27 +379,7 @@ namespace Astro.Library.Entities
             }
         }
 
-        public bool IsTrustee
-        {
-            get
-            {
-                int tCategory = int.TryParse(_category, out tCategory) ? tCategory : 0;
-                return tCategory == 7;
-            }
-            set
-            {
-                bool isTrustee = value;
-                int tCategory = int.TryParse(_category, out tCategory) ? tCategory : 0;
-                if (tCategory == 7 && !isTrustee)
-                {
-                    _category = "0";
-                }
-                else if (tCategory != 7 && isTrustee)
-                {
-                    _category = "07";
-                }
-            }
-        }
+        public bool IsTrustee { get; set; }
 
         public String accNumber
         {

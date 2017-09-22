@@ -35,6 +35,8 @@
             this.fdSaveClaimForm = new System.Windows.Forms.SaveFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tbBuilding = new System.Windows.Forms.TabPage();
+            this.grpTrustees = new System.Windows.Forms.GroupBox();
+            this.dgTrustees = new System.Windows.Forms.DataGridView();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnStandard = new System.Windows.Forms.Button();
             this.txtRF = new System.Windows.Forms.TextBox();
@@ -153,13 +155,15 @@
             this.label42 = new System.Windows.Forms.Label();
             this.txtCommonPropertyDim = new System.Windows.Forms.TextBox();
             this.label41 = new System.Windows.Forms.Label();
-            this.grpTrustees = new System.Windows.Forms.GroupBox();
-            this.dgTrustees = new System.Windows.Forms.DataGridView();
             this.clmLink = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.clmAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
+            this.grpTrustees.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).BeginInit();
             this.groupBox4.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
@@ -169,8 +173,6 @@
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.grpTrustees.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -272,6 +274,34 @@
             this.tbBuilding.TabIndex = 0;
             this.tbBuilding.Text = "Building Details";
             this.tbBuilding.UseVisualStyleBackColor = true;
+            // 
+            // grpTrustees
+            // 
+            this.grpTrustees.Controls.Add(this.dgTrustees);
+            this.grpTrustees.Location = new System.Drawing.Point(1009, 8);
+            this.grpTrustees.Name = "grpTrustees";
+            this.grpTrustees.Size = new System.Drawing.Size(354, 519);
+            this.grpTrustees.TabIndex = 141;
+            this.grpTrustees.TabStop = false;
+            this.grpTrustees.Text = "Trustees";
+            // 
+            // dgTrustees
+            // 
+            this.dgTrustees.AllowUserToAddRows = false;
+            this.dgTrustees.AllowUserToDeleteRows = false;
+            this.dgTrustees.AllowUserToResizeColumns = false;
+            this.dgTrustees.AllowUserToResizeRows = false;
+            this.dgTrustees.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgTrustees.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgTrustees.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clmLink,
+            this.clmAcc,
+            this.clmDescription,
+            this.clmCat});
+            this.dgTrustees.Location = new System.Drawing.Point(3, 16);
+            this.dgTrustees.Name = "dgTrustees";
+            this.dgTrustees.Size = new System.Drawing.Size(345, 497);
+            this.dgTrustees.TabIndex = 0;
             // 
             // groupBox4
             // 
@@ -1375,37 +1405,13 @@
             this.label41.TabIndex = 130;
             this.label41.Text = "Common Property Dimensions";
             // 
-            // grpTrustees
-            // 
-            this.grpTrustees.Controls.Add(this.dgTrustees);
-            this.grpTrustees.Location = new System.Drawing.Point(1009, 8);
-            this.grpTrustees.Name = "grpTrustees";
-            this.grpTrustees.Size = new System.Drawing.Size(354, 519);
-            this.grpTrustees.TabIndex = 141;
-            this.grpTrustees.TabStop = false;
-            this.grpTrustees.Text = "Trustees";
-            // 
-            // dgTrustees
-            // 
-            this.dgTrustees.AllowUserToAddRows = false;
-            this.dgTrustees.AllowUserToDeleteRows = false;
-            this.dgTrustees.AllowUserToResizeColumns = false;
-            this.dgTrustees.AllowUserToResizeRows = false;
-            this.dgTrustees.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgTrustees.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgTrustees.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.clmLink,
-            this.clmAcc});
-            this.dgTrustees.Location = new System.Drawing.Point(3, 16);
-            this.dgTrustees.Name = "dgTrustees";
-            this.dgTrustees.Size = new System.Drawing.Size(345, 497);
-            this.dgTrustees.TabIndex = 0;
-            // 
             // clmLink
             // 
             this.clmLink.DataPropertyName = "IsTrustee";
+            this.clmLink.FalseValue = "false";
             this.clmLink.HeaderText = "Trustee";
             this.clmLink.Name = "clmLink";
+            this.clmLink.TrueValue = "true";
             // 
             // clmAcc
             // 
@@ -1415,6 +1421,21 @@
             this.clmAcc.ReadOnly = true;
             this.clmAcc.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.clmAcc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // clmDescription
+            // 
+            this.clmDescription.DataPropertyName = "description";
+            this.clmDescription.HeaderText = "Name";
+            this.clmDescription.Name = "clmDescription";
+            this.clmDescription.ReadOnly = true;
+            // 
+            // clmCat
+            // 
+            this.clmCat.DataPropertyName = "category";
+            this.clmCat.HeaderText = "Category";
+            this.clmCat.Name = "clmCat";
+            this.clmCat.ReadOnly = true;
+            this.clmCat.Visible = false;
             // 
             // usrBuildings
             // 
@@ -1430,6 +1451,8 @@
             this.groupBox5.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tbBuilding.ResumeLayout(false);
+            this.grpTrustees.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox6.ResumeLayout(false);
@@ -1445,8 +1468,6 @@
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.grpTrustees.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1588,5 +1609,7 @@
         private System.Windows.Forms.DataGridView dgTrustees;
         private System.Windows.Forms.DataGridViewCheckBoxColumn clmLink;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmAcc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmDescription;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmCat;
     }
 }
