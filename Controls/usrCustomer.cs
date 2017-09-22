@@ -239,8 +239,8 @@ namespace Astrodon
             }
             catch
             {
-                UpdateCustomer(false);
-                LoadWeb();
+                //UpdateCustomer(false);
+                //LoadWeb();
             }
             lstUnits.Refresh();
         }

@@ -379,6 +379,8 @@ namespace Astro.Library.Entities
             }
         }
 
+        public bool IsTrustee { get; set; }
+
         public String accNumber
         {
             get
