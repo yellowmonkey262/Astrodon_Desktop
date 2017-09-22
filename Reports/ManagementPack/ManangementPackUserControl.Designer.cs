@@ -47,8 +47,14 @@
             this.btnAddLevyRoll = new System.Windows.Forms.Button();
             this.btnCheckList = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.gbReportType = new System.Windows.Forms.GroupBox();
+            this.rbDetailWithDocs = new System.Windows.Forms.RadioButton();
+            this.rbDetailed = new System.Windows.Forms.RadioButton();
+            this.rbSummaryReport = new System.Windows.Forms.RadioButton();
+            this.btnMaintenance = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgTocGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
+            this.gbReportType.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -98,7 +104,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(455, 15);
+            this.button1.Location = new System.Drawing.Point(218, 135);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(124, 23);
             this.button1.TabIndex = 4;
@@ -113,27 +119,27 @@
             this.cmbBuilding.Location = new System.Drawing.Point(109, 44);
             this.cmbBuilding.Name = "cmbBuilding";
             this.cmbBuilding.Size = new System.Drawing.Size(233, 21);
-            this.cmbBuilding.TabIndex = 7;
+            this.cmbBuilding.TabIndex = 2;
             // 
             // dgTocGrid
             // 
             this.dgTocGrid.AllowUserToAddRows = false;
             this.dgTocGrid.AllowUserToDeleteRows = false;
             this.dgTocGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgTocGrid.Location = new System.Drawing.Point(19, 131);
+            this.dgTocGrid.Location = new System.Drawing.Point(19, 194);
             this.dgTocGrid.MultiSelect = false;
             this.dgTocGrid.Name = "dgTocGrid";
-            this.dgTocGrid.Size = new System.Drawing.Size(821, 383);
+            this.dgTocGrid.Size = new System.Drawing.Size(821, 320);
             this.dgTocGrid.TabIndex = 8;
             this.dgTocGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgTocGrid_CellContentClick);
             this.dgTocGrid.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgTocGrid_DataBindingComplete);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(590, 102);
+            this.button3.Location = new System.Drawing.Point(455, 165);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(124, 23);
-            this.button3.TabIndex = 8;
+            this.button3.TabIndex = 9;
             this.button3.Text = "Save Report";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -161,10 +167,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(455, 44);
+            this.button2.Location = new System.Drawing.Point(455, 135);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(124, 23);
-            this.button2.TabIndex = 5;
+            this.button2.TabIndex = 8;
             this.button2.Text = "Add Additional PDF";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -174,7 +180,7 @@
             this.cbIncludeSundries.AutoSize = true;
             this.cbIncludeSundries.Checked = true;
             this.cbIncludeSundries.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbIncludeSundries.Location = new System.Drawing.Point(680, 78);
+            this.cbIncludeSundries.Location = new System.Drawing.Point(680, 21);
             this.cbIncludeSundries.Name = "cbIncludeSundries";
             this.cbIncludeSundries.Size = new System.Drawing.Size(15, 14);
             this.cbIncludeSundries.TabIndex = 7;
@@ -183,7 +189,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(587, 78);
+            this.label5.Location = new System.Drawing.Point(587, 21);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(86, 13);
             this.label5.TabIndex = 69;
@@ -191,20 +197,20 @@
             // 
             // btnAddLevyRoll
             // 
-            this.btnAddLevyRoll.Location = new System.Drawing.Point(455, 72);
+            this.btnAddLevyRoll.Location = new System.Drawing.Point(455, 15);
             this.btnAddLevyRoll.Name = "btnAddLevyRoll";
             this.btnAddLevyRoll.Size = new System.Drawing.Size(124, 23);
-            this.btnAddLevyRoll.TabIndex = 6;
+            this.btnAddLevyRoll.TabIndex = 5;
             this.btnAddLevyRoll.Text = "Add Levy Roll";
             this.btnAddLevyRoll.UseVisualStyleBackColor = true;
             this.btnAddLevyRoll.Click += new System.EventHandler(this.btnAddLevyRoll_Click);
             // 
             // btnCheckList
             // 
-            this.btnCheckList.Location = new System.Drawing.Point(455, 102);
+            this.btnCheckList.Location = new System.Drawing.Point(455, 106);
             this.btnCheckList.Name = "btnCheckList";
             this.btnCheckList.Size = new System.Drawing.Size(124, 23);
-            this.btnCheckList.TabIndex = 70;
+            this.btnCheckList.TabIndex = 7;
             this.btnCheckList.Text = "Add Check List";
             this.btnCheckList.UseVisualStyleBackColor = true;
             this.btnCheckList.Click += new System.EventHandler(this.btnCheckList_Click);
@@ -219,10 +225,66 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // gbReportType
+            // 
+            this.gbReportType.Controls.Add(this.rbDetailWithDocs);
+            this.gbReportType.Controls.Add(this.rbDetailed);
+            this.gbReportType.Controls.Add(this.rbSummaryReport);
+            this.gbReportType.Location = new System.Drawing.Point(590, 44);
+            this.gbReportType.Name = "gbReportType";
+            this.gbReportType.Size = new System.Drawing.Size(241, 72);
+            this.gbReportType.TabIndex = 72;
+            this.gbReportType.TabStop = false;
+            // 
+            // rbDetailWithDocs
+            // 
+            this.rbDetailWithDocs.AutoSize = true;
+            this.rbDetailWithDocs.Location = new System.Drawing.Point(9, 43);
+            this.rbDetailWithDocs.Name = "rbDetailWithDocs";
+            this.rbDetailWithDocs.Size = new System.Drawing.Size(232, 17);
+            this.rbDetailWithDocs.TabIndex = 2;
+            this.rbDetailWithDocs.Text = "Detailed Report with Supporting Documents";
+            this.rbDetailWithDocs.UseVisualStyleBackColor = true;
+            // 
+            // rbDetailed
+            // 
+            this.rbDetailed.AutoSize = true;
+            this.rbDetailed.Location = new System.Drawing.Point(116, 20);
+            this.rbDetailed.Name = "rbDetailed";
+            this.rbDetailed.Size = new System.Drawing.Size(99, 17);
+            this.rbDetailed.TabIndex = 1;
+            this.rbDetailed.TabStop = true;
+            this.rbDetailed.Text = "Detailed Report";
+            this.rbDetailed.UseVisualStyleBackColor = true;
+            // 
+            // rbSummaryReport
+            // 
+            this.rbSummaryReport.AutoSize = true;
+            this.rbSummaryReport.Checked = true;
+            this.rbSummaryReport.Location = new System.Drawing.Point(7, 20);
+            this.rbSummaryReport.Name = "rbSummaryReport";
+            this.rbSummaryReport.Size = new System.Drawing.Size(103, 17);
+            this.rbSummaryReport.TabIndex = 0;
+            this.rbSummaryReport.TabStop = true;
+            this.rbSummaryReport.Text = "Summary Report";
+            this.rbSummaryReport.UseVisualStyleBackColor = true;
+            // 
+            // btnMaintenance
+            // 
+            this.btnMaintenance.Location = new System.Drawing.Point(455, 50);
+            this.btnMaintenance.Name = "btnMaintenance";
+            this.btnMaintenance.Size = new System.Drawing.Size(124, 23);
+            this.btnMaintenance.TabIndex = 6;
+            this.btnMaintenance.Text = "Maintenance Report";
+            this.btnMaintenance.UseVisualStyleBackColor = true;
+            this.btnMaintenance.Click += new System.EventHandler(this.btnMaintenance_Click);
+            // 
             // ManangementPackUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnMaintenance);
+            this.Controls.Add(this.gbReportType);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.btnCheckList);
             this.Controls.Add(this.btnAddLevyRoll);
@@ -243,6 +305,8 @@
             this.Size = new System.Drawing.Size(1301, 529);
             ((System.ComponentModel.ISupportInitialize)(this.dgTocGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).EndInit();
+            this.gbReportType.ResumeLayout(false);
+            this.gbReportType.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -268,5 +332,10 @@
         private System.Windows.Forms.Button btnAddLevyRoll;
         private System.Windows.Forms.Button btnCheckList;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.GroupBox gbReportType;
+        private System.Windows.Forms.RadioButton rbDetailWithDocs;
+        private System.Windows.Forms.RadioButton rbDetailed;
+        private System.Windows.Forms.RadioButton rbSummaryReport;
+        private System.Windows.Forms.Button btnMaintenance;
     }
 }

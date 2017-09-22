@@ -41,6 +41,7 @@ namespace Astrodon.Reports
             button3.Enabled = false;
             btnAddLevyRoll.Enabled = false;
             btnCheckList.Enabled = false;
+            btnMaintenance.Enabled = false;
         }
 
         private void LoadCheckLists()
@@ -48,9 +49,7 @@ namespace Astrodon.Reports
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var itms = context.ManagementPackTOCItemSet.ToList();
-                if (itms == null || itms.Count == 0)
-                {
-                    var tmpItems = new List<string>() {
+                var tmpItems = new List<string>() {
                         "Detail income statement",
                         "Balance sheet",
                         "Bank statement",
@@ -61,8 +60,12 @@ namespace Astrodon.Reports
                         "Levy Roll",
                         "Financial checklist",
                         "Invoicing",
-                        "POP"
+                        "POP",
+                        "Maintenance"
                     };
+                if (itms == null || itms.Count < tmpItems.Count())
+                {
+                  
 
                     foreach(var itm in tmpItems)
                     {
@@ -143,6 +146,7 @@ namespace Astrodon.Reports
                 button3.Enabled = true;
                 btnAddLevyRoll.Enabled = true;
                 btnCheckList.Enabled = true;
+                btnMaintenance.Enabled = true;
             }
             finally
             {
@@ -747,6 +751,115 @@ namespace Astrodon.Reports
                 }
                 _TableOfContents.Clear();
                 RefreshTOC();
+            }
+        }
+
+        private void btnMaintenance_Click(object sender, EventArgs e)
+        {
+            button1.Enabled = false;
+
+            try
+            {
+                var reportFileName = Path.GetTempFileName();
+
+                using (var reportService = ReportServiceClient.CreateInstance())
+                {
+                    DateTime startDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+                    DateTime endDate = startDate.AddMonths(1).AddDays(-1);
+
+                    MaintenanceReportType repType;
+                    if (rbDetailed.Checked)
+                        repType = MaintenanceReportType.DetailedReport;
+                    else if (rbDetailWithDocs.Checked)
+                        repType = MaintenanceReportType.DetailedReportWithSupportingDocuments;
+                    else
+                        repType = MaintenanceReportType.SummaryReport;
+
+                    var building = cmbBuilding.SelectedItem as Building;
+
+                    var reportData = reportService.MaintenanceReport(SqlDataHandler.GetConnectionString(), repType, startDate, endDate, building.ID, building.Name, (cmbBuilding.SelectedItem as Building).DataPath);
+                    if (reportData == null)
+                    {
+                        Controller.HandleError("No data found for " + startDate.ToString("MMM yyyy") + " - " + endDate.ToString("MMM yyyy"), "Maintenance Report");
+                        return;
+                    }
+
+                    if (repType == MaintenanceReportType.DetailedReportWithSupportingDocuments)
+                    {
+                        byte[] combinedReport = null;
+
+
+                        using (var dataContext = SqlDataHandler.GetDataContext())
+                        {
+                            var documentIds = (from m in dataContext.MaintenanceSet
+                                               from d in m.MaintenanceDocuments
+                                               where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
+                                                  && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
+                                               orderby m.DateLogged
+                                               select d.id).ToList();
+
+                            var reqDocIds = (from m in dataContext.MaintenanceSet
+                                             from d in m.Requisition.Documents
+                                             where m.BuildingMaintenanceConfiguration.BuildingId == building.ID
+                                                && m.Requisition.trnDate >= startDate && m.Requisition.trnDate <= endDate
+                                             orderby m.DateLogged
+                                             select d.id).ToList();
+
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                using (Document doc = new Document())
+                                {
+                                    using (PdfCopy copy = new PdfCopy(doc, ms))
+                                    {
+                                        doc.Open();
+
+                                        AddPdfDocument(copy, reportData);
+
+                                        foreach (var documentId in reqDocIds)
+                                        {
+                                            var document = dataContext.RequisitionDocumentSet.Where(a => a.id == documentId).Select(a => a.FileData).Single();
+                                            AddPdfDocument(copy, document);
+                                        }
+
+                                        foreach (var documentId in documentIds)
+                                        {
+                                            var document = dataContext.MaintenanceDocumentSet.Where(a => a.id == documentId).Select(a => a.FileData).Single();
+                                            AddPdfDocument(copy, document);
+                                        }
+
+                                    }
+                                }
+
+                                combinedReport = ms.ToArray();
+                            }
+                        }
+
+                        File.WriteAllBytes(reportFileName, combinedReport);
+                    }
+                    else
+                        File.WriteAllBytes(reportFileName, reportData);
+
+                    var fileDate = DateTime.Now;
+                    var totalPages = GetTotalPages(reportFileName);
+
+                    _TableOfContents.Insert(0, new TableOfContentForPdfRecord()
+                    {
+                        Path = reportFileName,
+                        File = Path.GetFileName(reportFileName),
+                        Description = GetDescriptionList().Where(a => a.StartsWith("Maintenance")).FirstOrDefault(),
+                        Position = -1,
+                        Pages = totalPages,
+                        FileDate = fileDate,
+                        IsTempFile = true,
+                        IncludeInTOC = true
+                    });
+                    RefreshTOC();
+                }
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+                button1.Enabled = true;
             }
         }
     }
