@@ -26,12 +26,6 @@
             this.btnPrint = new System.Windows.Forms.Button();
             this.btnProcess = new System.Windows.Forms.Button();
             this.customerGrid = new System.Windows.Forms.DataGridView();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.label4 = new System.Windows.Forms.Label();
-            this.cmbCategory = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cmbBuildings = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.accNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.accName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.OSBAL = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -45,6 +39,12 @@
             this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cmbCategory = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cmbBuildings = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.customerGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -98,65 +98,6 @@
             this.customerGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.customerGrid_CellContentClick);
             this.customerGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.customerGrid_CellEndEdit);
             this.customerGrid.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.customerGrid_DataBindingComplete);
-            // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(173, 79);
-            this.dateTimePicker1.MinDate = new System.DateTime(2012, 1, 1, 0, 0, 0, 0);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(118, 20);
-            this.dateTimePicker1.TabIndex = 27;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 82);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(155, 13);
-            this.label4.TabIndex = 26;
-            this.label4.Text = "Disconnect Date (if applicable):";
-            // 
-            // cmbCategory
-            // 
-            this.cmbCategory.FormattingEnabled = true;
-            this.cmbCategory.Items.AddRange(new object[] {
-            "00-Standard",
-            "03-Arrangement",
-            "04-Disconnect",
-            "05-Legal"});
-            this.cmbCategory.Location = new System.Drawing.Point(173, 42);
-            this.cmbCategory.Name = "cmbCategory";
-            this.cmbCategory.Size = new System.Drawing.Size(187, 21);
-            this.cmbCategory.TabIndex = 25;
-            this.cmbCategory.SelectedIndexChanged += new System.EventHandler(this.cmbCategory_SelectedIndexChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 45);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(117, 13);
-            this.label2.TabIndex = 24;
-            this.label2.Text = "Please select category:";
-            // 
-            // cmbBuildings
-            // 
-            this.cmbBuildings.FormattingEnabled = true;
-            this.cmbBuildings.Location = new System.Drawing.Point(173, 10);
-            this.cmbBuildings.Name = "cmbBuildings";
-            this.cmbBuildings.Size = new System.Drawing.Size(187, 21);
-            this.cmbBuildings.TabIndex = 23;
-            this.cmbBuildings.SelectedIndexChanged += new System.EventHandler(this.cmbBuildings_SelectedIndexChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(112, 13);
-            this.label1.TabIndex = 22;
-            this.label1.Text = "Please select building:";
             // 
             // accNum
             // 
@@ -240,6 +181,66 @@
             this.Column3.DataPropertyName = "JournalAcc";
             this.Column3.HeaderText = "Journal Acc";
             this.Column3.Name = "Column3";
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(173, 79);
+            this.dateTimePicker1.MinDate = new System.DateTime(2012, 1, 1, 0, 0, 0, 0);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(118, 20);
+            this.dateTimePicker1.TabIndex = 27;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 82);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(155, 13);
+            this.label4.TabIndex = 26;
+            this.label4.Text = "Disconnect Date (if applicable):";
+            // 
+            // cmbCategory
+            // 
+            this.cmbCategory.FormattingEnabled = true;
+            this.cmbCategory.Items.AddRange(new object[] {
+            "00-Standard",
+            "03-Arrangement",
+            "04-Disconnect",
+            "05-Legal",
+            "07-Trustees"});
+            this.cmbCategory.Location = new System.Drawing.Point(173, 42);
+            this.cmbCategory.Name = "cmbCategory";
+            this.cmbCategory.Size = new System.Drawing.Size(187, 21);
+            this.cmbCategory.TabIndex = 25;
+            this.cmbCategory.SelectedIndexChanged += new System.EventHandler(this.cmbCategory_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 45);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(117, 13);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "Please select category:";
+            // 
+            // cmbBuildings
+            // 
+            this.cmbBuildings.FormattingEnabled = true;
+            this.cmbBuildings.Location = new System.Drawing.Point(173, 10);
+            this.cmbBuildings.Name = "cmbBuildings";
+            this.cmbBuildings.Size = new System.Drawing.Size(187, 21);
+            this.cmbBuildings.TabIndex = 23;
+            this.cmbBuildings.SelectedIndexChanged += new System.EventHandler(this.cmbBuildings_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(112, 13);
+            this.label1.TabIndex = 22;
+            this.label1.Text = "Please select building:";
             // 
             // usrLetters
             // 

@@ -26,6 +26,7 @@
             this.components = new System.ComponentModel.Container();
             this.tbContent = new System.Windows.Forms.TabControl();
             this.tbInstructions = new System.Windows.Forms.TabPage();
+            this.chkDisablePrint = new System.Windows.Forms.CheckBox();
             this.chkEmail3 = new System.Windows.Forms.CheckBox();
             this.chkSMS = new System.Windows.Forms.CheckBox();
             this.chkEmail2 = new System.Windows.Forms.CheckBox();
@@ -126,7 +127,7 @@
             this.btnApprove = new System.Windows.Forms.Button();
             this.btnProcess = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
-            this.chkDisablePrint = new System.Windows.Forms.CheckBox();
+            this.rdTrustees = new System.Windows.Forms.RadioButton();
             this.tbContent.SuspendLayout();
             this.tbInstructions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCustomers)).BeginInit();
@@ -156,6 +157,7 @@
             // 
             // tbInstructions
             // 
+            this.tbInstructions.Controls.Add(this.rdTrustees);
             this.tbInstructions.Controls.Add(this.chkDisablePrint);
             this.tbInstructions.Controls.Add(this.chkEmail3);
             this.tbInstructions.Controls.Add(this.chkSMS);
@@ -190,10 +192,20 @@
             this.tbInstructions.Text = "Instructions";
             this.tbInstructions.UseVisualStyleBackColor = true;
             // 
+            // chkDisablePrint
+            // 
+            this.chkDisablePrint.AutoSize = true;
+            this.chkDisablePrint.Location = new System.Drawing.Point(453, 374);
+            this.chkDisablePrint.Name = "chkDisablePrint";
+            this.chkDisablePrint.Size = new System.Drawing.Size(85, 17);
+            this.chkDisablePrint.TabIndex = 34;
+            this.chkDisablePrint.Text = "Disable Print";
+            this.chkDisablePrint.UseVisualStyleBackColor = true;
+            // 
             // chkEmail3
             // 
             this.chkEmail3.AutoSize = true;
-            this.chkEmail3.Location = new System.Drawing.Point(542, 57);
+            this.chkEmail3.Location = new System.Drawing.Point(791, 58);
             this.chkEmail3.Name = "chkEmail3";
             this.chkEmail3.Size = new System.Drawing.Size(115, 17);
             this.chkEmail3.TabIndex = 33;
@@ -204,7 +216,7 @@
             // chkSMS
             // 
             this.chkSMS.AutoSize = true;
-            this.chkSMS.Location = new System.Drawing.Point(778, 57);
+            this.chkSMS.Location = new System.Drawing.Point(1027, 58);
             this.chkSMS.Name = "chkSMS";
             this.chkSMS.Size = new System.Drawing.Size(63, 17);
             this.chkSMS.TabIndex = 32;
@@ -215,7 +227,7 @@
             // chkEmail2
             // 
             this.chkEmail2.AutoSize = true;
-            this.chkEmail2.Location = new System.Drawing.Point(424, 57);
+            this.chkEmail2.Location = new System.Drawing.Point(673, 58);
             this.chkEmail2.Name = "chkEmail2";
             this.chkEmail2.Size = new System.Drawing.Size(115, 17);
             this.chkEmail2.TabIndex = 31;
@@ -226,7 +238,7 @@
             // chkEmail4
             // 
             this.chkEmail4.AutoSize = true;
-            this.chkEmail4.Location = new System.Drawing.Point(660, 57);
+            this.chkEmail4.Location = new System.Drawing.Point(909, 58);
             this.chkEmail4.Name = "chkEmail4";
             this.chkEmail4.Size = new System.Drawing.Size(115, 17);
             this.chkEmail4.TabIndex = 30;
@@ -237,7 +249,7 @@
             // chkEmail1
             // 
             this.chkEmail1.AutoSize = true;
-            this.chkEmail1.Location = new System.Drawing.Point(306, 57);
+            this.chkEmail1.Location = new System.Drawing.Point(555, 58);
             this.chkEmail1.Name = "chkEmail1";
             this.chkEmail1.Size = new System.Drawing.Size(115, 17);
             this.chkEmail1.TabIndex = 29;
@@ -1154,15 +1166,17 @@
             this.btnSubmit.UseVisualStyleBackColor = true;
             this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
-            // chkDisablePrint
+            // rdTrustees
             // 
-            this.chkDisablePrint.AutoSize = true;
-            this.chkDisablePrint.Location = new System.Drawing.Point(453, 374);
-            this.chkDisablePrint.Name = "chkDisablePrint";
-            this.chkDisablePrint.Size = new System.Drawing.Size(85, 17);
-            this.chkDisablePrint.TabIndex = 34;
-            this.chkDisablePrint.Text = "Disable Print";
-            this.chkDisablePrint.UseVisualStyleBackColor = true;
+            this.rdTrustees.AutoSize = true;
+            this.rdTrustees.Location = new System.Drawing.Point(304, 57);
+            this.rdTrustees.Name = "rdTrustees";
+            this.rdTrustees.Size = new System.Drawing.Size(66, 17);
+            this.rdTrustees.TabIndex = 35;
+            this.rdTrustees.TabStop = true;
+            this.rdTrustees.Text = "Trustees";
+            this.rdTrustees.UseVisualStyleBackColor = true;
+            this.rdTrustees.CheckedChanged += new System.EventHandler(this.rdTrustees_CheckedChanged);
             // 
             // usrJob
             // 
@@ -1298,5 +1312,6 @@
         private System.Windows.Forms.CheckBox chkUseLetterhead;
         private System.Windows.Forms.CheckBox chkCustomer;
         private System.Windows.Forms.CheckBox chkDisablePrint;
+        private System.Windows.Forms.RadioButton rdTrustees;
     }
 }

@@ -49,6 +49,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.chkPriority = new System.Windows.Forms.CheckBox();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.chkTrustees = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgCustomers)).BeginInit();
             this.SuspendLayout();
             // 
@@ -297,10 +298,22 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
+            // chkTrustees
+            // 
+            this.chkTrustees.AutoSize = true;
+            this.chkTrustees.Location = new System.Drawing.Point(150, 70);
+            this.chkTrustees.Name = "chkTrustees";
+            this.chkTrustees.Size = new System.Drawing.Size(89, 17);
+            this.chkTrustees.TabIndex = 55;
+            this.chkTrustees.Text = "Trustees only";
+            this.chkTrustees.UseVisualStyleBackColor = true;
+            this.chkTrustees.CheckedChanged += new System.EventHandler(this.chkTrustees_CheckedChanged);
+            // 
             // usrBulkEmail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkTrustees);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.chkPriority);
             this.Controls.Add(this.cmbCategory);
@@ -364,5 +377,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox chkPriority;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.CheckBox chkTrustees;
     }
 }

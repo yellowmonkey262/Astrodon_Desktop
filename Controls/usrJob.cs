@@ -585,14 +585,49 @@ namespace Astrodon.Controls
             {
                 foreach (jobCustomers jc in JobCustomers) { jc.Include = true; }
                 rdCustomers.Checked = false;
+                rdTrustees.Checked = false;
             }
             chkBuilding.Checked = rdAllCustomers.Checked;
+            dgCustomers.DataSource = JobCustomers;
+            dgCustomers.Refresh();
         }
 
         private void rdCustomers_CheckedChanged(object sender, EventArgs e)
         {
-            if (rdCustomers.Checked) { rdAllCustomers.Checked = false; }
+            if (rdCustomers.Checked)
+            {
+                rdAllCustomers.Checked = false;
+                rdTrustees.Checked = false;
+            }
             chkInbox.Checked = rdCustomers.Checked;
+            dgCustomers.DataSource = JobCustomers;
+            dgCustomers.Refresh();
+        }
+
+        private void rdTrustees_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdTrustees.Checked)
+            {
+                foreach (jobCustomers jc in JobCustomers)
+                {
+                    Customer customer = customers.SingleOrDefault(c => c.accNumber == jc.Account);
+                    if (customer != null)
+                    {
+                        if (Controller.user.id == 1) { MessageBox.Show(customer.category); }
+                        int iCat = Convert.ToInt32(customer.category);
+                        jc.Include = iCat == 7;
+                    }
+                    else
+                    {
+                        jc.Include = false;
+                    }
+                }
+                rdAllCustomers.Checked = false;
+                rdCustomers.Checked = false;
+            }
+            chkInbox.Checked = rdTrustees.Checked;
+            dgCustomers.DataSource = JobCustomers;
+            dgCustomers.Refresh();
         }
 
         private void btnSave1_Click(object sender, EventArgs e)
@@ -1088,6 +1123,7 @@ namespace Astrodon.Controls
                             txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                             foreach (String attach in attachments)
                             {
+                                ftpClient.WorkingDirectory = ftpClient.WorkingDirectory + "/" + buildingFolder;
                                 if (ftpClient.Upload(attach, ftpClient.WorkingDirectory + "/" + Path.GetFileName(attach), false))
                                 {
                                     txtStatus.Text += Path.GetFileName(attach) + " uploaded: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;

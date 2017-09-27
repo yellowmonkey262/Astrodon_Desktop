@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Astrodon
@@ -11,7 +12,7 @@ namespace Astrodon
     {
         private List<Building> buildings;
         private List<EmailList> emailList;
-
+        private List<Customer> customers;
         private Building building;
 
         public usrBulkEmail()
@@ -59,6 +60,10 @@ namespace Astrodon
         private void LoadCategories()
         {
             Dictionary<String, String> categoryDictionary = Controller.pastel.GetCategories(building.DataPath);
+            if (Controller.user.id == 1)
+            {
+                MessageBox.Show(categoryDictionary.Count.ToString());
+            }
             cmbCategory.Items.Clear();
             List<Category> categoryList = new List<Category>();
             Category c1 = new Category
@@ -86,16 +91,18 @@ namespace Astrodon
 
         private void LoadCustomers(String category)
         {
-            List<Customer> customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
+            customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
             emailList = new List<EmailList>();
             foreach (Customer c in customers)
             {
                 if (c.statPrintorEmail != 4 && (c.category == category || String.IsNullOrEmpty(category)))
                 {
-                    EmailList el = new EmailList();
-                    el.AccNumber = c.accNumber;
-                    el.Name = c.description;
-                    el.EmailAddress = String.Empty;
+                    EmailList el = new EmailList
+                    {
+                        AccNumber = c.accNumber,
+                        Name = c.description,
+                        EmailAddress = String.Empty
+                    };
                     var builder = new System.Text.StringBuilder();
                     builder.Append(el.EmailAddress);
                     foreach (String email in c.Email)
@@ -114,6 +121,10 @@ namespace Astrodon
             dgCustomers.DataSource = null;
             dgCustomers.DataSource = emailList;
             lstAttachments.Items.Clear();
+        }
+
+        private void LoadTrustees()
+        {
         }
 
         private void LoadFolders()
@@ -138,6 +149,27 @@ namespace Astrodon
             if (dgCustomers.Rows.Count > 0)
             {
                 foreach (DataGridViewRow dvr in dgCustomers.Rows) { dvr.Cells[3].Value = chkIncludeAll.Checked; }
+            }
+        }
+
+        private void chkTrustees_CheckedChanged(object sender, EventArgs e)
+        {
+            if (dgCustomers.Rows.Count > 0)
+            {
+                foreach (DataGridViewRow dvr in dgCustomers.Rows)
+                {
+                    EmailList dataRow = dvr.DataBoundItem as EmailList;
+                    Customer customer = customers.SingleOrDefault(c => c.accNumber == dataRow.AccNumber);
+                    if (customer != null)
+                    {
+                        int iCat = Convert.ToInt32(customer.category);
+                        dvr.Cells[3].Value = iCat == 7;
+                    }
+                    else
+                    {
+                        dvr.Cells[3].Value = false;
+                    }
+                }
             }
         }
 
