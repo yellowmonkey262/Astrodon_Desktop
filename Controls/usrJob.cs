@@ -1120,9 +1120,10 @@ namespace Astrodon.Controls
 
                         if (chkBuilding.Checked && cmbFolder.SelectedItem != null)
                         {
-                            if (buildingFolder != "root" && ftpClient.WorkingDirectory != ftpClient.WorkingDirectory + "/" + buildingFolder)
+                            if (buildingFolder.ToLower() != "root" && ftpClient.WorkingDirectory != ftpClient.WorkingDirectory + "/" + buildingFolder)
                             {
                                 ftpClient.WorkingDirectory = ftpClient.WorkingDirectory + "/" + buildingFolder;
+                                //MessageBox.Show(ftpClient.WorkingDirectory);
                                 ftpClient.ChangeDirectory(false);
                             }
                             try
