@@ -1120,23 +1120,34 @@ namespace Astrodon.Controls
 
                         if (chkBuilding.Checked && cmbFolder.SelectedItem != null)
                         {
-                            txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                            foreach (String attach in attachments)
+                            if (buildingFolder != "root" && ftpClient.WorkingDirectory != ftpClient.WorkingDirectory + "/" + buildingFolder)
                             {
                                 ftpClient.WorkingDirectory = ftpClient.WorkingDirectory + "/" + buildingFolder;
-                                if (ftpClient.Upload(attach, ftpClient.WorkingDirectory + "/" + Path.GetFileName(attach), false))
-                                {
-                                    txtStatus.Text += Path.GetFileName(attach) + " uploaded: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                }
-                                else
-                                {
-                                    txtStatus.Text += "Error uploading " + Path.GetFileName(attach) + ": " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                    success = false;
-                                    MessageBox.Show("Error processing...");
-                                    return;
-                                }
+                                ftpClient.ChangeDirectory(false);
                             }
-                            txtStatus.Text += "Completed uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                            try
+                            {
+                                txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                                foreach (String attach in attachments)
+                                {
+                                    if (ftpClient.Upload(attach, Path.GetFileName(attach), false))
+                                    {
+                                        txtStatus.Text += Path.GetFileName(attach) + " uploaded: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                                    }
+                                    else
+                                    {
+                                        txtStatus.Text += "Error uploading " + Path.GetFileName(attach) + ": " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                                        success = false;
+                                        MessageBox.Show("Error processing...");
+                                        return;
+                                    }
+                                }
+                                txtStatus.Text += "Completed uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                            }
+                            catch (Exception ex)
+                            {
+                                txtStatus.Text += "Error uploading documents: " + ex.Message + Environment.NewLine;
+                            }
                         }
 
                         if (!print)
