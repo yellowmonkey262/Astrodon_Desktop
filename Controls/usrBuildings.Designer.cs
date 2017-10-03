@@ -37,6 +37,10 @@
             this.tbBuilding = new System.Windows.Forms.TabPage();
             this.grpTrustees = new System.Windows.Forms.GroupBox();
             this.dgTrustees = new System.Windows.Forms.DataGridView();
+            this.clmLink = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnStandard = new System.Windows.Forms.Button();
             this.txtRF = new System.Windows.Forms.TextBox();
@@ -155,10 +159,6 @@
             this.label42 = new System.Windows.Forms.Label();
             this.txtCommonPropertyDim = new System.Windows.Forms.TextBox();
             this.label41 = new System.Windows.Forms.Label();
-            this.clmLink = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -302,6 +302,38 @@
             this.dgTrustees.Name = "dgTrustees";
             this.dgTrustees.Size = new System.Drawing.Size(345, 497);
             this.dgTrustees.TabIndex = 0;
+            // 
+            // clmLink
+            // 
+            this.clmLink.DataPropertyName = "IsTrustee";
+            this.clmLink.FalseValue = "false";
+            this.clmLink.HeaderText = "Trustee";
+            this.clmLink.Name = "clmLink";
+            this.clmLink.TrueValue = "true";
+            // 
+            // clmAcc
+            // 
+            this.clmAcc.DataPropertyName = "accNumber";
+            this.clmAcc.HeaderText = "Account";
+            this.clmAcc.Name = "clmAcc";
+            this.clmAcc.ReadOnly = true;
+            this.clmAcc.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.clmAcc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // clmDescription
+            // 
+            this.clmDescription.DataPropertyName = "description";
+            this.clmDescription.HeaderText = "Name";
+            this.clmDescription.Name = "clmDescription";
+            this.clmDescription.ReadOnly = true;
+            // 
+            // clmCat
+            // 
+            this.clmCat.DataPropertyName = "category";
+            this.clmCat.HeaderText = "Category";
+            this.clmCat.Name = "clmCat";
+            this.clmCat.ReadOnly = true;
+            this.clmCat.Visible = false;
             // 
             // groupBox4
             // 
@@ -1147,7 +1179,7 @@
             this.groupBox3.Controls.Add(this.label50);
             this.groupBox3.Controls.Add(this.txtBrokerCompany);
             this.groupBox3.Controls.Add(this.label49);
-            this.groupBox3.Location = new System.Drawing.Point(9, 107);
+            this.groupBox3.Location = new System.Drawing.Point(9, 132);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(576, 134);
             this.groupBox3.TabIndex = 136;
@@ -1198,7 +1230,7 @@
             // 
             this.txtBrokerTel.Location = new System.Drawing.Point(87, 102);
             this.txtBrokerTel.Name = "txtBrokerTel";
-            this.txtBrokerTel.Size = new System.Drawing.Size(122, 20);
+            this.txtBrokerTel.Size = new System.Drawing.Size(162, 20);
             this.txtBrokerTel.TabIndex = 10;
             // 
             // label53
@@ -1284,7 +1316,7 @@
             this.groupBox2.Controls.Add(this.label45);
             this.groupBox2.Location = new System.Drawing.Point(300, 15);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(285, 86);
+            this.groupBox2.Size = new System.Drawing.Size(285, 111);
             this.groupBox2.TabIndex = 135;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Building Costs";
@@ -1349,7 +1381,7 @@
             this.groupBox1.Controls.Add(this.label41);
             this.groupBox1.Location = new System.Drawing.Point(9, 15);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(285, 86);
+            this.groupBox1.Size = new System.Drawing.Size(285, 111);
             this.groupBox1.TabIndex = 134;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Building Dimensions";
@@ -1404,38 +1436,6 @@
             this.label41.Size = new System.Drawing.Size(147, 13);
             this.label41.TabIndex = 130;
             this.label41.Text = "Common Property Dimensions";
-            // 
-            // clmLink
-            // 
-            this.clmLink.DataPropertyName = "IsTrustee";
-            this.clmLink.FalseValue = "false";
-            this.clmLink.HeaderText = "Trustee";
-            this.clmLink.Name = "clmLink";
-            this.clmLink.TrueValue = "true";
-            // 
-            // clmAcc
-            // 
-            this.clmAcc.DataPropertyName = "accNumber";
-            this.clmAcc.HeaderText = "Account";
-            this.clmAcc.Name = "clmAcc";
-            this.clmAcc.ReadOnly = true;
-            this.clmAcc.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.clmAcc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // clmDescription
-            // 
-            this.clmDescription.DataPropertyName = "description";
-            this.clmDescription.HeaderText = "Name";
-            this.clmDescription.Name = "clmDescription";
-            this.clmDescription.ReadOnly = true;
-            // 
-            // clmCat
-            // 
-            this.clmCat.DataPropertyName = "category";
-            this.clmCat.HeaderText = "Category";
-            this.clmCat.Name = "clmCat";
-            this.clmCat.ReadOnly = true;
-            this.clmCat.Visible = false;
             // 
             // usrBuildings
             // 
