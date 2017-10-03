@@ -952,6 +952,15 @@ namespace Astrodon.Controls
         {
             this.Cursor = Cursors.WaitCursor;
             if (sendNow) { txtStatus.Text += Environment.NewLine + "Starting processing: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine; }
+            String ftpUploadFolder = "";
+            if (chkBuilding.Checked && cmbFolder.SelectedItem != null)
+            {
+                if (buildingFolder.ToLower() != "root" && ftpUploadFolder != ftpClient.WorkingDirectory)
+                {
+                    ftpUploadFolder = ftpClient.WorkingDirectory + "/" + buildingFolder;
+                }
+            }
+
             String html = ConvertRTFToHtml();
             //MessageBox.Show(html);
             PDF pdf = new PDF();
@@ -1120,9 +1129,9 @@ namespace Astrodon.Controls
 
                         if (chkBuilding.Checked && cmbFolder.SelectedItem != null)
                         {
-                            if (buildingFolder.ToLower() != "root" && ftpClient.WorkingDirectory != ftpClient.WorkingDirectory + "/" + buildingFolder)
+                            if (buildingFolder.ToLower() != "root" && ftpUploadFolder != ftpClient.WorkingDirectory)
                             {
-                                ftpClient.WorkingDirectory = ftpClient.WorkingDirectory + "/" + buildingFolder;
+                                ftpClient.WorkingDirectory = ftpUploadFolder;
                                 //MessageBox.Show(ftpClient.WorkingDirectory);
                                 ftpClient.ChangeDirectory(false);
                             }
