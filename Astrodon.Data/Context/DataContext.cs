@@ -98,6 +98,7 @@ namespace Astrodon.Data
 
         public DbSet<BuildingUnit> BuildingUnitSet { get; set; }
         public DbSet<BuildingDocument> BuildingDocumentSet { get; set; }
+        public DbSet<InsuranceBroker> InsuranceBrokerSet { get; set; }
 
         #region Management Pack
 

@@ -8,6 +8,8 @@ namespace Astrodon.Data.InsuranceData
     public enum DocumentType
     {
         InsuranceContract,
-        InsuranceClaimForm
+        InsuranceClaimForm,
+        BuildingPlans,
+        PQ
     }
 }

@@ -34,6 +34,7 @@
             this.usersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkSMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upgradeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.managementPackTOCDescriptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.summaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,7 +97,7 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.managementPackTOCDescriptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.insuranceBrokerMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -185,6 +186,13 @@
             this.upgradeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.upgradeDatabaseToolStripMenuItem.Text = "Upgrade Database";
             this.upgradeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.upgradeDatabaseToolStripMenuItem_Click);
+            // 
+            // managementPackTOCDescriptionToolStripMenuItem
+            // 
+            this.managementPackTOCDescriptionToolStripMenuItem.Name = "managementPackTOCDescriptionToolStripMenuItem";
+            this.managementPackTOCDescriptionToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.managementPackTOCDescriptionToolStripMenuItem.Text = "Management Pack TOC Descriptions";
+            this.managementPackTOCDescriptionToolStripMenuItem.Click += new System.EventHandler(this.managementPackTOCDescriptionToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -412,7 +420,8 @@
             this.managementReportToolStripMenuItem,
             this.requisitionsToolStripMenuItem,
             this.buildingMaintenanceToolStripMenuItem,
-            this.suppliersToolStripMenuItem1});
+            this.suppliersToolStripMenuItem1,
+            this.insuranceBrokerMaintenanceToolStripMenuItem});
             this.pMPAToolStripMenuItem.Name = "pMPAToolStripMenuItem";
             this.pMPAToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.pMPAToolStripMenuItem.Text = "PM / PA";
@@ -421,28 +430,28 @@
             // pMJobListToolStripMenuItem
             // 
             this.pMJobListToolStripMenuItem.Name = "pMJobListToolStripMenuItem";
-            this.pMJobListToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.pMJobListToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.pMJobListToolStripMenuItem.Text = "New Job";
             this.pMJobListToolStripMenuItem.Click += new System.EventHandler(this.pMJobListToolStripMenuItem_Click);
             // 
             // jobListToolStripMenuItem
             // 
             this.jobListToolStripMenuItem.Name = "jobListToolStripMenuItem";
-            this.jobListToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.jobListToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.jobListToolStripMenuItem.Text = "Job List";
             this.jobListToolStripMenuItem.Click += new System.EventHandler(this.jobListToolStripMenuItem_Click);
             // 
             // webMaintenanceToolStripMenuItem
             // 
             this.webMaintenanceToolStripMenuItem.Name = "webMaintenanceToolStripMenuItem";
-            this.webMaintenanceToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.webMaintenanceToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.webMaintenanceToolStripMenuItem.Text = "Web Maintenance";
             this.webMaintenanceToolStripMenuItem.Click += new System.EventHandler(this.webMaintenanceToolStripMenuItem_Click);
             // 
             // webReportToolStripMenuItem
             // 
             this.webReportToolStripMenuItem.Name = "webReportToolStripMenuItem";
-            this.webReportToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.webReportToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.webReportToolStripMenuItem.Text = "Web Report";
             this.webReportToolStripMenuItem.Visible = false;
             this.webReportToolStripMenuItem.Click += new System.EventHandler(this.webReportToolStripMenuItem_Click);
@@ -450,14 +459,14 @@
             // bulkEmailToolStripMenuItem
             // 
             this.bulkEmailToolStripMenuItem.Name = "bulkEmailToolStripMenuItem";
-            this.bulkEmailToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.bulkEmailToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.bulkEmailToolStripMenuItem.Text = "Bulk Email";
             this.bulkEmailToolStripMenuItem.Click += new System.EventHandler(this.bulkEmailToolStripMenuItem_Click);
             // 
             // managementReportToolStripMenuItem
             // 
             this.managementReportToolStripMenuItem.Name = "managementReportToolStripMenuItem";
-            this.managementReportToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.managementReportToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.managementReportToolStripMenuItem.Text = "Management Report";
             this.managementReportToolStripMenuItem.Click += new System.EventHandler(this.managementReportToolStripMenuItem_Click);
             // 
@@ -472,7 +481,7 @@
             this.unPaidRequisitionsMenuItem,
             this.nedbankBeneficiaryMaintenanceToolStripMenuItem});
             this.requisitionsToolStripMenuItem.Name = "requisitionsToolStripMenuItem";
-            this.requisitionsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.requisitionsToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.requisitionsToolStripMenuItem.Text = "Requisitions";
             // 
             // paymentRequisitionsToolStripMenuItem
@@ -527,14 +536,14 @@
             // buildingMaintenanceToolStripMenuItem
             // 
             this.buildingMaintenanceToolStripMenuItem.Name = "buildingMaintenanceToolStripMenuItem";
-            this.buildingMaintenanceToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.buildingMaintenanceToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.buildingMaintenanceToolStripMenuItem.Text = "Building Maintenance";
             this.buildingMaintenanceToolStripMenuItem.Click += new System.EventHandler(this.buildingMaintenanceToolStripMenuItem_Click);
             // 
             // suppliersToolStripMenuItem1
             // 
             this.suppliersToolStripMenuItem1.Name = "suppliersToolStripMenuItem1";
-            this.suppliersToolStripMenuItem1.Size = new System.Drawing.Size(190, 22);
+            this.suppliersToolStripMenuItem1.Size = new System.Drawing.Size(234, 22);
             this.suppliersToolStripMenuItem1.Text = "Supplier Maintenance";
             this.suppliersToolStripMenuItem1.Click += new System.EventHandler(this.suppliersToolStripMenuItem1_Click);
             // 
@@ -676,12 +685,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // managementPackTOCDescriptionToolStripMenuItem
+            // insuranceBrokerMaintenanceToolStripMenuItem
             // 
-            this.managementPackTOCDescriptionToolStripMenuItem.Name = "managementPackTOCDescriptionToolStripMenuItem";
-            this.managementPackTOCDescriptionToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
-            this.managementPackTOCDescriptionToolStripMenuItem.Text = "Management Pack TOC Descriptions";
-            this.managementPackTOCDescriptionToolStripMenuItem.Click += new System.EventHandler(this.managementPackTOCDescriptionToolStripMenuItem_Click);
+            this.insuranceBrokerMaintenanceToolStripMenuItem.Name = "insuranceBrokerMaintenanceToolStripMenuItem";
+            this.insuranceBrokerMaintenanceToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.insuranceBrokerMaintenanceToolStripMenuItem.Text = "Insurance Broker Maintenance";
+            this.insuranceBrokerMaintenanceToolStripMenuItem.Click += new System.EventHandler(this.insuranceBrokerMaintenanceToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -782,5 +791,6 @@
         private System.Windows.Forms.ToolStripMenuItem managementPackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insuranceScheduleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem managementPackTOCDescriptionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem insuranceBrokerMaintenanceToolStripMenuItem;
     }
 }

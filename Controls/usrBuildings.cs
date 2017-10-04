@@ -1,10 +1,13 @@
 ﻿using Astro.Library.Entities;
+using Astrodon.Data.InsuranceData;
+using Astrodon.Forms;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Data.Entity;
 
 namespace Astrodon
 {
@@ -12,8 +15,9 @@ namespace Astrodon
     {
         private Buildings BuildingManager;
         private Building selectedBuilding = null;
+        private List<Astrodon.Data.BankData.Bank> _Banks;
 
-        private List<InsurancePqRecord> InsurancePqGrid { get; set; }
+        private List<IInsurancePqRecord> InsurancePqGrid { get; set; }
 
         public usrBuildings()
         {
@@ -24,6 +28,30 @@ namespace Astrodon
         {
             LoadCombo();
             clearBuilding();
+            LoadBanks();
+        }
+
+        private void LoadBanks()
+        {
+            //_Banks
+            this.Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    _Banks = context.BankSet.Where(a => a.IsActive).ToList();
+                    cmbBondHolder.DataSource = _Banks;
+                    cmbBondHolder.ValueMember = "Id";
+                    cmbBondHolder.DisplayMember = "Name";
+                    cmbBondHolder.SelectedIndex = -1;
+                }
+                
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void LoadCombo()
@@ -46,6 +74,8 @@ namespace Astrodon
 
         private void LoadBuilding()
         {
+            cmbBondHolder.Visible = false;
+            cmbBondHolder.Text = "";
             txtID.Text = selectedBuilding.ID.ToString();
             txtName.Text = selectedBuilding.Name;
             txtAbbr.Text = selectedBuilding.Abbr;
@@ -114,7 +144,7 @@ namespace Astrodon
                 Data.tblBuilding buildingEntity = null;
                 using (var context = SqlDataHandler.GetDataContext())
                 {
-                    buildingEntity = context.tblBuildings
+                    buildingEntity = context.tblBuildings.Include(a => a.InsuranceBroker)
                             .FirstOrDefault(a => a.id == selectedBuilding.ID);
                 }
                 if (buildingEntity != null)
@@ -122,12 +152,19 @@ namespace Astrodon
                     txtCommonPropertyDim.Text = buildingEntity.CommonPropertyDimensions.ToString();
                     txtUnitPropertyDim.Text = buildingEntity.UnitPropertyDimensions.ToString();
                     txtReplacementValue.Text = buildingEntity.UnitReplacementCost.ToString("#,##0.00");
+                    cbReplacementIncludesCommonProperty.Checked = buildingEntity.InsuranceReplacementValueIncludesCommonProperty;
+                    cbBondHolderInterest.Checked = buildingEntity.BondHolderInterestNotedOnPolicy;
+                    cmbBondHolder.Visible = cbBondHolderInterest.Checked;
+                    cmbBondHolder.SelectedText = buildingEntity.InsuranceBondHolder;
+
+                    _SelectedBroker = buildingEntity.InsuranceBroker;
+                    if (_SelectedBroker != null)
+                        lbBrokerName.Text = _SelectedBroker.CompanyName;
+                    else
+                        lbBrokerName.Text = "-- None Selected --";
+
                     txtCommonPropertyValue.Text = buildingEntity.CommonPropertyReplacementCost.ToString("#,##0.00");
-                    txtBrokerCompany.Text = buildingEntity.InsuranceCompanyName;
-                    txtBrokerAccountNumber.Text = buildingEntity.InsuranceAccountNumber;
-                    txtBrokerName.Text = buildingEntity.BrokerName;
-                    txtBrokerTel.Text = buildingEntity.BrokerTelNumber;
-                    txtBrokerEmail.Text = buildingEntity.BrokerEmail;
+                    txtInsurancePolicyNumber.Text = buildingEntity.PolicyNumber;
                     LoadInsuranceUnitPq(buildingEntity);
                 }
             }
@@ -140,16 +177,19 @@ namespace Astrodon
         private void LoadInsuranceUnitPq(Data.tblBuilding buildingEntity)
         {
             var unitRecords = Controller.pastel.AddCustomers(buildingEntity.Code, buildingEntity.DataPath);
-            InsurancePqGrid = unitRecords.Select(a => new InsurancePqRecord()
+            InsurancePqGrid = new List<IInsurancePqRecord>();
+            var items = unitRecords.Select(a => new InsurancePqRecord(InsurancePqGrid)
             {
                 UnitNo = a.accNumber,
                 SquareMeters = decimal.Round(buildingEntity.UnitPropertyDimensions / unitRecords.Count, 2),
-                Notes = "*New Unit*",
+                Notes = "",
                 TotalUnitPropertyDimensions = buildingEntity.UnitPropertyDimensions,
                 BuildingReplacementValue = buildingEntity.UnitReplacementCost
             }).OrderBy(a => a.UnitNo).ToList();
 
-           
+            InsurancePqGrid.AddRange(items);
+            InsurancePqGrid.Add(new PQTotal(InsurancePqGrid));
+
 
             using (var context = SqlDataHandler.GetDataContext())
             {
@@ -157,28 +197,21 @@ namespace Astrodon
                         .Where(a => a.BuildingId == selectedBuilding.ID).ToList();
                 foreach (var unit in buildingUnits)
                 {
-                    var record = InsurancePqGrid.FirstOrDefault(a => a.UnitNo == unit.UnitNo);
-                    if(!(record is PQTotal) &&  (record != null))
+                    var record = InsurancePqGrid.FirstOrDefault(a => a.UnitNo == unit.UnitNo) as InsurancePqRecord;
+                    if (record != null)
                     {
                         record.Id = unit.id;
                         record.SquareMeters = unit.SquareMeters;
                         record.Notes = unit.Notes;
-                        record.PQRating = unit.PQRating;
                         record.AdditionalInsurance = unit.AdditionalInsurance;
+                        record.BuildingReplacementValue = buildingEntity.UnitReplacementCost;
+                        record.TotalUnitPropertyDimensions = buildingEntity.UnitPropertyDimensions;
+                        record.Calculate();
                     }
                 }
             }
 
             //Add Total
-            InsurancePqGrid.Add(new PQTotal()
-            {
-                UnitNo = "Total",
-                SquareMeters = InsurancePqGrid.Sum(a => a.SquareMeters),
-                AdditionalInsurance = InsurancePqGrid.Sum(a => a.AdditionalInsurance),
-                PQRating = InsurancePqGrid.Sum(a => a.PQRating),
-                TotalUnitPropertyDimensions = InsurancePqGrid.Sum(a => a.TotalUnitPropertyDimensions),
-                Notes = "",
-            });
 
             PopulateInsurancePq();
         }
@@ -197,38 +230,35 @@ namespace Astrodon
                 HeaderText = "UnitNo",
                 ReadOnly = true,
             });
+
+
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "SquareMeters",
-                HeaderText = "SquareMeters",
+                HeaderText = "m²",
                 ReadOnly = false,
             });
-          
-            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "Notes",
-                HeaderText = "Notes",
-                ReadOnly = false,
-            });
+
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "PQCalculated",
-                HeaderText = "PQCalculated",
+                HeaderText = "PQ",
                 ReadOnly = true
-            });
-            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "AdditionalInsurance",
-                HeaderText = "AdditionalInsurance",
-                ReadOnly = false
             });
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "UnitReplacementCost",
                 HeaderText = "Replacement Value",
                 ReadOnly = true
-
             });
+
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "AdditionalInsurance",
+                HeaderText = "Additional",
+                ReadOnly = false
+            });
+
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "TotalReplacementValue",
@@ -237,7 +267,13 @@ namespace Astrodon
 
             });
 
-
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Notes",
+                HeaderText = "Notes",
+                ReadOnly = false,
+                MinimumWidth = 300
+            });
 
             RefreshGrid();
         }
@@ -252,22 +288,43 @@ namespace Astrodon
 
         private bool ValidatePQ()
         {
-            var itms = InsurancePqGrid.Sum(a => a.PQCalculated);
-            var totalSQM = InsurancePqGrid.Sum(a => a.SquareMeters);
-            if (itms > 0 && itms != 1)
-            {
-                Controller.HandleError("Total PQ% (" + itms.ToString() + ") does not equal 1\n" +
-                                       "Please verify that the total sqm " + totalSQM.ToString() + " must equal " + txtUnitPropertyDim.Text);
+            var itms = InsurancePqGrid.Where(a => a is InsurancePqRecord).Sum(a => a.PQCalculated);
+            var totalSQM = InsurancePqGrid.Where(a => a is InsurancePqRecord).Sum(a => a.SquareMeters);
 
+            try
+            {
+
+                if (itms > 0 && totalSQM != Convert.ToDecimal(txtUnitPropertyDim.Text))
+                {
+                    Controller.HandleError("Please verify that the total sqm " + totalSQM.ToString() + " must equal " + txtUnitPropertyDim.Text);
+
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                Controller.HandleError("Invalid Unit Property Dimension " + txtUnitPropertyDim.Text);
                 return false;
             }
-            return true;
         }
 
         private void SaveBuildingInsurance()
         {
             if (!ValidatePQ())
                 return;
+
+            if (_SelectedBroker == null)
+            {
+                Controller.HandleError("Please select an insurance broker");
+                return;
+            }
+
+            if(String.IsNullOrWhiteSpace(txtInsurancePolicyNumber.Text))
+            {
+                Controller.HandleError("Please enter an Insurance Policy Number.");
+                return;
+            }
 
             using (var context = SqlDataHandler.GetDataContext())
             {
@@ -282,13 +339,20 @@ namespace Astrodon
                     Convert.ToDecimal(txtReplacementValue.Text);
                 buildingEntity.CommonPropertyReplacementCost = string.IsNullOrWhiteSpace(txtCommonPropertyValue.Text) ? 0 :
                     Convert.ToDecimal(txtCommonPropertyValue.Text);
-                buildingEntity.InsuranceCompanyName = txtBrokerCompany.Text;
-                buildingEntity.InsuranceAccountNumber = txtBrokerAccountNumber.Text;
-                buildingEntity.BrokerName = txtBrokerName.Text;
-                buildingEntity.BrokerTelNumber = txtBrokerTel.Text;
-                buildingEntity.BrokerEmail = txtBrokerEmail.Text;
+                buildingEntity.PolicyNumber = txtInsurancePolicyNumber.Text;
+                buildingEntity.InsuranceReplacementValueIncludesCommonProperty = cbReplacementIncludesCommonProperty.Checked;
 
-                foreach (var item in InsurancePqGrid)
+                buildingEntity.BondHolderInterestNotedOnPolicy = cbBondHolderInterest.Checked;
+                cmbBondHolder.Visible = cbBondHolderInterest.Checked;
+                buildingEntity.InsuranceBondHolder = cmbBondHolder.SelectedText;
+
+                if (_SelectedBroker == null)
+                    buildingEntity.InsuranceBrokerId = null;
+                else
+                    buildingEntity.InsuranceBrokerId = _SelectedBroker.id;
+
+
+                foreach (var item in InsurancePqGrid.Where(a => a is InsurancePqRecord).Select(a => a as InsurancePqRecord).ToList())
                 {
                     if (item.Id == null)
                     {
@@ -728,7 +792,12 @@ namespace Astrodon
                 {
                     var val = Convert.ToDecimal(d);
                     foreach (var x in InsurancePqGrid)
-                        x.TotalUnitPropertyDimensions = val;
+                    {
+                        if (x is InsurancePqRecord)
+                        {
+                            x.TotalUnitPropertyDimensions = val;
+                        }
+                    }
                 }
                 catch
                 {
@@ -750,39 +819,358 @@ namespace Astrodon
             //    c.IsTrustee = iCat == 7;
             //}
         }
+
+        private void txtReplacementValue_TextChanged(object sender, EventArgs e)
+        {
+            var d = txtReplacementValue.Text;
+            if (!string.IsNullOrWhiteSpace(d))
+            {
+                try
+                {
+                    var val = Convert.ToDecimal(d);
+                    foreach (var x in InsurancePqGrid)
+                    {
+                        if (x is InsurancePqRecord)
+                        {
+                            x.BuildingReplacementValue = val;
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private void dgInsurancePq_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            foreach (DataGridViewRow row in dgInsurancePq.Rows)
+            {
+                IInsurancePqRecord reqItem = row.DataBoundItem as IInsurancePqRecord;
+                reqItem.DataRow = row;
+                if(reqItem is PQTotal)
+                {
+                    row.ReadOnly = true;
+                }
+
+
+
+            }
+        }
+
+        private void btnBuildingPlans_Click(object sender, EventArgs e)
+        {
+            if (fUploadClaimForm.ShowDialog() == DialogResult.OK)
+            {
+                btnBuildingPlans.Enabled = false;
+                try
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var fileEntity = context.BuildingDocumentSet
+                             .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.BuildingPlans);
+                        if (fileEntity == null)
+                        {
+                            fileEntity = new Data.InsuranceData.BuildingDocument();
+                            fileEntity.BuildingId = selectedBuilding.ID;
+                            fileEntity.DocumentType = Data.InsuranceData.DocumentType.BuildingPlans;
+                            context.BuildingDocumentSet.Add(fileEntity);
+                        }
+                        fileEntity.FileData = File.ReadAllBytes(fUploadClaimForm.FileName);
+                        fileEntity.FileName = Path.GetFileName(fUploadClaimForm.FileName);
+                        context.SaveChanges();
+                        MessageBox.Show("Successfully Uploaded Building Plans");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to upload Building Plans");
+                }
+                finally
+                {
+                    btnBuildingPlans.Enabled = true;
+                }
+            }
+        }
+
+        private void btnDownloadBuildingPlans_Click_1(object sender, EventArgs e)
+        {
+            btnDownloadBuildingPlans.Enabled = false;
+            try
+            {
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    var fileEntity = context.BuildingDocumentSet
+                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.BuildingPlans);
+                    if (fileEntity != null)
+                    {
+                        fdSaveClaimForm.FileName = fileEntity.FileName;
+                        if (fdSaveClaimForm.ShowDialog() == DialogResult.OK)
+                        {
+                            File.WriteAllBytes(fdSaveClaimForm.FileName, fileEntity.FileData);
+                            MessageBox.Show("Successfully Downloaded");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("No document exits");
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Failed to download");
+            }
+            finally
+            {
+                btnDownloadBuildingPlans.Enabled = true;
+            }
+        }
+
+        private void btnUploadPQ_Click(object sender, EventArgs e)
+        {
+            if (fUploadClaimForm.ShowDialog() == DialogResult.OK)
+            {
+                btnUploadPQ.Enabled = false;
+                try
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var fileEntity = context.BuildingDocumentSet
+                             .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.PQ);
+                        if (fileEntity == null)
+                        {
+                            fileEntity = new Data.InsuranceData.BuildingDocument();
+                            fileEntity.BuildingId = selectedBuilding.ID;
+                            fileEntity.DocumentType = Data.InsuranceData.DocumentType.PQ;
+                            context.BuildingDocumentSet.Add(fileEntity);
+                        }
+                        fileEntity.FileData = File.ReadAllBytes(fUploadClaimForm.FileName);
+                        fileEntity.FileName = Path.GetFileName(fUploadClaimForm.FileName);
+                        context.SaveChanges();
+                        MessageBox.Show("Successfully Uploaded PQ");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to upload PQ");
+                }
+                finally
+                {
+                    btnUploadPQ.Enabled = true;
+                }
+            }
+        }
+
+        private void btnDownloadPQ_Click(object sender, EventArgs e)
+        {
+            btnDownloadPQ.Enabled = false;
+            try
+            {
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    var fileEntity = context.BuildingDocumentSet
+                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.PQ);
+                    if (fileEntity != null)
+                    {
+                        fdSaveClaimForm.FileName = fileEntity.FileName;
+                        if (fdSaveClaimForm.ShowDialog() == DialogResult.OK)
+                        {
+                            File.WriteAllBytes(fdSaveClaimForm.FileName, fileEntity.FileData);
+                            MessageBox.Show("Successfully Downloaded");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("No document exits");
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Failed to download");
+            }
+            finally
+            {
+                btnDownloadPQ.Enabled = true;
+            }
+        }
+
+        private void cbBondHolderInterest_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbBondHolder.Visible = cbBondHolderInterest.Checked;
+        }
+
+        private void label55_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private InsuranceBroker _SelectedBroker;
+        private void btnBrokerLookup_Click(object sender, EventArgs e)
+        {
+            if (cmbBuilding.SelectedIndex < 0)
+            {
+                Controller.HandleError("Please select a building first.", "Validation Error");
+                return;
+            }
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var frmBrokerLookup = new frmInsuranceBrokerLookup(context);
+
+                var dialogResult = frmBrokerLookup.ShowDialog();
+                var broker = frmBrokerLookup.SelectedInsuranceBroker;
+
+                if (dialogResult == DialogResult.OK && broker != null)
+                {
+
+                    _SelectedBroker = broker;
+                    lbBrokerName.Text = _SelectedBroker.CompanyName;
+                }
+                else
+                {
+                    ClearBroker();
+                }
+            }
+        }
+
+        private void ClearBroker()
+        {
+            _SelectedBroker = null;
+            lbBrokerName.Text = "";
+        }
     }
 
-    internal class InsurancePqRecord
+    internal interface IInsurancePqRecord
     {
+
+        string UnitNo { get; set; }
+
+        decimal SquareMeters { get; set; }
+
+        decimal AdditionalInsurance { get; set; }
+
+        string Notes { get; set; }
+
+        decimal TotalUnitPropertyDimensions { get; set; }
+
+        decimal PQCalculated { get; }
+
+        decimal BuildingReplacementValue { get; set; }
+        decimal UnitReplacementCost { get;  }
+        decimal TotalReplacementValue { get;  }
+        DataGridViewRow DataRow { get; set; }
+    }
+
+    internal class InsurancePqRecord: IInsurancePqRecord
+    {
+        protected List<IInsurancePqRecord> _Items;
+        public InsurancePqRecord(List<IInsurancePqRecord> items)
+        {
+            _Items = items;
+        }
+
         public int? Id { get; set; }
         public string UnitNo { get; set; }
-        public decimal SquareMeters { get; set; }
-        public decimal AdditionalInsurance { get; set; }
+
+        private decimal _SquareMeters;
+        public decimal SquareMeters { get { return _SquareMeters; } set { _SquareMeters = value; Calculate(); } }
+
+        private decimal _AdditionalInsurance;
+        public decimal AdditionalInsurance { get { return _AdditionalInsurance; } set { _AdditionalInsurance = value; Calculate(); } }
+
         public string Notes { get; set; }
-        public decimal? PQRating { get; set; }
 
-        public decimal TotalUnitPropertyDimensions { get; set; }
+        private decimal _TotalUnitPropertyDimensions;
+        public decimal TotalUnitPropertyDimensions { get { return _TotalUnitPropertyDimensions; } set { _TotalUnitPropertyDimensions = value; Calculate(); } }
 
-        public decimal PQCalculated
+        public virtual decimal PQCalculated
         {
             get
             {
                 if (TotalUnitPropertyDimensions <= 0)
                     return 0;
-                return Math.Round(SquareMeters / TotalUnitPropertyDimensions,2);
+                return Math.Round((SquareMeters / TotalUnitPropertyDimensions)*100, 4);
             }
         }
 
-        public decimal BuildingReplacementValue { get; set; }
-        public decimal UnitReplacementCost { get { return Math.Round(BuildingReplacementValue * PQCalculated, 2); } }
-        public decimal TotalReplacementValue { get { return AdditionalInsurance + UnitReplacementCost; } }
+        private decimal _BuildingReplacementValue;
+        public decimal BuildingReplacementValue { get { return _BuildingReplacementValue; } set { _BuildingReplacementValue = value; Calculate(); } }
+        public virtual decimal UnitReplacementCost { get { return Math.Round(BuildingReplacementValue * PQCalculated, 2); } }
+        public virtual decimal TotalReplacementValue { get { return AdditionalInsurance + UnitReplacementCost; } }
+
+        public DataGridViewRow DataRow { get; set; }
+
+        public virtual void Calculate()
+        {
+            if (DataRow != null)
+            {
+                foreach (var c in DataRow.Cells)
+                {
+                    var cell = c as DataGridViewCell;
+                    DataRow.DataGridView.InvalidateCell(cell);
+                }
+            }
+
+            var total = _Items.Where(a => a is PQTotal).FirstOrDefault();
+            if (total != null)
+            {
+                (total as PQTotal).Calculate();
+            }
+        }
     }
 
-    internal class PQTotal: InsurancePqRecord
+    internal class PQTotal : IInsurancePqRecord
     {
-        public PQTotal()
+        protected List<IInsurancePqRecord> _Items;
+        public PQTotal(List<IInsurancePqRecord> items)
         {
-            Id = null;
+            _Items = items;
+            UnitNo = "Total";
         }
+
+        public  void Calculate()
+        {
+            UnitReplacementCost = _Items.Where(a => a != this).Sum(a => a.UnitReplacementCost);
+            PQCalculated = _Items.Where(a => a != this).Sum(a => a.PQCalculated);
+            TotalReplacementValue = _Items.Where(a => a != this).Sum(a => a.TotalReplacementValue);
+            SquareMeters = _Items.Where(a => a != this).Sum(a => a.SquareMeters);
+            AdditionalInsurance = _Items.Where(a => a != this).Sum(a => a.AdditionalInsurance);
+            TotalUnitPropertyDimensions = _Items.Where(a => a != this).Sum(a => a.TotalUnitPropertyDimensions);
+            BuildingReplacementValue = _Items.Where(a => a != this).Sum(a => a.BuildingReplacementValue);
+
+            if (DataRow != null)
+            {
+                foreach (var c in DataRow.Cells)
+                {
+                    var cell = c as DataGridViewCell;
+                    DataRow.DataGridView.InvalidateCell(cell);
+                }
+            }
+        }
+
+        public  decimal UnitReplacementCost { get; set; }
+
+        public  decimal PQCalculated { get; set; }
+
+        public  decimal TotalReplacementValue { get; set; }
+
+        public decimal SquareMeters { get; set; }
+
+        public decimal AdditionalInsurance { get; set; }
+
+        public decimal TotalUnitPropertyDimensions { get; set; }
+
+        public decimal BuildingReplacementValue { get; set; }
+
+        public string Notes { get; set; }
+
+        public string UnitNo { get; set; }
+
+        public DataGridViewRow DataRow { get; set; }
+
     }
 }

@@ -1,5 +1,6 @@
 namespace Astrodon.Data
 {
+    using InsuranceData;
     using MaintenanceData;
     using System;
     using System.Collections.Generic;
@@ -103,15 +104,17 @@ namespace Astrodon.Data
 
         public decimal CommonPropertyReplacementCost { get; set; }
 
-        public string InsuranceCompanyName { get; set; }
+        public string PolicyNumber { get; set; }
 
-        public string InsuranceAccountNumber { get; set; }
+        public bool InsuranceReplacementValueIncludesCommonProperty { get; set; }
 
-        public string BrokerName { get; set; }
+        public bool BondHolderInterestNotedOnPolicy { get; set; }
 
-        public string BrokerTelNumber { get; set; }
+        public string InsuranceBondHolder { get; set; }
 
-        public string BrokerEmail { get; set; }
+        public int? InsuranceBrokerId { get; set; }
+        [ForeignKey("InsuranceBrokerId")]
+        public virtual InsuranceBroker InsuranceBroker { get; set; }
 
         #endregion
 
@@ -141,6 +144,7 @@ namespace Astrodon.Data
             }
         }
 
+      
         public bool CheckIfFolderExists()
         {
             try

@@ -1243,6 +1243,16 @@ namespace Astrodon.Controls
         {
             tbNotificationEmail.Enabled = cbPaymentNotification.Checked;
         }
+
+        private void lbSupplierName_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class Requisition

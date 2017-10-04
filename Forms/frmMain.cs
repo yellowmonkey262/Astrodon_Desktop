@@ -1,4 +1,5 @@
 ﻿using Astrodon.Controls.Bank;
+using Astrodon.Controls.Insurance;
 using Astrodon.Controls.Maintenance;
 using Astrodon.Controls.Requisitions;
 using Astrodon.Controls.Supplier;
@@ -649,6 +650,15 @@ namespace Astrodon
             control.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(control);
             toolStripStatusLabel1.Text = "Management Pack Descriptions";
+        }
+
+        private void insuranceBrokerMaintenanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrInsuranceBrokerLookup lookup = new usrInsuranceBrokerLookup(_DataContext);
+            lookup.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(lookup);
+            toolStripStatusLabel1.Text = "Insurance Broker Maintenance";
         }
     }
 }

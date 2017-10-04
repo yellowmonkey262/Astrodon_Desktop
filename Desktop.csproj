@@ -162,6 +162,19 @@
     <Compile Include="Controls\Bank\usrBankConfiguration.Designer.cs">
       <DependentUpon>usrBankConfiguration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Insurance\InsuranceBrokerSelectEventArgs.cs" />
+    <Compile Include="Controls\Insurance\usrInsuranceBroker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Insurance\usrInsuranceBroker.Designer.cs">
+      <DependentUpon>usrInsuranceBroker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Insurance\usrInsuranceBrokerLookup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Insurance\usrInsuranceBrokerLookup.Designer.cs">
+      <DependentUpon>usrInsuranceBrokerLookup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Maintenance\MaintenanceException.cs" />
     <Compile Include="Controls\Maintenance\usrBuildingMaintenanceConfiguration.cs">
       <SubType>UserControl</SubType>
@@ -541,11 +554,23 @@
     <Compile Include="Forms\frmPrompt.Designer.cs">
       <DependentUpon>frmPrompt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmInsuranceBrokerDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmInsuranceBrokerDetail.Designer.cs">
+      <DependentUpon>frmInsuranceBrokerDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmSupplierDetail.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmSupplierDetail.Designer.cs">
       <DependentUpon>frmSupplierDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmInsuranceBrokerLookup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmInsuranceBrokerLookup.Designer.cs">
+      <DependentUpon>frmInsuranceBrokerLookup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmSupplierLookup.cs">
       <SubType>Form</SubType>
@@ -628,6 +653,12 @@
     </Compile>
     <EmbeddedResource Include="Controls\Bank\usrBankConfiguration.resx">
       <DependentUpon>usrBankConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Insurance\usrInsuranceBroker.resx">
+      <DependentUpon>usrInsuranceBroker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Insurance\usrInsuranceBrokerLookup.resx">
+      <DependentUpon>usrInsuranceBrokerLookup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Maintenance\usrBuildingMaintenanceConfiguration.resx">
       <DependentUpon>usrBuildingMaintenanceConfiguration.cs</DependentUpon>
@@ -810,8 +841,14 @@
     <EmbeddedResource Include="Forms\frmReqTrans.resx">
       <DependentUpon>frmReqTrans.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmInsuranceBrokerDetail.resx">
+      <DependentUpon>frmInsuranceBrokerDetail.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSupplierDetail.resx">
       <DependentUpon>frmSupplierDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmInsuranceBrokerLookup.resx">
+      <DependentUpon>frmInsuranceBrokerLookup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSupplierLookup.resx">
       <DependentUpon>frmSupplierLookup.cs</DependentUpon>
