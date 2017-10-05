@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrBuildings));
             this.label1 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.btnSave = new System.Windows.Forms.Button();
@@ -131,6 +132,9 @@
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.dgInsurancePq = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnViewPq = new System.Windows.Forms.Button();
+            this.btnViewBuildingPlans = new System.Windows.Forms.Button();
+            this.btnViewContract = new System.Windows.Forms.Button();
             this.btnBrokerLookup = new System.Windows.Forms.Button();
             this.lbBrokerName = new System.Windows.Forms.Label();
             this.label50 = new System.Windows.Forms.Label();
@@ -164,6 +168,8 @@
             this.label42 = new System.Windows.Forms.Label();
             this.txtCommonPropertyDim = new System.Windows.Forms.TextBox();
             this.label41 = new System.Windows.Forms.Label();
+            this.tbPDFViewer = new System.Windows.Forms.TabPage();
+            this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -178,6 +184,8 @@
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tbPDFViewer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -260,6 +268,7 @@
             // 
             this.tabControl1.Controls.Add(this.tbBuilding);
             this.tabControl1.Controls.Add(this.tbInsurance);
+            this.tabControl1.Controls.Add(this.tbPDFViewer);
             this.tabControl1.Location = new System.Drawing.Point(0, 33);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -1171,6 +1180,9 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnViewPq);
+            this.groupBox3.Controls.Add(this.btnViewBuildingPlans);
+            this.groupBox3.Controls.Add(this.btnViewContract);
             this.groupBox3.Controls.Add(this.btnBrokerLookup);
             this.groupBox3.Controls.Add(this.lbBrokerName);
             this.groupBox3.Controls.Add(this.label50);
@@ -1195,9 +1207,39 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Insurance Broker Details";
             // 
+            // btnViewPq
+            // 
+            this.btnViewPq.Location = new System.Drawing.Point(438, 109);
+            this.btnViewPq.Name = "btnViewPq";
+            this.btnViewPq.Size = new System.Drawing.Size(63, 23);
+            this.btnViewPq.TabIndex = 149;
+            this.btnViewPq.Text = "View";
+            this.btnViewPq.UseVisualStyleBackColor = true;
+            this.btnViewPq.Click += new System.EventHandler(this.btnViewPq_Click);
+            // 
+            // btnViewBuildingPlans
+            // 
+            this.btnViewBuildingPlans.Location = new System.Drawing.Point(438, 80);
+            this.btnViewBuildingPlans.Name = "btnViewBuildingPlans";
+            this.btnViewBuildingPlans.Size = new System.Drawing.Size(63, 23);
+            this.btnViewBuildingPlans.TabIndex = 148;
+            this.btnViewBuildingPlans.Text = "View";
+            this.btnViewBuildingPlans.UseVisualStyleBackColor = true;
+            this.btnViewBuildingPlans.Click += new System.EventHandler(this.btnViewBuildingPlans_Click);
+            // 
+            // btnViewContract
+            // 
+            this.btnViewContract.Location = new System.Drawing.Point(438, 22);
+            this.btnViewContract.Name = "btnViewContract";
+            this.btnViewContract.Size = new System.Drawing.Size(63, 23);
+            this.btnViewContract.TabIndex = 146;
+            this.btnViewContract.Text = "View";
+            this.btnViewContract.UseVisualStyleBackColor = true;
+            this.btnViewContract.Click += new System.EventHandler(this.btnViewContract_Click);
+            // 
             // btnBrokerLookup
             // 
-            this.btnBrokerLookup.Location = new System.Drawing.Point(210, 127);
+            this.btnBrokerLookup.Location = new System.Drawing.Point(194, 125);
             this.btnBrokerLookup.Name = "btnBrokerLookup";
             this.btnBrokerLookup.Size = new System.Drawing.Size(75, 23);
             this.btnBrokerLookup.TabIndex = 143;
@@ -1227,7 +1269,7 @@
             // 
             this.txtInsurancePolicyNumber.Location = new System.Drawing.Point(98, 76);
             this.txtInsurancePolicyNumber.Name = "txtInsurancePolicyNumber";
-            this.txtInsurancePolicyNumber.Size = new System.Drawing.Size(187, 20);
+            this.txtInsurancePolicyNumber.Size = new System.Drawing.Size(171, 20);
             this.txtInsurancePolicyNumber.TabIndex = 142;
             // 
             // label49
@@ -1244,7 +1286,7 @@
             this.cmbBondHolder.FormattingEnabled = true;
             this.cmbBondHolder.Location = new System.Drawing.Point(98, 48);
             this.cmbBondHolder.Name = "cmbBondHolder";
-            this.cmbBondHolder.Size = new System.Drawing.Size(187, 21);
+            this.cmbBondHolder.Size = new System.Drawing.Size(171, 21);
             this.cmbBondHolder.TabIndex = 140;
             this.cmbBondHolder.Visible = false;
             // 
@@ -1280,17 +1322,17 @@
             // 
             // btnDownloadPQ
             // 
-            this.btnDownloadPQ.Location = new System.Drawing.Point(466, 109);
+            this.btnDownloadPQ.Location = new System.Drawing.Point(507, 109);
             this.btnDownloadPQ.Name = "btnDownloadPQ";
-            this.btnDownloadPQ.Size = new System.Drawing.Size(91, 23);
+            this.btnDownloadPQ.Size = new System.Drawing.Size(63, 23);
             this.btnDownloadPQ.TabIndex = 18;
-            this.btnDownloadPQ.Text = "Download";
+            this.btnDownloadPQ.Text = "Dowload";
             this.btnDownloadPQ.UseVisualStyleBackColor = true;
             this.btnDownloadPQ.Click += new System.EventHandler(this.btnDownloadPQ_Click);
             // 
             // btnUploadPQ
             // 
-            this.btnUploadPQ.Location = new System.Drawing.Point(302, 109);
+            this.btnUploadPQ.Location = new System.Drawing.Point(277, 109);
             this.btnUploadPQ.Name = "btnUploadPQ";
             this.btnUploadPQ.Size = new System.Drawing.Size(158, 23);
             this.btnUploadPQ.TabIndex = 17;
@@ -1300,17 +1342,17 @@
             // 
             // btnDownloadBuildingPlans
             // 
-            this.btnDownloadBuildingPlans.Location = new System.Drawing.Point(466, 80);
+            this.btnDownloadBuildingPlans.Location = new System.Drawing.Point(507, 80);
             this.btnDownloadBuildingPlans.Name = "btnDownloadBuildingPlans";
-            this.btnDownloadBuildingPlans.Size = new System.Drawing.Size(91, 23);
+            this.btnDownloadBuildingPlans.Size = new System.Drawing.Size(63, 23);
             this.btnDownloadBuildingPlans.TabIndex = 16;
-            this.btnDownloadBuildingPlans.Text = "Download";
+            this.btnDownloadBuildingPlans.Text = "Dowload";
             this.btnDownloadBuildingPlans.UseVisualStyleBackColor = true;
             this.btnDownloadBuildingPlans.Click += new System.EventHandler(this.btnDownloadBuildingPlans_Click_1);
             // 
             // btnBuildingPlans
             // 
-            this.btnBuildingPlans.Location = new System.Drawing.Point(302, 80);
+            this.btnBuildingPlans.Location = new System.Drawing.Point(277, 80);
             this.btnBuildingPlans.Name = "btnBuildingPlans";
             this.btnBuildingPlans.Size = new System.Drawing.Size(158, 23);
             this.btnBuildingPlans.TabIndex = 15;
@@ -1320,9 +1362,9 @@
             // 
             // btnViewClaimForm
             // 
-            this.btnViewClaimForm.Location = new System.Drawing.Point(466, 51);
+            this.btnViewClaimForm.Location = new System.Drawing.Point(507, 51);
             this.btnViewClaimForm.Name = "btnViewClaimForm";
-            this.btnViewClaimForm.Size = new System.Drawing.Size(91, 23);
+            this.btnViewClaimForm.Size = new System.Drawing.Size(63, 23);
             this.btnViewClaimForm.TabIndex = 14;
             this.btnViewClaimForm.Text = "Download";
             this.btnViewClaimForm.UseVisualStyleBackColor = true;
@@ -1330,9 +1372,9 @@
             // 
             // btnViewInsuranceContract
             // 
-            this.btnViewInsuranceContract.Location = new System.Drawing.Point(466, 22);
+            this.btnViewInsuranceContract.Location = new System.Drawing.Point(507, 22);
             this.btnViewInsuranceContract.Name = "btnViewInsuranceContract";
-            this.btnViewInsuranceContract.Size = new System.Drawing.Size(91, 23);
+            this.btnViewInsuranceContract.Size = new System.Drawing.Size(63, 23);
             this.btnViewInsuranceContract.TabIndex = 13;
             this.btnViewInsuranceContract.Text = "Download";
             this.btnViewInsuranceContract.UseVisualStyleBackColor = true;
@@ -1340,7 +1382,7 @@
             // 
             // btnUploadClaimForm
             // 
-            this.btnUploadClaimForm.Location = new System.Drawing.Point(302, 51);
+            this.btnUploadClaimForm.Location = new System.Drawing.Point(277, 51);
             this.btnUploadClaimForm.Name = "btnUploadClaimForm";
             this.btnUploadClaimForm.Size = new System.Drawing.Size(158, 23);
             this.btnUploadClaimForm.TabIndex = 12;
@@ -1350,7 +1392,7 @@
             // 
             // btnUploadInsuranceContract
             // 
-            this.btnUploadInsuranceContract.Location = new System.Drawing.Point(302, 22);
+            this.btnUploadInsuranceContract.Location = new System.Drawing.Point(277, 22);
             this.btnUploadInsuranceContract.Name = "btnUploadInsuranceContract";
             this.btnUploadInsuranceContract.Size = new System.Drawing.Size(158, 23);
             this.btnUploadInsuranceContract.TabIndex = 11;
@@ -1511,6 +1553,26 @@
             this.label41.TabIndex = 130;
             this.label41.Text = "Common Property Dimensions";
             // 
+            // tbPDFViewer
+            // 
+            this.tbPDFViewer.Controls.Add(this.axAcroPDF1);
+            this.tbPDFViewer.Location = new System.Drawing.Point(4, 22);
+            this.tbPDFViewer.Name = "tbPDFViewer";
+            this.tbPDFViewer.Padding = new System.Windows.Forms.Padding(3);
+            this.tbPDFViewer.Size = new System.Drawing.Size(1369, 533);
+            this.tbPDFViewer.TabIndex = 2;
+            this.tbPDFViewer.Text = "PDF Viewer";
+            this.tbPDFViewer.UseVisualStyleBackColor = true;
+            // 
+            // axAcroPDF1
+            // 
+            this.axAcroPDF1.Enabled = true;
+            this.axAcroPDF1.Location = new System.Drawing.Point(3, 3);
+            this.axAcroPDF1.Name = "axAcroPDF1";
+            this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
+            this.axAcroPDF1.Size = new System.Drawing.Size(782, 524);
+            this.axAcroPDF1.TabIndex = 65;
+            // 
             // usrBuildings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1542,6 +1604,8 @@
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tbPDFViewer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1690,5 +1754,10 @@
         private System.Windows.Forms.Button btnBrokerLookup;
         private System.Windows.Forms.Label lbBrokerName;
         private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.TabPage tbPDFViewer;
+        private AxAcroPDFLib.AxAcroPDF axAcroPDF1;
+        private System.Windows.Forms.Button btnViewPq;
+        private System.Windows.Forms.Button btnViewBuildingPlans;
+        private System.Windows.Forms.Button btnViewContract;
     }
 }

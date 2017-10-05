@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Data.Entity;
+using iTextSharp.text.pdf;
 
 namespace Astrodon
 {
@@ -650,6 +651,13 @@ namespace Astrodon
                 btnUploadInsuranceContract.Enabled = false;
                 try
                 {
+                    if(!IsValidPdf(fdOpen.FileName))
+                    {
+                        btnUploadInsuranceContract.Enabled = true;
+                        Controller.HandleError("Not a valid PDF");
+                        return;
+                    }
+
                     using (var context = SqlDataHandler.GetDataContext())
                     {
                         var fileEntity = context.BuildingDocumentSet
@@ -865,6 +873,12 @@ namespace Astrodon
                 btnBuildingPlans.Enabled = false;
                 try
                 {
+                    if (!IsValidPdf(fdOpen.FileName))
+                    {
+                        btnBuildingPlans.Enabled = true;
+                        Controller.HandleError("Not a valid PDF");
+                        return;
+                    }
                     using (var context = SqlDataHandler.GetDataContext())
                     {
                         var fileEntity = context.BuildingDocumentSet
@@ -935,6 +949,12 @@ namespace Astrodon
                 btnUploadPQ.Enabled = false;
                 try
                 {
+                    if (!IsValidPdf(fdOpen.FileName))
+                    {
+                        btnUploadPQ.Enabled = true;
+                        Controller.HandleError("Not a valid PDF");
+                        return;
+                    }
                     using (var context = SqlDataHandler.GetDataContext())
                     {
                         var fileEntity = context.BuildingDocumentSet
@@ -1041,6 +1061,136 @@ namespace Astrodon
         {
             _SelectedBroker = null;
             lbBrokerName.Text = "";
+        }
+
+        #region PDF Handler
+
+
+        private string _TempPDFFile = string.Empty;
+        private void DisplayPDF(byte[] pdfData)
+        {
+            if (pdfData == null)
+            {
+                this.axAcroPDF1.Visible = false;
+                return;
+            }
+            if (!String.IsNullOrWhiteSpace(_TempPDFFile))
+                File.Delete(_TempPDFFile);
+            _TempPDFFile = Path.GetTempPath();
+            if (!_TempPDFFile.EndsWith(@"\"))
+                _TempPDFFile = _TempPDFFile + @"\";
+
+            _TempPDFFile = _TempPDFFile + System.Guid.NewGuid().ToString("N") + ".pdf";
+            File.WriteAllBytes(_TempPDFFile, pdfData);
+
+
+            try
+            {
+                this.axAcroPDF1.Visible = true;
+                this.axAcroPDF1.LoadFile(_TempPDFFile);
+                this.axAcroPDF1.src = _TempPDFFile;
+                this.axAcroPDF1.setShowToolbar(false);
+                this.axAcroPDF1.setView("FitH");
+                this.axAcroPDF1.setLayoutMode("SinglePage");
+                this.axAcroPDF1.setShowToolbar(false);
+
+                this.axAcroPDF1.Show();
+                tabControl1.SelectedTab = tbPDFViewer;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            File.Delete(_TempPDFFile);
+        }
+
+        private bool IsValidPdf(string filepath)
+        {
+            bool Ret = true;
+
+            PdfReader reader = null;
+
+            try
+            {
+                using (reader = new PdfReader(filepath))
+                {
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                Ret = false;
+            }
+
+            return Ret;
+        }
+
+
+        #endregion
+
+        private void ViewBuildingDocument(Data.InsuranceData.DocumentType documentType)
+        {
+            try
+            {
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    var fileEntity = context.BuildingDocumentSet
+                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == documentType);
+                    if (fileEntity != null)
+                    {
+                        DisplayPDF(fileEntity.FileData);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No document exits");
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Failed to download");
+            }
+        }
+
+        private void btnViewBuildingPlans_Click(object sender, EventArgs e)
+        {
+            btnViewBuildingPlans.Enabled = false;
+            try
+            {
+                ViewBuildingDocument(DocumentType.BuildingPlans);
+            }
+            finally
+            {
+                btnViewBuildingPlans.Enabled = true;
+            }
+        }
+
+        private void btnViewPq_Click(object sender, EventArgs e)
+        {
+            btnViewPq.Enabled = false;
+            try
+            {
+                ViewBuildingDocument(DocumentType.PQ);
+            }
+            finally
+            {
+                btnViewPq.Enabled = true;
+            }
+        }
+
+        private void btnViewContract_Click(object sender, EventArgs e)
+        {
+            btnViewContract.Enabled = false;
+            try
+            {
+                ViewBuildingDocument(DocumentType.InsuranceContract);
+            }
+            finally
+            {
+                btnViewContract.Enabled = true;
+            }
         }
     }
 
