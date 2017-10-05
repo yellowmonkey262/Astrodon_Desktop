@@ -57,6 +57,11 @@
     <Compile Include="Base\StringKeyValue.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
+    <Compile Include="DebitOrder\AccountTypeType.cs" />
+    <Compile Include="DebitOrder\CustomerDebitOrder.cs" />
+    <Compile Include="DebitOrder\DebitOrderDayType.cs" />
+    <Compile Include="DebitOrder\DebitOrderDocument.cs" />
+    <Compile Include="DebitOrder\DebitOrderDocumentType.cs" />
     <Compile Include="InsuranceData\BuildingDocument.cs" />
     <Compile Include="InsuranceData\DocumentType.cs" />
     <Compile Include="InsuranceData\InsuranceBroker.cs" />
@@ -165,6 +170,10 @@
     <Compile Include="Migrations\201710041001121_InsuranceBroker.cs" />
     <Compile Include="Migrations\201710041001121_InsuranceBroker.Designer.cs">
       <DependentUpon>201710041001121_InsuranceBroker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710051027291_DebitOrders.cs" />
+    <Compile Include="Migrations\201710051027291_DebitOrders.Designer.cs">
+      <DependentUpon>201710051027291_DebitOrders.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -302,6 +311,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710041001121_InsuranceBroker.resx">
       <DependentUpon>201710041001121_InsuranceBroker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710051027291_DebitOrders.resx">
+      <DependentUpon>201710051027291_DebitOrders.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

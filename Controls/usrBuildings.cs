@@ -101,6 +101,7 @@ namespace Astrodon
             chkWeb.Checked = selectedBuilding.Web_Building;
             txtLetter.Text = selectedBuilding.letterName;
             txtRF.Text = selectedBuilding.reminderFee.ToString();
+            txtDebitOrderFee.Text = selectedBuilding.DebitOrderFee.ToString();
             txtRFS.Text = selectedBuilding.reminderSplit.ToString();
             txtFF.Text = selectedBuilding.finalFee.ToString();
             txtFFS.Text = selectedBuilding.finalSplit.ToString();
@@ -442,6 +443,7 @@ namespace Astrodon
             selectedBuilding.Branch_Code = txtBranch.Text;
             selectedBuilding.Web_Building = chkWeb.Checked;
             selectedBuilding.letterName = txtLetter.Text;
+            selectedBuilding.DebitOrderFee = decimal.Parse(txtDebitOrderFee.Text);
             selectedBuilding.reminderFee = double.Parse(txtRF.Text);
             selectedBuilding.reminderSplit = double.Parse(txtRFS.Text);
             selectedBuilding.finalFee = double.Parse(txtFF.Text);

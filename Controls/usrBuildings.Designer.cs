@@ -170,6 +170,8 @@
             this.label41 = new System.Windows.Forms.Label();
             this.tbPDFViewer = new System.Windows.Forms.TabPage();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
+            this.txtDebitOrderFee = new System.Windows.Forms.TextBox();
+            this.label51 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -351,6 +353,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.txtDebitOrderFee);
+            this.groupBox4.Controls.Add(this.label51);
             this.groupBox4.Controls.Add(this.btnStandard);
             this.groupBox4.Controls.Add(this.txtRF);
             this.groupBox4.Controls.Add(this.txtRFS);
@@ -378,7 +382,7 @@
             this.groupBox4.Controls.Add(this.label40);
             this.groupBox4.Location = new System.Drawing.Point(427, 306);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(413, 216);
+            this.groupBox4.Size = new System.Drawing.Size(576, 216);
             this.groupBox4.TabIndex = 140;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Fees";
@@ -1573,6 +1577,22 @@
             this.axAcroPDF1.Size = new System.Drawing.Size(782, 524);
             this.axAcroPDF1.TabIndex = 65;
             // 
+            // txtDebitOrderFee
+            // 
+            this.txtDebitOrderFee.Location = new System.Drawing.Point(502, 51);
+            this.txtDebitOrderFee.Name = "txtDebitOrderFee";
+            this.txtDebitOrderFee.Size = new System.Drawing.Size(62, 20);
+            this.txtDebitOrderFee.TabIndex = 110;
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(414, 54);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(82, 13);
+            this.label51.TabIndex = 111;
+            this.label51.Text = "Debit Order Fee";
+            // 
             // usrBuildings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1759,5 +1779,7 @@
         private System.Windows.Forms.Button btnViewPq;
         private System.Windows.Forms.Button btnViewBuildingPlans;
         private System.Windows.Forms.Button btnViewContract;
+        private System.Windows.Forms.TextBox txtDebitOrderFee;
+        private System.Windows.Forms.Label label51;
     }
 }

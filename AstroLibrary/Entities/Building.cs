@@ -83,6 +83,8 @@ namespace Astro.Library.Entities
 
         public double handoverSplit { get; set; }
 
+        public decimal DebitOrderFee { get;set;}
+
         public String reminderTemplate { get; set; }
 
         public String finalTemplate { get; set; }

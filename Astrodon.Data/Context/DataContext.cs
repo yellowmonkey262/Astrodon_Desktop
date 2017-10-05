@@ -1,6 +1,7 @@
 ﻿
 //using Astrodon.Data.Maintenance;
 using Astrodon.Data.BankData;
+using Astrodon.Data.DebitOrder;
 using Astrodon.Data.InsuranceData;
 using Astrodon.Data.Log;
 using Astrodon.Data.MaintenanceData;
@@ -104,6 +105,13 @@ namespace Astrodon.Data
 
         public DbSet<ManagementPackTOCItem> ManagementPackTOCItemSet { get; set; }
         public DbSet<ManagementPack> ManagementPackSet { get; set; }
+
+        #endregion
+
+        #region Debit Orders
+
+        public DbSet<CustomerDebitOrder> CustomerDebitOrderSet { get; set; }
+        public DbSet<DebitOrderDocument> DebitOrderDocumentSet { get; set; }
 
         #endregion
 
