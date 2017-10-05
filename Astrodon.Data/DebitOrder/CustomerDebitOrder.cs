@@ -23,6 +23,8 @@ namespace Astrodon.Data.DebitOrder
         [Required]
         public virtual string CustomerCode { get; set; }
 
+        public virtual bool IsActive { get; set; }
+
         [Required]
         public virtual string BranchCode { get; set; }
 

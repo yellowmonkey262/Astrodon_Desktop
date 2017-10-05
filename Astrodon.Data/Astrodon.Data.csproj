@@ -175,6 +175,10 @@
     <Compile Include="Migrations\201710051027291_DebitOrders.Designer.cs">
       <DependentUpon>201710051027291_DebitOrders.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710051237234_DebitOrderActive.cs" />
+    <Compile Include="Migrations\201710051237234_DebitOrderActive.Designer.cs">
+      <DependentUpon>201710051237234_DebitOrderActive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -314,6 +318,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710051027291_DebitOrders.resx">
       <DependentUpon>201710051027291_DebitOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710051237234_DebitOrderActive.resx">
+      <DependentUpon>201710051237234_DebitOrderActive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
