@@ -7,7 +7,7 @@ namespace Astrodon.Data.DebitOrder
 {
     public enum DebitOrderDayType
     {
-        FirstDayOfTheMonth = 1,
-        FifteenthOfTheMonth = 2
+        One = 1,
+        Fifteen = 2
     }
 }

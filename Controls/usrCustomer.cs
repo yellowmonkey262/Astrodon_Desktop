@@ -1,5 +1,7 @@
 ﻿using Astro.Library.Entities;
 using Astrodon.Classes;
+using Astrodon.Data.DebitOrder;
+using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,6 +28,7 @@ namespace Astrodon
         {
             InitializeComponent();
             buildings = new Buildings(false).buildings;
+            LoadBanks();
         }
 
         private void usrCustomer_Load(object sender, EventArgs e)
@@ -90,6 +93,8 @@ namespace Astrodon
         {
             try
             {
+                this.axAcroPDF1.Visible = false;
+                btnUpload.Visible = false;
                 building = buildings[cmbBuilding.SelectedIndex];
                 customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
                 txtAccount.Text = txtAddress1.Text = txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = String.Empty;
@@ -146,6 +151,15 @@ namespace Astrodon
             }
             bsReminders.Clear();
             txtNotes.Text = "";
+
+            this.axAcroPDF1.Visible = false;
+            btnUpload.Visible = false;
+            cbDebitOrderActive.Checked = false;
+            cbBanks.SelectedIndex = -1;
+            txtBranchCode.Text =string.Empty;
+            txtAccountNumber.Text = string.Empty;
+            cbAccountType.SelectedIndex = -1;
+            cbProcessDate.SelectedIndex = -1;
         }
 
         private void cmbCustomer_SelectedIndexChanged(object sender, EventArgs e)
@@ -191,6 +205,7 @@ namespace Astrodon
                 LoadNotes();
                 LoadMaintenance();
                 LoadWeb();
+                LoadDebitOrder();
                 this.Cursor = Cursors.Default;
             }
             catch (Exception ex)
@@ -872,5 +887,265 @@ namespace Astrodon
             this.Cursor = Cursors.Arrow;
             MessageBox.Show("Complete");
         }
+
+        private void label24_Click(object sender, EventArgs e)
+        {
+
+        }
+        #region Debit Order
+
+        private List<Astrodon.Data.BankData.Bank> _Banks;
+
+        private void LoadBanks()
+        {
+            //_Banks
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    _Banks = context.BankSet.Where(a => a.IsActive).ToList();
+                    cbBanks.DataSource = _Banks;
+                    cbBanks.ValueMember = "Id";
+                    cbBanks.DisplayMember = "Name";
+                    cbBanks.SelectedIndex = -1;
+                }
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+            cbAccountType.Items.Clear();
+            foreach ( AccountTypeType c in Enum.GetValues(typeof(AccountTypeType)))
+            {
+                cbAccountType.Items.Add(c);
+            }
+
+            cbProcessDate.Items.Clear();
+            foreach (DebitOrderDayType c in Enum.GetValues(typeof(DebitOrderDayType)))
+            {
+                cbProcessDate.Items.Add(c);
+            }
+
+        }
+
+        private void LoadDebitOrder()
+        {
+            btnUpload.Visible = false;
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var debitOrder = context.CustomerDebitOrderSet.SingleOrDefault(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber);
+                if(debitOrder != null)
+                {
+                    cbDebitOrderActive.Checked = debitOrder.IsActive;
+                    cbBanks.SelectedValue = _Banks.FirstOrDefault(a => a.id == debitOrder.BankId);
+                    txtBranchCode.Text = debitOrder.BranceCode;
+                    txtAccountNumber.Text = debitOrder.AccountNumber;
+                    cbAccountType.SelectedValue = debitOrder.AccountType;
+                    cbProcessDate.SelectedValue = debitOrder.DebitOrderCollectionDay;
+                    btnUpload.Visible = true;
+
+                    var signedForm = context.DebitOrderDocumentSet.SingleOrDefault(a => a.CustomerDebitOrderId == debitOrder.id && a.DocumentType == DebitOrderDocumentType.SignedDebitOrder);
+                    if(signedForm != null)
+                    {
+                        DisplayPDF(signedForm.FileData);
+                    }
+                }
+            }
+        }
+
+        private void btnSaveDebitOrder_Click(object sender, EventArgs e)
+        {
+            if(cbBanks.SelectedIndex < 0)
+            {
+                Controller.HandleError("Bank required", "Validation Error");
+                return;
+            }
+            if (cbAccountType.SelectedIndex < 0)
+            {
+                Controller.HandleError("Account Type required", "Validation Error");
+                return;
+            }
+            if (cbProcessDate.SelectedIndex < 0)
+            {
+                Controller.HandleError("Process Date required", "Validation Error");
+                return;
+            }
+            if (String.IsNullOrWhiteSpace(txtBranchCode.Text))
+            {
+                Controller.HandleError("Branch code required", "Validation Error");
+                return;
+            }
+            if (String.IsNullOrWhiteSpace(txtAccountNumber.Text))
+            {
+                Controller.HandleError("Account number required", "Validation Error");
+                return;
+            }
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var debitOrder = context.CustomerDebitOrderSet.SingleOrDefault(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber);
+                if (debitOrder == null)
+                {
+                    debitOrder = new CustomerDebitOrder()
+                    {
+                        BuildingId = building.ID,
+                        CustomerCode = customer.accNumber
+                    };
+                    context.CustomerDebitOrderSet.Add(debitOrder);
+                    debitOrder.IsActive = cbDebitOrderActive.Checked;
+                    debitOrder.BankId = (cbBanks.SelectedItem as Data.BankData.Bank).id;
+                    debitOrder.BranceCode = txtBranchCode.Text;
+                    debitOrder.AccountNumber = txtAccountNumber.Text;
+                    debitOrder.AccountType = (AccountTypeType)cbAccountType.SelectedItem;
+                    debitOrder.DebitOrderCollectionDay = (DebitOrderDayType)cbProcessDate.SelectedItem;
+                    debitOrder.LastUpdatedByUserId = Controller.user.id;
+                    debitOrder.LastUpdateDate = DateTime.Now;
+                    context.SaveChanges();
+                }
+                btnUpload.Visible = true;
+            }
+        }
+
+
+        private void btnUpload_Click(object sender, EventArgs e)
+        {
+            if (fdOpen.ShowDialog() == DialogResult.OK)
+            {
+                btnUpload.Enabled = false;
+                try
+                {
+                    if (!IsValidPdf(fdOpen.FileName))
+                    {
+                        btnUpload.Enabled = true;
+                        Controller.HandleError("Not a valid PDF");
+                        return;
+                    }
+
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var debitOrder = context.CustomerDebitOrderSet.SingleOrDefault(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber);
+                        var signedForm = context.DebitOrderDocumentSet.SingleOrDefault(a => a.CustomerDebitOrderId == debitOrder.id && a.DocumentType == DebitOrderDocumentType.SignedDebitOrder);
+                        if (signedForm == null)
+                        {
+                            signedForm = new DebitOrderDocument()
+                            {
+                                CustomerDebitOrderId = debitOrder.id,
+                                DocumentType = DebitOrderDocumentType.SignedDebitOrder
+                            };
+                            context.DebitOrderDocumentSet.Add(signedForm);
+                        }
+                        signedForm.FileData = File.ReadAllBytes(fdOpen.FileName);
+                        signedForm.FileName = Path.GetFileName(fdOpen.FileName);
+                        context.SaveChanges();
+                        DisplayPDF(signedForm.FileData);
+                        MessageBox.Show("Successfully Uploaded Insurance Form");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to upload Insurance Form");
+                }
+                finally
+                {
+                    btnUpload.Enabled = true;
+                }
+            }
+        }
+
+        private void cbBanks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (customer == null)
+                return;
+
+            var bank = cbBanks.SelectedItem as Astrodon.Data.BankData.Bank;
+            if (bank != null)
+            {
+                if (!String.IsNullOrWhiteSpace(bank.BranchCode) && txtBranchCode.Text != bank.BranchCode)
+                {
+                    if (MessageBox.Show("Load default branch details?", "Question", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        txtBranch.Text = bank.BranchName;
+                        txtBranchCode.Text = bank.BranchCode;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+
+        private void label26_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        #region PDF Handler
+
+
+        private string _TempPDFFile = string.Empty;
+        private void DisplayPDF(byte[] pdfData)
+        {
+            if (pdfData == null)
+            {
+                this.axAcroPDF1.Visible = false;
+                return;
+            }
+            if (!String.IsNullOrWhiteSpace(_TempPDFFile))
+                File.Delete(_TempPDFFile);
+            _TempPDFFile = Path.GetTempPath();
+            if (!_TempPDFFile.EndsWith(@"\"))
+                _TempPDFFile = _TempPDFFile + @"\";
+
+            _TempPDFFile = _TempPDFFile + System.Guid.NewGuid().ToString("N") + ".pdf";
+            File.WriteAllBytes(_TempPDFFile, pdfData);
+
+
+            try
+            {
+                this.axAcroPDF1.Visible = true;
+                this.axAcroPDF1.LoadFile(_TempPDFFile);
+                this.axAcroPDF1.src = _TempPDFFile;
+                this.axAcroPDF1.setShowToolbar(false);
+                this.axAcroPDF1.setView("FitH");
+                this.axAcroPDF1.setLayoutMode("SinglePage");
+                this.axAcroPDF1.setShowToolbar(false);
+
+                this.axAcroPDF1.Show();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            File.Delete(_TempPDFFile);
+        }
+
+        private bool IsValidPdf(string filepath)
+        {
+            bool Ret = true;
+
+            PdfReader reader = null;
+
+            try
+            {
+                using (reader = new PdfReader(filepath))
+                {
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                Ret = false;
+            }
+
+            return Ret;
+        }
+
+
+        #endregion
+
+       
     }
 }

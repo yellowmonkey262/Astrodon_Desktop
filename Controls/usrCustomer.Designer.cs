@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrCustomer));
             this.cmbCustomer = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
@@ -110,7 +111,26 @@
             this.label14 = new System.Windows.Forms.Label();
             this.tbMaintenance = new System.Windows.Forms.TabPage();
             this.dgMaintenance = new System.Windows.Forms.DataGridView();
+            this.tbDebitOrder = new System.Windows.Forms.TabPage();
+            this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
+            this.btnUpload = new System.Windows.Forms.Button();
+            this.btnSaveDebitOrder = new System.Windows.Forms.Button();
+            this.cbAccountType = new System.Windows.Forms.ComboBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.cbProcessDate = new System.Windows.Forms.ComboBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.cbBanks = new System.Windows.Forms.ComboBox();
+            this.txtAccountNumber = new System.Windows.Forms.TextBox();
+            this.lblAccountNumber = new System.Windows.Forms.Label();
+            this.txtBranchCode = new System.Windows.Forms.TextBox();
+            this.lblBranchCode = new System.Windows.Forms.Label();
+            this.txtBranch = new System.Windows.Forms.TextBox();
+            this.lblBranch = new System.Windows.Forms.Label();
+            this.lblBank = new System.Windows.Forms.Label();
+            this.cbDebitOrderActive = new System.Windows.Forms.CheckBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.btnTrustees = new System.Windows.Forms.Button();
+            this.fdOpen = new System.Windows.Forms.OpenFileDialog();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -124,6 +144,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tbMaintenance.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).BeginInit();
+            this.tbDebitOrder.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbCustomer
@@ -189,6 +211,7 @@
             this.tabControl2.Controls.Add(this.tabPage4);
             this.tabControl2.Controls.Add(this.tabPage5);
             this.tabControl2.Controls.Add(this.tbMaintenance);
+            this.tabControl2.Controls.Add(this.tbDebitOrder);
             this.tabControl2.Location = new System.Drawing.Point(9, 100);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
@@ -217,11 +240,11 @@
             // 
             // txtEntry
             // 
-            this.txtEntry.Location = new System.Drawing.Point(9, 283);
+            this.txtEntry.Location = new System.Drawing.Point(3, 368);
             this.txtEntry.MaxLength = 30;
             this.txtEntry.Multiline = true;
             this.txtEntry.Name = "txtEntry";
-            this.txtEntry.Size = new System.Drawing.Size(586, 160);
+            this.txtEntry.Size = new System.Drawing.Size(904, 160);
             this.txtEntry.TabIndex = 81;
             this.txtEntry.Visible = false;
             // 
@@ -266,7 +289,7 @@
             this.tabControl1.Location = new System.Drawing.Point(5, 67);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(594, 200);
+            this.tabControl1.Size = new System.Drawing.Size(906, 295);
             this.tabControl1.TabIndex = 76;
             // 
             // tabPage1
@@ -292,7 +315,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(586, 174);
+            this.tabPage1.Size = new System.Drawing.Size(898, 269);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Primary Address";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -626,9 +649,9 @@
             // colDate
             // 
             this.colDate.DataPropertyName = "tstamp";
-            dataGridViewCellStyle7.Format = "d";
-            dataGridViewCellStyle7.NullValue = null;
-            this.colDate.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Format = "d";
+            dataGridViewCellStyle1.NullValue = null;
+            this.colDate.DefaultCellStyle = dataGridViewCellStyle1;
             this.colDate.HeaderText = "Date";
             this.colDate.Name = "colDate";
             this.colDate.ReadOnly = true;
@@ -807,9 +830,9 @@
             // colRemDate
             // 
             this.colRemDate.DataPropertyName = "remDate";
-            dataGridViewCellStyle8.Format = "g";
-            dataGridViewCellStyle8.NullValue = null;
-            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Format = "g";
+            dataGridViewCellStyle2.NullValue = null;
+            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle2;
             this.colRemDate.HeaderText = "Date / Time";
             this.colRemDate.Name = "colRemDate";
             this.colRemDate.ReadOnly = true;
@@ -823,8 +846,8 @@
             // colNote
             // 
             this.colNote.DataPropertyName = "note";
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colNote.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colNote.DefaultCellStyle = dataGridViewCellStyle3;
             this.colNote.HeaderText = "Note";
             this.colNote.Name = "colNote";
             this.colNote.ReadOnly = true;
@@ -914,6 +937,180 @@
             this.dgMaintenance.TabIndex = 10;
             this.dgMaintenance.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgMaintenance_CellContentClick);
             // 
+            // tbDebitOrder
+            // 
+            this.tbDebitOrder.Controls.Add(this.axAcroPDF1);
+            this.tbDebitOrder.Controls.Add(this.btnUpload);
+            this.tbDebitOrder.Controls.Add(this.btnSaveDebitOrder);
+            this.tbDebitOrder.Controls.Add(this.cbAccountType);
+            this.tbDebitOrder.Controls.Add(this.label25);
+            this.tbDebitOrder.Controls.Add(this.cbProcessDate);
+            this.tbDebitOrder.Controls.Add(this.label24);
+            this.tbDebitOrder.Controls.Add(this.cbBanks);
+            this.tbDebitOrder.Controls.Add(this.txtAccountNumber);
+            this.tbDebitOrder.Controls.Add(this.lblAccountNumber);
+            this.tbDebitOrder.Controls.Add(this.txtBranchCode);
+            this.tbDebitOrder.Controls.Add(this.lblBranchCode);
+            this.tbDebitOrder.Controls.Add(this.txtBranch);
+            this.tbDebitOrder.Controls.Add(this.lblBranch);
+            this.tbDebitOrder.Controls.Add(this.lblBank);
+            this.tbDebitOrder.Controls.Add(this.cbDebitOrderActive);
+            this.tbDebitOrder.Controls.Add(this.label20);
+            this.tbDebitOrder.Location = new System.Drawing.Point(4, 22);
+            this.tbDebitOrder.Name = "tbDebitOrder";
+            this.tbDebitOrder.Padding = new System.Windows.Forms.Padding(3);
+            this.tbDebitOrder.Size = new System.Drawing.Size(931, 534);
+            this.tbDebitOrder.TabIndex = 6;
+            this.tbDebitOrder.Text = "Debit Order";
+            this.tbDebitOrder.UseVisualStyleBackColor = true;
+            // 
+            // axAcroPDF1
+            // 
+            this.axAcroPDF1.Enabled = true;
+            this.axAcroPDF1.Location = new System.Drawing.Point(540, 3);
+            this.axAcroPDF1.Name = "axAcroPDF1";
+            this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
+            this.axAcroPDF1.Size = new System.Drawing.Size(352, 253);
+            this.axAcroPDF1.TabIndex = 66;
+            // 
+            // btnUpload
+            // 
+            this.btnUpload.Location = new System.Drawing.Point(115, 200);
+            this.btnUpload.Name = "btnUpload";
+            this.btnUpload.Size = new System.Drawing.Size(75, 23);
+            this.btnUpload.TabIndex = 57;
+            this.btnUpload.Text = "Upload Form";
+            this.btnUpload.UseVisualStyleBackColor = true;
+            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
+            // 
+            // btnSaveDebitOrder
+            // 
+            this.btnSaveDebitOrder.Location = new System.Drawing.Point(271, 200);
+            this.btnSaveDebitOrder.Name = "btnSaveDebitOrder";
+            this.btnSaveDebitOrder.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveDebitOrder.TabIndex = 55;
+            this.btnSaveDebitOrder.Text = "Save";
+            this.btnSaveDebitOrder.UseVisualStyleBackColor = true;
+            this.btnSaveDebitOrder.Click += new System.EventHandler(this.btnSaveDebitOrder_Click);
+            // 
+            // cbAccountType
+            // 
+            this.cbAccountType.FormattingEnabled = true;
+            this.cbAccountType.Location = new System.Drawing.Point(118, 144);
+            this.cbAccountType.Name = "cbAccountType";
+            this.cbAccountType.Size = new System.Drawing.Size(228, 21);
+            this.cbAccountType.TabIndex = 54;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(7, 148);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(74, 13);
+            this.label25.TabIndex = 53;
+            this.label25.Text = "Account Type";
+            // 
+            // cbProcessDate
+            // 
+            this.cbProcessDate.FormattingEnabled = true;
+            this.cbProcessDate.Location = new System.Drawing.Point(118, 173);
+            this.cbProcessDate.Name = "cbProcessDate";
+            this.cbProcessDate.Size = new System.Drawing.Size(228, 21);
+            this.cbProcessDate.TabIndex = 52;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(7, 177);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(71, 13);
+            this.label24.TabIndex = 51;
+            this.label24.Text = "Process Date";
+            // 
+            // cbBanks
+            // 
+            this.cbBanks.FormattingEnabled = true;
+            this.cbBanks.Location = new System.Drawing.Point(118, 39);
+            this.cbBanks.Name = "cbBanks";
+            this.cbBanks.Size = new System.Drawing.Size(228, 21);
+            this.cbBanks.TabIndex = 43;
+            this.cbBanks.SelectedIndexChanged += new System.EventHandler(this.cbBanks_SelectedIndexChanged);
+            // 
+            // txtAccountNumber
+            // 
+            this.txtAccountNumber.Location = new System.Drawing.Point(118, 118);
+            this.txtAccountNumber.Name = "txtAccountNumber";
+            this.txtAccountNumber.Size = new System.Drawing.Size(228, 20);
+            this.txtAccountNumber.TabIndex = 46;
+            // 
+            // lblAccountNumber
+            // 
+            this.lblAccountNumber.AutoSize = true;
+            this.lblAccountNumber.Location = new System.Drawing.Point(6, 121);
+            this.lblAccountNumber.Name = "lblAccountNumber";
+            this.lblAccountNumber.Size = new System.Drawing.Size(87, 13);
+            this.lblAccountNumber.TabIndex = 50;
+            this.lblAccountNumber.Text = "Account Number";
+            // 
+            // txtBranchCode
+            // 
+            this.txtBranchCode.Location = new System.Drawing.Point(118, 92);
+            this.txtBranchCode.Name = "txtBranchCode";
+            this.txtBranchCode.Size = new System.Drawing.Size(228, 20);
+            this.txtBranchCode.TabIndex = 45;
+            // 
+            // lblBranchCode
+            // 
+            this.lblBranchCode.AutoSize = true;
+            this.lblBranchCode.Location = new System.Drawing.Point(6, 95);
+            this.lblBranchCode.Name = "lblBranchCode";
+            this.lblBranchCode.Size = new System.Drawing.Size(69, 13);
+            this.lblBranchCode.TabIndex = 49;
+            this.lblBranchCode.Text = "Branch Code";
+            // 
+            // txtBranch
+            // 
+            this.txtBranch.Location = new System.Drawing.Point(118, 66);
+            this.txtBranch.Name = "txtBranch";
+            this.txtBranch.Size = new System.Drawing.Size(228, 20);
+            this.txtBranch.TabIndex = 44;
+            // 
+            // lblBranch
+            // 
+            this.lblBranch.AutoSize = true;
+            this.lblBranch.Location = new System.Drawing.Point(6, 69);
+            this.lblBranch.Name = "lblBranch";
+            this.lblBranch.Size = new System.Drawing.Size(41, 13);
+            this.lblBranch.TabIndex = 48;
+            this.lblBranch.Text = "Branch";
+            // 
+            // lblBank
+            // 
+            this.lblBank.AutoSize = true;
+            this.lblBank.Location = new System.Drawing.Point(6, 43);
+            this.lblBank.Name = "lblBank";
+            this.lblBank.Size = new System.Drawing.Size(32, 13);
+            this.lblBank.TabIndex = 47;
+            this.lblBank.Text = "Bank";
+            // 
+            // cbDebitOrderActive
+            // 
+            this.cbDebitOrderActive.AutoSize = true;
+            this.cbDebitOrderActive.Location = new System.Drawing.Point(118, 20);
+            this.cbDebitOrderActive.Name = "cbDebitOrderActive";
+            this.cbDebitOrderActive.Size = new System.Drawing.Size(15, 14);
+            this.cbDebitOrderActive.TabIndex = 1;
+            this.cbDebitOrderActive.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(7, 20);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(103, 13);
+            this.label20.TabIndex = 0;
+            this.label20.Text = "Debit Order Enabled";
+            // 
             // btnTrustees
             // 
             this.btnTrustees.Enabled = false;
@@ -925,6 +1122,10 @@
             this.btnTrustees.Text = "Update Trustees";
             this.btnTrustees.UseVisualStyleBackColor = true;
             this.btnTrustees.Click += new System.EventHandler(this.btnTrustees_Click);
+            // 
+            // fdOpen
+            // 
+            this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
             // 
             // usrCustomer
             // 
@@ -960,6 +1161,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tbMaintenance.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).EndInit();
+            this.tbDebitOrder.ResumeLayout(false);
+            this.tbDebitOrder.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1047,5 +1251,24 @@
         private System.Windows.Forms.TextBox txtWebLogin;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Button btnTrustees;
+        private System.Windows.Forms.OpenFileDialog fdOpen;
+        private System.Windows.Forms.TabPage tbDebitOrder;
+        private AxAcroPDFLib.AxAcroPDF axAcroPDF1;
+        private System.Windows.Forms.Button btnUpload;
+        private System.Windows.Forms.Button btnSaveDebitOrder;
+        private System.Windows.Forms.ComboBox cbAccountType;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.ComboBox cbProcessDate;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.ComboBox cbBanks;
+        private System.Windows.Forms.TextBox txtAccountNumber;
+        private System.Windows.Forms.Label lblAccountNumber;
+        private System.Windows.Forms.TextBox txtBranchCode;
+        private System.Windows.Forms.Label lblBranchCode;
+        private System.Windows.Forms.TextBox txtBranch;
+        private System.Windows.Forms.Label lblBranch;
+        private System.Windows.Forms.Label lblBank;
+        private System.Windows.Forms.CheckBox cbDebitOrderActive;
+        private System.Windows.Forms.Label label20;
     }
 }
