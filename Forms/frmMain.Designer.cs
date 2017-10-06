@@ -79,6 +79,7 @@
             this.nedbankBeneficiaryMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildingMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.suppliersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.insuranceBrokerMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debtorsReportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debtorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportingToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,7 +98,7 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.insuranceBrokerMaintenanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sAPORDebitOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -383,7 +384,8 @@
             this.customersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.customerFileToolStripMenuItem,
             this.emailCustomerToolStripMenuItem,
-            this.searchCustomersToolStripMenuItem});
+            this.searchCustomersToolStripMenuItem,
+            this.sAPORDebitOrderToolStripMenuItem});
             this.customersToolStripMenuItem.Name = "customersToolStripMenuItem";
             this.customersToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
             this.customersToolStripMenuItem.Text = "Customers";
@@ -391,21 +393,21 @@
             // customerFileToolStripMenuItem
             // 
             this.customerFileToolStripMenuItem.Name = "customerFileToolStripMenuItem";
-            this.customerFileToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.customerFileToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.customerFileToolStripMenuItem.Text = "Customer File";
             this.customerFileToolStripMenuItem.Click += new System.EventHandler(this.customerFileToolStripMenuItem_Click);
             // 
             // emailCustomerToolStripMenuItem
             // 
             this.emailCustomerToolStripMenuItem.Name = "emailCustomerToolStripMenuItem";
-            this.emailCustomerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.emailCustomerToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.emailCustomerToolStripMenuItem.Text = "Email Customer";
             this.emailCustomerToolStripMenuItem.Click += new System.EventHandler(this.emailCustomerToolStripMenuItem_Click);
             // 
             // searchCustomersToolStripMenuItem
             // 
             this.searchCustomersToolStripMenuItem.Name = "searchCustomersToolStripMenuItem";
-            this.searchCustomersToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.searchCustomersToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.searchCustomersToolStripMenuItem.Text = "Search customers";
             this.searchCustomersToolStripMenuItem.Click += new System.EventHandler(this.searchCustomersToolStripMenuItem_Click);
             // 
@@ -547,6 +549,13 @@
             this.suppliersToolStripMenuItem1.Text = "Supplier Maintenance";
             this.suppliersToolStripMenuItem1.Click += new System.EventHandler(this.suppliersToolStripMenuItem1_Click);
             // 
+            // insuranceBrokerMaintenanceToolStripMenuItem
+            // 
+            this.insuranceBrokerMaintenanceToolStripMenuItem.Name = "insuranceBrokerMaintenanceToolStripMenuItem";
+            this.insuranceBrokerMaintenanceToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.insuranceBrokerMaintenanceToolStripMenuItem.Text = "Insurance Broker Maintenance";
+            this.insuranceBrokerMaintenanceToolStripMenuItem.Click += new System.EventHandler(this.insuranceBrokerMaintenanceToolStripMenuItem_Click);
+            // 
             // debtorsReportsToolStripMenuItem
             // 
             this.debtorsReportsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -685,12 +694,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // insuranceBrokerMaintenanceToolStripMenuItem
+            // sAPORDebitOrderToolStripMenuItem
             // 
-            this.insuranceBrokerMaintenanceToolStripMenuItem.Name = "insuranceBrokerMaintenanceToolStripMenuItem";
-            this.insuranceBrokerMaintenanceToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
-            this.insuranceBrokerMaintenanceToolStripMenuItem.Text = "Insurance Broker Maintenance";
-            this.insuranceBrokerMaintenanceToolStripMenuItem.Click += new System.EventHandler(this.insuranceBrokerMaintenanceToolStripMenuItem_Click);
+            this.sAPORDebitOrderToolStripMenuItem.Name = "sAPORDebitOrderToolStripMenuItem";
+            this.sAPORDebitOrderToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.sAPORDebitOrderToolStripMenuItem.Text = "SAPOR Debit Order";
+            this.sAPORDebitOrderToolStripMenuItem.Click += new System.EventHandler(this.sAPORDebitOrderToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -792,5 +801,6 @@
         private System.Windows.Forms.ToolStripMenuItem insuranceScheduleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem managementPackTOCDescriptionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insuranceBrokerMaintenanceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sAPORDebitOrderToolStripMenuItem;
     }
 }

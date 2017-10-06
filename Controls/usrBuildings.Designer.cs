@@ -43,6 +43,8 @@
             this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.txtDebitOrderFee = new System.Windows.Forms.TextBox();
+            this.label51 = new System.Windows.Forms.Label();
             this.btnStandard = new System.Windows.Forms.Button();
             this.txtRF = new System.Windows.Forms.TextBox();
             this.txtRFS = new System.Windows.Forms.TextBox();
@@ -170,8 +172,6 @@
             this.label41 = new System.Windows.Forms.Label();
             this.tbPDFViewer = new System.Windows.Forms.TabPage();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
-            this.txtDebitOrderFee = new System.Windows.Forms.TextBox();
-            this.label51 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -386,6 +386,22 @@
             this.groupBox4.TabIndex = 140;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Fees";
+            // 
+            // txtDebitOrderFee
+            // 
+            this.txtDebitOrderFee.Location = new System.Drawing.Point(502, 51);
+            this.txtDebitOrderFee.Name = "txtDebitOrderFee";
+            this.txtDebitOrderFee.Size = new System.Drawing.Size(62, 20);
+            this.txtDebitOrderFee.TabIndex = 110;
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(414, 54);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(82, 13);
+            this.label51.TabIndex = 111;
+            this.label51.Text = "Debit Order Fee";
             // 
             // btnStandard
             // 
@@ -1287,6 +1303,7 @@
             // 
             // cmbBondHolder
             // 
+            this.cmbBondHolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbBondHolder.FormattingEnabled = true;
             this.cmbBondHolder.Location = new System.Drawing.Point(98, 48);
             this.cmbBondHolder.Name = "cmbBondHolder";
@@ -1576,22 +1593,6 @@
             this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
             this.axAcroPDF1.Size = new System.Drawing.Size(782, 524);
             this.axAcroPDF1.TabIndex = 65;
-            // 
-            // txtDebitOrderFee
-            // 
-            this.txtDebitOrderFee.Location = new System.Drawing.Point(502, 51);
-            this.txtDebitOrderFee.Name = "txtDebitOrderFee";
-            this.txtDebitOrderFee.Size = new System.Drawing.Size(62, 20);
-            this.txtDebitOrderFee.TabIndex = 110;
-            // 
-            // label51
-            // 
-            this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(414, 54);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(82, 13);
-            this.label51.TabIndex = 111;
-            this.label51.Text = "Debit Order Fee";
             // 
             // usrBuildings
             // 

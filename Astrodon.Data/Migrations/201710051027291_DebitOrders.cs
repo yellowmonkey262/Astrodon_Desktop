@@ -37,7 +37,7 @@ namespace Astrodon.Data.Migrations
                 .ForeignKey("dbo.CustomerDebitOrder", t => t.CustomerDebitOrderId)
                 .Index(t => new { t.CustomerDebitOrderId, t.DocumentType }, unique: true, name: "IDX_DebitOrderDocument");
             
-            AddColumn("dbo.tblBuildingSettings", "DebitOrderFee", c => c.Decimal(nullable: false, precision: 18, scale: 2, defaultValue:0));
+            AddColumn("dbo.tblBuildingSettings", "DebitOrderFee", c => c.Decimal(nullable: false, precision: 18, scale: 2, defaultValue:41.54M));
         }
         
         public override void Down()

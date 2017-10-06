@@ -5,6 +5,7 @@ using Astrodon.Controls.Requisitions;
 using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using Astrodon.Reports;
+using Astrodon.Reports.DebitOrder;
 using Astrodon.Reports.MaintenanceReport;
 using Astrodon.Reports.ManagementPack;
 using Astrodon.Reports.SupplierReport;
@@ -659,6 +660,15 @@ namespace Astrodon
             lookup.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(lookup);
             toolStripStatusLabel1.Text = "Insurance Broker Maintenance";
+        }
+
+        private void sAPORDebitOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            DebitOrderUserControl dt = new DebitOrderUserControl();
+            dt.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(dt);
+            toolStripStatusLabel1.Text = "SAPOR Debit Order";
         }
     }
 }

@@ -995,6 +995,7 @@
             // 
             // cbAccountType
             // 
+            this.cbAccountType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAccountType.FormattingEnabled = true;
             this.cbAccountType.Location = new System.Drawing.Point(118, 144);
             this.cbAccountType.Name = "cbAccountType";
@@ -1012,6 +1013,7 @@
             // 
             // cbProcessDate
             // 
+            this.cbProcessDate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProcessDate.FormattingEnabled = true;
             this.cbProcessDate.Location = new System.Drawing.Point(118, 173);
             this.cbProcessDate.Name = "cbProcessDate";
@@ -1029,6 +1031,7 @@
             // 
             // cbBanks
             // 
+            this.cbBanks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbBanks.FormattingEnabled = true;
             this.cbBanks.Location = new System.Drawing.Point(118, 39);
             this.cbBanks.Name = "cbBanks";
