@@ -36,15 +36,19 @@ namespace Astrodon.Controls
 
         private String completedQuery()
         {
+            var dt= new DateTime(dtStart.Value.Year, dtStart.Value.Month, 1);
+            
             String query = "SELECT b.Building, b.Code, f.findate, f.completeDate, u.name FROM tblMonthFin AS f INNER JOIN tblBuildings AS b ON f.buildingID = b.Code LEFT OUTER JOIN tblUsers AS u ON f.userID = u.id";
-            query += " WHERE finDate >= '" + dtStart.Value.ToString("yyyy/MM/dd") + "' AND finDate <= '" + dtStart.Value.AddMonths(1).AddDays(-1).ToString("yyyy/MM/dd HH:mm") + "'";
+            query += " WHERE finDate >= '" + dt.ToString("yyyy/MM/dd") + "' AND finDate <= '" + dt.AddMonths(1).AddMinutes(-1).ToString("yyyy/MM/dd HH:mm") + "'";
             return query;
         }
 
         private String incompletedQuery()
         {
+            var dt = new DateTime(dtStart.Value.Year, dtStart.Value.Month, 1);
+
             String query = "SELECT b.Code FROM tblMonthFin AS f INNER JOIN tblBuildings AS b ON f.buildingID = b.Code";
-            query += " WHERE finDate >= '" + dtStart.Value.ToString("yyyy/MM/dd") + "' AND finDate <= '" + dtStart.Value.AddMonths(1).AddDays(-1).ToString("yyyy/MM/dd HH:mm") + "'";
+            query += " WHERE finDate >= '" + dt.ToString("yyyy/MM/dd") + "' AND finDate <= '" + dt.AddMonths(1).AddMinutes(-1).ToString("yyyy/MM/dd HH:mm") + "'";
             return query;
         }
 
