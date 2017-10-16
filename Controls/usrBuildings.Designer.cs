@@ -172,6 +172,8 @@
             this.label41 = new System.Windows.Forms.Label();
             this.tbPDFViewer = new System.Windows.Forms.TabPage();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
+            this.label52 = new System.Windows.Forms.Label();
+            this.cbDisableDebitOrderFee = new System.Windows.Forms.CheckBox();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -353,6 +355,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.cbDisableDebitOrderFee);
+            this.groupBox4.Controls.Add(this.label52);
             this.groupBox4.Controls.Add(this.txtDebitOrderFee);
             this.groupBox4.Controls.Add(this.label51);
             this.groupBox4.Controls.Add(this.btnStandard);
@@ -1594,6 +1598,25 @@
             this.axAcroPDF1.Size = new System.Drawing.Size(782, 524);
             this.axAcroPDF1.TabIndex = 65;
             // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(414, 83);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(120, 13);
+            this.label52.TabIndex = 113;
+            this.label52.Text = "Disable Debit Order Fee";
+            // 
+            // cbDisableDebitOrderFee
+            // 
+            this.cbDisableDebitOrderFee.AutoSize = true;
+            this.cbDisableDebitOrderFee.Enabled = false;
+            this.cbDisableDebitOrderFee.Location = new System.Drawing.Point(549, 83);
+            this.cbDisableDebitOrderFee.Name = "cbDisableDebitOrderFee";
+            this.cbDisableDebitOrderFee.Size = new System.Drawing.Size(15, 14);
+            this.cbDisableDebitOrderFee.TabIndex = 114;
+            this.cbDisableDebitOrderFee.UseVisualStyleBackColor = true;
+            // 
             // usrBuildings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1782,5 +1805,7 @@
         private System.Windows.Forms.Button btnViewContract;
         private System.Windows.Forms.TextBox txtDebitOrderFee;
         private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.CheckBox cbDisableDebitOrderFee;
+        private System.Windows.Forms.Label label52;
     }
 }

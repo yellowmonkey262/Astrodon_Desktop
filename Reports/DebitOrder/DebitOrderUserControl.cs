@@ -86,7 +86,7 @@ namespace Astrodon.Reports.DebitOrder
                         {
                             DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
                             byte[] reportData = null;
-                            reportData = reportService.SAPORDebitOrder(SqlDataHandler.GetConnectionString(), (cmbBuilding.SelectedItem as Building).ID, dDate);
+                            reportData = reportService.SAPORDebitOrder(SqlDataHandler.GetConnectionString(), (cmbBuilding.SelectedItem as Building).ID, dDate,cbShowBreakdown.Checked);
                             File.WriteAllBytes(dlgSave.FileName, reportData);
                             Process.Start(dlgSave.FileName);
                         }

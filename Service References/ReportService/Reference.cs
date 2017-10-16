@@ -331,7 +331,7 @@ namespace Astrodon.ReportService {
         byte[] InsuranceSchedule(string sqlConnectionString, int buildingId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/SAPORDebitOrder", ReplyAction="http://tempuri.org/IReportService/SAPORDebitOrderResponse")]
-        byte[] SAPORDebitOrder(string sqlConnectionString, int buildingId, System.DateTime processMonth);
+        byte[] SAPORDebitOrder(string sqlConnectionString, int buildingId, System.DateTime processMonth, bool showFeeBreakdown);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -393,8 +393,8 @@ namespace Astrodon.ReportService {
             return base.Channel.InsuranceSchedule(sqlConnectionString, buildingId);
         }
         
-        public byte[] SAPORDebitOrder(string sqlConnectionString, int buildingId, System.DateTime processMonth) {
-            return base.Channel.SAPORDebitOrder(sqlConnectionString, buildingId, processMonth);
+        public byte[] SAPORDebitOrder(string sqlConnectionString, int buildingId, System.DateTime processMonth, bool showFeeBreakdown) {
+            return base.Channel.SAPORDebitOrder(sqlConnectionString, buildingId, processMonth, showFeeBreakdown);
         }
     }
 }

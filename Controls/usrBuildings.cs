@@ -143,6 +143,7 @@ namespace Astrodon
         {
             try
             {
+                cbDisableDebitOrderFee.Enabled = Controller.UserIsSheldon();
                 Data.tblBuilding buildingEntity = null;
                 using (var context = SqlDataHandler.GetDataContext())
                 {
@@ -151,6 +152,7 @@ namespace Astrodon
                 }
                 if (buildingEntity != null)
                 {
+                    cbDisableDebitOrderFee.Checked = buildingEntity.IsDebitOrderFeeDisabled;
                     txtCommonPropertyDim.Text = buildingEntity.CommonPropertyDimensions.ToString();
                     txtUnitPropertyDim.Text = buildingEntity.UnitPropertyDimensions.ToString();
                     txtReplacementValue.Text = buildingEntity.UnitReplacementCost.ToString("#,##0.00");
@@ -332,7 +334,7 @@ namespace Astrodon
             {
                 var buildingEntity = context.tblBuildings
                         .FirstOrDefault(a => a.id == selectedBuilding.ID);
-
+                buildingEntity.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
                 buildingEntity.CommonPropertyDimensions = string.IsNullOrWhiteSpace(txtCommonPropertyDim.Text) ? 0 :
                     Convert.ToDecimal(txtCommonPropertyDim.Text);
                 buildingEntity.UnitPropertyDimensions = string.IsNullOrWhiteSpace(txtUnitPropertyDim.Text) ? 0 :

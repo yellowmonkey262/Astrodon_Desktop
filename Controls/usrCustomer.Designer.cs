@@ -131,6 +131,8 @@
             this.label20 = new System.Windows.Forms.Label();
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
+            this.cbDisableDebitOrderFee = new System.Windows.Forms.CheckBox();
+            this.label26 = new System.Windows.Forms.Label();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -939,6 +941,8 @@
             // 
             // tbDebitOrder
             // 
+            this.tbDebitOrder.Controls.Add(this.cbDisableDebitOrderFee);
+            this.tbDebitOrder.Controls.Add(this.label26);
             this.tbDebitOrder.Controls.Add(this.axAcroPDF1);
             this.tbDebitOrder.Controls.Add(this.btnUpload);
             this.tbDebitOrder.Controls.Add(this.btnSaveDebitOrder);
@@ -975,7 +979,7 @@
             // 
             // btnUpload
             // 
-            this.btnUpload.Location = new System.Drawing.Point(115, 200);
+            this.btnUpload.Location = new System.Drawing.Point(128, 224);
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(75, 23);
             this.btnUpload.TabIndex = 57;
@@ -985,7 +989,7 @@
             // 
             // btnSaveDebitOrder
             // 
-            this.btnSaveDebitOrder.Location = new System.Drawing.Point(271, 200);
+            this.btnSaveDebitOrder.Location = new System.Drawing.Point(271, 224);
             this.btnSaveDebitOrder.Name = "btnSaveDebitOrder";
             this.btnSaveDebitOrder.Size = new System.Drawing.Size(75, 23);
             this.btnSaveDebitOrder.TabIndex = 55;
@@ -997,7 +1001,7 @@
             // 
             this.cbAccountType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAccountType.FormattingEnabled = true;
-            this.cbAccountType.Location = new System.Drawing.Point(118, 144);
+            this.cbAccountType.Location = new System.Drawing.Point(128, 168);
             this.cbAccountType.Name = "cbAccountType";
             this.cbAccountType.Size = new System.Drawing.Size(228, 21);
             this.cbAccountType.TabIndex = 54;
@@ -1005,7 +1009,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(7, 148);
+            this.label25.Location = new System.Drawing.Point(7, 172);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(74, 13);
             this.label25.TabIndex = 53;
@@ -1015,7 +1019,7 @@
             // 
             this.cbProcessDate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProcessDate.FormattingEnabled = true;
-            this.cbProcessDate.Location = new System.Drawing.Point(118, 173);
+            this.cbProcessDate.Location = new System.Drawing.Point(128, 197);
             this.cbProcessDate.Name = "cbProcessDate";
             this.cbProcessDate.Size = new System.Drawing.Size(228, 21);
             this.cbProcessDate.TabIndex = 52;
@@ -1023,7 +1027,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(7, 177);
+            this.label24.Location = new System.Drawing.Point(7, 201);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(71, 13);
             this.label24.TabIndex = 51;
@@ -1033,7 +1037,7 @@
             // 
             this.cbBanks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbBanks.FormattingEnabled = true;
-            this.cbBanks.Location = new System.Drawing.Point(118, 39);
+            this.cbBanks.Location = new System.Drawing.Point(128, 63);
             this.cbBanks.Name = "cbBanks";
             this.cbBanks.Size = new System.Drawing.Size(228, 21);
             this.cbBanks.TabIndex = 43;
@@ -1041,7 +1045,7 @@
             // 
             // txtAccountNumber
             // 
-            this.txtAccountNumber.Location = new System.Drawing.Point(118, 118);
+            this.txtAccountNumber.Location = new System.Drawing.Point(128, 142);
             this.txtAccountNumber.Name = "txtAccountNumber";
             this.txtAccountNumber.Size = new System.Drawing.Size(228, 20);
             this.txtAccountNumber.TabIndex = 46;
@@ -1049,7 +1053,7 @@
             // lblAccountNumber
             // 
             this.lblAccountNumber.AutoSize = true;
-            this.lblAccountNumber.Location = new System.Drawing.Point(6, 121);
+            this.lblAccountNumber.Location = new System.Drawing.Point(6, 145);
             this.lblAccountNumber.Name = "lblAccountNumber";
             this.lblAccountNumber.Size = new System.Drawing.Size(87, 13);
             this.lblAccountNumber.TabIndex = 50;
@@ -1057,7 +1061,7 @@
             // 
             // txtBranchCode
             // 
-            this.txtBranchCode.Location = new System.Drawing.Point(118, 92);
+            this.txtBranchCode.Location = new System.Drawing.Point(128, 116);
             this.txtBranchCode.Name = "txtBranchCode";
             this.txtBranchCode.Size = new System.Drawing.Size(228, 20);
             this.txtBranchCode.TabIndex = 45;
@@ -1065,7 +1069,7 @@
             // lblBranchCode
             // 
             this.lblBranchCode.AutoSize = true;
-            this.lblBranchCode.Location = new System.Drawing.Point(6, 95);
+            this.lblBranchCode.Location = new System.Drawing.Point(6, 119);
             this.lblBranchCode.Name = "lblBranchCode";
             this.lblBranchCode.Size = new System.Drawing.Size(69, 13);
             this.lblBranchCode.TabIndex = 49;
@@ -1073,7 +1077,7 @@
             // 
             // txtBranch
             // 
-            this.txtBranch.Location = new System.Drawing.Point(118, 66);
+            this.txtBranch.Location = new System.Drawing.Point(128, 90);
             this.txtBranch.Name = "txtBranch";
             this.txtBranch.Size = new System.Drawing.Size(228, 20);
             this.txtBranch.TabIndex = 44;
@@ -1081,7 +1085,7 @@
             // lblBranch
             // 
             this.lblBranch.AutoSize = true;
-            this.lblBranch.Location = new System.Drawing.Point(6, 69);
+            this.lblBranch.Location = new System.Drawing.Point(6, 93);
             this.lblBranch.Name = "lblBranch";
             this.lblBranch.Size = new System.Drawing.Size(41, 13);
             this.lblBranch.TabIndex = 48;
@@ -1090,7 +1094,7 @@
             // lblBank
             // 
             this.lblBank.AutoSize = true;
-            this.lblBank.Location = new System.Drawing.Point(6, 43);
+            this.lblBank.Location = new System.Drawing.Point(6, 67);
             this.lblBank.Name = "lblBank";
             this.lblBank.Size = new System.Drawing.Size(32, 13);
             this.lblBank.TabIndex = 47;
@@ -1099,7 +1103,7 @@
             // cbDebitOrderActive
             // 
             this.cbDebitOrderActive.AutoSize = true;
-            this.cbDebitOrderActive.Location = new System.Drawing.Point(118, 20);
+            this.cbDebitOrderActive.Location = new System.Drawing.Point(128, 20);
             this.cbDebitOrderActive.Name = "cbDebitOrderActive";
             this.cbDebitOrderActive.Size = new System.Drawing.Size(15, 14);
             this.cbDebitOrderActive.TabIndex = 1;
@@ -1129,6 +1133,25 @@
             // fdOpen
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            // 
+            // cbDisableDebitOrderFee
+            // 
+            this.cbDisableDebitOrderFee.AutoSize = true;
+            this.cbDisableDebitOrderFee.Enabled = false;
+            this.cbDisableDebitOrderFee.Location = new System.Drawing.Point(128, 44);
+            this.cbDisableDebitOrderFee.Name = "cbDisableDebitOrderFee";
+            this.cbDisableDebitOrderFee.Size = new System.Drawing.Size(15, 14);
+            this.cbDisableDebitOrderFee.TabIndex = 68;
+            this.cbDisableDebitOrderFee.UseVisualStyleBackColor = true;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(7, 44);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(120, 13);
+            this.label26.TabIndex = 67;
+            this.label26.Text = "Disable Debit Order Fee";
             // 
             // usrCustomer
             // 
@@ -1273,5 +1296,7 @@
         private System.Windows.Forms.Label lblBank;
         private System.Windows.Forms.CheckBox cbDebitOrderActive;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.CheckBox cbDisableDebitOrderFee;
+        private System.Windows.Forms.Label label26;
     }
 }

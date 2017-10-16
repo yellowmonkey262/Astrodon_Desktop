@@ -187,6 +187,10 @@
     <Compile Include="Migrations\201710051438201_DebitOrderRemoveBranchName.Designer.cs">
       <DependentUpon>201710051438201_DebitOrderRemoveBranchName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710160819467_DisableDebitOrder.cs" />
+    <Compile Include="Migrations\201710160819467_DisableDebitOrder.Designer.cs">
+      <DependentUpon>201710160819467_DisableDebitOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -335,6 +339,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710051438201_DebitOrderRemoveBranchName.resx">
       <DependentUpon>201710051438201_DebitOrderRemoveBranchName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710160819467_DisableDebitOrder.resx">
+      <DependentUpon>201710160819467_DisableDebitOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -140,6 +140,7 @@
         <xs:element minOccurs="0" name="sqlConnectionString" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="buildingId" type="xs:int" />
         <xs:element minOccurs="0" name="processMonth" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="showFeeBreakdown" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

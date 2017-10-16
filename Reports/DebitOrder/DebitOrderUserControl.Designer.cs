@@ -36,6 +36,8 @@
             this.cmbYear = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
+            this.cbShowBreakdown = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // cmbBuilding
@@ -49,7 +51,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(222, 107);
+            this.button1.Location = new System.Drawing.Point(222, 113);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(114, 23);
             this.button1.TabIndex = 13;
@@ -110,10 +112,30 @@
             this.dlgSave.InitialDirectory = "Y:\\";
             this.dlgSave.Title = "SAPOR Debit Order";
             // 
+            // cbShowBreakdown
+            // 
+            this.cbShowBreakdown.AutoSize = true;
+            this.cbShowBreakdown.Location = new System.Drawing.Point(103, 94);
+            this.cbShowBreakdown.Name = "cbShowBreakdown";
+            this.cbShowBreakdown.Size = new System.Drawing.Size(15, 14);
+            this.cbShowBreakdown.TabIndex = 15;
+            this.cbShowBreakdown.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(10, 94);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(90, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Show breakdown";
+            // 
             // DebitOrderUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.cbShowBreakdown);
             this.Controls.Add(this.cmbBuilding);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
@@ -138,5 +160,7 @@
         private System.Windows.Forms.ComboBox cmbYear;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.SaveFileDialog dlgSave;
+        private System.Windows.Forms.CheckBox cbShowBreakdown;
+        private System.Windows.Forms.Label label4;
     }
 }

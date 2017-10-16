@@ -144,7 +144,8 @@ namespace Astrodon.Data
             }
         }
 
-      
+        public bool IsDebitOrderFeeDisabled { get; set; }
+
         public bool CheckIfFolderExists()
         {
             try

@@ -926,16 +926,17 @@ namespace Astrodon
             {
                 cbProcessDate.Items.Add(c);
             }
-
         }
 
         private void LoadDebitOrder()
         {
             btnUpload.Visible = false;
+            cbDisableDebitOrderFee.Enabled = Controller.UserIsSheldon();
+            cbDisableDebitOrderFee.Checked = false;
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var debitOrder = context.CustomerDebitOrderSet.SingleOrDefault(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber);
-                if(debitOrder != null)
+                if (debitOrder != null)
                 {
                     cbDebitOrderActive.Checked = debitOrder.IsActive;
                     cbBanks.SelectedValue = _Banks.FirstOrDefault(a => a.id == debitOrder.BankId);
@@ -943,10 +944,12 @@ namespace Astrodon
                     txtAccountNumber.Text = debitOrder.AccountNumber;
                     cbAccountType.SelectedValue = debitOrder.AccountType;
                     cbProcessDate.SelectedValue = debitOrder.DebitOrderCollectionDay;
+                    cbDisableDebitOrderFee.Checked = debitOrder.IsDebitOrderFeeDisabled;
                     btnUpload.Visible = true;
 
-                    var signedForm = context.DebitOrderDocumentSet.SingleOrDefault(a => a.CustomerDebitOrderId == debitOrder.id && a.DocumentType == DebitOrderDocumentType.SignedDebitOrder);
-                    if(signedForm != null)
+                    var signedForm = context.DebitOrderDocumentSet.SingleOrDefault(a => a.CustomerDebitOrderId == debitOrder.id
+                                         && a.DocumentType == DebitOrderDocumentType.SignedDebitOrder);
+                    if (signedForm != null)
                     {
                         DisplayPDF(signedForm.FileData);
                     }
@@ -1001,6 +1004,7 @@ namespace Astrodon
                     debitOrder.DebitOrderCollectionDay = (DebitOrderDayType)cbProcessDate.SelectedItem;
                     debitOrder.LastUpdatedByUserId = Controller.user.id;
                     debitOrder.LastUpdateDate = DateTime.Now;
+                    debitOrder.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
                     context.SaveChanges();
                 }
                 btnUpload.Visible = true;
