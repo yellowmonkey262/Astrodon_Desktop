@@ -61,6 +61,11 @@ namespace Astrodon
 
         public DataSet GetData(String sqlQuery, Dictionary<String, Object> sqlParms, out String status)
         {
+            if(string.IsNullOrWhiteSpace(sqlQuery))
+            {
+                status = null;
+                return null;
+            }
             DataSet ds = new DataSet();
             try
             {

@@ -63,6 +63,12 @@
   <wsdl:message name="IReportService_SAPORDebitOrder_OutputMessage">
     <wsdl:part name="parameters" element="tns:SAPORDebitOrderResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_MonthlyReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:MonthlyReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_MonthlyReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MonthlyReportResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="LevyRollReport">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/LevyRollReport" message="tns:IReportService_LevyRollReport_InputMessage" />
@@ -99,6 +105,10 @@
     <wsdl:operation name="SAPORDebitOrder">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/SAPORDebitOrder" message="tns:IReportService_SAPORDebitOrder_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/IReportService/SAPORDebitOrderResponse" message="tns:IReportService_SAPORDebitOrder_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MonthlyReport">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/MonthlyReport" message="tns:IReportService_MonthlyReport_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/MonthlyReportResponse" message="tns:IReportService_MonthlyReport_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -177,6 +187,15 @@
     </wsdl:operation>
     <wsdl:operation name="SAPORDebitOrder">
       <soap:operation soapAction="http://tempuri.org/IReportService/SAPORDebitOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MonthlyReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/MonthlyReport" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

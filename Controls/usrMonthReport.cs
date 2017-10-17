@@ -1,10 +1,16 @@
 ﻿using Astro.Library.Entities;
+using Astrodon.Data.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Globalization;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Linq;
+using Astrodon.ReportService;
+using System.IO;
+using System.Diagnostics;
 
 namespace Astrodon.Controls
 {
@@ -13,20 +19,78 @@ namespace Astrodon.Controls
         private List<Building> buildings;
         private BindingList<MonthReport> results;
         private DateTime today;
+        private List<IdValue> _Years;
+        private List<IdValue> _Months;
+        private List<IdValue> _Users;
 
         public usrMonthReport()
         {
             InitializeComponent();
             results = new BindingList<MonthReport>();
+            LoadYears();
+            LoadUsers();
+        }
+
+        private void LoadUsers()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var q = from u in context.tblUsers
+                        select new IdValue()
+                        {
+                            Id = u.id,
+                            Value = u.name
+                        };
+                _Users = q.OrderBy(a => a.Value).ToList();
+                _Users.Insert(0,new IdValue()
+                {
+                    Id = 0,
+                    Value = "All Users"
+                });
+
+                cbUserList.DataSource = _Users;
+                cbUserList.ValueMember = "Id";
+                cbUserList.DisplayMember = "Value";
+                cbUserList.SelectedValue = 0;
+            }
+        }
+
+        private void LoadYears()
+        {
+            _Years = new List<IdValue>();
+            _Years.Add(new IdValue() { Id = DateTime.Now.Year - 1, Value = (DateTime.Now.Year - 1).ToString() });
+            _Years.Add(new IdValue() { Id = DateTime.Now.Year, Value = (DateTime.Now.Year).ToString() });
+            _Years.Add(new IdValue() { Id = DateTime.Now.Year + 1, Value = (DateTime.Now.Year + 1).ToString() });
+
+            _Months = new List<IdValue>();
+            for (int x = 1; x <= 12; x++)
+            {
+                _Months.Add(new IdValue()
+                {
+                    Id = x,
+                    Value = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x)
+                });
+            }
+
+            cmbYear.DataSource = _Years;
+            cmbYear.ValueMember = "Id";
+            cmbYear.DisplayMember = "Value";
+            cmbYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
+
+            cmbMonth.DataSource = _Months;
+            cmbMonth.ValueMember = "Id";
+            cmbMonth.DisplayMember = "Value";
+            cmbMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
+
+            
         }
 
         private void usrMonthReport_Load(object sender, EventArgs e)
         {
             LoadBuildings();
             today = DateTime.Now;
-            dtStart.Value = new DateTime(today.Year, today.Month, 1, 0, 0, 0);
             dgMonthly.DataSource = results;
-            LoadReport(0);
+            LoadReport();
         }
 
         private void LoadBuildings()
@@ -36,8 +100,16 @@ namespace Astrodon.Controls
 
         private String completedQuery()
         {
-            var dt= new DateTime(dtStart.Value.Year, dtStart.Value.Month, 1);
-            
+            var selectedYear = cmbYear.SelectedItem as IdValue;
+            if (selectedYear == null)
+                return string.Empty;
+
+            var selectedMonth = cmbMonth.SelectedItem as IdValue;
+            if (selectedMonth == null)
+                return string.Empty;
+
+            var dt = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+
             String query = "SELECT b.Building, b.Code, f.findate, f.completeDate, u.name FROM tblMonthFin AS f INNER JOIN tblBuildings AS b ON f.buildingID = b.Code LEFT OUTER JOIN tblUsers AS u ON f.userID = u.id";
             query += " WHERE finDate >= '" + dt.ToString("yyyy/MM/dd") + "' AND finDate <= '" + dt.AddMonths(1).AddMinutes(-1).ToString("yyyy/MM/dd HH:mm") + "'";
             return query;
@@ -45,7 +117,15 @@ namespace Astrodon.Controls
 
         private String incompletedQuery()
         {
-            var dt = new DateTime(dtStart.Value.Year, dtStart.Value.Month, 1);
+            var selectedYear = cmbYear.SelectedItem as IdValue;
+            if (selectedYear == null)
+                return string.Empty;
+
+            var selectedMonth = cmbMonth.SelectedItem as IdValue;
+            if (selectedMonth == null)
+                return string.Empty;
+
+            var dt = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
 
             String query = "SELECT b.Code FROM tblMonthFin AS f INNER JOIN tblBuildings AS b ON f.buildingID = b.Code";
             query += " WHERE finDate >= '" + dt.ToString("yyyy/MM/dd") + "' AND finDate <= '" + dt.AddMonths(1).AddMinutes(-1).ToString("yyyy/MM/dd HH:mm") + "'";
@@ -55,6 +135,8 @@ namespace Astrodon.Controls
         private List<MonthReport> GetAllResults(DataSet ds)
         {
             List<MonthReport> myResults = new List<MonthReport>();
+            if (ds == null || buildings == null)
+                return myResults;
             foreach (Building b in buildings)
             {
                 MonthReport mr = new MonthReport
@@ -78,6 +160,9 @@ namespace Astrodon.Controls
 
         private List<MonthReport> GetCompletedResults(DataSet ds)
         {
+            if (ds == null)
+                return new List<MonthReport>();
+
             List<MonthReport> myResults = new List<MonthReport>();
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
@@ -96,7 +181,13 @@ namespace Astrodon.Controls
 
         private List<MonthReport> GetIncompleteResults(DataSet ds)
         {
+            if (ds == null)
+                return new List<MonthReport>();
+
             List<MonthReport> myResults = new List<MonthReport>();
+            if (buildings == null)
+                return myResults;
+
             foreach (Building b in buildings)
             {
                 MonthReport mr = new MonthReport
@@ -121,8 +212,10 @@ namespace Astrodon.Controls
             return myResults;
         }
 
-        private void LoadReport(int selection)
+        private void LoadReport()
         {
+            int selection = 0;
+            if (rdCompleted.Checked) { selection = 1; } else if (rdIncomplete.Checked) { selection = 2; }
             this.Cursor = Cursors.WaitCursor;
             results.Clear();
             SqlDataHandler dh = new SqlDataHandler();
@@ -140,7 +233,17 @@ namespace Astrodon.Controls
             {
                 myResults = GetIncompleteResults(dh.GetData(incompletedQuery(), null, out status));
             }
-            foreach (MonthReport mr in myResults) { results.Add(mr); }
+            var idVal = (cbUserList.SelectedItem as IdValue);
+            if (idVal != null)
+            {
+                int selectedUserId = (cbUserList.SelectedItem as IdValue).Id;
+                if (selectedUserId > 0)
+                    myResults = myResults.Where(a => a.User == (cbUserList.SelectedItem as IdValue).Value).ToList();
+            }
+            foreach (MonthReport mr in myResults)
+            {
+                results.Add(mr);
+            }
             dgMonthly.Invalidate();
             this.Cursor = Cursors.Default;
         }
@@ -154,6 +257,37 @@ namespace Astrodon.Controls
 
         private void CreateExcel()
         {
+            if (dlgSave.ShowDialog() == DialogResult.OK)
+            {
+                btnPrint.Enabled = false;
+                try
+                {
+                    using (var reportService = ReportServiceClient.CreateInstance())
+                    {
+                        try
+                        {
+                            DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+                            var idVal = (cbUserList.SelectedItem as IdValue);
+                           var reportData =  reportService.MonthlyReport(SqlDataHandler.GetConnectionString(), dDate, rdCompleted.Checked, idVal != null ? idVal.Id : (int?)null);
+
+                            File.WriteAllBytes(dlgSave.FileName, reportData);
+                            Process.Start(dlgSave.FileName);
+                        }
+                        catch (Exception ex)
+                        {
+                            Controller.HandleError(ex);
+
+                            Controller.ShowMessage(ex.GetType().ToString());
+                        }
+                    }
+                }
+                finally
+                {
+                    btnPrint.Enabled = true;
+                }
+            }
+
+            /*
             try
             {
                 Excel.Application xlApp = new Excel.Application();
@@ -201,24 +335,33 @@ namespace Astrodon.Controls
             {
                 //MessageBox.Show(ex.Message);
             }
+            */
         }
 
         private void dtStart_ValueChanged(object sender, EventArgs e)
         {
-            int selection = 0;
-            if (rdCompleted.Checked) { selection = 1; } else if (rdIncomplete.Checked) { selection = 2; }
-            LoadReport(selection);
+           
+            LoadReport();
         }
 
         private void rdCompleted_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton rd = sender as RadioButton;
-            int selection = 0;
-            if (rd.Checked)
-            {
-                if (rd == rdCompleted) { selection = 1; } else { selection = 2; }
-            }
-            LoadReport(selection);
+            LoadReport();
+        }
+
+        private void cmbYear_SelectedValueChanged(object sender, EventArgs e)
+        {
+            LoadReport();
+        }
+
+        private void cmbMonth_SelectedValueChanged(object sender, EventArgs e)
+        {
+            LoadReport();
+        }
+
+        private void cbUserList_SelectedValueChanged(object sender, EventArgs e)
+        {
+            LoadReport();
         }
     }
 }

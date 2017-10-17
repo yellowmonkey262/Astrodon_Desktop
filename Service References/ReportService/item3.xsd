@@ -151,4 +151,21 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="MonthlyReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sqlConnectionString" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="processMonth" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="completedItems" type="xs:boolean" />
+        <xs:element minOccurs="0" name="userId" nillable="true" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MonthlyReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="MonthlyReportResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

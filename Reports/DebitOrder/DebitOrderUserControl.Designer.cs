@@ -107,7 +107,7 @@
             // dlgSave
             // 
             this.dlgSave.CheckPathExists = false;
-            this.dlgSave.DefaultExt = "pdf";
+            this.dlgSave.DefaultExt = "xlsx";
             this.dlgSave.Filter = "Microsoft Excel files (*.xlsx)|*.xlsx";
             this.dlgSave.InitialDirectory = "Y:\\";
             this.dlgSave.Title = "SAPOR Debit Order";
