@@ -81,12 +81,12 @@
             this.lblBuildingNameTitle = new System.Windows.Forms.Label();
             this.lblSupplierDetail = new System.Windows.Forms.Label();
             this.tbUnits = new System.Windows.Forms.TabPage();
+            this.lbTotalAmount = new System.Windows.Forms.Label();
             this.dgItems = new System.Windows.Forms.DataGridView();
             this.sfdDownloadAttachment = new System.Windows.Forms.SaveFileDialog();
             this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.lbTotalAmount = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tbMain.SuspendLayout();
             this.tbDetail.SuspendLayout();
@@ -209,6 +209,7 @@
             this.dgSupportingDocuments.ReadOnly = true;
             this.dgSupportingDocuments.Size = new System.Drawing.Size(364, 223);
             this.dgSupportingDocuments.TabIndex = 105;
+            this.dgSupportingDocuments.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgSupportingDocuments_CellContentClick);
             // 
             // lblAllowedFiles
             // 
@@ -620,6 +621,15 @@
             this.tbUnits.Text = "Split";
             this.tbUnits.UseVisualStyleBackColor = true;
             // 
+            // lbTotalAmount
+            // 
+            this.lbTotalAmount.AutoSize = true;
+            this.lbTotalAmount.Location = new System.Drawing.Point(7, 19);
+            this.lbTotalAmount.Name = "lbTotalAmount";
+            this.lbTotalAmount.Size = new System.Drawing.Size(73, 13);
+            this.lbTotalAmount.TabIndex = 71;
+            this.lbTotalAmount.Text = "Total Amount:";
+            // 
             // dgItems
             // 
             this.dgItems.AllowUserToAddRows = false;
@@ -667,15 +677,6 @@
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // lbTotalAmount
-            // 
-            this.lbTotalAmount.AutoSize = true;
-            this.lbTotalAmount.Location = new System.Drawing.Point(7, 19);
-            this.lbTotalAmount.Name = "lbTotalAmount";
-            this.lbTotalAmount.Size = new System.Drawing.Size(73, 13);
-            this.lbTotalAmount.TabIndex = 71;
-            this.lbTotalAmount.Text = "Total Amount:";
             // 
             // timer1
             // 
