@@ -65,8 +65,11 @@ namespace Astrodon.Controls.Requisitions
             {
                 foreach (var itm in _SupplierBuildingList)
                 {
-                    itm.SetSelectedAccount(cmbLedger.SelectedValue as string);
+                    itm.SetSelectedAccount(cmbLedger.SelectedValue as string,false);
                 }
+                var x = _SupplierBuildingList.FirstOrDefault();
+                if (x != null)
+                    x.Refresh();
             }
         }
 
@@ -76,8 +79,11 @@ namespace Astrodon.Controls.Requisitions
             {
                 foreach (var itm in _SupplierBuildingList)
                 {
-                    itm.SetSelectedInvoiceDate(dtInvoiceDate.Value);
+                    itm.SetSelectedInvoiceDate(dtInvoiceDate.Value,false);
                 }
+                var x = _SupplierBuildingList.FirstOrDefault();
+                if (x != null)
+                    x.Refresh();
             }
         }
 
@@ -246,9 +252,12 @@ namespace Astrodon.Controls.Requisitions
             foreach (var sb in _SupplierBuildingList)
             {
                 sb.PastelAccountList = LoadPastelAccountsForBuilding(sb.BuildingDataPath);
-                sb.SetSelectedAccount(cmbLedger.SelectedValue as string);
+                sb.SetSelectedAccount(cmbLedger.SelectedValue as string,false);
                 sb.BankList = _BankList.ToList();
             }
+            var x = _SupplierBuildingList.FirstOrDefault();
+            if (x != null)
+                x.Refresh();
             BindDataGrid();
         }
 
@@ -695,8 +704,10 @@ namespace Astrodon.Controls.Requisitions
                         itm.BranchCode = selItem.BranchCode;
                         itm.BranchName = selItem.BranchName;
                         itm.SupplierBankAccount = selItem.AccountNumber;
-                        itm.Refresh();
                     }
+                    var x = _SupplierBuildingList.LastOrDefault();
+                    if (x != null)
+                        x.Refresh();
                 }
             }
 
@@ -764,7 +775,7 @@ namespace Astrodon.Controls.Requisitions
         public DataGridViewComboBoxCell ComboBox { get; set; }
 
      
-        public void SetSelectedAccount(string accountNumber)
+        public void SetSelectedAccount(string accountNumber,bool refresh)
         {
             if (this.PastelAccountList != null && !String.IsNullOrWhiteSpace(accountNumber))
             {
@@ -780,15 +791,17 @@ namespace Astrodon.Controls.Requisitions
                 }
 
             }
-            Refresh();
+            if(refresh)
+              Refresh();
         }
 
         public DataGridViewTextBoxCell InvoiceDateControl { get; set; }
 
-        public void SetSelectedInvoiceDate(DateTime invoiceDate)
+        public void SetSelectedInvoiceDate(DateTime invoiceDate, bool refresh)
         {
             this.InvoiceDate = invoiceDate;
-            Refresh();
+            if(refresh)
+              Refresh();
         }
 
         public bool IsValid
