@@ -37,5 +37,7 @@ namespace Astrodon.Data
         [Column(TypeName = "image")]
         public byte[] pmSignature { get; set; }
 
+        public bool ProcessCheckLists { get; set; }
+
     }
 }

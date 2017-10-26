@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
+using Astrodon.Data;
 
 namespace Astrodon.Controls
 {
@@ -381,66 +382,192 @@ namespace Astrodon.Controls
 
         private void LoadChecklist()
         {
+            ClearCheckList();
             if (cmbBuilding.SelectedIndex >= 0 && cmbFinPeriod.SelectedIndex >= 0 && cmbYear.SelectedIndex >= 0)
             {
                 String building = cmbBuilding.SelectedValue.ToString();
                 int period = int.Parse(cmbFinPeriod.SelectedItem.ToString());
                 int year = int.Parse(cmbYear.SelectedItem.ToString());
-                String status;
-                DataSet dsChecklist = dh.GetData(GetQuery(building, period, year), null, out status);
                 DateTime findate = new DateTime(year, period, 1);
-                bool hasValues = false;
-                DataSet dsPrev = dh.GetData(GetPrevQuery(building, findate), null, out status);
-                if (dsChecklist != null && dsChecklist.Tables.Count > 0 && dsChecklist.Tables[0].Rows.Count > 0)
+                using (var context = SqlDataHandler.GetDataContext())
                 {
-                    DataRow dr = dsChecklist.Tables[0].Rows[0];
-                    hasValues = true;
-                    PopulateCheckList(Convert.ToInt16(dr["accountingFees"]), Convert.ToInt16(dr["bankCharges"]), Convert.ToInt16(dr["bankInterest"]),
-                        Convert.ToInt16(dr["debtors"]), Convert.ToInt16(dr["deliveries"]), Convert.ToInt16(dr["sewageExpense"]), Convert.ToInt16(dr["sewage"]), Convert.ToInt16(dr["electricityExpense"]),
-                        Convert.ToInt16(dr["electricity"]), Convert.ToInt16(dr["electricityRecon"]), Convert.ToInt16(dr["levies"]), Convert.ToInt16(dr["gardens"]), Convert.ToInt16(dr["insurance"]),
-                        Convert.ToInt16(dr["interestPaid"]), Convert.ToInt16(dr["memberInterest"]), Convert.ToInt16(dr["investment"]), Convert.ToInt16(dr["managementFees"]), Convert.ToInt16(dr["meterReading"]),
-                        Convert.ToInt16(dr["municipal"]), Convert.ToInt16(dr["municipalAccounts"]), Convert.ToInt16(dr["assets"]), Convert.ToInt16(dr["otherIncome"]), Convert.ToInt16(dr["liabilities"]),
-                        Convert.ToInt16(dr["own"]), Convert.ToInt16(dr["owners"]), Convert.ToInt16(dr["post"]), Convert.ToInt16(dr["printing"]), Convert.ToInt16(dr["refuse"]), Convert.ToInt16(dr["repairs"]),
-                        Convert.ToInt16(dr["salaries"]), Convert.ToInt16(dr["security"]), Convert.ToInt16(dr["specialLevies"]), Convert.ToInt16(dr["sundy"]), Convert.ToInt16(dr["suppliers"]),
-                        Convert.ToInt16(dr["telephone"]), Convert.ToInt16(dr["trust"]), Convert.ToInt16(dr["waterExpense"]), Convert.ToInt16(dr["water"]), Convert.ToInt16(dr["waterRecon"]),
-                        dr["accountingFeesNotes"].ToString(), dr["sundryNotes"].ToString(), dr["assetsNotes"].ToString(), dr["bankChargesNotes"].ToString(), dr["bankInterestNotes"].ToString(),
-                        dr["debtorsNotes"].ToString(), dr["deliveriesNotes"].ToString(), dr["sewageNotes"].ToString(), dr["sewageExpenseNotes"].ToString(), dr["electricityExpenseNotes"].ToString(),
-                        dr["electricityNotes"].ToString(), dr["gardensNotes"].ToString(), dr["insuranceNotes"].ToString(), dr["interestPaidNotes"].ToString(), dr["memberInterestNotes"].ToString(),
-                        dr["investmentNotes"].ToString(), dr["leviesReason"].ToString(), dr["liabilitiesNotes"].ToString(), dr["managementFeesNotes"].ToString(), dr["meterReadingNotes"].ToString(),
-                        dr["municipalAccountsNotes"].ToString(), dr["municipalReason"].ToString(), dr["otherIncomeNotes"].ToString(), dr["ownNotes"].ToString(), dr["ownersNotes"].ToString(),
-                        dr["postNotes"].ToString(), dr["printingNotes"].ToString(), dr["refuseNotes"].ToString(), dr["repairsNotes"].ToString(), dr["salariesNotes"].ToString(), dr["securityNotes"].ToString(),
-                        dr["specialLevyNotes"].ToString(), dr["suppliersNotes"].ToString(), dr["telephoneNotes"].ToString(), dr["trustNotes"].ToString(), dr["waterExpenseNotes"].ToString(),
-                        dr["waterNotes"].ToString());
-                }
-                else
-                {
-                    ClearCheckList();
-                }
-                if (dsPrev != null && dsPrev.Tables.Count > 0 && dsPrev.Tables[0].Rows.Count > 0)
-                {
-                    DataRow dr = dsPrev.Tables[0].Rows[0];
-                    PopulatePrevCheckList(hasValues, Convert.ToInt16(dr["accountingFees"]), Convert.ToInt16(dr["bankCharges"]), Convert.ToInt16(dr["bankInterest"]),
-                        Convert.ToInt16(dr["debtors"]), Convert.ToInt16(dr["deliveries"]), Convert.ToInt16(dr["sewageExpense"]), Convert.ToInt16(dr["sewage"]), Convert.ToInt16(dr["electricityExpense"]),
-                        Convert.ToInt16(dr["electricity"]), Convert.ToInt16(dr["electricityRecon"]), Convert.ToInt16(dr["levies"]), Convert.ToInt16(dr["gardens"]), Convert.ToInt16(dr["insurance"]),
-                        Convert.ToInt16(dr["interestPaid"]), Convert.ToInt16(dr["memberInterest"]), Convert.ToInt16(dr["investment"]), Convert.ToInt16(dr["managementFees"]), Convert.ToInt16(dr["meterReading"]),
-                        Convert.ToInt16(dr["municipal"]), Convert.ToInt16(dr["municipalAccounts"]), Convert.ToInt16(dr["assets"]), Convert.ToInt16(dr["otherIncome"]), Convert.ToInt16(dr["liabilities"]),
-                        Convert.ToInt16(dr["own"]), Convert.ToInt16(dr["owners"]), Convert.ToInt16(dr["post"]), Convert.ToInt16(dr["printing"]), Convert.ToInt16(dr["refuse"]), Convert.ToInt16(dr["repairs"]),
-                        Convert.ToInt16(dr["salaries"]), Convert.ToInt16(dr["security"]), Convert.ToInt16(dr["specialLevies"]), Convert.ToInt16(dr["sundy"]), Convert.ToInt16(dr["suppliers"]),
-                        Convert.ToInt16(dr["telephone"]), Convert.ToInt16(dr["trust"]), Convert.ToInt16(dr["waterExpense"]), Convert.ToInt16(dr["water"]), Convert.ToInt16(dr["waterRecon"]),
-                        dr["accountingFeesNotes"].ToString(), dr["sundryNotes"].ToString(), dr["assetsNotes"].ToString(), dr["bankChargesNotes"].ToString(), dr["bankInterestNotes"].ToString(),
-                        dr["debtorsNotes"].ToString(), dr["deliveriesNotes"].ToString(), dr["sewageNotes"].ToString(), dr["sewageExpenseNotes"].ToString(), dr["electricityExpenseNotes"].ToString(),
-                        dr["electricityNotes"].ToString(), dr["gardensNotes"].ToString(), dr["insuranceNotes"].ToString(), dr["interestPaidNotes"].ToString(), dr["memberInterestNotes"].ToString(),
-                        dr["investmentNotes"].ToString(), dr["leviesReason"].ToString(), dr["liabilitiesNotes"].ToString(), dr["managementFeesNotes"].ToString(), dr["meterReadingNotes"].ToString(),
-                        dr["municipalAccountsNotes"].ToString(), dr["municipalReason"].ToString(), dr["otherIncomeNotes"].ToString(), dr["ownNotes"].ToString(), dr["ownersNotes"].ToString(),
-                        dr["postNotes"].ToString(), dr["printingNotes"].ToString(), dr["refuseNotes"].ToString(), dr["repairsNotes"].ToString(), dr["salariesNotes"].ToString(), dr["securityNotes"].ToString(),
-                        dr["specialLevyNotes"].ToString(), dr["suppliersNotes"].ToString(), dr["telephoneNotes"].ToString(), dr["trustNotes"].ToString(), dr["waterExpenseNotes"].ToString(),
-                        dr["waterNotes"].ToString());
+                    var itm = context.tblMonthFins.SingleOrDefault(a => a.buildingID == building && a.findate == findate);
+                    if (itm != null)
+                    {
+                        PopulateCheckList(itm);
+                    }
+                    var prefDate = findate.AddMonths(-1);
+                    var prefItem = context.tblMonthFins.SingleOrDefault(a => a.buildingID == building && a.findate == prefDate);
+                    if (prefItem != null)
+                    {
+                        PopulatePrevCheckList(itm != null, prefItem);
+                    }
+
                 }
             }
-            else
-            {
-                ClearCheckList();
-            }
+        }
+
+        private void PopulatePrevCheckList(bool hasValues, tblMonthFin itm)
+        {
+            PopulatePrevCheckList(hasValues,
+                        itm.accountingFees,
+                        itm.bankCharges,
+                        itm.bankInterest,
+                        itm.debtors,
+                        itm.deliveries,
+                        itm.sewageExpense,
+                        itm.sewage,
+                        itm.electricityExpense,
+                        itm.electricity,
+                        itm.electricityRecon,
+                        itm.levies,
+                        itm.gardens,
+                        itm.insurance,
+                        itm.interestPaid,
+                        itm.memberInterest,
+                        itm.investment,
+                        itm.managementFees,
+                        itm.meterReading,
+                        itm.municipal,
+                        itm.municipalAccounts,
+                        itm.assets,
+                        itm.otherIncome,
+                        itm.liabilities,
+                        itm.own,
+                        itm.owners,
+                        itm.post,
+                        itm.printing,
+                        itm.refuse,
+                        itm.repairs,
+                        itm.salaries,
+                        itm.security,
+                        itm.specialLevies,
+                        itm.sundy,
+                        itm.suppliers,
+                        itm.telephone,
+                        itm.trust,
+                        itm.waterExpense,
+                        itm.water,
+                        itm.waterRecon,
+                        itm.accountingFeesNotes,
+                        itm.sundryNotes,
+                        itm.assetsNotes,
+                        itm.bankChargesNotes,
+                        itm.bankInterestNotes,
+                        itm.debtorsNotes,
+                        itm.deliveriesNotes,
+                        itm.sewageNotes,
+                        itm.sewageExpenseNotes,
+                        itm.electricityExpenseNotes,
+                        itm.electricityNotes,
+                        itm.gardensNotes,
+                        itm.insuranceNotes,
+                        itm.interestPaidNotes,
+                        itm.memberInterestNotes,
+                        itm.investmentNotes,
+                        itm.leviesReason,
+                        itm.liabilitiesNotes,
+                        itm.managementFeesNotes,
+                        itm.meterReadingNotes,
+                        itm.municipalAccountsNotes,
+                        itm.municipalReason,
+                        itm.otherIncomeNotes,
+                        itm.ownNotes,
+                        itm.ownersNotes,
+                        itm.postNotes,
+                        itm.printingNotes,
+                        itm.refuseNotes,
+                        itm.repairsNotes,
+                        itm.salariesNotes,
+                        itm.securityNotes,
+                        itm.specialLevyNotes,
+                        itm.suppliersNotes,
+                        itm.telephoneNotes,
+                        itm.trustNotes,
+                        itm.waterExpenseNotes,
+                        itm.waterNotes);
+        }
+
+        private void PopulateCheckList(tblMonthFin itm)
+        {
+            PopulateCheckList(
+                        itm.accountingFees,
+                        itm.bankCharges,
+                        itm.bankInterest,
+                        itm.debtors,
+                        itm.deliveries,
+                        itm.sewageExpense,
+                        itm.sewage,
+                        itm.electricityExpense,
+                        itm.electricity,
+                        itm.electricityRecon,
+                        itm.levies,
+                        itm.gardens,
+                        itm.insurance,
+                        itm.interestPaid,
+                        itm.memberInterest,
+                        itm.investment,
+                        itm.managementFees,
+                        itm.meterReading,
+                        itm.municipal,
+                        itm.municipalAccounts,
+                        itm.assets,
+                        itm.otherIncome,
+                        itm.liabilities,
+                        itm.own,
+                        itm.owners,
+                        itm.post,
+                        itm.printing,
+                        itm.refuse,
+                        itm.repairs,
+                        itm.salaries,
+                        itm.security,
+                        itm.specialLevies,
+                        itm.sundy,
+                        itm.suppliers,
+                        itm.telephone,
+                        itm.trust,
+                        itm.waterExpense,
+                        itm.water,
+                        itm.waterRecon,
+                        itm.accountingFeesNotes,
+                        itm.sundryNotes,
+                        itm.assetsNotes,
+                        itm.bankChargesNotes,
+                        itm.bankInterestNotes,
+                        itm.debtorsNotes,
+                        itm.deliveriesNotes,
+                        itm.sewageNotes,
+                        itm.sewageExpenseNotes,
+                        itm.electricityExpenseNotes,
+                        itm.electricityNotes,
+                        itm.gardensNotes,
+                        itm.insuranceNotes,
+                        itm.interestPaidNotes,
+                        itm.memberInterestNotes,
+                        itm.investmentNotes,
+                        itm.leviesReason,
+                        itm.liabilitiesNotes,
+                        itm.managementFeesNotes,
+                        itm.meterReadingNotes,
+                        itm.municipalAccountsNotes,
+                        itm.municipalReason,
+                        itm.otherIncomeNotes,
+                        itm.ownNotes,
+                        itm.ownersNotes,
+                        itm.postNotes,
+                        itm.printingNotes,
+                        itm.refuseNotes,
+                        itm.repairsNotes,
+                        itm.salariesNotes,
+                        itm.securityNotes,
+                        itm.specialLevyNotes,
+                        itm.suppliersNotes,
+                        itm.telephoneNotes,
+                        itm.trustNotes,
+                        itm.waterExpenseNotes,
+                        itm.waterNotes);
+
         }
 
         private void ClearCheckList()
@@ -465,10 +592,10 @@ namespace Astrodon.Controls
             txtWater.Text = txtWaterIncome.Text = String.Empty;
         }
 
-        private void PopulateCheckList(int accExp, int bankExp, int bankInc, int debtLia, int delExp, int domExp, int domInc, int elecExp, int elecInc, int elecRecover,
-            int levies, int gardensExp, int insExp, int intExp, int intInc, int invAss, int manExp, int meterExp, int munAss, int munLia, int otherAss, int otherInc,
-            int otherLia, int ownAss, int ownLia, int postExp, int printExp, int refuseExp, int repairExp, int salExp, int secExp, int specialInc, int sunAss,
-            int sunLia, int telExp, int trustAss, int waterExp, int waterInc, int waterRecover, String accountFees, String accruals, String assets, String bankCharges, String bankIncome,
+        private void PopulateCheckList(int? accExp, int? bankExp, int? bankInc, int? debtLia, int? delExp, int? domExp, int? domInc, int? elecExp, int? elecInc, int? elecRecover,
+            int? levies, int? gardensExp, int? insExp, int? intExp, int? intInc, int? invAss, int? manExp, int? meterExp, int? munAss, int? munLia, int? otherAss, int? otherInc,
+            int? otherLia, int? ownAss, int? ownLia, int? postExp, int? printExp, int? refuseExp, int? repairExp, int? salExp, int? secExp, int? specialInc, int? sunAss,
+            int? sunLia, int? telExp, int? trustAss, int? waterExp, int? waterInc, int? waterRecover, String accountFees, String accruals, String assets, String bankCharges, String bankIncome,
             String debtors, String deliveries, String domIncome, String domExpense, String electricity, String elecIncome, String gardens, String insurance, String interest,
             String intIncome, String investment, String leviesReason, String liabilities, String manFees, String meter, String muniAcc, String muniDep, String otherIncome,
             String ownAccount, String ownerDeposits, String post, String printing, String refuse, String repairs, String salaries, String security, String specialIncome,
@@ -598,10 +725,10 @@ namespace Astrodon.Controls
             txtWaterIncome.Text = waterIncome;
         }
 
-        private void PopulatePrevCheckList(bool hasValues, int accExp, int bankExp, int bankInc, int debtLia, int delExp, int domExp, int domInc, int elecExp, int elecInc, int elecRecover,
-            int levies, int gardensExp, int insExp, int intExp, int intInc, int invAss, int manExp, int meterExp, int munAss, int munLia, int otherAss, int otherInc,
-            int otherLia, int ownAss, int ownLia, int postExp, int printExp, int refuseExp, int repairExp, int salExp, int secExp, int specialInc, int sunAss,
-            int sunLia, int telExp, int trustAss, int waterExp, int waterInc, int waterRecover, String accountFees, String accruals, String assets, String bankCharges, String bankIncome,
+        private void PopulatePrevCheckList(bool hasValues, int?accExp, int?bankExp, int?bankInc, int?debtLia, int?delExp, int?domExp, int?domInc, int?elecExp, int?elecInc, int?elecRecover,
+            int?levies, int?gardensExp, int?insExp, int?intExp, int?intInc, int?invAss, int?manExp, int?meterExp, int?munAss, int?munLia, int?otherAss, int?otherInc,
+            int?otherLia, int?ownAss, int?ownLia, int?postExp, int?printExp, int?refuseExp, int?repairExp, int?salExp, int?secExp, int?specialInc, int?sunAss,
+            int?sunLia, int?telExp, int?trustAss, int?waterExp, int?waterInc, int?waterRecover, String accountFees, String accruals, String assets, String bankCharges, String bankIncome,
             String debtors, String deliveries, String domIncome, String domExpense, String electricity, String elecIncome, String gardens, String insurance, String interest,
             String intIncome, String investment, String leviesReason, String liabilities, String manFees, String meter, String muniAcc, String muniDep, String otherIncome,
             String ownAccount, String ownerDeposits, String post, String printing, String refuse, String repairs, String salaries, String security, String specialIncome,
@@ -771,66 +898,6 @@ namespace Astrodon.Controls
             #endregion Checkboxes
         }
 
-        private String GetQuery(String buildingCode, int period, int year)
-        {
-            String query = "SELECT id, completeDate, buildingID, finPeriod, year, levies, leviesReason, sewage, sewageNotes, electricity, electricityNotes, water, waterNotes, specialLevies, ";
-            query += "specialLevyNotes, otherIncomeDescription, otherIncome, otherIncomeNotes, memberInterest, memberInterestNotes, bankInterest, bankInterestNotes, accountingFees, ";
-            query += "accountingFeesNotes, bankCharges, bankChargesNotes, sewageExpense, sewageExpenseNotes, deliveries, deliveriesNotes, electricityExpense, electricityExpenseNotes, gardens, ";
-            query += "gardensNotes, insurance, insuranceNotes, interestPaid, interestPaidNotes, managementFees, managementFeesNotes, meterReading, meterReadingNotes, printing, printingNotes, ";
-            query += "post, postNotes, repairs, repairsNotes, refuse, refuseNotes, salaries, salariesNotes, security, securityNotes, telephone, telephoneNotes, waterExpense, waterExpenseNotes, ";
-            query += "municipal, municipalReason, trust, trustNotes, own, ownNotes, investment, investmentNotes, sundy, sundryNotes, assets, assetsNotes, debtors, debtorsNotes, municipalAccounts, ";
-            query += "municipalAccountsNotes, owners, ownersNotes, suppliers, suppliersNotes, liabilities, liabilitiesNotes, electricityRecon, waterRecon FROM tblMonthFin";
-            query += " WHERE buildingID = '" + buildingCode + "' AND finPeriod = " + period.ToString() + " AND year = " + year.ToString();
-            return query;
-        }
-
-        private String GetPrevQuery(String buildingCode, DateTime findate)
-        {
-            String query = "SELECT top(1) id, completeDate, buildingID, finPeriod, year, levies, leviesReason, sewage, sewageNotes, electricity, electricityNotes, water, waterNotes, specialLevies, ";
-            query += "specialLevyNotes, otherIncomeDescription, otherIncome, otherIncomeNotes, memberInterest, memberInterestNotes, bankInterest, bankInterestNotes, accountingFees, ";
-            query += "accountingFeesNotes, bankCharges, bankChargesNotes, sewageExpense, sewageExpenseNotes, deliveries, deliveriesNotes, electricityExpense, electricityExpenseNotes, gardens, ";
-            query += "gardensNotes, insurance, insuranceNotes, interestPaid, interestPaidNotes, managementFees, managementFeesNotes, meterReading, meterReadingNotes, printing, printingNotes, ";
-            query += "post, postNotes, repairs, repairsNotes, refuse, refuseNotes, salaries, salariesNotes, security, securityNotes, telephone, telephoneNotes, waterExpense, waterExpenseNotes, ";
-            query += "municipal, municipalReason, trust, trustNotes, own, ownNotes, investment, investmentNotes, sundy, sundryNotes, assets, assetsNotes, debtors, debtorsNotes, municipalAccounts, ";
-            query += "municipalAccountsNotes, owners, ownersNotes, suppliers, suppliersNotes, liabilities, liabilitiesNotes, electricityRecon, waterRecon FROM tblMonthFin";
-            query += " WHERE buildingID = '" + buildingCode + "' AND findate < '" + findate.ToString("yyyy/MM/dd") + "' ORDER BY findate desc";
-            return query;
-        }
-
-        private String UpdateQuery()
-        {
-            String query = "IF EXiSTS(SELECT id FROM tblMonthFin WHERE buildingID = @buildingID AND finPeriod = @finPeriod AND year = @year)";
-            query += " UPDATE tblMonthFin SET levies = @levies, leviesReason = @leviesReason, sewage = @sewage, sewageNotes = @sewageNotes, electricity = @electricity, electricityNotes = @electricityNotes, ";
-            query += " water = @water, waterNotes = @waterNotes, specialLevies = @specialLevies, specialLevyNotes = @specialLevyNotes, otherIncome = @otherIncome, otherIncomeNotes = @otherIncomeNotes, ";
-            query += " memberInterest = @memberInterest, memberInterestNotes = @memberInterestNotes, bankInterest = @bankInterest, bankInterestNotes = @bankInterestNotes, accountingFees = @accountingFees, ";
-            query += " accountingFeesNotes = @accountingFeesNotes, bankCharges = @bankCharges, bankChargesNotes = @bankChargesNotes, sewageExpense = @sewageExpense, sewageExpenseNotes = @sewageExpenseNotes, ";
-            query += " deliveries = @deliveries, deliveriesNotes = @deliveriesNotes, electricityExpense = @electricityExpense, electricityExpenseNotes = @electricityExpenseNotes, gardens = @gardens, ";
-            query += " gardensNotes = @gardensNotes, insurance = @insurance, insuranceNotes = @insuranceNotes, interestPaid = @interestPaid, interestPaidNotes = @interestPaidNotes, managementFees = @managementFees, ";
-            query += " managementFeesNotes = @managementFeesNotes, meterReading = @meterReading, meterReadingNotes = @meterReadingNotes, printing = @printing, printingNotes = @printingNotes, post = @post, ";
-            query += " postNotes = @postNotes, repairs = @repairs, repairsNotes = @repairsNotes, refuse = @refuse, refuseNotes = @refuseNotes, salaries = @salaries, salariesNotes = @salariesNotes, ";
-            query += " security = @security, securityNotes = @securityNotes, telephone = @telephone, telephoneNotes = @telephoneNotes, waterExpense = @waterExpense, waterExpenseNotes = @waterExpenseNotes, ";
-            query += " municipal = @municipal, municipalReason = @municipalReason, trust = @trust, trustNotes = @trustNotes, own = @own, ownNotes = @ownNotes, investment = @investment, investmentNotes = @investmentNotes, ";
-            query += " sundy = @sundy, sundryNotes = @sundryNotes, assets = @assets, assetsNotes = @assetsNotes, debtors = @debtors, debtorsNotes = @debtorsNotes, municipalAccounts = @municipalAccounts, ";
-            query += " municipalAccountsNotes = @municipalAccountsNotes, owners = @owners, ownersNotes = @ownersNotes, suppliers = @suppliers, suppliersNotes = @suppliersNotes, liabilities = @liabilities, ";
-            query += " liabilitiesNotes = @liabilitiesNotes, electricityRecon = @electricityRecon, waterRecon = @waterRecon WHERE buildingID = @buildingID AND finPeriod = @finPeriod AND year = @year";
-            query += " ELSE ";
-            query += " INSERT INTO tblMonthFin(completeDate, buildingID, userID, finPeriod, year, findate, levies, leviesReason, sewage, sewageNotes, electricity, electricityNotes, water, waterNotes, specialLevies, ";
-            query += "specialLevyNotes, otherIncome, otherIncomeNotes, memberInterest, memberInterestNotes, bankInterest, bankInterestNotes, accountingFees, ";
-            query += "accountingFeesNotes, bankCharges, bankChargesNotes, sewageExpense, sewageExpenseNotes, deliveries, deliveriesNotes, electricityExpense, electricityExpenseNotes, gardens, ";
-            query += "gardensNotes, insurance, insuranceNotes, interestPaid, interestPaidNotes, managementFees, managementFeesNotes, meterReading, meterReadingNotes, printing, printingNotes, ";
-            query += "post, postNotes, repairs, repairsNotes, refuse, refuseNotes, salaries, salariesNotes, security, securityNotes, telephone, telephoneNotes, waterExpense, waterExpenseNotes, ";
-            query += "municipal, municipalReason, trust, trustNotes, own, ownNotes, investment, investmentNotes, sundy, sundryNotes, assets, assetsNotes, debtors, debtorsNotes, municipalAccounts, ";
-            query += "municipalAccountsNotes, owners, ownersNotes, suppliers, suppliersNotes, liabilities, liabilitiesNotes, electricityRecon, waterRecon)";
-            query += " VALUES(@completeDate, @buildingID, @userID, @finPeriod, @year, @findate, @levies, @leviesReason, @sewage, @sewageNotes, @electricity, @electricityNotes, @water, @waterNotes, @specialLevies, @";
-            query += "specialLevyNotes, @otherIncome, @otherIncomeNotes, @memberInterest, @memberInterestNotes, @bankInterest, @bankInterestNotes, @accountingFees, @";
-            query += "accountingFeesNotes, @bankCharges, @bankChargesNotes, @sewageExpense, @sewageExpenseNotes, @deliveries, @deliveriesNotes, @electricityExpense, @electricityExpenseNotes, @gardens, @";
-            query += "gardensNotes, @insurance, @insuranceNotes, @interestPaid, @interestPaidNotes, @managementFees, @managementFeesNotes, @meterReading, @meterReadingNotes, @printing, @printingNotes, @";
-            query += "post, @postNotes, @repairs, @repairsNotes, @refuse, @refuseNotes, @salaries, @salariesNotes, @security, @securityNotes, @telephone, @telephoneNotes, @waterExpense, @waterExpenseNotes, @";
-            query += "municipal, @municipalReason, @trust, @trustNotes, @own, @ownNotes, @investment, @investmentNotes, @sundy, @sundryNotes, @assets, @assetsNotes, @debtors, @debtorsNotes, @municipalAccounts, @";
-            query += "municipalAccountsNotes, @owners, @ownersNotes, @suppliers, @suppliersNotes, @liabilities, @liabilitiesNotes, @electricityRecon, @waterRecon)";
-            return query;
-        }
-
         private void btnReset_Click(object sender, EventArgs e)
         {
             LoadChecklist();
@@ -855,120 +922,110 @@ namespace Astrodon.Controls
             }
             else
             {
-                Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-                sqlParms.Add("@completeDate", DateTime.Now);
-                sqlParms.Add("@buildingID", cmbBuilding.SelectedValue.ToString());
-                sqlParms.Add("@finPeriod", cmbFinPeriod.SelectedItem.ToString());
-                sqlParms.Add("@year", cmbYear.SelectedItem.ToString());
-                sqlParms.Add("@userID", Controller.user.id);
-                String period = cmbFinPeriod.SelectedItem.ToString();
-                String year = cmbYear.SelectedItem.ToString();
-
-                DateTime findate = new DateTime(int.Parse(year), int.Parse(period), 1);
-                sqlParms.Add("@findate", findate);
-                sqlParms.Add("@levies", (this.chkLeviesIncY.Checked ? 1 : this.chkLeviesIncN.Checked ? 2 : 0));
-                sqlParms.Add("@leviesReason", txtLevies.Text);
-                sqlParms.Add("@sewage", (this.chkDomIncY.Checked ? 1 : this.chkDomIncN.Checked ? 2 : 0));
-                sqlParms.Add("@sewageNotes", txtDomesticIncome.Text);
-                sqlParms.Add("@electricity", (this.chkElecIncY.Checked ? 1 : this.chkElecIncN.Checked ? 2 : 0));
-                sqlParms.Add("@electricityNotes", txtElectricityIncome.Text);
-                sqlParms.Add("@water", (this.chkWaterIncY.Checked ? 1 : this.chkWaterIncN.Checked ? 2 : 0));
-                sqlParms.Add("@waterNotes", txtWaterIncome.Text);
-                sqlParms.Add("@specialLevies", (this.chkSpecialIncY.Checked ? 1 : this.chkSpecialIncN.Checked ? 2 : 0));
-                sqlParms.Add("@specialLevyNotes", txtSpecialIncome.Text);
-                sqlParms.Add("@otherIncome", (this.chkOtherIncY.Checked ? 1 : this.chkOtherIncN.Checked ? 2 : 0));
-                sqlParms.Add("@otherIncomeNotes", txtOtherIncome.Text);
-                sqlParms.Add("@memberInterest", (this.chkIntIncY.Checked ? 1 : this.chkIntIncN.Checked ? 2 : 0));
-                sqlParms.Add("@memberInterestNotes", txtInterestIncome.Text);
-                sqlParms.Add("@bankInterest", (this.chkBankIncY.Checked ? 1 : this.chkBankIncN.Checked ? 2 : 0));
-                sqlParms.Add("@bankInterestNotes", txtBankIncome.Text);
-                sqlParms.Add("@accountingFees", (this.chkAccExpY.Checked ? 1 : this.chkAccExpN.Checked ? 2 : 0));
-                sqlParms.Add("@accountingFeesNotes", txtAccountFees.Text);
-                sqlParms.Add("@bankCharges", (this.chkBankExpY.Checked ? 1 : this.chkBankExpN.Checked ? 2 : 0));
-                sqlParms.Add("@bankChargesNotes", txtBankCharges.Text);
-                sqlParms.Add("@sewageExpense", (this.chkDomExpY.Checked ? 1 : this.chkDomExpN.Checked ? 2 : 0));
-                sqlParms.Add("@sewageExpenseNotes", txtDomExpense.Text);
-                sqlParms.Add("@deliveries", (this.chkDelExpY.Checked ? 1 : this.chkDelExpN.Checked ? 2 : 0));
-                sqlParms.Add("@deliveriesNotes", txtDeliveries.Text);
-                sqlParms.Add("@electricityExpense", (this.chkElecExpY.Checked ? 1 : this.chkElecExpN.Checked ? 2 : 0));
-                sqlParms.Add("@electricityExpenseNotes", txtElectricity.Text);
-                sqlParms.Add("@gardens", (this.chkGardensExpY.Checked ? 1 : this.chkGardensExpN.Checked ? 2 : 0));
-                sqlParms.Add("@gardensNotes", txtGardens.Text);
-                sqlParms.Add("@insurance", (this.chkInsExpY.Checked ? 1 : this.chkInsExpN.Checked ? 2 : 0));
-                sqlParms.Add("@insuranceNotes", txtInsurance.Text);
-                sqlParms.Add("@interestPaid", (this.chkIntExpY.Checked ? 1 : this.chkIntExpN.Checked ? 2 : 0));
-                sqlParms.Add("@interestPaidNotes", txtInterest.Text);
-                sqlParms.Add("@managementFees", (this.chkManExpY.Checked ? 1 : this.chkManExpN.Checked ? 2 : 0));
-                sqlParms.Add("@managementFeesNotes", txtManagementFees.Text);
-                sqlParms.Add("@meterReading", (this.chkMeterExpY.Checked ? 1 : this.chkMeterExpN.Checked ? 2 : 0));
-                sqlParms.Add("@meterReadingNotes", txtMeter.Text);
-                sqlParms.Add("@printing", (this.chkPrintExpY.Checked ? 1 : this.chkPrintExpN.Checked ? 2 : 0));
-                sqlParms.Add("@printingNotes", txtPrinting.Text);
-                sqlParms.Add("@post", (this.chkPostExpY.Checked ? 1 : this.chkPostExpN.Checked ? 2 : 0));
-                sqlParms.Add("@postNotes", txtPost.Text);
-                sqlParms.Add("@repairs", (this.chkRepairsExpY.Checked ? 1 : this.chkRepairsExpN.Checked ? 2 : 0));
-                sqlParms.Add("@repairsNotes", txtRepairs.Text);
-                sqlParms.Add("@refuse", (this.chkRefuseExpY.Checked ? 1 : this.chkRefuseExpN.Checked ? 2 : 0));
-                sqlParms.Add("@refuseNotes", txtRefuse.Text);
-                sqlParms.Add("@salaries", (this.chkSalExpY.Checked ? 1 : this.chkSalExpN.Checked ? 2 : 0));
-                sqlParms.Add("@salariesNotes", txtSalaries.Text);
-                sqlParms.Add("@security", (this.chkSecExpY.Checked ? 1 : this.chkSecExpN.Checked ? 2 : 0));
-                sqlParms.Add("@securityNotes", txtSecurity.Text);
-                sqlParms.Add("@telephone", (this.chkTelExpY.Checked ? 1 : this.chkTelExpN.Checked ? 2 : 0));
-                sqlParms.Add("@telephoneNotes", txtTelephone.Text);
-                sqlParms.Add("@waterExpense", (this.chkWaterExpY.Checked ? 1 : this.chkWaterExpN.Checked ? 2 : 0));
-                sqlParms.Add("@waterExpenseNotes", txtWater.Text);
-                sqlParms.Add("@municipal", (this.chkMunAssetY.Checked ? 1 : this.chkMunAssetN.Checked ? 2 : 0));
-                sqlParms.Add("@municipalReason", txtMunDep.Text);
-                sqlParms.Add("@trust", (this.chkTrustAssY.Checked ? 1 : this.chkTrustAssN.Checked ? 2 : 0));
-                sqlParms.Add("@trustNotes", txtTrust.Text);
-                sqlParms.Add("@own", (this.chkOwnAccAssY.Checked ? 1 : this.chkOwnAccAssN.Checked ? 2 : 0));
-                sqlParms.Add("@ownNotes", txtOwnAccount.Text);
-                sqlParms.Add("@investment", (this.chkInvestAssY.Checked ? 1 : this.chkInvestAssN.Checked ? 2 : 0));
-                sqlParms.Add("@investmentNotes", txtInvestment.Text);
-                sqlParms.Add("@sundy", (this.chkSunAssY.Checked ? 1 : this.chkSunAssN.Checked ? 2 : 0));
-                sqlParms.Add("@sundryNotes", txtAccruals.Text);
-                sqlParms.Add("@assets", (this.chkOtherAssY.Checked ? 1 : this.chkOtherAssN.Checked ? 2 : 0));
-                sqlParms.Add("@assetsNotes", txtAssets.Text);
-                sqlParms.Add("@debtors", (this.chkDebtLiaY.Checked ? 1 : this.chkDebtLiaN.Checked ? 2 : 0));
-                sqlParms.Add("@debtorsNotes", txtDebtors.Text);
-                sqlParms.Add("@municipalAccounts", (this.chkMunLiaY.Checked ? 1 : this.chkMunLiaN.Checked ? 2 : 0));
-                sqlParms.Add("@municipalAccountsNotes", txtMunAcc.Text);
-                sqlParms.Add("@owners", (this.chkOwnLiaY.Checked ? 1 : this.chkOwnLiaN.Checked ? 2 : 0));
-                sqlParms.Add("@ownersNotes", txtOwnerDep.Text);
-                sqlParms.Add("@suppliers", (this.chkSunLiaY.Checked ? 1 : this.chkSunLiaN.Checked ? 2 : 0));
-                sqlParms.Add("@suppliersNotes", txtSuppliers.Text);
-                sqlParms.Add("@liabilities", (this.chkOtherLiaY.Checked ? 1 : this.chkOtherLiaN.Checked ? 2 : 0));
-                sqlParms.Add("@liabilitiesNotes", txtLiabilities.Text);
-                sqlParms.Add("@waterRecon", (this.chkWaterInline.Checked ? 1 : this.chkWaterOver.Checked ? 2 : 3));
-                sqlParms.Add("@electricityRecon", (this.chkElecInline.Checked ? 1 : this.chkElecOver.Checked ? 2 : 3));
-                String status;
-                if (dh.SetData(UpdateQuery(), sqlParms, out status) > -1)
+                using (var context = SqlDataHandler.GetDataContext())
                 {
-                    //Generate the PDF
+                    String building = cmbBuilding.SelectedValue.ToString();
+                    int myPeriod = int.Parse(cmbFinPeriod.SelectedItem.ToString());
+                    int myYear = int.Parse(cmbYear.SelectedItem.ToString());
+                    DateTime myFinDate = new DateTime(myYear, myPeriod, 1);
+                    var itm = context.tblMonthFins.SingleOrDefault(a => a.buildingID == building && a.findate == myFinDate);
 
-                    var pdfReport = CreateExcel(true);
-                    using (var context = SqlDataHandler.GetDataContext())
+                    if(itm == null)
                     {
-                        //SELECT id FROM tblMonthFin WHERE buildingID = @buildingID AND finPeriod = @finPeriod AND year = @year
-
-                        int iPeriod = Convert.ToInt32(period);
-                        int iyear = Convert.ToInt32(year);
-                        string building = cmbBuilding.SelectedValue.ToString();
-                        var record = context.tblMonthFins.SingleOrDefault(a => a.buildingID == building
-                                                                            && a.finPeriod == iPeriod
-                                                                            && a.year == iyear);
-
-                        record.CheckListPDF = pdfReport;
-                        context.SaveChanges();
-                    
+                        itm = new tblMonthFin()
+                        {
+                            buildingID = building,
+                            userID = Controller.user.id,
+                            finPeriod = myFinDate.Month,
+                            year = myFinDate.Year,
+                            findate = myFinDate
+                        };
+                        context.tblMonthFins.Add(itm);
                     }
+                    itm.userID = Controller.user.id;
+                    itm.completeDate = DateTime.Now;
 
+                    itm.levies = this.chkLeviesIncY.Checked ? 1 : this.chkLeviesIncN.Checked ? 2 : 0;
+                    itm.leviesReason = txtLevies.Text;
+                    itm.sewage = this.chkDomIncY.Checked ? 1 : this.chkDomIncN.Checked ? 2 : 0;
+                    itm.sewageNotes = txtDomesticIncome.Text;
+                    itm.electricity = this.chkElecIncY.Checked ? 1 : this.chkElecIncN.Checked ? 2 : 0;
+                    itm.electricityNotes = txtElectricityIncome.Text;
+                    itm.water = this.chkWaterIncY.Checked ? 1 : this.chkWaterIncN.Checked ? 2 : 0;
+                    itm.waterNotes = txtWaterIncome.Text;
+                    itm.specialLevies = this.chkSpecialIncY.Checked ? 1 : this.chkSpecialIncN.Checked ? 2 : 0;
+                    itm.specialLevyNotes = txtSpecialIncome.Text;
+                    itm.otherIncome = this.chkOtherIncY.Checked ? 1 : this.chkOtherIncN.Checked ? 2 : 0;
+                    itm.otherIncomeNotes = txtOtherIncome.Text;
+                    itm.memberInterest = this.chkIntIncY.Checked ? 1 : this.chkIntIncN.Checked ? 2 : 0;
+                    itm.memberInterestNotes = txtInterestIncome.Text;
+                    itm.bankInterest = this.chkBankIncY.Checked ? 1 : this.chkBankIncN.Checked ? 2 : 0;
+                    itm.bankInterestNotes = txtBankIncome.Text;
+                    itm.accountingFees = this.chkAccExpY.Checked ? 1 : this.chkAccExpN.Checked ? 2 : 0;
+                    itm.accountingFeesNotes = txtAccountFees.Text;
+                    itm.bankCharges = this.chkBankExpY.Checked ? 1 : this.chkBankExpN.Checked ? 2 : 0;
+                    itm.bankChargesNotes = txtBankCharges.Text;
+                    itm.sewageExpense = this.chkDomExpY.Checked ? 1 : this.chkDomExpN.Checked ? 2 : 0;
+                    itm.sewageExpenseNotes = txtDomExpense.Text;
+                    itm.deliveries = this.chkDelExpY.Checked ? 1 : this.chkDelExpN.Checked ? 2 : 0;
+                    itm.deliveriesNotes = txtDeliveries.Text;
+                    itm.electricityExpense = this.chkElecExpY.Checked ? 1 : this.chkElecExpN.Checked ? 2 : 0;
+                    itm.electricityExpenseNotes = txtElectricity.Text;
+                    itm.gardens = this.chkGardensExpY.Checked ? 1 : this.chkGardensExpN.Checked ? 2 : 0;
+                    itm.gardensNotes = txtGardens.Text;
+                    itm.insurance = this.chkInsExpY.Checked ? 1 : this.chkInsExpN.Checked ? 2 : 0;
+                    itm.insuranceNotes = txtInsurance.Text;
+                    itm.interestPaid = this.chkIntExpY.Checked ? 1 : this.chkIntExpN.Checked ? 2 : 0;
+                    itm.interestPaidNotes = txtInterest.Text;
+                    itm.managementFees = this.chkManExpY.Checked ? 1 : this.chkManExpN.Checked ? 2 : 0;
+                    itm.managementFeesNotes = txtManagementFees.Text;
+                    itm.meterReading = this.chkMeterExpY.Checked ? 1 : this.chkMeterExpN.Checked ? 2 : 0;
+                    itm.meterReadingNotes = txtMeter.Text;
+                    itm.printing = this.chkPrintExpY.Checked ? 1 : this.chkPrintExpN.Checked ? 2 : 0;
+                    itm.printingNotes = txtPrinting.Text;
+                    itm.post = this.chkPostExpY.Checked ? 1 : this.chkPostExpN.Checked ? 2 : 0;
+                    itm.postNotes = txtPost.Text;
+                    itm.repairs = this.chkRepairsExpY.Checked ? 1 : this.chkRepairsExpN.Checked ? 2 : 0;
+                    itm.repairsNotes = txtRepairs.Text;
+                    itm.refuse = this.chkRefuseExpY.Checked ? 1 : this.chkRefuseExpN.Checked ? 2 : 0;
+                    itm.refuseNotes = txtRefuse.Text;
+                    itm.salaries = this.chkSalExpY.Checked ? 1 : this.chkSalExpN.Checked ? 2 : 0;
+                    itm.salariesNotes = txtSalaries.Text;
+                    itm.security = this.chkSecExpY.Checked ? 1 : this.chkSecExpN.Checked ? 2 : 0;
+                    itm.securityNotes = txtSecurity.Text;
+                    itm.telephone = this.chkTelExpY.Checked ? 1 : this.chkTelExpN.Checked ? 2 : 0;
+                    itm.telephoneNotes = txtTelephone.Text;
+                    itm.waterExpense = this.chkWaterExpY.Checked ? 1 : this.chkWaterExpN.Checked ? 2 : 0;
+                    itm.waterExpenseNotes = txtWater.Text;
+                    itm.municipal = this.chkMunAssetY.Checked ? 1 : this.chkMunAssetN.Checked ? 2 : 0;
+                    itm.municipalReason = txtMunDep.Text;
+                    itm.trust = this.chkTrustAssY.Checked ? 1 : this.chkTrustAssN.Checked ? 2 : 0;
+                    itm.trustNotes = txtTrust.Text;
+                    itm.own = this.chkOwnAccAssY.Checked ? 1 : this.chkOwnAccAssN.Checked ? 2 : 0;
+                    itm.ownNotes = txtOwnAccount.Text;
+                    itm.investment = this.chkInvestAssY.Checked ? 1 : this.chkInvestAssN.Checked ? 2 : 0;
+                    itm.investmentNotes = txtInvestment.Text;
+                    itm.sundy = this.chkSunAssY.Checked ? 1 : this.chkSunAssN.Checked ? 2 : 0;
+                    itm.sundryNotes = txtAccruals.Text;
+                    itm.assets = this.chkOtherAssY.Checked ? 1 : this.chkOtherAssN.Checked ? 2 : 0;
+                    itm.assetsNotes = txtAssets.Text;
+                    itm.debtors = this.chkDebtLiaY.Checked ? 1 : this.chkDebtLiaN.Checked ? 2 : 0;
+                    itm.debtorsNotes = txtDebtors.Text;
+                    itm.municipalAccounts = this.chkMunLiaY.Checked ? 1 : this.chkMunLiaN.Checked ? 2 : 0;
+                    itm.municipalAccountsNotes = txtMunAcc.Text;
+                    itm.owners = this.chkOwnLiaY.Checked ? 1 : this.chkOwnLiaN.Checked ? 2 : 0;
+                    itm.ownersNotes = txtOwnerDep.Text;
+                    itm.suppliers = this.chkSunLiaY.Checked ? 1 : this.chkSunLiaN.Checked ? 2 : 0;
+                    itm.suppliersNotes = txtSuppliers.Text;
+                    itm.liabilities = this.chkOtherLiaY.Checked ? 1 : this.chkOtherLiaN.Checked ? 2 : 0;
+                    itm.liabilitiesNotes = txtLiabilities.Text;
+                    itm.waterRecon = this.chkWaterInline.Checked ? 1 : this.chkWaterOver.Checked ? 2 : 3;
+                    itm.electricityRecon = this.chkElecInline.Checked ? 1 : this.chkElecOver.Checked ? 2 : 3;
+                    context.SaveChanges();
+                    var pdfReport = CreateExcel(true);
+                    itm.CheckListPDF = pdfReport;
+                    context.SaveChanges();
                     MessageBox.Show("Record saved!");
-                }
-                else
-                {
-                    MessageBox.Show(status);
                 }
             }
         }
@@ -1011,46 +1068,6 @@ namespace Astrodon.Controls
                         break;
                 }
             }
-        }
-
-        private void txtBankIncome_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void txtInterestIncome_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void txtOtherIncome_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void txtSpecialIncome_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void txtWaterIncome_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void txtElectricityIncome_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void txtDomesticIncome_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void txtLevies_TextChanged(object sender, EventArgs e)
-        {
         }
 
         private void btnPrint_Click(object sender, EventArgs e)

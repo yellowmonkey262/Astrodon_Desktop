@@ -11,7 +11,7 @@ namespace Astrodon.Data
     {
         public int id { get; set; }
 
-        public DateTime completeDate { get; set; }
+        public DateTime? completeDate { get; set; }
 
         [Required]
         [StringLength(50)]

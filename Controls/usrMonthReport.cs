@@ -26,6 +26,7 @@ namespace Astrodon.Controls
         public usrMonthReport()
         {
             InitializeComponent();
+            dgMonthly.AutoGenerateColumns = false;
             results = new BindingList<MonthReport>();
             LoadYears();
             LoadUsers();
@@ -42,7 +43,7 @@ namespace Astrodon.Controls
                             Value = u.name
                         };
                 _Users = q.OrderBy(a => a.Value).ToList();
-                _Users.Insert(0,new IdValue()
+                _Users.Insert(0, new IdValue()
                 {
                     Id = 0,
                     Value = "All Users"
@@ -82,7 +83,7 @@ namespace Astrodon.Controls
             cmbMonth.DisplayMember = "Value";
             cmbMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
 
-            
+
         }
 
         private void usrMonthReport_Load(object sender, EventArgs e)
@@ -98,154 +99,81 @@ namespace Astrodon.Controls
             buildings = new Buildings(false).buildings;
         }
 
-        private String completedQuery()
-        {
-            var selectedYear = cmbYear.SelectedItem as IdValue;
-            if (selectedYear == null)
-                return string.Empty;
-
-            var selectedMonth = cmbMonth.SelectedItem as IdValue;
-            if (selectedMonth == null)
-                return string.Empty;
-
-            var dt = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
-
-            String query = "SELECT b.Building, b.Code, f.findate, f.completeDate, u.name FROM tblMonthFin AS f INNER JOIN tblBuildings AS b ON f.buildingID = b.Code LEFT OUTER JOIN tblUsers AS u ON f.userID = u.id";
-            query += " WHERE finDate >= '" + dt.ToString("yyyy/MM/dd") + "' AND finDate <= '" + dt.AddMonths(1).AddMinutes(-1).ToString("yyyy/MM/dd HH:mm") + "'";
-            return query;
-        }
-
-        private String incompletedQuery()
-        {
-            var selectedYear = cmbYear.SelectedItem as IdValue;
-            if (selectedYear == null)
-                return string.Empty;
-
-            var selectedMonth = cmbMonth.SelectedItem as IdValue;
-            if (selectedMonth == null)
-                return string.Empty;
-
-            var dt = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
-
-            String query = "SELECT b.Code FROM tblMonthFin AS f INNER JOIN tblBuildings AS b ON f.buildingID = b.Code";
-            query += " WHERE finDate >= '" + dt.ToString("yyyy/MM/dd") + "' AND finDate <= '" + dt.AddMonths(1).AddMinutes(-1).ToString("yyyy/MM/dd HH:mm") + "'";
-            return query;
-        }
-
-        private List<MonthReport> GetAllResults(DataSet ds)
-        {
-            List<MonthReport> myResults = new List<MonthReport>();
-            if (ds == null || buildings == null)
-                return myResults;
-            foreach (Building b in buildings)
-            {
-                MonthReport mr = new MonthReport
-                {
-                    Building = b.Name,
-                    Code = b.Abbr
-                };
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    if (dr["Code"].ToString() == mr.Code)
-                    {
-                        mr.User = dr["name"].ToString();
-                        mr.finPeriod = (String.IsNullOrEmpty(dr["finDate"].ToString()) ? "" : DateTime.Parse(dr["finDate"].ToString()).ToString("MM yyyy"));
-                        mr.prcDate = (String.IsNullOrEmpty(dr["completeDate"].ToString()) ? "" : DateTime.Parse(dr["completeDate"].ToString()).ToString("yyyy/MM/dd HH:mm"));
-                    }
-                }
-                myResults.Add(mr);
-            }
-            return myResults;
-        }
-
-        private List<MonthReport> GetCompletedResults(DataSet ds)
-        {
-            if (ds == null)
-                return new List<MonthReport>();
-
-            List<MonthReport> myResults = new List<MonthReport>();
-            foreach (DataRow dr in ds.Tables[0].Rows)
-            {
-                MonthReport mr = new MonthReport
-                {
-                    Building = dr["Building"].ToString(),
-                    Code = dr["Code"].ToString(),
-                    User = dr["name"].ToString(),
-                    finPeriod = (String.IsNullOrEmpty(dr["finDate"].ToString()) ? "" : DateTime.Parse(dr["finDate"].ToString()).ToString("MM yyyy")),
-                    prcDate = (String.IsNullOrEmpty(dr["completeDate"].ToString()) ? "" : DateTime.Parse(dr["completeDate"].ToString()).ToString("yyyy/MM/dd HH:mm"))
-                };
-                myResults.Add(mr);
-            }
-            return myResults;
-        }
-
-        private List<MonthReport> GetIncompleteResults(DataSet ds)
-        {
-            if (ds == null)
-                return new List<MonthReport>();
-
-            List<MonthReport> myResults = new List<MonthReport>();
-            if (buildings == null)
-                return myResults;
-
-            foreach (Building b in buildings)
-            {
-                MonthReport mr = new MonthReport
-                {
-                    Building = b.Name,
-                    Code = b.Abbr
-                };
-                bool hasEntry = false;
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    if (dr["Code"].ToString() == b.Abbr)
-                    {
-                        hasEntry = true;
-                        break;
-                    }
-                }
-                mr.User = "";
-                mr.finPeriod = "";
-                mr.prcDate = "";
-                if (!hasEntry) { myResults.Add(mr); }
-            }
-            return myResults;
-        }
 
         private void LoadReport()
         {
-            int selection = 0;
-            if (rdCompleted.Checked) { selection = 1; } else if (rdIncomplete.Checked) { selection = 2; }
-            this.Cursor = Cursors.WaitCursor;
-            results.Clear();
-            SqlDataHandler dh = new SqlDataHandler();
-            String status;
-            List<MonthReport> myResults = null;
-            if (selection == 0)
-            {
-                myResults = GetAllResults(dh.GetData(completedQuery(), null, out status));
-            }
-            else if (selection == 1)
-            {
-                myResults = GetCompletedResults(dh.GetData(completedQuery(), null, out status));
-            }
-            else
-            {
-                myResults = GetIncompleteResults(dh.GetData(incompletedQuery(), null, out status));
-            }
+
+            var selectedYear = cmbYear.SelectedItem as IdValue;
+            if (selectedYear == null)
+                return;
+
+            var selectedMonth = cmbMonth.SelectedItem as IdValue;
+            if (selectedMonth == null)
+                return;
+
+            var dt = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+
+
             var idVal = (cbUserList.SelectedItem as IdValue);
+            int selectedUserId = 0;
             if (idVal != null)
+                selectedUserId = (cbUserList.SelectedItem as IdValue).Id;
+
+            Cursor = Cursors.WaitCursor;
+            try
             {
-                int selectedUserId = (cbUserList.SelectedItem as IdValue).Id;
-                if (selectedUserId > 0)
-                    myResults = myResults.Where(a => a.User == (cbUserList.SelectedItem as IdValue).Value).ToList();
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    IQueryable<MonthReport> query;
+                    if (rdCompleted.Checked)
+                    {
+                        query = from m in context.tblMonthFins
+                                join u in context.tblUsers on m.userID equals u.id into usr
+                                from us in usr.DefaultIfEmpty()
+                                join b in context.tblBuildings on m.buildingID equals b.Code
+                                where m.completeDate != null
+                                && m.findate == dt
+                                && (selectedUserId == 0 || (us != null && us.id == selectedUserId))
+                                select new MonthReport
+                                {
+                                    Building = b.Building,
+                                    Code = b.Code,
+                                    User = us == null ? string.Empty : us.name,
+                                    FinDate = m.findate,
+                                    CompletedDate = m.completeDate
+                                };
+                    }
+                    else
+                    {
+                        query = from m in context.tblMonthFins
+                                join u in context.tblUsers on m.userID equals u.id into usr
+                                from us in usr.DefaultIfEmpty()
+                                join b in context.tblBuildings on m.buildingID equals b.Code
+                                where m.completeDate == null
+                                && m.findate == dt
+                                && (selectedUserId == 0 || (us != null && us.id == selectedUserId))
+                                select new MonthReport
+                                {
+                                    Building = b.Building,
+                                    Code = b.Code,
+                                    User = us == null ? string.Empty : us.name,
+                                    FinDate = m.findate,
+                                    CompletedDate = m.completeDate
+                                };
+                    }
+
+                    results.Clear();
+                    foreach (MonthReport mr in query.OrderBy(a => a.Code).ToList())
+                    {
+                        results.Add(mr);
+                    }
+                    dgMonthly.Invalidate();
+                }
             }
-            foreach (MonthReport mr in myResults)
+            finally
             {
-                results.Add(mr);
+                this.Cursor = Cursors.Default;
             }
-            dgMonthly.Invalidate();
-            this.Cursor = Cursors.Default;
         }
 
         private void btnPrint_Click(object sender, EventArgs e)
@@ -268,7 +196,7 @@ namespace Astrodon.Controls
                         {
                             DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
                             var idVal = (cbUserList.SelectedItem as IdValue);
-                           var reportData =  reportService.MonthlyReport(SqlDataHandler.GetConnectionString(), dDate, rdCompleted.Checked, idVal != null ? idVal.Id : (int?)null);
+                            var reportData = reportService.MonthlyReport(SqlDataHandler.GetConnectionString(), dDate, rdCompleted.Checked, idVal != null ? idVal.Id : (int?)null);
 
                             File.WriteAllBytes(dlgSave.FileName, reportData);
                             Process.Start(dlgSave.FileName);
@@ -340,7 +268,7 @@ namespace Astrodon.Controls
 
         private void dtStart_ValueChanged(object sender, EventArgs e)
         {
-           
+
             LoadReport();
         }
 
@@ -362,6 +290,148 @@ namespace Astrodon.Controls
         private void cbUserList_SelectedValueChanged(object sender, EventArgs e)
         {
             LoadReport();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var selectedYear = cmbYear.SelectedItem as IdValue;
+            if (selectedYear == null)
+                return;
+
+            var selectedMonth = cmbMonth.SelectedItem as IdValue;
+            if (selectedMonth == null)
+                return;
+
+            var dt = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+
+
+            if (!Controller.AskQuestion("Are you sure you want top create the allocation for " + dt.ToString("MMM yyyy") + "?"))
+                return;
+            
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    //create a list of building id and user id
+                    var userIdList = context.tblUsers
+                                            .Where(a => a.ProcessCheckLists == true)
+                                            .Select(a => a.id).ToList();
+
+                    var buildingCodeList = context.tblBuildings.Select(a => a.Code).ToList();
+
+                    Dictionary<string, int> randomAllocations = new Dictionary<string, int>();
+
+                    //load the current allocations
+                    foreach (var itm in context.tblMonthFins.Where(a => a.findate == dt)
+                                                           .Select(a => new { a.buildingID, a.userID }).ToList())
+                    {
+                        randomAllocations.Add(itm.buildingID, itm.userID);
+                        if (buildingCodeList.Contains(itm.buildingID))
+                            buildingCodeList.Remove(itm.buildingID);
+                    }
+
+                    //get last months allocations
+                    Dictionary<string, int> lastMonthsAllocations = new Dictionary<string, int>();
+                    var lastMonth = dt.AddMonths(-1);
+                    foreach (var itm in context.tblMonthFins.Where(a => a.findate == lastMonth)
+                                                           .Select(a => new { a.buildingID, a.userID }).ToList())
+                    {
+                        lastMonthsAllocations.Add(itm.buildingID, itm.userID);
+                    }
+
+                    var userProcesslist = userIdList.ToList();
+                    var random = new Random();
+                    //bublle through buildings to build random dictionary
+                    #region Random Allocations
+                    while (buildingCodeList.Count > 0)
+                    {
+                        int userId = 0;
+                        var buildingCode = buildingCodeList[0];
+
+                        if (userProcesslist.Count > 1)
+                        {
+                            var idx = random.Next(0, userProcesslist.Count);
+
+                            userId = userProcesslist[idx];
+                            userProcesslist.Remove(userId);
+                        }
+                        else
+                        {
+                            if (userProcesslist.Count == 1)
+                            {
+                                userId = userProcesslist[0];
+                                userProcesslist.Remove(userId);
+                            }
+                        }
+
+                        if (userProcesslist.Count < 1)
+                            userProcesslist = userIdList.ToList();
+
+                        if (userId > 0)
+                        {
+
+                            if (lastMonthsAllocations.ContainsKey(buildingCode) && lastMonthsAllocations[buildingCode] == userId)
+                            {
+                                if (userProcesslist.Count > 1)
+                                {
+                                    var idx = random.Next(0, userProcesslist.Count);
+                                    int newUserId = userProcesslist[idx];
+                                    userProcesslist.Remove(newUserId);
+                                    userProcesslist.Add(userId);
+                                    if (newUserId > 0)
+                                    {
+                                        randomAllocations.Add(buildingCode, newUserId);
+                                        buildingCodeList.Remove(buildingCode);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (userId > 0)
+                                {
+                                    randomAllocations.Add(buildingCode, userId);
+                                    buildingCodeList.Remove(buildingCode);
+                                }
+                            }
+                        }
+                    }
+
+
+                    #endregion
+
+                    //Process dictionary to tblMonthFin
+
+                    foreach (var key in randomAllocations.Keys)
+                    {
+                        var curr = context.tblMonthFins.Where(a => a.buildingID == key && a.findate == dt).SingleOrDefault();
+                        if (curr == null)
+                        {
+                            curr = new Data.tblMonthFin()
+                            {
+                                buildingID = key,
+                                findate = dt,
+                                finPeriod = dt.Month,
+                                year = dt.Year
+                            };
+                            context.tblMonthFins.Add(curr);
+                        }
+                        curr.userID = randomAllocations[key];
+                    }
+
+                    context.SaveChanges();
+
+                }
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+            LoadReport();
+
+            Controller.ShowMessage("Random allocations completed");
+
+
         }
     }
 }

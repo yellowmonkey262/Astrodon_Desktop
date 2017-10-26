@@ -39,6 +39,7 @@
             this.cbUserList = new System.Windows.Forms.ComboBox();
             this.lblUser = new System.Windows.Forms.Label();
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgMonthly)).BeginInit();
             this.SuspendLayout();
             // 
@@ -196,10 +197,21 @@
             this.dlgSave.Filter = "Microsoft Excel files (*.xlsx)|*.xlsx";
             this.dlgSave.Title = "Monthly Report";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(308, 30);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(108, 23);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Allocate Users";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // usrMonthReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.cbUserList);
             this.Controls.Add(this.lblUser);
             this.Controls.Add(this.cmbMonth);
@@ -236,5 +248,6 @@
         private System.Windows.Forms.ComboBox cbUserList;
         private System.Windows.Forms.Label lblUser;
         private System.Windows.Forms.SaveFileDialog dlgSave;
+        private System.Windows.Forms.Button button1;
     }
 }

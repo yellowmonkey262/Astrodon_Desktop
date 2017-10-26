@@ -1016,7 +1016,6 @@
             this.txtBankIncome.Name = "txtBankIncome";
             this.txtBankIncome.Size = new System.Drawing.Size(357, 20);
             this.txtBankIncome.TabIndex = 33;
-            this.txtBankIncome.TextChanged += new System.EventHandler(this.txtBankIncome_TextChanged);
             // 
             // label13
             // 
@@ -1033,7 +1032,6 @@
             this.txtInterestIncome.Name = "txtInterestIncome";
             this.txtInterestIncome.Size = new System.Drawing.Size(357, 20);
             this.txtInterestIncome.TabIndex = 29;
-            this.txtInterestIncome.TextChanged += new System.EventHandler(this.txtInterestIncome_TextChanged);
             // 
             // label12
             // 
@@ -1050,7 +1048,6 @@
             this.txtOtherIncome.Name = "txtOtherIncome";
             this.txtOtherIncome.Size = new System.Drawing.Size(357, 20);
             this.txtOtherIncome.TabIndex = 25;
-            this.txtOtherIncome.TextChanged += new System.EventHandler(this.txtOtherIncome_TextChanged);
             // 
             // label11
             // 
@@ -1067,7 +1064,6 @@
             this.txtSpecialIncome.Name = "txtSpecialIncome";
             this.txtSpecialIncome.Size = new System.Drawing.Size(357, 20);
             this.txtSpecialIncome.TabIndex = 21;
-            this.txtSpecialIncome.TextChanged += new System.EventHandler(this.txtSpecialIncome_TextChanged);
             // 
             // label10
             // 
@@ -1084,7 +1080,6 @@
             this.txtWaterIncome.Name = "txtWaterIncome";
             this.txtWaterIncome.Size = new System.Drawing.Size(357, 20);
             this.txtWaterIncome.TabIndex = 17;
-            this.txtWaterIncome.TextChanged += new System.EventHandler(this.txtWaterIncome_TextChanged);
             // 
             // label9
             // 
@@ -1101,7 +1096,6 @@
             this.txtElectricityIncome.Name = "txtElectricityIncome";
             this.txtElectricityIncome.Size = new System.Drawing.Size(357, 20);
             this.txtElectricityIncome.TabIndex = 13;
-            this.txtElectricityIncome.TextChanged += new System.EventHandler(this.txtElectricityIncome_TextChanged);
             // 
             // label8
             // 
@@ -1118,7 +1112,6 @@
             this.txtDomesticIncome.Name = "txtDomesticIncome";
             this.txtDomesticIncome.Size = new System.Drawing.Size(357, 20);
             this.txtDomesticIncome.TabIndex = 9;
-            this.txtDomesticIncome.TextChanged += new System.EventHandler(this.txtDomesticIncome_TextChanged);
             // 
             // label7
             // 
@@ -1137,7 +1130,6 @@
             this.label6.Size = new System.Drawing.Size(21, 13);
             this.label6.TabIndex = 5;
             this.label6.Text = "No";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // label5
             // 
@@ -1147,7 +1139,6 @@
             this.label5.Size = new System.Drawing.Size(25, 13);
             this.label5.TabIndex = 4;
             this.label5.Text = "Yes";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // txtLevies
             // 
@@ -1155,7 +1146,6 @@
             this.txtLevies.Name = "txtLevies";
             this.txtLevies.Size = new System.Drawing.Size(357, 20);
             this.txtLevies.TabIndex = 3;
-            this.txtLevies.TextChanged += new System.EventHandler(this.txtLevies_TextChanged);
             // 
             // label4
             // 

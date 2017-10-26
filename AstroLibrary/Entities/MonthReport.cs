@@ -13,8 +13,23 @@ namespace Astro.Library.Entities
 
         public String User { get; set; }
 
-        public String finPeriod { get; set; }
+        public String finPeriod
+        {
+            get
+            {
+                return FinDate.ToString("yyyy-MM");
+            }
+        }
 
-        public String prcDate { get; set; }
+        public String prcDate
+        {
+            get
+            {
+                return CompletedDate == null ? "" : CompletedDate.Value.ToString("yyyy-MM-dd");
+            }
+        }
+
+        public DateTime? CompletedDate { get; set; }
+        public DateTime FinDate { get; set; }
     }
 }
