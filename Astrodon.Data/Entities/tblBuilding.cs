@@ -94,6 +94,8 @@ namespace Astrodon.Data
 
         public decimal limitD { get; set; }
 
+        public bool BuildingFinancialsEnabled { get; set; }
+
         #region Building Insurance
 
         public decimal CommonPropertyDimensions { get; set; }

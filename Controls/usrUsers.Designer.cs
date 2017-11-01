@@ -48,6 +48,8 @@
             this.label11 = new System.Windows.Forms.Label();
             this.picSig = new System.Windows.Forms.PictureBox();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.cbProcessCheckLists = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picSig)).BeginInit();
             this.SuspendLayout();
             // 
@@ -270,10 +272,30 @@
             this.btnDelete.UseVisualStyleBackColor = false;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
+            // cbProcessCheckLists
+            // 
+            this.cbProcessCheckLists.AutoSize = true;
+            this.cbProcessCheckLists.Location = new System.Drawing.Point(305, 143);
+            this.cbProcessCheckLists.Name = "cbProcessCheckLists";
+            this.cbProcessCheckLists.Size = new System.Drawing.Size(15, 14);
+            this.cbProcessCheckLists.TabIndex = 26;
+            this.cbProcessCheckLists.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(237, 143);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(62, 13);
+            this.label12.TabIndex = 27;
+            this.label12.Text = "Check Lists";
+            // 
             // usrUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.cbProcessCheckLists);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.picSig);
             this.Controls.Add(this.label11);
@@ -335,5 +357,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.PictureBox picSig;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.CheckBox cbProcessCheckLists;
+        private System.Windows.Forms.Label label12;
     }
 }

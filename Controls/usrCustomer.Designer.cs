@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrCustomer));
             this.cmbCustomer = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -112,6 +112,8 @@
             this.tbMaintenance = new System.Windows.Forms.TabPage();
             this.dgMaintenance = new System.Windows.Forms.DataGridView();
             this.tbDebitOrder = new System.Windows.Forms.TabPage();
+            this.cbDisableDebitOrderFee = new System.Windows.Forms.CheckBox();
+            this.label26 = new System.Windows.Forms.Label();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
             this.btnUpload = new System.Windows.Forms.Button();
             this.btnSaveDebitOrder = new System.Windows.Forms.Button();
@@ -124,15 +126,11 @@
             this.lblAccountNumber = new System.Windows.Forms.Label();
             this.txtBranchCode = new System.Windows.Forms.TextBox();
             this.lblBranchCode = new System.Windows.Forms.Label();
-            this.txtBranch = new System.Windows.Forms.TextBox();
-            this.lblBranch = new System.Windows.Forms.Label();
             this.lblBank = new System.Windows.Forms.Label();
             this.cbDebitOrderActive = new System.Windows.Forms.CheckBox();
             this.label20 = new System.Windows.Forms.Label();
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
-            this.cbDisableDebitOrderFee = new System.Windows.Forms.CheckBox();
-            this.label26 = new System.Windows.Forms.Label();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -651,9 +649,9 @@
             // colDate
             // 
             this.colDate.DataPropertyName = "tstamp";
-            dataGridViewCellStyle1.Format = "d";
-            dataGridViewCellStyle1.NullValue = null;
-            this.colDate.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Format = "d";
+            dataGridViewCellStyle4.NullValue = null;
+            this.colDate.DefaultCellStyle = dataGridViewCellStyle4;
             this.colDate.HeaderText = "Date";
             this.colDate.Name = "colDate";
             this.colDate.ReadOnly = true;
@@ -832,9 +830,9 @@
             // colRemDate
             // 
             this.colRemDate.DataPropertyName = "remDate";
-            dataGridViewCellStyle2.Format = "g";
-            dataGridViewCellStyle2.NullValue = null;
-            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Format = "g";
+            dataGridViewCellStyle5.NullValue = null;
+            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle5;
             this.colRemDate.HeaderText = "Date / Time";
             this.colRemDate.Name = "colRemDate";
             this.colRemDate.ReadOnly = true;
@@ -848,8 +846,8 @@
             // colNote
             // 
             this.colNote.DataPropertyName = "note";
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colNote.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colNote.DefaultCellStyle = dataGridViewCellStyle6;
             this.colNote.HeaderText = "Note";
             this.colNote.Name = "colNote";
             this.colNote.ReadOnly = true;
@@ -955,8 +953,6 @@
             this.tbDebitOrder.Controls.Add(this.lblAccountNumber);
             this.tbDebitOrder.Controls.Add(this.txtBranchCode);
             this.tbDebitOrder.Controls.Add(this.lblBranchCode);
-            this.tbDebitOrder.Controls.Add(this.txtBranch);
-            this.tbDebitOrder.Controls.Add(this.lblBranch);
             this.tbDebitOrder.Controls.Add(this.lblBank);
             this.tbDebitOrder.Controls.Add(this.cbDebitOrderActive);
             this.tbDebitOrder.Controls.Add(this.label20);
@@ -967,6 +963,25 @@
             this.tbDebitOrder.TabIndex = 6;
             this.tbDebitOrder.Text = "Debit Order";
             this.tbDebitOrder.UseVisualStyleBackColor = true;
+            // 
+            // cbDisableDebitOrderFee
+            // 
+            this.cbDisableDebitOrderFee.AutoSize = true;
+            this.cbDisableDebitOrderFee.Enabled = false;
+            this.cbDisableDebitOrderFee.Location = new System.Drawing.Point(128, 44);
+            this.cbDisableDebitOrderFee.Name = "cbDisableDebitOrderFee";
+            this.cbDisableDebitOrderFee.Size = new System.Drawing.Size(15, 14);
+            this.cbDisableDebitOrderFee.TabIndex = 68;
+            this.cbDisableDebitOrderFee.UseVisualStyleBackColor = true;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(7, 44);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(120, 13);
+            this.label26.TabIndex = 67;
+            this.label26.Text = "Disable Debit Order Fee";
             // 
             // axAcroPDF1
             // 
@@ -979,7 +994,7 @@
             // 
             // btnUpload
             // 
-            this.btnUpload.Location = new System.Drawing.Point(128, 224);
+            this.btnUpload.Location = new System.Drawing.Point(128, 199);
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(75, 23);
             this.btnUpload.TabIndex = 57;
@@ -989,7 +1004,7 @@
             // 
             // btnSaveDebitOrder
             // 
-            this.btnSaveDebitOrder.Location = new System.Drawing.Point(271, 224);
+            this.btnSaveDebitOrder.Location = new System.Drawing.Point(271, 199);
             this.btnSaveDebitOrder.Name = "btnSaveDebitOrder";
             this.btnSaveDebitOrder.Size = new System.Drawing.Size(75, 23);
             this.btnSaveDebitOrder.TabIndex = 55;
@@ -1001,7 +1016,7 @@
             // 
             this.cbAccountType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAccountType.FormattingEnabled = true;
-            this.cbAccountType.Location = new System.Drawing.Point(128, 168);
+            this.cbAccountType.Location = new System.Drawing.Point(128, 143);
             this.cbAccountType.Name = "cbAccountType";
             this.cbAccountType.Size = new System.Drawing.Size(228, 21);
             this.cbAccountType.TabIndex = 54;
@@ -1009,7 +1024,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(7, 172);
+            this.label25.Location = new System.Drawing.Point(7, 147);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(74, 13);
             this.label25.TabIndex = 53;
@@ -1019,7 +1034,7 @@
             // 
             this.cbProcessDate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbProcessDate.FormattingEnabled = true;
-            this.cbProcessDate.Location = new System.Drawing.Point(128, 197);
+            this.cbProcessDate.Location = new System.Drawing.Point(128, 172);
             this.cbProcessDate.Name = "cbProcessDate";
             this.cbProcessDate.Size = new System.Drawing.Size(228, 21);
             this.cbProcessDate.TabIndex = 52;
@@ -1027,7 +1042,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(7, 201);
+            this.label24.Location = new System.Drawing.Point(7, 176);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(71, 13);
             this.label24.TabIndex = 51;
@@ -1045,7 +1060,7 @@
             // 
             // txtAccountNumber
             // 
-            this.txtAccountNumber.Location = new System.Drawing.Point(128, 142);
+            this.txtAccountNumber.Location = new System.Drawing.Point(128, 117);
             this.txtAccountNumber.Name = "txtAccountNumber";
             this.txtAccountNumber.Size = new System.Drawing.Size(228, 20);
             this.txtAccountNumber.TabIndex = 46;
@@ -1053,7 +1068,7 @@
             // lblAccountNumber
             // 
             this.lblAccountNumber.AutoSize = true;
-            this.lblAccountNumber.Location = new System.Drawing.Point(6, 145);
+            this.lblAccountNumber.Location = new System.Drawing.Point(6, 120);
             this.lblAccountNumber.Name = "lblAccountNumber";
             this.lblAccountNumber.Size = new System.Drawing.Size(87, 13);
             this.lblAccountNumber.TabIndex = 50;
@@ -1061,7 +1076,7 @@
             // 
             // txtBranchCode
             // 
-            this.txtBranchCode.Location = new System.Drawing.Point(128, 116);
+            this.txtBranchCode.Location = new System.Drawing.Point(128, 91);
             this.txtBranchCode.Name = "txtBranchCode";
             this.txtBranchCode.Size = new System.Drawing.Size(228, 20);
             this.txtBranchCode.TabIndex = 45;
@@ -1069,27 +1084,11 @@
             // lblBranchCode
             // 
             this.lblBranchCode.AutoSize = true;
-            this.lblBranchCode.Location = new System.Drawing.Point(6, 119);
+            this.lblBranchCode.Location = new System.Drawing.Point(6, 94);
             this.lblBranchCode.Name = "lblBranchCode";
             this.lblBranchCode.Size = new System.Drawing.Size(69, 13);
             this.lblBranchCode.TabIndex = 49;
             this.lblBranchCode.Text = "Branch Code";
-            // 
-            // txtBranch
-            // 
-            this.txtBranch.Location = new System.Drawing.Point(128, 90);
-            this.txtBranch.Name = "txtBranch";
-            this.txtBranch.Size = new System.Drawing.Size(228, 20);
-            this.txtBranch.TabIndex = 44;
-            // 
-            // lblBranch
-            // 
-            this.lblBranch.AutoSize = true;
-            this.lblBranch.Location = new System.Drawing.Point(6, 93);
-            this.lblBranch.Name = "lblBranch";
-            this.lblBranch.Size = new System.Drawing.Size(41, 13);
-            this.lblBranch.TabIndex = 48;
-            this.lblBranch.Text = "Branch";
             // 
             // lblBank
             // 
@@ -1133,25 +1132,6 @@
             // fdOpen
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
-            // 
-            // cbDisableDebitOrderFee
-            // 
-            this.cbDisableDebitOrderFee.AutoSize = true;
-            this.cbDisableDebitOrderFee.Enabled = false;
-            this.cbDisableDebitOrderFee.Location = new System.Drawing.Point(128, 44);
-            this.cbDisableDebitOrderFee.Name = "cbDisableDebitOrderFee";
-            this.cbDisableDebitOrderFee.Size = new System.Drawing.Size(15, 14);
-            this.cbDisableDebitOrderFee.TabIndex = 68;
-            this.cbDisableDebitOrderFee.UseVisualStyleBackColor = true;
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(7, 44);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(120, 13);
-            this.label26.TabIndex = 67;
-            this.label26.Text = "Disable Debit Order Fee";
             // 
             // usrCustomer
             // 
@@ -1291,8 +1271,6 @@
         private System.Windows.Forms.Label lblAccountNumber;
         private System.Windows.Forms.TextBox txtBranchCode;
         private System.Windows.Forms.Label lblBranchCode;
-        private System.Windows.Forms.TextBox txtBranch;
-        private System.Windows.Forms.Label lblBranch;
         private System.Windows.Forms.Label lblBank;
         private System.Windows.Forms.CheckBox cbDebitOrderActive;
         private System.Windows.Forms.Label label20;

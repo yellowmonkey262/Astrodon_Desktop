@@ -726,7 +726,11 @@ namespace Astrodon
         public DataSet GetData(String query, Dictionary<String, Object> sqlParms, out String status)
         {
             DataSet ds = new DataSet();
-
+            if (Environment.MachineName == "PASTELPARTNER")
+            {
+                status = "";
+                return ds;
+            }
             using (MySqlConnection connect = new MySqlConnection(ConnectionString))
             {
                 using (MySqlCommand cmd = new MySqlCommand(query, connect))
@@ -751,6 +755,7 @@ namespace Astrodon
                     {
                         ds = null;
                         status = ex.Message;
+                        Controller.HandleError(ex, "MySQL Connector Error");
                         //MessageBox.Show(status);
                     }
                     finally

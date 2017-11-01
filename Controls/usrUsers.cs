@@ -65,6 +65,7 @@ namespace Astrodon
             txtName.Text = selectedUser.name;
             txtPhone.Text = selectedUser.phone;
             txtFax.Text = selectedUser.fax;
+            cbProcessCheckLists.Checked = selectedUser.processCheckLists;
             if (selectedUser.signature != null) { picSig.Image = selectedUser.signature; }
             try
             {
@@ -97,6 +98,7 @@ namespace Astrodon
             txtName.Text = "";
             txtPhone.Text = "";
             txtFax.Text = "";
+            cbProcessCheckLists.Checked = false;
             picSig.Image = null;
             for (int i = 0; i < chkBuildings.Items.Count; i++) { chkBuildings.SetItemChecked(i, false); }
         }
@@ -115,6 +117,7 @@ namespace Astrodon
                 selectedUser.name = txtName.Text;
                 selectedUser.phone = txtPhone.Text;
                 selectedUser.fax = txtFax.Text;
+                selectedUser.processCheckLists = cbProcessCheckLists.Checked;
                 try
                 {
                     if (picSig.Image != null) { selectedUser.signature = picSig.Image; }

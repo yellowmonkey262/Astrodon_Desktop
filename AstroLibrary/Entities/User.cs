@@ -8,6 +8,8 @@ namespace Astro.Library.Entities
 {
     public class User
     {
+        public bool processCheckLists;
+
         public int id { get; set; }
 
         public String username { get; set; }

@@ -930,36 +930,51 @@ namespace Astrodon
 
         private void LoadDebitOrder()
         {
-            btnUpload.Visible = false;
-            cbDisableDebitOrderFee.Enabled = Controller.UserIsSheldon();
-            cbDisableDebitOrderFee.Checked = false;
-            using (var context = SqlDataHandler.GetDataContext())
+            _promptForDefaults = false;
+            try
             {
-                var debitOrder = context.CustomerDebitOrderSet.SingleOrDefault(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber);
-                if (debitOrder != null)
+                btnUpload.Visible = false;
+                cbDisableDebitOrderFee.Enabled = Controller.UserIsSheldon();
+                cbDisableDebitOrderFee.Checked = false;
+                cbDebitOrderActive.Checked = false;
+                cbBanks.SelectedIndex = -1;
+                txtBranchCode.Text = "";
+                txtAccountNumber.Text = "";
+                cbAccountType.SelectedIndex = -1;
+                cbProcessDate.SelectedIndex = -1;
+                DisplayPDF(null);
+                using (var context = SqlDataHandler.GetDataContext())
                 {
-                    cbDebitOrderActive.Checked = debitOrder.IsActive;
-                    cbBanks.SelectedValue = _Banks.FirstOrDefault(a => a.id == debitOrder.BankId);
-                    txtBranchCode.Text = debitOrder.BranceCode;
-                    txtAccountNumber.Text = debitOrder.AccountNumber;
-                    cbAccountType.SelectedValue = debitOrder.AccountType;
-                    cbProcessDate.SelectedValue = debitOrder.DebitOrderCollectionDay;
-                    cbDisableDebitOrderFee.Checked = debitOrder.IsDebitOrderFeeDisabled;
-                    btnUpload.Visible = true;
-
-                    var signedForm = context.DebitOrderDocumentSet.SingleOrDefault(a => a.CustomerDebitOrderId == debitOrder.id
-                                         && a.DocumentType == DebitOrderDocumentType.SignedDebitOrder);
-                    if (signedForm != null)
+                    var debitOrder = context.CustomerDebitOrderSet.SingleOrDefault(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber);
+                    if (debitOrder != null)
                     {
-                        DisplayPDF(signedForm.FileData);
+                        cbDebitOrderActive.Checked = debitOrder.IsActive;
+                        cbBanks.SelectedItem = _Banks.FirstOrDefault(a => a.id == debitOrder.BankId);
+                        txtBranchCode.Text = debitOrder.BranceCode;
+                        txtAccountNumber.Text = debitOrder.AccountNumber;
+                        cbAccountType.SelectedItem = debitOrder.AccountType;
+                        cbProcessDate.SelectedItem = debitOrder.DebitOrderCollectionDay;
+                        cbDisableDebitOrderFee.Checked = debitOrder.IsDebitOrderFeeDisabled;
+                        btnUpload.Visible = true;
+
+                        var signedForm = context.DebitOrderDocumentSet.SingleOrDefault(a => a.CustomerDebitOrderId == debitOrder.id
+                                             && a.DocumentType == DebitOrderDocumentType.SignedDebitOrder);
+                        if (signedForm != null)
+                        {
+                            DisplayPDF(signedForm.FileData);
+                        }
                     }
                 }
+            }
+            finally
+            {
+                _promptForDefaults = true;
             }
         }
 
         private void btnSaveDebitOrder_Click(object sender, EventArgs e)
         {
-            if(cbBanks.SelectedIndex < 0)
+            if (cbBanks.SelectedIndex < 0)
             {
                 Controller.HandleError("Bank required", "Validation Error");
                 return;
@@ -996,18 +1011,19 @@ namespace Astrodon
                         CustomerCode = customer.accNumber
                     };
                     context.CustomerDebitOrderSet.Add(debitOrder);
-                    debitOrder.IsActive = cbDebitOrderActive.Checked;
-                    debitOrder.BankId = (cbBanks.SelectedItem as Data.BankData.Bank).id;
-                    debitOrder.BranceCode = txtBranchCode.Text;
-                    debitOrder.AccountNumber = txtAccountNumber.Text;
-                    debitOrder.AccountType = (AccountTypeType)cbAccountType.SelectedItem;
-                    debitOrder.DebitOrderCollectionDay = (DebitOrderDayType)cbProcessDate.SelectedItem;
-                    debitOrder.LastUpdatedByUserId = Controller.user.id;
-                    debitOrder.LastUpdateDate = DateTime.Now;
-                    debitOrder.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
-                    context.SaveChanges();
                 }
+                debitOrder.IsActive = cbDebitOrderActive.Checked;
+                debitOrder.BankId = (cbBanks.SelectedItem as Data.BankData.Bank).id;
+                debitOrder.BranceCode = txtBranchCode.Text;
+                debitOrder.AccountNumber = txtAccountNumber.Text;
+                debitOrder.AccountType = (AccountTypeType)cbAccountType.SelectedItem;
+                debitOrder.DebitOrderCollectionDay = (DebitOrderDayType)cbProcessDate.SelectedItem;
+                debitOrder.LastUpdatedByUserId = Controller.user.id;
+                debitOrder.LastUpdateDate = DateTime.Now;
+                debitOrder.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
+                context.SaveChanges();
                 btnUpload.Visible = true;
+                Controller.ShowMessage("Debit order detail saved. Please upload debit order form.");
             }
         }
 
@@ -1057,6 +1073,7 @@ namespace Astrodon
             }
         }
 
+        bool _promptForDefaults = true;
         private void cbBanks_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (customer == null)
@@ -1065,11 +1082,10 @@ namespace Astrodon
             var bank = cbBanks.SelectedItem as Astrodon.Data.BankData.Bank;
             if (bank != null)
             {
-                if (!String.IsNullOrWhiteSpace(bank.BranchCode) && txtBranchCode.Text != bank.BranchCode)
+                if (!String.IsNullOrWhiteSpace(bank.BranchCode) && txtBranchCode.Text != bank.BranchCode && _promptForDefaults)
                 {
                     if (MessageBox.Show("Load default branch details?", "Question", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        txtBranch.Text = bank.BranchName;
                         txtBranchCode.Text = bank.BranchCode;
                     }
                 }

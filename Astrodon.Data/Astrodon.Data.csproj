@@ -195,6 +195,10 @@
     <Compile Include="Migrations\201710261155090_CheckListProcessing.Designer.cs">
       <DependentUpon>201710261155090_CheckListProcessing.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711010821137_BuildingFinancialsEnabled.cs" />
+    <Compile Include="Migrations\201711010821137_BuildingFinancialsEnabled.Designer.cs">
+      <DependentUpon>201711010821137_BuildingFinancialsEnabled.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -349,6 +353,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710261155090_CheckListProcessing.resx">
       <DependentUpon>201710261155090_CheckListProcessing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711010821137_BuildingFinancialsEnabled.resx">
+      <DependentUpon>201711010821137_BuildingFinancialsEnabled.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

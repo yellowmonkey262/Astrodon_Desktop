@@ -159,7 +159,7 @@ namespace Astrodon
                 users.Add(u);
             }
             String status = String.Empty;
-            String loginQuery = "SELECT id, username, password, admin, email, name, phone, fax, usertype, pmSignature FROM tblUsers order by name";
+            String loginQuery = "SELECT id, username, password, admin, email, name, phone, fax, usertype, pmSignature, ProcessCheckLists FROM tblUsers order by name";
             SqlDataHandler dh = new SqlDataHandler();
             DataSet ds = dh.GetData(loginQuery, null, out status);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -175,6 +175,7 @@ namespace Astrodon
                     user.name = dr["name"].ToString();
                     user.phone = dr["phone"].ToString();
                     user.fax = dr["fax"].ToString();
+                    user.processCheckLists = bool.Parse(dr["ProcessCheckLists"].ToString());
                     user.usertype = int.Parse(dr["usertype"].ToString());
                     user.buildings = GetBuildingsIDs(user.usertype, user.id, user.email, out status);
                     user.signature = null;
@@ -201,10 +202,10 @@ namespace Astrodon
             String status = String.Empty;
             String updateUserQuery = "IF EXISTS (SELECT id FROM tblUsers WHERE id = @id)";
             updateUserQuery += " UPDATE tblUsers SET username = @username, password = @password, admin = @admin, email = @email, name = @name, phone = @phone,";
-            updateUserQuery += " fax = @fax, usertype = @usertype, pmSignature = @sig WHERE id = @id";
+            updateUserQuery += " fax = @fax, usertype = @usertype, pmSignature = @sig, ProcessCheckLists =@processCheckLists WHERE id = @id";
             updateUserQuery += " ELSE ";
-            updateUserQuery += " INSERT INTO tblUsers(username, password, admin, email, name, phone, fax, usertype, pmSignature)";
-            updateUserQuery += " VALUES(@username, @password, @admin, @email, @name, @phone, @fax, @usertype, @sig)";
+            updateUserQuery += " INSERT INTO tblUsers(username, password, admin, email, name, phone, fax, usertype, pmSignature, ProcessCheckLists)";
+            updateUserQuery += " VALUES(@username, @password, @admin, @email, @name, @phone, @fax, @usertype, @sig, @processCheckLists)";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@username", u.username);
             sqlParms.Add("@password", u.password);
@@ -215,6 +216,7 @@ namespace Astrodon
             sqlParms.Add("@fax", u.fax);
             sqlParms.Add("@usertype", u.usertype);
             sqlParms.Add("@id", u.id);
+            sqlParms.Add("@processCheckLists", u.processCheckLists ? 1 : 0);
             byte[] sig = new byte[0];
             if (u.signature != null)
             {

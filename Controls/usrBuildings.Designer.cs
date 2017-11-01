@@ -43,6 +43,8 @@
             this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cbDisableDebitOrderFee = new System.Windows.Forms.CheckBox();
+            this.label52 = new System.Windows.Forms.Label();
             this.txtDebitOrderFee = new System.Windows.Forms.TextBox();
             this.label51 = new System.Windows.Forms.Label();
             this.btnStandard = new System.Windows.Forms.Button();
@@ -172,8 +174,8 @@
             this.label41 = new System.Windows.Forms.Label();
             this.tbPDFViewer = new System.Windows.Forms.TabPage();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
-            this.label52 = new System.Windows.Forms.Label();
-            this.cbDisableDebitOrderFee = new System.Windows.Forms.CheckBox();
+            this.cbBuildingFinancialsEnabled = new System.Windows.Forms.CheckBox();
+            this.label53 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -355,6 +357,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.cbBuildingFinancialsEnabled);
+            this.groupBox4.Controls.Add(this.label53);
             this.groupBox4.Controls.Add(this.cbDisableDebitOrderFee);
             this.groupBox4.Controls.Add(this.label52);
             this.groupBox4.Controls.Add(this.txtDebitOrderFee);
@@ -390,6 +394,25 @@
             this.groupBox4.TabIndex = 140;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Fees";
+            // 
+            // cbDisableDebitOrderFee
+            // 
+            this.cbDisableDebitOrderFee.AutoSize = true;
+            this.cbDisableDebitOrderFee.Enabled = false;
+            this.cbDisableDebitOrderFee.Location = new System.Drawing.Point(549, 83);
+            this.cbDisableDebitOrderFee.Name = "cbDisableDebitOrderFee";
+            this.cbDisableDebitOrderFee.Size = new System.Drawing.Size(15, 14);
+            this.cbDisableDebitOrderFee.TabIndex = 114;
+            this.cbDisableDebitOrderFee.UseVisualStyleBackColor = true;
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(414, 83);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(120, 13);
+            this.label52.TabIndex = 113;
+            this.label52.Text = "Disable Debit Order Fee";
             // 
             // txtDebitOrderFee
             // 
@@ -1598,24 +1621,24 @@
             this.axAcroPDF1.Size = new System.Drawing.Size(782, 524);
             this.axAcroPDF1.TabIndex = 65;
             // 
-            // label52
+            // cbBuildingFinancialsEnabled
             // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(414, 83);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(120, 13);
-            this.label52.TabIndex = 113;
-            this.label52.Text = "Disable Debit Order Fee";
+            this.cbBuildingFinancialsEnabled.AutoSize = true;
+            this.cbBuildingFinancialsEnabled.Enabled = false;
+            this.cbBuildingFinancialsEnabled.Location = new System.Drawing.Point(549, 106);
+            this.cbBuildingFinancialsEnabled.Name = "cbBuildingFinancialsEnabled";
+            this.cbBuildingFinancialsEnabled.Size = new System.Drawing.Size(15, 14);
+            this.cbBuildingFinancialsEnabled.TabIndex = 116;
+            this.cbBuildingFinancialsEnabled.UseVisualStyleBackColor = true;
             // 
-            // cbDisableDebitOrderFee
+            // label53
             // 
-            this.cbDisableDebitOrderFee.AutoSize = true;
-            this.cbDisableDebitOrderFee.Enabled = false;
-            this.cbDisableDebitOrderFee.Location = new System.Drawing.Point(549, 83);
-            this.cbDisableDebitOrderFee.Name = "cbDisableDebitOrderFee";
-            this.cbDisableDebitOrderFee.Size = new System.Drawing.Size(15, 14);
-            this.cbDisableDebitOrderFee.TabIndex = 114;
-            this.cbDisableDebitOrderFee.UseVisualStyleBackColor = true;
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(414, 106);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(136, 13);
+            this.label53.TabIndex = 115;
+            this.label53.Text = "Building Financials Enabled";
             // 
             // usrBuildings
             // 
@@ -1807,5 +1830,7 @@
         private System.Windows.Forms.Label label51;
         private System.Windows.Forms.CheckBox cbDisableDebitOrderFee;
         private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.CheckBox cbBuildingFinancialsEnabled;
+        private System.Windows.Forms.Label label53;
     }
 }

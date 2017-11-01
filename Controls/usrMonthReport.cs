@@ -6,17 +6,17 @@ using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
 using System.Linq;
 using Astrodon.ReportService;
 using System.IO;
 using System.Diagnostics;
+using Astrodon.Data;
 
 namespace Astrodon.Controls
 {
     public partial class usrMonthReport : UserControl
     {
-        private List<Building> buildings;
+        private List<tblBuilding> buildings;
         private BindingList<MonthReport> results;
         private DateTime today;
         private List<IdValue> _Years;
@@ -53,6 +53,7 @@ namespace Astrodon.Controls
                 cbUserList.ValueMember = "Id";
                 cbUserList.DisplayMember = "Value";
                 cbUserList.SelectedValue = 0;
+
             }
         }
 
@@ -96,9 +97,11 @@ namespace Astrodon.Controls
 
         private void LoadBuildings()
         {
-            buildings = new Buildings(false).buildings;
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                buildings = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled).ToList();
+            }
         }
-
 
         private void LoadReport()
         {
@@ -215,55 +218,7 @@ namespace Astrodon.Controls
                 }
             }
 
-            /*
-            try
-            {
-                Excel.Application xlApp = new Excel.Application();
-
-                if (xlApp == null)
-                {
-                    MessageBox.Show("EXCEL could not be started. Check that your office installation and project references are correct.");
-                    return;
-                }
-                xlApp.Visible = true;
-
-                Excel.Workbook wb = xlApp.Workbooks.Add(Excel.XlWBATemplate.xlWBATWorksheet);
-                Excel.Worksheet ws = (Excel.Worksheet)wb.Worksheets[1];
-
-                if (ws == null)
-                {
-                    MessageBox.Show("Worksheet could not be created. Check that your office installation and project references are correct.");
-                    return;
-                }
-                ws.Name = "Financial Checklist Report";
-                ws.Cells[1, "A"].Value2 = "Building";
-                ws.Cells[1, "B"].Value2 = "Code";
-                ws.Cells[1, "C"].Value2 = "Financial Period";
-                ws.Cells[1, "D"].Value2 = "Processed Date";
-                ws.Cells[1, "E"].Value2 = "User";
-
-                int rowIdx = 2;
-                foreach (DataGridViewRow dvr in dgMonthly.Rows)
-                {
-                    try
-                    {
-                        ws.Cells[rowIdx, "A"].Value2 = (dvr.Cells[0].Value != null ? dvr.Cells[0].Value.ToString() : "");
-                        ws.Cells[rowIdx, "B"].Value2 = (dvr.Cells[1].Value != null ? dvr.Cells[1].Value.ToString() : "");
-                        ws.Cells[rowIdx, "C"].Value2 = (dvr.Cells[2].Value != null ? dvr.Cells[2].Value.ToString() : "");
-                        ws.Cells[rowIdx, "D"].Value2 = (dvr.Cells[3].Value != null ? dvr.Cells[3].Value.ToString() : "");
-                        ws.Cells[rowIdx, "E"].Value2 = (dvr.Cells[4].Value != null ? dvr.Cells[4].Value.ToString() : "");
-                        rowIdx++;
-                    }
-                    catch { }
-                }
-
-                ws.Columns.AutoFit();
-            }
-            catch (Exception ex)
-            {
-                //MessageBox.Show(ex.Message);
-            }
-            */
+         
         }
 
         private void dtStart_ValueChanged(object sender, EventArgs e)
@@ -318,7 +273,7 @@ namespace Astrodon.Controls
                                             .Where(a => a.ProcessCheckLists == true)
                                             .Select(a => a.id).ToList();
 
-                    var buildingCodeList = context.tblBuildings.Select(a => a.Code).ToList();
+                    var buildingCodeList = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled).Select(a => a.Code).ToList();
 
                     Dictionary<string, int> randomAllocations = new Dictionary<string, int>();
 

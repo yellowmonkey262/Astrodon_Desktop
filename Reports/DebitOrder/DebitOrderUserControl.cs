@@ -68,6 +68,7 @@ namespace Astrodon.Reports.DebitOrder
             Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
 
             _Buildings = bManager.buildings;
+            _Buildings.Insert(0, new Building() { ID = 0, Name = "All Buildings" });
             cmbBuilding.DataSource = _Buildings;
             cmbBuilding.ValueMember = "ID";
             cmbBuilding.DisplayMember = "Name";
