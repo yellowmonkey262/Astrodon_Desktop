@@ -121,6 +121,8 @@ namespace Astrodon.Reports.DebitOrder
                         }
 
                         byte[] reportData = null;
+                        Controller.ShowMessage("CNT " + compiledList.Count() + " " + compiledList[0].AmountDue.ToString() + " - > " + compiledList[1].AmountDue.ToString());
+
                         reportData = reportService.SAPORDebitOrder(SqlDataHandler.GetConnectionString(), compiledList.ToArray(), cbShowBreakdown.Checked);
                         File.WriteAllBytes(dlgSave.FileName, reportData);
                         Process.Start(dlgSave.FileName);
