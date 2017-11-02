@@ -315,19 +315,36 @@ namespace Astrodon
             }
         }
 
+        private void UpdateBuildingSettings()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var buildingEntity = context.tblBuildings
+                      .FirstOrDefault(a => a.id == selectedBuilding.ID);
+                buildingEntity.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
+                buildingEntity.BuildingFinancialsEnabled = cbBuildingFinancialsEnabled.Checked;
+                context.SaveChanges();
+            }
+        }
         private void SaveBuildingInsurance()
         {
+
             if (!ValidatePQ())
+            {
+                UpdateBuildingSettings();
                 return;
+            }
 
             if (_SelectedBroker == null)
             {
+                UpdateBuildingSettings();
                 Controller.HandleError("Please select an insurance broker");
                 return;
             }
 
             if(String.IsNullOrWhiteSpace(txtInsurancePolicyNumber.Text))
             {
+                UpdateBuildingSettings();
                 Controller.HandleError("Please enter an Insurance Policy Number.");
                 return;
             }
@@ -336,8 +353,6 @@ namespace Astrodon
             {
                 var buildingEntity = context.tblBuildings
                         .FirstOrDefault(a => a.id == selectedBuilding.ID);
-                buildingEntity.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
-                buildingEntity.BuildingFinancialsEnabled = cbBuildingFinancialsEnabled.Checked;
                 buildingEntity.CommonPropertyDimensions = string.IsNullOrWhiteSpace(txtCommonPropertyDim.Text) ? 0 :
                     Convert.ToDecimal(txtCommonPropertyDim.Text);
                 buildingEntity.UnitPropertyDimensions = string.IsNullOrWhiteSpace(txtUnitPropertyDim.Text) ? 0 :
