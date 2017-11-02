@@ -54,7 +54,7 @@ namespace Astrodon
         private void ActivateTrustees()
         {
             int userid = Controller.user.id;
-            if (userid == 1 || userid == 2 || userid == 27)
+            if (userid == 1 || userid == 2 || userid == 27 || Controller.user.usertype == 2)
             {
                 btnTrustees.Visible = true;
                 btnTrustees.Enabled = true;
