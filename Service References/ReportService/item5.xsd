@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Data.DebitOrder" />
+  <xs:complexType name="ArrayOfDebitOrderItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DebitOrderItem" nillable="true" type="tns:DebitOrderItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDebitOrderItem" nillable="true" type="tns:ArrayOfDebitOrderItem" />
+  <xs:complexType name="DebitOrderItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountNumber" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Astrodon.Data.DebitOrder" minOccurs="0" name="AccountTypeId" type="q1:AccountTypeType" />
+      <xs:element minOccurs="0" name="AmountDue" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BranchCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BuildingId" type="xs:int" />
+      <xs:element minOccurs="0" name="CollectionDay" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="CustomerCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerName" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Astrodon.Data.DebitOrder" minOccurs="0" name="DebitOrderCollectionDay" type="q2:DebitOrderDayType" />
+      <xs:element minOccurs="0" name="DebitOrderFee" type="xs:decimal" />
+      <xs:element minOccurs="0" name="DebitOrderFeeDisabled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsDebitOrderFeeDisabledOnBuilding" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DebitOrderItem" nillable="true" type="tns:DebitOrderItem" />
+</xs:schema>

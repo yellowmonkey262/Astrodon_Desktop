@@ -3,6 +3,7 @@
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" />
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts.Maintenance" />
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.ManagementReportCoverPage" />
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" />
   <xs:element name="LevyRollReport">
     <xs:complexType>
       <xs:sequence>
@@ -134,12 +135,28 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SAPORDebitOrder">
+  <xs:element name="RunDebitOrderForBuilding">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="sqlConnectionString" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="buildingId" type="xs:int" />
         <xs:element minOccurs="0" name="processMonth" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="showFeeBreakdown" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RunDebitOrderForBuildingResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" minOccurs="0" name="RunDebitOrderForBuildingResult" nillable="true" type="q4:ArrayOfDebitOrderItem" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SAPORDebitOrder">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sqlConnectionString" nillable="true" type="xs:string" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" minOccurs="0" name="items" nillable="true" type="q5:ArrayOfDebitOrderItem" />
         <xs:element minOccurs="0" name="showFeeBreakdown" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>

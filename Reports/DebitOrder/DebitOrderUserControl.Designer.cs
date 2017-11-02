@@ -38,6 +38,8 @@
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.cbShowBreakdown = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.lbProgress = new System.Windows.Forms.Label();
+            this.lbStatus = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // cmbBuilding
@@ -55,7 +57,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(114, 23);
             this.button1.TabIndex = 13;
-            this.button1.Text = "Download Excel";
+            this.button1.Text = "Run";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -130,10 +132,29 @@
             this.label4.TabIndex = 16;
             this.label4.Text = "Show breakdown";
             // 
+            // lbProgress
+            // 
+            this.lbProgress.AutoSize = true;
+            this.lbProgress.Location = new System.Drawing.Point(10, 160);
+            this.lbProgress.Name = "lbProgress";
+            this.lbProgress.Size = new System.Drawing.Size(48, 13);
+            this.lbProgress.TabIndex = 17;
+            this.lbProgress.Text = "Progress";
+            // 
+            // lbStatus
+            // 
+            this.lbStatus.FormattingEnabled = true;
+            this.lbStatus.Location = new System.Drawing.Point(103, 176);
+            this.lbStatus.Name = "lbStatus";
+            this.lbStatus.Size = new System.Drawing.Size(709, 407);
+            this.lbStatus.TabIndex = 18;
+            // 
             // DebitOrderUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbStatus);
+            this.Controls.Add(this.lbProgress);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cbShowBreakdown);
             this.Controls.Add(this.cmbBuilding);
@@ -144,7 +165,7 @@
             this.Controls.Add(this.cmbYear);
             this.Controls.Add(this.label1);
             this.Name = "DebitOrderUserControl";
-            this.Size = new System.Drawing.Size(357, 168);
+            this.Size = new System.Drawing.Size(850, 610);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,5 +183,7 @@
         private System.Windows.Forms.SaveFileDialog dlgSave;
         private System.Windows.Forms.CheckBox cbShowBreakdown;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbProgress;
+        private System.Windows.Forms.ListBox lbStatus;
     }
 }

@@ -1016,6 +1016,9 @@
     <None Include="rem_template.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Service References\ReportService\Astrodon.ReportService.DebitOrderItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ReportService\Astrodon.ReportService.PastelMaintenanceTransaction.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -1032,6 +1035,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\item4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\item5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\item51.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />

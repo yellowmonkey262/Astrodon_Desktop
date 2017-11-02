@@ -15,6 +15,8 @@ namespace Astrodon.Data
 
         public string Building { get; set; }
 
+        public bool BuildingDisabled { get; set; }
+
         [StringLength(50)]
         public string Code { get; set; }
 

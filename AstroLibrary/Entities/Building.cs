@@ -11,6 +11,8 @@ namespace Astro.Library.Entities
 
         public String Name { get; set; }
 
+        public bool BuildingDisabled { get; set; }
+
         public String Abbr { get; set; }
 
         public String Trust { get; set; }
@@ -132,6 +134,7 @@ namespace Astro.Library.Entities
             summonsSMS = "";
             disconnectionSMS = "";
             handoverSMS = "";
+            BuildingDisabled = false;
         }
     }
 

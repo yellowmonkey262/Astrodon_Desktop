@@ -99,7 +99,7 @@ namespace Astrodon.Controls
         {
             using (var context = SqlDataHandler.GetDataContext())
             {
-                buildings = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled).ToList();
+                buildings = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled && a.BuildingDisabled == false).ToList();
             }
         }
 
@@ -137,6 +137,7 @@ namespace Astrodon.Controls
                                 where m.completeDate != null
                                 && m.findate == dt
                                 && (selectedUserId == 0 || (us != null && us.id == selectedUserId))
+                                && b.BuildingDisabled == false
                                 select new MonthReport
                                 {
                                     Building = b.Building,
@@ -154,6 +155,7 @@ namespace Astrodon.Controls
                                 join b in context.tblBuildings on m.buildingID equals b.Code
                                 where m.completeDate == null
                                 && m.findate == dt
+                                && b.BuildingDisabled == false
                                 && (selectedUserId == 0 || (us != null && us.id == selectedUserId))
                                 select new MonthReport
                                 {
@@ -273,7 +275,7 @@ namespace Astrodon.Controls
                                             .Where(a => a.ProcessCheckLists == true)
                                             .Select(a => a.id).ToList();
 
-                    var buildingCodeList = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled).Select(a => a.Code).ToList();
+                    var buildingCodeList = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled == true && a.BuildingDisabled == false).Select(a => a.Code).ToList();
 
                     Dictionary<string, int> randomAllocations = new Dictionary<string, int>();
 

@@ -57,7 +57,7 @@ namespace Astrodon
 
         private void LoadCombo()
         {
-            BuildingManager = new Buildings(true);
+            BuildingManager = new Buildings(true,false);
             cmbBuilding.DataSource = BuildingManager.buildings;
             cmbBuilding.DisplayMember = "Name";
             cmbBuilding.ValueMember = "ID";
@@ -145,6 +145,7 @@ namespace Astrodon
             {
                 cbDisableDebitOrderFee.Enabled = Controller.UserIsSheldon();
                 cbBuildingFinancialsEnabled.Enabled = Controller.UserIsSheldon();
+                cbDisabled.Enabled = Controller.UserIsSheldon();
                 Data.tblBuilding buildingEntity = null;
                 using (var context = SqlDataHandler.GetDataContext())
                 {
@@ -155,6 +156,7 @@ namespace Astrodon
                 {
                     cbDisableDebitOrderFee.Checked = buildingEntity.IsDebitOrderFeeDisabled;
                     cbBuildingFinancialsEnabled.Checked = buildingEntity.BuildingFinancialsEnabled;
+                    cbDisabled.Checked = buildingEntity.BuildingDisabled;
                     txtCommonPropertyDim.Text = buildingEntity.CommonPropertyDimensions.ToString();
                     txtUnitPropertyDim.Text = buildingEntity.UnitPropertyDimensions.ToString();
                     txtReplacementValue.Text = buildingEntity.UnitReplacementCost.ToString("#,##0.00");
@@ -323,6 +325,10 @@ namespace Astrodon
                       .FirstOrDefault(a => a.id == selectedBuilding.ID);
                 buildingEntity.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
                 buildingEntity.BuildingFinancialsEnabled = cbBuildingFinancialsEnabled.Checked;
+                if (Controller.UserIsSheldon())
+                {
+                    buildingEntity.BuildingDisabled = cbDisabled.Enabled;
+                }
                 context.SaveChanges();
             }
         }
@@ -1213,6 +1219,11 @@ namespace Astrodon
             {
                 btnViewContract.Enabled = true;
             }
+        }
+
+        private void label57_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

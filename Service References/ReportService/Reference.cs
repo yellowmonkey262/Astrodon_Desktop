@@ -302,6 +302,227 @@ namespace Astrodon.ReportService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DebitOrderItem", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder")]
+    [System.SerializableAttribute()]
+    public partial class DebitOrderItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AccountNumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Astrodon.Data.DebitOrder.AccountTypeType AccountTypeIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal AmountDueField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string BranchCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BuildingIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime CollectionDayField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CustomerCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CustomerNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Astrodon.Data.DebitOrder.DebitOrderDayType DebitOrderCollectionDayField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal DebitOrderFeeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool DebitOrderFeeDisabledField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsDebitOrderFeeDisabledOnBuildingField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AccountNumber {
+            get {
+                return this.AccountNumberField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountNumberField, value) != true)) {
+                    this.AccountNumberField = value;
+                    this.RaisePropertyChanged("AccountNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Astrodon.Data.DebitOrder.AccountTypeType AccountTypeId {
+            get {
+                return this.AccountTypeIdField;
+            }
+            set {
+                if ((this.AccountTypeIdField.Equals(value) != true)) {
+                    this.AccountTypeIdField = value;
+                    this.RaisePropertyChanged("AccountTypeId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal AmountDue {
+            get {
+                return this.AmountDueField;
+            }
+            set {
+                if ((this.AmountDueField.Equals(value) != true)) {
+                    this.AmountDueField = value;
+                    this.RaisePropertyChanged("AmountDue");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string BranchCode {
+            get {
+                return this.BranchCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BranchCodeField, value) != true)) {
+                    this.BranchCodeField = value;
+                    this.RaisePropertyChanged("BranchCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BuildingId {
+            get {
+                return this.BuildingIdField;
+            }
+            set {
+                if ((this.BuildingIdField.Equals(value) != true)) {
+                    this.BuildingIdField = value;
+                    this.RaisePropertyChanged("BuildingId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime CollectionDay {
+            get {
+                return this.CollectionDayField;
+            }
+            set {
+                if ((this.CollectionDayField.Equals(value) != true)) {
+                    this.CollectionDayField = value;
+                    this.RaisePropertyChanged("CollectionDay");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CustomerCode {
+            get {
+                return this.CustomerCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CustomerCodeField, value) != true)) {
+                    this.CustomerCodeField = value;
+                    this.RaisePropertyChanged("CustomerCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CustomerName {
+            get {
+                return this.CustomerNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CustomerNameField, value) != true)) {
+                    this.CustomerNameField = value;
+                    this.RaisePropertyChanged("CustomerName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Astrodon.Data.DebitOrder.DebitOrderDayType DebitOrderCollectionDay {
+            get {
+                return this.DebitOrderCollectionDayField;
+            }
+            set {
+                if ((this.DebitOrderCollectionDayField.Equals(value) != true)) {
+                    this.DebitOrderCollectionDayField = value;
+                    this.RaisePropertyChanged("DebitOrderCollectionDay");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal DebitOrderFee {
+            get {
+                return this.DebitOrderFeeField;
+            }
+            set {
+                if ((this.DebitOrderFeeField.Equals(value) != true)) {
+                    this.DebitOrderFeeField = value;
+                    this.RaisePropertyChanged("DebitOrderFee");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool DebitOrderFeeDisabled {
+            get {
+                return this.DebitOrderFeeDisabledField;
+            }
+            set {
+                if ((this.DebitOrderFeeDisabledField.Equals(value) != true)) {
+                    this.DebitOrderFeeDisabledField = value;
+                    this.RaisePropertyChanged("DebitOrderFeeDisabled");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsDebitOrderFeeDisabledOnBuilding {
+            get {
+                return this.IsDebitOrderFeeDisabledOnBuildingField;
+            }
+            set {
+                if ((this.IsDebitOrderFeeDisabledOnBuildingField.Equals(value) != true)) {
+                    this.IsDebitOrderFeeDisabledOnBuildingField = value;
+                    this.RaisePropertyChanged("IsDebitOrderFeeDisabledOnBuilding");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
@@ -330,8 +551,11 @@ namespace Astrodon.ReportService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/InsuranceSchedule", ReplyAction="http://tempuri.org/IReportService/InsuranceScheduleResponse")]
         byte[] InsuranceSchedule(string sqlConnectionString, int buildingId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/RunDebitOrderForBuilding", ReplyAction="http://tempuri.org/IReportService/RunDebitOrderForBuildingResponse")]
+        Astrodon.ReportService.DebitOrderItem[] RunDebitOrderForBuilding(string sqlConnectionString, int buildingId, System.DateTime processMonth, bool showFeeBreakdown);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/SAPORDebitOrder", ReplyAction="http://tempuri.org/IReportService/SAPORDebitOrderResponse")]
-        byte[] SAPORDebitOrder(string sqlConnectionString, int buildingId, System.DateTime processMonth, bool showFeeBreakdown);
+        byte[] SAPORDebitOrder(string sqlConnectionString, Astrodon.ReportService.DebitOrderItem[] items, bool showFeeBreakdown);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MonthlyReport", ReplyAction="http://tempuri.org/IReportService/MonthlyReportResponse")]
         byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId);
@@ -396,8 +620,12 @@ namespace Astrodon.ReportService {
             return base.Channel.InsuranceSchedule(sqlConnectionString, buildingId);
         }
         
-        public byte[] SAPORDebitOrder(string sqlConnectionString, int buildingId, System.DateTime processMonth, bool showFeeBreakdown) {
-            return base.Channel.SAPORDebitOrder(sqlConnectionString, buildingId, processMonth, showFeeBreakdown);
+        public Astrodon.ReportService.DebitOrderItem[] RunDebitOrderForBuilding(string sqlConnectionString, int buildingId, System.DateTime processMonth, bool showFeeBreakdown) {
+            return base.Channel.RunDebitOrderForBuilding(sqlConnectionString, buildingId, processMonth, showFeeBreakdown);
+        }
+        
+        public byte[] SAPORDebitOrder(string sqlConnectionString, Astrodon.ReportService.DebitOrderItem[] items, bool showFeeBreakdown) {
+            return base.Channel.SAPORDebitOrder(sqlConnectionString, items, showFeeBreakdown);
         }
         
         public byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId) {

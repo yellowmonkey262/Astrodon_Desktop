@@ -48,7 +48,7 @@ namespace Astrodon
 
         #endregion Queries
 
-        private void LoadBuildings(DataSet ds)
+        private void LoadBuildings(DataSet ds, bool onlyActiveBuildings)
         {
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -88,6 +88,7 @@ namespace Astrodon
                         addy5 = dr["addy5"].ToString(),
                         pid = dr["pid"].ToString(),
                         isHOA = bool.Parse(dr["hoa"].ToString()),
+                        BuildingDisabled = bool.Parse(dr["BuildingDisabled"].ToString()),
                     };
                     try
                     {
@@ -133,12 +134,18 @@ namespace Astrodon
                         b.DebitOrderFee = 0;
                         b.reminderTemplate = b.finalTemplate = b.diconnectionNoticeTemplate = b.summonsTemplate = b.reminderSMS = b.finalSMS = b.disconnectionNoticeSMS = b.summonsSMS = b.disconnectionSMS = b.handoverSMS = "";
                     }
-                    buildings.Add(b);
+                    if (b.BuildingDisabled)
+                    {
+                        if (!onlyActiveBuildings)
+                            buildings.Add(b);
+                    }
+                    else
+                        buildings.Add(b);
                 }
             }
         }
 
-        public Buildings(bool addNew)
+        public Buildings(bool addNew, bool onlyActiveBuildings = true)
         {
             buildings = new List<Building>();
 
@@ -151,10 +158,10 @@ namespace Astrodon
                 };
                 buildings.Add(b);
             }
-            LoadBuildings(dh.GetData(buildQuery, null, out status));
+            LoadBuildings(dh.GetData(buildQuery, null, out status), onlyActiveBuildings);
         }
 
-        public Buildings(bool addNew, String nameValue)
+        public Buildings(bool addNew, String nameValue, bool onlyActiveBuildings = true)
         {
             buildings = new List<Building>();
             if (addNew)
@@ -166,15 +173,15 @@ namespace Astrodon
                 };
                 buildings.Add(b);
             }
-            LoadBuildings(dh.GetData(buildQuery, null, out status));
+            LoadBuildings(dh.GetData(buildQuery, null, out status), onlyActiveBuildings);
         }
 
-        public Buildings(int userID)
+        public Buildings(int userID, bool onlyActiveBuildings = true)
         {
             buildings = new List<Building>();
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@userid", userID);
-            LoadBuildings(dh.GetData(buildUserQuery, sqlParms, out status));
+            LoadBuildings(dh.GetData(buildUserQuery, sqlParms, out status), onlyActiveBuildings);
         }
 
         public bool Update(int idx, bool remove, out String status)
@@ -260,7 +267,7 @@ namespace Astrodon
             }
             else
             {
-                updateQuery = "DELETE FROM tblBuildings WHERE id = @ID";
+                updateQuery = "UPDATE tblBuildings SET BuildingDisabled = 1 where id = @ID";
             }
             if (buildings[idx].ID == 0)
             {

@@ -44,6 +44,9 @@ namespace Astrodon.Classes {
         }
 
         public bool ConnectClient(bool trustee) {
+            if (Environment.MachineName == "PASTELPARTNER")
+                return false;
+
             PasswordAuthenticationMethod PasswordConnection = new PasswordAuthenticationMethod("root", "root@66r94e!@#");
             KeyboardInteractiveAuthenticationMethod KeyboardInteractive = new KeyboardInteractiveAuthenticationMethod("root");
             ConnectionInfo connectionInfo = new ConnectionInfo("www.astrodon.co.za", port, "root", PasswordConnection, KeyboardInteractive);

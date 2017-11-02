@@ -34,6 +34,7 @@ namespace Astrodon.Controls.Requisitions
                             join b in context.tblBuildings on r.building equals b.id
                             where r.paid == false && r.processed == true
                             && r.trnDate <= startDate
+                            && b.BuildingDisabled == false
                             select new RequistitionGridItem
                             {
                                 Id = r.id,

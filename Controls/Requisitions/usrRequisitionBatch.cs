@@ -406,6 +406,7 @@ namespace Astrodon.Controls.Requisitions
                           join r in context.tblRequisitions on b.id equals r.building
                           join pmUser in context.tblUsers on b.pm equals pmUser.email
                           where r.processed == false
+                          && b.BuildingDisabled == false
                           select new RequisitionItem()
                           {
                               RequisitionId = r.id,                              
@@ -600,6 +601,7 @@ namespace Astrodon.Controls.Requisitions
                     var qry = from b in context.tblBuildings
                               join r in context.tblRequisitions on b.id equals r.building
                               where r.processed == false
+                              && b.BuildingDisabled == false
                               && b.pm == Controller.user.email
                               select b;
 

@@ -81,22 +81,52 @@ namespace Astrodon.Reports.DebitOrder
                 button1.Enabled = false;
                 try
                 {
+                    lbProgress.Text = "Starting";
+                    var buildingList = _Buildings.Where(a => a.ID > 0).ToList();
+                    if((cmbBuilding.SelectedItem as Building).ID != 0)
+                        buildingList = _Buildings.Where(a => a.ID == (cmbBuilding.SelectedItem as Building).ID).ToList();
+
+                    lbStatus.Items.Clear();
+                    int errorCount = 0;
+
+                    DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+                    List<DebitOrderItem> compiledList = new List<DebitOrderItem>();
+                    int buildingNum = 1;
                     using (var reportService = ReportServiceClient.CreateInstance())
                     {
-                        try
+                        foreach(var building in buildingList)
                         {
-                            DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
-                            byte[] reportData = null;
-                            reportData = reportService.SAPORDebitOrder(SqlDataHandler.GetConnectionString(), (cmbBuilding.SelectedItem as Building).ID, dDate,cbShowBreakdown.Checked);
-                            File.WriteAllBytes(dlgSave.FileName, reportData);
-                            Process.Start(dlgSave.FileName);
+                            lbProgress.Text = "Processing " + buildingNum.ToString() +"/"+ buildingList.Count().ToString() +" => "+building.Name;
+                            buildingNum++;
+                            Application.DoEvents();
+                            try
+                            {
+                                var items = reportService.RunDebitOrderForBuilding(SqlDataHandler.GetConnectionString(), building.ID, dDate, cbShowBreakdown.Checked);
+                                if(items != null && items.Length > 0)
+                                   compiledList.AddRange(items.ToList());
+                                lbStatus.Items.Insert(0,building.Name + " => "+ items.Length.ToString() + " records");
+                            }
+                            catch(Exception ex)
+                            {
+                                lbStatus.Items.Insert(0, "ERROR => " +building.Name +" " + ex.Message);
+                                errorCount++;
+                            }
+                            Application.DoEvents();
                         }
-                        catch (Exception ex)
+                        lbProgress.Text = "Compiling Excel File " + compiledList.Count().ToString() + " records total";
+                        Application.DoEvents();
+                        if (errorCount > 0)
                         {
-                            Controller.HandleError(ex);
+                            Controller.HandleError("Warning " + errorCount.ToString() + " buildings that could not be processed.", "Warning");
+                        }
 
-                            Controller.ShowMessage(ex.GetType().ToString());
-                        }
+                        byte[] reportData = null;
+                        reportData = reportService.SAPORDebitOrder(SqlDataHandler.GetConnectionString(), compiledList.ToArray(), cbShowBreakdown.Checked);
+                        File.WriteAllBytes(dlgSave.FileName, reportData);
+                        Process.Start(dlgSave.FileName);
+                        lbProgress.Text = "Completed " + compiledList.Count().ToString() + " records total";
+                        Application.DoEvents();
+
                     }
                 }
                 finally

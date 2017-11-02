@@ -159,6 +159,7 @@ namespace Astrodon.Controls.Requisitions
                             join s in context.SupplierSet on sb.SupplierId equals s.id
                             where s.id == _Supplier.id
                             && buildings.Contains(b.id)
+                            && b.BuildingDisabled == false
                             select new BuildingRequisitionItem()
                             {
                                 BuildingId = b.id,
@@ -186,6 +187,7 @@ namespace Astrodon.Controls.Requisitions
 
                     var q2 = from b in context.tblBuildings
                              where buldingList.Contains(b.id)
+                             && b.BuildingDisabled == false
                              select new BuildingRequisitionItem()
                              {
                                  BuildingId = b.id,

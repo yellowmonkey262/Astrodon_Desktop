@@ -7,6 +7,8 @@
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" />
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts.Maintenance" />
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.ManagementReportCoverPage" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Data.DebitOrder" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IReportService_LevyRollReport_InputMessage">
@@ -57,6 +59,12 @@
   <wsdl:message name="IReportService_InsuranceSchedule_OutputMessage">
     <wsdl:part name="parameters" element="tns:InsuranceScheduleResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_RunDebitOrderForBuilding_InputMessage">
+    <wsdl:part name="parameters" element="tns:RunDebitOrderForBuilding" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_RunDebitOrderForBuilding_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RunDebitOrderForBuildingResponse" />
+  </wsdl:message>
   <wsdl:message name="IReportService_SAPORDebitOrder_InputMessage">
     <wsdl:part name="parameters" element="tns:SAPORDebitOrder" />
   </wsdl:message>
@@ -101,6 +109,10 @@
     <wsdl:operation name="InsuranceSchedule">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/InsuranceSchedule" message="tns:IReportService_InsuranceSchedule_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/IReportService/InsuranceScheduleResponse" message="tns:IReportService_InsuranceSchedule_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RunDebitOrderForBuilding">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/RunDebitOrderForBuilding" message="tns:IReportService_RunDebitOrderForBuilding_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/RunDebitOrderForBuildingResponse" message="tns:IReportService_RunDebitOrderForBuilding_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SAPORDebitOrder">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/SAPORDebitOrder" message="tns:IReportService_SAPORDebitOrder_InputMessage" />
@@ -178,6 +190,15 @@
     </wsdl:operation>
     <wsdl:operation name="InsuranceSchedule">
       <soap:operation soapAction="http://tempuri.org/IReportService/InsuranceSchedule" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RunDebitOrderForBuilding">
+      <soap:operation soapAction="http://tempuri.org/IReportService/RunDebitOrderForBuilding" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
