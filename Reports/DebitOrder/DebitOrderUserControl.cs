@@ -16,6 +16,7 @@ using Astrodon.ReportService;
 using Astro.Library.Entities;
 using Astrodon.Data.Base;
 using Astrodon.Data.DebitOrder;
+using OfficeOpenXml;
 
 namespace Astrodon.Reports.DebitOrder
 {
@@ -90,7 +91,7 @@ namespace Astrodon.Reports.DebitOrder
                     int errorCount = 0;
 
                     DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
-                    List<DebitOrderItem> compiledList = new List<DebitOrderItem>();
+                    List<ExcelLineItem> compiledList = new List<ExcelLineItem>();
                     int buildingNum = 1;
                     using (var reportService = ReportServiceClient.CreateInstance())
                     {
@@ -103,7 +104,8 @@ namespace Astrodon.Reports.DebitOrder
                             {
                                 var items = reportService.RunDebitOrderForBuilding(SqlDataHandler.GetConnectionString(), building.ID, dDate, cbShowBreakdown.Checked);
                                 if(items != null && items.Length > 0)
-                                   compiledList.AddRange(items.ToList());
+                                   compiledList.AddRange(items.Select(a => new ExcelLineItem(a,building.Abbr,building.Name)).ToList());
+
                                 lbStatus.Items.Insert(0,building.Name + " => "+ items.Length.ToString() + " records");
                             }
                             catch(Exception ex)
@@ -121,9 +123,9 @@ namespace Astrodon.Reports.DebitOrder
                         }
 
                         byte[] reportData = null;
-                        Controller.ShowMessage("CNT " + compiledList.Count() + " " + compiledList[0].AmountDue.ToString() + " - > " + compiledList[1].AmountDue.ToString());
 
-                        reportData = reportService.SAPORDebitOrder(SqlDataHandler.GetConnectionString(), compiledList.ToArray(), cbShowBreakdown.Checked);
+                        reportData = ExportDebitOrder(compiledList, cbShowBreakdown.Checked);
+
                         File.WriteAllBytes(dlgSave.FileName, reportData);
                         Process.Start(dlgSave.FileName);
                         lbProgress.Text = "Completed " + compiledList.Count().ToString() + " records total";
@@ -137,5 +139,194 @@ namespace Astrodon.Reports.DebitOrder
                 }
             }
         }
+
+        byte[] ExportDebitOrder(List<ExcelLineItem> debitOrderItems, bool showFeeBreakdown)
+        {
+            byte[] result = null;
+            using (var memStream = new MemoryStream())
+            {
+                using (ExcelPackage excelPkg = new ExcelPackage())
+                {
+
+                    using (ExcelWorksheet wsSheet1 = excelPkg.Workbook.Worksheets.Add("Debtors"))
+                    {
+
+                        wsSheet1.Cells["A1"].Value = "SUPPLIER ID";
+                        wsSheet1.Cells["B1"].Value = "REFERENCE";
+                        wsSheet1.Cells["C1"].Value = "SUPPLIER NAME";
+                        wsSheet1.Cells["D1"].Value = "HOLNES";
+                        wsSheet1.Cells["E1"].Value = "ACCOUNT NAME";
+                        wsSheet1.Cells["F1"].Value = "DESCRIPTION";
+                        wsSheet1.Cells["G1"].Value = "BRANCH CODE";
+                        wsSheet1.Cells["H1"].Value = "ACCOUNT TYPE";
+                        wsSheet1.Cells["I1"].Value = "ACCOUNT NO";
+                        wsSheet1.Cells["J1"].Value = "COLLECTION DAY";
+                        wsSheet1.Cells["K1"].Value = "COLLECTION AMOUNT";
+                        if (showFeeBreakdown)
+                        {
+                            wsSheet1.Cells["L1"].Value = "DEBIT ORDER FEE";
+                            wsSheet1.Cells["M1"].Value = "AMOUNT DUE";
+                            wsSheet1.Cells["N1"].Value = "COMMENT";
+                            wsSheet1.Cells["O1"].Value = "BUILDING CODE";
+                            wsSheet1.Cells["P1"].Value = "BUILDING NAME";
+
+
+                        }
+                        int rowNum = 1;
+                        foreach (var row in debitOrderItems.Where(a => a.AmountDue > 0).OrderBy(a => a.Holnes).ThenBy(a => a.CustomerCode))
+                        {
+                            rowNum++;
+                            wsSheet1.Cells["A" + rowNum.ToString()].Value = "";
+                            wsSheet1.Cells["B" + rowNum.ToString()].Value = row.Reference;
+                            wsSheet1.Cells["C" + rowNum.ToString()].Value = row.SupplierName;
+                            wsSheet1.Cells["D" + rowNum.ToString()].Value = row.Holnes;
+                            wsSheet1.Cells["E" + rowNum.ToString()].Value = row.CustomerName;
+                            wsSheet1.Cells["F" + rowNum.ToString()].Value = row.Description;
+                            wsSheet1.Cells["G" + rowNum.ToString()].Value = row.BranchCode;
+                            wsSheet1.Cells["H" + rowNum.ToString()].Value = row.AccountType;
+                            wsSheet1.Cells["I" + rowNum.ToString()].Value = row.AccountNumber;
+
+                            wsSheet1.Cells["J" + rowNum.ToString()].Style.Numberformat.Format = "yyyy/MM/dd";
+                            wsSheet1.Cells["J" + rowNum.ToString()].Value = row.CollectionDay;
+
+                            wsSheet1.Cells["K" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                            wsSheet1.Cells["K" + rowNum.ToString()].Value = row.CollectionAmount;
+
+                            
+
+                            if (showFeeBreakdown)
+                            {
+                                if (row.ExportDebitOrderFee != 0)
+                                {
+                                    wsSheet1.Cells["L" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                                    wsSheet1.Cells["L" + rowNum.ToString()].Value = row.ExportDebitOrderFee;
+                                }
+
+                                wsSheet1.Cells["M" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                                wsSheet1.Cells["M" + rowNum.ToString()].Value = row.AmountDue;
+
+                                string debitOrderComment = "";
+                                if (row.IsDebitOrderFeeDisabledOnBuilding)
+                                {
+                                    if (row.DebitOrderFeeDisabled)
+                                        debitOrderComment = "Fee disabled on building and unit.";
+                                    else
+                                        debitOrderComment = "Fee disabled on building.";
+                                }
+                                else
+                                {
+                                    if (row.DebitOrderFeeDisabled)
+                                        debitOrderComment = "Fee disabled on unit.";
+                                }
+
+                                wsSheet1.Cells["N" + rowNum.ToString()].Value = debitOrderComment;
+                                wsSheet1.Cells["O" + rowNum.ToString()].Value = row.BuildingCode;
+                                wsSheet1.Cells["P" + rowNum.ToString()].Value = row.BuildingName;
+                            }
+                        }
+
+
+                        if(showFeeBreakdown && rowNum >= 1)
+                        {
+                            //ADD TOTALS
+                            rowNum++;
+
+                            wsSheet1.Cells["J" + rowNum.ToString()].Value = "TOTAL:";
+                            wsSheet1.Cells["j" + rowNum.ToString()].Style.Font.Bold = true;
+
+                            wsSheet1.Cells["K" + rowNum.ToString()].Formula = "SUM(K2:K"+(rowNum-1).ToString()+")";
+                            wsSheet1.Cells["K" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                            wsSheet1.Cells["K" + rowNum.ToString()].Style.Font.Bold = true;
+
+                            wsSheet1.Cells["L" + rowNum.ToString()].Formula = "SUM(L2:L" + (rowNum - 1).ToString() + ")";
+                            wsSheet1.Cells["L" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                            wsSheet1.Cells["L" + rowNum.ToString()].Style.Font.Bold = true;
+
+                            wsSheet1.Cells["M" + rowNum.ToString()].Formula = "SUM(M2:M" + (rowNum - 1).ToString() + ")";
+                            wsSheet1.Cells["M" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                            wsSheet1.Cells["M" + rowNum.ToString()].Style.Font.Bold = true;
+
+                        }
+
+                        wsSheet1.Protection.IsProtected = false;
+                        wsSheet1.Protection.AllowSelectLockedCells = false;
+                        wsSheet1.Cells.AutoFitColumns();
+
+                        excelPkg.SaveAs(memStream);
+                        memStream.Flush();
+                        result = memStream.ToArray();
+                    }
+                }
+            }
+            return result;
+        }
+    }
+
+    class ExcelLineItem
+    {
+        public ExcelLineItem(DebitOrderItem itm, string buildingCode, string buildingName)
+        {
+            BuildingId = itm.BuildingId;
+            IsDebitOrderFeeDisabledOnBuilding = itm.IsDebitOrderFeeDisabledOnBuilding;
+            CustomerCode = itm.CustomerCode;
+            CustomerName = itm.CustomerName;
+            AccountTypeId = itm.AccountTypeId;
+            BranchCode = itm.BranchCode;
+            AccountNumber = itm.AccountNumber;
+            CollectionDay = itm.CollectionDay;
+            DebitOrderCollectionDay = itm.DebitOrderCollectionDay;
+            DebitOrderFee = itm.DebitOrderFee;
+            AmountDue = itm.AmountDue;
+            DebitOrderFeeDisabled = itm.DebitOrderFeeDisabled;
+            BuildingCode = buildingCode;
+            BuildingName = buildingName;
+
+        }
+        public int BuildingId { get; set; }
+        public bool IsDebitOrderFeeDisabledOnBuilding { get; set; }
+        public string CustomerCode { get; set; }
+        public string CustomerName { get; set; }
+        public AccountTypeType AccountTypeId { get; set; }
+        public string BranchCode { get; set; }
+
+        public string AccountNumber { get; set; }
+        public DateTime CollectionDay { get; set; }
+        public DebitOrderDayType DebitOrderCollectionDay { get; set; }
+        public decimal DebitOrderFee { get; set; }
+        public decimal AmountDue { get; set; }
+        public bool DebitOrderFeeDisabled { get; set; }
+
+        #region ExportField
+        public string SupplierId { get { return string.Empty; } }
+        public string Reference { get { return "D/" + CustomerCode; } }
+        public string SupplierName { get { return "ASTRODON"; } }
+        public string Holnes { get { return CustomerCode + " " + CustomerName; } }
+        public string Description { get { return "ASTRODON"; } }
+
+        public decimal ExportDebitOrderFee
+        {
+            get
+            {
+                if (IsDebitOrderFeeDisabledOnBuilding || DebitOrderFeeDisabled)
+                    return 0;
+                else
+                    return DebitOrderFee;
+            }
+        }
+
+        public decimal CollectionAmount
+        {
+            get
+            {
+                return AmountDue + ExportDebitOrderFee;
+            }
+        }
+
+        public string AccountType { get { return ((int)AccountTypeId).ToString(); } }
+
+        public string BuildingCode { get; private set; }
+        public string BuildingName { get; private set; }
+        #endregion
+
     }
 }
