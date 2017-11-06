@@ -62,6 +62,7 @@
             this.customerFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.emailCustomerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchCustomersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sAPORDebitOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pMPAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pMJobListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jobListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,7 +99,7 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.sAPORDebitOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.calendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -411,6 +412,13 @@
             this.searchCustomersToolStripMenuItem.Text = "Search customers";
             this.searchCustomersToolStripMenuItem.Click += new System.EventHandler(this.searchCustomersToolStripMenuItem_Click);
             // 
+            // sAPORDebitOrderToolStripMenuItem
+            // 
+            this.sAPORDebitOrderToolStripMenuItem.Name = "sAPORDebitOrderToolStripMenuItem";
+            this.sAPORDebitOrderToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.sAPORDebitOrderToolStripMenuItem.Text = "SAPOR Debit Order";
+            this.sAPORDebitOrderToolStripMenuItem.Click += new System.EventHandler(this.sAPORDebitOrderToolStripMenuItem_Click);
+            // 
             // pMPAToolStripMenuItem
             // 
             this.pMPAToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -615,7 +623,8 @@
             this.checklistToolStripMenuItem,
             this.reportToolStripMenuItem,
             this.levyRollToolStripMenuItem,
-            this.managementPackToolStripMenuItem});
+            this.managementPackToolStripMenuItem,
+            this.calendarToolStripMenuItem});
             this.monthlyFinancialsToolStripMenuItem.Name = "monthlyFinancialsToolStripMenuItem";
             this.monthlyFinancialsToolStripMenuItem.Size = new System.Drawing.Size(119, 20);
             this.monthlyFinancialsToolStripMenuItem.Text = "Monthly Financials";
@@ -694,12 +703,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // sAPORDebitOrderToolStripMenuItem
+            // calendarToolStripMenuItem
             // 
-            this.sAPORDebitOrderToolStripMenuItem.Name = "sAPORDebitOrderToolStripMenuItem";
-            this.sAPORDebitOrderToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.sAPORDebitOrderToolStripMenuItem.Text = "SAPOR Debit Order";
-            this.sAPORDebitOrderToolStripMenuItem.Click += new System.EventHandler(this.sAPORDebitOrderToolStripMenuItem_Click);
+            this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
+            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.calendarToolStripMenuItem.Text = "Calendar";
+            this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -802,5 +811,6 @@
         private System.Windows.Forms.ToolStripMenuItem managementPackTOCDescriptionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insuranceBrokerMaintenanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sAPORDebitOrderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem calendarToolStripMenuItem;
     }
 }

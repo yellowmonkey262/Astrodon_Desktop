@@ -5,6 +5,7 @@ using Astrodon.Controls.Requisitions;
 using Astrodon.Controls.Supplier;
 using Astrodon.Data;
 using Astrodon.Reports;
+using Astrodon.Reports.Calendar;
 using Astrodon.Reports.DebitOrder;
 using Astrodon.Reports.MaintenanceReport;
 using Astrodon.Reports.ManagementPack;
@@ -669,6 +670,15 @@ namespace Astrodon
             dt.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(dt);
             toolStripStatusLabel1.Text = "SAPOR Debit Order";
+        }
+
+        private void calendarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucPrintCalendar dt = new ucPrintCalendar();
+            dt.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(dt);
+            toolStripStatusLabel1.Text = "Calendar";
         }
     }
 }

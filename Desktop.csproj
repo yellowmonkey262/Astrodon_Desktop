@@ -614,6 +614,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Calendar\CalendarReport.cs" />
+    <Compile Include="Reports\Calendar\ucPrintCalendar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reports\Calendar\ucPrintCalendar.Designer.cs">
+      <DependentUpon>ucPrintCalendar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reports\DebitOrder\DebitOrderUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -873,6 +880,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Calendar\ucPrintCalendar.resx">
+      <DependentUpon>ucPrintCalendar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\DebitOrder\DebitOrderUserControl.resx">
       <DependentUpon>DebitOrderUserControl.cs</DependentUpon>
