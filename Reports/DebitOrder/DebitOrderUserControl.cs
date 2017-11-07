@@ -167,8 +167,11 @@ namespace Astrodon.Reports.DebitOrder
                             wsSheet1.Cells["L1"].Value = "DEBIT ORDER FEE";
                             wsSheet1.Cells["M1"].Value = "AMOUNT DUE";
                             wsSheet1.Cells["N1"].Value = "COMMENT";
-                            wsSheet1.Cells["O1"].Value = "BUILDING CODE";
-                            wsSheet1.Cells["P1"].Value = "BUILDING NAME";
+
+                            wsSheet1.Cells["O1"].Value = "LEVY ROLL PAYMENTS";
+                            wsSheet1.Cells["P1"].Value = "LEVY ROLL DUE";
+                            wsSheet1.Cells["Q1"].Value = "BUILDING CODE";
+                            wsSheet1.Cells["R1"].Value = "BUILDING NAME";
 
 
                         }
@@ -220,8 +223,15 @@ namespace Astrodon.Reports.DebitOrder
                                 }
 
                                 wsSheet1.Cells["N" + rowNum.ToString()].Value = debitOrderComment;
-                                wsSheet1.Cells["O" + rowNum.ToString()].Value = row.BuildingCode;
-                                wsSheet1.Cells["P" + rowNum.ToString()].Value = row.BuildingName;
+
+                                wsSheet1.Cells["O" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                                wsSheet1.Cells["O" + rowNum.ToString()].Value = row.LevyRollPayments;
+
+                                wsSheet1.Cells["P" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                                wsSheet1.Cells["P" + rowNum.ToString()].Value = row.LevyRollDue ;
+
+                                wsSheet1.Cells["Q" + rowNum.ToString()].Value = row.BuildingCode;
+                                wsSheet1.Cells["R" + rowNum.ToString()].Value = row.BuildingName;
                             }
                         }
 
@@ -245,6 +255,14 @@ namespace Astrodon.Reports.DebitOrder
                             wsSheet1.Cells["M" + rowNum.ToString()].Formula = "SUM(M2:M" + (rowNum - 1).ToString() + ")";
                             wsSheet1.Cells["M" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
                             wsSheet1.Cells["M" + rowNum.ToString()].Style.Font.Bold = true;
+
+                            wsSheet1.Cells["O" + rowNum.ToString()].Formula = "SUM(O2:O" + (rowNum - 1).ToString() + ")";
+                            wsSheet1.Cells["O" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                            wsSheet1.Cells["O" + rowNum.ToString()].Style.Font.Bold = true;
+
+                            wsSheet1.Cells["P" + rowNum.ToString()].Formula = "SUM(P2:P" + (rowNum - 1).ToString() + ")";
+                            wsSheet1.Cells["P" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                            wsSheet1.Cells["P" + rowNum.ToString()].Style.Font.Bold = true;
 
                         }
 
@@ -280,6 +298,8 @@ namespace Astrodon.Reports.DebitOrder
             DebitOrderFeeDisabled = itm.DebitOrderFeeDisabled;
             BuildingCode = buildingCode;
             BuildingName = buildingName;
+            LevyRollDue = itm.LevyRollDue;
+            LevyRollPayments = itm.Payments;
 
         }
         public int BuildingId { get; set; }
@@ -294,6 +314,10 @@ namespace Astrodon.Reports.DebitOrder
         public DebitOrderDayType DebitOrderCollectionDay { get; set; }
         public decimal DebitOrderFee { get; set; }
         public decimal AmountDue { get; set; }
+
+        public decimal LevyRollDue { get; set; }
+        public decimal LevyRollPayments { get; set; }
+
         public bool DebitOrderFeeDisabled { get; set; }
 
         #region ExportField

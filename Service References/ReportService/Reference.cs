@@ -347,6 +347,12 @@ namespace Astrodon.ReportService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsDebitOrderFeeDisabledOnBuildingField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal LevyRollDueField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal PaymentsField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -513,6 +519,32 @@ namespace Astrodon.ReportService {
             }
         }
         
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal LevyRollDue {
+            get {
+                return this.LevyRollDueField;
+            }
+            set {
+                if ((this.LevyRollDueField.Equals(value) != true)) {
+                    this.LevyRollDueField = value;
+                    this.RaisePropertyChanged("LevyRollDue");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Payments {
+            get {
+                return this.PaymentsField;
+            }
+            set {
+                if ((this.PaymentsField.Equals(value) != true)) {
+                    this.PaymentsField = value;
+                    this.RaisePropertyChanged("Payments");
+                }
+            }
+        }
+        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -553,9 +585,6 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/RunDebitOrderForBuilding", ReplyAction="http://tempuri.org/IReportService/RunDebitOrderForBuildingResponse")]
         Astrodon.ReportService.DebitOrderItem[] RunDebitOrderForBuilding(string sqlConnectionString, int buildingId, System.DateTime processMonth, bool showFeeBreakdown);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/SAPORDebitOrder", ReplyAction="http://tempuri.org/IReportService/SAPORDebitOrderResponse")]
-        byte[] SAPORDebitOrder(string sqlConnectionString, Astrodon.ReportService.DebitOrderItem[] items, bool showFeeBreakdown);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MonthlyReport", ReplyAction="http://tempuri.org/IReportService/MonthlyReportResponse")]
         byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId);
@@ -622,10 +651,6 @@ namespace Astrodon.ReportService {
         
         public Astrodon.ReportService.DebitOrderItem[] RunDebitOrderForBuilding(string sqlConnectionString, int buildingId, System.DateTime processMonth, bool showFeeBreakdown) {
             return base.Channel.RunDebitOrderForBuilding(sqlConnectionString, buildingId, processMonth, showFeeBreakdown);
-        }
-        
-        public byte[] SAPORDebitOrder(string sqlConnectionString, Astrodon.ReportService.DebitOrderItem[] items, bool showFeeBreakdown) {
-            return base.Channel.SAPORDebitOrder(sqlConnectionString, items, showFeeBreakdown);
         }
         
         public byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId) {

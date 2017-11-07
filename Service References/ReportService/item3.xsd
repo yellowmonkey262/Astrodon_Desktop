@@ -152,22 +152,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SAPORDebitOrder">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="sqlConnectionString" nillable="true" type="xs:string" />
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" minOccurs="0" name="items" nillable="true" type="q5:ArrayOfDebitOrderItem" />
-        <xs:element minOccurs="0" name="showFeeBreakdown" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SAPORDebitOrderResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="SAPORDebitOrderResult" nillable="true" type="xs:base64Binary" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="MonthlyReport">
     <xs:complexType>
       <xs:sequence>

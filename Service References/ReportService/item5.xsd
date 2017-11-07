@@ -21,6 +21,8 @@
       <xs:element minOccurs="0" name="DebitOrderFee" type="xs:decimal" />
       <xs:element minOccurs="0" name="DebitOrderFeeDisabled" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsDebitOrderFeeDisabledOnBuilding" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LevyRollDue" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Payments" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="DebitOrderItem" nillable="true" type="tns:DebitOrderItem" />

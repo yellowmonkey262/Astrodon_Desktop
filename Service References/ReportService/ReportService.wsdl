@@ -65,12 +65,6 @@
   <wsdl:message name="IReportService_RunDebitOrderForBuilding_OutputMessage">
     <wsdl:part name="parameters" element="tns:RunDebitOrderForBuildingResponse" />
   </wsdl:message>
-  <wsdl:message name="IReportService_SAPORDebitOrder_InputMessage">
-    <wsdl:part name="parameters" element="tns:SAPORDebitOrder" />
-  </wsdl:message>
-  <wsdl:message name="IReportService_SAPORDebitOrder_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SAPORDebitOrderResponse" />
-  </wsdl:message>
   <wsdl:message name="IReportService_MonthlyReport_InputMessage">
     <wsdl:part name="parameters" element="tns:MonthlyReport" />
   </wsdl:message>
@@ -113,10 +107,6 @@
     <wsdl:operation name="RunDebitOrderForBuilding">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/RunDebitOrderForBuilding" message="tns:IReportService_RunDebitOrderForBuilding_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/IReportService/RunDebitOrderForBuildingResponse" message="tns:IReportService_RunDebitOrderForBuilding_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SAPORDebitOrder">
-      <wsdl:input wsam:Action="http://tempuri.org/IReportService/SAPORDebitOrder" message="tns:IReportService_SAPORDebitOrder_InputMessage" />
-      <wsdl:output wsam:Action="http://tempuri.org/IReportService/SAPORDebitOrderResponse" message="tns:IReportService_SAPORDebitOrder_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MonthlyReport">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/MonthlyReport" message="tns:IReportService_MonthlyReport_InputMessage" />
@@ -199,15 +189,6 @@
     </wsdl:operation>
     <wsdl:operation name="RunDebitOrderForBuilding">
       <soap:operation soapAction="http://tempuri.org/IReportService/RunDebitOrderForBuilding" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SAPORDebitOrder">
-      <soap:operation soapAction="http://tempuri.org/IReportService/SAPORDebitOrder" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
