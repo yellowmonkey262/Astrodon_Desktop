@@ -209,7 +209,7 @@
             this.dgItems.Location = new System.Drawing.Point(10, 306);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(582, 150);
+            this.dgItems.Size = new System.Drawing.Size(905, 402);
             this.dgItems.TabIndex = 20;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             // 
@@ -230,7 +230,7 @@
             this.Controls.Add(this.cmbBuilding);
             this.Controls.Add(this.label3);
             this.Name = "usrBuildingMaintenanceConfiguration";
-            this.Size = new System.Drawing.Size(601, 473);
+            this.Size = new System.Drawing.Size(918, 726);
             this.gbClassification.ResumeLayout(false);
             this.gbClassification.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).EndInit();

@@ -153,7 +153,7 @@ namespace Astrodon.Reports.Calendar
         }
 
 
-        private void DrawDateData(DateTime first_of_month, Dictionary<int,string> date_data,   Graphics gr, float x, float y, float col_wid, float row_hgt)
+        private void DrawDateData(DateTime first_of_month, Dictionary<int, string> date_data, Graphics gr, float x, float y, float col_wid, float row_hgt)
         {
             // Let date numbers occupy the upper quarter
             // and left third of the date box.
@@ -173,43 +173,56 @@ namespace Astrodon.Reports.Calendar
             // Draw the dates.
             using (Font number_font = new Font("Times New Roman", font_size))
             {
-                using (Font data_font = new Font("Times New Roman", font_size * 0.75f))
+                using (StringFormat ul_sf = new StringFormat())
                 {
-                    using (StringFormat ul_sf = new StringFormat())
+
+                    ul_sf.Alignment = StringAlignment.Near;
+                    ul_sf.LineAlignment = StringAlignment.Near;
+                    ul_sf.Trimming = StringTrimming.EllipsisWord;
+                    ul_sf.FormatFlags = StringFormatFlags.LineLimit;
+
+                    int num_days = DateTime.DaysInMonth(
+                        first_of_month.Year, first_of_month.Month);
+                    for (int day_num = 0; day_num < num_days; day_num++)
                     {
-                        ul_sf.Alignment = StringAlignment.Near;
-                        ul_sf.LineAlignment = StringAlignment.Near;
-                        ul_sf.Trimming = StringTrimming.EllipsisWord;
-                        ul_sf.FormatFlags = StringFormatFlags.LineLimit;
+                        // Outline the cell.
+                        RectangleF cell_rectf = new RectangleF(
+                            x + col * col_wid, y, col_wid, row_hgt);
+                        gr.DrawRectangle(Pens.Black,
+                            cell_rectf.X, cell_rectf.Y,
+                            cell_rectf.Width, cell_rectf.Height);
 
-                        int num_days = DateTime.DaysInMonth(
-                            first_of_month.Year, first_of_month.Month);
-                        for (int day_num = 0; day_num < num_days; day_num++)
+                        // Draw the date.
+                        date_rectf.X = cell_rectf.X;
+                        date_rectf.Y = cell_rectf.Y;
+                        gr.DrawString((day_num + 1).ToString(),
+                            number_font, Brushes.Blue, date_rectf, ul_sf);
+
+                        // Draw the data.
+                        data_rectf.X = x + col * col_wid;
+                        data_rectf.Y = y + row_hgt * 0.25f;
+                        if (date_data.ContainsKey(day_num + 1))
                         {
-                            // Outline the cell.
-                            RectangleF cell_rectf = new RectangleF(
-                                x + col * col_wid, y, col_wid, row_hgt);
-                            gr.DrawRectangle(Pens.Black,
-                                cell_rectf.X, cell_rectf.Y,
-                                cell_rectf.Width, cell_rectf.Height);
-
-                            // Draw the date.
-                            date_rectf.X = cell_rectf.X;
-                            date_rectf.Y = cell_rectf.Y;
-                            gr.DrawString((day_num + 1).ToString(),
-                                number_font, Brushes.Blue, date_rectf, ul_sf);
-
-                            // Draw the data.
-                            data_rectf.X = x + col * col_wid;
-                            data_rectf.Y = y + row_hgt * 0.25f;
-                            if (date_data.ContainsKey(day_num + 1))
+                            string text = date_data[day_num + 1];
+                            if (!String.IsNullOrWhiteSpace(text))
                             {
-                                gr.DrawString(date_data[day_num + 1], data_font, Brushes.Black, data_rectf, ul_sf);
+                                float factor = 1f;
+
+                                int lines = 1;
+                                if (text.Contains("\n"))
+                                    lines = text.Split("\n".ToCharArray()).Count();
+
+                                factor = factor / lines;
+                                using (Font data_font = new Font("Times New Roman", font_size * factor))
+                                {
+                                    gr.DrawString(date_data[day_num + 1], data_font, Brushes.Black, data_rectf, ul_sf);
+                                }
                             }
-                            // Move to the next cell.
-                            col = (col + 1) % 7;
-                            if (col == 0) y += row_hgt;
                         }
+
+                        // Move to the next cell.
+                        col = (col + 1) % 7;
+                        if (col == 0) y += row_hgt;
                     }
                 }
             }

@@ -160,6 +160,11 @@ namespace Astrodon
             txtAccountNumber.Text = string.Empty;
             cbAccountType.SelectedIndex = -1;
             cbProcessDate.SelectedIndex = -1;
+            dtpDebitOrderCancelled.Visible = false;
+            dtpDebitOrderCancelled.Value = DateTime.Today.AddMonths(1);
+            dtpDebitOrderCancelled.Format = DateTimePickerFormat.Custom;
+            dtpDebitOrderCancelled.CustomFormat = "yyyy/MM/dd";
+            cbDebitOrderCancelled.Checked = false;
         }
 
         private void cmbCustomer_SelectedIndexChanged(object sender, EventArgs e)
@@ -942,6 +947,11 @@ namespace Astrodon
                 txtAccountNumber.Text = "";
                 cbAccountType.SelectedIndex = -1;
                 cbProcessDate.SelectedIndex = -1;
+                dtpDebitOrderCancelled.Format = DateTimePickerFormat.Custom;
+                dtpDebitOrderCancelled.CustomFormat = "yyyy/MM/dd";
+                cbDebitOrderCancelled.Checked = false;
+                dtpDebitOrderCancelled.Visible = cbDebitOrderCancelled.Checked;
+
                 DisplayPDF(null);
                 using (var context = SqlDataHandler.GetDataContext())
                 {
@@ -956,6 +966,12 @@ namespace Astrodon
                         cbProcessDate.SelectedItem = debitOrder.DebitOrderCollectionDay;
                         cbDisableDebitOrderFee.Checked = debitOrder.IsDebitOrderFeeDisabled;
                         btnUpload.Visible = true;
+                        cbDebitOrderCancelled.Checked = debitOrder.DebitOrderCancelled;
+                        if(cbDebitOrderCancelled.Checked)
+                        {
+                            dtpDebitOrderCancelled.Visible = true;
+                            dtpDebitOrderCancelled.Value = debitOrder.DebitOrderCancelDate == null? DateTime.Today :  debitOrder.DebitOrderCancelDate.Value;
+                        }
 
                         var signedForm = context.DebitOrderDocumentSet.SingleOrDefault(a => a.CustomerDebitOrderId == debitOrder.id
                                              && a.DocumentType == DebitOrderDocumentType.SignedDebitOrder);
@@ -1021,6 +1037,11 @@ namespace Astrodon
                 debitOrder.LastUpdatedByUserId = Controller.user.id;
                 debitOrder.LastUpdateDate = DateTime.Now;
                 debitOrder.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
+                debitOrder.DebitOrderCancelled = cbDebitOrderCancelled.Checked;
+                if (debitOrder.DebitOrderCancelled)
+                    debitOrder.DebitOrderCancelDate = dtpDebitOrderCancelled.Value.Date;
+                else
+                    debitOrder.DebitOrderCancelDate = null;
                 context.SaveChanges();
                 btnUpload.Visible = true;
                 Controller.ShowMessage("Debit order detail saved. Please upload debit order form.");
@@ -1164,8 +1185,13 @@ namespace Astrodon
         }
 
 
+
         #endregion
 
-       
+        private void cbDebitOrderCancelled_CheckedChanged(object sender, EventArgs e)
+        {
+            dtpDebitOrderCancelled.Visible = cbDebitOrderCancelled.Checked;
+         
+        }
     }
 }

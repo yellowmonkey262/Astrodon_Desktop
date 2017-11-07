@@ -17,6 +17,8 @@
       <xs:element minOccurs="0" name="CollectionDay" type="xs:dateTime" />
       <xs:element minOccurs="0" name="CustomerCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CustomerName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DebitOrderCancelDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DebitOrderCancelled" type="xs:boolean" />
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Astrodon.Data.DebitOrder" minOccurs="0" name="DebitOrderCollectionDay" type="q2:DebitOrderDayType" />
       <xs:element minOccurs="0" name="DebitOrderFee" type="xs:decimal" />
       <xs:element minOccurs="0" name="DebitOrderFeeDisabled" type="xs:boolean" />

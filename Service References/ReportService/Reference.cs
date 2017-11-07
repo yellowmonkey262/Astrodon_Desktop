@@ -336,6 +336,12 @@ namespace Astrodon.ReportService {
         private string CustomerNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> DebitOrderCancelDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool DebitOrderCancelledField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Astrodon.Data.DebitOrder.DebitOrderDayType DebitOrderCollectionDayField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -463,6 +469,32 @@ namespace Astrodon.ReportService {
                 if ((object.ReferenceEquals(this.CustomerNameField, value) != true)) {
                     this.CustomerNameField = value;
                     this.RaisePropertyChanged("CustomerName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> DebitOrderCancelDate {
+            get {
+                return this.DebitOrderCancelDateField;
+            }
+            set {
+                if ((this.DebitOrderCancelDateField.Equals(value) != true)) {
+                    this.DebitOrderCancelDateField = value;
+                    this.RaisePropertyChanged("DebitOrderCancelDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool DebitOrderCancelled {
+            get {
+                return this.DebitOrderCancelledField;
+            }
+            set {
+                if ((this.DebitOrderCancelledField.Equals(value) != true)) {
+                    this.DebitOrderCancelledField = value;
+                    this.RaisePropertyChanged("DebitOrderCancelled");
                 }
             }
         }

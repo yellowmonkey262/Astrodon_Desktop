@@ -614,6 +614,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Calendar\CalendarPrintItem.cs" />
     <Compile Include="Reports\Calendar\CalendarReport.cs" />
     <Compile Include="Reports\Calendar\ucPrintCalendar.cs">
       <SubType>UserControl</SubType>

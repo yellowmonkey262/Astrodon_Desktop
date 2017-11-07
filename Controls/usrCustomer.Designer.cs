@@ -131,6 +131,9 @@
             this.label20 = new System.Windows.Forms.Label();
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
+            this.cbDebitOrderCancelled = new System.Windows.Forms.CheckBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.dtpDebitOrderCancelled = new System.Windows.Forms.DateTimePicker();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -939,6 +942,9 @@
             // 
             // tbDebitOrder
             // 
+            this.tbDebitOrder.Controls.Add(this.dtpDebitOrderCancelled);
+            this.tbDebitOrder.Controls.Add(this.cbDebitOrderCancelled);
+            this.tbDebitOrder.Controls.Add(this.label27);
             this.tbDebitOrder.Controls.Add(this.cbDisableDebitOrderFee);
             this.tbDebitOrder.Controls.Add(this.label26);
             this.tbDebitOrder.Controls.Add(this.axAcroPDF1);
@@ -994,7 +1000,7 @@
             // 
             // btnUpload
             // 
-            this.btnUpload.Location = new System.Drawing.Point(128, 199);
+            this.btnUpload.Location = new System.Drawing.Point(138, 252);
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(75, 23);
             this.btnUpload.TabIndex = 57;
@@ -1004,7 +1010,7 @@
             // 
             // btnSaveDebitOrder
             // 
-            this.btnSaveDebitOrder.Location = new System.Drawing.Point(271, 199);
+            this.btnSaveDebitOrder.Location = new System.Drawing.Point(281, 252);
             this.btnSaveDebitOrder.Name = "btnSaveDebitOrder";
             this.btnSaveDebitOrder.Size = new System.Drawing.Size(75, 23);
             this.btnSaveDebitOrder.TabIndex = 55;
@@ -1132,6 +1138,32 @@
             // fdOpen
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            // 
+            // cbDebitOrderCancelled
+            // 
+            this.cbDebitOrderCancelled.AutoSize = true;
+            this.cbDebitOrderCancelled.Location = new System.Drawing.Point(128, 203);
+            this.cbDebitOrderCancelled.Name = "cbDebitOrderCancelled";
+            this.cbDebitOrderCancelled.Size = new System.Drawing.Size(15, 14);
+            this.cbDebitOrderCancelled.TabIndex = 70;
+            this.cbDebitOrderCancelled.UseVisualStyleBackColor = true;
+            this.cbDebitOrderCancelled.CheckedChanged += new System.EventHandler(this.cbDebitOrderCancelled_CheckedChanged);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(7, 203);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(111, 13);
+            this.label27.TabIndex = 69;
+            this.label27.Text = "Debit Order Cancelled";
+            // 
+            // dtpDebitOrderCancelled
+            // 
+            this.dtpDebitOrderCancelled.Location = new System.Drawing.Point(157, 203);
+            this.dtpDebitOrderCancelled.Name = "dtpDebitOrderCancelled";
+            this.dtpDebitOrderCancelled.Size = new System.Drawing.Size(200, 20);
+            this.dtpDebitOrderCancelled.TabIndex = 71;
             // 
             // usrCustomer
             // 
@@ -1276,5 +1308,8 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.CheckBox cbDisableDebitOrderFee;
         private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.DateTimePicker dtpDebitOrderCancelled;
+        private System.Windows.Forms.CheckBox cbDebitOrderCancelled;
+        private System.Windows.Forms.Label label27;
     }
 }

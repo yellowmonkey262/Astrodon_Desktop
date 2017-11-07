@@ -1,5 +1,6 @@
 namespace Astrodon.Data
 {
+    using Calendar;
     using InsuranceData;
     using MaintenanceData;
     using System;
@@ -164,5 +165,9 @@ namespace Astrodon.Data
                 return false;
             }
         }
+
+        #region Calendar
+        public virtual ICollection<BuildingCalendarEntry> BuildingCalendarEntries { get; set; }
+        #endregion
     }
 }

@@ -55,6 +55,9 @@ namespace Astrodon.Data.DebitOrder
         public virtual DateTime LastUpdateDate { get; set; }
 
         public virtual bool IsDebitOrderFeeDisabled { get; set; }
+
+        public virtual DateTime? DebitOrderCancelDate { get; set; }
+        public virtual bool DebitOrderCancelled { get; set; }
     }
 }
 

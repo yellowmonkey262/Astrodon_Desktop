@@ -55,6 +55,7 @@
     <Compile Include="Base\DbEntity.cs" />
     <Compile Include="Base\IdValue.cs" />
     <Compile Include="Base\StringKeyValue.cs" />
+    <Compile Include="Calendar\BuildingCalendarEntry.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
     <Compile Include="DebitOrder\AccountTypeType.cs" />
@@ -202,6 +203,14 @@
     <Compile Include="Migrations\201711021012447_BuildingActiveFlag.cs" />
     <Compile Include="Migrations\201711021012447_BuildingActiveFlag.Designer.cs">
       <DependentUpon>201711021012447_BuildingActiveFlag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711070851203_BuildingCalendar.cs" />
+    <Compile Include="Migrations\201711070851203_BuildingCalendar.Designer.cs">
+      <DependentUpon>201711070851203_BuildingCalendar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711071141170_DebitOrderCancelDate.cs" />
+    <Compile Include="Migrations\201711071141170_DebitOrderCancelDate.Designer.cs">
+      <DependentUpon>201711071141170_DebitOrderCancelDate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -363,6 +372,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711021012447_BuildingActiveFlag.resx">
       <DependentUpon>201711021012447_BuildingActiveFlag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711070851203_BuildingCalendar.resx">
+      <DependentUpon>201711070851203_BuildingCalendar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711071141170_DebitOrderCancelDate.resx">
+      <DependentUpon>201711071141170_DebitOrderCancelDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

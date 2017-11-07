@@ -1,5 +1,6 @@
 namespace Astrodon.Data
 {
+    using Calendar;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -38,6 +39,8 @@ namespace Astrodon.Data
         public byte[] pmSignature { get; set; }
 
         public bool ProcessCheckLists { get; set; }
+
+        public virtual ICollection<BuildingCalendarEntry> BuildingCalendarEntries { get; set; }
 
     }
 }
