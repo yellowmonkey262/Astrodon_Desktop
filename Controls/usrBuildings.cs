@@ -327,7 +327,7 @@ namespace Astrodon
                 buildingEntity.BuildingFinancialsEnabled = cbBuildingFinancialsEnabled.Checked;
                 if (Controller.UserIsSheldon())
                 {
-                    buildingEntity.BuildingDisabled = cbDisabled.Enabled;
+                    buildingEntity.BuildingDisabled = cbDisabled.Checked;
                 }
                 context.SaveChanges();
             }
@@ -513,7 +513,7 @@ namespace Astrodon
                     }
                     else
                     {
-                        MessageBox.Show("Building update failed: " + status, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Building update failed: SV1 " + status, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
@@ -523,7 +523,7 @@ namespace Astrodon
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Building update failed:" + ex.Message, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Building update failed: SV2" + ex.Message, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

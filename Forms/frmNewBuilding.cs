@@ -133,12 +133,12 @@ namespace Astrodon.Forms
                 }
                 else
                 {
-                    MessageBox.Show("Building update failed: " + status, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Building update failed: SV3" + status, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Building update failed: " + ex.Message, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Building update failed: SV4" + ex.Message, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
