@@ -491,8 +491,19 @@ namespace Astrodon
 
         private void UpdateCustomer(bool showMessage)
         {
+            if (customer == null)
+            {
+                Controller.HandleError("Customer not selected");
+                return;
+            }
             String[] delAddress = customer.getDelAddress();
             String[] uDef = customer.userDefined;
+
+            if(delAddress == null)
+                delAddress = new string[] { "", "", "", "", "" };
+
+            if (uDef == null)
+                uDef = new string[] { "", "", "", "", "" };
 
             if (delAddress.Length < 5)
             {

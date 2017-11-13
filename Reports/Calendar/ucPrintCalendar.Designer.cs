@@ -56,6 +56,7 @@
             this.dtpEventDate = new System.Windows.Forms.DateTimePicker();
             this.Date = new System.Windows.Forms.Label();
             this.dgItems = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
@@ -88,6 +89,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.cbPM);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.cbFilterPM);
@@ -109,6 +111,7 @@
             this.cbPM.Name = "cbPM";
             this.cbPM.Size = new System.Drawing.Size(233, 21);
             this.cbPM.TabIndex = 20;
+            this.cbPM.SelectedIndexChanged += new System.EventHandler(this.cbPM_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -320,6 +323,16 @@
             this.dgItems.TabIndex = 21;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(427, 83);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(142, 23);
+            this.button1.TabIndex = 21;
+            this.button1.Text = "Send Calendar Invites";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ucPrintCalendar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -367,5 +380,6 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.DataGridView dgItems;
+        private System.Windows.Forms.Button button1;
     }
 }

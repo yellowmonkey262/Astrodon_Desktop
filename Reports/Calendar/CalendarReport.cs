@@ -81,7 +81,7 @@ namespace Astrodon.Reports.Calendar
                     " " + date.Year.ToString();
 
                 // Find the biggest font that will fit.
-                int font_size = FindFontSize(gr, rectf, "Times New Roman", title);
+                float font_size = FindFontSize(gr, rectf, "Times New Roman", title);
 
                 // Draw the text.
                 gr.FillRectangle(Brushes.LightBlue, rectf);
@@ -115,7 +115,7 @@ namespace Astrodon.Reports.Calendar
 
             // Find the biggest font size that will fit.
             RectangleF rectf = new RectangleF(x, y, col_wid, hgt);
-            int font_size = FindFontSize(gr, rectf, "Times New Roman", widest_name);
+            var font_size = FindFontSize(gr, rectf, "Times New Roman", widest_name);
 
             // Draw the day names.
             using (Font font = new Font("Times New Roman", font_size))
@@ -138,18 +138,24 @@ namespace Astrodon.Reports.Calendar
         }
 
         // Find the largest integer font size that will fit in the given space.
-        private int FindFontSize(Graphics gr, RectangleF rectf, string font_name, string text)
+        private float FindFontSize(Graphics gr, RectangleF rectf, string font_name, string text)
         {
-            for (int font_size = 5; ; font_size++)
+            float font_size = 15;
+            while (font_size > 0)
             {
                 using (Font font = new Font(font_name, font_size))
                 {
                     SizeF text_size = gr.MeasureString(text, font);
                     if ((text_size.Width > rectf.Width) ||
                         (text_size.Height > rectf.Height))
-                        return font_size - 1;
+                        font_size = font_size - 0.1f;
+                    else
+                        break;
                 }
             }
+            if (font_size > 0)
+                return font_size;
+            return 1;
         }
 
 
@@ -165,7 +171,7 @@ namespace Astrodon.Reports.Calendar
                 new RectangleF(x, y, col_wid, row_hgt * 0.75f);
 
             // See how big we can make the font.
-            int font_size = FindFontSize(gr, date_rectf, "Times New Roman", "30");
+            var font_size = FindFontSize(gr, date_rectf, "Times New Roman", "30");
 
             // Get the column number for the first day of the month.
             int col = DateColumn(first_of_month);
@@ -206,14 +212,10 @@ namespace Astrodon.Reports.Calendar
                             string text = date_data[day_num + 1];
                             if (!String.IsNullOrWhiteSpace(text))
                             {
-                                float factor = 1f;
 
-                                int lines = 1;
-                                if (text.Contains("\n"))
-                                    lines = text.Split("\n".ToCharArray()).Count();
-
-                                factor = factor / lines;
-                                using (Font data_font = new Font("Times New Roman", font_size * factor))
+                                var dateFontSize = FindFontSize(gr, data_rectf, "Times New Roman", text);
+                              
+                                using (Font data_font = new Font("Times New Roman", dateFontSize))
                                 {
                                     gr.DrawString(date_data[day_num + 1], data_font, Brushes.Black, data_rectf, ul_sf);
                                 }
