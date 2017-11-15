@@ -129,11 +129,11 @@ namespace Astrodon
         private void LoadCustomers()
         {
             List<Customer> customers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
-            foreach (Customer c in customers)
-            {
-                int iCat = Convert.ToInt32(c.category);
-                c.IsTrustee = iCat == 7;
-            }
+            //foreach (Customer c in customers)
+            //{
+            //    int iCat = Convert.ToInt32(c.category);
+            //    c.IsTrustee = iCat == 7;
+            //}
             dgTrustees.AutoGenerateColumns = false;
             dgTrustees.DataSource = customers;
             dgTrustees.Refresh();

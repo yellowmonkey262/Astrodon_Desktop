@@ -212,6 +212,18 @@
     <Compile Include="Migrations\201711071141170_DebitOrderCancelDate.Designer.cs">
       <DependentUpon>201711071141170_DebitOrderCancelDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711140650355_CalendarAdditionalFields.cs" />
+    <Compile Include="Migrations\201711140650355_CalendarAdditionalFields.Designer.cs">
+      <DependentUpon>201711140650355_CalendarAdditionalFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711140654265_CalendarNullableToDate.cs" />
+    <Compile Include="Migrations\201711140654265_CalendarNullableToDate.Designer.cs">
+      <DependentUpon>201711140654265_CalendarNullableToDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711140810125_NotifyTrustees.cs" />
+    <Compile Include="Migrations\201711140810125_NotifyTrustees.Designer.cs">
+      <DependentUpon>201711140810125_NotifyTrustees.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -378,6 +390,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711071141170_DebitOrderCancelDate.resx">
       <DependentUpon>201711071141170_DebitOrderCancelDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711140650355_CalendarAdditionalFields.resx">
+      <DependentUpon>201711140650355_CalendarAdditionalFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711140654265_CalendarNullableToDate.resx">
+      <DependentUpon>201711140654265_CalendarNullableToDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711140810125_NotifyTrustees.resx">
+      <DependentUpon>201711140810125_NotifyTrustees.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

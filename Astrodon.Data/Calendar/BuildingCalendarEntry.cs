@@ -25,6 +25,9 @@ namespace Astrodon.Data.Calendar
 
         public DateTime EntryDate { get; set; }
 
+        public DateTime EventToDate { get; set; }
+
+
         [MaxLength(50)]
         [Required]
         public string Event { get; set; }
@@ -33,5 +36,14 @@ namespace Astrodon.Data.Calendar
         [Required]
         public string Venue { get; set; }
 
+        public bool NotifyTrustees { get; set; }
+
+        public string BCCEmailAddress { get; set; }
+
+        public string InviteSubject { get; set; }
+
+        public string InviteBody { get; set; }
+
+        public bool TrusteesNotified { get; set; }
     }
 }

@@ -43,6 +43,17 @@
             this.cmbYear = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.tbBodyContent = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.tbSubject = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tbBCC = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbNotifyTrustees = new System.Windows.Forms.CheckBox();
+            this.dtpEventToTime = new System.Windows.Forms.DateTimePicker();
+            this.dtpEventToDate = new System.Windows.Forms.DateTimePicker();
+            this.label7 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
@@ -56,7 +67,6 @@
             this.dtpEventDate = new System.Windows.Forms.DateTimePicker();
             this.Date = new System.Windows.Forms.Label();
             this.dgItems = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
@@ -89,7 +99,6 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.cbPM);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.cbFilterPM);
@@ -100,7 +109,7 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(582, 128);
+            this.panel1.Size = new System.Drawing.Size(911, 128);
             this.panel1.TabIndex = 13;
             // 
             // cbPM
@@ -110,7 +119,7 @@
             this.cbPM.Location = new System.Drawing.Point(106, 85);
             this.cbPM.Name = "cbPM";
             this.cbPM.Size = new System.Drawing.Size(233, 21);
-            this.cbPM.TabIndex = 20;
+            this.cbPM.TabIndex = 3;
             this.cbPM.SelectedIndexChanged += new System.EventHandler(this.cbPM_SelectedIndexChanged);
             // 
             // label3
@@ -128,7 +137,7 @@
             this.cbFilterPM.Location = new System.Drawing.Point(83, 88);
             this.cbFilterPM.Name = "cbFilterPM";
             this.cbFilterPM.Size = new System.Drawing.Size(15, 14);
-            this.cbFilterPM.TabIndex = 18;
+            this.cbFilterPM.TabIndex = 2;
             this.cbFilterPM.UseVisualStyleBackColor = true;
             this.cbFilterPM.CheckedChanged += new System.EventHandler(this.cbFilterPM_CheckedChanged);
             // 
@@ -137,7 +146,7 @@
             this.btnPrint.Location = new System.Drawing.Point(345, 83);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
-            this.btnPrint.TabIndex = 17;
+            this.btnPrint.TabIndex = 4;
             this.btnPrint.Text = "Print";
             this.btnPrint.UseVisualStyleBackColor = true;
             this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
@@ -149,7 +158,7 @@
             this.cmbMonth.Location = new System.Drawing.Point(106, 53);
             this.cmbMonth.Name = "cmbMonth";
             this.cmbMonth.Size = new System.Drawing.Size(233, 21);
-            this.cmbMonth.TabIndex = 16;
+            this.cmbMonth.TabIndex = 1;
             this.cmbMonth.SelectedIndexChanged += new System.EventHandler(this.cmbMonth_SelectedIndexChanged);
             // 
             // label2
@@ -168,7 +177,7 @@
             this.cmbYear.Location = new System.Drawing.Point(106, 26);
             this.cmbYear.Name = "cmbYear";
             this.cmbYear.Size = new System.Drawing.Size(233, 21);
-            this.cmbYear.TabIndex = 14;
+            this.cmbYear.TabIndex = 0;
             this.cmbYear.SelectedIndexChanged += new System.EventHandler(this.cmbYear_SelectedIndexChanged);
             // 
             // label1
@@ -182,6 +191,17 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.tbBodyContent);
+            this.panel2.Controls.Add(this.label11);
+            this.panel2.Controls.Add(this.tbSubject);
+            this.panel2.Controls.Add(this.label10);
+            this.panel2.Controls.Add(this.tbBCC);
+            this.panel2.Controls.Add(this.label9);
+            this.panel2.Controls.Add(this.label8);
+            this.panel2.Controls.Add(this.cbNotifyTrustees);
+            this.panel2.Controls.Add(this.dtpEventToTime);
+            this.panel2.Controls.Add(this.dtpEventToDate);
+            this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.btnCancel);
             this.panel2.Controls.Add(this.btnSave);
             this.panel2.Controls.Add(this.btnNew);
@@ -196,12 +216,103 @@
             this.panel2.Controls.Add(this.Date);
             this.panel2.Location = new System.Drawing.Point(3, 137);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(582, 179);
+            this.panel2.Size = new System.Drawing.Size(914, 280);
             this.panel2.TabIndex = 14;
+            // 
+            // tbBodyContent
+            // 
+            this.tbBodyContent.AcceptsReturn = true;
+            this.tbBodyContent.Location = new System.Drawing.Point(511, 65);
+            this.tbBodyContent.Multiline = true;
+            this.tbBodyContent.Name = "tbBodyContent";
+            this.tbBodyContent.Size = new System.Drawing.Size(234, 93);
+            this.tbBodyContent.TabIndex = 31;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(400, 65);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(100, 13);
+            this.label11.TabIndex = 32;
+            this.label11.Text = "Invite Body Content";
+            // 
+            // tbSubject
+            // 
+            this.tbSubject.Location = new System.Drawing.Point(511, 39);
+            this.tbSubject.Name = "tbSubject";
+            this.tbSubject.Size = new System.Drawing.Size(234, 20);
+            this.tbSubject.TabIndex = 29;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(400, 39);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(72, 13);
+            this.label10.TabIndex = 30;
+            this.label10.Text = "Invite Subject";
+            // 
+            // tbBCC
+            // 
+            this.tbBCC.Location = new System.Drawing.Point(511, 13);
+            this.tbBCC.Name = "tbBCC";
+            this.tbBCC.Size = new System.Drawing.Size(234, 20);
+            this.tbBCC.TabIndex = 13;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(400, 13);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(28, 13);
+            this.label9.TabIndex = 28;
+            this.label9.Text = "BCC";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(15, 88);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(78, 13);
+            this.label8.TabIndex = 27;
+            this.label8.Text = "Notify Trustees";
+            // 
+            // cbNotifyTrustees
+            // 
+            this.cbNotifyTrustees.AutoSize = true;
+            this.cbNotifyTrustees.Location = new System.Drawing.Point(106, 88);
+            this.cbNotifyTrustees.Name = "cbNotifyTrustees";
+            this.cbNotifyTrustees.Size = new System.Drawing.Size(15, 14);
+            this.cbNotifyTrustees.TabIndex = 10;
+            this.cbNotifyTrustees.UseVisualStyleBackColor = true;
+            // 
+            // dtpEventToTime
+            // 
+            this.dtpEventToTime.Location = new System.Drawing.Point(220, 36);
+            this.dtpEventToTime.Name = "dtpEventToTime";
+            this.dtpEventToTime.Size = new System.Drawing.Size(107, 20);
+            this.dtpEventToTime.TabIndex = 8;
+            // 
+            // dtpEventToDate
+            // 
+            this.dtpEventToDate.Location = new System.Drawing.Point(107, 36);
+            this.dtpEventToDate.Name = "dtpEventToDate";
+            this.dtpEventToDate.Size = new System.Drawing.Size(107, 20);
+            this.dtpEventToDate.TabIndex = 7;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(14, 42);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(20, 13);
+            this.label7.TabIndex = 23;
+            this.label7.Text = "To";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(184, 138);
+            this.btnCancel.Location = new System.Drawing.Point(184, 245);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 22;
@@ -211,7 +322,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(265, 138);
+            this.btnSave.Location = new System.Drawing.Point(265, 245);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 21;
@@ -222,7 +333,7 @@
             // btnNew
             // 
             this.btnNew.AutoEllipsis = true;
-            this.btnNew.Location = new System.Drawing.Point(15, 138);
+            this.btnNew.Location = new System.Drawing.Point(15, 245);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(75, 23);
             this.btnNew.TabIndex = 20;
@@ -232,15 +343,15 @@
             // 
             // tbVenue
             // 
-            this.tbVenue.Location = new System.Drawing.Point(106, 103);
+            this.tbVenue.Location = new System.Drawing.Point(106, 138);
             this.tbVenue.Name = "tbVenue";
             this.tbVenue.Size = new System.Drawing.Size(234, 20);
-            this.tbVenue.TabIndex = 13;
+            this.tbVenue.TabIndex = 12;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(16, 103);
+            this.label6.Location = new System.Drawing.Point(16, 138);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(38, 13);
             this.label6.TabIndex = 12;
@@ -255,7 +366,7 @@
             "SGM",
             "ADJ SGM",
             "TM"});
-            this.cbEvent.Location = new System.Drawing.Point(107, 72);
+            this.cbEvent.Location = new System.Drawing.Point(107, 112);
             this.cbEvent.Name = "cbEvent";
             this.cbEvent.Size = new System.Drawing.Size(233, 21);
             this.cbEvent.TabIndex = 11;
@@ -263,7 +374,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 72);
+            this.label5.Location = new System.Drawing.Point(14, 112);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 13);
             this.label5.TabIndex = 10;
@@ -273,7 +384,7 @@
             // 
             this.cbBuilding.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbBuilding.FormattingEnabled = true;
-            this.cbBuilding.Location = new System.Drawing.Point(106, 41);
+            this.cbBuilding.Location = new System.Drawing.Point(107, 62);
             this.cbBuilding.Name = "cbBuilding";
             this.cbBuilding.Size = new System.Drawing.Size(233, 21);
             this.cbBuilding.TabIndex = 9;
@@ -281,7 +392,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 41);
+            this.label4.Location = new System.Drawing.Point(14, 62);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 13);
             this.label4.TabIndex = 8;
@@ -292,14 +403,14 @@
             this.dtpEventTime.Location = new System.Drawing.Point(219, 10);
             this.dtpEventTime.Name = "dtpEventTime";
             this.dtpEventTime.Size = new System.Drawing.Size(107, 20);
-            this.dtpEventTime.TabIndex = 2;
+            this.dtpEventTime.TabIndex = 6;
             // 
             // dtpEventDate
             // 
             this.dtpEventDate.Location = new System.Drawing.Point(106, 10);
             this.dtpEventDate.Name = "dtpEventDate";
             this.dtpEventDate.Size = new System.Drawing.Size(107, 20);
-            this.dtpEventDate.TabIndex = 1;
+            this.dtpEventDate.TabIndex = 5;
             // 
             // Date
             // 
@@ -308,7 +419,7 @@
             this.Date.Name = "Date";
             this.Date.Size = new System.Drawing.Size(30, 13);
             this.Date.TabIndex = 0;
-            this.Date.Text = "Date";
+            this.Date.Text = "From";
             // 
             // dgItems
             // 
@@ -316,22 +427,12 @@
             this.dgItems.AllowUserToDeleteRows = false;
             this.dgItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgItems.Location = new System.Drawing.Point(3, 322);
+            this.dgItems.Location = new System.Drawing.Point(3, 423);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(910, 315);
+            this.dgItems.Size = new System.Drawing.Size(911, 285);
             this.dgItems.TabIndex = 21;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(427, 83);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(142, 23);
-            this.button1.TabIndex = 21;
-            this.button1.Text = "Send Calendar Invites";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // ucPrintCalendar
             // 
@@ -341,7 +442,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "ucPrintCalendar";
-            this.Size = new System.Drawing.Size(916, 640);
+            this.Size = new System.Drawing.Size(917, 734);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -380,6 +481,16 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.DataGridView dgItems;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DateTimePicker dtpEventToTime;
+        private System.Windows.Forms.DateTimePicker dtpEventToDate;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox cbNotifyTrustees;
+        private System.Windows.Forms.TextBox tbBCC;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox tbBodyContent;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox tbSubject;
+        private System.Windows.Forms.Label label10;
     }
 }

@@ -37,7 +37,9 @@ namespace Astrodon
             return html;
         }
 
-        public static bool SendMailWithAttachments(String fromEmail, String[] toMail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, Dictionary<string, byte[]> attachments)
+        public static bool SendMailWithAttachments(String fromEmail, String[] toMail, 
+            String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, 
+            Dictionary<string, byte[]> attachments, string bccEmail = null)
         {
             Dictionary<string, MemoryStream> attachmentStreams = new Dictionary<string, MemoryStream>();
             foreach (string key in attachments.Keys)
@@ -79,6 +81,10 @@ namespace Astrodon
                         stream.Dispose();
                     }
                     return false;
+                }
+                if(!string.IsNullOrWhiteSpace(bccEmail))
+                {
+                    objMail.Bcc.Add(bccEmail);
                 }
                 objMail.From = objMail_fromaddress;
                 objMail.IsBodyHtml = htmlMail;

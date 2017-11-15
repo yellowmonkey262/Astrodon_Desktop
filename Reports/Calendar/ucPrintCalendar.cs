@@ -44,6 +44,22 @@ namespace Astrodon.Reports.Calendar
             dtpEventTime.Format = DateTimePickerFormat.Time;
             dtpEventTime.ShowUpDown = true;
 
+            dtpEventToDate.MinDate = DateTime.Today.AddYears(-2);
+            dtpEventToDate.MaxDate = DateTime.Today.AddYears(2);
+
+            dtpEventToDate.Format = DateTimePickerFormat.Custom;
+            dtpEventDate.CustomFormat = "yyyy/MM/dd";
+
+            dtpEventToTime.Format = DateTimePickerFormat.Time;
+            dtpEventToTime.ShowUpDown = true;
+
+
+            dtpEventDate.Value = DateTime.Today;
+            dtpEventTime.Value = DateTime.Now;
+
+            dtpEventToDate.Value = DateTime.Today;
+            dtpEventToTime.Value = DateTime.Now;
+
             LoadGrid();
 
         }
@@ -99,12 +115,15 @@ namespace Astrodon.Reports.Calendar
             cmbYear.DataSource = _Years;
             cmbYear.ValueMember = "Id";
             cmbYear.DisplayMember = "Value";
-            cmbYear.SelectedValue = DateTime.Now.AddMonths(-1).Year;
+            cmbYear.SelectedValue = DateTime.Now.Year;
 
             cmbMonth.DataSource = _Months;
             cmbMonth.ValueMember = "Id";
             cmbMonth.DisplayMember = "Value";
-            cmbMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
+            cmbMonth.SelectedValue = DateTime.Now.Month;
+
+            
+
         }
 
         Dictionary<int, string> _CalendarData;
@@ -145,9 +164,16 @@ namespace Astrodon.Reports.Calendar
                             EventDate = c.EntryDate,
                             BuildingId = c.BuildingId,
                             BuildingName = c.Building.Building,
+                            BuildingAbreviation = c.Building.Code,
+                            BuildingDataPath = c.Building.DataPath,
                             Event = c.Event,
                             Venue = c.Venue,
-                            PM = c.User.name
+                            PM = c.User.name,
+                            NotifyTrustees = c.NotifyTrustees,
+                            InviteSubject = c.InviteSubject,
+                            InviteBody = c.InviteBody,
+                            BCCEmailAddress = c.BCCEmailAddress,
+                            TrusteesNotified = c.TrusteesNotified
                         };
 
                 var entries = q.ToList();
@@ -196,7 +222,7 @@ namespace Astrodon.Reports.Calendar
             LoadGrid();
         }
 
-       
+
         private void cmbYear_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadGrid();
@@ -215,7 +241,7 @@ namespace Astrodon.Reports.Calendar
         {
             _Data = null;
             _Item = null;
-             LoadCalendarData();
+            LoadCalendarData();
             GotoReadOnly();
         }
 
@@ -244,12 +270,21 @@ namespace Astrodon.Reports.Calendar
                         {
                             Id = c.id,
                             EventDate = c.EntryDate,
+                            EventToDate = c.EventToDate,
                             BuildingId = c.BuildingId,
+                            BuildingAbreviation = c.Building.Code,
+                            BuildingDataPath = c.Building.DataPath,
                             BuildingName = c.Building.Building,
                             Event = c.Event,
                             Venue = c.Venue,
                             PM = c.User.name,
-                            PMEmail = c.User.email
+                            PMEmail = c.User.email,
+                            NotifyTrustees = c.NotifyTrustees,
+                            InviteSubject = c.InviteSubject,
+                            InviteBody = c.InviteBody,
+                            BCCEmailAddress = c.BCCEmailAddress,
+                            TrusteesNotified = c.TrusteesNotified
+
                         };
 
                 _Data = q.OrderBy(a => a.EventDate).ThenBy(a => a.BuildingName).ToList();
@@ -283,11 +318,29 @@ namespace Astrodon.Reports.Calendar
                 Text = "Delete",
                 UseColumnTextForButtonValue = true
             });
+            dgItems.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "Action",
+                Text = "Invite",
+                UseColumnTextForButtonValue = true
+            });
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "DisplayDate",
                 HeaderText = "Date",
+                ReadOnly = true
+            });
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "NotifyTrusteesStr",
+                HeaderText = "Notify Trustees",
+                ReadOnly = true
+            });
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "TrusteesNotifiedStr",
+                HeaderText = "Trustees Notified",
                 ReadOnly = true
             });
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
@@ -318,6 +371,28 @@ namespace Astrodon.Reports.Calendar
                 ReadOnly = true
             });
 
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "InviteSubject",
+                HeaderText = "Subject",
+                ReadOnly = true
+            });
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "InviteBody",
+                HeaderText = "Body",
+                ReadOnly = true
+            });
+
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "BCCEmailAddress",
+                HeaderText = "BCC",
+                ReadOnly = true
+            });
+
             dgItems.AutoResizeColumns();
         }
 
@@ -343,6 +418,15 @@ namespace Astrodon.Reports.Calendar
             btnNew.Visible = true;
             dgItems.Enabled = true;
 
+
+            dtpEventToDate.Enabled = false;
+            dtpEventToTime.Enabled = false;
+
+            cbNotifyTrustees.Enabled = false;
+            tbBCC.Enabled = false;
+            tbSubject.Enabled = false;
+            tbBodyContent.Enabled = false;
+
         }
 
         private void btnNew_Click(object sender, EventArgs e)
@@ -361,6 +445,13 @@ namespace Astrodon.Reports.Calendar
 
             btnNew.Visible = false;
             dgItems.Enabled = false;
+
+            dtpEventDate.Value = DateTime.Today;
+            dtpEventTime.Value = DateTime.Now;
+
+            dtpEventToDate.Value = DateTime.Today;
+            dtpEventToTime.Value = DateTime.Now;
+
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -377,9 +468,40 @@ namespace Astrodon.Reports.Calendar
             var minTime = new TimeSpan(05, 00, 00);
             var maxTime = new TimeSpan(23, 59, 00);
 
-            if(dtpEventTime.Value.TimeOfDay < minTime || dtpEventTime.Value.TimeOfDay > maxTime)
+            if (dtpEventTime.Value.TimeOfDay < minTime || dtpEventTime.Value.TimeOfDay > maxTime)
             {
                 Controller.HandleError("Event time must be > 05:00 and < 23:59", "Validation Error");
+                return;
+            }
+
+
+            if (dtpEventToTime.Value.TimeOfDay < minTime || dtpEventToTime.Value.TimeOfDay > maxTime)
+            {
+                Controller.HandleError("Event time must be > 05:00 and < 23:59", "Validation Error");
+                return;
+            }
+
+            if (dtpEventDate.Value.Date < DateTime.Today)
+            {
+                Controller.HandleError("Cannot schedule an event in the past.", "Validation Error");
+                return;
+            }
+
+            if(!string.IsNullOrWhiteSpace(tbBCC.Text))
+            {
+                if(!tbBCC.Text.Contains("@") || !tbBCC.Text.Contains("."))
+                {
+                    Controller.HandleError("BCC not a valid email address.", "Validation Error");
+                    return;
+                }
+            }
+
+            DateTime fromDate = dtpEventDate.Value.Date + dtpEventTime.Value.TimeOfDay;
+            DateTime toDate = dtpEventToDate.Value.Date + dtpEventToTime.Value.TimeOfDay;
+
+            if (fromDate >= toDate)
+            {
+                Controller.HandleError("To Date/Time cannot be more than the From Date/Time.", "Validation Error");
                 return;
             }
 
@@ -408,9 +530,14 @@ namespace Astrodon.Reports.Calendar
                 else if (editItem.id == 0)
                     editItem.UserId = Controller.user.id;
 
-                editItem.EntryDate = dtpEventDate.Value.Date + dtpEventTime.Value.TimeOfDay;
+                editItem.EntryDate = fromDate;
+                editItem.EventToDate = toDate;
                 editItem.Event = cbEvent.Text;
                 editItem.Venue = tbVenue.Text;
+                editItem.NotifyTrustees = cbNotifyTrustees.Checked;
+                editItem.InviteSubject = tbSubject.Text;
+                editItem.BCCEmailAddress = tbBCC.Text;
+                editItem.InviteBody = tbBodyContent.Text;
 
                 context.SaveChanges();
             }
@@ -432,9 +559,13 @@ namespace Astrodon.Reports.Calendar
                     {
                         EditItem(i.Id);
                     }
-                    else if(e.ColumnIndex == 1)
+                    else if (e.ColumnIndex == 1)
                     {
                         DeleteItem(i.Id);
+                    }
+                    else if (e.ColumnIndex == 2)
+                    {
+                        SendCalenderInvite(i);
                     }
 
                 }
@@ -464,8 +595,18 @@ namespace Astrodon.Reports.Calendar
                 cbBuilding.SelectedItem = _Buildings.Where(a => a.ID == _Item.BuildingId);
                 dtpEventDate.Value = _Item.EntryDate;
                 dtpEventTime.Value = _Item.EntryDate;
+                if (_Item != null)
+                {
+                    dtpEventToDate.Value = _Item.EventToDate;
+                    dtpEventToTime.Value = _Item.EventToDate;
+                }
+
                 cbEvent.Text = _Item.Event;
                 tbVenue.Text = _Item.Venue;
+                cbNotifyTrustees.Checked = _Item.NotifyTrustees;
+                tbBCC.Text = _Item.BCCEmailAddress;
+                tbSubject.Text = _Item.InviteSubject;
+                tbBodyContent.Text = _Item.InviteBody;
 
 
                 cbBuilding.Enabled = true;
@@ -473,6 +614,15 @@ namespace Astrodon.Reports.Calendar
                 dtpEventTime.Enabled = true;
                 cbEvent.Enabled = true;
                 tbVenue.Enabled = true;
+
+                dtpEventToDate.Enabled = true;
+                dtpEventToTime.Enabled = true;
+
+                cbNotifyTrustees.Enabled = true;
+                tbBCC.Enabled = true;
+                tbSubject.Enabled = true;
+                tbBodyContent.Enabled = true;
+
 
                 btnSave.Visible = true;
                 btnCancel.Visible = true;
@@ -487,31 +637,6 @@ namespace Astrodon.Reports.Calendar
             GotoReadOnly();
         }
 
-        class CalendarPrintItem
-        {
-            public int BuildingId { get; set; }
-            public string BuildingName { get; set; }
-            public string Event { get; set; }
-            public DateTime EventDate { get; set; }
-            public int Id { get; internal set; }
-            public string PM { get; internal set; }
-            public string Venue { get; set; }
-
-            public override string ToString()
-            {
-                return EventDate.ToString("HH:mm", CultureInfo.InvariantCulture) + " " + BuildingName + "-" + Event + "-" + PM + "-" + Venue;
-            }
-
-            public string DisplayDate
-            {
-                get
-                {
-                    return EventDate.ToString("yyyy/MM/dd HH:mm");
-                }
-            }
-
-            public string PMEmail { get; set; }
-        }
 
         private byte[] CreateCalendarInvite(string subject, string description,
             string location, DateTime startDate, DateTime endDate)
@@ -540,68 +665,105 @@ namespace Astrodon.Reports.Calendar
                 return;
             }
 
-            var calendarInvite = CreateCalendarInvite(entry.BuildingName + " - " + entry.Event, "", entry.Venue, entry.EventDate, entry.EventDate.AddHours(2));
+            var calendarInvite = CreateCalendarInvite(entry.BuildingName + " - " + entry.Event, "", entry.Venue, entry.EventDate, entry.EventToDate != null ? entry.EventToDate.Value: entry.EventDate.AddHours(2));
             Dictionary<string, byte[]> attachments = new Dictionary<string, byte[]>();
             attachments.Add("Appointment.ics", calendarInvite);
+            string subject = entry.InviteSubject;
+            if (String.IsNullOrWhiteSpace(subject))
+                subject = entry.BuildingName + " - " + entry.Event;
+
+            string bodyContent = entry.InviteBody;
+            if (String.IsNullOrWhiteSpace(bodyContent))
+                bodyContent = "Invite generated by " + Controller.user.name + " using the Astrodon System";
+
+            string bccEmail = entry.BCCEmailAddress;
+            if (bccEmail == string.Empty)
+                bccEmail = null;
+
 
             if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", new string[] { entry.PMEmail },
-                entry.BuildingName + " - " + entry.Event,
-                "Invite generated by " + Controller.user.name + " using the Astrodon System",
-                false, false, false, out status, attachments))
+                subject, bodyContent,
+                false, false, false, out status, attachments, bccEmail))
             {
                 Controller.HandleError("Error seding email " + status, "Email error");
             }
+
+            if (entry.NotifyTrustees)
+            {
+                var customers = Controller.pastel.AddCustomers(entry.BuildingAbreviation, entry.BuildingDataPath);
+                var trustees = customers.Where(a => a.IsTrustee).ToList();
+                if (trustees.Count() > 0 && Controller.AskQuestion("Are you sure you want to send the invite to " + trustees.Count().ToString() + " trustees?"))
+                {
+                    foreach (var trustee in trustees)
+                    {
+                        if (trustee.Email != null && trustee.Email.Length > 0)
+                        {
+                            if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", trustee.Email,
+                                 subject, bodyContent, false, false, false, out status, attachments, bccEmail))
+                            {
+                                Controller.HandleError("Error seding email " + status, "Email error");
+                            }
+                        }
+                    }
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var itm = context.BuildingCalendarEntrySet.Single(a => a.id == entry.Id);
+                        itm.TrusteesNotified = true;
+                        entry.TrusteesNotified = true;
+                        context.SaveChanges();
+                        BindDataGrid();
+                    }
+                }
+
+            }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+  
+        class CalendarPrintItem
         {
-            _ReportDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
-            _CalendarData = new Dictionary<int, string>();
 
-            var dtFrom = new DateTime(_ReportDate.Year, _ReportDate.Month, 1);
-            var dtTo = dtFrom.AddMonths(1).AddSeconds(-1);
+            public int BuildingId { get; set; }
+            public string BuildingName { get; set; }
+            public string BuildingAbreviation { get; set; }
+            public string BuildingDataPath { get; set; }
+            public string Event { get; set; }
+            public DateTime EventDate { get; set; }
+            public DateTime? EventToDate { get; set; }
 
-            int? pmId = null;
-            if (cbFilterPM.Checked && cbPM.SelectedItem != null)
+            public int Id { get; internal set; }
+            public string PM { get; internal set; }
+            public string Venue { get; set; }
+
+            public override string ToString()
             {
-                pmId = (cbPM.SelectedItem as IdValue).Id;
+                return EventDate.ToString("HH:mm", CultureInfo.InvariantCulture) + "-" 
+                     + EventToDate.Value.ToString("HH:mm", CultureInfo.InvariantCulture) 
+                     + " " + BuildingName 
+                     + "-" + Event 
+                     + "-" 
+                     + PM + "-" 
+                     + Venue;
             }
 
-            using (var context = SqlDataHandler.GetDataContext())
+            public string DisplayDate
             {
-                var q = from c in context.BuildingCalendarEntrySet
-                        where c.EntryDate >= dtFrom
-                           && c.EntryDate <= dtTo
-                           && (pmId == null || c.UserId == pmId)
-                        select new CalendarPrintItem
-                        {
-                            Id = c.id,
-                            EventDate = c.EntryDate,
-                            BuildingId = c.BuildingId,
-                            BuildingName = c.Building.Building,
-                            Event = c.Event,
-                            Venue = c.Venue,
-                            PM = c.User.name,
-                            PMEmail = c.User.email
-                        };
-
-                var entries = q.ToList();
-                if(entries.Count > 0)
+                get
                 {
-                    if(!Controller.AskQuestion("Your are about to send " + entries.Count.ToString() + " meeting invites.\n" +
-                        "Do you want to continue?"))
-                        return;
-
-                    foreach (CalendarPrintItem entry in entries)
-                        SendCalenderInvite(entry);
-                }
-                else
-                {
-                    Controller.HandleError("No entries found.");
+                    return EventDate.ToString("yyyy/MM/dd HH:mm");
                 }
             }
-            }
 
-       
+            public string PMEmail { get; set; }
+            public bool NotifyTrustees { get;  set; }
+            public string NotifyTrusteesStr { get { return NotifyTrustees ? "Yes" : "No"; } }
+
+            public bool TrusteesNotified { get; set; }
+            public string TrusteesNotifiedStr { get { return TrusteesNotified ? "Yes" : "No"; } }
+
+            public string InviteSubject { get;  set; }
+            public string InviteBody { get; internal set; }
+            public string BCCEmailAddress { get; internal set; }
+        }
+
     }
 }
