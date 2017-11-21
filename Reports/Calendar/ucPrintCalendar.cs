@@ -452,6 +452,13 @@ namespace Astrodon.Reports.Calendar
             dtpEventToDate.Value = DateTime.Today;
             dtpEventToTime.Value = DateTime.Now;
 
+            dtpEventToDate.Enabled = true;
+            dtpEventToTime.Enabled = true;
+
+            cbNotifyTrustees.Enabled = true;
+            tbBCC.Enabled = true;
+            tbSubject.Enabled = true;
+            tbBodyContent.Enabled = true;
         }
 
         private void btnSave_Click(object sender, EventArgs e)

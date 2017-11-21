@@ -112,7 +112,7 @@ namespace Astrodon
             return customers;
         }
 
-        public void SearchCustomers(List<String> searchCriteria, Dictionary<String, String> buildings)
+        public void SearchCustomers(List<String> searchCriteria, Dictionary<String, String> buildings, bool showErrors = true)
         {
             String status = String.Empty;
             runSearch = true;
@@ -125,7 +125,8 @@ namespace Astrodon
                     if (returner != "0")
                     {
                         status = "Returner = " + returner + " Customers: " + pastelDirectory + "\\" + building.Value;
-                        RaiseEvent(status);
+                        if(showErrors)
+                          RaiseEvent(status);
                     }
                     else
                     {
@@ -184,7 +185,8 @@ namespace Astrodon
             }
             catch (Exception ex)
             {
-                RaiseEvent("Error: " + ex.Message);
+                if(showErrors)
+                  RaiseEvent("Error: " + ex.Message);
             }
         }
 

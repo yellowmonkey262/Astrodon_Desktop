@@ -69,8 +69,7 @@ namespace Astrodon.Controls
                     searchResults.Clear();
                     btnSearch.Text = "Stop";
                     Application.DoEvents();
-                    this.Cursor = Cursors.WaitCursor;
-                    myNewThread = new Thread(() => Controller.pastel.SearchCustomers(searchCriteria, bCriteria));
+                    myNewThread = new Thread(() => Controller.pastel.SearchCustomers(searchCriteria, bCriteria,false));
                     myNewThread.Start();
                 }
                 else
@@ -84,7 +83,6 @@ namespace Astrodon.Controls
                 {
                     Controller.pastel.runSearch = false;
                     myNewThread.Join();
-                    this.Cursor = Cursors.Default;
                     btnSearch.Text = "Search";
                 }
                 catch { }
