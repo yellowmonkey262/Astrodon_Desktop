@@ -167,7 +167,13 @@ namespace Astrodon.Data
         }
 
         #region Calendar
+
         public virtual ICollection<BuildingCalendarEntry> BuildingCalendarEntries { get; set; }
+
         #endregion
+
+        public int FinancialDayOfMonth { get; set; }
+
+        public bool IsFixed { get; set; }
     }
 }

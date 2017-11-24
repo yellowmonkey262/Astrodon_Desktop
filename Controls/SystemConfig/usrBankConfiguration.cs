@@ -300,7 +300,7 @@ namespace Astrodon.Controls.Bank
                 BindDataGrid();
                 GotoReadOnly();
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 Controller.HandleError("Possible duplicate record detected", "Database Error");
             }

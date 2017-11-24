@@ -27,7 +27,6 @@ namespace Astrodon.Data.Calendar
 
         public DateTime EventToDate { get; set; }
 
-
         [MaxLength(50)]
         [Required]
         public string Event { get; set; }
@@ -45,5 +44,7 @@ namespace Astrodon.Data.Calendar
         public string InviteBody { get; set; }
 
         public bool TrusteesNotified { get; set; }
-    }
+
+        public virtual ICollection<CalendarEntryAttachment> Attachments { get; set; }
+   }
 }

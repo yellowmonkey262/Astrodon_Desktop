@@ -67,6 +67,9 @@
             this.dtpEventDate = new System.Windows.Forms.DateTimePicker();
             this.Date = new System.Windows.Forms.Label();
             this.dgItems = new System.Windows.Forms.DataGridView();
+            this.fdOpen = new System.Windows.Forms.OpenFileDialog();
+            this.btnUpload = new System.Windows.Forms.Button();
+            this.tbAttachment = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
@@ -191,6 +194,8 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.tbAttachment);
+            this.panel2.Controls.Add(this.btnUpload);
             this.panel2.Controls.Add(this.tbBodyContent);
             this.panel2.Controls.Add(this.label11);
             this.panel2.Controls.Add(this.tbSubject);
@@ -216,7 +221,7 @@
             this.panel2.Controls.Add(this.Date);
             this.panel2.Location = new System.Drawing.Point(3, 137);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(914, 280);
+            this.panel2.Size = new System.Drawing.Size(914, 231);
             this.panel2.TabIndex = 14;
             // 
             // tbBodyContent
@@ -312,7 +317,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(184, 245);
+            this.btnCancel.Location = new System.Drawing.Point(184, 193);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 22;
@@ -322,7 +327,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(265, 245);
+            this.btnSave.Location = new System.Drawing.Point(265, 193);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 21;
@@ -333,7 +338,7 @@
             // btnNew
             // 
             this.btnNew.AutoEllipsis = true;
-            this.btnNew.Location = new System.Drawing.Point(15, 245);
+            this.btnNew.Location = new System.Drawing.Point(15, 193);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(75, 23);
             this.btnNew.TabIndex = 20;
@@ -427,12 +432,34 @@
             this.dgItems.AllowUserToDeleteRows = false;
             this.dgItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgItems.Location = new System.Drawing.Point(3, 423);
+            this.dgItems.Location = new System.Drawing.Point(3, 374);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(911, 285);
+            this.dgItems.Size = new System.Drawing.Size(911, 334);
             this.dgItems.TabIndex = 21;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
+            // 
+            // fdOpen
+            // 
+            this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            // 
+            // btnUpload
+            // 
+            this.btnUpload.Location = new System.Drawing.Point(384, 164);
+            this.btnUpload.Name = "btnUpload";
+            this.btnUpload.Size = new System.Drawing.Size(121, 23);
+            this.btnUpload.TabIndex = 58;
+            this.btnUpload.Text = "Attachment =>";
+            this.btnUpload.UseVisualStyleBackColor = true;
+            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
+            // 
+            // tbAttachment
+            // 
+            this.tbAttachment.Enabled = false;
+            this.tbAttachment.Location = new System.Drawing.Point(511, 166);
+            this.tbAttachment.Name = "tbAttachment";
+            this.tbAttachment.Size = new System.Drawing.Size(234, 20);
+            this.tbAttachment.TabIndex = 59;
             // 
             // ucPrintCalendar
             // 
@@ -492,5 +519,8 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox tbSubject;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.OpenFileDialog fdOpen;
+        private System.Windows.Forms.TextBox tbAttachment;
+        private System.Windows.Forms.Button btnUpload;
     }
 }

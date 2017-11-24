@@ -12,6 +12,9 @@ using System.Globalization;
 using Astrodon.Data;
 using Astro.Library.Entities;
 using Astrodon.Data.Calendar;
+using System.Data.Entity;
+using iTextSharp.text.pdf;
+using System.IO;
 
 namespace Astrodon.Reports.Calendar
 {
@@ -24,6 +27,8 @@ namespace Astrodon.Reports.Calendar
         private DateTime _ReportDate = DateTime.Today;
 
         private BuildingCalendarEntry _Item = null;
+        byte[] _FileToLoad = null;
+
         private List<CalendarPrintItem> _Data;
 
         public ucPrintCalendar()
@@ -263,6 +268,8 @@ namespace Astrodon.Reports.Calendar
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var q = from c in context.BuildingCalendarEntrySet
+                        join i in context.CalendarEntryAttachmentSet on c.id equals i.BuildingCalendarEntryId into attach
+                        from a in attach.DefaultIfEmpty()
                         where c.EntryDate >= dtFrom
                            && c.EntryDate <= dtTo
                            && (pmId == 0 || c.UserId == pmId)
@@ -283,7 +290,8 @@ namespace Astrodon.Reports.Calendar
                             InviteSubject = c.InviteSubject,
                             InviteBody = c.InviteBody,
                             BCCEmailAddress = c.BCCEmailAddress,
-                            TrusteesNotified = c.TrusteesNotified
+                            TrusteesNotified = c.TrusteesNotified,
+                            FileName = a != null ? a.FileName : string.Empty
 
                         };
 
@@ -393,9 +401,18 @@ namespace Astrodon.Reports.Calendar
                 ReadOnly = true
             });
 
-            dgItems.AutoResizeColumns();
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "FileName",
+                HeaderText = "Attachment",
+                ReadOnly = true
+            });
+
+           // dgItems.AutoResizeColumns();
         }
 
+        
         private void GotoReadOnly()
         {
             if (cmbYear.SelectedItem != null && cmbMonth.SelectedItem != null)
@@ -426,13 +443,16 @@ namespace Astrodon.Reports.Calendar
             tbBCC.Enabled = false;
             tbSubject.Enabled = false;
             tbBodyContent.Enabled = false;
-
+            btnUpload.Enabled = false;
         }
 
         private void btnNew_Click(object sender, EventArgs e)
         {
             _Item = null;
+            _FileToLoad = null;
             GotoReadOnly();
+
+            btnUpload.Enabled = true;
 
             cbBuilding.Enabled = true;
             dtpEventDate.Enabled = true;
@@ -546,6 +566,27 @@ namespace Astrodon.Reports.Calendar
                 editItem.BCCEmailAddress = tbBCC.Text;
                 editItem.InviteBody = tbBodyContent.Text;
 
+                //check for attachments
+                if(_FileToLoad != null)
+                {
+                    CalendarEntryAttachment fileItem = null;
+
+                    if (editItem.id > 0)
+                        fileItem = context.CalendarEntryAttachmentSet.Where(a => a.BuildingCalendarEntryId == editItem.id).FirstOrDefault();
+
+                    if(fileItem == null)
+                    {
+                        fileItem = new CalendarEntryAttachment()
+                        {
+                            CalendarEntry = editItem
+                        };
+                        context.CalendarEntryAttachmentSet.Add(fileItem);
+                    }
+
+                    fileItem.FileData = _FileToLoad;
+                    fileItem.FileName = tbAttachment.Text;
+                }
+
                 context.SaveChanges();
             }
 
@@ -599,6 +640,8 @@ namespace Astrodon.Reports.Calendar
             using (var context = SqlDataHandler.GetDataContext())
             {
                 _Item = context.BuildingCalendarEntrySet.Single(a => a.id == id);
+                _FileToLoad = null;
+
                 cbBuilding.SelectedItem = _Buildings.Where(a => a.ID == _Item.BuildingId);
                 dtpEventDate.Value = _Item.EntryDate;
                 dtpEventTime.Value = _Item.EntryDate;
@@ -615,6 +658,15 @@ namespace Astrodon.Reports.Calendar
                 tbSubject.Text = _Item.InviteSubject;
                 tbBodyContent.Text = _Item.InviteBody;
 
+                var attachmentName = context.CalendarEntryAttachmentSet.Where(a => a.BuildingCalendarEntryId == id).Select(a => a.FileName).FirstOrDefault();
+
+                if (!String.IsNullOrWhiteSpace(attachmentName))
+                    tbAttachment.Text = attachmentName;
+                else
+                    tbAttachment.Text = string.Empty;
+
+
+                btnUpload.Enabled = true;
 
                 cbBuilding.Enabled = true;
                 dtpEventDate.Enabled = true;
@@ -636,6 +688,7 @@ namespace Astrodon.Reports.Calendar
 
                 btnNew.Visible = false;
                 dgItems.Enabled = false;
+
             }
         }
 
@@ -672,7 +725,7 @@ namespace Astrodon.Reports.Calendar
                 return;
             }
 
-            var calendarInvite = CreateCalendarInvite(entry.BuildingName + " - " + entry.Event, "", entry.Venue, entry.EventDate, entry.EventToDate != null ? entry.EventToDate.Value: entry.EventDate.AddHours(2));
+            var calendarInvite = CreateCalendarInvite(entry.BuildingName + " - " + entry.Event, "", entry.Venue, entry.EventDate, entry.EventToDate != null ? entry.EventToDate.Value : entry.EventDate.AddHours(2));
             Dictionary<string, byte[]> attachments = new Dictionary<string, byte[]>();
             attachments.Add("Appointment.ics", calendarInvite);
             string subject = entry.InviteSubject;
@@ -681,39 +734,58 @@ namespace Astrodon.Reports.Calendar
 
             string bodyContent = entry.InviteBody;
             if (String.IsNullOrWhiteSpace(bodyContent))
-                bodyContent = "Invite generated by " + Controller.user.name + " using the Astrodon System";
+                bodyContent = "";
+
+            bodyContent = bodyContent + Environment.NewLine + Environment.NewLine;
+
+            bodyContent += "Kind Regards" + Environment.NewLine;
+            bodyContent += entry.PM + Environment.NewLine;
+            bodyContent += "Tel: 011 867 3183" + Environment.NewLine;
+            bodyContent += "Fax: 011 867 3163" + Environment.NewLine;
+            bodyContent += "Direct Fax: 086 657 6199" + Environment.NewLine;
+            bodyContent += "BEE Level 4 Contributor" + Environment.NewLine;
+
+            bodyContent += "FOR AND ON BEHALF OF ASTRODON(PTY) LTD" + Environment.NewLine;
+            bodyContent += "The information contained in this communication is confidential and may be legally privileged.It is intended solely for the use of the individual or entity to whom it is addressed and others authorized to receive it.If you are not the intended recipient you are hereby notified that any disclosure, copying, distribution or taking action in reliance of the contents of this information is strictly prohibited and may be unlawful.The company is neither liable for proper, complete transmission of the information contained in this communication nor any delay in its receipt." + Environment.NewLine;
 
             string bccEmail = entry.BCCEmailAddress;
             if (bccEmail == string.Empty)
                 bccEmail = null;
 
-
-            if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", new string[] { entry.PMEmail },
-                subject, bodyContent,
-                false, false, false, out status, attachments, bccEmail))
+            //add aditional attachments
+            using (var context = SqlDataHandler.GetDataContext())
             {
-                Controller.HandleError("Error seding email " + status, "Email error");
-            }
-
-            if (entry.NotifyTrustees)
-            {
-                var customers = Controller.pastel.AddCustomers(entry.BuildingAbreviation, entry.BuildingDataPath);
-                var trustees = customers.Where(a => a.IsTrustee).ToList();
-                if (trustees.Count() > 0 && Controller.AskQuestion("Are you sure you want to send the invite to " + trustees.Count().ToString() + " trustees?"))
+                var attach = context.CalendarEntryAttachmentSet.Where(a => a.BuildingCalendarEntryId == entry.Id).ToList();
+                foreach(var a in attach)
                 {
-                    foreach (var trustee in trustees)
+                    attachments.Add(a.FileName, a.FileData);
+                }
+
+                if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", new string[] { entry.PMEmail },
+                    subject, bodyContent,
+                    false, false, false, out status, attachments, bccEmail))
+                {
+                    Controller.HandleError("Error seding email " + status, "Email error");
+                }
+
+                if (entry.NotifyTrustees)
+                {
+                    var customers = Controller.pastel.AddCustomers(entry.BuildingAbreviation, entry.BuildingDataPath);
+                    var trustees = customers.Where(a => a.IsTrustee).ToList();
+                    if (trustees.Count() > 0 && Controller.AskQuestion("Are you sure you want to send the invite to " + trustees.Count().ToString() + " trustees?"))
                     {
-                        if (trustee.Email != null && trustee.Email.Length > 0)
+                        foreach (var trustee in trustees)
                         {
-                            if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", trustee.Email,
-                                 subject, bodyContent, false, false, false, out status, attachments, bccEmail))
+                            if (trustee.Email != null && trustee.Email.Length > 0)
                             {
-                                Controller.HandleError("Error seding email " + status, "Email error");
+                                if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", trustee.Email,
+                                     subject, bodyContent, false, false, false, out status, attachments, bccEmail))
+                                {
+                                    Controller.HandleError("Error seding email " + status, "Email error");
+                                }
                             }
                         }
-                    }
-                    using (var context = SqlDataHandler.GetDataContext())
-                    {
+
                         var itm = context.BuildingCalendarEntrySet.Single(a => a.id == entry.Id);
                         itm.TrusteesNotified = true;
                         entry.TrusteesNotified = true;
@@ -721,7 +793,6 @@ namespace Astrodon.Reports.Calendar
                         BindDataGrid();
                     }
                 }
-
             }
         }
 
@@ -770,7 +841,58 @@ namespace Astrodon.Reports.Calendar
             public string InviteSubject { get;  set; }
             public string InviteBody { get; internal set; }
             public string BCCEmailAddress { get; internal set; }
+            public string FileName { get; internal set; }
         }
 
+
+        private bool IsValidPdf(string filepath)
+        {
+            bool Ret = true;
+
+            PdfReader reader = null;
+
+            try
+            {
+                using (reader = new PdfReader(filepath))
+                {
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                Ret = false;
+            }
+
+            return Ret;
+        }
+
+
+        private void btnUpload_Click(object sender, EventArgs e)
+        {
+            if (fdOpen.ShowDialog() == DialogResult.OK)
+            {
+                btnUpload.Enabled = false;
+                try
+                {
+                    if (!IsValidPdf(fdOpen.FileName))
+                    {
+                        btnUpload.Enabled = true;
+                        Controller.HandleError("Not a valid PDF");
+                        return;
+                    }
+
+                    _FileToLoad = File.ReadAllBytes(fdOpen.FileName);
+                    tbAttachment.Text = Path.GetFileName(fdOpen.FileName);
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to upload attachment");
+                }
+                finally
+                {
+                    btnUpload.Enabled = true;
+                }
+            }
+        }
     }
 }

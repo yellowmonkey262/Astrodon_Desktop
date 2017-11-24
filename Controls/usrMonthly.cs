@@ -903,6 +903,7 @@ namespace Astrodon.Controls
             LoadChecklist();
         }
 
+        private Random _RandomGenerator = new Random();
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (cmbBuilding.SelectedItem == null || cmbFinPeriod.SelectedItem == null || cmbYear.SelectedItem == null)
@@ -929,7 +930,7 @@ namespace Astrodon.Controls
                     int myYear = int.Parse(cmbYear.SelectedItem.ToString());
                     DateTime myFinDate = new DateTime(myYear, myPeriod, 1);
                     var itm = context.tblMonthFins.SingleOrDefault(a => a.buildingID == building && a.findate == myFinDate);
-
+                    
                     if(itm == null)
                     {
                         itm = new tblMonthFin()
@@ -941,6 +942,21 @@ namespace Astrodon.Controls
                             findate = myFinDate
                         };
                         context.tblMonthFins.Add(itm);
+
+                        var buildingEntity = context.tblBuildings.FirstOrDefault(a => a.Code == building);
+                        if(buildingEntity != null)
+                        {
+                            if(buildingEntity.IsFixed == false)
+                            {
+                                //create a new random number between 1 and 20 inclusive
+                                var rNumber = _RandomGenerator.Next(1, 21);
+                                if (rNumber < 1)
+                                    rNumber = 1;
+                                if (rNumber > 20)
+                                    rNumber = 20;
+                                buildingEntity.FinancialDayOfMonth = ValidateWeekendOrPublicHoliday(rNumber, context);
+                            }
+                        }
                     }
                     itm.userID = Controller.user.id;
                     itm.completeDate = DateTime.Now;
@@ -1025,9 +1041,49 @@ namespace Astrodon.Controls
                     var pdfReport = CreateExcel(true);
                     itm.CheckListPDF = pdfReport;
                     context.SaveChanges();
+
+
                     MessageBox.Show("Record saved!");
                 }
             }
+        }
+
+        private int ValidateWeekendOrPublicHoliday(int day, DataContext context)
+        {
+            var dtStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(1);
+            var dtEnd = new DateTime(dtStart.Year, dtStart.Month, 20);
+            var selectedDate = new DateTime(dtStart.Year, dtStart.Month, day); //next month
+
+            var datesToExclude = context.PublicHolidaySet.Where(a => a.Date >= dtStart && a.Date <= dtEnd).Select(a => a.Date).ToList();
+            while(dtStart < dtEnd)
+            {
+                if(dtStart.DayOfWeek == DayOfWeek.Saturday || dtStart.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    datesToExclude.Add(dtStart);
+                }
+
+                dtStart = dtStart.AddDays(1);
+            }
+
+            //ok find out if my selected date is in this list then adjust either one back or one forward.
+            if(datesToExclude.Contains(selectedDate))
+            {
+                DateTime startSearch = selectedDate;
+                while(selectedDate.Day > 1 && datesToExclude.Contains(selectedDate))
+                    selectedDate = selectedDate.AddDays(-1);
+
+                if (datesToExclude.Contains(selectedDate))
+                {
+                    selectedDate = startSearch; //search forward
+
+                    while (selectedDate.Day < 20 && datesToExclude.Contains(selectedDate))
+                        selectedDate = selectedDate.AddDays(1);
+                }
+
+                if (datesToExclude.Contains(selectedDate)) //could not find one return the random day
+                    selectedDate = startSearch;
+            }
+            return selectedDate.Day;
         }
 
         private void chkElecUnder_CheckedChanged(object sender, EventArgs e)

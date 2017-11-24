@@ -76,8 +76,6 @@ namespace Astrodon.Data
             }
         }
 
-
-
         #endregion
 
         public DbSet<BuildingMaintenanceConfiguration> BuildingMaintenanceConfigurationSet { get; set; }
@@ -118,6 +116,8 @@ namespace Astrodon.Data
 
         #region Calendar
         public DbSet<BuildingCalendarEntry> BuildingCalendarEntrySet { get; set; }
+        public DbSet<CalendarEntryAttachment> CalendarEntryAttachmentSet { get; set; }
+        public DbSet<PublicHoliday> PublicHolidaySet { get; set; }
         #endregion
 
         public void ClearChanges()

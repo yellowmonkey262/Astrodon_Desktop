@@ -262,7 +262,7 @@ namespace Astrodon.Controls
             var dt = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
 
 
-            if (!Controller.AskQuestion("Are you sure you want top create the allocation for " + dt.ToString("MMM yyyy") + "?"))
+            if (!Controller.AskQuestion("Are you sure you want to create the allocation for " + dt.ToString("MMM yyyy") + "?"))
                 return;
             
             this.Cursor = Cursors.WaitCursor;

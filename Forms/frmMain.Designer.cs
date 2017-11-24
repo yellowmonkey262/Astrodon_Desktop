@@ -91,15 +91,17 @@
             this.monthlyFinancialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checklistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allocationSheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.levyRollToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.managementPackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.calendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblNotifications = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.calendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.publicHolidaysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -132,8 +134,9 @@
             this.bankConfigurationToolStripMenuItem,
             this.usersToolStripMenuItem,
             this.bulkSMSToolStripMenuItem,
-            this.upgradeDatabaseToolStripMenuItem,
             this.managementPackTOCDescriptionToolStripMenuItem,
+            this.publicHolidaysToolStripMenuItem,
+            this.upgradeDatabaseToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
             this.systemToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
@@ -622,6 +625,7 @@
             this.monthlyFinancialsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.checklistToolStripMenuItem,
             this.reportToolStripMenuItem,
+            this.allocationSheetToolStripMenuItem,
             this.levyRollToolStripMenuItem,
             this.managementPackToolStripMenuItem,
             this.calendarToolStripMenuItem});
@@ -643,6 +647,13 @@
             this.reportToolStripMenuItem.Text = "Report";
             this.reportToolStripMenuItem.Click += new System.EventHandler(this.reportToolStripMenuItem_Click);
             // 
+            // allocationSheetToolStripMenuItem
+            // 
+            this.allocationSheetToolStripMenuItem.Name = "allocationSheetToolStripMenuItem";
+            this.allocationSheetToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.allocationSheetToolStripMenuItem.Text = "Allocation Sheet";
+            this.allocationSheetToolStripMenuItem.Click += new System.EventHandler(this.allocationSheetToolStripMenuItem_Click);
+            // 
             // levyRollToolStripMenuItem
             // 
             this.levyRollToolStripMenuItem.Name = "levyRollToolStripMenuItem";
@@ -656,6 +667,13 @@
             this.managementPackToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.managementPackToolStripMenuItem.Text = "Management Pack";
             this.managementPackToolStripMenuItem.Click += new System.EventHandler(this.managementPackToolStripMenuItem_Click);
+            // 
+            // calendarToolStripMenuItem
+            // 
+            this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
+            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.calendarToolStripMenuItem.Text = "Calendar";
+            this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -703,12 +721,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // calendarToolStripMenuItem
+            // publicHolidaysToolStripMenuItem
             // 
-            this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
-            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.calendarToolStripMenuItem.Text = "Calendar";
-            this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
+            this.publicHolidaysToolStripMenuItem.Name = "publicHolidaysToolStripMenuItem";
+            this.publicHolidaysToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.publicHolidaysToolStripMenuItem.Text = "Public Holidays";
+            this.publicHolidaysToolStripMenuItem.Click += new System.EventHandler(this.publicHolidaysToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -812,5 +830,7 @@
         private System.Windows.Forms.ToolStripMenuItem insuranceBrokerMaintenanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sAPORDebitOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem calendarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allocationSheetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem publicHolidaysToolStripMenuItem;
     }
 }

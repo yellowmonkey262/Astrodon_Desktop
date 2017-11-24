@@ -173,6 +173,10 @@ namespace Astrodon
 
                     txtCommonPropertyValue.Text = buildingEntity.CommonPropertyReplacementCost.ToString("#,##0.00");
                     txtInsurancePolicyNumber.Text = buildingEntity.PolicyNumber;
+
+                    cbFixedFinalcials.Checked = buildingEntity.IsFixed;
+                    tbFinancialDayOfMonth.Value = buildingEntity.FinancialDayOfMonth;
+
                     LoadInsuranceUnitPq(buildingEntity);
                 }
             }
@@ -325,6 +329,9 @@ namespace Astrodon
                       .FirstOrDefault(a => a.id == selectedBuilding.ID);
                 buildingEntity.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
                 buildingEntity.BuildingFinancialsEnabled = cbBuildingFinancialsEnabled.Checked;
+                buildingEntity.FinancialDayOfMonth = Convert.ToInt32(tbFinancialDayOfMonth.Value);
+                buildingEntity.IsFixed = cbFixedFinalcials.Checked;
+
                 if (Controller.UserIsSheldon())
                 {
                     buildingEntity.BuildingDisabled = cbDisabled.Checked;

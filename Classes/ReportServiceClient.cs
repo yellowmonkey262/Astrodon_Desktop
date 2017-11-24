@@ -24,10 +24,10 @@ namespace Astrodon.ReportService
                 url = "Localhost";
 
             BasicHttpBinding binding = new BasicHttpBinding(BasicHttpSecurityMode.None);
-            binding.CloseTimeout = new TimeSpan(00, 05, 00);
-            binding.OpenTimeout = new TimeSpan(00, 05, 00);
-            binding.ReceiveTimeout = new TimeSpan(00, 05, 00);
-            binding.SendTimeout = new TimeSpan(00, 05, 00);
+            binding.CloseTimeout = new TimeSpan(00, 50, 00);
+            binding.OpenTimeout = new TimeSpan(00, 50, 00);
+            binding.ReceiveTimeout = new TimeSpan(00, 50, 00);
+            binding.SendTimeout = new TimeSpan(00, 50, 00);
             binding.TextEncoding = System.Text.Encoding.UTF8;
             binding.MaxReceivedMessageSize = int.MaxValue;
             binding.MaxBufferSize = int.MaxValue;

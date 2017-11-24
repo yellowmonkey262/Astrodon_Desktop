@@ -56,6 +56,8 @@
     <Compile Include="Base\IdValue.cs" />
     <Compile Include="Base\StringKeyValue.cs" />
     <Compile Include="Calendar\BuildingCalendarEntry.cs" />
+    <Compile Include="Calendar\CalendarEntryAttachment.cs" />
+    <Compile Include="Calendar\PublicHoliday.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
     <Compile Include="DebitOrder\AccountTypeType.cs" />
@@ -223,6 +225,10 @@
     <Compile Include="Migrations\201711140810125_NotifyTrustees.cs" />
     <Compile Include="Migrations\201711140810125_NotifyTrustees.Designer.cs">
       <DependentUpon>201711140810125_NotifyTrustees.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711241004256_BuildingFinancialCycle.cs" />
+    <Compile Include="Migrations\201711241004256_BuildingFinancialCycle.Designer.cs">
+      <DependentUpon>201711241004256_BuildingFinancialCycle.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -399,6 +405,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711140810125_NotifyTrustees.resx">
       <DependentUpon>201711140810125_NotifyTrustees.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711241004256_BuildingFinancialCycle.resx">
+      <DependentUpon>201711241004256_BuildingFinancialCycle.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

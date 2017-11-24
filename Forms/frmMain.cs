@@ -1,8 +1,10 @@
-﻿using Astrodon.Controls.Bank;
+﻿using Astrodon.Controls;
+using Astrodon.Controls.Bank;
 using Astrodon.Controls.Insurance;
 using Astrodon.Controls.Maintenance;
 using Astrodon.Controls.Requisitions;
 using Astrodon.Controls.Supplier;
+using Astrodon.Controls.SystemConfig;
 using Astrodon.Data;
 using Astrodon.Reports;
 using Astrodon.Reports.Calendar;
@@ -679,6 +681,24 @@ namespace Astrodon
             dt.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(dt);
             toolStripStatusLabel1.Text = "Calendar";
+        }
+
+        private void allocationSheetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucAllocationSheet dt = new ucAllocationSheet();
+            dt.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(dt);
+            toolStripStatusLabel1.Text = "Allocation Sheet";
+        }
+
+        private void publicHolidaysToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucPublicHoliday dt = new ucPublicHoliday(_DataContext);
+            dt.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(dt);
+            toolStripStatusLabel1.Text = "Public Holidays";
         }
     }
 }

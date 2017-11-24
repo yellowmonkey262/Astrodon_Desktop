@@ -160,10 +160,10 @@
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\webreport.cs" />
     <Compile Include="Classes\WordProcessor.cs" />
-    <Compile Include="Controls\Bank\usrBankConfiguration.cs">
+    <Compile Include="Controls\SystemConfig\usrBankConfiguration.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\Bank\usrBankConfiguration.Designer.cs">
+    <Compile Include="Controls\SystemConfig\usrBankConfiguration.Designer.cs">
       <DependentUpon>usrBankConfiguration.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Insurance\InsuranceBrokerSelectEventArgs.cs" />
@@ -241,6 +241,18 @@
     </Compile>
     <Compile Include="Controls\Supplier\usrSupplierLookup.Designer.cs">
       <DependentUpon>usrSupplierLookup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SystemConfig\ucPublicHoliday.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SystemConfig\ucPublicHoliday.Designer.cs">
+      <DependentUpon>ucPublicHoliday.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ucAllocationSheet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ucAllocationSheet.Designer.cs">
+      <DependentUpon>ucAllocationSheet.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\usrAccounts.cs">
       <SubType>UserControl</SubType>
@@ -669,7 +681,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Controls\Bank\usrBankConfiguration.resx">
+    <EmbeddedResource Include="Controls\SystemConfig\ucPublicHoliday.resx">
+      <DependentUpon>ucPublicHoliday.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SystemConfig\usrBankConfiguration.resx">
       <DependentUpon>usrBankConfiguration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Insurance\usrInsuranceBroker.resx">
@@ -707,6 +722,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Supplier\usrSupplierLookup.resx">
       <DependentUpon>usrSupplierLookup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ucAllocationSheet.resx">
+      <DependentUpon>ucAllocationSheet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\usrAccounts.resx">
       <DependentUpon>usrAccounts.cs</DependentUpon>

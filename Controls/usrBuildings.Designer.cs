@@ -43,6 +43,11 @@
             this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label60 = new System.Windows.Forms.Label();
+            this.tbFinancialDayOfMonth = new System.Windows.Forms.NumericUpDown();
+            this.label59 = new System.Windows.Forms.Label();
+            this.cbFixedFinalcials = new System.Windows.Forms.CheckBox();
+            this.label58 = new System.Windows.Forms.Label();
             this.cbBuildingFinancialsEnabled = new System.Windows.Forms.CheckBox();
             this.label53 = new System.Windows.Forms.Label();
             this.cbDisableDebitOrderFee = new System.Windows.Forms.CheckBox();
@@ -75,11 +80,9 @@
             this.txtDFS = new System.Windows.Forms.TextBox();
             this.label40 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.txtName = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtCentrec1 = new System.Windows.Forms.TextBox();
             this.txtAbbr = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.txtCentrec2 = new System.Windows.Forms.TextBox();
@@ -108,9 +111,11 @@
             this.label13 = new System.Windows.Forms.Label();
             this.chkWeb = new System.Windows.Forms.CheckBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.txtName = new System.Windows.Forms.TextBox();
             this.cbDisabled = new System.Windows.Forms.CheckBox();
             this.label57 = new System.Windows.Forms.Label();
             this.txtID = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtTrust = new System.Windows.Forms.TextBox();
             this.txtPath = new System.Windows.Forms.TextBox();
@@ -184,6 +189,7 @@
             this.grpTrustees.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).BeginInit();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbFinancialDayOfMonth)).BeginInit();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.tbInsurance.SuspendLayout();
@@ -359,6 +365,11 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label60);
+            this.groupBox4.Controls.Add(this.tbFinancialDayOfMonth);
+            this.groupBox4.Controls.Add(this.label59);
+            this.groupBox4.Controls.Add(this.cbFixedFinalcials);
+            this.groupBox4.Controls.Add(this.label58);
             this.groupBox4.Controls.Add(this.cbBuildingFinancialsEnabled);
             this.groupBox4.Controls.Add(this.label53);
             this.groupBox4.Controls.Add(this.cbDisableDebitOrderFee);
@@ -396,6 +407,65 @@
             this.groupBox4.TabIndex = 140;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Fees";
+            // 
+            // label60
+            // 
+            this.label60.AutoSize = true;
+            this.label60.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label60.Location = new System.Drawing.Point(413, 129);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(132, 13);
+            this.label60.TabIndex = 122;
+            this.label60.Text = "Finalcial configuration";
+            // 
+            // tbFinancialDayOfMonth
+            // 
+            this.tbFinancialDayOfMonth.Location = new System.Drawing.Point(523, 166);
+            this.tbFinancialDayOfMonth.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.tbFinancialDayOfMonth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.tbFinancialDayOfMonth.Name = "tbFinancialDayOfMonth";
+            this.tbFinancialDayOfMonth.Size = new System.Drawing.Size(39, 20);
+            this.tbFinancialDayOfMonth.TabIndex = 121;
+            this.tbFinancialDayOfMonth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label59
+            // 
+            this.label59.AutoSize = true;
+            this.label59.Location = new System.Drawing.Point(414, 168);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(99, 13);
+            this.label59.TabIndex = 120;
+            this.label59.Text = "Day to be complete";
+            // 
+            // cbFixedFinalcials
+            // 
+            this.cbFixedFinalcials.AutoSize = true;
+            this.cbFixedFinalcials.Location = new System.Drawing.Point(523, 147);
+            this.cbFixedFinalcials.Name = "cbFixedFinalcials";
+            this.cbFixedFinalcials.Size = new System.Drawing.Size(15, 14);
+            this.cbFixedFinalcials.TabIndex = 118;
+            this.cbFixedFinalcials.UseVisualStyleBackColor = true;
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(414, 148);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(32, 13);
+            this.label58.TabIndex = 117;
+            this.label58.Text = "Fixed";
             // 
             // cbBuildingFinancialsEnabled
             // 
@@ -693,13 +763,6 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Bank Details";
             // 
-            // txtName
-            // 
-            this.txtName.Location = new System.Drawing.Point(127, 48);
-            this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(201, 20);
-            this.txtName.TabIndex = 7;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -722,15 +785,6 @@
             this.txtAbbr.Name = "txtAbbr";
             this.txtAbbr.Size = new System.Drawing.Size(150, 20);
             this.txtAbbr.TabIndex = 11;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(43, 50);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(78, 13);
-            this.label4.TabIndex = 40;
-            this.label4.Text = "Building Name ";
             // 
             // label5
             // 
@@ -999,6 +1053,13 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Building Details";
             // 
+            // txtName
+            // 
+            this.txtName.Location = new System.Drawing.Point(127, 48);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(201, 20);
+            this.txtName.TabIndex = 7;
+            // 
             // cbDisabled
             // 
             this.cbDisabled.AutoSize = true;
@@ -1027,6 +1088,15 @@
             this.txtID.ReadOnly = true;
             this.txtID.Size = new System.Drawing.Size(201, 20);
             this.txtID.TabIndex = 3;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(43, 50);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(78, 13);
+            this.label4.TabIndex = 40;
+            this.label4.Text = "Building Name ";
             // 
             // label2
             // 
@@ -1682,6 +1752,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbFinancialDayOfMonth)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox7.ResumeLayout(false);
@@ -1858,5 +1929,10 @@
         private System.Windows.Forms.Label label53;
         private System.Windows.Forms.CheckBox cbDisabled;
         private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.CheckBox cbFixedFinalcials;
+        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.Label label60;
+        private System.Windows.Forms.NumericUpDown tbFinancialDayOfMonth;
+        private System.Windows.Forms.Label label59;
     }
 }
