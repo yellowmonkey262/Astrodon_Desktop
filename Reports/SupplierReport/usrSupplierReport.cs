@@ -12,6 +12,8 @@ using Astrodon.ReportService;
 using System.IO;
 using System.Diagnostics;
 using Astro.Library.Entities;
+using Astrodon.Forms;
+using Astrodon.Data.SupplierData;
 
 namespace Astrodon.Reports.SupplierReport
 {
@@ -95,6 +97,7 @@ namespace Astrodon.Reports.SupplierReport
             cmbToMonth.SelectedValue = DateTime.Now.AddMonths(-1).Month;
         }
 
+        private Supplier _SelectedSupplier = null;
         private void button1_Click(object sender, EventArgs e)
         {
             if (dlgSave.ShowDialog() == DialogResult.OK)
@@ -115,7 +118,7 @@ namespace Astrodon.Reports.SupplierReport
                         }
                         var building = cmbBuilding.SelectedItem as Building;
 
-                        var reportData = reportService.SupplierReport(SqlDataHandler.GetConnectionString(), dtFrom,dtTo, building.ID);
+                        var reportData = reportService.SupplierReport(SqlDataHandler.GetConnectionString(), dtFrom,dtTo, building == null || building.ID == 0 ? (int?)null : building.ID, _SelectedSupplier == null ? (int?)null : _SelectedSupplier.id);
                         if(reportData == null)
                         {
                             Controller.HandleError("No data found", "Supplier Report");
@@ -131,6 +134,32 @@ namespace Astrodon.Reports.SupplierReport
                     button1.Enabled = true;
                 }
             }
+        }
+
+        private void btnFindSupplier_Click(object sender, EventArgs e)
+        {
+            _SelectedSupplier = null;
+            lbSupplierName.Text ="";
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var building = cmbBuilding.SelectedItem as Building;
+
+                var frmSupplierLookup = new frmSupplierLookup(context, building == null || building.ID == 0 ? (int?)null : building.ID);
+                var supplierResult = frmSupplierLookup.ShowDialog();
+                var supplier = frmSupplierLookup.SelectedSupplier;
+                if (supplierResult == DialogResult.OK && supplier != null)
+                {
+                    _SelectedSupplier = supplier;
+                    lbSupplierName.Text = supplier.CompanyName;
+                }
+            }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            _SelectedSupplier = null;
+            lbSupplierName.Text = "";
         }
     }
 }

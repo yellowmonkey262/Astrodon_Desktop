@@ -33,8 +33,9 @@
             this.bankConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkSMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.upgradeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.managementPackTOCDescriptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.publicHolidaysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.upgradeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.summaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,7 +102,6 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.publicHolidaysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -185,19 +185,26 @@
             this.bulkSMSToolStripMenuItem.Text = "Bulk SMS";
             this.bulkSMSToolStripMenuItem.Click += new System.EventHandler(this.bulkSMSToolStripMenuItem_Click);
             // 
-            // upgradeDatabaseToolStripMenuItem
-            // 
-            this.upgradeDatabaseToolStripMenuItem.Name = "upgradeDatabaseToolStripMenuItem";
-            this.upgradeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
-            this.upgradeDatabaseToolStripMenuItem.Text = "Upgrade Database";
-            this.upgradeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.upgradeDatabaseToolStripMenuItem_Click);
-            // 
             // managementPackTOCDescriptionToolStripMenuItem
             // 
             this.managementPackTOCDescriptionToolStripMenuItem.Name = "managementPackTOCDescriptionToolStripMenuItem";
             this.managementPackTOCDescriptionToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.managementPackTOCDescriptionToolStripMenuItem.Text = "Management Pack TOC Descriptions";
             this.managementPackTOCDescriptionToolStripMenuItem.Click += new System.EventHandler(this.managementPackTOCDescriptionToolStripMenuItem_Click);
+            // 
+            // publicHolidaysToolStripMenuItem
+            // 
+            this.publicHolidaysToolStripMenuItem.Name = "publicHolidaysToolStripMenuItem";
+            this.publicHolidaysToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.publicHolidaysToolStripMenuItem.Text = "Public Holidays";
+            this.publicHolidaysToolStripMenuItem.Click += new System.EventHandler(this.publicHolidaysToolStripMenuItem_Click);
+            // 
+            // upgradeDatabaseToolStripMenuItem
+            // 
+            this.upgradeDatabaseToolStripMenuItem.Name = "upgradeDatabaseToolStripMenuItem";
+            this.upgradeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.upgradeDatabaseToolStripMenuItem.Text = "Upgrade Database";
+            this.upgradeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.upgradeDatabaseToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -652,6 +659,7 @@
             this.allocationSheetToolStripMenuItem.Name = "allocationSheetToolStripMenuItem";
             this.allocationSheetToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.allocationSheetToolStripMenuItem.Text = "Allocation Sheet";
+            this.allocationSheetToolStripMenuItem.Visible = false;
             this.allocationSheetToolStripMenuItem.Click += new System.EventHandler(this.allocationSheetToolStripMenuItem_Click);
             // 
             // levyRollToolStripMenuItem
@@ -720,13 +728,6 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
-            // 
-            // publicHolidaysToolStripMenuItem
-            // 
-            this.publicHolidaysToolStripMenuItem.Name = "publicHolidaysToolStripMenuItem";
-            this.publicHolidaysToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
-            this.publicHolidaysToolStripMenuItem.Text = "Public Holidays";
-            this.publicHolidaysToolStripMenuItem.Click += new System.EventHandler(this.publicHolidaysToolStripMenuItem_Click);
             // 
             // frmMain
             // 

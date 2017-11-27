@@ -94,6 +94,9 @@ namespace Astrodon.Controls.Supplier
             btnNewSupplier.Visible = true;
 
             this.Cursor = Cursors.Default;
+
+            if (_SupplierData.Count() == 0)
+                Controller.ShowMessage("No suppliers were found matching your search criteria.");
         }
 
 

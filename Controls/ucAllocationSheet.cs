@@ -31,7 +31,7 @@ namespace Astrodon.Controls
                 var userList = context.tblUsers.Where(a => a.ProcessCheckLists).ToList();
                 foreach (var user in userList.OrderBy(a => a.name))
                 {
-                    _Data.AddRange(ProcessAllocation(context, user, 6));
+                    _Data.AddRange(ProcessAllocation(context, user, 6)); 
                     Application.DoEvents();
                 }
             }

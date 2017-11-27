@@ -598,7 +598,7 @@ namespace Astrodon.ReportService {
         byte[] LevyRollExcludeSundries(System.DateTime processMonth, string buildingName, string dataPath);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/SupplierReport", ReplyAction="http://tempuri.org/IReportService/SupplierReportResponse")]
-        byte[] SupplierReport(string sqlConnectionString, System.DateTime fromDate, System.DateTime toDate, int buildingId);
+        byte[] SupplierReport(string sqlConnectionString, System.DateTime fromDate, System.DateTime toDate, System.Nullable<int> buildingId, System.Nullable<int> supplierId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MaintenanceReport", ReplyAction="http://tempuri.org/IReportService/MaintenanceReportResponse")]
         byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime fromDate, System.DateTime toDate, int buildingId, string buildingName, string dataPath);
@@ -620,6 +620,9 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MonthlyReport", ReplyAction="http://tempuri.org/IReportService/MonthlyReportResponse")]
         byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/BookKepersWorksheetReport", ReplyAction="http://tempuri.org/IReportService/BookKepersWorksheetReportResponse")]
+        byte[] BookKepersWorksheetReport(string sqlConnectionString, System.Nullable<int> userId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -657,8 +660,8 @@ namespace Astrodon.ReportService {
             return base.Channel.LevyRollExcludeSundries(processMonth, buildingName, dataPath);
         }
         
-        public byte[] SupplierReport(string sqlConnectionString, System.DateTime fromDate, System.DateTime toDate, int buildingId) {
-            return base.Channel.SupplierReport(sqlConnectionString, fromDate, toDate, buildingId);
+        public byte[] SupplierReport(string sqlConnectionString, System.DateTime fromDate, System.DateTime toDate, System.Nullable<int> buildingId, System.Nullable<int> supplierId) {
+            return base.Channel.SupplierReport(sqlConnectionString, fromDate, toDate, buildingId, supplierId);
         }
         
         public byte[] MaintenanceReport(string sqlConnectionString, Astrodon.ReportService.MaintenanceReportType reportType, System.DateTime fromDate, System.DateTime toDate, int buildingId, string buildingName, string dataPath) {
@@ -687,6 +690,10 @@ namespace Astrodon.ReportService {
         
         public byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId) {
             return base.Channel.MonthlyReport(sqlConnectionString, processMonth, completedItems, userId);
+        }
+        
+        public byte[] BookKepersWorksheetReport(string sqlConnectionString, System.Nullable<int> userId) {
+            return base.Channel.BookKepersWorksheetReport(sqlConnectionString, userId);
         }
     }
 }

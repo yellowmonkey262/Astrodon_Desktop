@@ -38,6 +38,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lbSupplierName = new System.Windows.Forms.Label();
+            this.btnFindSupplier = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmbFromMonth
@@ -69,9 +73,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(256, 108);
+            this.button1.Location = new System.Drawing.Point(90, 127);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(89, 23);
             this.button1.TabIndex = 16;
             this.button1.Text = "Run Report";
             this.button1.UseVisualStyleBackColor = true;
@@ -130,10 +134,51 @@
             this.cmbBuilding.Size = new System.Drawing.Size(241, 21);
             this.cmbBuilding.TabIndex = 22;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(11, 101);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(45, 13);
+            this.label2.TabIndex = 23;
+            this.label2.Text = "Supplier";
+            // 
+            // lbSupplierName
+            // 
+            this.lbSupplierName.AutoSize = true;
+            this.lbSupplierName.Location = new System.Drawing.Point(87, 101);
+            this.lbSupplierName.Name = "lbSupplierName";
+            this.lbSupplierName.Size = new System.Drawing.Size(0, 13);
+            this.lbSupplierName.TabIndex = 24;
+            // 
+            // btnFindSupplier
+            // 
+            this.btnFindSupplier.Location = new System.Drawing.Point(256, 101);
+            this.btnFindSupplier.Name = "btnFindSupplier";
+            this.btnFindSupplier.Size = new System.Drawing.Size(75, 23);
+            this.btnFindSupplier.TabIndex = 26;
+            this.btnFindSupplier.Text = "Find";
+            this.btnFindSupplier.UseVisualStyleBackColor = true;
+            this.btnFindSupplier.Click += new System.EventHandler(this.btnFindSupplier_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(337, 101);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 23);
+            this.btnClear.TabIndex = 27;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // usrSupplierReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnClear);
+            this.Controls.Add(this.btnFindSupplier);
+            this.Controls.Add(this.lbSupplierName);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cmbBuilding);
             this.Controls.Add(this.cmbToMonth);
@@ -144,7 +189,7 @@
             this.Controls.Add(this.cmbFromYear);
             this.Controls.Add(this.label1);
             this.Name = "usrSupplierReport";
-            this.Size = new System.Drawing.Size(365, 146);
+            this.Size = new System.Drawing.Size(428, 207);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,5 +207,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cmbBuilding;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbSupplierName;
+        private System.Windows.Forms.Button btnFindSupplier;
+        private System.Windows.Forms.Button btnClear;
     }
 }
