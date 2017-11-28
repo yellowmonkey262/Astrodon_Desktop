@@ -166,16 +166,17 @@ namespace Astrodon.Reports.DebitOrder
                         {
                             wsSheet1.Cells["L1"].Value = "DEBIT ORDER FEE";
                             wsSheet1.Cells["M1"].Value = "AMOUNT DUE";
-                            wsSheet1.Cells["N1"].Value = "COMMENT";
+                            wsSheet1.Cells["N1"].Value = "MAX DEBIT AMOUNT";
+                            wsSheet1.Cells["O1"].Value = "COMMENT";
 
-                            wsSheet1.Cells["O1"].Value = "LEVY ROLL PAYMENTS";
-                            wsSheet1.Cells["P1"].Value = "LEVY ROLL DUE";
+                            wsSheet1.Cells["P1"].Value = "LEVY ROLL PAYMENTS";
+                            wsSheet1.Cells["Q1"].Value = "LEVY ROLL DUE";
 
-                            wsSheet1.Cells["Q1"].Value = "BUILDING CODE";
-                            wsSheet1.Cells["R1"].Value = "BUILDING NAME";
+                            wsSheet1.Cells["R1"].Value = "BUILDING CODE";
+                            wsSheet1.Cells["S1"].Value = "BUILDING NAME";
 
-                            wsSheet1.Cells["S1"].Value = "CANCELLED";
-                            wsSheet1.Cells["T1"].Value = "CANCEL DATE";
+                            wsSheet1.Cells["T1"].Value = "CANCELLED";
+                            wsSheet1.Cells["U1"].Value = "CANCEL DATE";
 
                         }
                         int rowNum = 1;
@@ -211,6 +212,13 @@ namespace Astrodon.Reports.DebitOrder
                                 wsSheet1.Cells["M" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
                                 wsSheet1.Cells["M" + rowNum.ToString()].Value = row.AmountDue;
 
+                                if (row.MaxDebitOrderAmount > 0)
+                                {
+                                    wsSheet1.Cells["N" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                                    wsSheet1.Cells["N" + rowNum.ToString()].Value = row.MaxDebitOrderAmount;
+                                }
+
+
                                 string debitOrderComment = "";
                                 if (row.IsDebitOrderFeeDisabledOnBuilding)
                                 {
@@ -225,22 +233,22 @@ namespace Astrodon.Reports.DebitOrder
                                         debitOrderComment = "Fee disabled on unit.";
                                 }
 
-                                wsSheet1.Cells["N" + rowNum.ToString()].Value = debitOrderComment;
-
-                                wsSheet1.Cells["O" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
-                                wsSheet1.Cells["O" + rowNum.ToString()].Value = row.LevyRollPayments;
+                                wsSheet1.Cells["O" + rowNum.ToString()].Value = debitOrderComment;
 
                                 wsSheet1.Cells["P" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
-                                wsSheet1.Cells["P" + rowNum.ToString()].Value = row.LevyRollDue;
+                                wsSheet1.Cells["P" + rowNum.ToString()].Value = row.LevyRollPayments;
 
-                                wsSheet1.Cells["Q" + rowNum.ToString()].Value = row.BuildingCode;
-                                wsSheet1.Cells["R" + rowNum.ToString()].Value = row.BuildingName;
+                                wsSheet1.Cells["Q" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                                wsSheet1.Cells["Q" + rowNum.ToString()].Value = row.LevyRollDue;
 
-                                wsSheet1.Cells["S" + rowNum.ToString()].Value = row.DebitOrderCancelled ? "YES" : "";
+                                wsSheet1.Cells["R" + rowNum.ToString()].Value = row.BuildingCode;
+                                wsSheet1.Cells["S" + rowNum.ToString()].Value = row.BuildingName;
+
+                                wsSheet1.Cells["T" + rowNum.ToString()].Value = row.DebitOrderCancelled ? "YES" : "";
                                 if (row.DebitOrderCancelDate != null)
                                 {
-                                    wsSheet1.Cells["T" + rowNum.ToString()].Style.Numberformat.Format = "yyyy/MM/dd";
-                                    wsSheet1.Cells["T" + rowNum.ToString()].Value = row.DebitOrderCancelDate.Value;
+                                    wsSheet1.Cells["U" + rowNum.ToString()].Style.Numberformat.Format = "yyyy/MM/dd";
+                                    wsSheet1.Cells["U" + rowNum.ToString()].Value = row.DebitOrderCancelDate.Value;
                                 }
                             }
                         }
@@ -266,13 +274,13 @@ namespace Astrodon.Reports.DebitOrder
                             wsSheet1.Cells["M" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
                             wsSheet1.Cells["M" + rowNum.ToString()].Style.Font.Bold = true;
 
-                            wsSheet1.Cells["O" + rowNum.ToString()].Formula = "SUM(O2:O" + (rowNum - 1).ToString() + ")";
-                            wsSheet1.Cells["O" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
-                            wsSheet1.Cells["O" + rowNum.ToString()].Style.Font.Bold = true;
-
                             wsSheet1.Cells["P" + rowNum.ToString()].Formula = "SUM(P2:P" + (rowNum - 1).ToString() + ")";
                             wsSheet1.Cells["P" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
                             wsSheet1.Cells["P" + rowNum.ToString()].Style.Font.Bold = true;
+
+                            wsSheet1.Cells["Q" + rowNum.ToString()].Formula = "SUM(Q2:Q" + (rowNum - 1).ToString() + ")";
+                            wsSheet1.Cells["Q" + rowNum.ToString()].Style.Numberformat.Format = "#,##0.00";
+                            wsSheet1.Cells["Q" + rowNum.ToString()].Style.Font.Bold = true;
 
                         }
 
@@ -312,6 +320,7 @@ namespace Astrodon.Reports.DebitOrder
             LevyRollPayments = itm.Payments;
             DebitOrderCancelled = itm.DebitOrderCancelled;
             DebitOrderCancelDate = itm.DebitOrderCancelDate;
+            MaxDebitOrderAmount = itm.MaxDebitOrderAmount;
 
         }
         public int BuildingId { get; set; }
@@ -336,6 +345,8 @@ namespace Astrodon.Reports.DebitOrder
 
         public DateTime? DebitOrderCancelDate { get; set; }
 
+        public decimal MaxDebitOrderAmount { get; set; }
+
         #region ExportField
         public string SupplierId { get { return string.Empty; } }
         public string Reference { get { return "D/" + CustomerCode; } }
@@ -358,7 +369,10 @@ namespace Astrodon.Reports.DebitOrder
         {
             get
             {
-                return AmountDue + ExportDebitOrderFee;
+                var amount = AmountDue + ExportDebitOrderFee;
+                if (MaxDebitOrderAmount > 0 && MaxDebitOrderAmount < amount)
+                    return MaxDebitOrderAmount;
+                return amount;
             }
         }
 
@@ -366,7 +380,10 @@ namespace Astrodon.Reports.DebitOrder
 
         public string BuildingCode { get; private set; }
         public string BuildingName { get; private set; }
+
         #endregion
+
+
 
     }
 }

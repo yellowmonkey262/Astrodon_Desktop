@@ -24,6 +24,7 @@
       <xs:element minOccurs="0" name="DebitOrderFeeDisabled" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsDebitOrderFeeDisabledOnBuilding" type="xs:boolean" />
       <xs:element minOccurs="0" name="LevyRollDue" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MaxDebitOrderAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="Payments" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>

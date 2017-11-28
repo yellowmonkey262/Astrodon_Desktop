@@ -5,6 +5,7 @@ using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -158,6 +159,7 @@ namespace Astrodon
             cbBanks.SelectedIndex = -1;
             txtBranchCode.Text =string.Empty;
             txtAccountNumber.Text = string.Empty;
+            tbMaxAmount.Text = string.Empty;
             cbAccountType.SelectedIndex = -1;
             cbProcessDate.SelectedIndex = -1;
             dtpDebitOrderCancelled.Visible = false;
@@ -955,6 +957,7 @@ namespace Astrodon
                 cbDebitOrderActive.Checked = false;
                 cbBanks.SelectedIndex = -1;
                 txtBranchCode.Text = "";
+                tbMaxAmount.Text = "";
                 txtAccountNumber.Text = "";
                 cbAccountType.SelectedIndex = -1;
                 cbProcessDate.SelectedIndex = -1;
@@ -972,6 +975,7 @@ namespace Astrodon
                         cbDebitOrderActive.Checked = debitOrder.IsActive;
                         cbBanks.SelectedItem = _Banks.FirstOrDefault(a => a.id == debitOrder.BankId);
                         txtBranchCode.Text = debitOrder.BranceCode;
+                        tbMaxAmount.Text = debitOrder.MaxDebitAmount.ToString("###,##0.00",CultureInfo.InvariantCulture);
                         txtAccountNumber.Text = debitOrder.AccountNumber;
                         cbAccountType.SelectedItem = debitOrder.AccountType;
                         cbProcessDate.SelectedItem = debitOrder.DebitOrderCollectionDay;
@@ -1027,6 +1031,26 @@ namespace Astrodon
                 return;
             }
 
+            if (String.IsNullOrWhiteSpace(tbMaxAmount.Text))
+                tbMaxAmount.Text = "0";
+
+            decimal maxAmount = 0;
+            try
+            {
+                maxAmount = Convert.ToDecimal(tbMaxAmount.Text);
+            }
+            catch
+            {
+                Controller.HandleError("Debit order max amount invalid", "Validation Error");
+                return;
+            }
+
+            if(maxAmount < 0)
+            {
+                Controller.HandleError("Debit order max amount cannot be negative", "Validation Error");
+                return;
+            }
+
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var debitOrder = context.CustomerDebitOrderSet.SingleOrDefault(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber);
@@ -1049,6 +1073,7 @@ namespace Astrodon
                 debitOrder.LastUpdateDate = DateTime.Now;
                 debitOrder.IsDebitOrderFeeDisabled = cbDisableDebitOrderFee.Checked;
                 debitOrder.DebitOrderCancelled = cbDebitOrderCancelled.Checked;
+                debitOrder.MaxDebitAmount = maxAmount;
                 if (debitOrder.DebitOrderCancelled)
                     debitOrder.DebitOrderCancelDate = dtpDebitOrderCancelled.Value.Date;
                 else

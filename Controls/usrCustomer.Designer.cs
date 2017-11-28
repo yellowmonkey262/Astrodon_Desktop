@@ -112,6 +112,9 @@
             this.tbMaintenance = new System.Windows.Forms.TabPage();
             this.dgMaintenance = new System.Windows.Forms.DataGridView();
             this.tbDebitOrder = new System.Windows.Forms.TabPage();
+            this.dtpDebitOrderCancelled = new System.Windows.Forms.DateTimePicker();
+            this.cbDebitOrderCancelled = new System.Windows.Forms.CheckBox();
+            this.label27 = new System.Windows.Forms.Label();
             this.cbDisableDebitOrderFee = new System.Windows.Forms.CheckBox();
             this.label26 = new System.Windows.Forms.Label();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
@@ -131,9 +134,9 @@
             this.label20 = new System.Windows.Forms.Label();
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
-            this.cbDebitOrderCancelled = new System.Windows.Forms.CheckBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.dtpDebitOrderCancelled = new System.Windows.Forms.DateTimePicker();
+            this.tbMaxAmount = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -942,6 +945,9 @@
             // 
             // tbDebitOrder
             // 
+            this.tbDebitOrder.Controls.Add(this.label29);
+            this.tbDebitOrder.Controls.Add(this.tbMaxAmount);
+            this.tbDebitOrder.Controls.Add(this.label28);
             this.tbDebitOrder.Controls.Add(this.dtpDebitOrderCancelled);
             this.tbDebitOrder.Controls.Add(this.cbDebitOrderCancelled);
             this.tbDebitOrder.Controls.Add(this.label27);
@@ -969,6 +975,32 @@
             this.tbDebitOrder.TabIndex = 6;
             this.tbDebitOrder.Text = "Debit Order";
             this.tbDebitOrder.UseVisualStyleBackColor = true;
+            // 
+            // dtpDebitOrderCancelled
+            // 
+            this.dtpDebitOrderCancelled.Location = new System.Drawing.Point(157, 254);
+            this.dtpDebitOrderCancelled.Name = "dtpDebitOrderCancelled";
+            this.dtpDebitOrderCancelled.Size = new System.Drawing.Size(200, 20);
+            this.dtpDebitOrderCancelled.TabIndex = 71;
+            // 
+            // cbDebitOrderCancelled
+            // 
+            this.cbDebitOrderCancelled.AutoSize = true;
+            this.cbDebitOrderCancelled.Location = new System.Drawing.Point(128, 254);
+            this.cbDebitOrderCancelled.Name = "cbDebitOrderCancelled";
+            this.cbDebitOrderCancelled.Size = new System.Drawing.Size(15, 14);
+            this.cbDebitOrderCancelled.TabIndex = 70;
+            this.cbDebitOrderCancelled.UseVisualStyleBackColor = true;
+            this.cbDebitOrderCancelled.CheckedChanged += new System.EventHandler(this.cbDebitOrderCancelled_CheckedChanged);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(7, 254);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(111, 13);
+            this.label27.TabIndex = 69;
+            this.label27.Text = "Debit Order Cancelled";
             // 
             // cbDisableDebitOrderFee
             // 
@@ -1000,7 +1032,7 @@
             // 
             // btnUpload
             // 
-            this.btnUpload.Location = new System.Drawing.Point(138, 252);
+            this.btnUpload.Location = new System.Drawing.Point(138, 283);
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(75, 23);
             this.btnUpload.TabIndex = 57;
@@ -1010,7 +1042,7 @@
             // 
             // btnSaveDebitOrder
             // 
-            this.btnSaveDebitOrder.Location = new System.Drawing.Point(281, 252);
+            this.btnSaveDebitOrder.Location = new System.Drawing.Point(281, 283);
             this.btnSaveDebitOrder.Name = "btnSaveDebitOrder";
             this.btnSaveDebitOrder.Size = new System.Drawing.Size(75, 23);
             this.btnSaveDebitOrder.TabIndex = 55;
@@ -1139,31 +1171,31 @@
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
             // 
-            // cbDebitOrderCancelled
+            // tbMaxAmount
             // 
-            this.cbDebitOrderCancelled.AutoSize = true;
-            this.cbDebitOrderCancelled.Location = new System.Drawing.Point(128, 203);
-            this.cbDebitOrderCancelled.Name = "cbDebitOrderCancelled";
-            this.cbDebitOrderCancelled.Size = new System.Drawing.Size(15, 14);
-            this.cbDebitOrderCancelled.TabIndex = 70;
-            this.cbDebitOrderCancelled.UseVisualStyleBackColor = true;
-            this.cbDebitOrderCancelled.CheckedChanged += new System.EventHandler(this.cbDebitOrderCancelled_CheckedChanged);
+            this.tbMaxAmount.Location = new System.Drawing.Point(128, 199);
+            this.tbMaxAmount.Name = "tbMaxAmount";
+            this.tbMaxAmount.Size = new System.Drawing.Size(228, 20);
+            this.tbMaxAmount.TabIndex = 72;
             // 
-            // label27
+            // label28
             // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(7, 203);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(111, 13);
-            this.label27.TabIndex = 69;
-            this.label27.Text = "Debit Order Cancelled";
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(6, 202);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(69, 13);
+            this.label28.TabIndex = 73;
+            this.label28.Text = "Max Amount ";
             // 
-            // dtpDebitOrderCancelled
+            // label29
             // 
-            this.dtpDebitOrderCancelled.Location = new System.Drawing.Point(157, 203);
-            this.dtpDebitOrderCancelled.Name = "dtpDebitOrderCancelled";
-            this.dtpDebitOrderCancelled.Size = new System.Drawing.Size(200, 20);
-            this.dtpDebitOrderCancelled.TabIndex = 71;
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(128, 226);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(212, 13);
+            this.label29.TabIndex = 74;
+            this.label29.Text = "Please use 0.00 to disable the max amount.";
             // 
             // usrCustomer
             // 
@@ -1311,5 +1343,8 @@
         private System.Windows.Forms.DateTimePicker dtpDebitOrderCancelled;
         private System.Windows.Forms.CheckBox cbDebitOrderCancelled;
         private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox tbMaxAmount;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
     }
 }

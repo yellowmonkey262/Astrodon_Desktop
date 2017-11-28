@@ -58,6 +58,9 @@ namespace Astrodon.Data.DebitOrder
 
         public virtual DateTime? DebitOrderCancelDate { get; set; }
         public virtual bool DebitOrderCancelled { get; set; }
+
+        [DataType(DataType.Currency)]
+        public virtual decimal MaxDebitAmount { get; set; }
     }
 }
 

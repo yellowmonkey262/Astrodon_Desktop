@@ -357,6 +357,9 @@ namespace Astrodon.ReportService {
         private decimal LevyRollDueField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal MaxDebitOrderAmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal PaymentsField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -565,6 +568,19 @@ namespace Astrodon.ReportService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal MaxDebitOrderAmount {
+            get {
+                return this.MaxDebitOrderAmountField;
+            }
+            set {
+                if ((this.MaxDebitOrderAmountField.Equals(value) != true)) {
+                    this.MaxDebitOrderAmountField = value;
+                    this.RaisePropertyChanged("MaxDebitOrderAmount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal Payments {
             get {
                 return this.PaymentsField;
@@ -620,9 +636,6 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MonthlyReport", ReplyAction="http://tempuri.org/IReportService/MonthlyReportResponse")]
         byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/BookKepersWorksheetReport", ReplyAction="http://tempuri.org/IReportService/BookKepersWorksheetReportResponse")]
-        byte[] BookKepersWorksheetReport(string sqlConnectionString, System.Nullable<int> userId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -690,10 +703,6 @@ namespace Astrodon.ReportService {
         
         public byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId) {
             return base.Channel.MonthlyReport(sqlConnectionString, processMonth, completedItems, userId);
-        }
-        
-        public byte[] BookKepersWorksheetReport(string sqlConnectionString, System.Nullable<int> userId) {
-            return base.Channel.BookKepersWorksheetReport(sqlConnectionString, userId);
         }
     }
 }

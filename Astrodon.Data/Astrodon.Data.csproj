@@ -230,6 +230,10 @@
     <Compile Include="Migrations\201711241004256_BuildingFinancialCycle.Designer.cs">
       <DependentUpon>201711241004256_BuildingFinancialCycle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711280738416_DebitOrderMaxAmount.cs" />
+    <Compile Include="Migrations\201711280738416_DebitOrderMaxAmount.Designer.cs">
+      <DependentUpon>201711280738416_DebitOrderMaxAmount.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -408,6 +412,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711241004256_BuildingFinancialCycle.resx">
       <DependentUpon>201711241004256_BuildingFinancialCycle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711280738416_DebitOrderMaxAmount.resx">
+      <DependentUpon>201711280738416_DebitOrderMaxAmount.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
