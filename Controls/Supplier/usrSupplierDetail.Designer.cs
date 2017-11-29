@@ -68,6 +68,7 @@
             this.dgBuildingAuditTrail = new System.Windows.Forms.DataGridView();
             this.lbBuildingAuditTrail = new System.Windows.Forms.Label();
             this.btnChangeAll = new System.Windows.Forms.Button();
+            this.btnUpdateSupplier = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgBuildings)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAuditTrail)).BeginInit();
             this.pnlBank.SuspendLayout();
@@ -434,10 +435,22 @@
             this.btnChangeAll.UseVisualStyleBackColor = true;
             this.btnChangeAll.Click += new System.EventHandler(this.btnChangeAll_Click);
             // 
+            // btnUpdateSupplier
+            // 
+            this.btnUpdateSupplier.Location = new System.Drawing.Point(437, 175);
+            this.btnUpdateSupplier.Name = "btnUpdateSupplier";
+            this.btnUpdateSupplier.Size = new System.Drawing.Size(134, 23);
+            this.btnUpdateSupplier.TabIndex = 37;
+            this.btnUpdateSupplier.Text = "Update Supplier";
+            this.btnUpdateSupplier.UseVisualStyleBackColor = true;
+            this.btnUpdateSupplier.Visible = false;
+            this.btnUpdateSupplier.Click += new System.EventHandler(this.button1_Click);
+            // 
             // usrSupplierDetail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnUpdateSupplier);
             this.Controls.Add(this.btnChangeAll);
             this.Controls.Add(this.lbBuildingAuditTrail);
             this.Controls.Add(this.dgBuildingAuditTrail);
@@ -519,5 +532,6 @@
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.Button btnNewBuilding;
         private System.Windows.Forms.Button btnChangeAll;
+        private System.Windows.Forms.Button btnUpdateSupplier;
     }
 }

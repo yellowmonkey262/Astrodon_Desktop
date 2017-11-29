@@ -55,8 +55,27 @@ namespace Astrodon.Controls.Supplier
                 if (String.IsNullOrWhiteSpace(username))
                     username = "Unknown";
 
-                Controller.HandleError("The supplier was black listed by '"+username + "' for '" + selectedItem.BlackListReason + "'\n"+
-                    "To select this supplier the black list must be cleared.", "Validation Error");
+                bool showPassword = Controller.AskQuestion("The supplier was black listed by '" + username + "' for '" + selectedItem.BlackListReason + "'\n" +
+                    "To select this supplier the black list must be cleared or a supervisor password is required." + Environment.NewLine +
+                    "Would you still want to select this supplier?");
+
+                if (showPassword)
+                {
+                    string password = string.Empty;
+                    using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
+                    {
+                        if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
+                        {
+                            Controller.HandleError("Invalid password entered");
+                            return;
+                        }
+                        else
+                        {
+                            if (SupplierSelectedEvent != null)
+                                SupplierSelectedEvent(this, new SupplierSelectEventArgs(selectedItem));
+                        }
+                    }
+                }
             }
         }
 

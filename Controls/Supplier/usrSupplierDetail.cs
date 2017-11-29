@@ -125,9 +125,10 @@ namespace Astrodon.Controls.Supplier
         private void PopulateForm()
         {
             btnChangeAll.Enabled = Controller.UserIsSheldon() && _SupplierId > 0; //Sheldon and Tertia
-
+            btnUpdateSupplier.Visible = false;
             if (_SupplierId > 0)
             {
+                btnUpdateSupplier.Visible = true;
                 _Supplier = _DataContext.SupplierSet.Single(a => a.id == _SupplierId);
 
                 _AuditTrailData = _DataContext.SupplierAuditSet
@@ -175,7 +176,11 @@ namespace Astrodon.Controls.Supplier
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            var validationResult = ValidateForm();
+            SaveSupplier(false); //include banking details
+        }
+        private void SaveSupplier(bool supplierOnly)
+        {
+            var validationResult = ValidateForm(supplierOnly);
 
             if (!String.IsNullOrEmpty(validationResult))
             {
@@ -199,7 +204,7 @@ namespace Astrodon.Controls.Supplier
                     supplier.BlackListReason = txtBlackListReason.Text.Trim();
 
 
-                    if (cmbBuilding.SelectedItem != null && cbBanks.SelectedItem != null)
+                    if (cmbBuilding.SelectedItem != null && cbBanks.SelectedItem != null && !supplierOnly)
                     {
                         var bank = cbBanks.SelectedItem as Astrodon.Data.BankData.Bank;
                         var buildingId = (cmbBuilding.SelectedItem as Building).ID;
@@ -563,7 +568,7 @@ namespace Astrodon.Controls.Supplier
             
         }
 
-        private string ValidateForm()
+        private string ValidateForm(bool supplierOnly = false)
         {
             var errors = new List<string>();
             string result = "";
@@ -574,21 +579,23 @@ namespace Astrodon.Controls.Supplier
             if (String.IsNullOrEmpty(txtContactPerson.Text))
                 errors.Add("Contact Person is Required.");
 
-            if (cmbBuilding.SelectedIndex < 0)
-                errors.Add("Building is Required.");
+            if (!supplierOnly)
+            {
+                if (cmbBuilding.SelectedIndex < 0)
+                    errors.Add("Building is Required.");
 
-            if (cbBanks.SelectedIndex < 0)
-                errors.Add("Bank is Required.");
+                if (cbBanks.SelectedIndex < 0)
+                    errors.Add("Bank is Required.");
 
-            if (String.IsNullOrEmpty(txtBranch.Text))
-                errors.Add("Branch is Required.");
+                if (String.IsNullOrEmpty(txtBranch.Text))
+                    errors.Add("Branch is Required.");
 
-            if (String.IsNullOrEmpty(txtBranchCode.Text))
-                errors.Add("Branch Code is Required.");
+                if (String.IsNullOrEmpty(txtBranchCode.Text))
+                    errors.Add("Branch Code is Required.");
 
-            if (String.IsNullOrEmpty(txtAccountNumber.Text))
-                errors.Add("Account Number is Required.");
-
+                if (String.IsNullOrEmpty(txtAccountNumber.Text))
+                    errors.Add("Account Number is Required.");
+            }
             if (string.IsNullOrEmpty(txtEmailAddress.Text) || !(txtEmailAddress.Text.Contains("@") && txtEmailAddress.Text.Contains(".")))
                 errors.Add("Invalid Email Address");
 
@@ -717,6 +724,11 @@ namespace Astrodon.Controls.Supplier
             _DataContext.SaveChanges();
             PopulateForm();
             Controller.ShowMessage("Banking Details Changed");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SaveSupplier(true);
         }
     }
 
