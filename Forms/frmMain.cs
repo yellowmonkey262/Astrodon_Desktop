@@ -686,10 +686,6 @@ namespace Astrodon
         private void allocationSheetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             pnlContents.Controls.Clear();
-            ucAllocationSheet dt = new ucAllocationSheet();
-            dt.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(dt);
-            toolStripStatusLabel1.Text = "Allocation Sheet";
         }
 
         private void publicHolidaysToolStripMenuItem_Click(object sender, EventArgs e)

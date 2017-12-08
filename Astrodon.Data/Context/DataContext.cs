@@ -111,13 +111,18 @@ namespace Astrodon.Data
 
         public DbSet<CustomerDebitOrder> CustomerDebitOrderSet { get; set; }
         public DbSet<DebitOrderDocument> DebitOrderDocumentSet { get; set; }
+        public DbSet<CustomerDebitOrderArchive> CustomerDebitOrderArchiveSet { get; set; }
+        public DbSet<DebitOrderDocumentArchive> DebitOrderDocumentArchiveSet { get; set; }
 
         #endregion
 
         #region Calendar
         public DbSet<BuildingCalendarEntry> BuildingCalendarEntrySet { get; set; }
         public DbSet<CalendarEntryAttachment> CalendarEntryAttachmentSet { get; set; }
+        public DbSet<CalendarUserInvite> CalendarUserInviteSet { get; set; }
         public DbSet<PublicHoliday> PublicHolidaySet { get; set; }
+
+        
         #endregion
 
         public void ClearChanges()

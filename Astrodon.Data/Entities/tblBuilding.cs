@@ -174,6 +174,15 @@ namespace Astrodon.Data
 
         public int FinancialDayOfMonth { get; set; }
 
+        public DateTime? FinancialStartDate { get; set; } //date financials should start at
+        public DateTime? FinancialEndDate { get; set; } //stop allocating financials after the end date
+
+        public bool FixedMonthyFinancialMeetingEnabled { get; set; }
+        public int? FinancialMeetingDayOfMonth { get; set; }
+        public string FinancialMeetingSubject { get; set; }
+        public string FinancialMeetingBodyText { get; set; }
+        public bool FinancialMeetingSendInviteToAllTrustees { get; set; }
+
         public bool IsFixed { get; set; }
     }
 }

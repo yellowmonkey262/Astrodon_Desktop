@@ -43,6 +43,8 @@
             this.cmbYear = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.tbAttachment = new System.Windows.Forms.TextBox();
+            this.btnUpload = new System.Windows.Forms.Button();
             this.tbBodyContent = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.tbSubject = new System.Windows.Forms.TextBox();
@@ -68,8 +70,10 @@
             this.Date = new System.Windows.Forms.Label();
             this.dgItems = new System.Windows.Forms.DataGridView();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
-            this.btnUpload = new System.Windows.Forms.Button();
-            this.tbAttachment = new System.Windows.Forms.TextBox();
+            this.rbFinancial = new System.Windows.Forms.RadioButton();
+            this.rbStaff = new System.Windows.Forms.RadioButton();
+            this.label12 = new System.Windows.Forms.Label();
+            this.cbUserInvites = new System.Windows.Forms.CheckedListBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
@@ -102,6 +106,9 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label12);
+            this.panel1.Controls.Add(this.rbStaff);
+            this.panel1.Controls.Add(this.rbFinancial);
             this.panel1.Controls.Add(this.cbPM);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.cbFilterPM);
@@ -112,14 +119,14 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(911, 128);
+            this.panel1.Size = new System.Drawing.Size(914, 151);
             this.panel1.TabIndex = 13;
             // 
             // cbPM
             // 
             this.cbPM.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPM.FormattingEnabled = true;
-            this.cbPM.Location = new System.Drawing.Point(106, 85);
+            this.cbPM.Location = new System.Drawing.Point(106, 108);
             this.cbPM.Name = "cbPM";
             this.cbPM.Size = new System.Drawing.Size(233, 21);
             this.cbPM.TabIndex = 3;
@@ -128,7 +135,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 88);
+            this.label3.Location = new System.Drawing.Point(13, 111);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 13);
             this.label3.TabIndex = 19;
@@ -137,7 +144,7 @@
             // cbFilterPM
             // 
             this.cbFilterPM.AutoSize = true;
-            this.cbFilterPM.Location = new System.Drawing.Point(83, 88);
+            this.cbFilterPM.Location = new System.Drawing.Point(83, 111);
             this.cbFilterPM.Name = "cbFilterPM";
             this.cbFilterPM.Size = new System.Drawing.Size(15, 14);
             this.cbFilterPM.TabIndex = 2;
@@ -146,7 +153,7 @@
             // 
             // btnPrint
             // 
-            this.btnPrint.Location = new System.Drawing.Point(345, 83);
+            this.btnPrint.Location = new System.Drawing.Point(345, 106);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 4;
@@ -194,6 +201,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.cbUserInvites);
             this.panel2.Controls.Add(this.tbAttachment);
             this.panel2.Controls.Add(this.btnUpload);
             this.panel2.Controls.Add(this.tbBodyContent);
@@ -219,10 +227,28 @@
             this.panel2.Controls.Add(this.dtpEventTime);
             this.panel2.Controls.Add(this.dtpEventDate);
             this.panel2.Controls.Add(this.Date);
-            this.panel2.Location = new System.Drawing.Point(3, 137);
+            this.panel2.Location = new System.Drawing.Point(3, 160);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(914, 231);
             this.panel2.TabIndex = 14;
+            // 
+            // tbAttachment
+            // 
+            this.tbAttachment.Enabled = false;
+            this.tbAttachment.Location = new System.Drawing.Point(511, 166);
+            this.tbAttachment.Name = "tbAttachment";
+            this.tbAttachment.Size = new System.Drawing.Size(170, 20);
+            this.tbAttachment.TabIndex = 59;
+            // 
+            // btnUpload
+            // 
+            this.btnUpload.Location = new System.Drawing.Point(384, 164);
+            this.btnUpload.Name = "btnUpload";
+            this.btnUpload.Size = new System.Drawing.Size(121, 23);
+            this.btnUpload.TabIndex = 58;
+            this.btnUpload.Text = "Attachment =>";
+            this.btnUpload.UseVisualStyleBackColor = true;
+            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
             // 
             // tbBodyContent
             // 
@@ -230,7 +256,7 @@
             this.tbBodyContent.Location = new System.Drawing.Point(511, 65);
             this.tbBodyContent.Multiline = true;
             this.tbBodyContent.Name = "tbBodyContent";
-            this.tbBodyContent.Size = new System.Drawing.Size(234, 93);
+            this.tbBodyContent.Size = new System.Drawing.Size(170, 93);
             this.tbBodyContent.TabIndex = 31;
             // 
             // label11
@@ -246,7 +272,7 @@
             // 
             this.tbSubject.Location = new System.Drawing.Point(511, 39);
             this.tbSubject.Name = "tbSubject";
-            this.tbSubject.Size = new System.Drawing.Size(234, 20);
+            this.tbSubject.Size = new System.Drawing.Size(170, 20);
             this.tbSubject.TabIndex = 29;
             // 
             // label10
@@ -262,7 +288,7 @@
             // 
             this.tbBCC.Location = new System.Drawing.Point(511, 13);
             this.tbBCC.Name = "tbBCC";
-            this.tbBCC.Size = new System.Drawing.Size(234, 20);
+            this.tbBCC.Size = new System.Drawing.Size(170, 20);
             this.tbBCC.TabIndex = 13;
             // 
             // label9
@@ -432,10 +458,10 @@
             this.dgItems.AllowUserToDeleteRows = false;
             this.dgItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgItems.Location = new System.Drawing.Point(3, 374);
+            this.dgItems.Location = new System.Drawing.Point(3, 400);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(911, 334);
+            this.dgItems.Size = new System.Drawing.Size(911, 308);
             this.dgItems.TabIndex = 21;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             // 
@@ -443,23 +469,46 @@
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
             // 
-            // btnUpload
+            // rbFinancial
             // 
-            this.btnUpload.Location = new System.Drawing.Point(384, 164);
-            this.btnUpload.Name = "btnUpload";
-            this.btnUpload.Size = new System.Drawing.Size(121, 23);
-            this.btnUpload.TabIndex = 58;
-            this.btnUpload.Text = "Attachment =>";
-            this.btnUpload.UseVisualStyleBackColor = true;
-            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
+            this.rbFinancial.AutoSize = true;
+            this.rbFinancial.Checked = true;
+            this.rbFinancial.Location = new System.Drawing.Point(106, 80);
+            this.rbFinancial.Name = "rbFinancial";
+            this.rbFinancial.Size = new System.Drawing.Size(67, 17);
+            this.rbFinancial.TabIndex = 20;
+            this.rbFinancial.TabStop = true;
+            this.rbFinancial.Text = "Financial";
+            this.rbFinancial.UseVisualStyleBackColor = true;
+            this.rbFinancial.CheckedChanged += new System.EventHandler(this.rbFinancial_CheckedChanged);
             // 
-            // tbAttachment
+            // rbStaff
             // 
-            this.tbAttachment.Enabled = false;
-            this.tbAttachment.Location = new System.Drawing.Point(511, 166);
-            this.tbAttachment.Name = "tbAttachment";
-            this.tbAttachment.Size = new System.Drawing.Size(234, 20);
-            this.tbAttachment.TabIndex = 59;
+            this.rbStaff.AutoSize = true;
+            this.rbStaff.Location = new System.Drawing.Point(191, 80);
+            this.rbStaff.Name = "rbStaff";
+            this.rbStaff.Size = new System.Drawing.Size(47, 17);
+            this.rbStaff.TabIndex = 21;
+            this.rbStaff.Text = "Staff";
+            this.rbStaff.UseVisualStyleBackColor = true;
+            this.rbStaff.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(15, 80);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(72, 13);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "Meeting Type";
+            // 
+            // cbUserInvites
+            // 
+            this.cbUserInvites.FormattingEnabled = true;
+            this.cbUserInvites.Location = new System.Drawing.Point(700, 13);
+            this.cbUserInvites.Name = "cbUserInvites";
+            this.cbUserInvites.Size = new System.Drawing.Size(181, 169);
+            this.cbUserInvites.TabIndex = 60;
             // 
             // ucPrintCalendar
             // 
@@ -522,5 +571,9 @@
         private System.Windows.Forms.OpenFileDialog fdOpen;
         private System.Windows.Forms.TextBox tbAttachment;
         private System.Windows.Forms.Button btnUpload;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.RadioButton rbStaff;
+        private System.Windows.Forms.RadioButton rbFinancial;
+        private System.Windows.Forms.CheckedListBox cbUserInvites;
     }
 }

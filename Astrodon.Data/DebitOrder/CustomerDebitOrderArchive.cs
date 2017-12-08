@@ -9,21 +9,22 @@ using System.Text;
 
 namespace Astrodon.Data.DebitOrder
 {
-    [Table("CustomerDebitOrder")]
-    public class CustomerDebitOrder:
+    [Table("CustomerDebitOrderArchive")]
+    public class CustomerDebitOrderArchive :
         DbEntity
     {
-        [Index("UIDX_CustomerDebitOrder", IsUnique = true, Order = 0)]
+        [Index("UIDX_CustomerDebitOrder",Order = 0)]
         public virtual int BuildingId { get; set; }
 
         [ForeignKey("BuildingId")]
         public virtual tblBuilding Building { get; set; }
 
         [MaxLength(200)]
-        [Index("UIDX_CustomerDebitOrder", IsUnique = true, Order = 1)]
+        [Index("UIDX_CustomerDebitOrder",  Order = 1)]
         [Required]
         public virtual string CustomerCode { get; set; }
 
+        public DateTime DateArchived { get; set; }
 
         #region Banking Details
 
@@ -47,8 +48,6 @@ namespace Astrodon.Data.DebitOrder
 
         public virtual bool IsActive { get; set; }
 
-        public virtual ICollection<DebitOrderDocument> Documents { get; set; }
-
         public virtual int LastUpdatedByUserId { get; set; }
         [ForeignKey("LastUpdatedByUserId")]
         public virtual tblUser UserUpdate { get; set; }
@@ -62,8 +61,8 @@ namespace Astrodon.Data.DebitOrder
 
         [DataType(DataType.Currency)]
         public virtual decimal MaxDebitAmount { get; set; }
+
+        public virtual ICollection<DebitOrderDocumentArchive> Documents { get; set; }
+
     }
 }
-
-
-//m.CustomerCode, m.CustomerDesc

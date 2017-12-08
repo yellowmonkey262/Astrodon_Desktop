@@ -168,9 +168,9 @@ namespace Astrodon.Reports.Calendar
                             Id = c.id,
                             EventDate = c.EntryDate,
                             BuildingId = c.BuildingId,
-                            BuildingName = c.Building.Building,
-                            BuildingAbreviation = c.Building.Code,
-                            BuildingDataPath = c.Building.DataPath,
+                            BuildingName = c.BuildingId != null ? c.Building.Building : string.Empty,
+                            BuildingAbreviation = c.BuildingId != null ? c.Building.Code : string.Empty,
+                            BuildingDataPath = c.BuildingId != null ? c.Building.DataPath : string.Empty,
                             Event = c.Event,
                             Venue = c.Venue,
                             PM = c.User.name,
@@ -221,6 +221,19 @@ namespace Astrodon.Reports.Calendar
             }
         }
 
+
+        private void rbFinancial_CheckedChanged(object sender, EventArgs e)
+        {
+            LoadGrid();
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            LoadGrid();
+
+        }
+
         private void cbFilterPM_CheckedChanged(object sender, EventArgs e)
         {
             cbPM.Enabled = cbFilterPM.Checked;
@@ -264,6 +277,10 @@ namespace Astrodon.Reports.Calendar
                 pmId = (cbPM.SelectedItem as IdValue).Id;
             }
 
+            CalendarEntryType entryType = CalendarEntryType.Financial;
+            if (rbStaff.Checked)
+                entryType = CalendarEntryType.Staff;
+
 
             using (var context = SqlDataHandler.GetDataContext())
             {
@@ -273,6 +290,7 @@ namespace Astrodon.Reports.Calendar
                         where c.EntryDate >= dtFrom
                            && c.EntryDate <= dtTo
                            && (pmId == 0 || c.UserId == pmId)
+                           && c.CalendarEntryType == CalendarEntryType.Staff
                         select new CalendarPrintItem
                         {
                             Id = c.id,
@@ -444,6 +462,33 @@ namespace Astrodon.Reports.Calendar
             tbSubject.Enabled = false;
             tbBodyContent.Enabled = false;
             btnUpload.Enabled = false;
+
+            cbBuilding.Enabled = false;
+
+            if (rbStaff.Checked)
+            {
+                cbBuilding.Visible = false;
+                cbPM.Visible = false;
+                cbFilterPM.Visible = false;
+                label3.Visible = false;
+                cbUserInvites.Visible = true;
+                label4.Visible = false;
+                label8.Visible = false;
+                cbNotifyTrustees.Visible = false;
+                cbNotifyTrustees.Checked = false;
+            }
+            else
+            {
+                cbBuilding.Visible = true;
+                cbPM.Visible = true;
+                cbFilterPM.Visible = true;
+                label3.Visible = true;
+                cbUserInvites.Visible = false;
+
+                label4.Visible = true;
+                label8.Visible = true;
+                cbNotifyTrustees.Visible = true;
+            }
         }
 
         private void btnNew_Click(object sender, EventArgs e)
@@ -483,14 +528,24 @@ namespace Astrodon.Reports.Calendar
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            var selectedBuilding = (cbBuilding.SelectedItem as Building);
+            Building selectedBuilding = null;
 
             if (String.IsNullOrWhiteSpace(cbEvent.Text)
                || String.IsNullOrWhiteSpace(tbVenue.Text)
-               || selectedBuilding == null)
+               )
             {
                 Controller.HandleError("Please complete all fields", "Validation Error");
                 return;
+            }
+
+            if(rbFinancial.Checked)
+            {
+                selectedBuilding = (cbBuilding.SelectedItem as Building);
+                if(selectedBuilding == null)
+                {
+                    Controller.HandleError("Building required", "Validation Error");
+                    return;
+                }
             }
             var minTime = new TimeSpan(05, 00, 00);
             var maxTime = new TimeSpan(23, 59, 00);
@@ -545,17 +600,31 @@ namespace Astrodon.Reports.Calendar
                     editItem = context.BuildingCalendarEntrySet.Single(a => a.id == _Item.id);
                 }
 
-                editItem.BuildingId = selectedBuilding.ID;
+                if (selectedBuilding != null)
+                    editItem.BuildingId = selectedBuilding.ID;
+                else
+                    editItem.BuildingId = null;
+                if (rbStaff.Checked)
+                    editItem.CalendarEntryType = CalendarEntryType.Staff;
+                else
+                    editItem.CalendarEntryType = CalendarEntryType.Financial;
 
-                var pm = (from b in context.tblBuildings
-                          join u in context.tblUsers on b.pm equals u.email
-                          where b.id == editItem.BuildingId
-                          select u).SingleOrDefault();
+                if (rbFinancial.Checked)
+                {
+                    var pm = (from b in context.tblBuildings
+                              join u in context.tblUsers on b.pm equals u.email
+                              where b.id == editItem.BuildingId
+                              select u).SingleOrDefault();
 
-                if (pm != null)
-                    editItem.UserId = pm.id;
-                else if (editItem.id == 0)
+                    if (pm != null)
+                        editItem.UserId = pm.id;
+                    else if (editItem.id == 0)
+                        editItem.UserId = Controller.user.id;
+                }
+                else
+                {
                     editItem.UserId = Controller.user.id;
+                }
 
                 editItem.EntryDate = fromDate;
                 editItem.EventToDate = toDate;
@@ -800,7 +869,7 @@ namespace Astrodon.Reports.Calendar
         class CalendarPrintItem
         {
 
-            public int BuildingId { get; set; }
+            public int? BuildingId { get; set; }
             public string BuildingName { get; set; }
             public string BuildingAbreviation { get; set; }
             public string BuildingDataPath { get; set; }
@@ -894,5 +963,6 @@ namespace Astrodon.Reports.Calendar
                 }
             }
         }
+
     }
 }

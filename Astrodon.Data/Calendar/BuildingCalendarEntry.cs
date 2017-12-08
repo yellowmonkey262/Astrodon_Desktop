@@ -11,13 +11,16 @@ namespace Astrodon.Data.Calendar
     [Table("BuildingCalendarEntry")]
     public class BuildingCalendarEntry : DbEntity
     {
-        [Index("IDX_BuildingCalendarEntry",  Order = 0)]
-        public virtual int BuildingId { get; set; }
+        [Index("IDX_BuildingCalendarEntry", Order = 0)]
+        public CalendarEntryType CalendarEntryType { get; set; }
+
+        [Index("IDX_BuildingCalendarEntry",  Order = 1)]
+        public virtual int? BuildingId { get; set; }
 
         [ForeignKey("BuildingId")]
         public virtual tblBuilding Building { get; set; }
 
-        [Index("IDX_BuildingCalendarEntry", Order = 1)]
+        [Index("IDX_BuildingCalendarEntry", Order = 2)]
         public virtual int UserId { get; set; }
 
         [ForeignKey("UserId")]
@@ -46,5 +49,7 @@ namespace Astrodon.Data.Calendar
         public bool TrusteesNotified { get; set; }
 
         public virtual ICollection<CalendarEntryAttachment> Attachments { get; set; }
-   }
+
+        public virtual ICollection<CalendarUserInvite> UserInvites { get; set; }
+    }
 }

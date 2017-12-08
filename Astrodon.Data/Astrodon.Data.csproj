@@ -57,13 +57,17 @@
     <Compile Include="Base\StringKeyValue.cs" />
     <Compile Include="Calendar\BuildingCalendarEntry.cs" />
     <Compile Include="Calendar\CalendarEntryAttachment.cs" />
+    <Compile Include="Calendar\CalendarEntryType.cs" />
+    <Compile Include="Calendar\CalendarUserInvite.cs" />
     <Compile Include="Calendar\PublicHoliday.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
     <Compile Include="DebitOrder\AccountTypeType.cs" />
     <Compile Include="DebitOrder\CustomerDebitOrder.cs" />
+    <Compile Include="DebitOrder\CustomerDebitOrderArchive.cs" />
     <Compile Include="DebitOrder\DebitOrderDayType.cs" />
     <Compile Include="DebitOrder\DebitOrderDocument.cs" />
+    <Compile Include="DebitOrder\DebitOrderDocumentArchive.cs" />
     <Compile Include="DebitOrder\DebitOrderDocumentType.cs" />
     <Compile Include="InsuranceData\BuildingDocument.cs" />
     <Compile Include="InsuranceData\DocumentType.cs" />
@@ -233,6 +237,10 @@
     <Compile Include="Migrations\201711280738416_DebitOrderMaxAmount.cs" />
     <Compile Include="Migrations\201711280738416_DebitOrderMaxAmount.Designer.cs">
       <DependentUpon>201711280738416_DebitOrderMaxAmount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712081309531_DebitOrderArchive.cs" />
+    <Compile Include="Migrations\201712081309531_DebitOrderArchive.Designer.cs">
+      <DependentUpon>201712081309531_DebitOrderArchive.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -415,6 +423,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711280738416_DebitOrderMaxAmount.resx">
       <DependentUpon>201711280738416_DebitOrderMaxAmount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712081309531_DebitOrderArchive.resx">
+      <DependentUpon>201712081309531_DebitOrderArchive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -248,12 +248,6 @@
     <Compile Include="Controls\SystemConfig\ucPublicHoliday.Designer.cs">
       <DependentUpon>ucPublicHoliday.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ucAllocationSheet.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ucAllocationSheet.Designer.cs">
-      <DependentUpon>ucAllocationSheet.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\usrAccounts.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -722,9 +716,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Supplier\usrSupplierLookup.resx">
       <DependentUpon>usrSupplierLookup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ucAllocationSheet.resx">
-      <DependentUpon>ucAllocationSheet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\usrAccounts.resx">
       <DependentUpon>usrAccounts.cs</DependentUpon>
