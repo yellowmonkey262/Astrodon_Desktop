@@ -341,23 +341,19 @@ namespace Astrodon
         }
         private void SaveBuildingInsurance()
         {
-
             if (!ValidatePQ())
             {
-                UpdateBuildingSettings();
                 return;
             }
 
             if (_SelectedBroker == null)
             {
-                UpdateBuildingSettings();
                 Controller.HandleError("Please select an insurance broker");
                 return;
             }
 
             if(String.IsNullOrWhiteSpace(txtInsurancePolicyNumber.Text))
             {
-                UpdateBuildingSettings();
                 Controller.HandleError("Please enter an Insurance Policy Number.");
                 return;
             }
@@ -511,6 +507,7 @@ namespace Astrodon
                     if (BuildingManager.Update(cmbBuilding.SelectedIndex, false, out status))
                     {
                         SaveWebBuilding(false);
+                        UpdateBuildingSettings();
                         SaveBuildingInsurance();
                         SaveTrustees();
                         MessageBox.Show("Building updated!", "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Information);
