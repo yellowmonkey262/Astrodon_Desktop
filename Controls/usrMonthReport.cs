@@ -99,7 +99,11 @@ namespace Astrodon.Controls
         {
             using (var context = SqlDataHandler.GetDataContext())
             {
-                buildings = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled && a.BuildingDisabled == false).ToList();
+                buildings = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled 
+                                                         && a.BuildingDisabled == false
+                                                            && (a.FinancialStartDate == null || a.FinancialStartDate <= DateTime.Today)
+                        && (a.FinancialEndDate == null || a.FinancialEndDate >= DateTime.Today)
+                                                         ).ToList();
             }
         }
 

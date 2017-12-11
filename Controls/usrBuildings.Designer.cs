@@ -43,13 +43,6 @@
             this.clmDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label60 = new System.Windows.Forms.Label();
-            this.tbFinancialDayOfMonth = new System.Windows.Forms.NumericUpDown();
-            this.label59 = new System.Windows.Forms.Label();
-            this.cbFixedFinalcials = new System.Windows.Forms.CheckBox();
-            this.label58 = new System.Windows.Forms.Label();
-            this.cbBuildingFinancialsEnabled = new System.Windows.Forms.CheckBox();
-            this.label53 = new System.Windows.Forms.Label();
             this.cbDisableDebitOrderFee = new System.Windows.Forms.CheckBox();
             this.label52 = new System.Windows.Forms.Label();
             this.txtDebitOrderFee = new System.Windows.Forms.TextBox();
@@ -141,6 +134,41 @@
             this.txtAddress1 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.pnlFinancials = new System.Windows.Forms.Panel();
+            this.pnlFinancialMeeting = new System.Windows.Forms.Panel();
+            this.dtpEventToTime = new System.Windows.Forms.DateTimePicker();
+            this.label71 = new System.Windows.Forms.Label();
+            this.dtpEventTime = new System.Windows.Forms.DateTimePicker();
+            this.Date = new System.Windows.Forms.Label();
+            this.tbBodyContent = new System.Windows.Forms.TextBox();
+            this.label68 = new System.Windows.Forms.Label();
+            this.tbSubject = new System.Windows.Forms.TextBox();
+            this.label69 = new System.Windows.Forms.Label();
+            this.tbBCC = new System.Windows.Forms.TextBox();
+            this.label70 = new System.Windows.Forms.Label();
+            this.label65 = new System.Windows.Forms.Label();
+            this.cbNotifyTrustees = new System.Windows.Forms.CheckBox();
+            this.tbVenue = new System.Windows.Forms.TextBox();
+            this.label66 = new System.Windows.Forms.Label();
+            this.cbEvent = new System.Windows.Forms.ComboBox();
+            this.label67 = new System.Windows.Forms.Label();
+            this.numMeetingDayOfMonth = new System.Windows.Forms.NumericUpDown();
+            this.label64 = new System.Windows.Forms.Label();
+            this.cbFixedMonhlyFinMeeting = new System.Windows.Forms.CheckBox();
+            this.label63 = new System.Windows.Forms.Label();
+            this.cbFinancialEndDateSet = new System.Windows.Forms.CheckBox();
+            this.dtpFinancialEndDate = new System.Windows.Forms.DateTimePicker();
+            this.label62 = new System.Windows.Forms.Label();
+            this.dtpFinancialStartDate = new System.Windows.Forms.DateTimePicker();
+            this.label61 = new System.Windows.Forms.Label();
+            this.label60 = new System.Windows.Forms.Label();
+            this.tbFinancialDayOfMonth = new System.Windows.Forms.NumericUpDown();
+            this.label59 = new System.Windows.Forms.Label();
+            this.cbFixedFinalcials = new System.Windows.Forms.CheckBox();
+            this.label58 = new System.Windows.Forms.Label();
+            this.cbBuildingFinancialsEnabled = new System.Windows.Forms.CheckBox();
+            this.label53 = new System.Windows.Forms.Label();
             this.tbInsurance = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.dgInsurancePq = new System.Windows.Forms.DataGridView();
@@ -189,9 +217,13 @@
             this.grpTrustees.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).BeginInit();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbFinancialDayOfMonth)).BeginInit();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.pnlFinancials.SuspendLayout();
+            this.pnlFinancialMeeting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMeetingDayOfMonth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbFinancialDayOfMonth)).BeginInit();
             this.tbInsurance.SuspendLayout();
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgInsurancePq)).BeginInit();
@@ -281,6 +313,7 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tbBuilding);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tbInsurance);
             this.tabControl1.Controls.Add(this.tbPDFViewer);
             this.tabControl1.Location = new System.Drawing.Point(0, 33);
@@ -365,13 +398,6 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.label60);
-            this.groupBox4.Controls.Add(this.tbFinancialDayOfMonth);
-            this.groupBox4.Controls.Add(this.label59);
-            this.groupBox4.Controls.Add(this.cbFixedFinalcials);
-            this.groupBox4.Controls.Add(this.label58);
-            this.groupBox4.Controls.Add(this.cbBuildingFinancialsEnabled);
-            this.groupBox4.Controls.Add(this.label53);
             this.groupBox4.Controls.Add(this.cbDisableDebitOrderFee);
             this.groupBox4.Controls.Add(this.label52);
             this.groupBox4.Controls.Add(this.txtDebitOrderFee);
@@ -407,84 +433,6 @@
             this.groupBox4.TabIndex = 140;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Fees";
-            // 
-            // label60
-            // 
-            this.label60.AutoSize = true;
-            this.label60.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label60.Location = new System.Drawing.Point(413, 129);
-            this.label60.Name = "label60";
-            this.label60.Size = new System.Drawing.Size(132, 13);
-            this.label60.TabIndex = 122;
-            this.label60.Text = "Finalcial configuration";
-            // 
-            // tbFinancialDayOfMonth
-            // 
-            this.tbFinancialDayOfMonth.Location = new System.Drawing.Point(523, 166);
-            this.tbFinancialDayOfMonth.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.tbFinancialDayOfMonth.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.tbFinancialDayOfMonth.Name = "tbFinancialDayOfMonth";
-            this.tbFinancialDayOfMonth.Size = new System.Drawing.Size(39, 20);
-            this.tbFinancialDayOfMonth.TabIndex = 121;
-            this.tbFinancialDayOfMonth.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label59
-            // 
-            this.label59.AutoSize = true;
-            this.label59.Location = new System.Drawing.Point(414, 168);
-            this.label59.Name = "label59";
-            this.label59.Size = new System.Drawing.Size(99, 13);
-            this.label59.TabIndex = 120;
-            this.label59.Text = "Day to be complete";
-            // 
-            // cbFixedFinalcials
-            // 
-            this.cbFixedFinalcials.AutoSize = true;
-            this.cbFixedFinalcials.Location = new System.Drawing.Point(523, 147);
-            this.cbFixedFinalcials.Name = "cbFixedFinalcials";
-            this.cbFixedFinalcials.Size = new System.Drawing.Size(15, 14);
-            this.cbFixedFinalcials.TabIndex = 118;
-            this.cbFixedFinalcials.UseVisualStyleBackColor = true;
-            // 
-            // label58
-            // 
-            this.label58.AutoSize = true;
-            this.label58.Location = new System.Drawing.Point(414, 148);
-            this.label58.Name = "label58";
-            this.label58.Size = new System.Drawing.Size(32, 13);
-            this.label58.TabIndex = 117;
-            this.label58.Text = "Fixed";
-            // 
-            // cbBuildingFinancialsEnabled
-            // 
-            this.cbBuildingFinancialsEnabled.AutoSize = true;
-            this.cbBuildingFinancialsEnabled.Enabled = false;
-            this.cbBuildingFinancialsEnabled.Location = new System.Drawing.Point(549, 106);
-            this.cbBuildingFinancialsEnabled.Name = "cbBuildingFinancialsEnabled";
-            this.cbBuildingFinancialsEnabled.Size = new System.Drawing.Size(15, 14);
-            this.cbBuildingFinancialsEnabled.TabIndex = 116;
-            this.cbBuildingFinancialsEnabled.UseVisualStyleBackColor = true;
-            // 
-            // label53
-            // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(414, 106);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(136, 13);
-            this.label53.TabIndex = 115;
-            this.label53.Text = "Building Financials Enabled";
             // 
             // cbDisableDebitOrderFee
             // 
@@ -1300,6 +1248,376 @@
             this.label22.TabIndex = 110;
             this.label22.Text = "Address";
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.pnlFinancials);
+            this.tabPage1.Controls.Add(this.cbBuildingFinancialsEnabled);
+            this.tabPage1.Controls.Add(this.label53);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1369, 533);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Financials";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // pnlFinancials
+            // 
+            this.pnlFinancials.Controls.Add(this.pnlFinancialMeeting);
+            this.pnlFinancials.Controls.Add(this.cbFixedMonhlyFinMeeting);
+            this.pnlFinancials.Controls.Add(this.label63);
+            this.pnlFinancials.Controls.Add(this.cbFinancialEndDateSet);
+            this.pnlFinancials.Controls.Add(this.dtpFinancialEndDate);
+            this.pnlFinancials.Controls.Add(this.label62);
+            this.pnlFinancials.Controls.Add(this.dtpFinancialStartDate);
+            this.pnlFinancials.Controls.Add(this.label61);
+            this.pnlFinancials.Controls.Add(this.label60);
+            this.pnlFinancials.Controls.Add(this.tbFinancialDayOfMonth);
+            this.pnlFinancials.Controls.Add(this.label59);
+            this.pnlFinancials.Controls.Add(this.cbFixedFinalcials);
+            this.pnlFinancials.Controls.Add(this.label58);
+            this.pnlFinancials.Location = new System.Drawing.Point(9, 35);
+            this.pnlFinancials.Name = "pnlFinancials";
+            this.pnlFinancials.Size = new System.Drawing.Size(947, 461);
+            this.pnlFinancials.TabIndex = 135;
+            // 
+            // pnlFinancialMeeting
+            // 
+            this.pnlFinancialMeeting.Controls.Add(this.dtpEventToTime);
+            this.pnlFinancialMeeting.Controls.Add(this.label71);
+            this.pnlFinancialMeeting.Controls.Add(this.dtpEventTime);
+            this.pnlFinancialMeeting.Controls.Add(this.Date);
+            this.pnlFinancialMeeting.Controls.Add(this.tbBodyContent);
+            this.pnlFinancialMeeting.Controls.Add(this.label68);
+            this.pnlFinancialMeeting.Controls.Add(this.tbSubject);
+            this.pnlFinancialMeeting.Controls.Add(this.label69);
+            this.pnlFinancialMeeting.Controls.Add(this.tbBCC);
+            this.pnlFinancialMeeting.Controls.Add(this.label70);
+            this.pnlFinancialMeeting.Controls.Add(this.label65);
+            this.pnlFinancialMeeting.Controls.Add(this.cbNotifyTrustees);
+            this.pnlFinancialMeeting.Controls.Add(this.tbVenue);
+            this.pnlFinancialMeeting.Controls.Add(this.label66);
+            this.pnlFinancialMeeting.Controls.Add(this.cbEvent);
+            this.pnlFinancialMeeting.Controls.Add(this.label67);
+            this.pnlFinancialMeeting.Controls.Add(this.numMeetingDayOfMonth);
+            this.pnlFinancialMeeting.Controls.Add(this.label64);
+            this.pnlFinancialMeeting.Location = new System.Drawing.Point(0, 161);
+            this.pnlFinancialMeeting.Name = "pnlFinancialMeeting";
+            this.pnlFinancialMeeting.Size = new System.Drawing.Size(849, 297);
+            this.pnlFinancialMeeting.TabIndex = 147;
+            // 
+            // dtpEventToTime
+            // 
+            this.dtpEventToTime.Location = new System.Drawing.Point(261, 39);
+            this.dtpEventToTime.Name = "dtpEventToTime";
+            this.dtpEventToTime.Size = new System.Drawing.Size(107, 20);
+            this.dtpEventToTime.TabIndex = 166;
+            // 
+            // label71
+            // 
+            this.label71.AutoSize = true;
+            this.label71.Location = new System.Drawing.Point(200, 43);
+            this.label71.Name = "label71";
+            this.label71.Size = new System.Drawing.Size(26, 13);
+            this.label71.TabIndex = 167;
+            this.label71.Text = "End";
+            // 
+            // dtpEventTime
+            // 
+            this.dtpEventTime.Location = new System.Drawing.Point(260, 11);
+            this.dtpEventTime.Name = "dtpEventTime";
+            this.dtpEventTime.Size = new System.Drawing.Size(107, 20);
+            this.dtpEventTime.TabIndex = 165;
+            // 
+            // Date
+            // 
+            this.Date.AutoSize = true;
+            this.Date.Location = new System.Drawing.Point(199, 15);
+            this.Date.Name = "Date";
+            this.Date.Size = new System.Drawing.Size(29, 13);
+            this.Date.TabIndex = 164;
+            this.Date.Text = "Start";
+            // 
+            // tbBodyContent
+            // 
+            this.tbBodyContent.AcceptsReturn = true;
+            this.tbBodyContent.Location = new System.Drawing.Point(118, 172);
+            this.tbBodyContent.Multiline = true;
+            this.tbBodyContent.Name = "tbBodyContent";
+            this.tbBodyContent.Size = new System.Drawing.Size(170, 93);
+            this.tbBodyContent.TabIndex = 160;
+            // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.Location = new System.Drawing.Point(5, 172);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(100, 13);
+            this.label68.TabIndex = 163;
+            this.label68.Text = "Invite Body Content";
+            // 
+            // tbSubject
+            // 
+            this.tbSubject.Location = new System.Drawing.Point(118, 146);
+            this.tbSubject.Name = "tbSubject";
+            this.tbSubject.Size = new System.Drawing.Size(170, 20);
+            this.tbSubject.TabIndex = 159;
+            // 
+            // label69
+            // 
+            this.label69.AutoSize = true;
+            this.label69.Location = new System.Drawing.Point(5, 146);
+            this.label69.Name = "label69";
+            this.label69.Size = new System.Drawing.Size(72, 13);
+            this.label69.TabIndex = 162;
+            this.label69.Text = "Invite Subject";
+            // 
+            // tbBCC
+            // 
+            this.tbBCC.Location = new System.Drawing.Point(118, 120);
+            this.tbBCC.Name = "tbBCC";
+            this.tbBCC.Size = new System.Drawing.Size(170, 20);
+            this.tbBCC.TabIndex = 158;
+            // 
+            // label70
+            // 
+            this.label70.AutoSize = true;
+            this.label70.Location = new System.Drawing.Point(5, 120);
+            this.label70.Name = "label70";
+            this.label70.Size = new System.Drawing.Size(28, 13);
+            this.label70.TabIndex = 161;
+            this.label70.Text = "BCC";
+            // 
+            // label65
+            // 
+            this.label65.AutoSize = true;
+            this.label65.Location = new System.Drawing.Point(5, 43);
+            this.label65.Name = "label65";
+            this.label65.Size = new System.Drawing.Size(78, 13);
+            this.label65.TabIndex = 157;
+            this.label65.Text = "Notify Trustees";
+            // 
+            // cbNotifyTrustees
+            // 
+            this.cbNotifyTrustees.AutoSize = true;
+            this.cbNotifyTrustees.Location = new System.Drawing.Point(119, 42);
+            this.cbNotifyTrustees.Name = "cbNotifyTrustees";
+            this.cbNotifyTrustees.Size = new System.Drawing.Size(15, 14);
+            this.cbNotifyTrustees.TabIndex = 152;
+            this.cbNotifyTrustees.UseVisualStyleBackColor = true;
+            // 
+            // tbVenue
+            // 
+            this.tbVenue.Location = new System.Drawing.Point(118, 94);
+            this.tbVenue.Name = "tbVenue";
+            this.tbVenue.Size = new System.Drawing.Size(234, 20);
+            this.tbVenue.TabIndex = 155;
+            // 
+            // label66
+            // 
+            this.label66.AutoSize = true;
+            this.label66.Location = new System.Drawing.Point(5, 94);
+            this.label66.Name = "label66";
+            this.label66.Size = new System.Drawing.Size(38, 13);
+            this.label66.TabIndex = 156;
+            this.label66.Text = "Venue";
+            // 
+            // cbEvent
+            // 
+            this.cbEvent.FormattingEnabled = true;
+            this.cbEvent.Items.AddRange(new object[] {
+            "AGM",
+            "ADJ AGM",
+            "SGM",
+            "ADJ SGM",
+            "TM"});
+            this.cbEvent.Location = new System.Drawing.Point(119, 68);
+            this.cbEvent.Name = "cbEvent";
+            this.cbEvent.Size = new System.Drawing.Size(233, 21);
+            this.cbEvent.TabIndex = 154;
+            // 
+            // label67
+            // 
+            this.label67.AutoSize = true;
+            this.label67.Location = new System.Drawing.Point(5, 68);
+            this.label67.Name = "label67";
+            this.label67.Size = new System.Drawing.Size(35, 13);
+            this.label67.TabIndex = 153;
+            this.label67.Text = "Event";
+            // 
+            // numMeetingDayOfMonth
+            // 
+            this.numMeetingDayOfMonth.Location = new System.Drawing.Point(118, 11);
+            this.numMeetingDayOfMonth.Maximum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.numMeetingDayOfMonth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numMeetingDayOfMonth.Name = "numMeetingDayOfMonth";
+            this.numMeetingDayOfMonth.Size = new System.Drawing.Size(39, 20);
+            this.numMeetingDayOfMonth.TabIndex = 151;
+            this.numMeetingDayOfMonth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label64
+            // 
+            this.label64.AutoSize = true;
+            this.label64.Location = new System.Drawing.Point(5, 15);
+            this.label64.Name = "label64";
+            this.label64.Size = new System.Drawing.Size(26, 13);
+            this.label64.TabIndex = 150;
+            this.label64.Text = "Day";
+            // 
+            // cbFixedMonhlyFinMeeting
+            // 
+            this.cbFixedMonhlyFinMeeting.AutoSize = true;
+            this.cbFixedMonhlyFinMeeting.Location = new System.Drawing.Point(200, 144);
+            this.cbFixedMonhlyFinMeeting.Name = "cbFixedMonhlyFinMeeting";
+            this.cbFixedMonhlyFinMeeting.Size = new System.Drawing.Size(15, 14);
+            this.cbFixedMonhlyFinMeeting.TabIndex = 146;
+            this.cbFixedMonhlyFinMeeting.UseVisualStyleBackColor = true;
+            this.cbFixedMonhlyFinMeeting.CheckedChanged += new System.EventHandler(this.cbFixedMonhlyFinMeeting_CheckedChanged);
+            // 
+            // label63
+            // 
+            this.label63.AutoSize = true;
+            this.label63.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label63.Location = new System.Drawing.Point(5, 145);
+            this.label63.Name = "label63";
+            this.label63.Size = new System.Drawing.Size(189, 13);
+            this.label63.TabIndex = 145;
+            this.label63.Text = "Fixed Monthly Financial Meeting";
+            // 
+            // cbFinancialEndDateSet
+            // 
+            this.cbFinancialEndDateSet.AutoSize = true;
+            this.cbFinancialEndDateSet.Location = new System.Drawing.Point(135, 48);
+            this.cbFinancialEndDateSet.Name = "cbFinancialEndDateSet";
+            this.cbFinancialEndDateSet.Size = new System.Drawing.Size(15, 14);
+            this.cbFinancialEndDateSet.TabIndex = 144;
+            this.cbFinancialEndDateSet.UseVisualStyleBackColor = true;
+            // 
+            // dtpFinancialEndDate
+            // 
+            this.dtpFinancialEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpFinancialEndDate.Location = new System.Drawing.Point(156, 45);
+            this.dtpFinancialEndDate.Name = "dtpFinancialEndDate";
+            this.dtpFinancialEndDate.Size = new System.Drawing.Size(200, 20);
+            this.dtpFinancialEndDate.TabIndex = 143;
+            // 
+            // label62
+            // 
+            this.label62.AutoSize = true;
+            this.label62.Location = new System.Drawing.Point(3, 49);
+            this.label62.Name = "label62";
+            this.label62.Size = new System.Drawing.Size(97, 13);
+            this.label62.TabIndex = 142;
+            this.label62.Text = "Financial End Date";
+            // 
+            // dtpFinancialStartDate
+            // 
+            this.dtpFinancialStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpFinancialStartDate.Location = new System.Drawing.Point(156, 16);
+            this.dtpFinancialStartDate.Name = "dtpFinancialStartDate";
+            this.dtpFinancialStartDate.Size = new System.Drawing.Size(200, 20);
+            this.dtpFinancialStartDate.TabIndex = 141;
+            // 
+            // label61
+            // 
+            this.label61.AutoSize = true;
+            this.label61.Location = new System.Drawing.Point(3, 20);
+            this.label61.Name = "label61";
+            this.label61.Size = new System.Drawing.Size(100, 13);
+            this.label61.TabIndex = 140;
+            this.label61.Text = "Financial Start Date";
+            // 
+            // label60
+            // 
+            this.label60.AutoSize = true;
+            this.label60.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label60.Location = new System.Drawing.Point(4, 76);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(132, 13);
+            this.label60.TabIndex = 139;
+            this.label60.Text = "Finalcial configuration";
+            // 
+            // tbFinancialDayOfMonth
+            // 
+            this.tbFinancialDayOfMonth.Location = new System.Drawing.Point(312, 92);
+            this.tbFinancialDayOfMonth.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.tbFinancialDayOfMonth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.tbFinancialDayOfMonth.Name = "tbFinancialDayOfMonth";
+            this.tbFinancialDayOfMonth.Size = new System.Drawing.Size(39, 20);
+            this.tbFinancialDayOfMonth.TabIndex = 138;
+            this.tbFinancialDayOfMonth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label59
+            // 
+            this.label59.AutoSize = true;
+            this.label59.Location = new System.Drawing.Point(181, 96);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(105, 13);
+            this.label59.TabIndex = 137;
+            this.label59.Text = "Day to be completed";
+            // 
+            // cbFixedFinalcials
+            // 
+            this.cbFixedFinalcials.AutoSize = true;
+            this.cbFixedFinalcials.Location = new System.Drawing.Point(137, 95);
+            this.cbFixedFinalcials.Name = "cbFixedFinalcials";
+            this.cbFixedFinalcials.Size = new System.Drawing.Size(15, 14);
+            this.cbFixedFinalcials.TabIndex = 136;
+            this.cbFixedFinalcials.UseVisualStyleBackColor = true;
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(6, 96);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(32, 13);
+            this.label58.TabIndex = 135;
+            this.label58.Text = "Fixed";
+            // 
+            // cbBuildingFinancialsEnabled
+            // 
+            this.cbBuildingFinancialsEnabled.AutoSize = true;
+            this.cbBuildingFinancialsEnabled.Enabled = false;
+            this.cbBuildingFinancialsEnabled.Location = new System.Drawing.Point(141, 15);
+            this.cbBuildingFinancialsEnabled.Name = "cbBuildingFinancialsEnabled";
+            this.cbBuildingFinancialsEnabled.Size = new System.Drawing.Size(15, 14);
+            this.cbBuildingFinancialsEnabled.TabIndex = 124;
+            this.cbBuildingFinancialsEnabled.UseVisualStyleBackColor = true;
+            this.cbBuildingFinancialsEnabled.CheckedChanged += new System.EventHandler(this.cbBuildingFinancialsEnabled_CheckedChanged);
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(6, 15);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(136, 13);
+            this.label53.TabIndex = 123;
+            this.label53.Text = "Building Financials Enabled";
+            // 
             // tbInsurance
             // 
             this.tbInsurance.Controls.Add(this.groupBox8);
@@ -1752,11 +2070,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgTrustees)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbFinancialDayOfMonth)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.pnlFinancials.ResumeLayout(false);
+            this.pnlFinancials.PerformLayout();
+            this.pnlFinancialMeeting.ResumeLayout(false);
+            this.pnlFinancialMeeting.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numMeetingDayOfMonth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbFinancialDayOfMonth)).EndInit();
             this.tbInsurance.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgInsurancePq)).EndInit();
@@ -1925,14 +2250,42 @@
         private System.Windows.Forms.Label label51;
         private System.Windows.Forms.CheckBox cbDisableDebitOrderFee;
         private System.Windows.Forms.Label label52;
-        private System.Windows.Forms.CheckBox cbBuildingFinancialsEnabled;
-        private System.Windows.Forms.Label label53;
         private System.Windows.Forms.CheckBox cbDisabled;
         private System.Windows.Forms.Label label57;
-        private System.Windows.Forms.CheckBox cbFixedFinalcials;
-        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.CheckBox cbBuildingFinancialsEnabled;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Panel pnlFinancials;
+        private System.Windows.Forms.CheckBox cbFinancialEndDateSet;
+        private System.Windows.Forms.DateTimePicker dtpFinancialEndDate;
+        private System.Windows.Forms.Label label62;
+        private System.Windows.Forms.DateTimePicker dtpFinancialStartDate;
+        private System.Windows.Forms.Label label61;
         private System.Windows.Forms.Label label60;
         private System.Windows.Forms.NumericUpDown tbFinancialDayOfMonth;
         private System.Windows.Forms.Label label59;
+        private System.Windows.Forms.CheckBox cbFixedFinalcials;
+        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.Label label63;
+        private System.Windows.Forms.Panel pnlFinancialMeeting;
+        private System.Windows.Forms.NumericUpDown numMeetingDayOfMonth;
+        private System.Windows.Forms.Label label64;
+        private System.Windows.Forms.CheckBox cbFixedMonhlyFinMeeting;
+        private System.Windows.Forms.Label label65;
+        private System.Windows.Forms.CheckBox cbNotifyTrustees;
+        private System.Windows.Forms.TextBox tbVenue;
+        private System.Windows.Forms.Label label66;
+        private System.Windows.Forms.ComboBox cbEvent;
+        private System.Windows.Forms.Label label67;
+        private System.Windows.Forms.TextBox tbBodyContent;
+        private System.Windows.Forms.Label label68;
+        private System.Windows.Forms.TextBox tbSubject;
+        private System.Windows.Forms.Label label69;
+        private System.Windows.Forms.TextBox tbBCC;
+        private System.Windows.Forms.Label label70;
+        private System.Windows.Forms.DateTimePicker dtpEventToTime;
+        private System.Windows.Forms.Label label71;
+        private System.Windows.Forms.DateTimePicker dtpEventTime;
+        private System.Windows.Forms.Label Date;
     }
 }

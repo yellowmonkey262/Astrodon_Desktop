@@ -242,6 +242,14 @@
     <Compile Include="Migrations\201712081309531_DebitOrderArchive.Designer.cs">
       <DependentUpon>201712081309531_DebitOrderArchive.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712110901068_BuildingMeetingSchedule.cs" />
+    <Compile Include="Migrations\201712110901068_BuildingMeetingSchedule.Designer.cs">
+      <DependentUpon>201712110901068_BuildingMeetingSchedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712111013062_BuildingMeetingScheduleMeetingTimes.cs" />
+    <Compile Include="Migrations\201712111013062_BuildingMeetingScheduleMeetingTimes.Designer.cs">
+      <DependentUpon>201712111013062_BuildingMeetingScheduleMeetingTimes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -426,6 +434,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712081309531_DebitOrderArchive.resx">
       <DependentUpon>201712081309531_DebitOrderArchive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712110901068_BuildingMeetingSchedule.resx">
+      <DependentUpon>201712110901068_BuildingMeetingSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712111013062_BuildingMeetingScheduleMeetingTimes.resx">
+      <DependentUpon>201712111013062_BuildingMeetingScheduleMeetingTimes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

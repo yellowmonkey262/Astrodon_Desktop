@@ -166,12 +166,9 @@ namespace Astrodon.Data
             }
         }
 
-        #region Calendar
+     
 
-        public virtual ICollection<BuildingCalendarEntry> BuildingCalendarEntries { get; set; }
-
-        #endregion
-
+        #region Financials
         public int FinancialDayOfMonth { get; set; }
 
         public DateTime? FinancialStartDate { get; set; } //date financials should start at
@@ -183,6 +180,23 @@ namespace Astrodon.Data
         public string FinancialMeetingBodyText { get; set; }
         public bool FinancialMeetingSendInviteToAllTrustees { get; set; }
 
+        public string FinancialMeetingEvent { get; set; }
+        public string FinancialMeetingVenue { get; set; }
+        public string FinancialMeetingBCC { get; set; }
+
+        public DateTime? FinancialMeetingStartTime { get; set; }
+        public DateTime? FinancialMeetingEndTime { get; set; }
+
+
         public bool IsFixed { get; set; }
+
+        #endregion
+
+        #region Calendar
+
+        public virtual ICollection<BuildingCalendarEntry> BuildingCalendarEntries { get; set; }
+
+        #endregion
+
     }
 }

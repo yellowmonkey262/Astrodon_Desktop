@@ -23,6 +23,13 @@ namespace Astrodon
         public usrBuildings()
         {
             InitializeComponent();
+
+            dtpEventToTime.Format = DateTimePickerFormat.Time;
+            dtpEventToTime.ShowUpDown = true;
+
+            dtpEventTime.Format = DateTimePickerFormat.Time;
+            dtpEventTime.ShowUpDown = true;
+
         }
 
         private void usrBuildings_Load(object sender, EventArgs e)
@@ -156,6 +163,7 @@ namespace Astrodon
                 {
                     cbDisableDebitOrderFee.Checked = buildingEntity.IsDebitOrderFeeDisabled;
                     cbBuildingFinancialsEnabled.Checked = buildingEntity.BuildingFinancialsEnabled;
+                    pnlFinancials.Visible = cbBuildingFinancialsEnabled.Checked;
                     cbDisabled.Checked = buildingEntity.BuildingDisabled;
                     txtCommonPropertyDim.Text = buildingEntity.CommonPropertyDimensions.ToString();
                     txtUnitPropertyDim.Text = buildingEntity.UnitPropertyDimensions.ToString();
@@ -177,6 +185,41 @@ namespace Astrodon
                     cbFixedFinalcials.Checked = buildingEntity.IsFixed;
                     tbFinancialDayOfMonth.Value = buildingEntity.FinancialDayOfMonth;
 
+                    if (buildingEntity.FinancialStartDate == null)
+                        buildingEntity.FinancialStartDate = DateTime.Today;
+                    dtpFinancialStartDate.Value = buildingEntity.FinancialStartDate.Value;
+
+                    if (buildingEntity.FinancialEndDate != null)
+                    {
+                        dtpFinancialEndDate.Value = buildingEntity.FinancialEndDate.Value;
+                        dtpFinancialEndDate.Visible = true;
+                        cbFinancialEndDateSet.Checked = true;
+                    }
+                    else
+                    {
+                        cbFinancialEndDateSet.Checked = false;
+                        dtpFinancialEndDate.Visible = false;
+                    }
+
+                    /*Calendar*/
+                    cbFixedMonhlyFinMeeting.Checked = buildingEntity.FixedMonthyFinancialMeetingEnabled;
+                    pnlFinancialMeeting.Visible = cbFixedMonhlyFinMeeting.Checked;
+                    if (buildingEntity.FinancialMeetingDayOfMonth != null)
+                        numMeetingDayOfMonth.Value = buildingEntity.FinancialMeetingDayOfMonth.Value;
+                    else
+                        numMeetingDayOfMonth.Value = 1;
+
+                    if(buildingEntity.FinancialMeetingStartTime != null)
+                      dtpEventTime.Value = buildingEntity.FinancialMeetingStartTime.Value;
+                    if(buildingEntity.FinancialMeetingEndTime != null)
+                      dtpEventToTime.Value = buildingEntity.FinancialMeetingEndTime.Value;
+
+                    tbSubject.Text = buildingEntity.FinancialMeetingSubject;
+                    cbEvent.Text = buildingEntity.FinancialMeetingEvent;
+                    tbVenue.Text = buildingEntity.FinancialMeetingVenue;
+                    tbBCC.Text = buildingEntity.FinancialMeetingBCC;
+                    tbBodyContent.Text = buildingEntity.FinancialMeetingBodyText;
+                    cbNotifyTrustees.Checked = buildingEntity.FinancialMeetingSendInviteToAllTrustees;
                     LoadInsuranceUnitPq(buildingEntity);
                 }
             }
@@ -332,13 +375,48 @@ namespace Astrodon
                 buildingEntity.FinancialDayOfMonth = Convert.ToInt32(tbFinancialDayOfMonth.Value);
                 buildingEntity.IsFixed = cbFixedFinalcials.Checked;
 
+                buildingEntity.FinancialStartDate = dtpFinancialStartDate.Value.Date;
+                if (cbFinancialEndDateSet.Checked)
+                    buildingEntity.FinancialEndDate = dtpFinancialEndDate.Value.Date;
+                else
+                    buildingEntity.FinancialEndDate = null;
+
                 if (Controller.UserIsSheldon())
                 {
                     buildingEntity.BuildingDisabled = cbDisabled.Checked;
                 }
+
+                /*Calendar*/
+                buildingEntity.FixedMonthyFinancialMeetingEnabled = cbFixedMonhlyFinMeeting.Checked;
+                if (buildingEntity.FixedMonthyFinancialMeetingEnabled)
+                {
+                    if (String.IsNullOrWhiteSpace(tbSubject.Text) ||
+                        String.IsNullOrWhiteSpace(tbSubject.Text) ||
+                        String.IsNullOrWhiteSpace(tbSubject.Text) ||
+                        dtpEventTime.Value > dtpEventToTime.Value)
+                    {
+                        Controller.HandleError("Financial meeting subject, event and venue required or To Time < From Time");
+                        return;
+                    }
+                    else
+                    {
+                        buildingEntity.FinancialMeetingDayOfMonth = Convert.ToInt32(numMeetingDayOfMonth.Value);
+                        buildingEntity.FinancialMeetingSubject = tbSubject.Text;
+                        buildingEntity.FinancialMeetingEvent = cbEvent.Text;
+                        buildingEntity.FinancialMeetingVenue = tbVenue.Text;
+                        buildingEntity.FinancialMeetingBCC = tbBCC.Text;
+                        buildingEntity.FinancialMeetingBodyText = tbBodyContent.Text;
+                        buildingEntity.FinancialMeetingSendInviteToAllTrustees = cbNotifyTrustees.Checked;
+                        buildingEntity.FinancialMeetingStartTime = dtpEventTime.Value;
+                        buildingEntity.FinancialMeetingEndTime = dtpEventToTime.Value;
+
+                    }
+                }
                 context.SaveChanges();
             }
         }
+
+
         private void SaveBuildingInsurance()
         {
             if (!ValidatePQ())
@@ -1228,6 +1306,26 @@ namespace Astrodon
         private void label57_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void label62_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbFinancialEndDateSet_CheckedChanged(object sender, EventArgs e)
+        {
+            dtpFinancialEndDate.Visible = cbFinancialEndDateSet.Checked;
+        }
+
+        private void cbBuildingFinancialsEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlFinancials.Visible = cbBuildingFinancialsEnabled.Checked;
+        }
+
+        private void cbFixedMonhlyFinMeeting_CheckedChanged(object sender, EventArgs e)
+        {
+            pnlFinancialMeeting.Visible = cbFixedMonhlyFinMeeting.Checked;
         }
     }
 
