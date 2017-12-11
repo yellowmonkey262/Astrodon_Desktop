@@ -975,17 +975,17 @@ namespace Astrodon
                         cbDebitOrderActive.Checked = debitOrder.IsActive;
                         cbBanks.SelectedItem = _Banks.FirstOrDefault(a => a.id == debitOrder.BankId);
                         txtBranchCode.Text = debitOrder.BranceCode;
-                        tbMaxAmount.Text = debitOrder.MaxDebitAmount.ToString("###,##0.00",CultureInfo.InvariantCulture);
+                        tbMaxAmount.Text = debitOrder.MaxDebitAmount.ToString("###,##0.00", CultureInfo.InvariantCulture);
                         txtAccountNumber.Text = debitOrder.AccountNumber;
                         cbAccountType.SelectedItem = debitOrder.AccountType;
                         cbProcessDate.SelectedItem = debitOrder.DebitOrderCollectionDay;
                         cbDisableDebitOrderFee.Checked = debitOrder.IsDebitOrderFeeDisabled;
                         btnUpload.Visible = true;
                         cbDebitOrderCancelled.Checked = debitOrder.DebitOrderCancelled;
-                        if(cbDebitOrderCancelled.Checked)
+                        if (cbDebitOrderCancelled.Checked)
                         {
                             dtpDebitOrderCancelled.Visible = true;
-                            dtpDebitOrderCancelled.Value = debitOrder.DebitOrderCancelDate == null? DateTime.Today :  debitOrder.DebitOrderCancelDate.Value;
+                            dtpDebitOrderCancelled.Value = debitOrder.DebitOrderCancelDate == null ? DateTime.Today : debitOrder.DebitOrderCancelDate.Value;
                         }
 
                         var signedForm = context.DebitOrderDocumentSet.SingleOrDefault(a => a.CustomerDebitOrderId == debitOrder.id
@@ -995,6 +995,7 @@ namespace Astrodon
                             DisplayPDF(signedForm.FileData);
                         }
                     }
+                    LoadArchiveGrid(context);
                 }
             }
             finally
@@ -1002,6 +1003,93 @@ namespace Astrodon
                 _promptForDefaults = true;
             }
         }
+
+        private void LoadArchiveGrid(Data.DataContext context)
+        {
+            var debitOrderArchive = context.CustomerDebitOrderArchiveSet.Where(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber)
+                .Select(a => new DebitOrderArchiveItem()
+                {
+                    DebitOrderCancelDate = a.DebitOrderCancelDate,
+                    BankName = a.Bank.Name,
+                    AccountNumber = a.AccountNumber,
+                    UserUpdate = a.UserUpdate.name,
+                    DateArchived = a.DateArchived,
+                    MaxDebitAmount = a.MaxDebitAmount,
+                    DebitOrderCancelled = a.DebitOrderCancelled ? "Yes" : "No"
+                }).ToList();
+            LoadDebitOrderArchiveGrid(debitOrderArchive);
+        }
+
+        class DebitOrderArchiveItem
+        {
+            public DateTime? DebitOrderCancelDate { get; set; }
+            public string BankName { get; set; }
+            public string AccountNumber { get; set; }
+            public string UserUpdate { get; set; }
+            public decimal MaxDebitAmount { get; set; }
+            public DateTime? DateArchived { get; set; }
+            public string DebitOrderCancelled { get; set; }
+
+        }
+
+        private void LoadDebitOrderArchiveGrid(List<DebitOrderArchiveItem> debitOrderArchive)
+        {
+            dgDebitOrderArchive.ClearSelection();
+            dgDebitOrderArchive.MultiSelect = false;
+            dgDebitOrderArchive.AutoGenerateColumns = false;
+
+            BindingSource bs = new BindingSource();
+            bs.DataSource = debitOrderArchive;
+
+            dgDebitOrderArchive.Columns.Clear();
+
+            dgDebitOrderArchive.DataSource = bs;
+
+            dgDebitOrderArchive.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "DateArchived",
+                HeaderText = "Date",
+                ReadOnly = true
+            });
+            dgDebitOrderArchive.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "BankName",
+                HeaderText = "Bank",
+                ReadOnly = true
+            });
+            dgDebitOrderArchive.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "AccountNumber",
+                HeaderText = "Account Number",
+                ReadOnly = true
+            });
+            dgDebitOrderArchive.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "DebitOrderCancelled",
+                HeaderText = "Cancelled",
+                ReadOnly = true
+            });
+            dgDebitOrderArchive.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "DebitOrderCancelDate",
+                HeaderText = "Cancel Date",
+                ReadOnly = true
+            });
+            dgDebitOrderArchive.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "MaxDebitAmount",
+                HeaderText = "Max Amount",
+                ReadOnly = true
+            });
+            dgDebitOrderArchive.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "UserUpdate",
+                HeaderText = "Updated by",
+                ReadOnly = true
+            });
+        }
+
+      
 
         private void btnSaveDebitOrder_Click(object sender, EventArgs e)
         {
@@ -1063,6 +1151,38 @@ namespace Astrodon
                     };
                     context.CustomerDebitOrderSet.Add(debitOrder);
                 }
+                else
+                {
+                    //create the arvice
+                    var archive = new CustomerDebitOrderArchive()
+                    {
+                        BuildingId = debitOrder.BuildingId,
+                        CustomerCode = debitOrder.CustomerCode,
+                        DateArchived = DateTime.Now,
+                        BankId = debitOrder.BankId,
+                        BranceCode = debitOrder.BranceCode,
+                        AccountNumber = debitOrder.AccountNumber,
+                        AccountType = debitOrder.AccountType,
+                        DebitOrderCollectionDay = debitOrder.DebitOrderCollectionDay,
+                        IsActive = debitOrder.IsActive,
+                        LastUpdatedByUserId = Controller.user.id,
+                        LastUpdateDate = DateTime.Now,
+                        IsDebitOrderFeeDisabled = debitOrder.IsDebitOrderFeeDisabled,
+                        DebitOrderCancelDate = debitOrder.DebitOrderCancelDate,
+                        MaxDebitAmount = debitOrder.MaxDebitAmount,
+                        Documents = new List<DebitOrderDocumentArchive>()
+                    };
+                    foreach (var doc in debitOrder.Documents)
+                    {
+                        archive.Documents.Add(new DebitOrderDocumentArchive()
+                        {
+                            CustomerDebitOrderArchive = archive,
+                            FileData = doc.FileData,
+                            FileName = doc.FileName
+                        });
+                    }
+                    context.CustomerDebitOrderArchiveSet.Add(archive);
+                }
                 debitOrder.IsActive = cbDebitOrderActive.Checked;
                 debitOrder.BankId = (cbBanks.SelectedItem as Data.BankData.Bank).id;
                 debitOrder.BranceCode = txtBranchCode.Text;
@@ -1080,6 +1200,7 @@ namespace Astrodon
                     debitOrder.DebitOrderCancelDate = null;
                 context.SaveChanges();
                 btnUpload.Visible = true;
+                LoadArchiveGrid(context);
                 Controller.ShowMessage("Debit order detail saved. Please upload debit order form.");
             }
         }
@@ -1102,6 +1223,35 @@ namespace Astrodon
                     using (var context = SqlDataHandler.GetDataContext())
                     {
                         var debitOrder = context.CustomerDebitOrderSet.SingleOrDefault(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber);
+                        var archive = new CustomerDebitOrderArchive()
+                        {
+                            BuildingId = debitOrder.BuildingId,
+                            CustomerCode = debitOrder.CustomerCode,
+                            DateArchived = DateTime.Now,
+                            BankId = debitOrder.BankId,
+                            BranceCode = debitOrder.BranceCode,
+                            AccountNumber = debitOrder.AccountNumber,
+                            AccountType = debitOrder.AccountType,
+                            DebitOrderCollectionDay = debitOrder.DebitOrderCollectionDay,
+                            IsActive = debitOrder.IsActive,
+                            LastUpdatedByUserId = Controller.user.id,
+                            LastUpdateDate = DateTime.Now,
+                            IsDebitOrderFeeDisabled = debitOrder.IsDebitOrderFeeDisabled,
+                            DebitOrderCancelDate = debitOrder.DebitOrderCancelDate,
+                            MaxDebitAmount = debitOrder.MaxDebitAmount,
+                            Documents = new List<DebitOrderDocumentArchive>()
+                        };
+                        foreach (var doc in debitOrder.Documents)
+                        {
+                            archive.Documents.Add(new DebitOrderDocumentArchive()
+                            {
+                                CustomerDebitOrderArchive = archive,
+                                FileData = doc.FileData,
+                                FileName = doc.FileName
+                            });
+                        }
+                        context.CustomerDebitOrderArchiveSet.Add(archive);
+
                         var signedForm = context.DebitOrderDocumentSet.SingleOrDefault(a => a.CustomerDebitOrderId == debitOrder.id && a.DocumentType == DebitOrderDocumentType.SignedDebitOrder);
                         if (signedForm == null)
                         {
@@ -1116,6 +1266,7 @@ namespace Astrodon
                         signedForm.FileName = Path.GetFileName(fdOpen.FileName);
                         context.SaveChanges();
                         DisplayPDF(signedForm.FileData);
+                        LoadArchiveGrid(context);
                         MessageBox.Show("Successfully Uploaded Insurance Form");
                     }
                 }

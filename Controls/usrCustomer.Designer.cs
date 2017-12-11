@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrCustomer));
             this.cmbCustomer = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -112,6 +112,9 @@
             this.tbMaintenance = new System.Windows.Forms.TabPage();
             this.dgMaintenance = new System.Windows.Forms.DataGridView();
             this.tbDebitOrder = new System.Windows.Forms.TabPage();
+            this.label29 = new System.Windows.Forms.Label();
+            this.tbMaxAmount = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
             this.dtpDebitOrderCancelled = new System.Windows.Forms.DateTimePicker();
             this.cbDebitOrderCancelled = new System.Windows.Forms.CheckBox();
             this.label27 = new System.Windows.Forms.Label();
@@ -134,9 +137,8 @@
             this.label20 = new System.Windows.Forms.Label();
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
-            this.tbMaxAmount = new System.Windows.Forms.TextBox();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.dgDebitOrderArchive = new System.Windows.Forms.DataGridView();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -152,6 +154,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgMaintenance)).BeginInit();
             this.tbDebitOrder.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
+            this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgDebitOrderArchive)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbCustomer
@@ -218,6 +222,7 @@
             this.tabControl2.Controls.Add(this.tabPage5);
             this.tabControl2.Controls.Add(this.tbMaintenance);
             this.tabControl2.Controls.Add(this.tbDebitOrder);
+            this.tabControl2.Controls.Add(this.tabPage6);
             this.tabControl2.Location = new System.Drawing.Point(9, 100);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
@@ -655,9 +660,9 @@
             // colDate
             // 
             this.colDate.DataPropertyName = "tstamp";
-            dataGridViewCellStyle4.Format = "d";
-            dataGridViewCellStyle4.NullValue = null;
-            this.colDate.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Format = "d";
+            dataGridViewCellStyle1.NullValue = null;
+            this.colDate.DefaultCellStyle = dataGridViewCellStyle1;
             this.colDate.HeaderText = "Date";
             this.colDate.Name = "colDate";
             this.colDate.ReadOnly = true;
@@ -836,9 +841,9 @@
             // colRemDate
             // 
             this.colRemDate.DataPropertyName = "remDate";
-            dataGridViewCellStyle5.Format = "g";
-            dataGridViewCellStyle5.NullValue = null;
-            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Format = "g";
+            dataGridViewCellStyle2.NullValue = null;
+            this.colRemDate.DefaultCellStyle = dataGridViewCellStyle2;
             this.colRemDate.HeaderText = "Date / Time";
             this.colRemDate.Name = "colRemDate";
             this.colRemDate.ReadOnly = true;
@@ -852,8 +857,8 @@
             // colNote
             // 
             this.colNote.DataPropertyName = "note";
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.colNote.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colNote.DefaultCellStyle = dataGridViewCellStyle3;
             this.colNote.HeaderText = "Note";
             this.colNote.Name = "colNote";
             this.colNote.ReadOnly = true;
@@ -975,6 +980,32 @@
             this.tbDebitOrder.TabIndex = 6;
             this.tbDebitOrder.Text = "Debit Order";
             this.tbDebitOrder.UseVisualStyleBackColor = true;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(128, 226);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(212, 13);
+            this.label29.TabIndex = 74;
+            this.label29.Text = "Please use 0.00 to disable the max amount.";
+            // 
+            // tbMaxAmount
+            // 
+            this.tbMaxAmount.Location = new System.Drawing.Point(128, 199);
+            this.tbMaxAmount.Name = "tbMaxAmount";
+            this.tbMaxAmount.Size = new System.Drawing.Size(228, 20);
+            this.tbMaxAmount.TabIndex = 72;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(6, 202);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(69, 13);
+            this.label28.TabIndex = 73;
+            this.label28.Text = "Max Amount ";
             // 
             // dtpDebitOrderCancelled
             // 
@@ -1171,31 +1202,28 @@
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
             // 
-            // tbMaxAmount
+            // tabPage6
             // 
-            this.tbMaxAmount.Location = new System.Drawing.Point(128, 199);
-            this.tbMaxAmount.Name = "tbMaxAmount";
-            this.tbMaxAmount.Size = new System.Drawing.Size(228, 20);
-            this.tbMaxAmount.TabIndex = 72;
+            this.tabPage6.Controls.Add(this.dgDebitOrderArchive);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(931, 534);
+            this.tabPage6.TabIndex = 7;
+            this.tabPage6.Text = "Debit Order Archive";
+            this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // label28
+            // dgDebitOrderArchive
             // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(6, 202);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(69, 13);
-            this.label28.TabIndex = 73;
-            this.label28.Text = "Max Amount ";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(128, 226);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(212, 13);
-            this.label29.TabIndex = 74;
-            this.label29.Text = "Please use 0.00 to disable the max amount.";
+            this.dgDebitOrderArchive.AllowUserToAddRows = false;
+            this.dgDebitOrderArchive.AllowUserToDeleteRows = false;
+            this.dgDebitOrderArchive.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgDebitOrderArchive.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgDebitOrderArchive.Location = new System.Drawing.Point(6, 6);
+            this.dgDebitOrderArchive.Name = "dgDebitOrderArchive";
+            this.dgDebitOrderArchive.ReadOnly = true;
+            this.dgDebitOrderArchive.Size = new System.Drawing.Size(919, 522);
+            this.dgDebitOrderArchive.TabIndex = 22;
             // 
             // usrCustomer
             // 
@@ -1234,6 +1262,8 @@
             this.tbDebitOrder.ResumeLayout(false);
             this.tbDebitOrder.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).EndInit();
+            this.tabPage6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgDebitOrderArchive)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1346,5 +1376,7 @@
         private System.Windows.Forms.TextBox tbMaxAmount;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.DataGridView dgDebitOrderArchive;
     }
 }
