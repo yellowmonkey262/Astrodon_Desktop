@@ -34,6 +34,9 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.printDialog2 = new System.Windows.Forms.PrintDialog();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.rbStaff = new System.Windows.Forms.RadioButton();
+            this.rbFinancial = new System.Windows.Forms.RadioButton();
             this.cbPM = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cbFilterPM = new System.Windows.Forms.CheckBox();
@@ -43,6 +46,7 @@
             this.cmbYear = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.cbUserInvites = new System.Windows.Forms.CheckedListBox();
             this.tbAttachment = new System.Windows.Forms.TextBox();
             this.btnUpload = new System.Windows.Forms.Button();
             this.tbBodyContent = new System.Windows.Forms.TextBox();
@@ -70,10 +74,6 @@
             this.Date = new System.Windows.Forms.Label();
             this.dgItems = new System.Windows.Forms.DataGridView();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
-            this.rbFinancial = new System.Windows.Forms.RadioButton();
-            this.rbStaff = new System.Windows.Forms.RadioButton();
-            this.label12 = new System.Windows.Forms.Label();
-            this.cbUserInvites = new System.Windows.Forms.CheckedListBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
@@ -121,6 +121,39 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(914, 151);
             this.panel1.TabIndex = 13;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(15, 80);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(72, 13);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "Meeting Type";
+            // 
+            // rbStaff
+            // 
+            this.rbStaff.AutoSize = true;
+            this.rbStaff.Location = new System.Drawing.Point(191, 80);
+            this.rbStaff.Name = "rbStaff";
+            this.rbStaff.Size = new System.Drawing.Size(47, 17);
+            this.rbStaff.TabIndex = 21;
+            this.rbStaff.Text = "Staff";
+            this.rbStaff.UseVisualStyleBackColor = true;
+            this.rbStaff.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // rbFinancial
+            // 
+            this.rbFinancial.AutoSize = true;
+            this.rbFinancial.Checked = true;
+            this.rbFinancial.Location = new System.Drawing.Point(106, 80);
+            this.rbFinancial.Name = "rbFinancial";
+            this.rbFinancial.Size = new System.Drawing.Size(67, 17);
+            this.rbFinancial.TabIndex = 20;
+            this.rbFinancial.TabStop = true;
+            this.rbFinancial.Text = "Financial";
+            this.rbFinancial.UseVisualStyleBackColor = true;
+            this.rbFinancial.CheckedChanged += new System.EventHandler(this.rbFinancial_CheckedChanged);
             // 
             // cbPM
             // 
@@ -232,6 +265,14 @@
             this.panel2.Size = new System.Drawing.Size(914, 231);
             this.panel2.TabIndex = 14;
             // 
+            // cbUserInvites
+            // 
+            this.cbUserInvites.FormattingEnabled = true;
+            this.cbUserInvites.Location = new System.Drawing.Point(700, 13);
+            this.cbUserInvites.Name = "cbUserInvites";
+            this.cbUserInvites.Size = new System.Drawing.Size(181, 169);
+            this.cbUserInvites.TabIndex = 17;
+            // 
             // tbAttachment
             // 
             this.tbAttachment.Enabled = false;
@@ -245,7 +286,7 @@
             this.btnUpload.Location = new System.Drawing.Point(384, 164);
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(121, 23);
-            this.btnUpload.TabIndex = 58;
+            this.btnUpload.TabIndex = 16;
             this.btnUpload.Text = "Attachment =>";
             this.btnUpload.UseVisualStyleBackColor = true;
             this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
@@ -257,7 +298,7 @@
             this.tbBodyContent.Multiline = true;
             this.tbBodyContent.Name = "tbBodyContent";
             this.tbBodyContent.Size = new System.Drawing.Size(170, 93);
-            this.tbBodyContent.TabIndex = 31;
+            this.tbBodyContent.TabIndex = 15;
             // 
             // label11
             // 
@@ -273,7 +314,7 @@
             this.tbSubject.Location = new System.Drawing.Point(511, 39);
             this.tbSubject.Name = "tbSubject";
             this.tbSubject.Size = new System.Drawing.Size(170, 20);
-            this.tbSubject.TabIndex = 29;
+            this.tbSubject.TabIndex = 14;
             // 
             // label10
             // 
@@ -468,47 +509,6 @@
             // fdOpen
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
-            // 
-            // rbFinancial
-            // 
-            this.rbFinancial.AutoSize = true;
-            this.rbFinancial.Checked = true;
-            this.rbFinancial.Location = new System.Drawing.Point(106, 80);
-            this.rbFinancial.Name = "rbFinancial";
-            this.rbFinancial.Size = new System.Drawing.Size(67, 17);
-            this.rbFinancial.TabIndex = 20;
-            this.rbFinancial.TabStop = true;
-            this.rbFinancial.Text = "Financial";
-            this.rbFinancial.UseVisualStyleBackColor = true;
-            this.rbFinancial.CheckedChanged += new System.EventHandler(this.rbFinancial_CheckedChanged);
-            // 
-            // rbStaff
-            // 
-            this.rbStaff.AutoSize = true;
-            this.rbStaff.Location = new System.Drawing.Point(191, 80);
-            this.rbStaff.Name = "rbStaff";
-            this.rbStaff.Size = new System.Drawing.Size(47, 17);
-            this.rbStaff.TabIndex = 21;
-            this.rbStaff.Text = "Staff";
-            this.rbStaff.UseVisualStyleBackColor = true;
-            this.rbStaff.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(15, 80);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(72, 13);
-            this.label12.TabIndex = 22;
-            this.label12.Text = "Meeting Type";
-            // 
-            // cbUserInvites
-            // 
-            this.cbUserInvites.FormattingEnabled = true;
-            this.cbUserInvites.Location = new System.Drawing.Point(700, 13);
-            this.cbUserInvites.Name = "cbUserInvites";
-            this.cbUserInvites.Size = new System.Drawing.Size(181, 169);
-            this.cbUserInvites.TabIndex = 60;
             // 
             // ucPrintCalendar
             // 

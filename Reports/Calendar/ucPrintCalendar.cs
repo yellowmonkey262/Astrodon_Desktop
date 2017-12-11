@@ -23,6 +23,7 @@ namespace Astrodon.Reports.Calendar
         private List<IdValue> _Years;
         private List<IdValue> _Months;
         private List<IdValue> _PMUsers;
+        private List<tblUser> _Users;
         private List<Building> _Buildings;
         private DateTime _ReportDate = DateTime.Today;
 
@@ -37,6 +38,7 @@ namespace Astrodon.Reports.Calendar
             LoadYears();
             LoadPMUsers();
             LoadBuildings();
+            LoadAllUsers();
 
             cbFilterPM_CheckedChanged(this, EventArgs.Empty);
 
@@ -69,6 +71,8 @@ namespace Astrodon.Reports.Calendar
 
         }
 
+    
+
         private void LoadBuildings()
         {
             var userid = Controller.user.id;
@@ -98,6 +102,21 @@ namespace Astrodon.Reports.Calendar
             cbPM.DataSource = _PMUsers;
             cbPM.ValueMember = "Id";
             cbPM.DisplayMember = "Value";
+        }
+
+        private void LoadAllUsers()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var users = from u in context.tblUsers
+                           select u;
+
+                _Users = users.OrderBy(a => a.name).ToList();
+            }
+
+            cbUserInvites.DataSource = _Users;
+            cbUserInvites.DisplayMember = "name";
+            cbUserInvites.ValueMember = "id";
         }
 
         private void LoadYears()
@@ -178,7 +197,8 @@ namespace Astrodon.Reports.Calendar
                             InviteSubject = c.InviteSubject,
                             InviteBody = c.InviteBody,
                             BCCEmailAddress = c.BCCEmailAddress,
-                            TrusteesNotified = c.TrusteesNotified
+                            TrusteesNotified = c.TrusteesNotified,
+                            EventyType = c.CalendarEntryType
                         };
 
                 var entries = q.ToList();
@@ -257,6 +277,9 @@ namespace Astrodon.Reports.Calendar
         }
         private void LoadGrid()
         {
+            if (_DisableGridLoad)
+                return;
+
             _Data = null;
             _Item = null;
             LoadCalendarData();
@@ -290,7 +313,7 @@ namespace Astrodon.Reports.Calendar
                         where c.EntryDate >= dtFrom
                            && c.EntryDate <= dtTo
                            && (pmId == 0 || c.UserId == pmId)
-                           && c.CalendarEntryType == CalendarEntryType.Staff
+           //                && c.CalendarEntryType == entryType
                         select new CalendarPrintItem
                         {
                             Id = c.id,
@@ -309,7 +332,8 @@ namespace Astrodon.Reports.Calendar
                             InviteBody = c.InviteBody,
                             BCCEmailAddress = c.BCCEmailAddress,
                             TrusteesNotified = c.TrusteesNotified,
-                            FileName = a != null ? a.FileName : string.Empty
+                            FileName = a != null ? a.FileName : string.Empty,
+                            EventyType = c.CalendarEntryType
 
                         };
 
@@ -464,6 +488,10 @@ namespace Astrodon.Reports.Calendar
             btnUpload.Enabled = false;
 
             cbBuilding.Enabled = false;
+            cbUserInvites.Enabled = false;
+
+            for (int x = 0; x < cbUserInvites.Items.Count; x++)
+                    cbUserInvites.SetItemChecked(x, false);
 
             if (rbStaff.Checked)
             {
@@ -597,7 +625,9 @@ namespace Astrodon.Reports.Calendar
                 }
                 else
                 {
-                    editItem = context.BuildingCalendarEntrySet.Single(a => a.id == _Item.id);
+                    editItem = context.BuildingCalendarEntrySet.Include(a => a.UserInvites).Single(a => a.id == _Item.id);
+                    foreach (var itm in editItem.UserInvites.ToList())
+                        context.CalendarUserInviteSet.Remove(itm);
                 }
 
                 if (selectedBuilding != null)
@@ -620,10 +650,21 @@ namespace Astrodon.Reports.Calendar
                         editItem.UserId = pm.id;
                     else if (editItem.id == 0)
                         editItem.UserId = Controller.user.id;
+                    editItem.UserInvites = new List<CalendarUserInvite>();
                 }
                 else
                 {
                     editItem.UserId = Controller.user.id;
+                    editItem.UserInvites = new List<CalendarUserInvite>();
+                    foreach(var checkedItem in cbUserInvites.CheckedItems)
+                    {
+                        var usr = (tblUser)checkedItem;
+                        editItem.UserInvites.Add(new CalendarUserInvite()
+                        {
+                            CalendarEntry = editItem,
+                            UserId = usr.id
+                        });
+                    }
                 }
 
                 editItem.EntryDate = fromDate;
@@ -696,6 +737,8 @@ namespace Astrodon.Reports.Calendar
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     var itm = context.BuildingCalendarEntrySet.Single(a => a.id == id);
+                    foreach (var invite in itm.UserInvites)
+                        context.CalendarUserInviteSet.Remove(invite);
                     context.BuildingCalendarEntrySet.Remove(itm);
                     context.SaveChanges();
                 }
@@ -703,61 +746,109 @@ namespace Astrodon.Reports.Calendar
                 GotoReadOnly();
             }
         }
-
+        bool _DisableGridLoad = false;
         private void EditItem(int id)
         {
-            using (var context = SqlDataHandler.GetDataContext())
+            _DisableGridLoad = true;
+            try
             {
-                _Item = context.BuildingCalendarEntrySet.Single(a => a.id == id);
-                _FileToLoad = null;
-
-                cbBuilding.SelectedItem = _Buildings.Where(a => a.ID == _Item.BuildingId);
-                dtpEventDate.Value = _Item.EntryDate;
-                dtpEventTime.Value = _Item.EntryDate;
-                if (_Item != null)
+                using (var context = SqlDataHandler.GetDataContext())
                 {
-                    dtpEventToDate.Value = _Item.EventToDate;
-                    dtpEventToTime.Value = _Item.EventToDate;
+                    _Item = context.BuildingCalendarEntrySet.Single(a => a.id == id);
+                    if (_Item.CalendarEntryType == CalendarEntryType.Financial)
+                        rbFinancial.Checked = true;
+                    else
+                        rbStaff.Checked = true;
+                    _FileToLoad = null;
+
+                    cbBuilding.SelectedItem = _Buildings.Where(a => a.ID == _Item.BuildingId);
+                    dtpEventDate.Value = _Item.EntryDate;
+                    dtpEventTime.Value = _Item.EntryDate;
+                    if (_Item != null)
+                    {
+                        dtpEventToDate.Value = _Item.EventToDate;
+                        dtpEventToTime.Value = _Item.EventToDate;
+                    }
+
+                    cbEvent.Text = _Item.Event;
+                    tbVenue.Text = _Item.Venue;
+                    cbNotifyTrustees.Checked = _Item.NotifyTrustees;
+                    tbBCC.Text = _Item.BCCEmailAddress;
+                    tbSubject.Text = _Item.InviteSubject;
+                    tbBodyContent.Text = _Item.InviteBody;
+
+                    var attachmentName = context.CalendarEntryAttachmentSet.Where(a => a.BuildingCalendarEntryId == id).Select(a => a.FileName).FirstOrDefault();
+
+                    if (!String.IsNullOrWhiteSpace(attachmentName))
+                        tbAttachment.Text = attachmentName;
+                    else
+                        tbAttachment.Text = string.Empty;
+
+                    var usrInvates = context.CalendarUserInviteSet.Where(a => a.CalendarEntryId == id).ToList();
+                    for (int x = 0; x < cbUserInvites.Items.Count; x++)
+                    {
+                        var usr = cbUserInvites.Items[x] as tblUser;
+                        var c = usrInvates.Where(a => a.UserId == usr.id).FirstOrDefault();
+                        if (c != null)
+                            cbUserInvites.SetItemChecked(x, true);
+                    }
+
+
+                    btnUpload.Enabled = true;
+
+                    cbBuilding.Enabled = true;
+                    dtpEventDate.Enabled = true;
+                    dtpEventTime.Enabled = true;
+                    cbEvent.Enabled = true;
+                    tbVenue.Enabled = true;
+
+                    dtpEventToDate.Enabled = true;
+                    dtpEventToTime.Enabled = true;
+
+                    cbNotifyTrustees.Enabled = true;
+                    tbBCC.Enabled = true;
+                    tbSubject.Enabled = true;
+                    tbBodyContent.Enabled = true;
+
+
+                    btnSave.Visible = true;
+                    btnCancel.Visible = true;
+
+                    btnNew.Visible = false;
+                    dgItems.Enabled = false;
+                    cbUserInvites.Enabled = true;
+
+
+                    if (rbStaff.Checked)
+                    {
+                        cbBuilding.Visible = false;
+                        cbPM.Visible = false;
+                        cbFilterPM.Visible = false;
+                        label3.Visible = false;
+                        cbUserInvites.Visible = true;
+                        label4.Visible = false;
+                        label8.Visible = false;
+                        cbNotifyTrustees.Visible = false;
+                        cbNotifyTrustees.Checked = false;
+                    }
+                    else
+                    {
+                        cbBuilding.Visible = true;
+                        cbPM.Visible = true;
+                        cbFilterPM.Visible = true;
+                        label3.Visible = true;
+                        cbUserInvites.Visible = false;
+
+                        label4.Visible = true;
+                        label8.Visible = true;
+                        cbNotifyTrustees.Visible = true;
+                    }
+
                 }
-
-                cbEvent.Text = _Item.Event;
-                tbVenue.Text = _Item.Venue;
-                cbNotifyTrustees.Checked = _Item.NotifyTrustees;
-                tbBCC.Text = _Item.BCCEmailAddress;
-                tbSubject.Text = _Item.InviteSubject;
-                tbBodyContent.Text = _Item.InviteBody;
-
-                var attachmentName = context.CalendarEntryAttachmentSet.Where(a => a.BuildingCalendarEntryId == id).Select(a => a.FileName).FirstOrDefault();
-
-                if (!String.IsNullOrWhiteSpace(attachmentName))
-                    tbAttachment.Text = attachmentName;
-                else
-                    tbAttachment.Text = string.Empty;
-
-
-                btnUpload.Enabled = true;
-
-                cbBuilding.Enabled = true;
-                dtpEventDate.Enabled = true;
-                dtpEventTime.Enabled = true;
-                cbEvent.Enabled = true;
-                tbVenue.Enabled = true;
-
-                dtpEventToDate.Enabled = true;
-                dtpEventToTime.Enabled = true;
-
-                cbNotifyTrustees.Enabled = true;
-                tbBCC.Enabled = true;
-                tbSubject.Enabled = true;
-                tbBodyContent.Enabled = true;
-
-
-                btnSave.Visible = true;
-                btnCancel.Visible = true;
-
-                btnNew.Visible = false;
-                dgItems.Enabled = false;
-
+            }
+            finally
+            {
+                _DisableGridLoad = false;
             }
         }
 
@@ -830,14 +921,26 @@ namespace Astrodon.Reports.Calendar
                     attachments.Add(a.FileName, a.FileData);
                 }
 
-                if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", new string[] { entry.PMEmail },
+                List<string> toAddress = new List<string>();
+                toAddress.Add(entry.PMEmail);
+                if (entry.EventyType == CalendarEntryType.Staff)
+                {
+                    var qInvite = from i in context.CalendarUserInviteSet
+                                  where i.CalendarEntryId == entry.Id
+                                  select i.User.email;
+
+                    toAddress.AddRange(qInvite.ToList());
+
+                }
+
+                if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", toAddress.Distinct().ToArray(),
                     subject, bodyContent,
                     false, false, false, out status, attachments, bccEmail))
                 {
                     Controller.HandleError("Error seding email " + status, "Email error");
                 }
 
-                if (entry.NotifyTrustees)
+                if (entry.NotifyTrustees && entry.EventyType == CalendarEntryType.Financial)
                 {
                     var customers = Controller.pastel.AddCustomers(entry.BuildingAbreviation, entry.BuildingDataPath);
                     var trustees = customers.Where(a => a.IsTrustee).ToList();
@@ -884,7 +987,7 @@ namespace Astrodon.Reports.Calendar
             public override string ToString()
             {
                 return EventDate.ToString("HH:mm", CultureInfo.InvariantCulture) + "-" 
-                     + EventToDate.Value.ToString("HH:mm", CultureInfo.InvariantCulture) 
+                 //    + EventToDate != null ? EventToDate.Value.ToString("HH:mm", CultureInfo.InvariantCulture)  : string.Empty
                      + " " + BuildingName 
                      + "-" + Event 
                      + "-" 
@@ -911,6 +1014,7 @@ namespace Astrodon.Reports.Calendar
             public string InviteBody { get; internal set; }
             public string BCCEmailAddress { get; internal set; }
             public string FileName { get; internal set; }
+            public CalendarEntryType EventyType { get; internal set; }
         }
 
 
