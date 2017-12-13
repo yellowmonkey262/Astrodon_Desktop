@@ -19,6 +19,7 @@ namespace Astrodon.Data
         public bool BuildingDisabled { get; set; }
 
         [StringLength(50)]
+        [Index("IDX_BuildingCode",IsUnique =true)]
         public string Code { get; set; }
 
         public string AccNumber { get; set; }
