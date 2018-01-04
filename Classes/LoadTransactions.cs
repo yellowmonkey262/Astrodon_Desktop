@@ -1,4 +1,4 @@
-﻿using Astro.Library.Entities;
+using Astro.Library.Entities;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -48,13 +48,16 @@ namespace Astrodon.Classes
                         }
                         else
                         {
-                            if (bPeriod == 1 && !building.DataPath.StartsWith("MABAL"))
+                            if (bPeriod == 1 && building.Period != 10)
+                            //!building.DataPath.StartsWith("MABAL"))
                             {
+                                if (Controller.user.id == 1) { MessageBox.Show("std"); }
                                 startperiod = 111;
                                 endperiod = 113;
                             }
                             else
                             {
+                                if (Controller.user.id == 1) { MessageBox.Show("dec"); }
                                 startperiod = (bPeriod - 2 == -1 ? 11 : 111);
                                 endperiod = (bPeriod - 2 == -1 ? 101 : 113);
                             }
@@ -63,8 +66,16 @@ namespace Astrodon.Classes
                     else
                     {
                         if (dataYear < thisYear) { isThisYear = true; }
-                        startperiod = 11;
-                        endperiod = 101;
+                        if (bPeriod == 1 && building.Period == 10)
+                        {
+                            startperiod = 111;
+                            endperiod = 113;
+                        }
+                        else
+                        {
+                            startperiod = 11;
+                            endperiod = 101;
+                        }
                     }
                 }
                 else if (bPeriod - 2 > 0)
@@ -94,7 +105,8 @@ namespace Astrodon.Classes
                         if (opBalPeriod < 0 && !isThisYear)
                         {
                             opBalPeriod *= -1;
-                            if (!newYear && !building.DataPath.StartsWith("MABAL"))
+                            if (!newYear && building.Period != 10)
+                            //!building.DataPath.StartsWith("MABAL"))
                             {
                                 for (int li = 0; li < customer.lastBal.Length; li++) { opBal += customer.lastBal[li]; }
                                 for (int i = 0; i < 12 - opBalPeriod; i++) { opBal += customer.balance[i]; }
@@ -119,9 +131,15 @@ namespace Astrodon.Classes
                                     for (int li = 0; li < customer.lastBal.Length; li++) { opBal += customer.lastBal[li]; }
                                     for (int i = 0; i < 12 - opBalPeriod; i++) { opBal += customer.balance[i]; }
                                 }
-                                else if (bPeriod == 1 && !building.DataPath.StartsWith("MABAL"))
+                                else if (bPeriod == 1 && building.Period != 10)
+                                //!building.DataPath.StartsWith("MABAL"))
                                 {
                                     for (int li = 0; li < customer.lastBal.Length; li++) { opBal += customer.lastBal[li]; }
+                                    for (int i = 0; i < 12 - opBalPeriod; i++) { opBal += customer.balance[i]; }
+                                }
+                                else if (bPeriod == 1 && building.Period == 10)
+                                {
+                                    //for (int li = 0; li < customer.lastBal.Length; li++) { opBal += customer.lastBal[li]; }
                                     for (int i = 0; i < 12 - opBalPeriod; i++) { opBal += customer.balance[i]; }
                                 }
                                 else
