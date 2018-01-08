@@ -657,9 +657,8 @@
             // allocationSheetToolStripMenuItem
             // 
             this.allocationSheetToolStripMenuItem.Name = "allocationSheetToolStripMenuItem";
-            this.allocationSheetToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.allocationSheetToolStripMenuItem.Text = "Allocation Sheet";
-            this.allocationSheetToolStripMenuItem.Visible = false;
+            this.allocationSheetToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.allocationSheetToolStripMenuItem.Text = "Request Allocations";
             this.allocationSheetToolStripMenuItem.Click += new System.EventHandler(this.allocationSheetToolStripMenuItem_Click);
             // 
             // levyRollToolStripMenuItem

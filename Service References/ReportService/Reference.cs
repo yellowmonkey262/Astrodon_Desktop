@@ -636,6 +636,9 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/MonthlyReport", ReplyAction="http://tempuri.org/IReportService/MonthlyReportResponse")]
         byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/RequestAllocations", ReplyAction="http://tempuri.org/IReportService/RequestAllocationsResponse")]
+        void RequestAllocations(string sqlConnectionString, int userId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -703,6 +706,10 @@ namespace Astrodon.ReportService {
         
         public byte[] MonthlyReport(string sqlConnectionString, System.DateTime processMonth, bool completedItems, System.Nullable<int> userId) {
             return base.Channel.MonthlyReport(sqlConnectionString, processMonth, completedItems, userId);
+        }
+        
+        public void RequestAllocations(string sqlConnectionString, int userId) {
+            base.Channel.RequestAllocations(sqlConnectionString, userId);
         }
     }
 }

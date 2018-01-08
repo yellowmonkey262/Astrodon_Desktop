@@ -685,7 +685,14 @@ namespace Astrodon
 
         private void allocationSheetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pnlContents.Controls.Clear();
+            if (Controller.AskQuestion("Are you sure you want to request more allocations?"))
+            {
+                using (var reportService = ReportService.ReportServiceClient.CreateInstance())
+                {
+                    reportService.RequestAllocations(SqlDataHandler.GetConnectionString(), Controller.user.id);
+                    Controller.ShowMessage("The server will email your next set of allocations.");
+                }
+            }
         }
 
         private void publicHolidaysToolStripMenuItem_Click(object sender, EventArgs e)

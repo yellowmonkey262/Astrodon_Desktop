@@ -168,8 +168,25 @@ namespace Astrodon.Reports
             if (string.IsNullOrWhiteSpace(dataFolder))
                 return null;
 
-            string folder = "Invoices" + @"\" + dt.ToString("MMM yyyy");
+            string folder = "Invoices" + @"\" + dt.ToString("yyyy") + @"\" + dt.ToString("MMM yyyy"); 
             string outputPath = (dataFolder + folder).Trim();
+
+            if(!Directory.Exists(outputPath))
+            {
+                folder = "Invoices" + @"\" + dt.ToString("MMM yyyy");
+                outputPath = (dataFolder + folder).Trim();
+                if (!Directory.Exists(outputPath))
+                {
+                    if (!Directory.Exists(outputPath))
+                    {
+                        folder = "Invoices" + @"\" + dt.ToString("yyyy") + @"\" + dt.ToString("MMM");
+                        outputPath = (dataFolder + folder).Trim();
+
+                    }
+
+
+                }
+            }
 
             if (Directory.Exists(outputPath))
             {

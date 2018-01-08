@@ -250,6 +250,10 @@
     <Compile Include="Migrations\201712111013062_BuildingMeetingScheduleMeetingTimes.Designer.cs">
       <DependentUpon>201712111013062_BuildingMeetingScheduleMeetingTimes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801050721511_Astrodon2018.cs" />
+    <Compile Include="Migrations\201801050721511_Astrodon2018.Designer.cs">
+      <DependentUpon>201801050721511_Astrodon2018.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -440,6 +444,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712111013062_BuildingMeetingScheduleMeetingTimes.resx">
       <DependentUpon>201712111013062_BuildingMeetingScheduleMeetingTimes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801050721511_Astrodon2018.resx">
+      <DependentUpon>201801050721511_Astrodon2018.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
