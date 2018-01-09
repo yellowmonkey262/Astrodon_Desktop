@@ -139,8 +139,15 @@ namespace Astrodon.Classes
                                 }
                                 else if (bPeriod == 1 && building.Period == 10)
                                 {
-                                    //for (int li = 0; li < customer.lastBal.Length; li++) { opBal += customer.lastBal[li]; }
-                                    for (int i = 0; i < 12 - opBalPeriod; i++) { opBal += customer.balance[i]; }
+                                    if (thisYear > dataYear)
+                                    {
+                                        //for (int li = 0; li < customer.lastBal.Length; li++) { opBal += customer.lastBal[li]; }
+                                        for (int i = 0; i < 12 - opBalPeriod; i++) { opBal += customer.balance[i]; }
+                                    }
+                                    else
+                                    {
+                                        for (int li = 0; li < (customer.lastBal.Length - (opBalPeriod + 1)); li++) { opBal += customer.lastBal[li]; }
+                                    }
                                 }
                                 else
                                 {
