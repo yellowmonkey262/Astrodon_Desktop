@@ -714,9 +714,17 @@ namespace Astrodon.Controls.Requisitions
             }
 
         }
+
+        private void btnDefaultLedger_Click(object sender, EventArgs e)
+        {
+            cmbLedger_SelectedIndexChanged(sender, e);
+        }
+
+        private void btnDefaultDate_Click(object sender, EventArgs e)
+        {
+            dtInvoiceDate_ValueChanged(sender, e);
+        }
     }
-
-
 
 
     class BuildingRequisitionItem

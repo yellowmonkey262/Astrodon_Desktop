@@ -30,6 +30,9 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnDefaultDate = new System.Windows.Forms.Button();
+            this.btnDefaultLedger = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.cbSupplierBankAccount = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.dtInvoiceDate = new System.Windows.Forms.DateTimePicker();
@@ -44,7 +47,6 @@
             this.dgItems = new System.Windows.Forms.DataGridView();
             this.ofdAttachment = new System.Windows.Forms.OpenFileDialog();
             this.btnSave = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).BeginInit();
             this.SuspendLayout();
@@ -60,6 +62,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnDefaultDate);
+            this.panel1.Controls.Add(this.btnDefaultLedger);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.cbSupplierBankAccount);
             this.panel1.Controls.Add(this.label2);
@@ -76,6 +80,36 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(621, 165);
             this.panel1.TabIndex = 53;
+            // 
+            // btnDefaultDate
+            // 
+            this.btnDefaultDate.Location = new System.Drawing.Point(456, 104);
+            this.btnDefaultDate.Name = "btnDefaultDate";
+            this.btnDefaultDate.Size = new System.Drawing.Size(106, 23);
+            this.btnDefaultDate.TabIndex = 66;
+            this.btnDefaultDate.Text = "Set Default";
+            this.btnDefaultDate.UseVisualStyleBackColor = true;
+            this.btnDefaultDate.Click += new System.EventHandler(this.btnDefaultDate_Click);
+            // 
+            // btnDefaultLedger
+            // 
+            this.btnDefaultLedger.Location = new System.Drawing.Point(456, 77);
+            this.btnDefaultLedger.Name = "btnDefaultLedger";
+            this.btnDefaultLedger.Size = new System.Drawing.Size(106, 23);
+            this.btnDefaultLedger.TabIndex = 65;
+            this.btnDefaultLedger.Text = "Set Default";
+            this.btnDefaultLedger.UseVisualStyleBackColor = true;
+            this.btnDefaultLedger.Click += new System.EventHandler(this.btnDefaultLedger_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(455, 132);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(107, 23);
+            this.button1.TabIndex = 64;
+            this.button1.Text = "Set as default";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // cbSupplierBankAccount
             // 
@@ -210,16 +244,6 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(455, 132);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(107, 23);
-            this.button1.TabIndex = 64;
-            this.button1.Text = "Set as default";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // usrSupplierBatchRequisition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -256,5 +280,7 @@
         private System.Windows.Forms.ComboBox cbSupplierBankAccount;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnDefaultDate;
+        private System.Windows.Forms.Button btnDefaultLedger;
     }
 }
