@@ -1,4 +1,4 @@
-﻿using Astro.Library.Entities;
+using Astro.Library.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -75,17 +75,29 @@ namespace Astrodon.Controls
                     int tPeriod = 19;
                     if (startPeriod <= 0)
                     {
-                        if (isthisyear) { tPeriod = 18 + startPeriod; } else { lPeriod = 31 + startPeriod; }
+                        if (isthisyear) { tPeriod = 18 + startPeriod + 1; } else { lPeriod = 31 + startPeriod; }
                     }
                     else
                     {
                         tPeriod = 6 + startPeriod;
                     }
                     double lbal;
+
                     for (int i = 20; i <= lPeriod; i++) { bal += (double.TryParse(accBits[i], out lbal) ? lbal : 0); }
-                    if (isthisyear || startPeriod > 0)
+                    if (Controller.user.id == 1)
                     {
-                        for (int i = 7; i <= tPeriod; i++) { bal += (double.TryParse(accBits[i], out lbal) ? lbal : 0); }
+                        MessageBox.Show(bal.ToString());
+                    }
+                    if (isthisyear)//|| startPeriod > 0
+                    {
+                        for (int i = 7; i <= tPeriod; i++)
+                        {
+                            bal += (double.TryParse(accBits[i], out lbal) ? lbal : 0);
+                            if (Controller.user.id == 1)
+                            {
+                                MessageBox.Show((i - 6).ToString() + "=" + bal.ToString());
+                            }
+                        }
                     }
                 }
                 catch { }
