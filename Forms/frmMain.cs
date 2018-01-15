@@ -81,6 +81,7 @@ namespace Astrodon
             notifyIcon1.Visible = false;
 
             unPaidRequisitionsMenuItem.Enabled = Controller.UserIsSheldon(); //Sheldon and Tertia
+            publishManagementPackToolStripMenuItem.Enabled = Controller.UserIsSheldon();
 
         }
 
@@ -702,6 +703,15 @@ namespace Astrodon
             dt.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(dt);
             toolStripStatusLabel1.Text = "Public Holidays";
+        }
+
+        private void publishManagementPackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucPublishManagementPack dt = new ucPublishManagementPack();
+            dt.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(dt);
+            toolStripStatusLabel1.Text = "Publish Management Pack";
         }
     }
 }

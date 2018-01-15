@@ -102,6 +102,7 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.publishManagementPackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -635,6 +636,7 @@
             this.allocationSheetToolStripMenuItem,
             this.levyRollToolStripMenuItem,
             this.managementPackToolStripMenuItem,
+            this.publishManagementPackToolStripMenuItem,
             this.calendarToolStripMenuItem});
             this.monthlyFinancialsToolStripMenuItem.Name = "monthlyFinancialsToolStripMenuItem";
             this.monthlyFinancialsToolStripMenuItem.Size = new System.Drawing.Size(119, 20);
@@ -643,42 +645,42 @@
             // checklistToolStripMenuItem
             // 
             this.checklistToolStripMenuItem.Name = "checklistToolStripMenuItem";
-            this.checklistToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.checklistToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.checklistToolStripMenuItem.Text = "Checklist";
             this.checklistToolStripMenuItem.Click += new System.EventHandler(this.checklistToolStripMenuItem_Click);
             // 
             // reportToolStripMenuItem
             // 
             this.reportToolStripMenuItem.Name = "reportToolStripMenuItem";
-            this.reportToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.reportToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.reportToolStripMenuItem.Text = "Report";
             this.reportToolStripMenuItem.Click += new System.EventHandler(this.reportToolStripMenuItem_Click);
             // 
             // allocationSheetToolStripMenuItem
             // 
             this.allocationSheetToolStripMenuItem.Name = "allocationSheetToolStripMenuItem";
-            this.allocationSheetToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.allocationSheetToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.allocationSheetToolStripMenuItem.Text = "Request Allocations";
             this.allocationSheetToolStripMenuItem.Click += new System.EventHandler(this.allocationSheetToolStripMenuItem_Click);
             // 
             // levyRollToolStripMenuItem
             // 
             this.levyRollToolStripMenuItem.Name = "levyRollToolStripMenuItem";
-            this.levyRollToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.levyRollToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.levyRollToolStripMenuItem.Text = "Levy Roll";
             this.levyRollToolStripMenuItem.Click += new System.EventHandler(this.levyRollToolStripMenuItem_Click);
             // 
             // managementPackToolStripMenuItem
             // 
             this.managementPackToolStripMenuItem.Name = "managementPackToolStripMenuItem";
-            this.managementPackToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.managementPackToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.managementPackToolStripMenuItem.Text = "Management Pack";
             this.managementPackToolStripMenuItem.Click += new System.EventHandler(this.managementPackToolStripMenuItem_Click);
             // 
             // calendarToolStripMenuItem
             // 
             this.calendarToolStripMenuItem.Name = "calendarToolStripMenuItem";
-            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.calendarToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
             this.calendarToolStripMenuItem.Text = "Calendar";
             this.calendarToolStripMenuItem.Click += new System.EventHandler(this.calendarToolStripMenuItem_Click);
             // 
@@ -727,6 +729,13 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
+            // 
+            // publishManagementPackToolStripMenuItem
+            // 
+            this.publishManagementPackToolStripMenuItem.Name = "publishManagementPackToolStripMenuItem";
+            this.publishManagementPackToolStripMenuItem.Size = new System.Drawing.Size(215, 22);
+            this.publishManagementPackToolStripMenuItem.Text = "Publish Management Pack";
+            this.publishManagementPackToolStripMenuItem.Click += new System.EventHandler(this.publishManagementPackToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -832,5 +841,6 @@
         private System.Windows.Forms.ToolStripMenuItem calendarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allocationSheetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem publicHolidaysToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem publishManagementPackToolStripMenuItem;
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -297,6 +298,21 @@ namespace Astrodon
                     dm.SetData(eQ2, null, out status);
                 }
             }
+        }
+
+        public static string ReadResourceString(string path)
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            string result = string.Empty;
+
+            using (var stream = assembly.GetManifestResourceStream(path))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    result = reader.ReadToEnd();
+                }
+            }
+            return result;
         }
     }
 }

@@ -44,8 +44,8 @@ namespace Astrodon.Classes {
         }
 
         public bool ConnectClient(bool trustee) {
-            if (Environment.MachineName == "PASTELPARTNER")
-                return false;
+            //if (Environment.MachineName == "PASTELPARTNER")
+          //      return false;
 
             PasswordAuthenticationMethod PasswordConnection = new PasswordAuthenticationMethod("root", "root@66r94e!@#");
             KeyboardInteractiveAuthenticationMethod KeyboardInteractive = new KeyboardInteractiveAuthenticationMethod("root");
@@ -68,7 +68,8 @@ namespace Astrodon.Classes {
                     if (CheckTrusteeDirectory()) { client.ChangeDirectory(trusteeDirectory); }
                 }
                 return client.IsConnected;
-            } catch {
+            } catch (Exception e) {
+                Controller.HandleError(e);
                 return false;
             }
         }

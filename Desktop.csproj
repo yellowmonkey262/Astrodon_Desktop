@@ -658,6 +658,12 @@
     <Compile Include="Reports\ManagementPack\ManangementPackUserControl.Designer.cs">
       <DependentUpon>ManangementPackUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\ManagementPack\ucPublishManagementPack.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reports\ManagementPack\ucPublishManagementPack.Designer.cs">
+      <DependentUpon>ucPublishManagementPack.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reports\ManagementPack\ucTOCItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -908,6 +914,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ManagementPack\ManangementPackUserControl.resx">
       <DependentUpon>ManangementPackUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ManagementPack\ucPublishManagementPack.resx">
+      <DependentUpon>ucPublishManagementPack.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\ManagementPack\ucTOCItem.resx">
       <DependentUpon>ucTOCItem.cs</DependentUpon>
@@ -1172,6 +1181,8 @@
     <None Include="rem_HOA_template.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="Reports\ManagementPack\ManagementPackEmail.txt" />
+    <EmbeddedResource Include="Reports\ManagementPack\ManagementPackDeclined.txt" />
     <Content Include="Resources\AstradonNewLogo.jpg" />
     <Content Include="Resources\stdmd5.jpg" />
     <None Include="signature.png">

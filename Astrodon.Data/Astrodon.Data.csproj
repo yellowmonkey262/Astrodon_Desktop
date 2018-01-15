@@ -259,6 +259,14 @@
     <Compile Include="Migrations\201801150950309_PersistManagementReport.Designer.cs">
       <DependentUpon>201801150950309_PersistManagementReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801151000173_ManagementPackPublishedFlag.cs" />
+    <Compile Include="Migrations\201801151000173_ManagementPackPublishedFlag.Designer.cs">
+      <DependentUpon>201801151000173_ManagementPackPublishedFlag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801151108351_ManagementPackComments.cs" />
+    <Compile Include="Migrations\201801151108351_ManagementPackComments.Designer.cs">
+      <DependentUpon>201801151108351_ManagementPackComments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -455,6 +463,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801150950309_PersistManagementReport.resx">
       <DependentUpon>201801150950309_PersistManagementReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801151000173_ManagementPackPublishedFlag.resx">
+      <DependentUpon>201801151000173_ManagementPackPublishedFlag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801151108351_ManagementPackComments.resx">
+      <DependentUpon>201801151108351_ManagementPackComments.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
