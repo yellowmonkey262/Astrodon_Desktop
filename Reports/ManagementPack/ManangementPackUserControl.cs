@@ -690,6 +690,9 @@ namespace Astrodon.Reports
                             managementPackReport.UserId = Controller.user.id;
                             managementPackReport.DateUpdated = now;
                             managementPackReport.ReportData = File.ReadAllBytes(dlgSave.FileName);
+                            managementPackReport.Published = false;
+                            
+
 
                             var itemsToRemove = managementPackReport.Items.ToList();
                             foreach(var i in itemsToRemove)

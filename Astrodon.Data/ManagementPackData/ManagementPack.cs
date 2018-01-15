@@ -29,5 +29,6 @@ namespace Astrodon.Data.ManagementPackData
         public virtual byte[] ReportData { get; set; }
 
         public virtual ICollection<ManagementPackReportItem> Items { get; set; }
+        public bool Published { get; set; }
     }
 }
