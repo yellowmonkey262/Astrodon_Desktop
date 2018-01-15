@@ -104,6 +104,7 @@ namespace Astrodon.Data
 
         public DbSet<ManagementPackTOCItem> ManagementPackTOCItemSet { get; set; }
         public DbSet<ManagementPack> ManagementPackSet { get; set; }
+        public DbSet<ManagementPackReportItem> ManagementPackReportItemSet { get; set; }
 
         #endregion
 

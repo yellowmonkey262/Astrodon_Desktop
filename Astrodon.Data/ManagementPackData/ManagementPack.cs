@@ -27,5 +27,7 @@ namespace Astrodon.Data.ManagementPackData
         public virtual DateTime DateUpdated { get; set; }
 
         public virtual byte[] ReportData { get; set; }
+
+        public virtual ICollection<ManagementPackReportItem> Items { get; set; }
     }
 }

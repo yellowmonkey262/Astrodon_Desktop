@@ -18,6 +18,8 @@ using Astrodon.Data.Base;
 using Astrodon.Classes;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using System.Data.Entity;
+using Astrodon.Data.ManagementPackData;
 
 namespace Astrodon.Reports
 {
@@ -140,6 +142,8 @@ namespace Astrodon.Reports
             btnCheckList.Enabled = false;
             try
             {
+                _TableOfContents = new List<TableOfContentForPdfRecord>();
+                LoadExistingPack();
                 LoadFiles();
                 PopulateTableOfContents();
                 button2.Enabled = true;
@@ -151,6 +155,55 @@ namespace Astrodon.Reports
             finally
             {
                 button1.Enabled = true;
+            }
+        }
+
+        private void LoadExistingPack()
+        {
+            var building = cmbBuilding.SelectedItem as Building;
+            var year = cmbYear.SelectedItem as IdValue;
+            var month = cmbMonth.SelectedItem as IdValue;
+
+            var dt = new DateTime(year.Id, month.Id, 1);
+            DateTime now = DateTime.Now;
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var managementPackReport = context.ManagementPackSet.Include(a => a.Items)
+                                                                    .SingleOrDefault(a => a.BuildingId == building.ID && a.Period == dt);
+                if (managementPackReport != null)
+                {
+                    _TableOfContents.Clear();
+                    foreach (var item in managementPackReport.Items)
+                    {
+
+                        if (item.IsTempFile)
+                        {
+                            var reportFileName = Path.GetTempFileName();
+                            item.Path = reportFileName;
+                            File.WriteAllBytes(item.Path, item.FileData);
+                        }
+
+                        if (File.Exists(item.Path))
+                        {
+                            _TableOfContents.Add(new TableOfContentForPdfRecord()
+                            {
+                                Path = item.Path,
+                                File = item.File,
+                                Description = item.Description,
+                                Description2 = item.Description2,
+                                Pages = item.Pages,
+                                Position = item.Position,
+                                FileDate = item.FileDate,
+                                IsTempFile = item.IsTempFile,
+                                IncludeInTOC = true
+                            });
+                        }else
+                        {
+                            Controller.ShowMessage("File: " + item.Path + " is missing or does not exist, item skipped.");
+                        }
+                    }
+                }
             }
         }
 
@@ -197,7 +250,9 @@ namespace Astrodon.Reports
             }
             else
             {
-                Controller.ShowMessage("Folder does not exist [" + outputPath + "]");
+                if (Controller.AskQuestion("Folder does not exist [" + outputPath + "], would you like to create the folder?"))
+                    Directory.CreateDirectory(outputPath);
+                
                 return new List<string>();
             }
         }
@@ -242,7 +297,6 @@ namespace Astrodon.Reports
 
         private void LoadFiles()
         {
-            _TableOfContents = new List<TableOfContentForPdfRecord>();
             var building = cmbBuilding.SelectedItem as Building;
             var year = cmbYear.SelectedItem as IdValue;
             var month = cmbMonth.SelectedItem as IdValue;
@@ -255,17 +309,20 @@ namespace Astrodon.Reports
                     if (totalPages > 0)
                     {
                         var fileDate = File.GetCreationTime(files[i]);
-
-                        _TableOfContents.Add(new TableOfContentForPdfRecord()
+                        var existing = _TableOfContents.SingleOrDefault(a => a.Path == files[i]);
+                        if (existing == null)
                         {
-                            Path = files[i],
-                            File = Path.GetFileName( files[i]),
-                            Position = 0,
-                            Pages = totalPages,
-                            FileDate = fileDate,
-                            IsTempFile = false,
-                            IncludeInTOC = true
-                        });
+                            _TableOfContents.Add(new TableOfContentForPdfRecord()
+                            {
+                                Path = files[i],
+                                File = Path.GetFileName(files[i]),
+                                Position = 0,
+                                Pages = totalPages,
+                                FileDate = fileDate,
+                                IsTempFile = false,
+                                IncludeInTOC = true
+                            });
+                        }
                     }
                 }
                 _TableOfContents = _TableOfContents.OrderBy(a => a.FileDate).ToList();
@@ -618,7 +675,7 @@ namespace Astrodon.Reports
 
                         using (var context = SqlDataHandler.GetDataContext())
                         {
-                            var managementPackReport = context.ManagementPackSet.SingleOrDefault(a => a.BuildingId == building.ID && a.Period == dt);
+                            var managementPackReport = context.ManagementPackSet.Include(a => a.Items).SingleOrDefault(a => a.BuildingId == building.ID && a.Period == dt);
                             if(managementPackReport == null)
                             {
                                 managementPackReport = new Data.ManagementPackData.ManagementPack()
@@ -626,12 +683,45 @@ namespace Astrodon.Reports
                                     BuildingId = building.ID,
                                     Period = dt,
                                     DateCreated = now,
+                                    Items = new List<ManagementPackReportItem>()
                                 };
                                 context.ManagementPackSet.Add(managementPackReport);
                             }
                             managementPackReport.UserId = Controller.user.id;
                             managementPackReport.DateUpdated = now;
                             managementPackReport.ReportData = File.ReadAllBytes(dlgSave.FileName);
+
+                            var itemsToRemove = managementPackReport.Items.ToList();
+                            foreach(var i in itemsToRemove)
+                            {
+                                managementPackReport.Items.Remove(i);
+                                context.ManagementPackReportItemSet.Remove(i);
+                            }
+
+                            foreach (var item in records.Where(a => a.IncludeInTOC).OrderBy(a => a.Position))
+                            {
+                                var i = new ManagementPackReportItem()
+                                {
+                                    ManagementPack = managementPackReport,
+                                    ManagementPackId = managementPackReport.id,
+                                    Path = item.Path,
+                                    File = item.File,
+                                    Description = item.Description,
+                                    Description2 = item.Description2,
+                                    Pages = item.Pages,
+                                    Position = item.Position,
+                                    FileDate = item.FileDate,
+                                    IsTempFile = item.IsTempFile
+                                };
+
+                                if (i.IsTempFile)
+                                    i.FileData = File.ReadAllBytes(i.Path);
+
+                                managementPackReport.Items.Add(i);
+
+
+                            }
+
                             context.SaveChanges();
                         }
                         Process.Start(dlgSave.FileName);
