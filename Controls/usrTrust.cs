@@ -75,7 +75,15 @@ namespace Astrodon.Controls
                     int tPeriod = 19;
                     if (startPeriod <= 0)
                     {
-                        if (isthisyear) { tPeriod = 18 + startPeriod + 1; } else { lPeriod = 31 + startPeriod; }
+                        if (isthisyear)
+                        {
+                            int additionalMonth = account.StartsWith("9391", StringComparison.Ordinal) ? 1 : 0;
+                            tPeriod = 18 + startPeriod + additionalMonth;
+                        }
+                        else
+                        {
+                            lPeriod = 31 + startPeriod;
+                        }
                     }
                     else
                     {
@@ -168,7 +176,7 @@ namespace Astrodon.Controls
             else
             {
                 List<Trns> bTrans = LoadTransactions(sPeriod, ePeriod, selectedBuilding.Trust, out remBal, out trnBal);
-                double openingBalance = GetBalance(selectedBuilding.Trust, fromMonth - 1) + remBal;
+                double openingBalance = GetBalance(selectedBuilding.Trust, fromMonth - 1) + remBal; //- selectedBuilding.Period
                 Trns openingTrns = new Trns
                 {
                     Amount = openingBalance.ToString("#0.00"),
@@ -220,7 +228,7 @@ namespace Astrodon.Controls
                     double trnBal = 0;
                     double remBal = 0;
                     List<Trns> bTrans = LoadTransactions(sPeriod, ePeriod, b.Trust, out remBal, out trnBal);
-                    double openingBalance = GetBalance(b.Trust, fromMonth - 1) + remBal;
+                    double openingBalance = GetBalance(b.Trust, fromMonth - 1) + remBal;//- b.Period
                     Trns openingTrns = new Trns
                     {
                         Amount = openingBalance.ToString("#0.00"),
