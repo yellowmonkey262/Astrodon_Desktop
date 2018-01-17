@@ -328,10 +328,10 @@ namespace Astrodon.Reports.ManagementPack
                     string workingDirectory = ftpClient.WorkingDirectory;
 
                     ftpClient.ChangeDirectory(false);
+                    string uploadDirectory = workingDirectory + "/" + _Webfolder + "/" + dataItem.Period.Year.ToString() + "/" + dataItem.Period.ToString("MMM");
                     ftpClient.CreateDirectory(_Webfolder, false);
 
-                    string uploadDirectory = workingDirectory + "/"+ _Webfolder;
-                    string uploadFile = uploadDirectory + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
+                     string uploadFile = uploadDirectory + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
                    
                     ftpClient.UploadReplace(_SelectedItem.PDFFileName, uploadDirectory, false);
 
