@@ -198,7 +198,8 @@ namespace Astrodon.Reports
                                 IsTempFile = item.IsTempFile,
                                 IncludeInTOC = true
                             });
-                        }else
+                        }
+                        else
                         {
                             Controller.ShowMessage("File: " + item.Path + " is missing or does not exist, item skipped.");
                         }

@@ -1,5 +1,6 @@
 ﻿using Renci.SshNet;
 using Renci.SshNet.Common;
+using Renci.SshNet.Sftp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -106,7 +107,7 @@ namespace Astrodon.Classes {
                     Console.WriteLine("Uploading {0} ({1:N0} bytes)", fileName, fileStream.Length);
                     client.BufferSize = 4 * 1024; // bypass Payload error large files
                     client.UploadFile(fileStream, remoteFile);
-
+                    
                     var listDirectory = (!trustee ? client.ListDirectory(workingdirectory) : client.ListDirectory(trusteeDirectory));
 
                     foreach (var fi in listDirectory) {
@@ -117,9 +118,89 @@ namespace Astrodon.Classes {
                     }
                 }
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Upload exception " + ex.Message);
             }
             return success;
+        }
+
+
+        public bool ForceUpload(String fileName, String remoteFile, bool trustee)
+        {
+            if (client == null || !client.IsConnected)
+                ConnectClient(trustee);
+
+            bool success = false;
+            try
+            {
+                using (var fileStream = new FileStream(fileName, FileMode.Open))
+                {
+                    Console.WriteLine("Uploading {0} ({1:N0} bytes)", fileName, fileStream.Length);
+                    client.BufferSize = 4 * 1024; // bypass Payload error large files
+                    client.UploadFile(fileStream, remoteFile);
+                    success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Upload exception " + ex.Message);
+                success = false;
+            }
+            return success;
+        }
+
+        public bool ForceDirectory(string path, bool trustee)
+        {
+            try
+            {
+                if (client == null || !client.IsConnected)
+                    ConnectClient(trustee);
+
+
+                string current = "";
+
+                if (path[0] == '/')
+                {
+                    path = path.Substring(1);
+                }
+
+                while (!string.IsNullOrEmpty(path))
+                {
+                    int p = path.IndexOf('/');
+                    current += '/';
+                    if (p >= 0)
+                    {
+                        current += path.Substring(0, p);
+                        path = path.Substring(p + 1);
+                    }
+                    else
+                    {
+                        current += path;
+                        path = "";
+                    }
+
+                    if (client.Exists(current))
+                    {
+                        SftpFileAttributes attrs = client.GetAttributes(current);
+                        if (!attrs.IsDirectory)
+                        {
+                            throw new Exception("not directory");
+                        }
+                    }
+                    else
+                    {
+                        client.CreateDirectory(current);
+                        client.ChangePermissions(current, 777);
+                    }
+                }
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Controller.HandleError(e);
+                return false;
+            }
         }
 
         public bool UploadReplace(String fileName, String remoteFile, bool trustee) {
@@ -148,18 +229,19 @@ namespace Astrodon.Classes {
                 if (!folders.Contains(path)) {
                     client.CreateDirectory(client.WorkingDirectory + "/" + path);
                     client.ChangePermissions(client.WorkingDirectory + "/" + path, 777);
+                    
                     folders = RemoteFolders(trustee);
                     if (folders.Contains(path)) {
                         return true;
                     } else {
-                        MessageBox.Show("No folder created");
+                        MessageBox.Show("E:1 No folder created - " + client.WorkingDirectory + "/" + path);
                         return false;
                     }
                 } else {
                     return true;
                 }
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("E2 : " + ex.Message + " -> " + client.WorkingDirectory + "/" + path);
                 return false;
             }
         }
@@ -167,6 +249,12 @@ namespace Astrodon.Classes {
         public void ChangeDirectory(bool trustee) {
             if (client == null || !client.IsConnected) { ConnectClient(trustee); }
             client.ChangeDirectory(trustee ? trusteeDirectory : workingdirectory);
+        }
+
+        public void ChangeDirectory(bool trustee,string path)
+        {
+            if (client == null || !client.IsConnected) { ConnectClient(trustee); }
+            client.ChangeDirectory(path);
         }
 
         public bool DeleteDirectory(String path, bool trustee) {

@@ -294,12 +294,16 @@ namespace Astrodon.Reports.ManagementPack
 
                 if (UploadFileToBuilding(building, dataItem))
                 {
+                    String status = "";
+                    if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", emailContent, false, false, out status))
+                    {
+                        Controller.HandleError("Unable to notify trustees by email : " + status);
+                    }
 
                     foreach (var trustee in trustees)
                     {
                         if (trustee.Email != null && trustee.Email.Length > 0)
                         {
-                            String status = "";
                             if (!Mailer.SendDirectMail(building.pm, trustee.Email, "", "", "Monthly financial pack", emailContent, false, false, out status))
                             {
                                 Controller.HandleError("Unable to notify trustees by email : " + status);
@@ -328,12 +332,19 @@ namespace Astrodon.Reports.ManagementPack
                     string workingDirectory = ftpClient.WorkingDirectory;
 
                     ftpClient.ChangeDirectory(false);
-                    string uploadDirectory = workingDirectory + "/" + _Webfolder + "/" + dataItem.Period.Year.ToString() + "/" + dataItem.Period.ToString("MMM");
-                    ftpClient.CreateDirectory(_Webfolder, false);
 
-                     string uploadFile = uploadDirectory + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
-                   
-                    ftpClient.UploadReplace(_SelectedItem.PDFFileName, uploadDirectory, false);
+                    string uploadDirectory = workingDirectory + "/" + _Webfolder + "/" + dataItem.Period.Year.ToString() + "/" + dataItem.Period.ToString("MMM") ;
+                    string uploadFile = uploadDirectory + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
+
+                    ftpClient.ForceDirectory(uploadDirectory, false);
+
+
+
+                    if (!ftpClient.ForceUpload(_SelectedItem.PDFFileName, uploadFile, false))
+                    {
+                        Controller.HandleError("Unable to upload file to FTP server:" + uploadFile);
+                        return false;
+                    }
 
                     result = true;
                 }
