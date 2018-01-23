@@ -68,9 +68,9 @@ namespace Astrodon.Data
             }
         }
 
-        public static void HouseKeepSystemLog()
+        public static void HouseKeepSystemLog(string connectionString)
         {
-            using (var dbContext = new DataContext())
+            using (var dbContext = new DataContext(connectionString))
             {
                 dbContext.Database.ExecuteSqlCommand("delete from SystemLogs where EventTime < GetDate() - 14");
             }
@@ -148,6 +148,10 @@ namespace Astrodon.Data
             }
         }
 
+        public void ClearStuckRequisitons(int buildingId)
+        {
+            Database.ExecuteSqlCommand("update tblRequisition set RequisitionBatchId = null where processed = 0 and RequisitionBatchId is not null and building = " + buildingId.ToString());
+        }
 
         public void CommitRequisitionBatch(int requisitionBatchId)
         {

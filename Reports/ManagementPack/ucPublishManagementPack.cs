@@ -10,6 +10,7 @@ using Astrodon.Data;
 using System.IO;
 using System.Diagnostics;
 using Astrodon.Data.ManagementPackData;
+using System.Web;
 
 namespace Astrodon.Reports.ManagementPack
 {
@@ -17,6 +18,7 @@ namespace Astrodon.Reports.ManagementPack
     {
         private List<ManagementPackPreviewItem> _Data;
         private string _Webfolder = "Financial packs";
+        private string _RootURL = "http://www.astrodon.co.za/fileadmin/Trustees/";
 
         public ucPublishManagementPack()
         {
@@ -288,57 +290,87 @@ namespace Astrodon.Reports.ManagementPack
                 var customers = Controller.pastel.AddCustomers(building.Code, building.DataPath);
                 var trustees = customers.Where(a => a.IsTrustee).ToList();
 
-                emailContent = emailContent.Replace("{MANAGEMENTPACKPERIOD}", _SelectedItem.Period.ToString("MMMM yyyy"));
-                emailContent = emailContent.Replace("{BUILDINGNAME}", building.Building);
-                emailContent = emailContent.Replace("{PMEMAILADDRESS}", building.pm);
-
-                if (UploadFileToBuilding(building, dataItem))
+                if (trustees.Count() > 0)
                 {
-                    String status = "";
-                    if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", emailContent, false, false, out status))
+                    emailContent = emailContent.Replace("{MANAGEMENTPACKPERIOD}", _SelectedItem.Period.ToString("MMMM yyyy"));
+                    emailContent = emailContent.Replace("{BUILDINGNAME}", building.Building);
+                    emailContent = emailContent.Replace("{PMEMAILADDRESS}", building.pm);
+                    string fileUrl = string.Empty;
+                    if (UploadFileToBuilding(building, dataItem, out fileUrl))
                     {
-                        Controller.HandleError("Unable to notify trustees by email : " + status);
-                    }
+                        tbComments.Text = "File was uploaded to\n" + fileUrl;
+                        Application.DoEvents();
 
-                    foreach (var trustee in trustees)
-                    {
-                        if (trustee.Email != null && trustee.Email.Length > 0)
+                        emailContent = emailContent.Replace("{URL}", fileUrl);
+                        String status = "";
+                        if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", emailContent, false, false, out status))
                         {
-                            if (!Mailer.SendDirectMail(building.pm, trustee.Email, "", "", "Monthly financial pack", emailContent, false, false, out status))
+                            Controller.HandleError("Unable to notify trustees by email : " + status);
+                        }
+
+                        foreach (var trustee in trustees)
+                        {
+                            if (trustee.Email != null && trustee.Email.Length > 0)
                             {
-                                Controller.HandleError("Unable to notify trustees by email : " + status);
+                                tbComments.Text = tbComments.Text + "\nSent email to:"+trustee.accNumber + "-" + GetEmailString(trustee.Email);
+                                if (!Mailer.SendDirectMail(building.pm, trustee.Email, "", "", "Monthly financial pack", emailContent, false, false, out status))
+                                {
+                                    Controller.HandleError("Unable to notify trustees by email : " + status);
+                                }
+                                Application.DoEvents();
                             }
                         }
+                        _SelectedItem.Processed = true;
+                        dataItem.Published = true;
+                        context.SaveChanges();
+                        BindDataGrid();
+                        ClosePDF();
+                        Application.DoEvents();
                     }
-                    _SelectedItem.Processed = true;
-                    dataItem.Published = true;
-                    context.SaveChanges();
-                    BindDataGrid();
-                    ClosePDF();
+                }
+                else
+                {
+                    Controller.HandleError(building.Building + " does not have any trustees configured.\n Unable to upload document.", "No trustees found.");
                 }
             }
         }
 
-        private bool UploadFileToBuilding(tblBuilding building, Data.ManagementPackData.ManagementPack dataItem)
+        private string GetEmailString(string[] email)
         {
+            string result = "";
+            foreach (var e in email)
+                result = result + e + ";";
+            return result;
+        }
+
+        private bool UploadFileToBuilding(tblBuilding building, Data.ManagementPackData.ManagementPack dataItem,out string url)
+        {
+            url = string.Empty;
             try
             {
                 bool result = false;
 
                 var web = building.web;
-                var ftpClient = new Classes.Sftp(web, false);
+                var ftpClient = new Classes.Sftp(web, false,true);
                 try
                 {
                     string workingDirectory = ftpClient.WorkingDirectory;
 
-                    ftpClient.ChangeDirectory(false);
+                    ftpClient.ChangeDirectory(true);
 
                     string uploadDirectory = workingDirectory + "/" + _Webfolder + "/" + dataItem.Period.Year.ToString() + "/" + dataItem.Period.ToString("MMM") ;
                     string uploadFile = uploadDirectory + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
 
-                    ftpClient.ForceDirectory(uploadDirectory, false);
+                    url = _RootURL + web;
+                    if (!url.EndsWith("/"))
+                        url = url + "/";
 
+                    url = url + "/" + _Webfolder + "/" + dataItem.Period.Year.ToString() + "/" + dataItem.Period.ToString("MMM");
+                    url = url + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
 
+                    url = HttpUtility.UrlEncode(url);
+
+                    ftpClient.ForceDirectory(uploadDirectory, true);
 
                     if (!ftpClient.ForceUpload(_SelectedItem.PDFFileName, uploadFile, false))
                     {

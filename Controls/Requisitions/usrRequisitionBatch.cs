@@ -70,25 +70,41 @@ namespace Astrodon.Controls.Requisitions
 
         private RequisitionBatch CreateRequisitionBatch(int buildingId,bool buildingHasCSVExport, bool warnIfNoRequisitions = true)
         {
+            ShowDebug("Start batch for building");
             using (var context = SqlDataHandler.GetDataContext())
             {
+                ShowDebug("Context created");
                 int batchNumber = 0;
                 var requisitions = context.tblRequisitions
                     .Where(a => a.building == buildingId 
                              && a.processed == false 
                              && a.RequisitionBatchId == null).ToList();
+                ShowDebug("Query executed");
+
+                if (requisitions.Count < 0)
+                {
+                    context.ClearStuckRequisitons(buildingId);
+                    requisitions = context.tblRequisitions.Where(a => a.building == buildingId
+                                            && a.processed == false
+                                            && a.RequisitionBatchId == null).ToList();
+                }
+
                 if (requisitions.Count <= 0)
                 {
                     if (warnIfNoRequisitions)
                         Controller.ShowMessage("There are no outstanding requisitions to process.");
+                    ShowDebug("Return NULL in batch");
 
                     return null;
                 }
+                ShowDebug("Found Requisitions");
+
                 var previousBatch = context.RequisitionBatchSet.Where(a => a.BuildingId == buildingId).OrderByDescending(a => a.BatchNumber).FirstOrDefault();
                 if (previousBatch == null)
                     batchNumber = 1;
                 else
                     batchNumber = previousBatch.BatchNumber + 1;
+                ShowDebug("Batch Number: " + batchNumber.ToString());
 
                 //find all requisitions
 
@@ -115,13 +131,13 @@ namespace Astrodon.Controls.Requisitions
                     }
                     requisition.RequisitionBatch = batch;
                 }
-
+                ShowDebug("Save batch for building");
                 context.RequisitionBatchSet.Add(batch);
 
                 context.SaveChanges();
 
                 Application.DoEvents();
-
+                ShowDebug("Return batch for building");
                 return batch;
 
 
@@ -261,7 +277,7 @@ namespace Astrodon.Controls.Requisitions
                                 {
                                     doc.Open();
 
-                                    AddPdfDocument(copy, reportData);
+                                    AddPdfDocument(copy, reportData,"Generated Report");
 
                                     using (var context = SqlDataHandler.GetDataContext())
                                     {
@@ -273,7 +289,7 @@ namespace Astrodon.Controls.Requisitions
                                                 {
                                                     try
                                                     {
-                                                        AddPdfDocument(copy, invoice.FileData);
+                                                        AddPdfDocument(copy, invoice.FileData, invoice.FileName);
                                                     }
                                                     catch (Exception ex)
                                                     {
@@ -364,17 +380,26 @@ namespace Astrodon.Controls.Requisitions
             }
         }
 
-        private void AddPdfDocument(PdfCopy copy, byte[] document)
+        private void AddPdfDocument(PdfCopy copy, byte[] document, string documentName)
         {
-            PdfReader.unethicalreading = true;
-            using (PdfReader reader = new PdfReader(document))
+            try
             {
+               
                 PdfReader.unethicalreading = true;
-                int n = reader.NumberOfPages;
-                for (int page = 0; page < n;)
+                using (PdfReader reader = new PdfReader(document))
                 {
-                    copy.AddPage(copy.GetImportedPage(reader, ++page));
+                    PdfReader.unethicalreading = true;
+                    int n = reader.NumberOfPages;
+                    for (int page = 0; page < n;)
+                    {
+                        copy.AddPage(copy.GetImportedPage(reader, ++page));
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Controller.HandleError("Unable to add PDF document " + documentName);
+                throw e;
             }
         }
 
@@ -597,7 +622,7 @@ namespace Astrodon.Controls.Requisitions
 
                 using (var context = SqlDataHandler.GetDataContext())
                 {
-
+                   
                     var qry = from b in context.tblBuildings
                               join r in context.tblRequisitions on b.id equals r.building
                               where r.processed == false
@@ -643,6 +668,7 @@ namespace Astrodon.Controls.Requisitions
 
                         var tempCombinedReport = GetATempFile(".pdf");
                         var attachments = new Dictionary<string, byte[]>();
+                        ShowDebug("Process start "+ tempCombinedReport);
 
                         try
                         {
@@ -653,6 +679,8 @@ namespace Astrodon.Controls.Requisitions
                                 {
                                     using (copy = new PdfCopy(doc, ms))
                                     {
+                                        ShowDebug("doc.Open() " + tempCombinedReport);
+
                                         doc.Open();
 
                                         foreach (var building in buildings)
@@ -661,14 +689,20 @@ namespace Astrodon.Controls.Requisitions
                                             try
                                             {
                                                 lbProcessing.Text = "Processing " + building.Building;
+                                                ShowDebug("Processing " + building.Building);
+
                                                 Application.DoEvents();
                                                 var batch = CreateRequisitionBatch(building.id, building.IsUsingNedbank, false);
                                                 if (batch != null)
                                                 {
+                                                    ShowDebug("Created Batch " + building.Building);
+
                                                     #region Create PDF For Batch
                                                     var tempFile = GetATempFile(".pdf");
                                                     try
                                                     {
+                                                        ShowDebug("Generate Report " + building.Building);
+
                                                         var reportData = CreateReport(batch.id, tempFile);
                                                         if (reportData != null)
                                                         {
@@ -685,6 +719,8 @@ namespace Astrodon.Controls.Requisitions
                                                                     File.Delete(outputFilename);
                                                                 try
                                                                 {
+                                                                    ShowDebug("Write output file " + outputFilename + " " + building.Building);
+
                                                                     File.Copy(tempFile, outputFilename);
                                                                 }
                                                                 catch (Exception fEx)
@@ -693,7 +729,9 @@ namespace Astrodon.Controls.Requisitions
                                                                 }
 
                                                                 emailCount++;
-                                                                AddPdfDocument(copy, reportData);
+                                                                ShowDebug("AddPdfDocument " + "Batch Report" + " " + building.Building);
+
+                                                                AddPdfDocument(copy, reportData,"Batch Report");
 
                                                                 CommitRequisitionBatch(batch);
 
@@ -725,6 +763,8 @@ namespace Astrodon.Controls.Requisitions
                                                         }
                                                         else
                                                         {
+                                                            ShowDebug("Report empty " + building.Building);
+
                                                             RollbackRequsitionBatch(batch);// an error occured in this batch rollback it
                                                         }
                                                     }
@@ -734,6 +774,10 @@ namespace Astrodon.Controls.Requisitions
                                                             File.Delete(tempFile);
                                                     }
                                                     #endregion
+                                                }
+                                                else
+                                                {
+                                                    Controller.HandleError("An empty batch was returned");
                                                 }
 
                                             }
@@ -781,6 +825,11 @@ namespace Astrodon.Controls.Requisitions
                 this.Cursor = Cursors.Default;
             }
             LoadPendingRequisions();
+        }
+
+        private void ShowDebug(string v)
+        {
+            //Controller.ShowMessage(v, "Debug");
         }
 
         private byte[] CreateCSVForBuildingBatch(tblBuilding building, RequisitionBatch batch,out string fileName)

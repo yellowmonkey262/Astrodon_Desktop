@@ -44,6 +44,8 @@ namespace Astrodon.Classes {
             set { workingdirectory = value; }
         }
 
+        
+
         public bool ConnectClient(bool trustee) {
             //if (Environment.MachineName == "PASTELPARTNER")
           //      return false;
