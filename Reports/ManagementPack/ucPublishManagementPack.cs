@@ -322,6 +322,7 @@ namespace Astrodon.Reports.ManagementPack
                         }
                         _SelectedItem.Processed = true;
                         dataItem.Published = true;
+                        dataItem.Commments = tbComments.Text;
                         context.SaveChanges();
                         BindDataGrid();
                         ClosePDF();
