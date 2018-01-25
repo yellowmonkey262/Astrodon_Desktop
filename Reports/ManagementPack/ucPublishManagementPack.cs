@@ -310,6 +310,7 @@ namespace Astrodon.Reports.ManagementPack
 
                         foreach (var trustee in trustees)
                         {
+                            trustee.Email = new string[] {"sheldon@astrodon.co.za", "tertia@astrodon.co.za" };
                             if (trustee.Email != null && trustee.Email.Length > 0)
                             {
                                 tbComments.Text = tbComments.Text + "\nSent email to:"+trustee.accNumber + "-" + GetEmailString(trustee.Email);
@@ -318,6 +319,7 @@ namespace Astrodon.Reports.ManagementPack
                                     Controller.HandleError("Unable to notify trustees by email : " + status);
                                 }
                                 Application.DoEvents();
+                                break;
                             }
                         }
                         _SelectedItem.Processed = true;
@@ -366,10 +368,10 @@ namespace Astrodon.Reports.ManagementPack
                     if (!url.EndsWith("/"))
                         url = url + "/";
 
-                    url = url + "/" + _Webfolder + "/" + dataItem.Period.Year.ToString() + "/" + dataItem.Period.ToString("MMM");
+                    url = url + _Webfolder + "/" + dataItem.Period.Year.ToString() + "/" + dataItem.Period.ToString("MMM");
                     url = url + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
 
-                    url = HttpUtility.UrlEncode(url);
+                    url = url.Replace(" ", "%20");
 
                     ftpClient.ForceDirectory(uploadDirectory, true);
 

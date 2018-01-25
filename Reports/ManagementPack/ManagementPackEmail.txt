@@ -1,6 +1,6 @@
 ﻿Dear Trustee/Director,
 
-We hereby confirm that your {MANAGEMENTPACKPERIOD} monthly financial pack is ready to be downloaded from the web portal using the locatioin below.
+We hereby confirm that your {MANAGEMENTPACKPERIOD} monthly financial pack is ready to be downloaded from the web portal using the location below.
 {URL}
 
 Account #: {BUILDINGNAME} For any queries on your financial pack, please your appointed portfolio manager at {PMEMAILADDRESS}
