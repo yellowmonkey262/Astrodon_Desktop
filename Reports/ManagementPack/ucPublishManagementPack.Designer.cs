@@ -49,7 +49,7 @@
             this.dgItems.Location = new System.Drawing.Point(3, 43);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(427, 549);
+            this.dgItems.Size = new System.Drawing.Size(492, 549);
             this.dgItems.TabIndex = 69;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             // 
@@ -66,18 +66,18 @@
             // axAcroPDF1
             // 
             this.axAcroPDF1.Enabled = true;
-            this.axAcroPDF1.Location = new System.Drawing.Point(436, 43);
+            this.axAcroPDF1.Location = new System.Drawing.Point(501, 43);
             this.axAcroPDF1.Name = "axAcroPDF1";
             this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
-            this.axAcroPDF1.Size = new System.Drawing.Size(565, 456);
+            this.axAcroPDF1.Size = new System.Drawing.Size(500, 456);
             this.axAcroPDF1.TabIndex = 71;
             // 
             // tbComments
             // 
-            this.tbComments.Location = new System.Drawing.Point(436, 505);
+            this.tbComments.Location = new System.Drawing.Point(501, 505);
             this.tbComments.Multiline = true;
             this.tbComments.Name = "tbComments";
-            this.tbComments.Size = new System.Drawing.Size(568, 87);
+            this.tbComments.Size = new System.Drawing.Size(503, 87);
             this.tbComments.TabIndex = 72;
             // 
             // btnPublish
@@ -102,7 +102,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(436, 599);
+            this.button1.Location = new System.Drawing.Point(501, 598);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 75;

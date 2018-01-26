@@ -52,6 +52,7 @@
             this.rbDetailed = new System.Windows.Forms.RadioButton();
             this.rbSummaryReport = new System.Windows.Forms.RadioButton();
             this.btnMaintenance = new System.Windows.Forms.Button();
+            this.tbComments = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgTocGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
             this.gbReportType.SuspendLayout();
@@ -129,7 +130,7 @@
             this.dgTocGrid.Location = new System.Drawing.Point(19, 194);
             this.dgTocGrid.MultiSelect = false;
             this.dgTocGrid.Name = "dgTocGrid";
-            this.dgTocGrid.Size = new System.Drawing.Size(821, 320);
+            this.dgTocGrid.Size = new System.Drawing.Size(821, 243);
             this.dgTocGrid.TabIndex = 8;
             this.dgTocGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgTocGrid_CellContentClick);
             this.dgTocGrid.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgTocGrid_DataBindingComplete);
@@ -279,10 +280,19 @@
             this.btnMaintenance.UseVisualStyleBackColor = true;
             this.btnMaintenance.Click += new System.EventHandler(this.btnMaintenance_Click);
             // 
+            // tbComments
+            // 
+            this.tbComments.Location = new System.Drawing.Point(19, 444);
+            this.tbComments.Multiline = true;
+            this.tbComments.Name = "tbComments";
+            this.tbComments.Size = new System.Drawing.Size(821, 70);
+            this.tbComments.TabIndex = 73;
+            // 
             // ManangementPackUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.tbComments);
             this.Controls.Add(this.btnMaintenance);
             this.Controls.Add(this.gbReportType);
             this.Controls.Add(this.button4);
@@ -337,5 +347,6 @@
         private System.Windows.Forms.RadioButton rbDetailed;
         private System.Windows.Forms.RadioButton rbSummaryReport;
         private System.Windows.Forms.Button btnMaintenance;
+        private System.Windows.Forms.TextBox tbComments;
     }
 }

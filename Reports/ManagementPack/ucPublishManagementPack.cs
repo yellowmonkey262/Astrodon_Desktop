@@ -17,7 +17,7 @@ namespace Astrodon.Reports.ManagementPack
     public partial class ucPublishManagementPack : UserControl
     {
         private List<ManagementPackPreviewItem> _Data;
-        private string _Webfolder = "Financial packs";
+        private string _Webfolder = "FinancialPacks";
         private string _RootURL = "http://www.astrodon.co.za/fileadmin/Trustees/";
 
         public ucPublishManagementPack()
@@ -36,6 +36,7 @@ namespace Astrodon.Reports.ManagementPack
             {
                 var q = from pack in context.ManagementPackSet
                         where pack.Published == false
+                        && pack.Declined == false
                         select new ManagementPackPreviewItem
                         {
                             Id = pack.id,
@@ -222,6 +223,7 @@ namespace Astrodon.Reports.ManagementPack
                 {
                     var dataItem = context.ManagementPackSet.Single(a => a.id == _SelectedItem.Id);
                     dataItem.Commments = tbComments.Text;
+                    dataItem.Declined = true;
                     _SelectedItem.Comments = tbComments.Text;
                     _SelectedItem.Processed = true;
 
@@ -235,7 +237,7 @@ namespace Astrodon.Reports.ManagementPack
                     string status;
                     if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + "financial pack declined.", emailContent, false, false, out status))
                     {
-                        Controller.HandleError("Unable to notify trustees by email : " + status);
+                        Controller.HandleError("Unable to send notification email : " + status);
                     }
 
                     context.SaveChanges();
@@ -310,7 +312,6 @@ namespace Astrodon.Reports.ManagementPack
 
                         foreach (var trustee in trustees)
                         {
-                            trustee.Email = new string[] {"sheldon@astrodon.co.za", "tertia@astrodon.co.za" };
                             if (trustee.Email != null && trustee.Email.Length > 0)
                             {
                                 tbComments.Text = tbComments.Text + "\nSent email to:"+trustee.accNumber + "-" + GetEmailString(trustee.Email);
@@ -319,7 +320,6 @@ namespace Astrodon.Reports.ManagementPack
                                     Controller.HandleError("Unable to notify trustees by email : " + status);
                                 }
                                 Application.DoEvents();
-                                break;
                             }
                         }
                         _SelectedItem.Processed = true;
@@ -408,7 +408,7 @@ namespace Astrodon.Reports.ManagementPack
         public DateTime Updated { get;  set; }
         public string Comments { get; set; }
         public bool Processed { get;  set; }
-        public string PDFFileName { get; internal set; }
-        public string UserCreatedEmail { get; internal set; }
+        public string PDFFileName { get;  set; }
+        public string UserCreatedEmail { get;  set; }
     }
 }

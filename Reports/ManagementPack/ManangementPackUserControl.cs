@@ -173,6 +173,8 @@ namespace Astrodon.Reports
                                                                     .SingleOrDefault(a => a.BuildingId == building.ID && a.Period == dt);
                 if (managementPackReport != null)
                 {
+                    tbComments.Text = managementPackReport.Commments;
+
                     _TableOfContents.Clear();
                     foreach (var item in managementPackReport.Items)
                     {
@@ -725,7 +727,16 @@ namespace Astrodon.Reports
 
 
                             }
-
+                            managementPackReport.Commments = tbComments.Text;
+                            if(managementPackReport.Declined)
+                            {
+                                if (Controller.AskQuestion("This report is in a declined status.\n"
+                                    + "Would you like to resubmit the report for approval?"))
+                                {
+                                    managementPackReport.Declined = false;
+                                }
+                            }
+                            tbComments.Text = "";
                             context.SaveChanges();
                         }
                         Process.Start(dlgSave.FileName);

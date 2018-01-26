@@ -32,6 +32,9 @@ namespace Astrodon.Data.ManagementPackData
 
         public virtual string Commments { get; set; }
 
+        public virtual bool Declined { get; set; }
+
         public virtual ICollection<ManagementPackReportItem> Items { get; set; }
+
     }
 }
