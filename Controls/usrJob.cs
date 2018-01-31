@@ -1,4 +1,4 @@
-﻿using Astro.Library.Entities;
+using Astro.Library.Entities;
 using Astrodon.Classes;
 using Itenso.Rtf;
 using Itenso.Rtf.Converter.Html;
@@ -948,6 +948,42 @@ namespace Astrodon.Controls
             return (dsHasLetter != null && dsHasLetter.Tables.Count > 0 && dsHasLetter.Tables[0].Rows.Count > 0);
         }
 
+        private bool ValidateProcess()
+        {
+            bool atleastone = false;
+            for (int i = 0; i < dgCustomers.Rows.Count; i++)
+            {
+                DataGridViewRow dvr = dgCustomers.Rows[i];
+                bool included = (bool)dvr.Cells[0].Value;
+                jobCustomers jAcc = null;
+                if (included)
+                {
+                    jAcc = JobCustomers[i];
+                    foreach (Customer c in customers)
+                    {
+                        if (c.accNumber == jAcc.Account)
+                        {
+                            try { c.Email[0] = jAcc.sEmail1 ? jAcc.email1 : String.Empty; } catch { }
+                            try { c.Email[1] = jAcc.sEmail2 ? jAcc.email2 : String.Empty; } catch { }
+                            try { c.Email[2] = jAcc.sEmail3 ? jAcc.email3 : String.Empty; } catch { }
+                            try { c.Email[3] = jAcc.sEmail4 ? jAcc.email4 : String.Empty; } catch { }
+                            try { c.CellPhone = jAcc.sCell ? jAcc.cell : String.Empty; } catch { }
+                            if (!String.IsNullOrEmpty(c.Email[0]) || !String.IsNullOrEmpty(c.Email[1]) || !String.IsNullOrEmpty(c.Email[2]) || !String.IsNullOrEmpty(c.Email[3]))
+                            {
+                                atleastone = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!atleastone)
+            {
+                MessageBox.Show("No customers / email addresses selected");
+            }
+            return atleastone;
+        }
+
         private void ProcessDocuments(bool sendNow)
         {
             this.Cursor = Cursors.WaitCursor;
@@ -1037,6 +1073,7 @@ namespace Astrodon.Controls
                 Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
                 fileName = r.Replace(fileName, "");
             }
+            bool onetimebuildingattachments = false;
             foreach (Customer sendCustomer in includedCustomers)
             {
                 if (rtfEditor.Enabled == true && chkCustomer.Checked)
@@ -1085,11 +1122,13 @@ namespace Astrodon.Controls
 
                     List<String> attachments = new List<string>();
                     Dictionary<String, byte[]> liveAttachments = new Dictionary<string, byte[]>();
+                    String filePath = "";
                     if (HasLetter() && !String.IsNullOrEmpty(fileName) && fileStream != null)
                     {
                         if (CreateDocument(attachmentLocation, fileName, fileStream, out status))
                         {
-                            attachments.Add(Path.Combine(attachmentLocation, fileName));
+                            filePath = Path.Combine(attachmentLocation, fileName);
+                            attachments.Add(filePath);
                             try { liveAttachments.Add(fileName, fileStream); }
                             catch { }
                         }
@@ -1127,29 +1166,46 @@ namespace Astrodon.Controls
                         foreach (String cEmail in sendCustomer.Email) { if (String.IsNullOrEmpty(cEmail)) { cEmailCount--; } }
                         print = cEmailCount == 0;
 
-                        if (chkBuilding.Checked && cmbFolder.SelectedItem != null)
+                        if (chkBuilding.Checked && cmbFolder.SelectedItem != null && onetimebuildingattachments == false)
                         {
+                            onetimebuildingattachments = true;
                             if (buildingFolder.ToLower() != "root" && ftpUploadFolder != ftpClient.WorkingDirectory)
                             {
                                 ftpClient.WorkingDirectory = ftpUploadFolder;
                                 //MessageBox.Show(ftpClient.WorkingDirectory);
                                 ftpClient.ChangeDirectory(false);
                             }
+
+                            pdf.CreatePALetter(null, selectedBuilding, GetPM(), txtSubject.Text, DateTime.Now, html, null, justify, chkUseLetterhead.Checked, out fileStream); //.Replace("/", "\\")
+                            String tempFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + selectedBuilding.Abbr + "_" + txtSubject.Text + "_" + cCount.ToString();
+                            if (tempFileName.Length > 32) { tempFileName = tempFileName.Substring(0, 32); }
+                            String bfileName = tempFileName + ".pdf";
+                            bfileName = bfileName.Replace("\\", "_").Replace("/", "_");
+                            string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+                            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                            bfileName = r.Replace(bfileName, "");
+
+                            String bfilePath = Path.Combine(attachmentLocation, bfileName);
+                            attachments.Add(bfilePath);
+
                             try
                             {
                                 txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                                 foreach (String attach in attachments)
                                 {
-                                    if (ftpClient.Upload(attach, Path.GetFileName(attach), false))
+                                    if (attach != filePath)
                                     {
-                                        txtStatus.Text += Path.GetFileName(attach) + " uploaded: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                    }
-                                    else
-                                    {
-                                        txtStatus.Text += "Error uploading " + Path.GetFileName(attach) + ": " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                        success = false;
-                                        MessageBox.Show("Error processing...");
-                                        return;
+                                        if (ftpClient.Upload(attach, Path.GetFileName(attach), false))
+                                        {
+                                            txtStatus.Text += Path.GetFileName(attach) + " uploaded: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                                        }
+                                        else
+                                        {
+                                            txtStatus.Text += "Error uploading " + Path.GetFileName(attach) + ": " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                                            success = false;
+                                            MessageBox.Show("Error processing...");
+                                            return;
+                                        }
                                     }
                                 }
                                 txtStatus.Text += "Completed uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
@@ -1158,6 +1214,7 @@ namespace Astrodon.Controls
                             {
                                 txtStatus.Text += "Error uploading documents: " + ex.Message + Environment.NewLine;
                             }
+                            attachments.Remove(bfilePath);
                         }
 
                         if (!print)
@@ -1361,18 +1418,24 @@ namespace Astrodon.Controls
 
         private void btnProcess_Click(object sender, EventArgs e)
         {
-            UpdateJobStatus("COMPLETED");
-            ProcessDocuments(true);
-            String selfProcess = "UPDATE tblPMJob SET processedBy = " + Controller.user.id.ToString() + ", completedate = getdate() WHERE id = " + jobID.ToString();
-            dataHandler.SetData(selfProcess, null, out status);
-            Controller.mainF.ShowJobs();
+            if (ValidateProcess())
+            {
+                UpdateJobStatus("COMPLETED");
+                ProcessDocuments(true);
+                String selfProcess = "UPDATE tblPMJob SET processedBy = " + Controller.user.id.ToString() + ", completedate = getdate() WHERE id = " + jobID.ToString();
+                dataHandler.SetData(selfProcess, null, out status);
+                Controller.mainF.ShowJobs();
+            }
         }
 
         private void btnApprove_Click(object sender, EventArgs e)
         {
-            UpdateJobStatus("COMPLETED");
-            ProcessDocuments(true);
-            Controller.mainF.ShowJobs();
+            if (ValidateProcess())
+            {
+                UpdateJobStatus("COMPLETED");
+                ProcessDocuments(true);
+                Controller.mainF.ShowJobs();
+            }
         }
 
         private void btnRework_Click(object sender, EventArgs e)
