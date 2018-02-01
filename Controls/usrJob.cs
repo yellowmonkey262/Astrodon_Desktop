@@ -951,32 +951,36 @@ namespace Astrodon.Controls
         private bool ValidateProcess()
         {
             bool atleastone = false;
-            for (int i = 0; i < dgCustomers.Rows.Count; i++)
+            try
             {
-                DataGridViewRow dvr = dgCustomers.Rows[i];
-                bool included = (bool)dvr.Cells[0].Value;
-                jobCustomers jAcc = null;
-                if (included)
+                for (int i = 0; i < dgCustomers.Rows.Count; i++)
                 {
-                    jAcc = JobCustomers[i];
-                    foreach (Customer c in customers)
+                    DataGridViewRow dvr = dgCustomers.Rows[i];
+                    bool included = (bool)dvr.Cells[0].Value;
+                    jobCustomers jAcc = null;
+                    if (included)
                     {
-                        if (c.accNumber == jAcc.Account)
+                        jAcc = JobCustomers[i];
+                        foreach (Customer c in customers)
                         {
-                            try { c.Email[0] = jAcc.sEmail1 ? jAcc.email1 : String.Empty; } catch { }
-                            try { c.Email[1] = jAcc.sEmail2 ? jAcc.email2 : String.Empty; } catch { }
-                            try { c.Email[2] = jAcc.sEmail3 ? jAcc.email3 : String.Empty; } catch { }
-                            try { c.Email[3] = jAcc.sEmail4 ? jAcc.email4 : String.Empty; } catch { }
-                            try { c.CellPhone = jAcc.sCell ? jAcc.cell : String.Empty; } catch { }
-                            if (!String.IsNullOrEmpty(c.Email[0]) || !String.IsNullOrEmpty(c.Email[1]) || !String.IsNullOrEmpty(c.Email[2]) || !String.IsNullOrEmpty(c.Email[3]))
+                            if (c.accNumber == jAcc.Account)
                             {
-                                atleastone = true;
-                                break;
+                                try { c.Email[0] = jAcc.sEmail1 ? jAcc.email1 : String.Empty; } catch { }
+                                try { c.Email[1] = jAcc.sEmail2 ? jAcc.email2 : String.Empty; } catch { }
+                                try { c.Email[2] = jAcc.sEmail3 ? jAcc.email3 : String.Empty; } catch { }
+                                try { c.Email[3] = jAcc.sEmail4 ? jAcc.email4 : String.Empty; } catch { }
+                                try { c.CellPhone = jAcc.sCell ? jAcc.cell : String.Empty; } catch { }
+                                if (!String.IsNullOrEmpty(c.Email[0]) || !String.IsNullOrEmpty(c.Email[1]) || !String.IsNullOrEmpty(c.Email[2]) || !String.IsNullOrEmpty(c.Email[3]))
+                                {
+                                    atleastone = true;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
+            catch { }
             if (!atleastone)
             {
                 MessageBox.Show("No customers / email addresses selected");
