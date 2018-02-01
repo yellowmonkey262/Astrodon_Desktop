@@ -274,6 +274,11 @@ namespace Astrodon.Controls
             {
                 using (var context = SqlDataHandler.GetDataContext())
                 {
+                    //clear current allocations
+                    var currentAllocations = context.tblMonthFins.Where(a => a.completeDate == null && a.findate == dt).ToList();
+                    context.tblMonthFins.RemoveRange(currentAllocations);
+                    context.SaveChanges();
+                    
                     //create a list of building id and user id
                     var userIdList = context.tblUsers
                                             .Where(a => a.ProcessCheckLists == true)
