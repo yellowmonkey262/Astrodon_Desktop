@@ -1210,6 +1210,7 @@ namespace Astrodon.Controls
                             bfileName = r.Replace(bfileName, "");
 
                             String bfilePath = Path.Combine(attachmentLocation, bfileName);
+                            CreateDocument(attachmentLocation, bfileName, fileStream, out status);
                             attachments.Add(bfilePath);
 
                             try
