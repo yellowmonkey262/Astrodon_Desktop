@@ -1032,6 +1032,7 @@ namespace Astrodon.Controls
                     }
                 }
             }
+            bool cansend = false;
 
             if (includedCustomers.Count == 0)
             {
@@ -1044,6 +1045,25 @@ namespace Astrodon.Controls
                 };
                 includedCustomers.Clear();
                 includedCustomers.Add(c);
+            }
+            else
+            {
+                int i = 0;
+                foreach (Customer sendCustomer in includedCustomers)
+                {
+                    int j = sendCustomer.Email.ToList().Count(c => !String.IsNullOrEmpty(c));
+                    i += j;
+                }
+                cansend = i > 0;
+                //////////
+                //MessageBox.Show(cansend.ToString());
+                //cansend = false;
+                //////////
+                if (!cansend)
+                {
+                    MessageBox.Show("No customers / email addresses selected");
+                    return;
+                }
             }
 
             String defaultLocation = "K:\\Debtors System";
@@ -1422,24 +1442,24 @@ namespace Astrodon.Controls
 
         private void btnProcess_Click(object sender, EventArgs e)
         {
-            if (ValidateProcess())
-            {
-                UpdateJobStatus("COMPLETED");
-                ProcessDocuments(true);
-                String selfProcess = "UPDATE tblPMJob SET processedBy = " + Controller.user.id.ToString() + ", completedate = getdate() WHERE id = " + jobID.ToString();
-                dataHandler.SetData(selfProcess, null, out status);
-                Controller.mainF.ShowJobs();
-            }
+            //if (ValidateProcess())
+            //{
+            UpdateJobStatus("COMPLETED");
+            ProcessDocuments(true);
+            String selfProcess = "UPDATE tblPMJob SET processedBy = " + Controller.user.id.ToString() + ", completedate = getdate() WHERE id = " + jobID.ToString();
+            dataHandler.SetData(selfProcess, null, out status);
+            Controller.mainF.ShowJobs();
+            //}
         }
 
         private void btnApprove_Click(object sender, EventArgs e)
         {
-            if (ValidateProcess())
-            {
-                UpdateJobStatus("COMPLETED");
-                ProcessDocuments(true);
-                Controller.mainF.ShowJobs();
-            }
+            //if (ValidateProcess())
+            //{
+            UpdateJobStatus("COMPLETED");
+            ProcessDocuments(true);
+            Controller.mainF.ShowJobs();
+            //}
         }
 
         private void btnRework_Click(object sender, EventArgs e)
