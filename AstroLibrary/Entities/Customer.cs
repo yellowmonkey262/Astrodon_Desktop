@@ -379,13 +379,24 @@ namespace Astro.Library.Entities
             }
         }
 
+        private bool? _IsTrustee = null;
+
         public bool IsTrustee
         {
             get
             {
-                if (String.IsNullOrWhiteSpace(category))
-                    return false;
-                return Convert.ToInt32(category) == 7;
+                if (_IsTrustee == null)
+                {
+                    if (String.IsNullOrWhiteSpace(category))
+                        _IsTrustee = false;
+                    else
+                        _IsTrustee = Convert.ToInt32(category) == 7;
+                }
+                return _IsTrustee.Value;
+            }
+            set
+            {
+                _IsTrustee = value;
             }
         }
 

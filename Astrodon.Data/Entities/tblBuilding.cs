@@ -199,5 +199,6 @@ namespace Astrodon.Data
 
         #endregion
 
+        public ICollection<CustomerData.Customer> CustomerList { get; set; }
     }
 }

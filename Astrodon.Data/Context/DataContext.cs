@@ -2,6 +2,7 @@
 //using Astrodon.Data.Maintenance;
 using Astrodon.Data.BankData;
 using Astrodon.Data.Calendar;
+using Astrodon.Data.CustomerData;
 using Astrodon.Data.DebitOrder;
 using Astrodon.Data.InsuranceData;
 using Astrodon.Data.Log;
@@ -114,6 +115,7 @@ namespace Astrodon.Data
         public DbSet<DebitOrderDocument> DebitOrderDocumentSet { get; set; }
         public DbSet<CustomerDebitOrderArchive> CustomerDebitOrderArchiveSet { get; set; }
         public DbSet<DebitOrderDocumentArchive> DebitOrderDocumentArchiveSet { get; set; }
+        public DbSet<Customer> CustomerSet { get; set; }
 
         #endregion
 

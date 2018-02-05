@@ -37,6 +37,7 @@ namespace Astrodon.Reports.ManagementPack
                 var q = from pack in context.ManagementPackSet
                         where pack.Published == false
                         && pack.Declined == false
+                        && pack.SubmitForApproval == true
                         select new ManagementPackPreviewItem
                         {
                             Id = pack.id,
@@ -224,6 +225,7 @@ namespace Astrodon.Reports.ManagementPack
                     var dataItem = context.ManagementPackSet.Single(a => a.id == _SelectedItem.Id);
                     dataItem.Commments = tbComments.Text;
                     dataItem.Declined = true;
+                    dataItem.SubmitForApproval = false;
                     _SelectedItem.Comments = tbComments.Text;
                     _SelectedItem.Processed = true;
 
@@ -290,7 +292,42 @@ namespace Astrodon.Reports.ManagementPack
                 string emailContent = Controller.ReadResourceString("Astrodon.Reports.ManagementPack.ManagementPackEmail.txt");
 
                 var customers = Controller.pastel.AddCustomers(building.Code, building.DataPath);
-                var trustees = customers.Where(a => a.IsTrustee).ToList();
+                var dbCustomers = context.CustomerSet
+                                          .Where(a => a.BuildingId == building.id)
+                                          .ToList();
+
+                bool commitChanges = false;
+                foreach (var acc in customers)
+                {
+                    var cust = dbCustomers.SingleOrDefault(a => a.BuildingId == building.id && a.AccountNumber == acc.accNumber);
+                    if (cust == null)
+                    {
+                        cust = new Data.CustomerData.Customer()
+                        {
+                            BuildingId = building.id,
+                            AccountNumber = acc.accNumber,
+                            Created = DateTime.Now,
+                            IsTrustee = acc.IsTrustee
+                        };
+                        commitChanges = true;
+                        context.CustomerSet.Add(cust);
+                        dbCustomers.Add(cust);
+                    }
+                    if (cust.Description != acc.description)
+                    {
+                        cust.Description = acc.description;
+                        commitChanges = true;
+                    }
+                }
+                if(commitChanges)
+                  context.SaveChanges();
+
+
+                var dbTrustees = context.CustomerSet
+                                 .Where(a => a.BuildingId == building.id && a.IsTrustee == true)
+                                 .Select(a => a.AccountNumber).ToList();
+
+                var trustees = customers.Where(a => dbTrustees.Contains(a.accNumber)).ToList();
 
                 if (trustees.Count() > 0)
                 {

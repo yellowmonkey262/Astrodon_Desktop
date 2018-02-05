@@ -728,12 +728,22 @@ namespace Astrodon.Reports
 
                             }
                             managementPackReport.Commments = tbComments.Text;
-                            if(managementPackReport.Declined)
+                            managementPackReport.SubmitForApproval = false;
+                            if (managementPackReport.Declined)
                             {
                                 if (Controller.AskQuestion("This report is in a declined status.\n"
                                     + "Would you like to resubmit the report for approval?"))
                                 {
                                     managementPackReport.Declined = false;
+                                    managementPackReport.SubmitForApproval = true;
+                                    managementPackReport.Submitted = DateTime.Now;
+                                }
+                            }else
+                            {
+                                if(cbSubmitForApproval.Checked)
+                                {
+                                    managementPackReport.SubmitForApproval = true;
+                                    managementPackReport.Submitted = DateTime.Now;
                                 }
                             }
                             tbComments.Text = "";

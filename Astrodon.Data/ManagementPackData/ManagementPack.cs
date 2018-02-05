@@ -34,7 +34,11 @@ namespace Astrodon.Data.ManagementPackData
 
         public virtual bool Declined { get; set; }
 
-        public virtual ICollection<ManagementPackReportItem> Items { get; set; }
+        public virtual bool SubmitForApproval { get; set; }
 
+        public virtual DateTime? Submitted { get; set; }
+
+
+        public virtual ICollection<ManagementPackReportItem> Items { get; set; }
     }
 }

@@ -53,6 +53,8 @@
             this.rbSummaryReport = new System.Windows.Forms.RadioButton();
             this.btnMaintenance = new System.Windows.Forms.Button();
             this.tbComments = new System.Windows.Forms.TextBox();
+            this.cbSubmitForApproval = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgTocGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
             this.gbReportType.SuspendLayout();
@@ -127,7 +129,7 @@
             this.dgTocGrid.AllowUserToAddRows = false;
             this.dgTocGrid.AllowUserToDeleteRows = false;
             this.dgTocGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgTocGrid.Location = new System.Drawing.Point(19, 194);
+            this.dgTocGrid.Location = new System.Drawing.Point(19, 161);
             this.dgTocGrid.MultiSelect = false;
             this.dgTocGrid.Name = "dgTocGrid";
             this.dgTocGrid.Size = new System.Drawing.Size(821, 243);
@@ -137,7 +139,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(455, 165);
+            this.button3.Location = new System.Drawing.Point(716, 487);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(124, 23);
             this.button3.TabIndex = 9;
@@ -168,7 +170,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(455, 135);
+            this.button2.Location = new System.Drawing.Point(444, 135);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(124, 23);
             this.button2.TabIndex = 8;
@@ -181,7 +183,7 @@
             this.cbIncludeSundries.AutoSize = true;
             this.cbIncludeSundries.Checked = true;
             this.cbIncludeSundries.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbIncludeSundries.Location = new System.Drawing.Point(680, 21);
+            this.cbIncludeSundries.Location = new System.Drawing.Point(669, 21);
             this.cbIncludeSundries.Name = "cbIncludeSundries";
             this.cbIncludeSundries.Size = new System.Drawing.Size(15, 14);
             this.cbIncludeSundries.TabIndex = 7;
@@ -190,7 +192,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(587, 21);
+            this.label5.Location = new System.Drawing.Point(576, 21);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(86, 13);
             this.label5.TabIndex = 69;
@@ -198,7 +200,7 @@
             // 
             // btnAddLevyRoll
             // 
-            this.btnAddLevyRoll.Location = new System.Drawing.Point(455, 15);
+            this.btnAddLevyRoll.Location = new System.Drawing.Point(444, 15);
             this.btnAddLevyRoll.Name = "btnAddLevyRoll";
             this.btnAddLevyRoll.Size = new System.Drawing.Size(124, 23);
             this.btnAddLevyRoll.TabIndex = 5;
@@ -208,7 +210,7 @@
             // 
             // btnCheckList
             // 
-            this.btnCheckList.Location = new System.Drawing.Point(455, 106);
+            this.btnCheckList.Location = new System.Drawing.Point(444, 106);
             this.btnCheckList.Name = "btnCheckList";
             this.btnCheckList.Size = new System.Drawing.Size(124, 23);
             this.btnCheckList.TabIndex = 7;
@@ -231,9 +233,9 @@
             this.gbReportType.Controls.Add(this.rbDetailWithDocs);
             this.gbReportType.Controls.Add(this.rbDetailed);
             this.gbReportType.Controls.Add(this.rbSummaryReport);
-            this.gbReportType.Location = new System.Drawing.Point(590, 44);
+            this.gbReportType.Location = new System.Drawing.Point(579, 44);
             this.gbReportType.Name = "gbReportType";
-            this.gbReportType.Size = new System.Drawing.Size(241, 72);
+            this.gbReportType.Size = new System.Drawing.Size(261, 72);
             this.gbReportType.TabIndex = 72;
             this.gbReportType.TabStop = false;
             // 
@@ -272,7 +274,7 @@
             // 
             // btnMaintenance
             // 
-            this.btnMaintenance.Location = new System.Drawing.Point(455, 50);
+            this.btnMaintenance.Location = new System.Drawing.Point(444, 50);
             this.btnMaintenance.Name = "btnMaintenance";
             this.btnMaintenance.Size = new System.Drawing.Size(124, 23);
             this.btnMaintenance.TabIndex = 6;
@@ -282,16 +284,37 @@
             // 
             // tbComments
             // 
-            this.tbComments.Location = new System.Drawing.Point(19, 444);
+            this.tbComments.Location = new System.Drawing.Point(19, 411);
             this.tbComments.Multiline = true;
             this.tbComments.Name = "tbComments";
             this.tbComments.Size = new System.Drawing.Size(821, 70);
             this.tbComments.TabIndex = 73;
             // 
+            // cbSubmitForApproval
+            // 
+            this.cbSubmitForApproval.AutoSize = true;
+            this.cbSubmitForApproval.Location = new System.Drawing.Point(687, 492);
+            this.cbSubmitForApproval.Name = "cbSubmitForApproval";
+            this.cbSubmitForApproval.Size = new System.Drawing.Size(15, 14);
+            this.cbSubmitForApproval.TabIndex = 74;
+            this.cbSubmitForApproval.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.cbSubmitForApproval.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(577, 492);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(104, 13);
+            this.label4.TabIndex = 75;
+            this.label4.Text = "Submit for approval?";
+            // 
             // ManangementPackUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.cbSubmitForApproval);
             this.Controls.Add(this.tbComments);
             this.Controls.Add(this.btnMaintenance);
             this.Controls.Add(this.gbReportType);
@@ -348,5 +371,7 @@
         private System.Windows.Forms.RadioButton rbSummaryReport;
         private System.Windows.Forms.Button btnMaintenance;
         private System.Windows.Forms.TextBox tbComments;
+        private System.Windows.Forms.CheckBox cbSubmitForApproval;
+        private System.Windows.Forms.Label label4;
     }
 }

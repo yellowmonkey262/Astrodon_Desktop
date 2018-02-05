@@ -136,14 +136,49 @@ namespace Astrodon
         private void LoadCustomers()
         {
             List<Customer> customers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
-            //foreach (Customer c in customers)
-            //{
-            //    int iCat = Convert.ToInt32(c.category);
-            //    c.IsTrustee = iCat == 7;
-            //}
-            dgTrustees.AutoGenerateColumns = false;
-            dgTrustees.DataSource = customers;
-            dgTrustees.Refresh();
+
+            //merge trustees db and override setting in pastel
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var dbCustomers = context.CustomerSet
+                                        .Where(a => a.BuildingId == selectedBuilding.ID)
+                                        .ToList();
+
+                foreach (var acc in customers)
+                {
+                    var cust = dbCustomers.SingleOrDefault(a => a.BuildingId == selectedBuilding.ID && a.AccountNumber == acc.accNumber);
+                    if (cust == null)
+                    {
+                        cust = new Data.CustomerData.Customer()
+                        {
+                            BuildingId = selectedBuilding.ID,
+                            AccountNumber = acc.accNumber,
+                            Created = DateTime.Now,
+                            IsTrustee = acc.IsTrustee
+                        };
+                        context.CustomerSet.Add(cust);
+                        dbCustomers.Add(cust);
+                    }
+                    else if(cust.IsTrustee)
+                    {
+                        acc.IsTrustee = true;
+                    }
+                    if (cust.Description != acc.description)
+                        cust.Description = acc.description;
+                }
+                context.SaveChanges();
+
+                //foreach (Customer c in customers)
+                //{
+                //    int iCat = Convert.ToInt32(c.category);
+                //    c.IsTrustee = iCat == 7;
+                //}
+
+                dgTrustees.AutoGenerateColumns = false;
+                dgTrustees.DataSource = customers;
+                dgTrustees.Refresh();
+            }
         }
 
         private void LoadBuildingInsurance()
@@ -612,38 +647,61 @@ namespace Astrodon
         private void SaveTrustees()
         {
             this.Cursor = Cursors.WaitCursor;
-            List<Customer> vCustomers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
-            MySqlConnector myConn = new MySqlConnector();
-            myConn.ToggleConnection(true);
-            String usergroup = "";
-            List<Customer> customers = dgTrustees.DataSource as List<Customer>;
-            foreach (Customer customer in customers)
+            using (var dbContext = SqlDataHandler.GetDataContext())
             {
-                bool trustee = false;
-                foreach (String email in customer.Email)
+                List<Customer> vCustomers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
+                MySqlConnector myConn = new MySqlConnector();
+                myConn.ToggleConnection(true);
+                String usergroup = "";
+                List<Customer> customers = dgTrustees.DataSource as List<Customer>;
+                var dbCustomers = dbContext.CustomerSet.Where(a => a.BuildingId == selectedBuilding.ID).ToList();
+
+                foreach (Customer customer in customers)
                 {
-                    if (email != "sheldon@astrodon.co.za")
+                    bool trustee = false;
+
+                    foreach (String email in customer.Email)
                     {
-                        String[] login = myConn.HasLogin(email);
-                        if (login != null)
+                        if (email != "sheldon@astrodon.co.za")
                         {
-                            if (customer.IsTrustee)
+                            String[] login = myConn.HasLogin(email);
+                            if (login != null)
                             {
-                                usergroup = "1,2,4";
-                                trustee = true;
+                                if (customer.IsTrustee)
+                                {
+                                    usergroup = "1,2,4";
+                                    trustee = true;
+                                }
+                                else
+                                {
+                                    usergroup = "1,2";
+                                }
+                                myConn.UpdateGroup(login[0], usergroup);
                             }
-                            else
-                            {
-                                usergroup = "1,2";
-                            }
-                            myConn.UpdateGroup(login[0], usergroup);
+
                         }
                     }
+                    Customer vCustomer = vCustomers.SingleOrDefault(c => c.accNumber == customer.accNumber);
+
+                    var dbCust = dbCustomers.Where(a => a.AccountNumber == customer.accNumber).SingleOrDefault();
+                    if(dbCust == null)
+                    {
+                        dbCust = new Astrodon.Data.CustomerData.Customer()
+                        {
+                            AccountNumber = customer.accNumber,
+                            BuildingId = selectedBuilding.ID,
+                            Created = DateTime.Now
+                        };
+                        dbContext.CustomerSet.Add(dbCust);
+                    }
+                    dbCust.Description = customer.description;
+                    dbCust.IsTrustee = customer.IsTrustee;
+
+                    UpdateCustomer(vCustomer, trustee);
                 }
-                Customer vCustomer = vCustomers.SingleOrDefault(c => c.accNumber == customer.accNumber);
-                UpdateCustomer(vCustomer, trustee);
+                myConn.ToggleConnection(false);
+                dbContext.SaveChanges();
             }
-            myConn.ToggleConnection(false);
             this.Cursor = Cursors.Arrow;
         }
 
