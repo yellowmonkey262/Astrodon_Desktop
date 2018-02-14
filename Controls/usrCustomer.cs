@@ -954,19 +954,22 @@ namespace Astrodon
                                 if (email != "sheldon@astrodon.co.za")
                                 {
                                     String[] logins = myConn.HasLogin(email);
-                                    foreach (var login in logins)
+                                    if (logins != null)
                                     {
-                                        if (login != null)
+                                        foreach (var login in logins)
                                         {
-                                            if (entity.IsTrustee)
+                                            if (login != null)
                                             {
-                                                usergroup = "1,2,4";
+                                                if (entity.IsTrustee)
+                                                {
+                                                    usergroup = "1,2,4";
+                                                }
+                                                else
+                                                {
+                                                    usergroup = "1,2";
+                                                }
+                                                myConn.UpdateGroup(login, usergroup);
                                             }
-                                            else
-                                            {
-                                                usergroup = "1,2";
-                                            }
-                                            myConn.UpdateGroup(login, usergroup);
                                         }
                                     }
                                 }
