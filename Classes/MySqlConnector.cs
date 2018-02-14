@@ -361,6 +361,14 @@ namespace Astrodon
 
         public bool UpdateWebCustomer(String buildingName, String acc, String[] emails)
         {
+            if (emails == null || emails.Length <= 0)
+            {
+                Controller.HandleError("Unable to update Web account for " + acc + " on building " + buildingName + "\r" +
+                    "The customer does not have an email address configured. Please update the customer email address and try again.");
+                return false;
+            }
+
+
             bool success = false;
             try
             {
@@ -472,7 +480,11 @@ namespace Astrodon
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Update MySQL Error: " + ex.Message + "\r" + ex.StackTrace + "\r" +
+                    "Building : " + buildingName + "\r" +
+                    "Acc: " + acc + "\r" +
+                    "Emails: " + emails.Length.ToString());
+
             }
             return success;
         }

@@ -558,31 +558,48 @@ namespace Astrodon
                 }
 
                 String[] emails = { txtEmail.Text };
-                bool updatedWeb = mySqlConn.UpdateWebCustomer(building.Name, customer.accNumber, emails);
-                foreach (var email in emails)
+                if (cbTrustee.Checked)
                 {
-                    String[] logins = mySqlConn.HasLogin(email);
-                    foreach (var login in logins)
+                    if (emails == null || emails.Length == 0 || String.IsNullOrWhiteSpace(emails[0]))
                     {
-                        if (login != null)
-                        {
-                            string usergroup;
-                            if (cbTrustee.Checked)
-                            {
-                                usergroup = "1,2,4";
-                            }
-                            else
-                            {
-                                usergroup = "1,2";
-                            }
-                            mySqlConn.UpdateGroup(login, usergroup);
-                        }
+                        Controller.HandleError("Trustee " + customer.description + " does not have an email address configured.\r" +
+                            "The trustee will not be able to login to the website without an email\r" +
+                            "Please configure an email address and try again.");
                     }
                 }
-
+                if (emails != null && emails.Length > 0 && !String.IsNullOrWhiteSpace(emails[0]))
+                {
+                    bool updatedWeb = mySqlConn.UpdateWebCustomer(building.Name, customer.accNumber, emails);
+                    foreach (var email in emails)
+                    {
+                        String[] logins = mySqlConn.HasLogin(email);
+                        if (logins != null)
+                        {
+                            foreach (var login in logins)
+                            {
+                                if (login != null)
+                                {
+                                    string usergroup;
+                                    if (cbTrustee.Checked)
+                                    {
+                                        usergroup = "1,2,4";
+                                    }
+                                    else
+                                    {
+                                        usergroup = "1,2";
+                                    }
+                                    mySqlConn.UpdateGroup(login, usergroup);
+                                }
+                            }
+                        }
+                    }
+                    if (showMessage)
+                    {
+                        MessageBox.Show(!updatedWeb ? "Pastel updated! Cannot save customer on web!" : "Customer updated!");
+                    }
+                }
                 //mySqlConn.InsertCustomer(building, txtAccount.Text, new string[] { txtEmail.Text }, out status);
                 mySqlConn.ToggleConnection(false);
-                if (showMessage) { MessageBox.Show(!updatedWeb ? "Pastel updated! Cannot save customer on web!" : "Customer updated!"); }
             }
             else
             {
@@ -921,24 +938,36 @@ namespace Astrodon
                     var c = customers.Where(a => a.accNumber == entity.AccountNumber).FirstOrDefault();
                     if (c != null)
                     {
-                        foreach (String email in c.Email)
+                        if (entity.IsTrustee)
                         {
-                            if (email != "sheldon@astrodon.co.za")
+                            if (c.Email == null || c.Email.Length == 0)
                             {
-                                String[] logins = myConn.HasLogin(email);
-                                foreach (var login in logins)
+                                Controller.HandleError("Trustee " + customer.description + " does not have an email address configured.\r" +
+                                    "The trustee will not be able to login to the website without an email\r" +
+                                    "Please configure an email address and try again.");
+                            }
+                        }
+                        if (c.Email != null)
+                        {
+                            foreach (String email in c.Email)
+                            {
+                                if (email != "sheldon@astrodon.co.za")
                                 {
-                                    if (login != null)
+                                    String[] logins = myConn.HasLogin(email);
+                                    foreach (var login in logins)
                                     {
-                                        if (entity.IsTrustee)
+                                        if (login != null)
                                         {
-                                            usergroup = "1,2,4";
+                                            if (entity.IsTrustee)
+                                            {
+                                                usergroup = "1,2,4";
+                                            }
+                                            else
+                                            {
+                                                usergroup = "1,2";
+                                            }
+                                            myConn.UpdateGroup(login, usergroup);
                                         }
-                                        else
-                                        {
-                                            usergroup = "1,2";
-                                        }
-                                        myConn.UpdateGroup(login, usergroup);
                                     }
                                 }
                             }
@@ -1494,7 +1523,6 @@ namespace Astrodon
                     if (customerEntity.Description != cust.description)
                         customerEntity.Description = cust.description;
                 }
-
                 context.SaveChanges();
             }
         }

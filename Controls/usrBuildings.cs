@@ -144,10 +144,11 @@ namespace Astrodon
                 var dbCustomers = context.CustomerSet
                                         .Where(a => a.BuildingId == selectedBuilding.ID)
                                         .ToList();
-
+                bool saveChanges = false;
                 foreach (var acc in customers)
                 {
-                    var cust = dbCustomers.SingleOrDefault(a => a.BuildingId == selectedBuilding.ID && a.AccountNumber == acc.accNumber);
+                    var cust = dbCustomers.SingleOrDefault(a => a.BuildingId == selectedBuilding.ID 
+                                                             && a.AccountNumber == acc.accNumber);
                     if (cust == null)
                     {
                         cust = new Data.CustomerData.Customer()
@@ -159,15 +160,17 @@ namespace Astrodon
                         };
                         context.CustomerSet.Add(cust);
                         dbCustomers.Add(cust);
+                        saveChanges = true;
                     }
-                    else if(cust.IsTrustee)
-                    {
-                        acc.IsTrustee = true;
-                    }
+                    acc.IsTrustee = cust.IsTrustee;
                     if (cust.Description != acc.description)
+                    {
                         cust.Description = acc.description;
+                        saveChanges = true;
+                    }
                 }
-                context.SaveChanges();
+                if(saveChanges)
+                  context.SaveChanges();
 
                 //foreach (Customer c in customers)
                 //{
@@ -619,10 +622,39 @@ namespace Astrodon
                     String status = String.Empty;
                     if (BuildingManager.Update(cmbBuilding.SelectedIndex, false, out status))
                     {
-                        SaveWebBuilding(false);
-                        UpdateBuildingSettings();
-                        SaveBuildingInsurance();
-                        SaveTrustees();
+                        try
+                        {
+                            SaveWebBuilding(false);
+                        }
+                        catch (Exception ex1)
+                        {
+                            MessageBox.Show("Save Web Building failed: " + ex1.Message + "\r" + ex1.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+                        try
+                        {
+                            UpdateBuildingSettings();
+                        }
+                        catch (Exception ex2)
+                        {
+                            MessageBox.Show("Update Building Settings failed: " + ex2.Message + "\r" + ex2.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        try
+                        {
+                            SaveBuildingInsurance();
+                        }
+                        catch (Exception ex3)
+                        {
+                            MessageBox.Show("Save Insurance Feailed: " + ex3.Message + "\r" + ex3.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        try
+                        {
+                            SaveTrustees();
+                        }
+                        catch (Exception ex4)
+                        {
+                            MessageBox.Show("Save Trustees Failed: " + ex4.Message + "\r" + ex4.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                         MessageBox.Show("Building updated!", "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         selectedBuilding = null;
                         clearBuilding();
@@ -640,12 +672,13 @@ namespace Astrodon
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Building update failed: SV2" + ex.Message, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Building update failed: SV2" + ex.Message + "\r" + ex.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void SaveTrustees()
         {
+
             this.Cursor = Cursors.WaitCursor;
             using (var dbContext = SqlDataHandler.GetDataContext())
             {
@@ -661,7 +694,7 @@ namespace Astrodon
                     Customer vCustomer = vCustomers.SingleOrDefault(c => c.accNumber == customer.accNumber);
 
                     var dbCust = dbCustomers.Where(a => a.AccountNumber == customer.accNumber).SingleOrDefault();
-                    if(dbCust == null)
+                    if (dbCust == null)
                     {
                         dbCust = new Astrodon.Data.CustomerData.Customer()
                         {
@@ -673,29 +706,46 @@ namespace Astrodon
                         dbContext.CustomerSet.Add(dbCust);
                     }
                     dbCust.Description = customer.description;
+                    dbCust.IsTrustee = customer.IsTrustee;
+                    vCustomer.IsTrustee = customer.IsTrustee;
+
                     dbContext.SaveChanges();
 
                     UpdateCustomer(vCustomer, dbCust.IsTrustee);
-                    bool updatedWeb = myConn.UpdateWebCustomer(selectedBuilding.Name, customer.accNumber, customer.Email);
-                    foreach (String email in customer.Email)
+                    if (dbCust.IsTrustee)
                     {
-                        if (email != "sheldon@astrodon.co.za")
+                        if (customer.Email == null || customer.Email.Length == 0)
                         {
-
-                            String[] logins = myConn.HasLogin(email);
-                            foreach (var login in logins)
+                            Controller.HandleError("Trustee " + customer.description + " does not have an email address configured.\r" +
+                                "The trustee will not be able to login to the website without an email\r"+
+                                "Please configure an email address and try again.");
+                        }
+                    }
+                    if (customer.Email != null && customer.Email.Length > 0)
+                    {
+                        bool updatedWeb = myConn.UpdateWebCustomer(selectedBuilding.Name, customer.accNumber, customer.Email);
+                        foreach (String email in customer.Email)
+                        {
+                            if (email != "sheldon@astrodon.co.za")
                             {
-                                if (login != null)
+                                String[] logins = myConn.HasLogin(email);
+                                if (logins != null)
                                 {
-                                    if (dbCust.IsTrustee)
+                                    foreach (var login in logins)
                                     {
-                                        usergroup = "1,2,4";
+                                        if (login != null)
+                                        {
+                                            if (dbCust.IsTrustee)
+                                            {
+                                                usergroup = "1,2,4";
+                                            }
+                                            else
+                                            {
+                                                usergroup = "1,2";
+                                            }
+                                            myConn.UpdateGroup(login, usergroup);
+                                        }
                                     }
-                                    else
-                                    {
-                                        usergroup = "1,2";
-                                    }
-                                    myConn.UpdateGroup(login, usergroup);
                                 }
                             }
                         }
@@ -705,10 +755,12 @@ namespace Astrodon
                 myConn.ToggleConnection(false);
             }
             this.Cursor = Cursors.Arrow;
+
         }
 
         private void UpdateCustomer(Customer vCustomer, bool isTrustee)
         {
+            /*
             bool changeMe = false;
             if (Convert.ToInt32(vCustomer.category) == 7 && !isTrustee)
             {
@@ -724,6 +776,7 @@ namespace Astrodon
             {
                 String result = Controller.pastel.UpdateCustomer(vCustomer.GetCustomer(), selectedBuilding.DataPath);
             }
+            */
         }
 
         private void SaveWebBuilding(bool remove)

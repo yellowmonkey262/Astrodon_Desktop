@@ -296,33 +296,6 @@ namespace Astrodon.Reports.ManagementPack
                                           .Where(a => a.BuildingId == building.id)
                                           .ToList();
 
-                bool commitChanges = false;
-                foreach (var acc in customers)
-                {
-                    var cust = dbCustomers.SingleOrDefault(a => a.BuildingId == building.id && a.AccountNumber == acc.accNumber);
-                    if (cust == null)
-                    {
-                        cust = new Data.CustomerData.Customer()
-                        {
-                            BuildingId = building.id,
-                            AccountNumber = acc.accNumber,
-                            Created = DateTime.Now,
-                            IsTrustee = acc.IsTrustee
-                        };
-                        commitChanges = true;
-                        context.CustomerSet.Add(cust);
-                        dbCustomers.Add(cust);
-                    }
-                    if (cust.Description != acc.description)
-                    {
-                        cust.Description = acc.description;
-                        commitChanges = true;
-                    }
-                }
-                if(commitChanges)
-                  context.SaveChanges();
-
-
                 var dbTrustees = context.CustomerSet
                                  .Where(a => a.BuildingId == building.id && a.IsTrustee == true)
                                  .Select(a => a.AccountNumber).ToList();

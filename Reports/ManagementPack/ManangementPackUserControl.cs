@@ -306,7 +306,8 @@ namespace Astrodon.Reports
             var building = cmbBuilding.SelectedItem as Building;
             var year = cmbYear.SelectedItem as IdValue;
             var month = cmbMonth.SelectedItem as IdValue;
-            int position = _TableOfContents.Max(a => a.Position);
+            int position = _TableOfContents.Count();
+            
             var tempItems = new List<TableOfContentForPdfRecord>();
             try
             {
@@ -335,7 +336,7 @@ namespace Astrodon.Reports
                 }
                 int maxPos = 0;
                 if (_TableOfContents != null && _TableOfContents.Count > 0)
-                    maxPos = _TableOfContents.Max(a => a.Position);
+                    maxPos = _TableOfContents.Count();
 
                 foreach(var itm in tempItems.OrderBy(a => a.FileDate))
                 {

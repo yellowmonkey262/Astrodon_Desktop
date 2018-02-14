@@ -86,7 +86,8 @@ namespace Astrodon
 
         internal static void HandleError(string error, string title = "Application Error")
         {
-            MessageBox.Show(error, title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            
+            MessageBox.Show(error, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         internal static void ShowMessage(string message, string title = "Information")
@@ -96,7 +97,7 @@ namespace Astrodon
 
         internal static bool AskQuestion(string message, string title = "Confirmation")
         {
-            return MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes;
+            return MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
         private static void commClient_LoginOK(object sender, EventArgs e)
