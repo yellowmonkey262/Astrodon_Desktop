@@ -658,29 +658,6 @@ namespace Astrodon
 
                 foreach (Customer customer in customers)
                 {
-                    bool trustee = false;
-
-                    foreach (String email in customer.Email)
-                    {
-                        if (email != "sheldon@astrodon.co.za")
-                        {
-                            String[] login = myConn.HasLogin(email);
-                            if (login != null)
-                            {
-                                if (customer.IsTrustee)
-                                {
-                                    usergroup = "1,2,4";
-                                    trustee = true;
-                                }
-                                else
-                                {
-                                    usergroup = "1,2";
-                                }
-                                myConn.UpdateGroup(login[0], usergroup);
-                            }
-
-                        }
-                    }
                     Customer vCustomer = vCustomers.SingleOrDefault(c => c.accNumber == customer.accNumber);
 
                     var dbCust = dbCustomers.Where(a => a.AccountNumber == customer.accNumber).SingleOrDefault();
@@ -690,17 +667,42 @@ namespace Astrodon
                         {
                             AccountNumber = customer.accNumber,
                             BuildingId = selectedBuilding.ID,
-                            Created = DateTime.Now
+                            Created = DateTime.Now,
+                            IsTrustee = customer.IsTrustee
                         };
                         dbContext.CustomerSet.Add(dbCust);
                     }
                     dbCust.Description = customer.description;
-                    dbCust.IsTrustee = customer.IsTrustee;
+                    dbContext.SaveChanges();
 
-                    UpdateCustomer(vCustomer, trustee);
+                    UpdateCustomer(vCustomer, dbCust.IsTrustee);
+                    bool updatedWeb = myConn.UpdateWebCustomer(selectedBuilding.Name, customer.accNumber, customer.Email);
+                    foreach (String email in customer.Email)
+                    {
+                        if (email != "sheldon@astrodon.co.za")
+                        {
+
+                            String[] logins = myConn.HasLogin(email);
+                            foreach (var login in logins)
+                            {
+                                if (login != null)
+                                {
+                                    if (dbCust.IsTrustee)
+                                    {
+                                        usergroup = "1,2,4";
+                                    }
+                                    else
+                                    {
+                                        usergroup = "1,2";
+                                    }
+                                    myConn.UpdateGroup(login, usergroup);
+                                }
+                            }
+                        }
+                    }
                 }
+
                 myConn.ToggleConnection(false);
-                dbContext.SaveChanges();
             }
             this.Cursor = Cursors.Arrow;
         }

@@ -40,6 +40,8 @@
             this.lblOS = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label30 = new System.Windows.Forms.Label();
+            this.cbTrustee = new System.Windows.Forms.CheckBox();
             this.txtEntry = new System.Windows.Forms.TextBox();
             this.cmbCategory = new System.Windows.Forms.ComboBox();
             this.label18 = new System.Windows.Forms.Label();
@@ -135,10 +137,10 @@
             this.lblBank = new System.Windows.Forms.Label();
             this.cbDebitOrderActive = new System.Windows.Forms.CheckBox();
             this.label20 = new System.Windows.Forms.Label();
-            this.btnTrustees = new System.Windows.Forms.Button();
-            this.fdOpen = new System.Windows.Forms.OpenFileDialog();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.dgDebitOrderArchive = new System.Windows.Forms.DataGridView();
+            this.btnTrustees = new System.Windows.Forms.Button();
+            this.fdOpen = new System.Windows.Forms.OpenFileDialog();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -198,7 +200,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(9, 77);
+            this.label12.Location = new System.Drawing.Point(9, 65);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(157, 20);
             this.label12.TabIndex = 52;
@@ -208,7 +210,7 @@
             // 
             this.lblOS.AutoSize = true;
             this.lblOS.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOS.Location = new System.Drawing.Point(166, 77);
+            this.lblOS.Location = new System.Drawing.Point(166, 65);
             this.lblOS.Name = "lblOS";
             this.lblOS.Size = new System.Drawing.Size(0, 20);
             this.lblOS.TabIndex = 53;
@@ -223,14 +225,16 @@
             this.tabControl2.Controls.Add(this.tbMaintenance);
             this.tabControl2.Controls.Add(this.tbDebitOrder);
             this.tabControl2.Controls.Add(this.tabPage6);
-            this.tabControl2.Location = new System.Drawing.Point(9, 100);
+            this.tabControl2.Location = new System.Drawing.Point(9, 89);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(939, 560);
+            this.tabControl2.Size = new System.Drawing.Size(939, 571);
             this.tabControl2.TabIndex = 72;
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label30);
+            this.tabPage2.Controls.Add(this.cbTrustee);
             this.tabPage2.Controls.Add(this.txtEntry);
             this.tabPage2.Controls.Add(this.cmbCategory);
             this.tabPage2.Controls.Add(this.label18);
@@ -244,18 +248,36 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(931, 534);
+            this.tabPage2.Size = new System.Drawing.Size(931, 545);
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "Customer Details";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(352, 66);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(43, 13);
+            this.label30.TabIndex = 83;
+            this.label30.Text = "Trustee";
+            // 
+            // cbTrustee
+            // 
+            this.cbTrustee.AutoSize = true;
+            this.cbTrustee.Location = new System.Drawing.Point(431, 67);
+            this.cbTrustee.Name = "cbTrustee";
+            this.cbTrustee.Size = new System.Drawing.Size(15, 14);
+            this.cbTrustee.TabIndex = 82;
+            this.cbTrustee.UseVisualStyleBackColor = true;
+            // 
             // txtEntry
             // 
-            this.txtEntry.Location = new System.Drawing.Point(3, 368);
+            this.txtEntry.Location = new System.Drawing.Point(3, 375);
             this.txtEntry.MaxLength = 30;
             this.txtEntry.Multiline = true;
             this.txtEntry.Name = "txtEntry";
-            this.txtEntry.Size = new System.Drawing.Size(904, 160);
+            this.txtEntry.Size = new System.Drawing.Size(904, 153);
             this.txtEntry.TabIndex = 81;
             this.txtEntry.Visible = false;
             // 
@@ -297,7 +319,7 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Location = new System.Drawing.Point(5, 67);
+            this.tabControl1.Location = new System.Drawing.Point(5, 81);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(906, 295);
@@ -533,7 +555,7 @@
             this.tbWeb.Location = new System.Drawing.Point(4, 22);
             this.tbWeb.Name = "tbWeb";
             this.tbWeb.Padding = new System.Windows.Forms.Padding(3);
-            this.tbWeb.Size = new System.Drawing.Size(931, 534);
+            this.tbWeb.Size = new System.Drawing.Size(931, 545);
             this.tbWeb.TabIndex = 5;
             this.tbWeb.Text = "Web";
             this.tbWeb.UseVisualStyleBackColor = true;
@@ -602,7 +624,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(931, 534);
+            this.tabPage3.Size = new System.Drawing.Size(931, 545);
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "Documents";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -731,7 +753,7 @@
             this.tabPage4.Controls.Add(this.dgTransactions);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(931, 534);
+            this.tabPage4.Size = new System.Drawing.Size(931, 545);
             this.tabPage4.TabIndex = 2;
             this.tabPage4.Text = "Transactions";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -770,7 +792,7 @@
             this.tabPage5.Controls.Add(this.label14);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(931, 534);
+            this.tabPage5.Size = new System.Drawing.Size(931, 545);
             this.tabPage5.TabIndex = 3;
             this.tabPage5.Text = "Notes";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -930,7 +952,7 @@
             this.tbMaintenance.Location = new System.Drawing.Point(4, 22);
             this.tbMaintenance.Name = "tbMaintenance";
             this.tbMaintenance.Padding = new System.Windows.Forms.Padding(3);
-            this.tbMaintenance.Size = new System.Drawing.Size(931, 534);
+            this.tbMaintenance.Size = new System.Drawing.Size(931, 545);
             this.tbMaintenance.TabIndex = 4;
             this.tbMaintenance.Text = "Maintenance";
             this.tbMaintenance.UseVisualStyleBackColor = true;
@@ -976,7 +998,7 @@
             this.tbDebitOrder.Location = new System.Drawing.Point(4, 22);
             this.tbDebitOrder.Name = "tbDebitOrder";
             this.tbDebitOrder.Padding = new System.Windows.Forms.Padding(3);
-            this.tbDebitOrder.Size = new System.Drawing.Size(931, 534);
+            this.tbDebitOrder.Size = new System.Drawing.Size(931, 545);
             this.tbDebitOrder.TabIndex = 6;
             this.tbDebitOrder.Text = "Debit Order";
             this.tbDebitOrder.UseVisualStyleBackColor = true;
@@ -1186,29 +1208,13 @@
             this.label20.TabIndex = 0;
             this.label20.Text = "Debit Order Enabled";
             // 
-            // btnTrustees
-            // 
-            this.btnTrustees.Enabled = false;
-            this.btnTrustees.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTrustees.Location = new System.Drawing.Point(313, 13);
-            this.btnTrustees.Name = "btnTrustees";
-            this.btnTrustees.Size = new System.Drawing.Size(169, 23);
-            this.btnTrustees.TabIndex = 73;
-            this.btnTrustees.Text = "Update Trustees";
-            this.btnTrustees.UseVisualStyleBackColor = true;
-            this.btnTrustees.Click += new System.EventHandler(this.btnTrustees_Click);
-            // 
-            // fdOpen
-            // 
-            this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
-            // 
             // tabPage6
             // 
             this.tabPage6.Controls.Add(this.dgDebitOrderArchive);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(931, 534);
+            this.tabPage6.Size = new System.Drawing.Size(931, 545);
             this.tabPage6.TabIndex = 7;
             this.tabPage6.Text = "Debit Order Archive";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -1224,6 +1230,22 @@
             this.dgDebitOrderArchive.ReadOnly = true;
             this.dgDebitOrderArchive.Size = new System.Drawing.Size(919, 522);
             this.dgDebitOrderArchive.TabIndex = 22;
+            // 
+            // btnTrustees
+            // 
+            this.btnTrustees.Enabled = false;
+            this.btnTrustees.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTrustees.Location = new System.Drawing.Point(313, 13);
+            this.btnTrustees.Name = "btnTrustees";
+            this.btnTrustees.Size = new System.Drawing.Size(169, 23);
+            this.btnTrustees.TabIndex = 73;
+            this.btnTrustees.Text = "Update Trustees";
+            this.btnTrustees.UseVisualStyleBackColor = true;
+            this.btnTrustees.Click += new System.EventHandler(this.btnTrustees_Click);
+            // 
+            // fdOpen
+            // 
+            this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
             // 
             // usrCustomer
             // 
@@ -1378,5 +1400,7 @@
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.DataGridView dgDebitOrderArchive;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.CheckBox cbTrustee;
     }
 }

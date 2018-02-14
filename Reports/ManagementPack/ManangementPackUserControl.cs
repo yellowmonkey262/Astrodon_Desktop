@@ -176,7 +176,7 @@ namespace Astrodon.Reports
                     tbComments.Text = managementPackReport.Commments;
 
                     _TableOfContents.Clear();
-                    foreach (var item in managementPackReport.Items)
+                    foreach (var item in managementPackReport.Items.OrderBy(a => a.Position))
                     {
 
                         if (item.IsTempFile)
@@ -208,6 +208,9 @@ namespace Astrodon.Reports
                     }
                 }
             }
+
+            if (_TableOfContents != null)
+                _TableOfContents = _TableOfContents.OrderBy(a => a.Position).ToList();
         }
 
         private List<string> GetFilesInDirectory(int buildingId, int year, int month)
@@ -303,6 +306,8 @@ namespace Astrodon.Reports
             var building = cmbBuilding.SelectedItem as Building;
             var year = cmbYear.SelectedItem as IdValue;
             var month = cmbMonth.SelectedItem as IdValue;
+            int position = _TableOfContents.Max(a => a.Position);
+            var tempItems = new List<TableOfContentForPdfRecord>();
             try
             {
                 var files = GetFilesInDirectory(building.ID, year.Id, month.Id);
@@ -315,7 +320,7 @@ namespace Astrodon.Reports
                         var existing = _TableOfContents.SingleOrDefault(a => a.Path == files[i]);
                         if (existing == null)
                         {
-                            _TableOfContents.Add(new TableOfContentForPdfRecord()
+                            tempItems.Add(new TableOfContentForPdfRecord()
                             {
                                 Path = files[i],
                                 File = Path.GetFileName(files[i]),
@@ -328,9 +333,18 @@ namespace Astrodon.Reports
                         }
                     }
                 }
-                _TableOfContents = _TableOfContents.OrderBy(a => a.FileDate).ToList();
-                for (int x = 1; x < _TableOfContents.Count; x++)
-                    _TableOfContents[x].Position = x;
+                int maxPos = 0;
+                if (_TableOfContents != null && _TableOfContents.Count > 0)
+                    maxPos = _TableOfContents.Max(a => a.Position);
+
+                foreach(var itm in tempItems.OrderBy(a => a.FileDate))
+                {
+                    maxPos++;
+                    itm.Position = maxPos;
+                    _TableOfContents.Add(itm);
+                }
+
+                _TableOfContents = _TableOfContents.OrderBy(a => a.Position).ToList();
             }
             catch (Exception e)
             {
@@ -738,14 +752,15 @@ namespace Astrodon.Reports
                                     managementPackReport.SubmitForApproval = true;
                                     managementPackReport.Submitted = DateTime.Now;
                                 }
-                            }else
-                            {
-                                if(cbSubmitForApproval.Checked)
-                                {
-                                    managementPackReport.SubmitForApproval = true;
-                                    managementPackReport.Submitted = DateTime.Now;
-                                }
                             }
+                          
+
+                            if (cbSubmitForApproval.Checked)
+                            {
+                                managementPackReport.SubmitForApproval = true;
+                                managementPackReport.Submitted = DateTime.Now;
+                            }
+
                             tbComments.Text = "";
                             context.SaveChanges();
                         }

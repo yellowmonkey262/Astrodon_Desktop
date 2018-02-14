@@ -122,13 +122,20 @@ namespace Astrodon
                     };
                     myCats.Add(cat);
                 }
+
+                var trustee = myCats.Where(a => a.categoryID == 7).FirstOrDefault();
+                if (trustee != null)
+                   myCats.Remove(trustee);
+
                 cmbCategory.DataSource = myCats;
                 cmbCategory.ValueMember = "categoryID";
                 cmbCategory.DisplayMember = "categoryName";
                 cmbCategory.SelectedIndex = -1;
+                UpdateSQLCustomers();
             }
             catch { }
         }
+
 
         private void ClearCustomer()
         {
@@ -167,6 +174,7 @@ namespace Astrodon
             dtpDebitOrderCancelled.Format = DateTimePickerFormat.Custom;
             dtpDebitOrderCancelled.CustomFormat = "yyyy/MM/dd";
             cbDebitOrderCancelled.Checked = false;
+            cbTrustee.Checked = false;
         }
 
         private void cmbCustomer_SelectedIndexChanged(object sender, EventArgs e)
@@ -493,6 +501,8 @@ namespace Astrodon
 
         private void UpdateCustomer(bool showMessage)
         {
+            UpdateTrusteeTick();
+
             if (customer == null)
             {
                 Controller.HandleError("Customer not selected");
@@ -542,9 +552,34 @@ namespace Astrodon
                 MySqlConnector mySqlConn = new MySqlConnector();
                 String status = String.Empty;
                 mySqlConn.ToggleConnection(true);
-                if (customer.Email.Length == 0) { customer.Email = new string[] { customer.accNumber + "@astrodon.co.za" }; }
+                if (customer.Email.Length == 0)
+                {
+                    customer.Email = new string[] { customer.accNumber + "@astrodon.co.za" };
+                }
+
                 String[] emails = { txtEmail.Text };
                 bool updatedWeb = mySqlConn.UpdateWebCustomer(building.Name, customer.accNumber, emails);
+                foreach (var email in emails)
+                {
+                    String[] logins = mySqlConn.HasLogin(email);
+                    foreach (var login in logins)
+                    {
+                        if (login != null)
+                        {
+                            string usergroup;
+                            if (cbTrustee.Checked)
+                            {
+                                usergroup = "1,2,4";
+                            }
+                            else
+                            {
+                                usergroup = "1,2";
+                            }
+                            mySqlConn.UpdateGroup(login, usergroup);
+                        }
+                    }
+                }
+
                 //mySqlConn.InsertCustomer(building, txtAccount.Text, new string[] { txtEmail.Text }, out status);
                 mySqlConn.ToggleConnection(false);
                 if (showMessage) { MessageBox.Show(!updatedWeb ? "Pastel updated! Cannot save customer on web!" : "Customer updated!"); }
@@ -877,26 +912,36 @@ namespace Astrodon
             MySqlConnector myConn = new MySqlConnector();
             myConn.ToggleConnection(true);
             String usergroup = "";
-            foreach (Customer c in customers)
+
+            using (var context = SqlDataHandler.GetDataContext())
             {
-                foreach (String email in c.Email)
+
+                foreach (var entity in context.CustomerSet.Where(a => a.BuildingId == building.ID).ToList())
                 {
-                    if (email != "sheldon@astrodon.co.za")
+                    var c = customers.Where(a => a.accNumber == entity.AccountNumber).FirstOrDefault();
+                    if (c != null)
                     {
-                        String[] login = myConn.HasLogin(email);
-                        bool trustee = false;
-                        if (login != null)
+                        foreach (String email in c.Email)
                         {
-                            if (Convert.ToInt32(c.category) == 7)
+                            if (email != "sheldon@astrodon.co.za")
                             {
-                                usergroup = "1,2,4";
-                                trustee = true;
+                                String[] logins = myConn.HasLogin(email);
+                                foreach (var login in logins)
+                                {
+                                    if (login != null)
+                                    {
+                                        if (entity.IsTrustee)
+                                        {
+                                            usergroup = "1,2,4";
+                                        }
+                                        else
+                                        {
+                                            usergroup = "1,2";
+                                        }
+                                        myConn.UpdateGroup(login, usergroup);
+                                    }
+                                }
                             }
-                            else
-                            {
-                                usergroup = "1,2";
-                            }
-                            myConn.UpdateGroup(login[0], usergroup);
                         }
                     }
                 }
@@ -969,6 +1014,22 @@ namespace Astrodon
                 DisplayPDF(null);
                 using (var context = SqlDataHandler.GetDataContext())
                 {
+                    var customerEntity = context.CustomerSet.SingleOrDefault(a => a.BuildingId == building.ID && a.AccountNumber == customer.accNumber);
+                    if(customerEntity == null)
+                    {
+                        customerEntity = new Data.CustomerData.Customer()
+                        {
+                            BuildingId = building.ID,
+                            AccountNumber = customer.accNumber,
+                            Description = customer.description,
+                            IsTrustee = customer.IsTrustee,
+                            Created = DateTime.Now
+                        };
+                        context.CustomerSet.Add(customerEntity);
+                        context.SaveChanges();
+                    }
+                    cbTrustee.Checked = customerEntity.IsTrustee;
+
                     var debitOrder = context.CustomerDebitOrderSet.SingleOrDefault(a => a.BuildingId == building.ID && a.CustomerCode == customer.accNumber);
                     if (debitOrder != null)
                     {
@@ -1379,6 +1440,63 @@ namespace Astrodon
         {
             dtpDebitOrderCancelled.Visible = cbDebitOrderCancelled.Checked;
          
+        }
+
+        private void UpdateTrusteeTick()
+        {
+            if (building == null)
+                return;
+            if (customer == null)
+                return;
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var customerEntity = context.CustomerSet.SingleOrDefault(a => a.BuildingId == building.ID && a.AccountNumber == customer.accNumber);
+                if (customerEntity == null)
+                {
+                    customerEntity = new Data.CustomerData.Customer()
+                    {
+                        BuildingId = building.ID,
+                        AccountNumber = customer.accNumber,
+                        Description = customer.description,
+                        IsTrustee = customer.IsTrustee,
+                        Created = DateTime.Now
+                    };
+                    context.CustomerSet.Add(customerEntity);
+                }
+                customerEntity.IsTrustee = cbTrustee.Checked;
+                customerEntity.Description = customer.description;
+                context.SaveChanges();
+            }
+        }
+
+        private void UpdateSQLCustomers()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var customerEntities = context.CustomerSet.Where(a => a.BuildingId == building.ID).ToList();
+
+                foreach(var cust in customers)
+                {
+                    var customerEntity = customerEntities.Where(a => a.AccountNumber == cust.accNumber).SingleOrDefault();
+                    if(customerEntity == null)
+                    {
+                        customerEntity = new Data.CustomerData.Customer()
+                        {
+                            BuildingId = building.ID,
+                            AccountNumber = cust.accNumber,
+                            Description = cust.description,
+                            IsTrustee = cust.IsTrustee,
+                            Created = DateTime.Now
+                        };
+                        context.CustomerSet.Add(customerEntity);
+                    }
+                    if (customerEntity.Description != cust.description)
+                        customerEntity.Description = cust.description;
+                }
+
+                context.SaveChanges();
+            }
         }
     }
 }

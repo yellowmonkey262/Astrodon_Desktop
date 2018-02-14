@@ -432,6 +432,11 @@ namespace Astrodon.Reports.ManagementPack
                 return false;
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            LoadManagementPacks();
+        }
     }
 
     class ManagementPackPreviewItem
