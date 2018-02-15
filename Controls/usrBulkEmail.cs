@@ -93,31 +93,38 @@ namespace Astrodon
         {
             customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
             emailList = new List<EmailList>();
-            foreach (Customer c in customers)
+            using (var context = SqlDataHandler.GetDataContext())
             {
-                if (c.statPrintorEmail != 4 && (c.category == category || String.IsNullOrEmpty(category)))
-                {
-                    EmailList el = new EmailList
-                    {
-                        AccNumber = c.accNumber,
-                        Name = c.description,
-                        EmailAddress = String.Empty
-                    };
-                    var builder = new System.Text.StringBuilder();
-                    builder.Append(el.EmailAddress);
-                    foreach (String email in c.Email)
-                    {
-                        if (!email.Contains("imp.ad-one"))
-                        {
-                            builder.Append(email.Replace("\"", "").Replace("\'", "").Replace(";", "").Replace(",", "") + ";");
-                        }
-                    }
-                    el.EmailAddress = builder.ToString();
+                var trustees = context.CustomerSet.Where(a => a.BuildingId == building.ID && a.IsTrustee == true).ToList();
 
-                    el.Include = false;
-                    if (!emailList.Contains(el)) { emailList.Add(el); }
+                foreach (Customer c in customers)
+                {
+                    c.IsTrustee = trustees.Where(a => a.AccountNumber == c.accNumber).FirstOrDefault() != null;
+                    if (c.statPrintorEmail != 4 && (c.category == category || String.IsNullOrEmpty(category)))
+                    {
+                        EmailList el = new EmailList
+                        {
+                            AccNumber = c.accNumber,
+                            Name = c.description,
+                            EmailAddress = String.Empty
+                        };
+                        var builder = new System.Text.StringBuilder();
+                        builder.Append(el.EmailAddress);
+                        foreach (String email in c.Email)
+                        {
+                            if (!email.Contains("imp.ad-one"))
+                            {
+                                builder.Append(email.Replace("\"", "").Replace("\'", "").Replace(";", "").Replace(",", "") + ";");
+                            }
+                        }
+                        el.EmailAddress = builder.ToString();
+
+                        el.Include = false;
+                        if (!emailList.Contains(el)) { emailList.Add(el); }
+                    }
                 }
             }
+
             dgCustomers.DataSource = null;
             dgCustomers.DataSource = emailList;
             lstAttachments.Items.Clear();
@@ -160,10 +167,14 @@ namespace Astrodon
                 {
                     EmailList dataRow = dvr.DataBoundItem as EmailList;
                     Customer customer = customers.SingleOrDefault(c => c.accNumber == dataRow.AccNumber);
-                    if (customer != null)
+                   
+
+                    if (customer != null && customer.IsTrustee)
                     {
-                        int iCat = Convert.ToInt32(customer.category);
-                        dvr.Cells[3].Value = iCat == 7;
+                        if (chkTrustees.Checked == false)
+                            dvr.Cells[3].Value = false;
+                        else
+                           dvr.Cells[3].Value = customer.IsTrustee;
                     }
                     else
                     {

@@ -17,7 +17,7 @@ namespace Astrodon.Reports.ManagementPack
     public partial class ucPublishManagementPack : UserControl
     {
         private List<ManagementPackPreviewItem> _Data;
-        private string _Webfolder = "FinancialPacks";
+        private string _Webfolder = "Monthly_Financial_";
         private string _RootURL = "http://www.astrodon.co.za/fileadmin/Trustees/";
 
         public ucPublishManagementPack()
@@ -371,14 +371,17 @@ namespace Astrodon.Reports.ManagementPack
 
                     ftpClient.ChangeDirectory(true);
 
-                    string uploadDirectory = workingDirectory + "/" + _Webfolder + "/" + dataItem.Period.Year.ToString() + "/" + dataItem.Period.ToString("MMM") ;
+                    //Monthly_Financials_2019 
+                    string yearFolder = _Webfolder + dataItem.Period.Year.ToString();
+
+                    string uploadDirectory = workingDirectory + "/" + yearFolder;
                     string uploadFile = uploadDirectory + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
 
                     url = _RootURL + web;
                     if (!url.EndsWith("/"))
                         url = url + "/";
 
-                    url = url + _Webfolder + "/" + dataItem.Period.Year.ToString() + "/" + dataItem.Period.ToString("MMM");
+                    url = url + yearFolder;
                     url = url + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
 
                     url = url.Replace(" ", "%20");

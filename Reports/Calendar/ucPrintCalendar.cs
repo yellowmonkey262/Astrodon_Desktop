@@ -943,17 +943,22 @@ namespace Astrodon.Reports.Calendar
                 if (entry.NotifyTrustees && entry.EventyType == CalendarEntryType.Financial)
                 {
                     var customers = Controller.pastel.AddCustomers(entry.BuildingAbreviation, entry.BuildingDataPath);
-                    var trustees = customers.Where(a => a.IsTrustee).ToList();
-                    if (trustees.Count() > 0 && Controller.AskQuestion("Are you sure you want to send the invite to " + trustees.Count().ToString() + " trustees?"))
+                    var dbCustomers = context.CustomerSet.Where(a => a.BuildingId == entry.BuildingId && a.IsTrustee == true).ToList();
+
+                    if (dbCustomers.Count() > 0 && Controller.AskQuestion("Are you sure you want to send the invite to " + dbCustomers.Count().ToString() + " trustees?"))
                     {
-                        foreach (var trustee in trustees)
+                        foreach (var dbCustomer in dbCustomers)
                         {
-                            if (trustee.Email != null && trustee.Email.Length > 0)
+                            var trustee = customers.Where(a => a.accNumber == dbCustomer.AccountNumber).FirstOrDefault();
+                            if (trustee != null)
                             {
-                                if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", trustee.Email,
-                                     subject, bodyContent, false, false, false, out status, attachments, bccEmail))
+                                if (trustee.Email != null && trustee.Email.Length > 0)
                                 {
-                                    Controller.HandleError("Error seding email " + status, "Email error");
+                                    if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", trustee.Email,
+                                         subject, bodyContent, false, false, false, out status, attachments, bccEmail))
+                                    {
+                                        Controller.HandleError("Error seding email " + status, "Email error");
+                                    }
                                 }
                             }
                         }
