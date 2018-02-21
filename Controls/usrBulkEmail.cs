@@ -244,6 +244,13 @@ namespace Astrodon
                     sentToList.Add(el);
                 }
             }
+
+            if(!Controller.AskQuestion("Send this email to " + sentToList.Count().ToString() + " email addresses?"))
+            {
+                status = "User cancelled";
+                return false;
+            }
+
             if (building == null)
             {
                 status = "No building selected";

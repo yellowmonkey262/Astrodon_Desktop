@@ -304,41 +304,44 @@ namespace Astrodon.Reports.ManagementPack
 
                 if (trustees.Count() > 0)
                 {
-                    emailContent = emailContent.Replace("{MANAGEMENTPACKPERIOD}", _SelectedItem.Period.ToString("MMMM yyyy"));
-                    emailContent = emailContent.Replace("{BUILDINGNAME}", building.Building);
-                    emailContent = emailContent.Replace("{PMEMAILADDRESS}", building.pm);
-                    string fileUrl = string.Empty;
-                    if (UploadFileToBuilding(building, dataItem, out fileUrl))
+                    if (Controller.AskQuestion("Are you sure you want to notify " + trustees.Count().ToString() + " trustees?"))
                     {
-                        tbComments.Text = "File was uploaded to\n" + fileUrl;
-                        Application.DoEvents();
-
-                        emailContent = emailContent.Replace("{URL}", fileUrl);
-                        String status = "";
-                        if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", emailContent, false, false, out status))
+                        emailContent = emailContent.Replace("{MANAGEMENTPACKPERIOD}", _SelectedItem.Period.ToString("MMMM yyyy"));
+                        emailContent = emailContent.Replace("{BUILDINGNAME}", building.Building);
+                        emailContent = emailContent.Replace("{PMEMAILADDRESS}", building.pm);
+                        string fileUrl = string.Empty;
+                        if (UploadFileToBuilding(building, dataItem, out fileUrl))
                         {
-                            Controller.HandleError("Unable to notify trustees by email : " + status);
-                        }
+                            tbComments.Text = "File was uploaded to\n" + fileUrl;
+                            Application.DoEvents();
 
-                        foreach (var trustee in trustees)
-                        {
-                            if (trustee.Email != null && trustee.Email.Length > 0)
+                            emailContent = emailContent.Replace("{URL}", fileUrl);
+                            String status = "";
+                            if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", emailContent, false, false, out status))
                             {
-                                tbComments.Text = tbComments.Text + "\nSent email to:"+trustee.accNumber + "-" + GetEmailString(trustee.Email);
-                                if (!Mailer.SendDirectMail(building.pm, trustee.Email, "", "", "Monthly financial pack", emailContent, false, false, out status))
-                                {
-                                    Controller.HandleError("Unable to notify trustees by email : " + status);
-                                }
-                                Application.DoEvents();
+                                Controller.HandleError("Unable to notify trustees by email : " + status);
                             }
+
+                            foreach (var trustee in trustees)
+                            {
+                                if (trustee.Email != null && trustee.Email.Length > 0)
+                                {
+                                    tbComments.Text = tbComments.Text + "\nSent email to:" + trustee.accNumber + "-" + GetEmailString(trustee.Email);
+                                    if (!Mailer.SendDirectMail(building.pm, trustee.Email, "", "", "Monthly financial pack", emailContent, false, false, out status))
+                                    {
+                                        Controller.HandleError("Unable to notify trustees by email : " + status);
+                                    }
+                                    Application.DoEvents();
+                                }
+                            }
+                            _SelectedItem.Processed = true;
+                            dataItem.Published = true;
+                            dataItem.Commments = tbComments.Text;
+                            context.SaveChanges();
+                            BindDataGrid();
+                            ClosePDF();
+                            Application.DoEvents();
                         }
-                        _SelectedItem.Processed = true;
-                        dataItem.Published = true;
-                        dataItem.Commments = tbComments.Text;
-                        context.SaveChanges();
-                        BindDataGrid();
-                        ClosePDF();
-                        Application.DoEvents();
                     }
                 }
                 else

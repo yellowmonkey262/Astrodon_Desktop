@@ -420,14 +420,36 @@ namespace Astrodon.Controls
 
         private double getOutstandingAmt()
         {
+            var useTrust = false;
+            if (cmbAccount.SelectedItem != null)
+              useTrust = cmbAccount.SelectedItem.ToString() == "TRUST";
             double os = 0;
             foreach (RequisitionList r in unProcessedRequisitions)
             {
-                os += r.amount;
+                if(useTrust)
+                {
+                    if (r.account != "OWN")
+                        os += r.amount;
+                }
+                else
+                {
+                    if (r.account == "OWN")
+                        os += r.amount;
+                }
+              
             }
             foreach (RequisitionList r in unPaidRequisitions)
             {
-                os += r.amount;
+                if (useTrust)
+                {
+                    if (r.account != "OWN")
+                        os += r.amount;
+                }
+                else
+                {
+                    if (r.account == "OWN")
+                        os += r.amount;
+                }
             }
 
             return os;
