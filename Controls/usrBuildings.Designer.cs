@@ -194,6 +194,9 @@
             this.btnUploadClaimForm = new System.Windows.Forms.Button();
             this.btnUploadInsuranceContract = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label72 = new System.Windows.Forms.Label();
+            this.txtAdditionalInsuredValue = new System.Windows.Forms.TextBox();
+            this.label73 = new System.Windows.Forms.Label();
             this.cbReplacementIncludesCommonProperty = new System.Windows.Forms.CheckBox();
             this.label54 = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
@@ -211,6 +214,9 @@
             this.label41 = new System.Windows.Forms.Label();
             this.tbPDFViewer = new System.Windows.Forms.TabPage();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
+            this.label74 = new System.Windows.Forms.Label();
+            this.txtTotalReplacementValue = new System.Windows.Forms.TextBox();
+            this.label75 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -1678,7 +1684,7 @@
             this.groupBox3.Controls.Add(this.btnViewInsuranceContract);
             this.groupBox3.Controls.Add(this.btnUploadClaimForm);
             this.groupBox3.Controls.Add(this.btnUploadInsuranceContract);
-            this.groupBox3.Location = new System.Drawing.Point(9, 132);
+            this.groupBox3.Location = new System.Drawing.Point(9, 189);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(576, 221);
             this.groupBox3.TabIndex = 136;
@@ -1881,6 +1887,12 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label74);
+            this.groupBox2.Controls.Add(this.txtTotalReplacementValue);
+            this.groupBox2.Controls.Add(this.label75);
+            this.groupBox2.Controls.Add(this.label72);
+            this.groupBox2.Controls.Add(this.txtAdditionalInsuredValue);
+            this.groupBox2.Controls.Add(this.label73);
             this.groupBox2.Controls.Add(this.cbReplacementIncludesCommonProperty);
             this.groupBox2.Controls.Add(this.label54);
             this.groupBox2.Controls.Add(this.label48);
@@ -1891,10 +1903,36 @@
             this.groupBox2.Controls.Add(this.label45);
             this.groupBox2.Location = new System.Drawing.Point(300, 15);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(285, 111);
+            this.groupBox2.Size = new System.Drawing.Size(285, 168);
             this.groupBox2.TabIndex = 135;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Building Costs";
+            // 
+            // label72
+            // 
+            this.label72.AutoSize = true;
+            this.label72.Location = new System.Drawing.Point(145, 108);
+            this.label72.Name = "label72";
+            this.label72.Size = new System.Drawing.Size(15, 13);
+            this.label72.TabIndex = 139;
+            this.label72.Text = "R";
+            // 
+            // txtAdditionalInsuredValue
+            // 
+            this.txtAdditionalInsuredValue.Enabled = false;
+            this.txtAdditionalInsuredValue.Location = new System.Drawing.Point(166, 105);
+            this.txtAdditionalInsuredValue.Name = "txtAdditionalInsuredValue";
+            this.txtAdditionalInsuredValue.Size = new System.Drawing.Size(100, 20);
+            this.txtAdditionalInsuredValue.TabIndex = 138;
+            // 
+            // label73
+            // 
+            this.label73.AutoSize = true;
+            this.label73.Location = new System.Drawing.Point(8, 108);
+            this.label73.Name = "label73";
+            this.label73.Size = new System.Drawing.Size(121, 13);
+            this.label73.TabIndex = 137;
+            this.label73.Text = "Additional Insured Value";
             // 
             // cbReplacementIncludesCommonProperty
             // 
@@ -1976,7 +2014,7 @@
             this.groupBox1.Controls.Add(this.label41);
             this.groupBox1.Location = new System.Drawing.Point(9, 15);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(285, 111);
+            this.groupBox1.Size = new System.Drawing.Size(285, 168);
             this.groupBox1.TabIndex = 134;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Building Dimensions";
@@ -2051,6 +2089,32 @@
             this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
             this.axAcroPDF1.Size = new System.Drawing.Size(782, 524);
             this.axAcroPDF1.TabIndex = 65;
+            // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.Location = new System.Drawing.Point(145, 145);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(15, 13);
+            this.label74.TabIndex = 142;
+            this.label74.Text = "R";
+            // 
+            // txtTotalReplacementValue
+            // 
+            this.txtTotalReplacementValue.Enabled = false;
+            this.txtTotalReplacementValue.Location = new System.Drawing.Point(166, 142);
+            this.txtTotalReplacementValue.Name = "txtTotalReplacementValue";
+            this.txtTotalReplacementValue.Size = new System.Drawing.Size(100, 20);
+            this.txtTotalReplacementValue.TabIndex = 141;
+            // 
+            // label75
+            // 
+            this.label75.AutoSize = true;
+            this.label75.Location = new System.Drawing.Point(8, 145);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(127, 13);
+            this.label75.TabIndex = 140;
+            this.label75.Text = "Total Replacement Value";
             // 
             // usrBuildings
             // 
@@ -2287,5 +2351,11 @@
         private System.Windows.Forms.Label label71;
         private System.Windows.Forms.DateTimePicker dtpEventTime;
         private System.Windows.Forms.Label Date;
+        private System.Windows.Forms.Label label72;
+        private System.Windows.Forms.TextBox txtAdditionalInsuredValue;
+        private System.Windows.Forms.Label label73;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.TextBox txtTotalReplacementValue;
+        private System.Windows.Forms.Label label75;
     }
 }

@@ -110,6 +110,8 @@ namespace Astrodon.Data
 
         public decimal CommonPropertyReplacementCost { get; set; }
 
+        public decimal AdditionalInsuredValueCost { get; set; }
+
         public string PolicyNumber { get; set; }
 
         public bool InsuranceReplacementValueIncludesCommonProperty { get; set; }

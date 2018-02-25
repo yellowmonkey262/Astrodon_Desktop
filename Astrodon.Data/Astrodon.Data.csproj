@@ -276,6 +276,10 @@
     <Compile Include="Migrations\201802051230128_CustomerTrusteeFlag.Designer.cs">
       <DependentUpon>201802051230128_CustomerTrusteeFlag.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802251207341_AddedAdditionalInsuredValue.cs" />
+    <Compile Include="Migrations\201802251207341_AddedAdditionalInsuredValue.Designer.cs">
+      <DependentUpon>201802251207341_AddedAdditionalInsuredValue.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -484,6 +488,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802051230128_CustomerTrusteeFlag.resx">
       <DependentUpon>201802051230128_CustomerTrusteeFlag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802251207341_AddedAdditionalInsuredValue.resx">
+      <DependentUpon>201802251207341_AddedAdditionalInsuredValue.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
