@@ -327,9 +327,13 @@ namespace Astrodon
                         sqlParms["@accNo"] = el.AccNumber;
                         foreach (String toAddy in toAddys)
                         {
-                            sqlParms["@recipient"] = toAddy;
-                            dh.SetData(msgReceipientQuery, sqlParms, out status);
-                            success = true;
+                            if (!string.IsNullOrWhiteSpace(toAddy))
+                            {
+                                sqlParms["@recipient"] = toAddy;
+                                dh.SetData(msgReceipientQuery, sqlParms, out status);
+                                success = true;
+                                break;
+                            }
                         }
                     }
 

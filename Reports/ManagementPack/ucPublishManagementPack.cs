@@ -326,8 +326,9 @@ namespace Astrodon.Reports.ManagementPack
                             {
                                 if (trustee.Email != null && trustee.Email.Length > 0)
                                 {
-                                    tbComments.Text = tbComments.Text + "\nSent email to:" + trustee.accNumber + "-" + GetEmailString(trustee.Email);
-                                    if (!Mailer.SendDirectMail(building.pm, trustee.Email, "", "", "Monthly financial pack", emailContent, false, false, out status))
+                                    string[] toEmail = new string[] { trustee.Email[0] };
+                                    tbComments.Text = tbComments.Text + "\nSent email to:" + trustee.accNumber + "-" + toEmail[0];
+                                    if (!Mailer.SendDirectMail(building.pm, toEmail, "", "", "Monthly financial pack", emailContent, false, false, out status))
                                     {
                                         Controller.HandleError("Unable to notify trustees by email : " + status);
                                     }
@@ -415,6 +416,31 @@ namespace Astrodon.Reports.ManagementPack
         private void button2_Click(object sender, EventArgs e)
         {
             LoadManagementPacks();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (_SelectedItem == null || String.IsNullOrWhiteSpace(_SelectedItem.PDFFileName))
+            {
+                Controller.HandleError("Please select an item from the list.", "Validation Error");
+                return;
+            }
+
+            if (!Controller.AskQuestion("Are you sure you want to set the selected items as published notifying trustrees and without uploading to the website?"))
+                return;
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var dataItem = context.ManagementPackSet.Single(a => a.id == _SelectedItem.Id);
+                _SelectedItem.Processed = true;
+                dataItem.Published = true;
+                dataItem.Commments = tbComments.Text;
+                context.SaveChanges();
+                BindDataGrid();
+                ClosePDF();
+                Application.DoEvents();
+            }
+
         }
     }
 

@@ -382,6 +382,18 @@ namespace Astrodon.Controls
             if (customers == null) { customers = new List<Customer>(); }
             customers.Clear();
             customers = Controller.pastel.AddCustomers(String.Empty, selectedBuilding.DataPath);
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var trustees = context.CustomerSet.Where(a => a.BuildingId == selectedBuilding.ID && a.IsTrustee).ToList();
+                foreach (var trustee in trustees)
+                {
+                    var customer = customers.Where(a => a.accNumber == trustee.AccountNumber).FirstOrDefault();
+                    if (customer != null)
+                        customer.IsTrustee = true;
+                }
+            }
+
             JobCustomers = new BindingList<jobCustomers>();
             sqlParms.Clear();
             String customerQuery = "SELECT * FROM tblPMCustomers WHERE jobID = " + jobID.ToString() + " AND account = @account";
@@ -613,9 +625,9 @@ namespace Astrodon.Controls
                     Customer customer = customers.SingleOrDefault(c => c.accNumber == jc.Account);
                     if (customer != null)
                     {
-                        if (Controller.user.id == 1) { MessageBox.Show(customer.category); }
-                        int iCat = Convert.ToInt32(customer.category);
-                        jc.Include = iCat == 7;
+                        jc.Include = customer.IsTrustee;
+                        if (customer.IsTrustee && !String.IsNullOrWhiteSpace(jc.email1))
+                            jc.sEmail1 = true;
                     }
                     else
                     {
