@@ -92,19 +92,19 @@ namespace Astrodon.Controls
                     double lbal;
 
                     for (int i = 20; i <= lPeriod; i++) { bal += (double.TryParse(accBits[i], out lbal) ? lbal : 0); }
-                    if (Controller.user.id == 1)
-                    {
-                        MessageBox.Show(bal.ToString());
-                    }
+                    //if (Controller.user.id == 1)
+                    //{
+                    //    MessageBox.Show(bal.ToString());
+                    //}
                     if (isthisyear)//|| startPeriod > 0
                     {
                         for (int i = 7; i <= tPeriod; i++)
                         {
                             bal += (double.TryParse(accBits[i], out lbal) ? lbal : 0);
-                            if (Controller.user.id == 1)
-                            {
-                                MessageBox.Show((i - 6).ToString() + "=" + bal.ToString());
-                            }
+                            //if (Controller.user.id == 1)
+                            //{
+                            //    MessageBox.Show((i - 6).ToString() + "=" + bal.ToString());
+                            //}
                         }
                     }
                 }
@@ -169,35 +169,105 @@ namespace Astrodon.Controls
             List<Trns> transactions = new List<Trns>();
             double trnBal = 0;
             double remBal = 0;
+            List<string> btmsg = new List<string>();
             if (selectedBuilding.ID == 0)
             {
-                ProcessAllBuildings();
+                Dictionary<String, List<Trns>> buildingTrans = new Dictionary<string, List<Trns>>();
+                foreach (Building b in BuildingManager.buildings)
+                {
+                    if (b.ID != 0 && b.Web_Building)
+                    {
+                        transactions = LoadBuildingTransactions(sPeriod, ePeriod, fromMonth, b.Trust);
+                        btmsg.Add(b.Name + " = " + transactions.Count.ToString());
+                        if (transactions.Count > 2)
+                        {
+                            buildingTrans.Add(b.Name, transactions);
+                        }
+                    }
+                }
+                if (Controller.user.id == 1)
+                {
+                    // MessageBox.Show(String.Join(";", btmsg));
+                }
+
+                String pdfFile = new PDF().TrustMovement(buildingTrans);
+                if (!String.IsNullOrEmpty(pdfFile))
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start(pdfFile);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("File " + pdfFile + " is in use. Please close and try again.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No file created. Please try again.");
+                }
             }
             else
             {
-                List<Trns> bTrans = LoadTransactions(sPeriod, ePeriod, selectedBuilding.Trust, out remBal, out trnBal);
-                double openingBalance = GetBalance(selectedBuilding.Trust, fromMonth - 1) + remBal; //- selectedBuilding.Period
-                Trns openingTrns = new Trns
-                {
-                    Amount = openingBalance.ToString("#0.00"),
-                    Date = dtFrom.Value.AddDays(-1).ToString("yyyy/MM/dd"),
-                    Description = "Opening Balance",
-                    Reference = ""
-                };
-                transactions.Add(openingTrns);
-                transactions.AddRange(bTrans);
-                Trns closingTrns = new Trns
-                {
-                    Amount = (openingBalance + trnBal).ToString("#0.00"),
-                    Date = dtTo.Value.ToString("yyyy/MM/dd"),
-                    Description = "Closing Balance",
-                    Reference = ""
-                };
-                transactions.Add(closingTrns);
+                //List<Trns> bTrans = LoadTransactions(sPeriod, ePeriod, selectedBuilding.Trust, out remBal, out trnBal);
+                //double openingBalance = GetBalance(selectedBuilding.Trust, fromMonth - 1) + remBal; //- selectedBuilding.Period
+                //Trns openingTrns = new Trns
+                //{
+                //    Amount = openingBalance.ToString("#0.00"),
+                //    Date = dtFrom.Value.AddDays(-1).ToString("yyyy/MM/dd"),
+                //    Description = "Opening Balance",
+                //    Reference = ""
+                //};
+                //transactions.Add(openingTrns);
+                //transactions.AddRange(bTrans);
+                //Trns closingTrns = new Trns
+                //{
+                //    Amount = (openingBalance + trnBal).ToString("#0.00"),
+                //    Date = dtTo.Value.ToString("yyyy/MM/dd"),
+                //    Description = "Closing Balance",
+                //    Reference = ""
+                //};
+                //transactions.Add(closingTrns);
+                transactions = LoadBuildingTransactions(sPeriod, ePeriod, fromMonth, selectedBuilding.Trust);
             }
             transactions = transactions.OrderBy(t => t.Date).ToList();
             foreach (Trns t in transactions) { bs.Add(t); }
         }
+
+        //private void ProcessAllBuildings()
+        //{
+        //    int fromMonth = dtFrom.Value.Month - 2;
+        //    int toMonth = dtTo.Value.Month - 2;
+        //    int periodYear = (IsThisYear() ? 112 : 12);
+        //    int sPeriod = (fromMonth <= 0 ? periodYear + fromMonth : 100 + fromMonth);
+        //    int ePeriod = (toMonth <= 0 ? periodYear + toMonth : 100 + toMonth);
+        //            //List<Trns> transactions = new List<Trns>();
+        //            //double trnBal = 0;
+        //            //double remBal = 0;
+        //            //List<Trns> bTrans = LoadTransactions(sPeriod, ePeriod, b.Trust, out remBal, out trnBal);
+        //            //double openingBalance = GetBalance(b.Trust, fromMonth - 1) + remBal;//- b.Period
+        //            //Trns openingTrns = new Trns
+        //            //{
+        //            //    Amount = openingBalance.ToString("#0.00"),
+        //            //    Date = dtFrom.Value.AddDays(-1).ToString("yyyy/MM/dd"),
+        //            //    Description = "Opening Balance",
+        //            //    Reference = ""
+        //            //};
+        //            //transactions.Add(openingTrns);
+        //            //transactions.AddRange(bTrans);
+        //            //Trns closingTrns = new Trns
+        //            //{
+        //            //    Amount = (openingBalance + trnBal).ToString("#0.00"),
+        //            //    Date = dtTo.Value.ToString("yyyy/MM/dd"),
+        //            //    Description = "Closing Balance",
+        //            //    Reference = ""
+        //            //};
+        //            //transactions.Add(closingTrns);
+        //            //transactions = transactions.OrderBy(t => t.Date).ToList();
+
+        //        }
+        //    }
+        //}
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
@@ -212,60 +282,44 @@ namespace Astrodon.Controls
             }
         }
 
-        private void ProcessAllBuildings()
+        private List<Trns> LoadBuildingTransactions(int sPeriod, int ePeriod, int fromMonth, string Trust)
         {
-            int fromMonth = dtFrom.Value.Month - 2;
-            int toMonth = dtTo.Value.Month - 2;
-            int periodYear = (IsThisYear() ? 112 : 12);
-            int sPeriod = (fromMonth <= 0 ? periodYear + fromMonth : 100 + fromMonth);
-            int ePeriod = (toMonth <= 0 ? periodYear + toMonth : 100 + toMonth);
-            Dictionary<String, List<Trns>> buildingTrans = new Dictionary<string, List<Trns>>();
-            foreach (Building b in BuildingManager.buildings)
+            String wherearewe = "start";
+            List<Trns> transactions = new List<Trns>();
+            try
             {
-                if (b.ID != 0 && b.Web_Building)
+                double trnBal = 0;
+                double remBal = 0;
+                List<Trns> bTrans = LoadTransactions(sPeriod, ePeriod, Trust, out remBal, out trnBal);
+                wherearewe = "loaded trans";
+                double openingBalance = GetBalance(Trust, fromMonth - 1) + remBal; //- selectedBuilding.Period
+                wherearewe = "loaded balance";
+                Trns openingTrns = new Trns
                 {
-                    List<Trns> transactions = new List<Trns>();
-                    double trnBal = 0;
-                    double remBal = 0;
-                    List<Trns> bTrans = LoadTransactions(sPeriod, ePeriod, b.Trust, out remBal, out trnBal);
-                    double openingBalance = GetBalance(b.Trust, fromMonth - 1) + remBal;//- b.Period
-                    Trns openingTrns = new Trns
-                    {
-                        Amount = openingBalance.ToString("#0.00"),
-                        Date = dtFrom.Value.AddDays(-1).ToString("yyyy/MM/dd"),
-                        Description = "Opening Balance",
-                        Reference = ""
-                    };
-                    transactions.Add(openingTrns);
-                    transactions.AddRange(bTrans);
-                    Trns closingTrns = new Trns
-                    {
-                        Amount = (openingBalance + trnBal).ToString("#0.00"),
-                        Date = dtTo.Value.ToString("yyyy/MM/dd"),
-                        Description = "Closing Balance",
-                        Reference = ""
-                    };
-                    transactions.Add(closingTrns);
-                    transactions = transactions.OrderBy(t => t.Date).ToList();
-                    if (transactions.Count > 2) { buildingTrans.Add(b.Name, transactions); }
-                }
+                    Amount = openingBalance.ToString("#0.00"),
+                    Date = dtFrom.Value.AddDays(-1).ToString("yyyy/MM/dd"),
+                    Description = "Opening Balance",
+                    Reference = ""
+                };
+                wherearewe = "openingtrans";
+                transactions.Add(openingTrns);
+                transactions.AddRange(bTrans);
+                wherearewe = "buildtrans";
+                Trns closingTrns = new Trns
+                {
+                    Amount = (openingBalance + trnBal).ToString("#0.00"),
+                    Date = dtTo.Value.ToString("yyyy/MM/dd"),
+                    Description = "Closing Balance",
+                    Reference = ""
+                };
+                wherearewe = "closingtrans";
+                transactions.Add(closingTrns);
             }
-            String pdfFile = new PDF().TrustMovement(buildingTrans);
-            if (!String.IsNullOrEmpty(pdfFile))
+            catch (Exception ex)
             {
-                try
-                {
-                    System.Diagnostics.Process.Start(pdfFile);
-                }
-                catch
-                {
-                    MessageBox.Show("File " + pdfFile + " is in use. Please close and try again.");
-                }
+                MessageBox.Show(wherearewe + " - " + ex.Message);
             }
-            else
-            {
-                MessageBox.Show("No file created. Please try again.");
-            }
+            return transactions;
         }
     }
 }
