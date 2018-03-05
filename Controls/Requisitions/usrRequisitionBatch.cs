@@ -81,7 +81,7 @@ namespace Astrodon.Controls.Requisitions
                              && a.RequisitionBatchId == null).ToList();
                 ShowDebug("Query executed");
 
-                if (requisitions.Count < 0)
+                if (requisitions.Count <= 0)
                 {
                     context.ClearStuckRequisitons(buildingId);
                     requisitions = context.tblRequisitions.Where(a => a.building == buildingId
