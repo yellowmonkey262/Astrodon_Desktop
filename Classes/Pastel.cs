@@ -1104,7 +1104,7 @@ namespace Astrodon
             int trustPeriod = getPeriod(trnDate);
             StrIn = trustPeriod.ToString() + "|" + trnDate.ToString("dd/MM/yyyy") + "|D|" + acc + "|" + buildAcc + "|" + description + "|" + amt + "|0|0|A|||0|0|1120000|1|1";
             //MessageBox.Show(StrIn + " - " + trustType.ToString());
-            returner = PostBatch("ASTROD18", StrIn, trustType);
+            returner = PostBatch("ASTROD19", StrIn, trustType);
             //MessageBox.Show(returner);
         }
 
@@ -1115,7 +1115,7 @@ namespace Astrodon
             int trustPeriod = getPeriod(trnDate);
             StrIn = trustPeriod.ToString() + "|" + trnDate.ToString("dd/MM/yyyy") + "|G|" + acc + "|" + buildAcc + "|" + description + "|" + amt + "|0|0|A|||0|0|1120000|1|1";
             //MessageBox.Show(StrIn + " - " + trustType.ToString());
-            returner = PostBatch("ASTROD18", StrIn, trustType);
+            returner = PostBatch("ASTROD19", StrIn, trustType);
             //MessageBox.Show(returner);
         }
 
