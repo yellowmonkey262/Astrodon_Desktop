@@ -24,11 +24,6 @@
         /// </summary>
         private void InitializeComponent() {
             this.dgMonthly = new System.Windows.Forms.DataGridView();
-            this.colBuild = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFinPeriod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colUser = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnPrint = new System.Windows.Forms.Button();
             this.rdCompleted = new System.Windows.Forms.RadioButton();
             this.rdIncomplete = new System.Windows.Forms.RadioButton();
@@ -40,6 +35,12 @@
             this.lblUser = new System.Windows.Forms.Label();
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.button1 = new System.Windows.Forms.Button();
+            this.colBuild = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFinPeriod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.YearEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colUser = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgMonthly)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,6 +56,7 @@
             this.colBuild,
             this.colCode,
             this.colFinPeriod,
+            this.YearEnd,
             this.colDate,
             this.colUser});
             this.dgMonthly.Location = new System.Drawing.Point(20, 130);
@@ -62,41 +64,6 @@
             this.dgMonthly.ReadOnly = true;
             this.dgMonthly.Size = new System.Drawing.Size(842, 411);
             this.dgMonthly.TabIndex = 6;
-            // 
-            // colBuild
-            // 
-            this.colBuild.DataPropertyName = "Building";
-            this.colBuild.HeaderText = "Building";
-            this.colBuild.Name = "colBuild";
-            this.colBuild.ReadOnly = true;
-            // 
-            // colCode
-            // 
-            this.colCode.DataPropertyName = "Code";
-            this.colCode.HeaderText = "Code";
-            this.colCode.Name = "colCode";
-            this.colCode.ReadOnly = true;
-            // 
-            // colFinPeriod
-            // 
-            this.colFinPeriod.DataPropertyName = "finPeriod";
-            this.colFinPeriod.HeaderText = "Month / Year";
-            this.colFinPeriod.Name = "colFinPeriod";
-            this.colFinPeriod.ReadOnly = true;
-            // 
-            // colDate
-            // 
-            this.colDate.DataPropertyName = "prcDate";
-            this.colDate.HeaderText = "Process Date";
-            this.colDate.Name = "colDate";
-            this.colDate.ReadOnly = true;
-            // 
-            // colUser
-            // 
-            this.colUser.DataPropertyName = "User";
-            this.colUser.HeaderText = "User";
-            this.colUser.Name = "colUser";
-            this.colUser.ReadOnly = true;
             // 
             // btnPrint
             // 
@@ -207,6 +174,48 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // colBuild
+            // 
+            this.colBuild.DataPropertyName = "Building";
+            this.colBuild.HeaderText = "Building";
+            this.colBuild.Name = "colBuild";
+            this.colBuild.ReadOnly = true;
+            // 
+            // colCode
+            // 
+            this.colCode.DataPropertyName = "Code";
+            this.colCode.HeaderText = "Code";
+            this.colCode.Name = "colCode";
+            this.colCode.ReadOnly = true;
+            // 
+            // colFinPeriod
+            // 
+            this.colFinPeriod.DataPropertyName = "finPeriod";
+            this.colFinPeriod.HeaderText = "Month / Year";
+            this.colFinPeriod.Name = "colFinPeriod";
+            this.colFinPeriod.ReadOnly = true;
+            // 
+            // YearEnd
+            // 
+            this.YearEnd.DataPropertyName = "YearEnd";
+            this.YearEnd.HeaderText = "YearEnd";
+            this.YearEnd.Name = "YearEnd";
+            this.YearEnd.ReadOnly = true;
+            // 
+            // colDate
+            // 
+            this.colDate.DataPropertyName = "prcDate";
+            this.colDate.HeaderText = "Process Date";
+            this.colDate.Name = "colDate";
+            this.colDate.ReadOnly = true;
+            // 
+            // colUser
+            // 
+            this.colUser.DataPropertyName = "User";
+            this.colUser.HeaderText = "User";
+            this.colUser.Name = "colUser";
+            this.colUser.ReadOnly = true;
+            // 
             // usrMonthReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -234,11 +243,6 @@
         #endregion
         private System.Windows.Forms.DataGridView dgMonthly;
         private System.Windows.Forms.Button btnPrint;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colBuild;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colFinPeriod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colUser;
         private System.Windows.Forms.RadioButton rdCompleted;
         private System.Windows.Forms.RadioButton rdIncomplete;
         private System.Windows.Forms.ComboBox cmbMonth;
@@ -249,5 +253,11 @@
         private System.Windows.Forms.Label lblUser;
         private System.Windows.Forms.SaveFileDialog dlgSave;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBuild;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFinPeriod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn YearEnd;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUser;
     }
 }

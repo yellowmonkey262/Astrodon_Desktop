@@ -289,7 +289,10 @@ namespace Astrodon
 
             User pmUser;
             new Users().GetUser(building.PM, out pmUser, out status);
-            if (pmUser == null) { pmUser = Controller.user; }
+            if (pmUser == null)
+            {
+                pmUser = Controller.user;
+            }
             message += Environment.NewLine + Environment.NewLine;
             message += "Kind Regards" + Environment.NewLine;
             message += pmUser.name + Environment.NewLine;
