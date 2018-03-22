@@ -59,6 +59,7 @@
     <Compile Include="Calendar\CalendarEntryAttachment.cs" />
     <Compile Include="Calendar\CalendarEntryType.cs" />
     <Compile Include="Calendar\CalendarUserInvite.cs" />
+    <Compile Include="Calendar\MeetingRoom.cs" />
     <Compile Include="Calendar\PublicHoliday.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
@@ -276,6 +277,10 @@
     <Compile Include="Migrations\201802051230128_CustomerTrusteeFlag.Designer.cs">
       <DependentUpon>201802051230128_CustomerTrusteeFlag.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803220607513_MeetingRoom.cs" />
+    <Compile Include="Migrations\201803220607513_MeetingRoom.Designer.cs">
+      <DependentUpon>201803220607513_MeetingRoom.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -484,6 +489,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802051230128_CustomerTrusteeFlag.resx">
       <DependentUpon>201802051230128_CustomerTrusteeFlag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803220607513_MeetingRoom.resx">
+      <DependentUpon>201803220607513_MeetingRoom.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
