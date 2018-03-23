@@ -769,13 +769,24 @@ namespace Astrodon.Reports.Calendar
             if (selectedRoom == null)
                 return false;
 
-            if (selectedRoom.NumberOfSeats > 16) //we selected room A B and C
+            if (selectedRoom.Name.Contains("A-B-C")) //we selected room A B and C
             {
                 foreach (var room in roomList)
                 {
                     if (HasMeetingOverlap(context, room, editItem.EntryDate, editItem.EventToDate))
                     {
                         Controller.HandleError("Meeting double booked for room " + room.ToString(), "Validation Error");
+                        return true;
+                    }
+                }
+            }
+            else if(selectedRoom.Name.Contains("B-C"))
+            {
+                foreach (var room in roomList.Where(a => a.Name.Contains("B") || a.Name.Contains("C")))
+                {
+                    if (HasMeetingOverlap(context, room, editItem.EntryDate, editItem.EventToDate))
+                    {
+                        Controller.HandleError("Meeting double booked for room " + selectedRoom.ToString(), "Validation Error");
                         return true;
                     }
                 }
