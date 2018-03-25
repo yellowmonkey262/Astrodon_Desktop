@@ -221,6 +221,7 @@ namespace Astrodon
                 LoadMaintenance();
                 LoadWeb();
                 LoadDebitOrder();
+                LoadCustomerEntity();
                 this.Cursor = Cursors.Default;
             }
             catch (Exception ex)
@@ -1492,7 +1493,8 @@ namespace Astrodon
                         AccountNumber = customer.accNumber,
                         Description = customer.description,
                         IsTrustee = customer.IsTrustee,
-                        Created = DateTime.Now
+                        Created = DateTime.Now,
+                        CellNumber = customer.CellPhone
                     };
                     context.CustomerSet.Add(customerEntity);
                 }
@@ -1519,15 +1521,117 @@ namespace Astrodon
                             AccountNumber = cust.accNumber,
                             Description = cust.description,
                             IsTrustee = cust.IsTrustee,
-                            Created = DateTime.Now
+                            Created = DateTime.Now,
+                            CellNumber = cust.CellPhone
                         };
                         context.CustomerSet.Add(customerEntity);
                     }
                     if (customerEntity.Description != cust.description)
                         customerEntity.Description = cust.description;
+                    if (customerEntity.CellNumber != cust.CellPhone)
+                        customerEntity.CellNumber = cust.CellPhone;
                 }
                 context.SaveChanges();
             }
         }
+
+
+        private void LoadCustomerEntity()
+        {
+            cbBirthDayNotificaiton.Checked = false;
+            tbRSAIDNumber.Text = "";
+            dtpDateOfBirth.Value = new DateTime(1900, 01, 01);
+            dtpDateOfBirth.MaxDate = DateTime.Today;
+            dtpDateOfBirth.MinDate = DateTime.Today.AddYears(-150);
+            tbFullName.Text = "";
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var customerEntity = context.CustomerSet.SingleOrDefault(a => a.BuildingId == building.ID && a.AccountNumber == customer.accNumber);
+                if (customerEntity == null)
+                {
+                    customerEntity = new Data.CustomerData.Customer()
+                    {
+                        BuildingId = building.ID,
+                        AccountNumber = customer.accNumber,
+                        Description = customer.description,
+                        IsTrustee = customer.IsTrustee,
+                        Created = DateTime.Now,
+                        SendBirthdayNotification = false,
+                        IDNumber = string.Empty,
+                        DateOfBirth = null,
+                        CellNumber = customer.CellPhone
+                    };
+                    context.CustomerSet.Add(customerEntity);
+                    context.SaveChanges();
+                }
+                cbBirthDayNotificaiton.Checked = customerEntity.SendBirthdayNotification;
+
+                if (!String.IsNullOrWhiteSpace(customerEntity.IDNumber))
+                    tbRSAIDNumber.Text = customerEntity.IDNumber;
+
+                if (customerEntity.DateOfBirth != null)
+                    dtpDateOfBirth.Value = customerEntity.DateOfBirth.Value;
+
+                if (!String.IsNullOrWhiteSpace(customerEntity.CustomerFullName))
+                    tbFullName.Text = customerEntity.CustomerFullName;
+
+            }
+        }
+
+        private void btnSaveBirthDay_Click(object sender, EventArgs e)
+        {
+            if (dtpDateOfBirth.Value < DateTime.Today.AddYears(-140))
+                cbBirthDayNotificaiton.Checked = false;
+            if(String.IsNullOrWhiteSpace(tbFullName.Text))
+            {
+                Controller.HandleError("Full Name is required for Birthday SMS", "Validation Error");
+                return;
+            }
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var customerEntity = context.CustomerSet.SingleOrDefault(a => a.BuildingId == building.ID && a.AccountNumber == customer.accNumber);
+                if (customerEntity == null)
+                {
+                    customerEntity = new Data.CustomerData.Customer()
+                    {
+                        BuildingId = building.ID,
+                        AccountNumber = customer.accNumber,
+                        Description = customer.description,
+                        IsTrustee = customer.IsTrustee,
+                        Created = DateTime.Now,
+                        CellNumber = customer.CellPhone
+
+                    };
+                    context.CustomerSet.Add(customerEntity);
+                }
+
+                customerEntity.DateOfBirth = dtpDateOfBirth.Value;
+                customerEntity.IDNumber = tbRSAIDNumber.Text;
+                customerEntity.SendBirthdayNotification = cbBirthDayNotificaiton.Checked;
+                customerEntity.CellNumber = customer.CellPhone;
+                customerEntity.CustomerFullName = tbFullName.Text;
+                context.SaveChanges();
+
+                Controller.ShowMessage("Birthday details updated");
+            }
+        }
+
+        private void tbRSAIDNumber_TextChanged(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrWhiteSpace(tbRSAIDNumber.Text) && tbRSAIDNumber.Text.Length >= 13)
+            {
+                var idval = new IDValidator(tbRSAIDNumber.Text);
+                if (idval.isValid())
+                {
+                    dtpDateOfBirth.Value = idval.GetDateOfBirthAsDateTime();
+                    cbBirthDayNotificaiton.Checked = true;
+                }
+                else
+                    Controller.HandleError(tbRSAIDNumber.Text + " is not a valid RSA ID Number");
+            }
+
+        }
+
+       
     }
 }

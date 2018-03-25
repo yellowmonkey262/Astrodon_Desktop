@@ -141,6 +141,7 @@
     <Compile Include="Classes\DataHandler.cs" />
     <Compile Include="Classes\Detail.cs" />
     <Compile Include="Classes\FTP.cs" />
+    <Compile Include="Classes\IDValidator.cs" />
     <Compile Include="Classes\IMEvents.cs" />
     <Compile Include="Classes\LoadTransactions.cs" />
     <Compile Include="Classes\Mailer.cs" />

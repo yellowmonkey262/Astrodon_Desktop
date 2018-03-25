@@ -25,6 +25,23 @@ namespace Astrodon.Data.CustomerData
         public virtual string Description { get; set; }
 
         public virtual bool IsTrustee { get; set; }
-        public DateTime Created { get; set; }
+
+        public virtual DateTime Created { get; set; }
+
+        public virtual bool SendBirthdayNotification { get; set; }
+
+        public virtual string IDNumber { get; set; }
+
+        [Index("IDX_CustomerDateOfBirth")]
+        public virtual DateTime? DateOfBirth { get; set; }
+
+        public virtual string CustomerFullName { get; set; }
+
+        public virtual DateTime? LastBirthdayNotificationSent { get; set; }
+
+        public virtual string CellNumber { get; set; }
+        public virtual string BirthdaySMSText { get; set; }
+        public virtual string BirthDaySMSStatus { get; set; }
+        public virtual string BirthDaySMSBatch { get; set; }
     }
 }

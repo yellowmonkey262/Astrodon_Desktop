@@ -20,6 +20,8 @@ namespace Astrodon {
 
             iTextSharp.text.pdf.PdfReader.unethicalreading = true;
 
+           
+
             Application.Run();
         }
     }

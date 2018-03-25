@@ -281,6 +281,26 @@
     <Compile Include="Migrations\201803220607513_MeetingRoom.Designer.cs">
       <DependentUpon>201803220607513_MeetingRoom.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803250837057_CustomerBirthdays.cs" />
+    <Compile Include="Migrations\201803250837057_CustomerBirthdays.Designer.cs">
+      <DependentUpon>201803250837057_CustomerBirthdays.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803250845001_CustomerBirthdayNotification.cs" />
+    <Compile Include="Migrations\201803250845001_CustomerBirthdayNotification.Designer.cs">
+      <DependentUpon>201803250845001_CustomerBirthdayNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803250849148_CustomerCellNumber.cs" />
+    <Compile Include="Migrations\201803250849148_CustomerCellNumber.Designer.cs">
+      <DependentUpon>201803250849148_CustomerCellNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803250909161_CustomerDateOfBirth.cs" />
+    <Compile Include="Migrations\201803250909161_CustomerDateOfBirth.Designer.cs">
+      <DependentUpon>201803250909161_CustomerDateOfBirth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803250919172_CustomerBirthdaySMSTracking.cs" />
+    <Compile Include="Migrations\201803250919172_CustomerBirthdaySMSTracking.Designer.cs">
+      <DependentUpon>201803250919172_CustomerBirthdaySMSTracking.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -492,6 +512,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803220607513_MeetingRoom.resx">
       <DependentUpon>201803220607513_MeetingRoom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250837057_CustomerBirthdays.resx">
+      <DependentUpon>201803250837057_CustomerBirthdays.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250845001_CustomerBirthdayNotification.resx">
+      <DependentUpon>201803250845001_CustomerBirthdayNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250849148_CustomerCellNumber.resx">
+      <DependentUpon>201803250849148_CustomerCellNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250909161_CustomerDateOfBirth.resx">
+      <DependentUpon>201803250909161_CustomerDateOfBirth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250919172_CustomerBirthdaySMSTracking.resx">
+      <DependentUpon>201803250919172_CustomerBirthdaySMSTracking.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
