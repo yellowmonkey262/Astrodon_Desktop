@@ -1,4 +1,5 @@
-﻿using Astrodon.DataProcessor;
+﻿using Astrodon;
+using Astrodon.DataProcessor;
 using PastelReportServer;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,8 @@ namespace SelfHosted
 
         static void Main(string[] args)
         {
-
-          //  ProcessorThread.ProcessWorkSchedule();
-            ProcessorThread.ProcessBirthdaySMS();
+            //  ProcessorThread.ProcessWorkSchedule();
+            // ProcessorThread.ProcessBirthdaySMS();
             //ProcessorThread.ScheduleFinancialMeetings();
 
             //    return;

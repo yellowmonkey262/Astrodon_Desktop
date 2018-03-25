@@ -170,6 +170,11 @@ namespace Astrodon
 
         public bool SendSMS(String phoneNumber, String message, out String status, out String batchID)
         {
+            if (phoneNumber.Contains("+"))
+                phoneNumber = phoneNumber.Replace("+", "");
+
+            phoneNumber = phoneNumber.Replace(" ", "");
+
             double credits = GetCredits(out status);
             batchID = "";
             if (credits > 0)

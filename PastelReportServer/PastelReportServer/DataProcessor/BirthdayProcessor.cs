@@ -43,14 +43,6 @@ namespace Astrodon.DataProcessor
                 string smsText = "Happy birthday " + bdayCustomer.CustomerFullName + ". We hope you have a wonderful day. Regards Astrodon";
 
                 string number = bdayCustomer.CellNumber;
-                if (number.StartsWith("0"))
-                {
-                    number = number.Remove(0, 1);
-                    number = "+27" + number;
-                }
-                else if (number.StartsWith("27"))
-                    number = "+" + number;
-
                 var sms = new SMS();
                 string status;
                 string batchId;
