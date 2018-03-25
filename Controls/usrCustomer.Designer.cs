@@ -40,6 +40,8 @@
             this.lblOS = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tbFullName = new System.Windows.Forms.TextBox();
+            this.label34 = new System.Windows.Forms.Label();
             this.btnSaveBirthDay = new System.Windows.Forms.Button();
             this.dtpDateOfBirth = new System.Windows.Forms.DateTimePicker();
             this.label33 = new System.Windows.Forms.Label();
@@ -148,8 +150,6 @@
             this.dgDebitOrderArchive = new System.Windows.Forms.DataGridView();
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
-            this.tbFullName = new System.Windows.Forms.TextBox();
-            this.label34 = new System.Windows.Forms.Label();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -271,6 +271,22 @@
             this.tabPage2.Text = "Customer Details";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // tbFullName
+            // 
+            this.tbFullName.Location = new System.Drawing.Point(99, 117);
+            this.tbFullName.Name = "tbFullName";
+            this.tbFullName.Size = new System.Drawing.Size(200, 20);
+            this.tbFullName.TabIndex = 83;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(5, 121);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(81, 13);
+            this.label34.TabIndex = 91;
+            this.label34.Text = "Full Name (sms)";
+            // 
             // btnSaveBirthDay
             // 
             this.btnSaveBirthDay.BackColor = System.Drawing.Color.Lime;
@@ -295,7 +311,7 @@
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(8, 97);
+            this.label33.Location = new System.Drawing.Point(5, 95);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(66, 13);
             this.label33.TabIndex = 88;
@@ -1329,22 +1345,6 @@
             // fdOpen
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
-            // 
-            // tbFullName
-            // 
-            this.tbFullName.Location = new System.Drawing.Point(99, 117);
-            this.tbFullName.Name = "tbFullName";
-            this.tbFullName.Size = new System.Drawing.Size(200, 20);
-            this.tbFullName.TabIndex = 83;
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(5, 121);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(81, 13);
-            this.label34.TabIndex = 91;
-            this.label34.Text = "Full Name (sms)";
             // 
             // usrCustomer
             // 

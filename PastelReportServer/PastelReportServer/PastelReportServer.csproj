@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{479C6C3D-B394-43E8-A8BC-3569F377FA36}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Astrodon</RootNamespace>
+    <AssemblyName>Astrodon</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\Astrodon_Desktop\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\Astrodon_Desktop\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\..\Desktop\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DLL\ReportViewer\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DLL\ReportViewer\Microsoft.ReportViewer.DataVisualization.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DLL\ReportViewer\Microsoft.ReportViewer.Design.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DLL\ReportViewer\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DLL\ReportViewer\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Mailer.cs" />
+    <Compile Include="Classes\SMS.cs" />
+    <Compile Include="DataContracts\MaintenanceReportType.cs" />
+    <Compile Include="DataContracts\Maintenance\PastelMaintenanceTransaction.cs" />
+    <Compile Include="DataContracts\PaymentTransaction.cs" />
+    <Compile Include="DataContracts\PervasiveItem.cs" />
+    <Compile Include="DataProcessor\BirthdayProcessor.cs" />
+    <Compile Include="DataProcessor\FixedFinancialMeetingsProcessor.cs" />
+    <Compile Include="DataProcessor\MaintenanceProcessor.cs" />
+    <Compile Include="DataProcessor\ProcessorThread.cs" />
+    <Compile Include="DataProcessor\RequisitionProcessor.cs" />
+    <Compile Include="DebitOrder\DebitOrderExcel.cs" />
+    <Compile Include="DebitOrder\DebitOrderItem.cs" />
+    <Compile Include="ReportServiceHost.cs" />
+    <Compile Include="Impersonation.cs" />
+    <Compile Include="IReportService.cs" />
+    <Compile Include="Lib\SQL\PervasiveSqlUtilities.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportService.svc.cs">
+      <DependentUpon>ReportService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\AllocationWorksheet\AllocationItem.cs" />
+    <Compile Include="Reports\AllocationWorksheet\AllocationWorksheetReport.cs" />
+    <Compile Include="Reports\IdValue.cs" />
+    <Compile Include="Reports\InsuranceSchedule\InsuranceScheduleReport.cs" />
+    <Compile Include="Reports\InsuranceSchedule\InsuranceScheduleDataItem.cs" />
+    <Compile Include="Reports\LevyRoll\LevyRollDataItem.cs" />
+    <Compile Include="Reports\LevyRoll\LevyRollReport.cs" />
+    <Compile Include="Reports\LevyRoll\PeriodDataItem.cs" />
+    <Compile Include="Reports\LevyRoll\SundryDataItem.cs" />
+    <Compile Include="Reports\MaintenanceReport\MaintenanceReport.cs" />
+    <Compile Include="Reports\MaintenanceReport\MaintenanceReportDataItem.cs" />
+    <Compile Include="Reports\MaintenanceReport\PervasiveAccount.cs" />
+    <Compile Include="Reports\ManagementReportCoverPage\ManagementReportCoverPage.cs" />
+    <Compile Include="Reports\ManagementReportCoverPage\TOCDataItem.cs" />
+    <Compile Include="Reports\MonthlyReport\MonthlyReportExport.cs" />
+    <Compile Include="Reports\MonthlyReport\MonthlyReportItem.cs" />
+    <Compile Include="Reports\PervasiveDataItem.cs" />
+    <Compile Include="Reports\RdlcHelper.cs" />
+    <Compile Include="Reports\ReportDataBase.cs" />
+    <Compile Include="Reports\RequisitionBatch\RequisitionBatchReportDataItem.cs" />
+    <Compile Include="Reports\RequisitionBatch\RequisitionBatchReport.cs" />
+    <Compile Include="Reports\SupplierReport\SupplierReport.cs" />
+    <Compile Include="Reports\SupplierReport\SupplierReportDataItem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataProcessor\Scripts\MaintenanceRecordList.sql" />
+    <EmbeddedResource Include="DataProcessor\Scripts\PaymentTransactionList.sql" />
+    <EmbeddedResource Include="DataProcessor\Scripts\TrustPaymentTransactionList.sql" />
+    <EmbeddedResource Include="DataProcessor\Scripts\MaintenanceRecordListBetweenDates.sql" />
+    <Content Include="Properties\DataSources\Astrodon.Reports.LevyRoll.LevyRollDataItem.datasource" />
+    <Content Include="ReportService.svc" />
+    <EmbeddedResource Include="Reports\InsuranceSchedule\InsuranceScheduleReport.rdlc" />
+    <EmbeddedResource Include="Reports\MaintenanceReport\MaintenanceReport.rdlc" />
+    <EmbeddedResource Include="Reports\ManagementReportCoverPage\ManagementReportCoverPageReport.rdlc" />
+    <EmbeddedResource Include="Reports\RequisitionBatch\RequisitionReport.rdlc" />
+    <EmbeddedResource Include="Reports\Scripts\Sundries.sql" />
+    <EmbeddedResource Include="Reports\Scripts\PeriodParameters.sql" />
+    <EmbeddedResource Include="Reports\Scripts\LevyRollAllCustomers.sql" />
+    <EmbeddedResource Include="Reports\Scripts\LevyRoll.sql" />
+    <EmbeddedResource Include="Reports\SupplierReport\SupplierReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\DataSources\Astrodon.Reports.LevyRoll.SundryDataItem.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataSources\Astrodon.Reports.LevyRoll.LevyRollDataItem.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataSources\Astrodon.Reports.LevyRoll.SundryDataItem.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\LevyRoll\LevyRollReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Astrodon.Data\Astrodon.Data.csproj">
+      <Project>{89422917-7104-43aa-b124-bccabf3c733b}</Project>
+      <Name>Astrodon.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AstroLibrary\AstroLibrary.csproj">
+      <Project>{ce7d8e45-b945-4013-8633-c2add2ac8876}</Project>
+      <Name>AstroLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\Astrodon.Reports.InsuranceSchedule.InsuranceScheduleDataItem.datasource" />
+    <None Include="Properties\DataSources\Astrodon.Reports.MaintenanceReport.MaintenanceReportDataItem.datasource" />
+    <None Include="Properties\DataSources\Astrodon.Reports.ManagementReportCoverPage.TOCDataItem.datasource" />
+    <None Include="Properties\DataSources\Astrodon.Reports.RequisitionBatch.RequisitionBatchReportDataItem.datasource" />
+    <None Include="Properties\DataSources\Astrodon.Reports.SupplierReport.SupplierReportDataItem.datasource" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
