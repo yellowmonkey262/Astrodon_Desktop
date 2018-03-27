@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -8,10 +8,8 @@ using System.Threading;
 
 namespace Astrodon
 {
-
     public class Mailer
     {
-
         public Mailer()
         {
             // TODO: Add constructor logic here
@@ -37,10 +35,11 @@ namespace Astrodon
             return html;
         }
 
-        public static bool SendMailWithAttachments(String fromEmail, String[] toMail, 
-            String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, 
+        public static bool SendMailWithAttachments(String fromEmail, String[] toMail,
+            String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status,
             Dictionary<string, byte[]> attachments, string bccEmail = null)
         {
+            if (fromEmail.ToLower() == "noreply@astrodon.co.za") { fromEmail = "nrp@astrodon.co.za"; }
             Dictionary<string, MemoryStream> attachmentStreams = new Dictionary<string, MemoryStream>();
             foreach (string key in attachments.Keys)
             {
@@ -82,7 +81,7 @@ namespace Astrodon
                     }
                     return false;
                 }
-                if(!string.IsNullOrWhiteSpace(bccEmail))
+                if (!string.IsNullOrWhiteSpace(bccEmail))
                 {
                     objMail.Bcc.Add(bccEmail);
                 }
@@ -97,12 +96,10 @@ namespace Astrodon
                 }
                 try
                 {
-
                     foreach (string key in attachmentStreams.Keys)
                     {
                         objMail.Attachments.Add(new Attachment(attachmentStreams[key], key));
                     }
-
                 }
                 catch
                 {
@@ -164,6 +161,8 @@ namespace Astrodon
 
         public static bool SendMail(String fromEmail, String[] toMail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, String[] attachments = null)
         {
+            if (fromEmail.ToLower() == "noreply@astrodon.co.za") { fromEmail = "nrp@astrodon.co.za"; }
+
             if (attachments != null && attachments.Length == 0)
                 attachments = null;
 
@@ -257,6 +256,8 @@ namespace Astrodon
 
         public static bool SendDirectMail(String fromEmail, String[] toMail, String cc, String bcc, String subject, String message, bool htmlMail, bool readreceipt, out String status, String[] attachments = null)
         {
+            if (fromEmail.ToLower() == "noreply@astrodon.co.za") { fromEmail = "nrp@astrodon.co.za"; }
+
             String mailBody = "";
             status = String.Empty;
             if (htmlMail)
@@ -371,6 +372,8 @@ namespace Astrodon
 
         public static bool SendMail(String fromEmail, String[] toMail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, Dictionary<String, byte[]> attachments = null)
         {
+            if (fromEmail.ToLower() == "noreply@astrodon.co.za") { fromEmail = "nrp@astrodon.co.za"; }
+
             String mailBody = "";
             status = String.Empty;
             if (htmlMail)
@@ -481,6 +484,8 @@ namespace Astrodon
 
         public static bool SendMail(String fromEmail, String[] toMail, String cc, String bcc, String subject, String message, bool htmlMail, out String status, Dictionary<String, byte[]> attachments = null)
         {
+            if (fromEmail.ToLower() == "noreply@astrodon.co.za") { fromEmail = "nrp@astrodon.co.za"; }
+
             int count = 0;
             while (count <= 3 && !CheckPort())
             {
