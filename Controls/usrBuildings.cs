@@ -626,6 +626,7 @@ namespace Astrodon
             btnUploadClaimForm.Enabled = false;
             btnBuildingPlans.Enabled = false;
             btnUploadPQ.Enabled = false;
+            dgInsurancePq.DataSource = null;
         }
 
         private void SaveBuilding()
