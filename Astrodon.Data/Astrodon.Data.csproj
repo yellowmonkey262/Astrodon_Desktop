@@ -59,6 +59,7 @@
     <Compile Include="Calendar\CalendarEntryAttachment.cs" />
     <Compile Include="Calendar\CalendarEntryType.cs" />
     <Compile Include="Calendar\CalendarUserInvite.cs" />
+    <Compile Include="Calendar\MeetingRoom.cs" />
     <Compile Include="Calendar\PublicHoliday.cs" />
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
@@ -276,6 +277,30 @@
     <Compile Include="Migrations\201802051230128_CustomerTrusteeFlag.Designer.cs">
       <DependentUpon>201802051230128_CustomerTrusteeFlag.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803220607513_MeetingRoom.cs" />
+    <Compile Include="Migrations\201803220607513_MeetingRoom.Designer.cs">
+      <DependentUpon>201803220607513_MeetingRoom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803250837057_CustomerBirthdays.cs" />
+    <Compile Include="Migrations\201803250837057_CustomerBirthdays.Designer.cs">
+      <DependentUpon>201803250837057_CustomerBirthdays.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803250845001_CustomerBirthdayNotification.cs" />
+    <Compile Include="Migrations\201803250845001_CustomerBirthdayNotification.Designer.cs">
+      <DependentUpon>201803250845001_CustomerBirthdayNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803250849148_CustomerCellNumber.cs" />
+    <Compile Include="Migrations\201803250849148_CustomerCellNumber.Designer.cs">
+      <DependentUpon>201803250849148_CustomerCellNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803250909161_CustomerDateOfBirth.cs" />
+    <Compile Include="Migrations\201803250909161_CustomerDateOfBirth.Designer.cs">
+      <DependentUpon>201803250909161_CustomerDateOfBirth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803250919172_CustomerBirthdaySMSTracking.cs" />
+    <Compile Include="Migrations\201803250919172_CustomerBirthdaySMSTracking.Designer.cs">
+      <DependentUpon>201803250919172_CustomerBirthdaySMSTracking.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201802251207341_AddedAdditionalInsuredValue.cs" />
     <Compile Include="Migrations\201802251207341_AddedAdditionalInsuredValue.Designer.cs">
       <DependentUpon>201802251207341_AddedAdditionalInsuredValue.cs</DependentUpon>
@@ -488,6 +513,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802051230128_CustomerTrusteeFlag.resx">
       <DependentUpon>201802051230128_CustomerTrusteeFlag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803220607513_MeetingRoom.resx">
+      <DependentUpon>201803220607513_MeetingRoom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250837057_CustomerBirthdays.resx">
+      <DependentUpon>201803250837057_CustomerBirthdays.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250845001_CustomerBirthdayNotification.resx">
+      <DependentUpon>201803250845001_CustomerBirthdayNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250849148_CustomerCellNumber.resx">
+      <DependentUpon>201803250849148_CustomerCellNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250909161_CustomerDateOfBirth.resx">
+      <DependentUpon>201803250909161_CustomerDateOfBirth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803250919172_CustomerBirthdaySMSTracking.resx">
+      <DependentUpon>201803250919172_CustomerBirthdaySMSTracking.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802251207341_AddedAdditionalInsuredValue.resx">
       <DependentUpon>201802251207341_AddedAdditionalInsuredValue.cs</DependentUpon>

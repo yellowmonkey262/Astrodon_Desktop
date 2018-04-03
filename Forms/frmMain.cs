@@ -713,5 +713,14 @@ namespace Astrodon
             pnlContents.Controls.Add(dt);
             toolStripStatusLabel1.Text = "Publish Management Pack";
         }
+
+        private void meetingRoomConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usMeetingVenue dt = new usMeetingVenue(_DataContext);
+            dt.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(dt);
+            toolStripStatusLabel1.Text = "Meeting Rooms";
+        }
     }
 }

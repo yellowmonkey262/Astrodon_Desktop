@@ -62,7 +62,11 @@ namespace Astrodon
             {
                 lc = "DK11110068";
                 auth = "4228113";
-                pastelDirectory = (Directory.Exists("K:\\") ? "K:\\" : "C:\\Pastel11\\");
+                pastelDirectory = @"K:\";// (Directory.Exists("K:\\") ? "K:\\" : "C:\\Pastel11\\");
+                if (!Directory.Exists(pastelDirectory))
+                {
+                    pastelDirectory = @"C:\Pastel11\";
+                }
                 SDK.SetLicense(lc, auth);
             }
         }
@@ -73,7 +77,8 @@ namespace Astrodon
         {
             List<Customer> customers = new List<Customer>();
             String path = "";
-            if (Directory.Exists(Path.Combine(pastelDirectory, buildPath)))
+            path = Path.Combine(pastelDirectory, buildPath);
+            if (!Directory.Exists(path))
             {
                 path = Path.Combine(pastelDirectory, buildPath);
             }
@@ -83,8 +88,11 @@ namespace Astrodon
                 pastelDirectory = "C:\\Pastel12";
             }
             String returner = SDK.SetDataPath(path);
+
+
             if (returner.Contains("99"))
             {
+                
             }
             else
             {
@@ -1104,7 +1112,7 @@ namespace Astrodon
             int trustPeriod = getPeriod(trnDate);
             StrIn = trustPeriod.ToString() + "|" + trnDate.ToString("dd/MM/yyyy") + "|D|" + acc + "|" + buildAcc + "|" + description + "|" + amt + "|0|0|A|||0|0|1120000|1|1";
             //MessageBox.Show(StrIn + " - " + trustType.ToString());
-            returner = PostBatch("ASTROD18", StrIn, trustType);
+            returner = PostBatch("ASTROD19", StrIn, trustType);
             //MessageBox.Show(returner);
         }
 
@@ -1115,7 +1123,7 @@ namespace Astrodon
             int trustPeriod = getPeriod(trnDate);
             StrIn = trustPeriod.ToString() + "|" + trnDate.ToString("dd/MM/yyyy") + "|G|" + acc + "|" + buildAcc + "|" + description + "|" + amt + "|0|0|A|||0|0|1120000|1|1";
             //MessageBox.Show(StrIn + " - " + trustType.ToString());
-            returner = PostBatch("ASTROD18", StrIn, trustType);
+            returner = PostBatch("ASTROD19", StrIn, trustType);
             //MessageBox.Show(returner);
         }
 

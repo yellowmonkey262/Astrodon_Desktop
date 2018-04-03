@@ -99,9 +99,11 @@ namespace Astrodon.Controls
         {
             using (var context = SqlDataHandler.GetDataContext())
             {
+
+                
                 buildings = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled 
                                                          && a.BuildingDisabled == false
-                                                            && (a.FinancialStartDate == null || a.FinancialStartDate <= DateTime.Today)
+                                                         && (a.FinancialStartDate == null || a.FinancialStartDate <= DateTime.Today)
                         && (a.FinancialEndDate == null || a.FinancialEndDate >= DateTime.Today)
                                                          ).ToList();
             }
@@ -148,7 +150,8 @@ namespace Astrodon.Controls
                                     Code = b.Code,
                                     User = us == null ? string.Empty : us.name,
                                     FinDate = m.findate,
-                                    CompletedDate = m.completeDate
+                                    CompletedDate = m.completeDate,
+                                    Period = b.Period
                                 };
                     }
                     else
@@ -167,13 +170,15 @@ namespace Astrodon.Controls
                                     Code = b.Code,
                                     User = us == null ? string.Empty : us.name,
                                     FinDate = m.findate,
-                                    CompletedDate = m.completeDate
+                                    CompletedDate = m.completeDate,
+                                    Period = b.Period
                                 };
                     }
 
                     results.Clear();
                     foreach (MonthReport mr in query.OrderBy(a => a.Code).ToList())
                     {
+                        mr.CalculatePeriod();
                         results.Add(mr);
                     }
                     dgMonthly.Invalidate();

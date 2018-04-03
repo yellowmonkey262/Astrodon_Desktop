@@ -98,7 +98,7 @@ namespace Astrodon
                 if (!String.IsNullOrEmpty(attachment)) { attachments.Add(attachment); }
                 String[] att = attachments.ToArray();
                 String status = String.Empty;
-                if (Mailer.SendMail("noreply@astrodon.co.za", stmt.email1, "Customer Statements", CustomerMessage(stmt.accNumber, stmt.DebtorEmail), false, false, false, out status, att))
+                if (Mailer.SendMail("nrp@astrodon.co.za", stmt.email1, "Customer Statements", CustomerMessage(stmt.accNumber, stmt.DebtorEmail), false, false, false, out status, att))
                 {
                     MessageBox.Show("Message Sent");
                 }

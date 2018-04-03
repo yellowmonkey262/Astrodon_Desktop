@@ -25,6 +25,8 @@ namespace Astrodon.Reports.Calendar
         private List<IdValue> _PMUsers;
         private List<tblUser> _Users;
         private List<Building> _Buildings;
+        private List<IdValue> _MeetingRooms;
+
         private DateTime _ReportDate = DateTime.Today;
 
         private BuildingCalendarEntry _Item = null;
@@ -39,6 +41,7 @@ namespace Astrodon.Reports.Calendar
             LoadPMUsers();
             LoadBuildings();
             LoadAllUsers();
+            LoadMeetingRooms();
 
             cbFilterPM_CheckedChanged(this, EventArgs.Empty);
 
@@ -102,6 +105,29 @@ namespace Astrodon.Reports.Calendar
             cbPM.DataSource = _PMUsers;
             cbPM.ValueMember = "Id";
             cbPM.DisplayMember = "Value";
+        }
+
+        private void LoadMeetingRooms()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var rooms = context.MeetingRoomSet.Where(a => a.Active).ToList();
+                _MeetingRooms = rooms.Select(a => new IdValue()
+                {
+                    Id = a.id,
+                    Value = a.ToString()
+                }).OrderBy(a => a.Value).ToList();
+            }
+
+            cbFilterRoom.DataSource = _MeetingRooms;
+            cbFilterRoom.ValueMember = "Id";
+            cbFilterRoom.DisplayMember = "Value";
+
+            cbRoom.DataSource = _MeetingRooms;
+            cbRoom.ValueMember = "Id";
+            cbRoom.DisplayMember = "Value";
+
+            
         }
 
         private void LoadAllUsers()
@@ -176,12 +202,20 @@ namespace Astrodon.Reports.Calendar
                 pmId = (cbPM.SelectedItem as IdValue).Id;
             }
 
+            int? roomId = null;
+            if(cbRoomFilter.Checked && cbFilterRoom.SelectedItem != null)
+            {
+                roomId = (cbFilterRoom.SelectedItem as IdValue).Id;
+            }
+
+
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var q = from c in context.BuildingCalendarEntrySet
                         where c.EntryDate >= dtFrom
                            && c.EntryDate <= dtTo
                            && (pmId == null || c.UserId == pmId)
+                           && (roomId == null || c.MeetingRoomId == roomId)
                         select new CalendarPrintItem
                         {
                             Id = c.id,
@@ -333,7 +367,8 @@ namespace Astrodon.Reports.Calendar
                             BCCEmailAddress = c.BCCEmailAddress,
                             TrusteesNotified = c.TrusteesNotified,
                             FileName = a != null ? a.FileName : string.Empty,
-                            EventyType = c.CalendarEntryType
+                            EventyType = c.CalendarEntryType,
+                            Room = c.MeetingRoomId != null ? c.MeetingRoom.Name : string.Empty
 
                         };
 
@@ -420,6 +455,12 @@ namespace Astrodon.Reports.Calendar
                 HeaderText = "Venue",
                 ReadOnly = true
             });
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Room",
+                HeaderText = "Room",
+                ReadOnly = true
+            });
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -464,12 +505,14 @@ namespace Astrodon.Reports.Calendar
 
             dtpEventTime.Value = dtpEventDate.Value + new TimeSpan(08, 00, 00);
             cbEvent.SelectedIndex = -1;
+            cbRoom.SelectedIndex = -1;
             tbVenue.Text = string.Empty;
 
             cbBuilding.Enabled = false;
             dtpEventDate.Enabled = false;
             dtpEventTime.Enabled = false;
             cbEvent.Enabled = false;
+            cbRoom.Enabled = false;
             tbVenue.Enabled = false;
 
             btnSave.Visible = false;
@@ -531,6 +574,7 @@ namespace Astrodon.Reports.Calendar
             dtpEventDate.Enabled = true;
             dtpEventTime.Enabled = true;
             cbEvent.Enabled = true;
+            cbRoom.Enabled = true;
             tbVenue.Enabled = true;
 
             btnSave.Visible = true;
@@ -676,6 +720,16 @@ namespace Astrodon.Reports.Calendar
                 editItem.BCCEmailAddress = tbBCC.Text;
                 editItem.InviteBody = tbBodyContent.Text;
 
+                if (cbRoom.SelectedItem != null)
+                    editItem.MeetingRoomId = (cbRoom.SelectedItem as IdValue).Id;
+                else
+                    editItem.MeetingRoomId = null;
+
+                if(CheckDoubleBooking(context,editItem))
+                {
+                    return;
+                }
+
                 //check for attachments
                 if(_FileToLoad != null)
                 {
@@ -701,6 +755,66 @@ namespace Astrodon.Reports.Calendar
             }
 
             LoadGrid();
+        }
+
+        private bool CheckDoubleBooking(DataContext context, BuildingCalendarEntry editItem)
+        {
+            //first find out which rooms to load.
+            if (editItem.MeetingRoomId == null)
+                return false;
+
+            var roomList = context.MeetingRoomSet.ToList();
+
+            var selectedRoom = roomList.Where(a => a.id == editItem.MeetingRoomId).FirstOrDefault();
+            if (selectedRoom == null)
+                return false;
+
+            if (selectedRoom.Name.Contains("A-B-C")) //we selected room A B and C
+            {
+                foreach (var room in roomList)
+                {
+                    if (HasMeetingOverlap(context, room, editItem.EntryDate, editItem.EventToDate))
+                    {
+                        Controller.HandleError("Meeting double booked for room " + room.ToString(), "Validation Error");
+                        return true;
+                    }
+                }
+            }
+            else if(selectedRoom.Name.Contains("B-C"))
+            {
+                foreach (var room in roomList.Where(a => a.Name.Contains("B") || a.Name.Contains("C")))
+                {
+                    if (HasMeetingOverlap(context, room, editItem.EntryDate, editItem.EventToDate))
+                    {
+                        Controller.HandleError("Meeting double booked for room " + selectedRoom.ToString(), "Validation Error");
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                if (HasMeetingOverlap(context, selectedRoom, editItem.EntryDate, editItem.EventToDate))
+                {
+                    Controller.HandleError("Meeting double booked for room " + selectedRoom.ToString(), "Validation Error");
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool HasMeetingOverlap(DataContext context, MeetingRoom selectedRoom, 
+            DateTime fromDate, DateTime toDate)
+        {
+            var q = from c in context.BuildingCalendarEntrySet
+                    where c.MeetingRoomId == selectedRoom.id
+                    && ((c.EntryDate <= fromDate && c.EventToDate >= fromDate) //starts in an exsting
+                    || (c.EntryDate <= toDate && c.EventToDate >= toDate) // ends in an existing
+                    || (fromDate <= c.EntryDate  && toDate >= c.EventToDate) //overlaps
+                    )
+                    select c;
+
+            var cnt = q.Count();
+            return (cnt > 0);
         }
 
         private void dgItems_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -777,6 +891,12 @@ namespace Astrodon.Reports.Calendar
                     tbSubject.Text = _Item.InviteSubject;
                     tbBodyContent.Text = _Item.InviteBody;
 
+                    if(_Item.MeetingRoomId != null)
+                      cbRoom.SelectedValue = _MeetingRooms.Where(a => a.Id == _Item.MeetingRoomId).FirstOrDefault();
+                    else
+                      cbRoom.SelectedIndex = -1;
+
+
                     var attachmentName = context.CalendarEntryAttachmentSet.Where(a => a.BuildingCalendarEntryId == id).Select(a => a.FileName).FirstOrDefault();
 
                     if (!String.IsNullOrWhiteSpace(attachmentName))
@@ -801,6 +921,7 @@ namespace Astrodon.Reports.Calendar
                     dtpEventTime.Enabled = true;
                     cbEvent.Enabled = true;
                     tbVenue.Enabled = true;
+                    cbRoom.Enabled = true;
 
                     dtpEventToDate.Enabled = true;
                     dtpEventToTime.Enabled = true;
@@ -933,7 +1054,7 @@ namespace Astrodon.Reports.Calendar
 
                 }
 
-                if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", toAddress.Distinct().ToArray(),
+                if (!Mailer.SendMailWithAttachments("nrp@astrodon.co.za", toAddress.Distinct().ToArray(),
                     subject, bodyContent,
                     false, false, false, out status, attachments, bccEmail))
                 {
@@ -954,7 +1075,7 @@ namespace Astrodon.Reports.Calendar
                             {
                                 if (trustee.Email != null && trustee.Email.Length > 0)
                                 {
-                                    if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", trustee.Email,
+                                    if (!Mailer.SendMailWithAttachments("nrp@astrodon.co.za", trustee.Email,
                                          subject, bodyContent, false, false, false, out status, attachments, bccEmail))
                                     {
                                         Controller.HandleError("Error seding email " + status, "Email error");
@@ -991,13 +1112,13 @@ namespace Astrodon.Reports.Calendar
 
             public override string ToString()
             {
-                return EventDate.ToString("HH:mm", CultureInfo.InvariantCulture) + "-" 
-                 //    + EventToDate != null ? EventToDate.Value.ToString("HH:mm", CultureInfo.InvariantCulture)  : string.Empty
-                     + " " + BuildingName 
-                     + "-" + Event 
-                     + "-" 
-                     + PM + "-" 
-                     + Venue;
+                return EventDate.ToString("HH:mm", CultureInfo.InvariantCulture) + "-"
+                     //    + EventToDate != null ? EventToDate.Value.ToString("HH:mm", CultureInfo.InvariantCulture)  : string.Empty
+                     + " " + BuildingName
+                     + "-" + Event
+                     + "-" + PM
+                     + "-" + Venue
+                     + Room != string.Empty ? "-" + Room : "";
             }
 
             public string DisplayDate
@@ -1020,6 +1141,7 @@ namespace Astrodon.Reports.Calendar
             public string BCCEmailAddress { get; internal set; }
             public string FileName { get; internal set; }
             public CalendarEntryType EventyType { get; internal set; }
+            public string Room { get; internal set; }
         }
 
 
@@ -1073,5 +1195,22 @@ namespace Astrodon.Reports.Calendar
             }
         }
 
+        private void cbRoomFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            cbFilterRoom.Enabled = cbRoomFilter.Checked;
+            LoadGrid();
+        }
+
+        private void cbRoom_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(cbRoom.SelectedItem != null)
+            {
+                tbVenue.Text = cbRoom.Text;
+            }
+            else
+            {
+                tbVenue.Text = "";
+            }
+        }
     }
 }

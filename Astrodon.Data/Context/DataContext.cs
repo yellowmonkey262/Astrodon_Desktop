@@ -124,8 +124,9 @@ namespace Astrodon.Data
         public DbSet<CalendarEntryAttachment> CalendarEntryAttachmentSet { get; set; }
         public DbSet<CalendarUserInvite> CalendarUserInviteSet { get; set; }
         public DbSet<PublicHoliday> PublicHolidaySet { get; set; }
+        public DbSet<MeetingRoom> MeetingRoomSet { get; set; }
 
-        
+
         #endregion
 
         public void ClearChanges()

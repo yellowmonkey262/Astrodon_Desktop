@@ -293,7 +293,7 @@ namespace Astrodon.Controls
                             String[] attachments = null;
                             String email = myBuildings[cmbBuilding.SelectedIndex].PM;
                             //email = "stephen@metathought.co.za";
-                            Mailer.SendMail("noreply@astrodon.co.za", new string[] { email }, "Payment Requisitions", message, false, false, false, out status, attachments);
+                            Mailer.SendMail("nrp@astrodon.co.za", new string[] { email }, "Payment Requisitions", message, false, false, false, out status, attachments);
                         }
                         dh.SetData(query, null, out status);
                         balance -= reqAmt;

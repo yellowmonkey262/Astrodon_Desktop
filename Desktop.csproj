@@ -141,6 +141,7 @@
     <Compile Include="Classes\DataHandler.cs" />
     <Compile Include="Classes\Detail.cs" />
     <Compile Include="Classes\FTP.cs" />
+    <Compile Include="Classes\IDValidator.cs" />
     <Compile Include="Classes\IMEvents.cs" />
     <Compile Include="Classes\LoadTransactions.cs" />
     <Compile Include="Classes\Mailer.cs" />
@@ -160,6 +161,12 @@
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\webreport.cs" />
     <Compile Include="Classes\WordProcessor.cs" />
+    <Compile Include="Controls\SystemConfig\usMeetingVenue.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SystemConfig\usMeetingVenue.Designer.cs">
+      <DependentUpon>usMeetingVenue.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SystemConfig\usrBankConfiguration.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -683,6 +690,9 @@
     </Compile>
     <EmbeddedResource Include="Controls\SystemConfig\ucPublicHoliday.resx">
       <DependentUpon>ucPublicHoliday.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SystemConfig\usMeetingVenue.resx">
+      <DependentUpon>usMeetingVenue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SystemConfig\usrBankConfiguration.resx">
       <DependentUpon>usrBankConfiguration.cs</DependentUpon>

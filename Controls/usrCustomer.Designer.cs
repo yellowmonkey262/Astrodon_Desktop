@@ -40,6 +40,15 @@
             this.lblOS = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tbFullName = new System.Windows.Forms.TextBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.btnSaveBirthDay = new System.Windows.Forms.Button();
+            this.dtpDateOfBirth = new System.Windows.Forms.DateTimePicker();
+            this.label33 = new System.Windows.Forms.Label();
+            this.tbRSAIDNumber = new System.Windows.Forms.TextBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.cbBirthDayNotificaiton = new System.Windows.Forms.CheckBox();
             this.label30 = new System.Windows.Forms.Label();
             this.cbTrustee = new System.Windows.Forms.CheckBox();
             this.txtEntry = new System.Windows.Forms.TextBox();
@@ -233,6 +242,15 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.tbFullName);
+            this.tabPage2.Controls.Add(this.label34);
+            this.tabPage2.Controls.Add(this.btnSaveBirthDay);
+            this.tabPage2.Controls.Add(this.dtpDateOfBirth);
+            this.tabPage2.Controls.Add(this.label33);
+            this.tabPage2.Controls.Add(this.tbRSAIDNumber);
+            this.tabPage2.Controls.Add(this.label32);
+            this.tabPage2.Controls.Add(this.label31);
+            this.tabPage2.Controls.Add(this.cbBirthDayNotificaiton);
             this.tabPage2.Controls.Add(this.label30);
             this.tabPage2.Controls.Add(this.cbTrustee);
             this.tabPage2.Controls.Add(this.txtEntry);
@@ -252,6 +270,87 @@
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "Customer Details";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tbFullName
+            // 
+            this.tbFullName.Location = new System.Drawing.Point(99, 117);
+            this.tbFullName.Name = "tbFullName";
+            this.tbFullName.Size = new System.Drawing.Size(200, 20);
+            this.tbFullName.TabIndex = 83;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(5, 121);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(81, 13);
+            this.label34.TabIndex = 91;
+            this.label34.Text = "Full Name (sms)";
+            // 
+            // btnSaveBirthDay
+            // 
+            this.btnSaveBirthDay.BackColor = System.Drawing.Color.Lime;
+            this.btnSaveBirthDay.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSaveBirthDay.Location = new System.Drawing.Point(355, 116);
+            this.btnSaveBirthDay.Name = "btnSaveBirthDay";
+            this.btnSaveBirthDay.Size = new System.Drawing.Size(130, 23);
+            this.btnSaveBirthDay.TabIndex = 85;
+            this.btnSaveBirthDay.Text = "Update Birthday";
+            this.btnSaveBirthDay.UseVisualStyleBackColor = false;
+            this.btnSaveBirthDay.Click += new System.EventHandler(this.btnSaveBirthDay_Click);
+            // 
+            // dtpDateOfBirth
+            // 
+            this.dtpDateOfBirth.Location = new System.Drawing.Point(99, 91);
+            this.dtpDateOfBirth.MaxDate = new System.DateTime(2018, 12, 31, 0, 0, 0, 0);
+            this.dtpDateOfBirth.MinDate = new System.DateTime(1900, 1, 1, 0, 0, 0, 0);
+            this.dtpDateOfBirth.Name = "dtpDateOfBirth";
+            this.dtpDateOfBirth.Size = new System.Drawing.Size(200, 20);
+            this.dtpDateOfBirth.TabIndex = 82;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(5, 95);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(66, 13);
+            this.label33.TabIndex = 88;
+            this.label33.Text = "Date of Birth";
+            // 
+            // tbRSAIDNumber
+            // 
+            this.tbRSAIDNumber.Location = new System.Drawing.Point(99, 63);
+            this.tbRSAIDNumber.Name = "tbRSAIDNumber";
+            this.tbRSAIDNumber.Size = new System.Drawing.Size(195, 20);
+            this.tbRSAIDNumber.TabIndex = 81;
+            this.tbRSAIDNumber.TextChanged += new System.EventHandler(this.tbRSAIDNumber_TextChanged);
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(5, 67);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(83, 13);
+            this.label32.TabIndex = 86;
+            this.label32.Text = "RSA ID Number";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(352, 91);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(71, 13);
+            this.label31.TabIndex = 85;
+            this.label31.Text = "Birthday SMS";
+            // 
+            // cbBirthDayNotificaiton
+            // 
+            this.cbBirthDayNotificaiton.AutoSize = true;
+            this.cbBirthDayNotificaiton.Location = new System.Drawing.Point(431, 90);
+            this.cbBirthDayNotificaiton.Name = "cbBirthDayNotificaiton";
+            this.cbBirthDayNotificaiton.Size = new System.Drawing.Size(15, 14);
+            this.cbBirthDayNotificaiton.TabIndex = 84;
+            this.cbBirthDayNotificaiton.UseVisualStyleBackColor = true;
             // 
             // label30
             // 
@@ -319,10 +418,10 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Location = new System.Drawing.Point(5, 81);
+            this.tabControl1.Location = new System.Drawing.Point(5, 145);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(906, 295);
+            this.tabControl1.Size = new System.Drawing.Size(906, 231);
             this.tabControl1.TabIndex = 76;
             // 
             // tabPage1
@@ -348,7 +447,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(898, 269);
+            this.tabPage1.Size = new System.Drawing.Size(898, 205);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Primary Address";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -1402,5 +1501,14 @@
         private System.Windows.Forms.DataGridView dgDebitOrderArchive;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.CheckBox cbTrustee;
+        private System.Windows.Forms.Button btnSaveBirthDay;
+        private System.Windows.Forms.DateTimePicker dtpDateOfBirth;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.TextBox tbRSAIDNumber;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.CheckBox cbBirthDayNotificaiton;
+        private System.Windows.Forms.TextBox tbFullName;
+        private System.Windows.Forms.Label label34;
     }
 }

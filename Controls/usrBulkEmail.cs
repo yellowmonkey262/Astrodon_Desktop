@@ -289,7 +289,10 @@ namespace Astrodon
 
             User pmUser;
             new Users().GetUser(building.PM, out pmUser, out status);
-            if (pmUser == null) { pmUser = Controller.user; }
+            if (pmUser == null)
+            {
+                pmUser = Controller.user;
+            }
             message += Environment.NewLine + Environment.NewLine;
             message += "Kind Regards" + Environment.NewLine;
             message += pmUser.name + Environment.NewLine;
@@ -304,6 +307,12 @@ namespace Astrodon
             sqlParms.Add("@billAmount", txtBill.Text);
             sqlParms.Add("@queue", queue);
             sqlParms.Add("@fromAddress", pmUser.email);
+            if(string.IsNullOrWhiteSpace(pmUser.email))
+            {
+                status = "PM " + pmUser.name + " does not have an email address";
+                return false;
+            }
+
             String msgQuery = "INSERT INTO tblMsg(buildingID, fromAddress, incBCC, bccAddy, subject, message, billBuilding, billAmount, queue)";
             msgQuery += " VALUES (@buildingID, @fromAddress, @incBCC, @bccAddy, @subject, @message, @billBuilding, @billAmount, @queue)";
             int rs = dh.SetData(msgQuery, sqlParms, out status);
@@ -317,7 +326,13 @@ namespace Astrodon
                     sqlParms.Clear();
                     sqlParms.Add("@msgID", msgID);
                     sqlParms.Add("@billCustomer", cmbBill.SelectedItem != null && cmbBill.SelectedItem.ToString() == "Customer" ? true : false);
-                    sqlParms.Add("@fromAddress", !string.IsNullOrEmpty(building.PM) ? building.PM : Controller.user.email);
+                    string fromAddress = !string.IsNullOrEmpty(building.PM) ? building.PM : Controller.user.email;
+                    sqlParms.Add("@fromAddress", fromAddress);
+                    if (string.IsNullOrWhiteSpace(fromAddress))
+                    {
+                        status = "From address is blank email address";
+                        return false;
+                    }
                     sqlParms.Add("@recipient", "");
                     sqlParms.Add("@accNo", "");
                     String msgReceipientQuery = "INSERT INTO tblMsgRecipients(msgID, recipient, accNo, billCustomer) VALUES(@msgID, @recipient, @accNo, @billCustomer)";

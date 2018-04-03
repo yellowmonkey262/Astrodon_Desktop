@@ -45,7 +45,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(16, 17);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.Size = new System.Drawing.Size(32, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "Year";
             // 
@@ -72,7 +72,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(16, 44);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(37, 13);
+            this.label2.Size = new System.Drawing.Size(42, 15);
             this.label2.TabIndex = 2;
             this.label2.Text = "Month";
             // 
@@ -81,7 +81,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(16, 71);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(44, 13);
+            this.label3.Size = new System.Drawing.Size(52, 15);
             this.label3.TabIndex = 4;
             this.label3.Text = "Building";
             // 
@@ -117,16 +117,16 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(16, 105);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(86, 13);
+            this.label4.Size = new System.Drawing.Size(99, 15);
             this.label4.TabIndex = 8;
             this.label4.Text = "Include Sundries";
             // 
             // cbIncludeSundries
             // 
             this.cbIncludeSundries.AutoSize = true;
-            this.cbIncludeSundries.Location = new System.Drawing.Point(109, 105);
+            this.cbIncludeSundries.Location = new System.Drawing.Point(116, 105);
             this.cbIncludeSundries.Name = "cbIncludeSundries";
-            this.cbIncludeSundries.Size = new System.Drawing.Size(15, 14);
+            this.cbIncludeSundries.Size = new System.Drawing.Size(18, 17);
             this.cbIncludeSundries.TabIndex = 9;
             this.cbIncludeSundries.UseVisualStyleBackColor = true;
             // 

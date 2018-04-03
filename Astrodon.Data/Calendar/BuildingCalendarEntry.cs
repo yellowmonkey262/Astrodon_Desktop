@@ -26,6 +26,12 @@ namespace Astrodon.Data.Calendar
         [ForeignKey("UserId")]
         public virtual tblUser User { get; set; }
 
+        [Index("IDX_BuildingCalendarMeetingRoom")]
+        public virtual int? MeetingRoomId { get; set; }
+
+        [ForeignKey(nameof(MeetingRoomId))]
+        public virtual MeetingRoom MeetingRoom { get; set; }
+
         public DateTime EntryDate { get; set; }
 
         public DateTime EventToDate { get; set; }
