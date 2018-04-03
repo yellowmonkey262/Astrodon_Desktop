@@ -842,6 +842,8 @@ namespace Astrodon
         {
             selectedBuilding = null;
             clearBuilding();
+            tabControl1.SelectedIndex = 0;
+            cmbBuilding.SelectedIndex = 0;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -916,7 +918,7 @@ namespace Astrodon
                         MessageBox.Show("Successfully Uploaded Insurance Form");
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
                     MessageBox.Show("Failed to upload Insurance Form");
                 }
@@ -1457,6 +1459,31 @@ namespace Astrodon
         private void cbFixedMonhlyFinMeeting_CheckedChanged(object sender, EventArgs e)
         {
             pnlFinancialMeeting.Visible = cbFixedMonhlyFinMeeting.Checked;
+        }
+
+        private void dgInsurancePq_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (InsurancePqGrid != null && InsurancePqGrid.Count > 1)
+            {
+                if (InsurancePqGrid.Any(a => a is InsurancePqRecord))
+                    txtAdditionalInsuredValue.Text = InsurancePqGrid.Where(a => a is InsurancePqRecord).Sum(a => a.AdditionalInsurance).ToString("#,##0.00");
+                if (InsurancePqGrid.Any(a => a is PQTotal))
+                    txtTotalReplacementValue.Text = InsurancePqGrid.First(a => a is PQTotal).TotalReplacementValue.ToString("#,##0.00");
+            }
+        }
+        private string cbReplacementIncludesCommonPropertyValue { get; set; }
+        private void cbReplacementIncludesCommonProperty_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbReplacementIncludesCommonProperty.Checked)
+            {
+                cbReplacementIncludesCommonPropertyValue = txtCommonPropertyValue.Text;
+                txtCommonPropertyValue.Text = 0.ToString("#,##0.00");
+            }
+            else
+            {
+                txtCommonPropertyValue.Text = cbReplacementIncludesCommonPropertyValue;
+            }
+            txtCommonPropertyValue.Enabled = !cbReplacementIncludesCommonProperty.Checked;
         }
     }
 

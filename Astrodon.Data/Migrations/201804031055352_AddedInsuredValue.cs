@@ -3,7 +3,7 @@ namespace Astrodon.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddedAdditionalInsuredValue : DbMigration
+    public partial class AddedInsuredValue : DbMigration
     {
         public override void Up()
         {

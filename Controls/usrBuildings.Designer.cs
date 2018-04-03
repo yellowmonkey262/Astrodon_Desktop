@@ -194,6 +194,9 @@
             this.btnUploadClaimForm = new System.Windows.Forms.Button();
             this.btnUploadInsuranceContract = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label74 = new System.Windows.Forms.Label();
+            this.txtTotalReplacementValue = new System.Windows.Forms.TextBox();
+            this.label75 = new System.Windows.Forms.Label();
             this.label72 = new System.Windows.Forms.Label();
             this.txtAdditionalInsuredValue = new System.Windows.Forms.TextBox();
             this.label73 = new System.Windows.Forms.Label();
@@ -214,9 +217,9 @@
             this.label41 = new System.Windows.Forms.Label();
             this.tbPDFViewer = new System.Windows.Forms.TabPage();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
-            this.label74 = new System.Windows.Forms.Label();
-            this.txtTotalReplacementValue = new System.Windows.Forms.TextBox();
-            this.label75 = new System.Windows.Forms.Label();
+            this.label76 = new System.Windows.Forms.Label();
+            this.txtMonthlyPremium = new System.Windows.Forms.TextBox();
+            this.label77 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -1660,6 +1663,7 @@
             this.dgInsurancePq.Name = "dgInsurancePq";
             this.dgInsurancePq.Size = new System.Drawing.Size(764, 551);
             this.dgInsurancePq.TabIndex = 0;
+            this.dgInsurancePq.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgInsurancePq_CellValueChanged);
             this.dgInsurancePq.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgInsurancePq_DataBindingComplete);
             // 
             // groupBox3
@@ -1684,7 +1688,7 @@
             this.groupBox3.Controls.Add(this.btnViewInsuranceContract);
             this.groupBox3.Controls.Add(this.btnUploadClaimForm);
             this.groupBox3.Controls.Add(this.btnUploadInsuranceContract);
-            this.groupBox3.Location = new System.Drawing.Point(9, 189);
+            this.groupBox3.Location = new System.Drawing.Point(9, 241);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(576, 221);
             this.groupBox3.TabIndex = 136;
@@ -1887,6 +1891,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label76);
+            this.groupBox2.Controls.Add(this.txtMonthlyPremium);
+            this.groupBox2.Controls.Add(this.label77);
             this.groupBox2.Controls.Add(this.label74);
             this.groupBox2.Controls.Add(this.txtTotalReplacementValue);
             this.groupBox2.Controls.Add(this.label75);
@@ -1903,15 +1910,41 @@
             this.groupBox2.Controls.Add(this.label45);
             this.groupBox2.Location = new System.Drawing.Point(300, 15);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(285, 168);
+            this.groupBox2.Size = new System.Drawing.Size(285, 220);
             this.groupBox2.TabIndex = 135;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Building Costs";
             // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.Location = new System.Drawing.Point(145, 187);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(15, 13);
+            this.label74.TabIndex = 142;
+            this.label74.Text = "R";
+            // 
+            // txtTotalReplacementValue
+            // 
+            this.txtTotalReplacementValue.Enabled = false;
+            this.txtTotalReplacementValue.Location = new System.Drawing.Point(166, 184);
+            this.txtTotalReplacementValue.Name = "txtTotalReplacementValue";
+            this.txtTotalReplacementValue.Size = new System.Drawing.Size(100, 20);
+            this.txtTotalReplacementValue.TabIndex = 141;
+            // 
+            // label75
+            // 
+            this.label75.AutoSize = true;
+            this.label75.Location = new System.Drawing.Point(12, 187);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(127, 13);
+            this.label75.TabIndex = 140;
+            this.label75.Text = "Total Replacement Value";
+            // 
             // label72
             // 
             this.label72.AutoSize = true;
-            this.label72.Location = new System.Drawing.Point(145, 108);
+            this.label72.Location = new System.Drawing.Point(145, 116);
             this.label72.Name = "label72";
             this.label72.Size = new System.Drawing.Size(15, 13);
             this.label72.TabIndex = 139;
@@ -1920,7 +1953,7 @@
             // txtAdditionalInsuredValue
             // 
             this.txtAdditionalInsuredValue.Enabled = false;
-            this.txtAdditionalInsuredValue.Location = new System.Drawing.Point(166, 105);
+            this.txtAdditionalInsuredValue.Location = new System.Drawing.Point(166, 113);
             this.txtAdditionalInsuredValue.Name = "txtAdditionalInsuredValue";
             this.txtAdditionalInsuredValue.Size = new System.Drawing.Size(100, 20);
             this.txtAdditionalInsuredValue.TabIndex = 138;
@@ -1928,7 +1961,7 @@
             // label73
             // 
             this.label73.AutoSize = true;
-            this.label73.Location = new System.Drawing.Point(8, 108);
+            this.label73.Location = new System.Drawing.Point(18, 116);
             this.label73.Name = "label73";
             this.label73.Size = new System.Drawing.Size(121, 13);
             this.label73.TabIndex = 137;
@@ -1943,6 +1976,7 @@
             this.cbReplacementIncludesCommonProperty.TabIndex = 136;
             this.cbReplacementIncludesCommonProperty.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.cbReplacementIncludesCommonProperty.UseVisualStyleBackColor = true;
+            this.cbReplacementIncludesCommonProperty.CheckedChanged += new System.EventHandler(this.cbReplacementIncludesCommonProperty_CheckedChanged);
             // 
             // label54
             // 
@@ -1956,7 +1990,7 @@
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(145, 82);
+            this.label48.Location = new System.Drawing.Point(145, 90);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(15, 13);
             this.label48.TabIndex = 134;
@@ -1973,7 +2007,7 @@
             // 
             // txtCommonPropertyValue
             // 
-            this.txtCommonPropertyValue.Location = new System.Drawing.Point(166, 79);
+            this.txtCommonPropertyValue.Location = new System.Drawing.Point(166, 87);
             this.txtCommonPropertyValue.Name = "txtCommonPropertyValue";
             this.txtCommonPropertyValue.Size = new System.Drawing.Size(100, 20);
             this.txtCommonPropertyValue.TabIndex = 3;
@@ -1989,7 +2023,7 @@
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(8, 82);
+            this.label46.Location = new System.Drawing.Point(19, 90);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(120, 13);
             this.label46.TabIndex = 1;
@@ -1998,7 +2032,7 @@
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(28, 29);
+            this.label45.Location = new System.Drawing.Point(39, 29);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(100, 13);
             this.label45.TabIndex = 0;
@@ -2014,7 +2048,7 @@
             this.groupBox1.Controls.Add(this.label41);
             this.groupBox1.Location = new System.Drawing.Point(9, 15);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(285, 168);
+            this.groupBox1.Size = new System.Drawing.Size(285, 220);
             this.groupBox1.TabIndex = 134;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Building Dimensions";
@@ -2090,31 +2124,30 @@
             this.axAcroPDF1.Size = new System.Drawing.Size(782, 524);
             this.axAcroPDF1.TabIndex = 65;
             // 
-            // label74
+            // label76
             // 
-            this.label74.AutoSize = true;
-            this.label74.Location = new System.Drawing.Point(145, 145);
-            this.label74.Name = "label74";
-            this.label74.Size = new System.Drawing.Size(15, 13);
-            this.label74.TabIndex = 142;
-            this.label74.Text = "R";
+            this.label76.AutoSize = true;
+            this.label76.Location = new System.Drawing.Point(145, 142);
+            this.label76.Name = "label76";
+            this.label76.Size = new System.Drawing.Size(15, 13);
+            this.label76.TabIndex = 145;
+            this.label76.Text = "R";
             // 
-            // txtTotalReplacementValue
+            // txtMonthlyPremium
             // 
-            this.txtTotalReplacementValue.Enabled = false;
-            this.txtTotalReplacementValue.Location = new System.Drawing.Point(166, 142);
-            this.txtTotalReplacementValue.Name = "txtTotalReplacementValue";
-            this.txtTotalReplacementValue.Size = new System.Drawing.Size(100, 20);
-            this.txtTotalReplacementValue.TabIndex = 141;
+            this.txtMonthlyPremium.Location = new System.Drawing.Point(166, 139);
+            this.txtMonthlyPremium.Name = "txtMonthlyPremium";
+            this.txtMonthlyPremium.Size = new System.Drawing.Size(100, 20);
+            this.txtMonthlyPremium.TabIndex = 144;
             // 
-            // label75
+            // label77
             // 
-            this.label75.AutoSize = true;
-            this.label75.Location = new System.Drawing.Point(8, 145);
-            this.label75.Name = "label75";
-            this.label75.Size = new System.Drawing.Size(127, 13);
-            this.label75.TabIndex = 140;
-            this.label75.Text = "Total Replacement Value";
+            this.label77.AutoSize = true;
+            this.label77.Location = new System.Drawing.Point(22, 142);
+            this.label77.Name = "label77";
+            this.label77.Size = new System.Drawing.Size(117, 13);
+            this.label77.TabIndex = 143;
+            this.label77.Text = "Monthly Premium Value";
             // 
             // usrBuildings
             // 
@@ -2357,5 +2390,8 @@
         private System.Windows.Forms.Label label74;
         private System.Windows.Forms.TextBox txtTotalReplacementValue;
         private System.Windows.Forms.Label label75;
+        private System.Windows.Forms.Label label76;
+        private System.Windows.Forms.TextBox txtMonthlyPremium;
+        private System.Windows.Forms.Label label77;
     }
 }

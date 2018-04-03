@@ -7,13 +7,13 @@ namespace Astrodon.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddedAdditionalInsuredValue : IMigrationMetadata
+    public sealed partial class AddedInsuredValue : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddedAdditionalInsuredValue));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddedInsuredValue));
         
         string IMigrationMetadata.Id
         {
-            get { return "201802251207341_AddedAdditionalInsuredValue"; }
+            get { return "201804031055352_AddedInsuredValue"; }
         }
         
         string IMigrationMetadata.Source
