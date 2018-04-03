@@ -192,10 +192,13 @@ namespace Astrodon
                 cbBuildingFinancialsEnabled.Enabled = Controller.UserIsSheldon();
                 cbDisabled.Enabled = Controller.UserIsSheldon();
                 Data.tblBuilding buildingEntity = null;
+                List<BuildingDocument> buildingDocumentEntities = null;
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     buildingEntity = context.tblBuildings.Include(a => a.InsuranceBroker)
                             .FirstOrDefault(a => a.id == selectedBuilding.ID);
+                    buildingDocumentEntities = context.BuildingDocumentSet
+                         .Where(a => a.BuildingId == selectedBuilding.ID).ToList();
                 }
                 if (buildingEntity != null)
                 {
@@ -267,7 +270,37 @@ namespace Astrodon
                         var totalReplacementValue = totalPqItems.TotalReplacementValue;
                         txtTotalReplacementValue.Text = totalReplacementValue.ToString("#,##0.00");
                     }
+                }
+                btnUploadInsuranceContract.Enabled = true;
+                btnUploadClaimForm.Enabled = true;
+                btnBuildingPlans.Enabled = true;
+                btnUploadPQ.Enabled = true;
 
+                if (buildingDocumentEntities != null && buildingDocumentEntities.Count > 0)
+                {
+                    foreach (var buildingDocument in buildingDocumentEntities)
+                    {
+                        switch (buildingDocument.DocumentType)
+                        {
+                            case DocumentType.InsuranceContract:
+                                btnViewContract.Enabled = true;
+                                btnViewInsuranceContract.Enabled = true;
+                                break;
+                            case DocumentType.InsuranceClaimForm:
+                                btnViewClaimForm.Enabled = true;
+                                break;
+                            case DocumentType.BuildingPlans:
+                                btnViewBuildingPlans.Enabled = true;
+                                btnDownloadBuildingPlans.Enabled = true;
+                                break;
+                            case DocumentType.PQ:
+                                btnViewPq.Enabled = true;
+                                btnDownloadPQ.Enabled = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -579,6 +612,20 @@ namespace Astrodon
             //chkWeb.Checked = btnSave.Enabled = false;
             //txtRF.Text = txtRFS.Text = txtFF.Text = txtFFS.Text = txtDCF.Text = txtDCFS.Text = txtSF.Text = txtSFS.Text = txtDF.Text = txtDFS.Text = txtHF.Text = txtHFS.Text = txtAddress1.Text = "";
             //txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = "";
+            DisplayPDF(null);
+            tabControl1.SelectedIndex = 0;
+            cmbBuilding.SelectedIndex = 0;
+            btnViewContract.Enabled = false;
+            btnViewInsuranceContract.Enabled = false;
+            btnViewClaimForm.Enabled = false;
+            btnViewBuildingPlans.Enabled = false;
+            btnDownloadBuildingPlans.Enabled = false;
+            btnViewPq.Enabled = false;
+            btnDownloadPQ.Enabled = false;
+            btnUploadInsuranceContract.Enabled = false;
+            btnUploadClaimForm.Enabled = false;
+            btnBuildingPlans.Enabled = false;
+            btnUploadPQ.Enabled = false;
         }
 
         private void SaveBuilding()
@@ -842,8 +889,6 @@ namespace Astrodon
         {
             selectedBuilding = null;
             clearBuilding();
-            tabControl1.SelectedIndex = 0;
-            cmbBuilding.SelectedIndex = 0;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -917,6 +962,8 @@ namespace Astrodon
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Insurance Form");
                     }
+                    btnViewContract.Enabled = true;
+                    btnViewInsuranceContract.Enabled = true;
                 }
                 catch(Exception ex)
                 {
@@ -936,6 +983,13 @@ namespace Astrodon
                 btnUploadClaimForm.Enabled = false;
                 try
                 {
+                    if (!IsValidPdf(fdOpen.FileName))
+                    {
+                        btnUploadClaimForm.Enabled = true;
+                        Controller.HandleError("Not a valid PDF");
+                        return;
+                    }
+
                     using (var context = SqlDataHandler.GetDataContext())
                     {
                         var fileEntity = context.BuildingDocumentSet
@@ -952,6 +1006,7 @@ namespace Astrodon
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Claim Form");
                     }
+                    btnViewClaimForm.Enabled = true;
                 }
                 catch
                 {
@@ -1138,6 +1193,8 @@ namespace Astrodon
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Building Plans");
                     }
+                    btnViewBuildingPlans.Enabled = true;
+                    btnDownloadBuildingPlans.Enabled = true;
                 }
                 catch
                 {
@@ -1214,6 +1271,8 @@ namespace Astrodon
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded PQ");
                     }
+                    btnViewPq.Enabled = true;
+                    btnDownloadPQ.Enabled = true;
                 }
                 catch
                 {
@@ -1361,7 +1420,7 @@ namespace Astrodon
                     reader.Close();
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 Ret = false;
             }
@@ -1484,6 +1543,11 @@ namespace Astrodon
                 txtCommonPropertyValue.Text = cbReplacementIncludesCommonPropertyValue;
             }
             txtCommonPropertyValue.Enabled = !cbReplacementIncludesCommonProperty.Checked;
+        }
+
+        private void cmbBondHolder_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

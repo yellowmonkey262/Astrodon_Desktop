@@ -194,6 +194,9 @@
             this.btnUploadClaimForm = new System.Windows.Forms.Button();
             this.btnUploadInsuranceContract = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label76 = new System.Windows.Forms.Label();
+            this.txtMonthlyPremium = new System.Windows.Forms.TextBox();
+            this.label77 = new System.Windows.Forms.Label();
             this.label74 = new System.Windows.Forms.Label();
             this.txtTotalReplacementValue = new System.Windows.Forms.TextBox();
             this.label75 = new System.Windows.Forms.Label();
@@ -217,9 +220,6 @@
             this.label41 = new System.Windows.Forms.Label();
             this.tbPDFViewer = new System.Windows.Forms.TabPage();
             this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
-            this.label76 = new System.Windows.Forms.Label();
-            this.txtMonthlyPremium = new System.Windows.Forms.TextBox();
-            this.label77 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -313,11 +313,11 @@
             // 
             // fUploadClaimForm
             // 
-            this.fUploadClaimForm.Filter = "All document types (*.*)|*.*";
+            this.fUploadClaimForm.Filter = "Adobe PDF files (*.pdf)|*.pdf";
             // 
             // fdSaveClaimForm
             // 
-            this.fdSaveClaimForm.Filter = "All document types (*.*)|*.*";
+            this.fdSaveClaimForm.Filter = "Adobe PDF files (*.pdf)|*.pdf";
             // 
             // tabControl1
             // 
@@ -1697,7 +1697,8 @@
             // 
             // btnViewPq
             // 
-            this.btnViewPq.Location = new System.Drawing.Point(438, 109);
+            this.btnViewPq.Enabled = false;
+            this.btnViewPq.Location = new System.Drawing.Point(438, 133);
             this.btnViewPq.Name = "btnViewPq";
             this.btnViewPq.Size = new System.Drawing.Size(63, 23);
             this.btnViewPq.TabIndex = 149;
@@ -1707,7 +1708,8 @@
             // 
             // btnViewBuildingPlans
             // 
-            this.btnViewBuildingPlans.Location = new System.Drawing.Point(438, 80);
+            this.btnViewBuildingPlans.Enabled = false;
+            this.btnViewBuildingPlans.Location = new System.Drawing.Point(438, 104);
             this.btnViewBuildingPlans.Name = "btnViewBuildingPlans";
             this.btnViewBuildingPlans.Size = new System.Drawing.Size(63, 23);
             this.btnViewBuildingPlans.TabIndex = 148;
@@ -1717,7 +1719,8 @@
             // 
             // btnViewContract
             // 
-            this.btnViewContract.Location = new System.Drawing.Point(438, 22);
+            this.btnViewContract.Enabled = false;
+            this.btnViewContract.Location = new System.Drawing.Point(438, 46);
             this.btnViewContract.Name = "btnViewContract";
             this.btnViewContract.Size = new System.Drawing.Size(63, 23);
             this.btnViewContract.TabIndex = 146;
@@ -1727,9 +1730,9 @@
             // 
             // btnBrokerLookup
             // 
-            this.btnBrokerLookup.Location = new System.Drawing.Point(194, 125);
+            this.btnBrokerLookup.Location = new System.Drawing.Point(98, 133);
             this.btnBrokerLookup.Name = "btnBrokerLookup";
-            this.btnBrokerLookup.Size = new System.Drawing.Size(75, 23);
+            this.btnBrokerLookup.Size = new System.Drawing.Size(171, 23);
             this.btnBrokerLookup.TabIndex = 143;
             this.btnBrokerLookup.Text = "Find";
             this.btnBrokerLookup.UseVisualStyleBackColor = true;
@@ -1747,7 +1750,7 @@
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(5, 109);
+            this.label50.Location = new System.Drawing.Point(18, 109);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(71, 13);
             this.label50.TabIndex = 144;
@@ -1763,7 +1766,7 @@
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(5, 75);
+            this.label49.Location = new System.Drawing.Point(17, 79);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(75, 13);
             this.label49.TabIndex = 141;
@@ -1778,11 +1781,12 @@
             this.cmbBondHolder.Size = new System.Drawing.Size(171, 21);
             this.cmbBondHolder.TabIndex = 140;
             this.cmbBondHolder.Visible = false;
+            this.cmbBondHolder.SelectedIndexChanged += new System.EventHandler(this.cmbBondHolder_SelectedIndexChanged);
             // 
             // label56
             // 
             this.label56.AutoSize = true;
-            this.label56.Location = new System.Drawing.Point(2, 51);
+            this.label56.Location = new System.Drawing.Point(14, 51);
             this.label56.Name = "label56";
             this.label56.Size = new System.Drawing.Size(78, 13);
             this.label56.TabIndex = 138;
@@ -1791,7 +1795,7 @@
             // cbBondHolderInterest
             // 
             this.cbBondHolderInterest.AutoSize = true;
-            this.cbBondHolderInterest.Location = new System.Drawing.Point(138, 26);
+            this.cbBondHolderInterest.Location = new System.Drawing.Point(151, 26);
             this.cbBondHolderInterest.Name = "cbBondHolderInterest";
             this.cbBondHolderInterest.Size = new System.Drawing.Size(15, 14);
             this.cbBondHolderInterest.TabIndex = 137;
@@ -1802,7 +1806,7 @@
             // label55
             // 
             this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(2, 27);
+            this.label55.Location = new System.Drawing.Point(14, 26);
             this.label55.Name = "label55";
             this.label55.Size = new System.Drawing.Size(131, 13);
             this.label55.TabIndex = 19;
@@ -1811,7 +1815,8 @@
             // 
             // btnDownloadPQ
             // 
-            this.btnDownloadPQ.Location = new System.Drawing.Point(507, 109);
+            this.btnDownloadPQ.Enabled = false;
+            this.btnDownloadPQ.Location = new System.Drawing.Point(507, 133);
             this.btnDownloadPQ.Name = "btnDownloadPQ";
             this.btnDownloadPQ.Size = new System.Drawing.Size(63, 23);
             this.btnDownloadPQ.TabIndex = 18;
@@ -1821,7 +1826,8 @@
             // 
             // btnUploadPQ
             // 
-            this.btnUploadPQ.Location = new System.Drawing.Point(277, 109);
+            this.btnUploadPQ.Enabled = false;
+            this.btnUploadPQ.Location = new System.Drawing.Point(277, 133);
             this.btnUploadPQ.Name = "btnUploadPQ";
             this.btnUploadPQ.Size = new System.Drawing.Size(158, 23);
             this.btnUploadPQ.TabIndex = 17;
@@ -1831,7 +1837,8 @@
             // 
             // btnDownloadBuildingPlans
             // 
-            this.btnDownloadBuildingPlans.Location = new System.Drawing.Point(507, 80);
+            this.btnDownloadBuildingPlans.Enabled = false;
+            this.btnDownloadBuildingPlans.Location = new System.Drawing.Point(507, 104);
             this.btnDownloadBuildingPlans.Name = "btnDownloadBuildingPlans";
             this.btnDownloadBuildingPlans.Size = new System.Drawing.Size(63, 23);
             this.btnDownloadBuildingPlans.TabIndex = 16;
@@ -1841,7 +1848,8 @@
             // 
             // btnBuildingPlans
             // 
-            this.btnBuildingPlans.Location = new System.Drawing.Point(277, 80);
+            this.btnBuildingPlans.Enabled = false;
+            this.btnBuildingPlans.Location = new System.Drawing.Point(277, 104);
             this.btnBuildingPlans.Name = "btnBuildingPlans";
             this.btnBuildingPlans.Size = new System.Drawing.Size(158, 23);
             this.btnBuildingPlans.TabIndex = 15;
@@ -1851,7 +1859,8 @@
             // 
             // btnViewClaimForm
             // 
-            this.btnViewClaimForm.Location = new System.Drawing.Point(507, 51);
+            this.btnViewClaimForm.Enabled = false;
+            this.btnViewClaimForm.Location = new System.Drawing.Point(507, 75);
             this.btnViewClaimForm.Name = "btnViewClaimForm";
             this.btnViewClaimForm.Size = new System.Drawing.Size(63, 23);
             this.btnViewClaimForm.TabIndex = 14;
@@ -1861,7 +1870,8 @@
             // 
             // btnViewInsuranceContract
             // 
-            this.btnViewInsuranceContract.Location = new System.Drawing.Point(507, 22);
+            this.btnViewInsuranceContract.Enabled = false;
+            this.btnViewInsuranceContract.Location = new System.Drawing.Point(507, 46);
             this.btnViewInsuranceContract.Name = "btnViewInsuranceContract";
             this.btnViewInsuranceContract.Size = new System.Drawing.Size(63, 23);
             this.btnViewInsuranceContract.TabIndex = 13;
@@ -1871,7 +1881,8 @@
             // 
             // btnUploadClaimForm
             // 
-            this.btnUploadClaimForm.Location = new System.Drawing.Point(277, 51);
+            this.btnUploadClaimForm.Enabled = false;
+            this.btnUploadClaimForm.Location = new System.Drawing.Point(277, 75);
             this.btnUploadClaimForm.Name = "btnUploadClaimForm";
             this.btnUploadClaimForm.Size = new System.Drawing.Size(158, 23);
             this.btnUploadClaimForm.TabIndex = 12;
@@ -1881,7 +1892,8 @@
             // 
             // btnUploadInsuranceContract
             // 
-            this.btnUploadInsuranceContract.Location = new System.Drawing.Point(277, 22);
+            this.btnUploadInsuranceContract.Enabled = false;
+            this.btnUploadInsuranceContract.Location = new System.Drawing.Point(277, 46);
             this.btnUploadInsuranceContract.Name = "btnUploadInsuranceContract";
             this.btnUploadInsuranceContract.Size = new System.Drawing.Size(158, 23);
             this.btnUploadInsuranceContract.TabIndex = 11;
@@ -1914,6 +1926,31 @@
             this.groupBox2.TabIndex = 135;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Building Costs";
+            // 
+            // label76
+            // 
+            this.label76.AutoSize = true;
+            this.label76.Location = new System.Drawing.Point(145, 142);
+            this.label76.Name = "label76";
+            this.label76.Size = new System.Drawing.Size(15, 13);
+            this.label76.TabIndex = 145;
+            this.label76.Text = "R";
+            // 
+            // txtMonthlyPremium
+            // 
+            this.txtMonthlyPremium.Location = new System.Drawing.Point(166, 139);
+            this.txtMonthlyPremium.Name = "txtMonthlyPremium";
+            this.txtMonthlyPremium.Size = new System.Drawing.Size(100, 20);
+            this.txtMonthlyPremium.TabIndex = 144;
+            // 
+            // label77
+            // 
+            this.label77.AutoSize = true;
+            this.label77.Location = new System.Drawing.Point(22, 142);
+            this.label77.Name = "label77";
+            this.label77.Size = new System.Drawing.Size(117, 13);
+            this.label77.TabIndex = 143;
+            this.label77.Text = "Monthly Premium Value";
             // 
             // label74
             // 
@@ -2123,31 +2160,6 @@
             this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
             this.axAcroPDF1.Size = new System.Drawing.Size(782, 524);
             this.axAcroPDF1.TabIndex = 65;
-            // 
-            // label76
-            // 
-            this.label76.AutoSize = true;
-            this.label76.Location = new System.Drawing.Point(145, 142);
-            this.label76.Name = "label76";
-            this.label76.Size = new System.Drawing.Size(15, 13);
-            this.label76.TabIndex = 145;
-            this.label76.Text = "R";
-            // 
-            // txtMonthlyPremium
-            // 
-            this.txtMonthlyPremium.Location = new System.Drawing.Point(166, 139);
-            this.txtMonthlyPremium.Name = "txtMonthlyPremium";
-            this.txtMonthlyPremium.Size = new System.Drawing.Size(100, 20);
-            this.txtMonthlyPremium.TabIndex = 144;
-            // 
-            // label77
-            // 
-            this.label77.AutoSize = true;
-            this.label77.Location = new System.Drawing.Point(22, 142);
-            this.label77.Name = "label77";
-            this.label77.Size = new System.Drawing.Size(117, 13);
-            this.label77.TabIndex = 143;
-            this.label77.Text = "Monthly Premium Value";
             // 
             // usrBuildings
             // 
