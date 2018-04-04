@@ -934,7 +934,7 @@ namespace Astrodon.Controls.Requisitions
                     sb.AppendLine("Astrodon PTY LTD");
                     try
                     {
-                        Mailer.SendMail("nrp@astrodon.co.za", new string[] { itm.NotifyEmailAddress }, "Payment Scheduled",
+                        Mailer.SendMail("noreply@astrodon.co.za", new string[] { itm.NotifyEmailAddress }, "Payment Scheduled",
                             sb.ToString(), false, false, false, out status, new string[] { });
                     }
                     catch (Exception e)
@@ -951,7 +951,7 @@ namespace Astrodon.Controls.Requisitions
         private void SendEmail(DataContext context, string emailAddress,  Dictionary<string, byte[]> attachments)
         {
             string status;
-            if(!Mailer.SendMailWithAttachments("nrp@astrodon.co.za", new string[] { "payments@astrodon.co.za", emailAddress },  
+            if(!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", new string[] { "payments@astrodon.co.za", emailAddress },  
                 "Payment Requisitions" , 
                 "Please find attached requisitions", false, false, false, out status, attachments))
             {

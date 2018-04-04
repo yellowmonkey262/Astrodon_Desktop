@@ -173,7 +173,7 @@ namespace Astrodon.DataProcessor
             toAddress.Add(pm.email);
 
 
-            if (!Mailer.SendMailWithAttachments("nrp@astrodon.co.za", toAddress.Distinct().ToArray(),
+            if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", toAddress.Distinct().ToArray(),
                 subject, bodyContent,
                 false, false, false, out status, attachments, bccEmail))
             {

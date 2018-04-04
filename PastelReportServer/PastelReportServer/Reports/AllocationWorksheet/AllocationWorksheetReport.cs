@@ -69,7 +69,7 @@ namespace Astrodon.Reports.AllocationWorksheet
 
             string status;
 
-            if (!Mailer.SendMailWithAttachments("nrp@astrodon.co.za", new string[] { email },
+            if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", new string[] { email },
                 subject, bodyContent,
                 false, false, false, out status, attachments, "tertia@astrodon.co.za"))
             {

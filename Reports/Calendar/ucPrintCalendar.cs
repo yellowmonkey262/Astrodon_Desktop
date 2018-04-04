@@ -1054,7 +1054,7 @@ namespace Astrodon.Reports.Calendar
 
                 }
 
-                if (!Mailer.SendMailWithAttachments("nrp@astrodon.co.za", toAddress.Distinct().ToArray(),
+                if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", toAddress.Distinct().ToArray(),
                     subject, bodyContent,
                     false, false, false, out status, attachments, bccEmail))
                 {
@@ -1075,7 +1075,7 @@ namespace Astrodon.Reports.Calendar
                             {
                                 if (trustee.Email != null && trustee.Email.Length > 0)
                                 {
-                                    if (!Mailer.SendMailWithAttachments("nrp@astrodon.co.za", trustee.Email,
+                                    if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", trustee.Email,
                                          subject, bodyContent, false, false, false, out status, attachments, bccEmail))
                                     {
                                         Controller.HandleError("Error seding email " + status, "Email error");

@@ -720,7 +720,7 @@ namespace Astrodon
                             String status;
                             String[] att = { Path.Combine(Path.GetTempPath(), cd.file) };
                             String[] emailTo = txtEmailTo.Text.Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                            if (Mailer.SendMail("nrp@astrodon.co.za", emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
+                            if (Mailer.SendMail("noreply@astrodon.co.za", emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
                             {
                                 MessageBox.Show("Message Sent");
                             }
