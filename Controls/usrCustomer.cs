@@ -235,8 +235,8 @@ namespace Astrodon
         {
             try
             {
-                if (building.Name != "ASTRODON RENTALS")
-                {
+                //if (building.Name != "ASTRODON RENTALS")
+                //{
                     bool loginFound = false;
                     MySqlConnector mySql = new MySqlConnector();
                     //mySql.ToggleConnection(true);
@@ -266,7 +266,7 @@ namespace Astrodon
                     {
                         lstUnits.Items.Add(linkedUnit);
                     }
-                }
+                //}
             }
             catch
             {
