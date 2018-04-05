@@ -39,10 +39,20 @@ namespace Astrodon.Reports.AllocationWorksheet
                         EmailAllocationsToUser(user.email, allocationItems);
                         allocatedItems.AddRange(allocatedItems);
                     }
+                    else
+                    {
+                        context.SystemLogSet.Add(new Data.Log.SystemLog()
+                        {
+                            EventTime = DateTime.Now,
+                            Message = "No allocations to process for " + user.name,
+                            StackTrace = "No stack"
+                        });
+                        context.SaveChanges();
+                    }
                 }
                 catch (Exception e)
                 {
-                    LogException(e,"Unable to process user");
+                    LogException(e,"Unable to process user " + user.name);
                 }
             }
         }

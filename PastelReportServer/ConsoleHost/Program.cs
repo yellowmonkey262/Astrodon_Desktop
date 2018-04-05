@@ -15,7 +15,7 @@ namespace SelfHosted
 
         static void Main(string[] args)
         {
-            //  ProcessorThread.ProcessWorkSchedule();
+              ProcessorThread.ProcessWorkSchedule();
             // ProcessorThread.ProcessBirthdaySMS();
             //ProcessorThread.ScheduleFinancialMeetings();
 
