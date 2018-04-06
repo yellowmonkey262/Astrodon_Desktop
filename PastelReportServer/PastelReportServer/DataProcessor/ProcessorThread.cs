@@ -149,7 +149,7 @@ namespace Astrodon.DataProcessor
                 }
                 catch (Exception e)
                 {
-                    LogException(e,"Link Payments buildingId:" + buildingId.ToString());
+                   // LogException(e,"Link Payments buildingId:" + buildingId.ToString());
                 }
             }
         }

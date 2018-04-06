@@ -39,16 +39,6 @@ namespace Astrodon.Reports.AllocationWorksheet
                         EmailAllocationsToUser(user.email, allocationItems);
                         allocatedItems.AddRange(allocatedItems);
                     }
-                    else
-                    {
-                        context.SystemLogSet.Add(new Data.Log.SystemLog()
-                        {
-                            EventTime = DateTime.Now,
-                            Message = "No allocations to process for " + user.name,
-                            StackTrace = "No stack"
-                        });
-                        context.SaveChanges();
-                    }
                 }
                 catch (Exception e)
                 {
@@ -83,8 +73,13 @@ namespace Astrodon.Reports.AllocationWorksheet
                 subject, bodyContent,
                 false, false, false, out status, attachments, "tertia@astrodon.co.za"))
             {
+                Console.WriteLine("Email failed " + status);
+
                 throw new Exception("Unable to send email " + status);
             }
+
+            Console.WriteLine("Email Sent!");
+
         }
 
         private void LogException(Exception e,string section)
@@ -198,6 +193,7 @@ namespace Astrodon.Reports.AllocationWorksheet
             var myBuildingsToProcess = query.Distinct().ToList().Where(a => a.IsCandidate)
                                                                 .OrderBy(a => a.Financial.findate).ToList();
 
+
             var buildingIdList = myBuildingsToProcess.Select(a => a.Building.id).Distinct().ToList();
 
             var toRemove = alreadyAllocated.Where(a => buildingIdList.Contains(a.BuildingId)).Select(a => a.BuildingId).ToList();
@@ -301,8 +297,9 @@ namespace Astrodon.Reports.AllocationWorksheet
                 result.Add(itm);
             }
 
+            var returnResult = result.Where(a => a.IsFinancialReady).OrderBy(a => a.Priority).Take(buildingsToAllocate).ToList();
 
-            return result.Where(a => a.IsFinancialReady).OrderBy(a => a.Priority).Take(buildingsToAllocate).ToList();
+            return returnResult;
         }
 
         class BuildingProspect

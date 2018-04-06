@@ -19,7 +19,7 @@ namespace SelfHosted
             // ProcessorThread.ProcessBirthdaySMS();
             //ProcessorThread.ScheduleFinancialMeetings();
 
-            //    return;
+                return;
 
             ReportServiceHost host = new ReportServiceHost();
             Console.WriteLine("Service is running");

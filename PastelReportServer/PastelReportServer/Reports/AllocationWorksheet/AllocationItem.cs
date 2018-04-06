@@ -33,7 +33,7 @@ namespace Astrodon.Reports.AllocationWorksheet
                 if (ReasonDate != null)
                      result = Reason + " " + ReasonDate.Value.ToString("yyyy/MM/dd");
                 else
-                    result = Reason;
+                    result = Reason + " no reason date";
 
                 if (FinancialStartDate != null)
                     result = result + " Financial Start: " + FinancialStartDate.Value.ToString("yyyy/MM/dd");
@@ -54,12 +54,23 @@ namespace Astrodon.Reports.AllocationWorksheet
         {
             get
             {
+                if (ReasonDate == null)
+                    return true;
+
                 bool canSend = true;
-                if (FinancialStartDate != null && ReasonDate != null && FinancialStartDate > ReasonDate)
+                var checkResonDateMax = new DateTime(ReasonDate.Value.Year, ReasonDate.Value.Month, 1).AddMonths(1).AddDays(-1);
+
+                if (FinancialStartDate != null && ReasonDate != null && FinancialStartDate > checkResonDateMax)
+                {                                          //31-03-2018                          01-03-2018
+                    Console.WriteLine("Cansend false 1 " + FinancialStartDate.ToString() + " " + ReasonDate.ToString());
                     canSend = false;
+                }
 
                 if (FinancialEndDate != null && ReasonDate != null && FinancialEndDate < ReasonDate)
+                {
+                    Console.WriteLine("Cansend false 2 " + FinancialEndDate.ToString() + ReasonDate.ToString());
                     canSend = false;
+                }
                 return canSend;
 
             }
