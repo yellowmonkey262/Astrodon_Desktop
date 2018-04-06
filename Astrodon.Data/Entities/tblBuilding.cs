@@ -124,6 +124,8 @@ namespace Astrodon.Data
         [ForeignKey("InsuranceBrokerId")]
         public virtual InsuranceBroker InsuranceBroker { get; set; }
 
+        public decimal MonthlyInsurancePremium { get; set; }
+
         #endregion
 
         [NotMapped]

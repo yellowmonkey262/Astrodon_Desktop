@@ -223,6 +223,7 @@ namespace Astrodon
                     txtCommonPropertyValue.Text = buildingEntity.CommonPropertyReplacementCost.ToString("#,##0.00");
                     txtAdditionalInsuredValue.Text = buildingEntity.AdditionalInsuredValueCost.ToString("#,##0.00");
                     txtInsurancePolicyNumber.Text = buildingEntity.PolicyNumber;
+                    txtMonthlyPremium.Text = buildingEntity.MonthlyInsurancePremium.ToString("#,##0.00");
 
                     cbFixedFinalcials.Checked = buildingEntity.IsFixed;
                     tbFinancialDayOfMonth.Value = buildingEntity.FinancialDayOfMonth;
@@ -319,7 +320,8 @@ namespace Astrodon
                 SquareMeters = decimal.Round(buildingEntity.UnitPropertyDimensions / unitRecords.Count, 2),
                 Notes = "",
                 TotalUnitPropertyDimensions = buildingEntity.UnitPropertyDimensions,
-                BuildingReplacementValue = buildingEntity.UnitReplacementCost
+                BuildingReplacementValue = buildingEntity.UnitReplacementCost,
+                BuildingPremium = buildingEntity.MonthlyInsurancePremium
             }).OrderBy(a => a.UnitNo).ToList();
 
             InsurancePqGrid.AddRange(items);
@@ -339,6 +341,8 @@ namespace Astrodon
                         record.SquareMeters = unit.SquareMeters;
                         record.Notes = unit.Notes;
                         record.AdditionalInsurance = unit.AdditionalInsurance;
+                        record.AdditionalPremium = unit.AdditionalPremium;
+
                         record.BuildingReplacementValue = buildingEntity.UnitReplacementCost;
                         record.TotalUnitPropertyDimensions = buildingEntity.UnitPropertyDimensions;
                         record.Calculate();
@@ -357,6 +361,19 @@ namespace Astrodon
             dgInsurancePq.MultiSelect = false;
             dgInsurancePq.AutoGenerateColumns = false;
 
+            DataGridViewCellStyle currencyCellFormat = new DataGridViewCellStyle()
+            {
+                Format = "c",
+                Alignment = DataGridViewContentAlignment.MiddleRight
+            };
+
+
+            DataGridViewCellStyle numberCell = new DataGridViewCellStyle()
+            {
+                Format = "0.00",
+                Alignment = DataGridViewContentAlignment.MiddleRight
+            };
+
             dgInsurancePq.Columns.Clear();
 
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
@@ -372,40 +389,59 @@ namespace Astrodon
                 DataPropertyName = "SquareMeters",
                 HeaderText = "m²",
                 ReadOnly = false,
+                DefaultCellStyle = numberCell
             });
 
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "PQCalculated",
                 HeaderText = "PQ",
-                ReadOnly = true
+                ReadOnly = true,
+                DefaultCellStyle = numberCell
             });
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "UnitReplacementCost",
-                HeaderText = "Replacement Value Per PQ",
-                ReadOnly = true
+                HeaderText = "Replacement / PQ",
+                ReadOnly = true,
+                DefaultCellStyle = currencyCellFormat,
+                MinimumWidth = 100
             });
 
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "AdditionalInsurance",
-                HeaderText = "Additional",
-                ReadOnly = false
+                HeaderText = "Additional Insurance",
+                ReadOnly = false,
+                DefaultCellStyle = currencyCellFormat,
+                MinimumWidth = 100
+            });
+
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "UnitPremium",
+                HeaderText = "Total Premium",
+                ReadOnly = true,
+                DefaultCellStyle = currencyCellFormat,
+                MinimumWidth = 100
             });
 
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "AdditionalPremium",
                 HeaderText = "Additional Premium",
-                ReadOnly = false
+                ReadOnly = false,
+                DefaultCellStyle = currencyCellFormat,
+                MinimumWidth = 100
             });
 
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "TotalReplacementValue",
-                HeaderText = "Total Replacement Value",
-                ReadOnly = true
+                HeaderText = "Total Replacement",
+                ReadOnly = true,
+                DefaultCellStyle = currencyCellFormat,
+                MinimumWidth = 100
 
             });
 
@@ -535,6 +571,11 @@ namespace Astrodon
                     Convert.ToDecimal(txtReplacementValue.Text);
                 buildingEntity.CommonPropertyReplacementCost = string.IsNullOrWhiteSpace(txtCommonPropertyValue.Text) ? 0 :
                     Convert.ToDecimal(txtCommonPropertyValue.Text);
+
+                buildingEntity.MonthlyInsurancePremium = string.IsNullOrWhiteSpace(txtMonthlyPremium.Text) ? 0 :
+                    Convert.ToDecimal(txtMonthlyPremium.Text);
+
+
                 buildingEntity.PolicyNumber = txtInsurancePolicyNumber.Text;
                 buildingEntity.InsuranceReplacementValueIncludesCommonProperty = cbReplacementIncludesCommonProperty.Checked;
 
@@ -561,6 +602,8 @@ namespace Astrodon
                             PQRating = item.PQCalculated,
                             SquareMeters = item.SquareMeters,
                             UnitNo = item.UnitNo,
+                            UnitPremium = item.UnitPremium,
+                            AdditionalPremium = item.AdditionalPremium
                         });
                     }
                     else
@@ -572,6 +615,8 @@ namespace Astrodon
                         update.PQRating = item.PQCalculated;
                         update.SquareMeters = item.SquareMeters;
                         update.UnitNo = item.UnitNo;
+                        update.UnitPremium = item.UnitPremium;
+                        update.AdditionalPremium = item.AdditionalPremium;
                     }
                 }
                 buildingEntity.AdditionalInsuredValueCost = totalAdditionalInsuredValue;
@@ -1149,6 +1194,28 @@ namespace Astrodon
             }
         }
 
+        private void txtMonthlyPremium_TextChanged(object sender, EventArgs e)
+        {
+            var d = txtMonthlyPremium.Text;
+            if (!string.IsNullOrWhiteSpace(d))
+            {
+                try
+                {
+                    var val = Convert.ToDecimal(d);
+                    foreach (var x in InsurancePqGrid)
+                    {
+                        if (x is InsurancePqRecord)
+                        {
+                            x.BuildingPremium = val;
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            }
+        }
+
         private void dgInsurancePq_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             foreach (DataGridViewRow row in dgInsurancePq.Rows)
@@ -1370,6 +1437,7 @@ namespace Astrodon
 
 
         private string _TempPDFFile = string.Empty;
+
         private void DisplayPDF(byte[] pdfData)
         {
             if (pdfData == null)
@@ -1496,16 +1564,6 @@ namespace Astrodon
             }
         }
 
-        private void label57_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label62_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void cbFinancialEndDateSet_CheckedChanged(object sender, EventArgs e)
         {
             dtpFinancialEndDate.Visible = cbFinancialEndDateSet.Checked;
@@ -1546,10 +1604,9 @@ namespace Astrodon
             txtCommonPropertyValue.Enabled = !cbReplacementIncludesCommonProperty.Checked;
         }
 
-        private void cmbBondHolder_SelectedIndexChanged(object sender, EventArgs e)
-        {
+   
 
-        }
+      
     }
 
     internal interface IInsurancePqRecord
@@ -1572,6 +1629,10 @@ namespace Astrodon
         decimal BuildingReplacementValue { get; set; }
         decimal UnitReplacementCost { get;  }
         decimal TotalReplacementValue { get;  }
+        decimal UnitPremium { get; }
+
+        decimal BuildingPremium { get; set; }
+
         DataGridViewRow DataRow { get; set; }
     }
 
@@ -1621,27 +1682,82 @@ namespace Astrodon
         }
 
         private decimal _BuildingReplacementValue;
+
         public decimal BuildingReplacementValue { get { return _BuildingReplacementValue; } set { _BuildingReplacementValue = value; Calculate(); } }
+
+        private decimal _BuildingPremiumValue;
+        public decimal BuildingPremium { get { return _BuildingPremiumValue; } set { _BuildingPremiumValue = value; Calculate(); } }
+
         public virtual decimal UnitReplacementCost { get { return Math.Round(BuildingReplacementValue * PQCalculatedPercentage, 2); } }
         public virtual decimal TotalReplacementValue { get { return AdditionalInsurance + UnitReplacementCost; } }
 
+        private decimal _UnitPremium = 0;
+        public decimal UnitPremium { get { return _UnitPremium; }  }
+        
         public DataGridViewRow DataRow { get; set; }
 
-        public virtual void Calculate()
+        private bool _InCalculate = false;
+
+        public decimal CalculatePremium()
         {
+            var totalAdditional = _Items.Where(a => !(a is PQTotal)).Sum(a => a.AdditionalPremium);
+            var totalExcludingAdditional = _BuildingPremiumValue - totalAdditional;
+            var myPremiumPart = totalExcludingAdditional * PQCalculatedPercentage;
+            var insureTemp = myPremiumPart + AdditionalPremium;
+
+            if (insureTemp < 0)
+                return 0;
+            _UnitPremium = Math.Round(insureTemp, 2);
+
             if (DataRow != null)
             {
                 foreach (var c in DataRow.Cells)
                 {
                     var cell = c as DataGridViewCell;
-                    DataRow.DataGridView.InvalidateCell(cell);
+                    if (cell != null)
+                    {
+                        if(cell.OwningColumn.DataPropertyName == "UnitPremium")
+                           DataRow.DataGridView.InvalidateCell(cell);
+                    }
                 }
             }
 
-            var total = _Items.Where(a => a is PQTotal).FirstOrDefault();
-            if (total != null)
+            return _UnitPremium;
+        }
+
+        public virtual void Calculate()
+        {
+            if (_InCalculate)
+                return;
+            try
             {
-                (total as PQTotal).Calculate();
+                _InCalculate = true;
+
+                CalculatePremium();
+                foreach(var itm in _Items)
+                {
+                    if (itm is InsurancePqRecord)
+                        (itm as InsurancePqRecord).CalculatePremium();
+                }
+
+                if (DataRow != null)
+                {
+                    foreach (var c in DataRow.Cells)
+                    {
+                        var cell = c as DataGridViewCell;
+                        DataRow.DataGridView.InvalidateCell(cell);
+                    }
+                }
+
+                var total = _Items.Where(a => a is PQTotal).FirstOrDefault();
+                if (total != null)
+                {
+                    (total as PQTotal).Calculate();
+                }
+            }
+            finally
+            {
+                _InCalculate = false;
             }
         }
     }
@@ -1665,6 +1781,7 @@ namespace Astrodon
             AdditionalPremium = _Items.Where(a => a != this).Sum(a => a.AdditionalPremium);
             TotalUnitPropertyDimensions = _Items.Where(a => a != this).Sum(a => a.TotalUnitPropertyDimensions);
             BuildingReplacementValue = _Items.Where(a => a != this).Sum(a => a.BuildingReplacementValue);
+            UnitPremium = _Items.Where(a => a != this).Sum(a => a.UnitPremium);
 
             if (DataRow != null)
             {
@@ -1692,9 +1809,13 @@ namespace Astrodon
 
         public decimal BuildingReplacementValue { get; set; }
 
+        public decimal BuildingPremium { get; set; }
+
         public string Notes { get; set; }
 
         public string UnitNo { get; set; }
+
+        public decimal UnitPremium { get; set; }
 
         public DataGridViewRow DataRow { get; set; }
 

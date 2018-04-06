@@ -29,7 +29,13 @@ namespace Astrodon.Data.MaintenanceData
 
         public decimal PQRating { get; set; }
 
+        public decimal UnitPremium { get; set; }
+
+        public decimal AdditionalPremium { get; set; }
+
         [MaxLength(1500)]
         public string Notes { get; set; }
+
+      
     }
 }

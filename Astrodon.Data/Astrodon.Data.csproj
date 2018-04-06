@@ -305,6 +305,14 @@
     <Compile Include="Migrations\201804031055352_AddedInsuredValue.Designer.cs">
       <DependentUpon>201804031055352_AddedInsuredValue.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804060913055_UnitPremiumCalculation.cs" />
+    <Compile Include="Migrations\201804060913055_UnitPremiumCalculation.Designer.cs">
+      <DependentUpon>201804060913055_UnitPremiumCalculation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804060921061_UnitAdditionalPremium.cs" />
+    <Compile Include="Migrations\201804060921061_UnitAdditionalPremium.Designer.cs">
+      <DependentUpon>201804060921061_UnitAdditionalPremium.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -534,6 +542,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804031055352_AddedInsuredValue.resx">
       <DependentUpon>201804031055352_AddedInsuredValue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804060913055_UnitPremiumCalculation.resx">
+      <DependentUpon>201804060913055_UnitPremiumCalculation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804060921061_UnitAdditionalPremium.resx">
+      <DependentUpon>201804060921061_UnitAdditionalPremium.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

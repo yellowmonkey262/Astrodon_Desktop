@@ -1035,7 +1035,6 @@
             this.label57.Size = new System.Drawing.Size(48, 13);
             this.label57.TabIndex = 126;
             this.label57.Text = "Disabled";
-            this.label57.Click += new System.EventHandler(this.label57_Click);
             // 
             // txtID
             // 
@@ -1656,12 +1655,10 @@
             // 
             this.dgInsurancePq.AllowUserToAddRows = false;
             this.dgInsurancePq.AllowUserToDeleteRows = false;
-            this.dgInsurancePq.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgInsurancePq.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgInsurancePq.Location = new System.Drawing.Point(3, 16);
             this.dgInsurancePq.MultiSelect = false;
             this.dgInsurancePq.Name = "dgInsurancePq";
-            this.dgInsurancePq.Size = new System.Drawing.Size(764, 551);
+            this.dgInsurancePq.Size = new System.Drawing.Size(764, 505);
             this.dgInsurancePq.TabIndex = 0;
             this.dgInsurancePq.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgInsurancePq_CellValueChanged);
             this.dgInsurancePq.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgInsurancePq_DataBindingComplete);
@@ -1781,7 +1778,6 @@
             this.cmbBondHolder.Size = new System.Drawing.Size(171, 21);
             this.cmbBondHolder.TabIndex = 140;
             this.cmbBondHolder.Visible = false;
-            this.cmbBondHolder.SelectedIndexChanged += new System.EventHandler(this.cmbBondHolder_SelectedIndexChanged);
             // 
             // label56
             // 
@@ -1930,7 +1926,7 @@
             // label76
             // 
             this.label76.AutoSize = true;
-            this.label76.Location = new System.Drawing.Point(145, 142);
+            this.label76.Location = new System.Drawing.Point(145, 161);
             this.label76.Name = "label76";
             this.label76.Size = new System.Drawing.Size(15, 13);
             this.label76.TabIndex = 145;
@@ -1938,15 +1934,16 @@
             // 
             // txtMonthlyPremium
             // 
-            this.txtMonthlyPremium.Location = new System.Drawing.Point(166, 139);
+            this.txtMonthlyPremium.Location = new System.Drawing.Point(166, 158);
             this.txtMonthlyPremium.Name = "txtMonthlyPremium";
             this.txtMonthlyPremium.Size = new System.Drawing.Size(100, 20);
             this.txtMonthlyPremium.TabIndex = 144;
+            this.txtMonthlyPremium.TextChanged += new System.EventHandler(this.txtMonthlyPremium_TextChanged);
             // 
             // label77
             // 
             this.label77.AutoSize = true;
-            this.label77.Location = new System.Drawing.Point(22, 142);
+            this.label77.Location = new System.Drawing.Point(22, 161);
             this.label77.Name = "label77";
             this.label77.Size = new System.Drawing.Size(117, 13);
             this.label77.TabIndex = 143;
