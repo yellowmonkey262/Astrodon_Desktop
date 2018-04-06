@@ -192,10 +192,13 @@ namespace Astrodon
                 cbBuildingFinancialsEnabled.Enabled = Controller.UserIsSheldon();
                 cbDisabled.Enabled = Controller.UserIsSheldon();
                 Data.tblBuilding buildingEntity = null;
+                List<BuildingDocument> buildingDocumentEntities = null;
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     buildingEntity = context.tblBuildings.Include(a => a.InsuranceBroker)
                             .FirstOrDefault(a => a.id == selectedBuilding.ID);
+                    buildingDocumentEntities = context.BuildingDocumentSet
+                         .Where(a => a.BuildingId == selectedBuilding.ID).ToList();
                 }
                 if (buildingEntity != null)
                 {
@@ -218,6 +221,7 @@ namespace Astrodon
                         lbBrokerName.Text = "-- None Selected --";
 
                     txtCommonPropertyValue.Text = buildingEntity.CommonPropertyReplacementCost.ToString("#,##0.00");
+                    txtAdditionalInsuredValue.Text = buildingEntity.AdditionalInsuredValueCost.ToString("#,##0.00");
                     txtInsurancePolicyNumber.Text = buildingEntity.PolicyNumber;
 
                     cbFixedFinalcials.Checked = buildingEntity.IsFixed;
@@ -259,6 +263,44 @@ namespace Astrodon
                     tbBodyContent.Text = buildingEntity.FinancialMeetingBodyText;
                     cbNotifyTrustees.Checked = buildingEntity.FinancialMeetingSendInviteToAllTrustees;
                     LoadInsuranceUnitPq(buildingEntity);
+
+                    var totalPqItems = InsurancePqGrid.Where(a => a is PQTotal).FirstOrDefault();
+                    if (totalPqItems != null)
+                    {
+                        var totalReplacementValue = totalPqItems.TotalReplacementValue;
+                        txtTotalReplacementValue.Text = totalReplacementValue.ToString("#,##0.00");
+                    }
+                }
+                btnUploadInsuranceContract.Enabled = true;
+                btnUploadClaimForm.Enabled = true;
+                btnBuildingPlans.Enabled = true;
+                btnUploadPQ.Enabled = true;
+
+                if (buildingDocumentEntities != null && buildingDocumentEntities.Count > 0)
+                {
+                    foreach (var buildingDocument in buildingDocumentEntities)
+                    {
+                        switch (buildingDocument.DocumentType)
+                        {
+                            case DocumentType.InsuranceContract:
+                                btnViewContract.Enabled = true;
+                                btnViewInsuranceContract.Enabled = true;
+                                break;
+                            case DocumentType.InsuranceClaimForm:
+                                btnViewClaimForm.Enabled = true;
+                                break;
+                            case DocumentType.BuildingPlans:
+                                btnViewBuildingPlans.Enabled = true;
+                                btnDownloadBuildingPlans.Enabled = true;
+                                break;
+                            case DocumentType.PQ:
+                                btnViewPq.Enabled = true;
+                                btnDownloadPQ.Enabled = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -341,7 +383,7 @@ namespace Astrodon
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "UnitReplacementCost",
-                HeaderText = "Replacement Value",
+                HeaderText = "Replacement Value Per PQ",
                 ReadOnly = true
             });
 
@@ -349,6 +391,13 @@ namespace Astrodon
             {
                 DataPropertyName = "AdditionalInsurance",
                 HeaderText = "Additional",
+                ReadOnly = false
+            });
+
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "AdditionalPremium",
+                HeaderText = "Additional Premium",
                 ReadOnly = false
             });
 
@@ -498,9 +547,10 @@ namespace Astrodon
                 else
                     buildingEntity.InsuranceBrokerId = _SelectedBroker.id;
 
-
+                decimal totalAdditionalInsuredValue = 0;
                 foreach (var item in InsurancePqGrid.Where(a => a is InsurancePqRecord).Select(a => a as InsurancePqRecord).ToList())
                 {
+                    totalAdditionalInsuredValue += item.AdditionalInsurance;
                     if (item.Id == null)
                     {
                         context.BuildingUnitSet.Add(new Data.MaintenanceData.BuildingUnit()
@@ -524,6 +574,7 @@ namespace Astrodon
                         update.UnitNo = item.UnitNo;
                     }
                 }
+                buildingEntity.AdditionalInsuredValueCost = totalAdditionalInsuredValue;
                 try
                 {
                     context.SaveChanges();
@@ -561,6 +612,21 @@ namespace Astrodon
             //chkWeb.Checked = btnSave.Enabled = false;
             //txtRF.Text = txtRFS.Text = txtFF.Text = txtFFS.Text = txtDCF.Text = txtDCFS.Text = txtSF.Text = txtSFS.Text = txtDF.Text = txtDFS.Text = txtHF.Text = txtHFS.Text = txtAddress1.Text = "";
             //txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = "";
+            DisplayPDF(null);
+            tabControl1.SelectedIndex = 0;
+            cmbBuilding.SelectedIndex = 0;
+            btnViewContract.Enabled = false;
+            btnViewInsuranceContract.Enabled = false;
+            btnViewClaimForm.Enabled = false;
+            btnViewBuildingPlans.Enabled = false;
+            btnDownloadBuildingPlans.Enabled = false;
+            btnViewPq.Enabled = false;
+            btnDownloadPQ.Enabled = false;
+            btnUploadInsuranceContract.Enabled = false;
+            btnUploadClaimForm.Enabled = false;
+            btnBuildingPlans.Enabled = false;
+            btnUploadPQ.Enabled = false;
+            dgInsurancePq.DataSource = null;
         }
 
         private void SaveBuilding()
@@ -897,8 +963,10 @@ namespace Astrodon
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Insurance Form");
                     }
+                    btnViewContract.Enabled = true;
+                    btnViewInsuranceContract.Enabled = true;
                 }
-                catch
+                catch(Exception ex)
                 {
                     MessageBox.Show("Failed to upload Insurance Form");
                 }
@@ -916,6 +984,13 @@ namespace Astrodon
                 btnUploadClaimForm.Enabled = false;
                 try
                 {
+                    if (!IsValidPdf(fdOpen.FileName))
+                    {
+                        btnUploadClaimForm.Enabled = true;
+                        Controller.HandleError("Not a valid PDF");
+                        return;
+                    }
+
                     using (var context = SqlDataHandler.GetDataContext())
                     {
                         var fileEntity = context.BuildingDocumentSet
@@ -932,6 +1007,7 @@ namespace Astrodon
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Claim Form");
                     }
+                    btnViewClaimForm.Enabled = true;
                 }
                 catch
                 {
@@ -1118,6 +1194,8 @@ namespace Astrodon
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Building Plans");
                     }
+                    btnViewBuildingPlans.Enabled = true;
+                    btnDownloadBuildingPlans.Enabled = true;
                 }
                 catch
                 {
@@ -1194,6 +1272,8 @@ namespace Astrodon
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded PQ");
                     }
+                    btnViewPq.Enabled = true;
+                    btnDownloadPQ.Enabled = true;
                 }
                 catch
                 {
@@ -1341,7 +1421,7 @@ namespace Astrodon
                     reader.Close();
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 Ret = false;
             }
@@ -1440,6 +1520,36 @@ namespace Astrodon
         {
             pnlFinancialMeeting.Visible = cbFixedMonhlyFinMeeting.Checked;
         }
+
+        private void dgInsurancePq_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (InsurancePqGrid != null && InsurancePqGrid.Count > 1)
+            {
+                if (InsurancePqGrid.Any(a => a is InsurancePqRecord))
+                    txtAdditionalInsuredValue.Text = InsurancePqGrid.Where(a => a is InsurancePqRecord).Sum(a => a.AdditionalInsurance).ToString("#,##0.00");
+                if (InsurancePqGrid.Any(a => a is PQTotal))
+                    txtTotalReplacementValue.Text = InsurancePqGrid.First(a => a is PQTotal).TotalReplacementValue.ToString("#,##0.00");
+            }
+        }
+        private string cbReplacementIncludesCommonPropertyValue { get; set; }
+        private void cbReplacementIncludesCommonProperty_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbReplacementIncludesCommonProperty.Checked)
+            {
+                cbReplacementIncludesCommonPropertyValue = txtCommonPropertyValue.Text;
+                txtCommonPropertyValue.Text = 0.ToString("#,##0.00");
+            }
+            else
+            {
+                txtCommonPropertyValue.Text = cbReplacementIncludesCommonPropertyValue;
+            }
+            txtCommonPropertyValue.Enabled = !cbReplacementIncludesCommonProperty.Checked;
+        }
+
+        private void cmbBondHolder_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     internal interface IInsurancePqRecord
@@ -1450,6 +1560,8 @@ namespace Astrodon
         decimal SquareMeters { get; set; }
 
         decimal AdditionalInsurance { get; set; }
+
+        decimal AdditionalPremium { get; set; }
 
         string Notes { get; set; }
 
@@ -1480,6 +1592,9 @@ namespace Astrodon
         private decimal _AdditionalInsurance;
         public decimal AdditionalInsurance { get { return _AdditionalInsurance; } set { _AdditionalInsurance = value; Calculate(); } }
 
+        private decimal _AdditionalPremium;
+        public decimal AdditionalPremium { get { return _AdditionalPremium; } set { _AdditionalPremium = value; Calculate(); } }
+
         public string Notes { get; set; }
 
         private decimal _TotalUnitPropertyDimensions;
@@ -1495,9 +1610,19 @@ namespace Astrodon
             }
         }
 
+        public virtual decimal PQCalculatedPercentage
+        {
+            get
+            {
+                if (PQCalculated <= 0)
+                    return 0;
+                return PQCalculated / 100;
+            }
+        }
+
         private decimal _BuildingReplacementValue;
         public decimal BuildingReplacementValue { get { return _BuildingReplacementValue; } set { _BuildingReplacementValue = value; Calculate(); } }
-        public virtual decimal UnitReplacementCost { get { return Math.Round(BuildingReplacementValue * PQCalculated, 2); } }
+        public virtual decimal UnitReplacementCost { get { return Math.Round(BuildingReplacementValue * PQCalculatedPercentage, 2); } }
         public virtual decimal TotalReplacementValue { get { return AdditionalInsurance + UnitReplacementCost; } }
 
         public DataGridViewRow DataRow { get; set; }
@@ -1537,6 +1662,7 @@ namespace Astrodon
             TotalReplacementValue = _Items.Where(a => a != this).Sum(a => a.TotalReplacementValue);
             SquareMeters = _Items.Where(a => a != this).Sum(a => a.SquareMeters);
             AdditionalInsurance = _Items.Where(a => a != this).Sum(a => a.AdditionalInsurance);
+            AdditionalPremium = _Items.Where(a => a != this).Sum(a => a.AdditionalPremium);
             TotalUnitPropertyDimensions = _Items.Where(a => a != this).Sum(a => a.TotalUnitPropertyDimensions);
             BuildingReplacementValue = _Items.Where(a => a != this).Sum(a => a.BuildingReplacementValue);
 
@@ -1559,6 +1685,8 @@ namespace Astrodon
         public decimal SquareMeters { get; set; }
 
         public decimal AdditionalInsurance { get; set; }
+
+        public decimal AdditionalPremium { get; set; }
 
         public decimal TotalUnitPropertyDimensions { get; set; }
 

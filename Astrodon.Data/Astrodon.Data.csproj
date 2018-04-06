@@ -301,6 +301,10 @@
     <Compile Include="Migrations\201803250919172_CustomerBirthdaySMSTracking.Designer.cs">
       <DependentUpon>201803250919172_CustomerBirthdaySMSTracking.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804031055352_AddedInsuredValue.cs" />
+    <Compile Include="Migrations\201804031055352_AddedInsuredValue.Designer.cs">
+      <DependentUpon>201804031055352_AddedInsuredValue.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -527,6 +531,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803250919172_CustomerBirthdaySMSTracking.resx">
       <DependentUpon>201803250919172_CustomerBirthdaySMSTracking.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804031055352_AddedInsuredValue.resx">
+      <DependentUpon>201804031055352_AddedInsuredValue.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
