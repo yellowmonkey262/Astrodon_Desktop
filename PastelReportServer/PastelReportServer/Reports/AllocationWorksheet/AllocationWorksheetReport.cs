@@ -165,8 +165,6 @@ namespace Astrodon.Reports.AllocationWorksheet
 
         private List<AllocationItem> ProcessAllocation(DataContext context, tblUser user, int buildingsToAllocate, List<AllocationItem> alreadyAllocated)
         {
-
-
             List<AllocationItem> result = new List<AllocationItem>();
             //find the buildings allocated to this user to process check lists for
 
@@ -192,7 +190,6 @@ namespace Astrodon.Reports.AllocationWorksheet
 
             var myBuildingsToProcess = query.Distinct().ToList().Where(a => a.IsCandidate)
                                                                 .OrderBy(a => a.Financial.findate).ToList();
-
 
             var buildingIdList = myBuildingsToProcess.Select(a => a.Building.id).Distinct().ToList();
 
@@ -257,19 +254,22 @@ namespace Astrodon.Reports.AllocationWorksheet
             buildingIds = result.Select(a => a.BuildingId).Distinct().ToArray();
             List<AllocationItem> randomBuildings = new List<AllocationItem>();
 
-            foreach (var itm in myBuildingsToProcess
+           
+            var processList = myBuildingsToProcess
                                         .Where(a => !buildingIds.Contains(a.Building.id))
                                         .OrderBy(a => a.YearEndDays)
                                         .ThenBy(a => a.Financial.findate)
-                                        .Select(a => a))
+                                        .Select(a => a).ToList();
+
+            Console.WriteLine("Process List " + processList.Count.ToString());
+
+            foreach (var itm in processList)
             {
                 var existing = result.FirstOrDefault(a => a.BuildingId == itm.Building.id);
                 if (existing == null)
                 {
-
                     var finDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, itm.Building.FinancialDayOfMonth);
                     int priority = Math.Abs((DateTime.Today - finDate).Days);
-
 
                     randomBuildings.Add(new AllocationItem()
                     {
@@ -330,15 +330,14 @@ namespace Astrodon.Reports.AllocationWorksheet
                     DateTime chekFinMonth = new DateTime(FinancialMonth.Year, FinancialMonth.Month, 1);
 
                     if (FinancialEndDate != null)
-                        checkStart = new DateTime(FinancialEndDate.Value.Year, FinancialEndDate.Value.Month, 1);
-                    else
-                        checkStart = FinancialMonth;
-
-                    if (FinancialStartDate != null)
-                        checkEnd = new DateTime(FinancialStartDate.Value.Year, FinancialStartDate.Value.Month, 1);
+                        checkEnd = new DateTime(FinancialEndDate.Value.Year, FinancialEndDate.Value.Month, 1);
                     else
                         checkEnd = FinancialMonth;
 
+                    if (FinancialStartDate != null)
+                        checkStart = new DateTime(FinancialStartDate.Value.Year, FinancialStartDate.Value.Month, 1);
+                    else
+                        checkStart = FinancialMonth;
                     return FinancialMonth >= checkStart && FinancialMonth <= checkEnd;
 
                 }
