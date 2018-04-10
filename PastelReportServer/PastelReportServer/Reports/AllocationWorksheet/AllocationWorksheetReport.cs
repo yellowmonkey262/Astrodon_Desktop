@@ -50,6 +50,7 @@ namespace Astrodon.Reports.AllocationWorksheet
     
         private void EmailAllocationsToUser(string email, List<AllocationItem> allocationItems)
         {
+            Console.WriteLine("Sending " + allocationItems.Count.ToString() + " to " + email);
             var excelFile = CreateExcelFile(allocationItems);
 
             Dictionary<string, byte[]> attachments = new Dictionary<string, byte[]>();
