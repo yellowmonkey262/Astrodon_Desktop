@@ -183,6 +183,11 @@ namespace Astrodon.Data
 
         public int waterRecon { get; set; }
 
+        public virtual int? csosLeviesExpense { get; set; }
+
+        public virtual string csosLeviesNotes { get; set; }
+
         public virtual byte[] CheckListPDF { get; set; }
+
     }
 }

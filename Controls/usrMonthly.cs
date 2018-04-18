@@ -358,6 +358,12 @@ namespace Astrodon.Controls
                     case "chkWaterExpY":
                         chkWaterExpN.Checked = false;
                         break;
+                    case "chkCSOSLeviesExpY":
+                        chkCSOSLeviesExpN.Checked = false;
+                        break;
+                    case "chkCSOSLeviesExpN":
+                        chkCSOSLeviesExpY.Checked = false;
+                        break;
                 }
             }
         }
@@ -449,6 +455,7 @@ namespace Astrodon.Controls
                         itm.waterExpense,
                         itm.water,
                         itm.waterRecon,
+                        itm.csosLeviesExpense,
                         itm.accountingFeesNotes,
                         itm.sundryNotes,
                         itm.assetsNotes,
@@ -485,7 +492,8 @@ namespace Astrodon.Controls
                         itm.telephoneNotes,
                         itm.trustNotes,
                         itm.waterExpenseNotes,
-                        itm.waterNotes);
+                        itm.waterNotes,
+                        itm.csosLeviesNotes);
         }
 
         private void PopulateCheckList(tblMonthFin itm)
@@ -530,6 +538,7 @@ namespace Astrodon.Controls
                         itm.waterExpense,
                         itm.water,
                         itm.waterRecon,
+                        itm.csosLeviesExpense,
                         itm.accountingFeesNotes,
                         itm.sundryNotes,
                         itm.assetsNotes,
@@ -566,7 +575,8 @@ namespace Astrodon.Controls
                         itm.telephoneNotes,
                         itm.trustNotes,
                         itm.waterExpenseNotes,
-                        itm.waterNotes);
+                        itm.waterNotes,
+                        itm.csosLeviesNotes);
 
         }
 
@@ -584,6 +594,9 @@ namespace Astrodon.Controls
             chkSpecialIncY.Checked = chkSunAssN.Checked = chkSunAssY.Checked = chkSunLiaN.Checked = chkSunLiaY.Checked = chkTelExpN.Checked = chkTelExpY.Checked = chkWaterOver.Checked = false;
             chkTrustAssN.Checked = chkTrustAssY.Checked = chkWaterExpN.Checked = chkWaterExpY.Checked = chkWaterIncN.Checked = chkWaterIncY.Checked = chkWaterInline.Checked = false;
 
+            chkCSOSLeviesExpN.Checked = chkCSOSLeviesExpY.Checked = chkEDCSOSLevies.Checked = chkEPCSOSLevies.Checked = false;
+
+
             txtAccountFees.Text = txtAccruals.Text = txtAssets.Text = txtBankCharges.Text = txtBankIncome.Text = txtDebtors.Text = txtDeliveries.Text = String.Empty;
             txtDomesticIncome.Text = txtDomExpense.Text = txtElectricity.Text = txtElectricityIncome.Text = txtGardens.Text = txtInsurance.Text = txtInterest.Text = String.Empty;
             txtInterestIncome.Text = txtInvestment.Text = txtLevies.Text = txtLiabilities.Text = txtManagementFees.Text = txtMeter.Text = txtMunAcc.Text = String.Empty;
@@ -595,11 +608,14 @@ namespace Astrodon.Controls
         private void PopulateCheckList(int? accExp, int? bankExp, int? bankInc, int? debtLia, int? delExp, int? domExp, int? domInc, int? elecExp, int? elecInc, int? elecRecover,
             int? levies, int? gardensExp, int? insExp, int? intExp, int? intInc, int? invAss, int? manExp, int? meterExp, int? munAss, int? munLia, int? otherAss, int? otherInc,
             int? otherLia, int? ownAss, int? ownLia, int? postExp, int? printExp, int? refuseExp, int? repairExp, int? salExp, int? secExp, int? specialInc, int? sunAss,
-            int? sunLia, int? telExp, int? trustAss, int? waterExp, int? waterInc, int? waterRecover, String accountFees, String accruals, String assets, String bankCharges, String bankIncome,
+            int? sunLia, int? telExp, int? trustAss, int? waterExp, int? waterInc, int? waterRecover, 
+            int? csosLeviesExp,
+            String accountFees, String accruals, String assets, String bankCharges, String bankIncome,
             String debtors, String deliveries, String domIncome, String domExpense, String electricity, String elecIncome, String gardens, String insurance, String interest,
             String intIncome, String investment, String leviesReason, String liabilities, String manFees, String meter, String muniAcc, String muniDep, String otherIncome,
             String ownAccount, String ownerDeposits, String post, String printing, String refuse, String repairs, String salaries, String security, String specialIncome,
-            String suppliers, String telephone, String trust, String water, String waterIncome)
+            String suppliers, String telephone, String trust, String water, String waterIncome,
+            string csosLeviesComment)
         {
             #region Checkboxes
 
@@ -676,8 +692,12 @@ namespace Astrodon.Controls
             chkTelExpY.Checked = telExp == 1;
             chkTrustAssN.Checked = trustAss == 2;
             chkTrustAssY.Checked = trustAss == 1;
+
             chkWaterExpN.Checked = waterExp == 2;
             chkWaterExpY.Checked = waterExp == 1;
+            chkCSOSLeviesExpN.Checked = csosLeviesExp == 2;
+            chkCSOSLeviesExpY.Checked = csosLeviesExp == 1;
+
             chkWaterIncN.Checked = waterInc == 2;
             chkWaterIncY.Checked = waterInc == 1;
             chkWaterInline.Checked = waterRecover == 1;
@@ -723,16 +743,20 @@ namespace Astrodon.Controls
             txtTrust.Text = trust;
             txtWater.Text = water;
             txtWaterIncome.Text = waterIncome;
+            txtCSOSLevies.Text = csosLeviesComment;
         }
 
         private void PopulatePrevCheckList(bool hasValues, int?accExp, int?bankExp, int?bankInc, int?debtLia, int?delExp, int?domExp, int?domInc, int?elecExp, int?elecInc, int?elecRecover,
             int?levies, int?gardensExp, int?insExp, int?intExp, int?intInc, int?invAss, int?manExp, int?meterExp, int?munAss, int?munLia, int?otherAss, int?otherInc,
             int?otherLia, int?ownAss, int?ownLia, int?postExp, int?printExp, int?refuseExp, int?repairExp, int?salExp, int?secExp, int?specialInc, int?sunAss,
-            int?sunLia, int?telExp, int?trustAss, int?waterExp, int?waterInc, int?waterRecover, String accountFees, String accruals, String assets, String bankCharges, String bankIncome,
+            int?sunLia, int?telExp, int?trustAss, int?waterExp, int?waterInc, int?waterRecover,
+            int? csosLeviesExp,
+            String accountFees, String accruals, String assets, String bankCharges, String bankIncome,
             String debtors, String deliveries, String domIncome, String domExpense, String electricity, String elecIncome, String gardens, String insurance, String interest,
             String intIncome, String investment, String leviesReason, String liabilities, String manFees, String meter, String muniAcc, String muniDep, String otherIncome,
             String ownAccount, String ownerDeposits, String post, String printing, String refuse, String repairs, String salaries, String security, String specialIncome,
-            String suppliers, String telephone, String trust, String water, String waterIncome)
+            String suppliers, String telephone, String trust, String water, String waterIncome,
+            string csosLeviesComment)
         {
             #region Checkboxes
 
@@ -773,6 +797,7 @@ namespace Astrodon.Controls
             txtPrevTelephone.Text = (telExp == 1 ? "Y" : "N");
             txtPrevTrust.Text = (trustAss == 1 ? "Y" : "N");
             txtPrevWater.Text = (waterExp == 1 ? "Y" : "N");
+            txtPrevCSOSLevies.Text = (csosLeviesExp == 1 ? "Y" : "N");
 
             #region Old Values
 
@@ -894,6 +919,7 @@ namespace Astrodon.Controls
             txtPrevTelNotes.Text = telephone;
             txtPrevTrustNotes.Text = trust;
             txtPrevWaterExpNotes.Text = water;
+            txtPrevCSOSLeviesExpNotes.Text = csosLeviesComment;
 
             #endregion Checkboxes
         }
@@ -1042,10 +1068,50 @@ namespace Astrodon.Controls
                     itm.CheckListPDF = pdfReport;
                     context.SaveChanges();
 
+                    ProcessEmail(pdfReport);
 
                     MessageBox.Show("Record saved!");
                 }
             }
+        }
+
+        private void ProcessEmail(byte[] attachment)
+        {
+            Building building = buildings[cmbBuilding.SelectedIndex];
+            string pmEmail = building.PM;
+            string debtorEmail = building.Debtor;
+
+            string toEmail = pmEmail;
+
+            if (cbEmailTo.SelectedIndex == 1)
+                toEmail = debtorEmail;
+            else if (cbEmailTo.SelectedIndex == 2)
+                toEmail = debtorEmail + ";" + pmEmail;
+
+            var attachmentList = new List<Tuple<string, byte[]>>();
+            attachmentList.Add(new Tuple<string, byte[]>("FinancialReport.pdf", attachment));
+            string subject = building.Name + " " + cmbFinPeriod.SelectedItem.ToString() + "/" + cmbYear.SelectedItem.ToString();
+
+            string cced = "";
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var q = from u in context.tblUsers
+                        where u.ProcessCheckLists == true && u.Active == true
+                        select u.email;
+
+                foreach (var email in q.ToList())
+                {
+                    if (!String.IsNullOrWhiteSpace(email) && !toEmail.Contains(email))
+                    {
+                        if (!String.IsNullOrWhiteSpace(cced))
+                            cced = cced + ";" + email;
+                        else
+                            cced = email;
+                    }
+                }
+            }
+
+            OutlookEmail.SendEmail(toEmail, cced, "tertia@astrodon.co.za", "Financial Report - " + subject, txtComments.Text, attachmentList);
         }
 
         private int ValidateWeekendOrPublicHoliday(int day, DataContext context)
@@ -1133,156 +1199,180 @@ namespace Astrodon.Controls
 
         private void btnEmailPM_Click(object sender, EventArgs e)
         {
-            String message = "Queries regarding financials for " + cmbBuilding.Text + " for period " + cmbFinPeriod.SelectedItem.ToString() + "/" + cmbYear.SelectedItem.ToString() + Environment.NewLine + Environment.NewLine;
-            if (chkEPLevies.Checked || chkEPDomInc.Checked || chkEPElecInc.Checked || chkEPWaterInc.Checked || chkEPSpecialInc.Checked || chkEPOtherInc.Checked || chkEPIntInc.Checked || chkEPBankInc.Checked)
-            {
-                message += "Income Statement - Income" + Environment.NewLine;
-                if (chkEPLevies.Checked) { message += "Levies: provision - " + (chkLeviesIncY.Checked ? "Y" : (chkLeviesIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtLevies.Text + Environment.NewLine; }
-                if (chkEPDomInc.Checked) { message += "Domestic Effluent Recovery: provision - " + (this.chkDomExpY.Checked ? "Y" : (chkDomExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDomesticIncome.Text + Environment.NewLine; }
-                if (chkEPElecInc.Checked) { message += "Electricity Recovery: provision - " + (chkElecIncY.Checked ? "Y" : (chkElecIncN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtElectricityIncome.Text + Environment.NewLine; }
-                if (chkEPWaterInc.Checked) { message += "Water Recovery: provision - " + (chkWaterIncY.Checked ? "Y" : (chkWaterIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtWaterIncome.Text + Environment.NewLine; }
-                if (chkEPSpecialInc.Checked) { message += "Special Levies: provision - " + (this.chkSpecialIncY.Checked ? "Y" : (chkSpecialIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtSpecialIncome.Text + Environment.NewLine; }
-                if (chkEPOtherInc.Checked) { message += "Any other income accounts to be noted: provision - " + (chkOtherIncY.Checked ? "Y" : (chkOtherIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtOtherIncome.Text + Environment.NewLine; }
-                if (chkEPIntInc.Checked) { message += "Interest from members: provision - " + (chkIntIncY.Checked ? "Y" : (chkIntIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtInterestIncome.Text + Environment.NewLine; }
-                if (chkEPBankInc.Checked) { message += "Interest from bank investments: provision - " + (chkBankIncY.Checked ? "Y" : (chkBankIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtBankIncome.Text + Environment.NewLine; }
-            }
-            if (chkEPWater.Checked || chkEPTel.Checked || chkEPSec.Checked || chkEPSal.Checked || chkEPRefuse.Checked || chkEPRepairs.Checked || chkEPPost.Checked || chkEPPrint.Checked ||
-                chkEPMeter.Checked || chkEPMan.Checked || chkEPIntExp.Checked || chkEPIns.Checked || chkEPGardens.Checked || chkEPElec.Checked || chkEPDel.Checked || chkEPDomExp.Checked ||
-                chkEPBank.Checked || chkEPAcc.Checked)
-            {
-                message += Environment.NewLine + Environment.NewLine + "Income Statement - Expenses";
-                if (chkEPWater.Checked) { message += "Water expense: provision - " + (chkWaterExpY.Checked ? "Y" : (chkWaterExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtWater.Text + Environment.NewLine; }
-                if (chkEPTel.Checked) { message += "Telephone expense: provision - " + (chkTelExpY.Checked ? "Y" : (chkTelExpY.Checked ? "N" : "N/A")) + "; Notes - " + txtTelephone.Text + Environment.NewLine; }
-                if (chkEPSec.Checked) { message += "Security expense: provision - " + (chkSecExpY.Checked ? "Y" : (chkSecExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtSecurity.Text + Environment.NewLine; }
-                if (chkEPSal.Checked) { message += "Salaries & Wages expense: provision - " + (chkSalExpY.Checked ? "Y" : (chkSalExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtSalaries.Text + Environment.NewLine; }
-                if (chkEPRefuse.Checked) { message += "Refuse removal expense: provision - " + (this.chkRefuseExpY.Checked ? "Y" : (chkRefuseExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtRefuse.Text + Environment.NewLine; }
-                if (chkEPRepairs.Checked) { message += "Repairs & Maintenance expense: provision - " + (chkRepairsExpY.Checked ? "Y" : (chkRepairsExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtRepairs.Text + Environment.NewLine; }
-                if (chkEPPost.Checked) { message += "Post & petties expense: provision - " + (chkPostExpY.Checked ? "Y" : (chkPostExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtPost.Text + Environment.NewLine; }
-                if (chkEPPrint.Checked) { message += "Printing & stationery expense: provision - " + (chkPrintExpY.Checked ? "Y" : (chkPrintExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtPrinting.Text + Environment.NewLine; }
-                if (chkEPMeter.Checked) { message += "Meter reading expense: provision - " + (chkMeterExpY.Checked ? "Y" : (chkMeterExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtMeter.Text + Environment.NewLine; }
-                if (chkEPMan.Checked) { message += "Management fees expense: provision - " + (chkManExpY.Checked ? "Y" : (chkManExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtManagementFees.Text + Environment.NewLine; }
-                if (chkEPIntExp.Checked) { message += "Interest paid expense: provision - " + (chkIntExpY.Checked ? "Y" : (chkIntExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtInterest.Text + Environment.NewLine; }
-                if (chkEPIns.Checked) { message += "Insurance expense: provision - " + (chkInsExpY.Checked ? "Y" : (chkInsExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtInsurance.Text + Environment.NewLine; }
-                if (chkEPGardens.Checked) { message += "Gardens expense: provision - " + (chkGardensExpY.Checked ? "Y" : (chkGardensExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtGardens.Text + Environment.NewLine; }
-                if (chkEPElec.Checked) { message += "Electricity expense: provision - " + (chkElecExpY.Checked ? "Y" : (chkElecExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtElectricity.Text + Environment.NewLine; }
-                if (chkEPDel.Checked) { message += "Deliveries expense: provision - " + (chkDelExpY.Checked ? "Y" : (chkDelExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtDeliveries.Text + Environment.NewLine; }
-                if (chkEPDomExp.Checked) { message += "Domestic effluent expense: provision - " + (chkDomExpY.Checked ? "Y" : (chkDomExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDomExpense.Text + Environment.NewLine; }
-                if (chkEPBank.Checked) { message += "Bank charges: provision - " + (chkBankExpY.Checked ? "Y" : (chkBankExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtBankCharges.Text + Environment.NewLine; }
-                if (chkEPAcc.Checked) { message += "Accounting fees: provision - " + (chkAccExpY.Checked ? "Y" : (chkAccExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAccountFees.Text + Environment.NewLine; }
-            }
-            if (chkEPMunDep.Checked || chkEPTrust.Checked || chkEPOwn.Checked || chkEPInv.Checked || chkEPSunAss.Checked || chkEPAss.Checked)
-            {
-                message += Environment.NewLine + Environment.NewLine + "Balance Sheet - Assets" + Environment.NewLine;
-                if (chkEPMunDep.Checked) { message += "Municipal deposits: provision - " + (this.chkMunAssetY.Checked ? "Y" : (chkMunAssetN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtMunDep.Text + Environment.NewLine; }
-                if (chkEPTrust.Checked) { message += "Trust Account: provision - " + (this.chkTrustAssY.Checked ? "Y" : (chkTrustAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtTrust.Text + Environment.NewLine; }
-                if (chkEPOwn.Checked) { message += "Own Account: provision - " + (this.chkOwnAccAssY.Checked ? "Y" : (chkOwnAccAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtOwnAccount.Text + Environment.NewLine; }
-                if (chkEPInv.Checked) { message += "Investment Account: provision - " + (this.chkInvestAssY.Checked ? "Y" : (chkInvestAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtInvestment.Text + Environment.NewLine; }
-                if (chkEPSunAss.Checked) { message += "Sundry Assets: provision - " + (this.chkSunAssY.Checked ? "Y" : (chkSunAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAccruals.Text + Environment.NewLine; }
-                if (chkEPAss.Checked) { message += "Other Assets: provision - " + (this.chkOtherAssY.Checked ? "Y" : (chkOtherAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAssets.Text + Environment.NewLine; }
-            }
-            if (chkEPDebtors.Checked || chkEPMunAcc.Checked || chkEPOwnDep.Checked || chkEPSunLia.Checked || chkEPLia.Checked)
-            {
-                message += Environment.NewLine + Environment.NewLine + "Balance Sheet - Liabilities" + Environment.NewLine;
-                if (chkEPDebtors.Checked) { message += "Debtors: provision - " + (this.chkDebtLiaY.Checked ? "Y" : (chkDebtLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDebtors.Text + Environment.NewLine; }
-                if (chkEPMunAcc.Checked) { message += "Municipal Accounts: provision - " + (this.chkMunLiaY.Checked ? "Y" : (chkMunLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtMunAcc.Text + Environment.NewLine; }
-                if (chkEPOwnDep.Checked) { message += "Owners Deposits: provision - " + (this.chkOwnLiaY.Checked ? "Y" : (chkOwnLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtOwnerDep.Text + Environment.NewLine; }
-                if (chkEPSunLia.Checked) { message += "Sundry suppliers: provision - " + (this.chkSunLiaY.Checked ? "Y" : (chkSunLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtSuppliers.Text + Environment.NewLine; }
-                if (chkEPLia.Checked) { message += "Other liabilities: provision - " + (this.chkOtherLiaY.Checked ? "Y" : (chkOtherLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtLiabilities.Text + Environment.NewLine; }
-            }
-            message += Environment.NewLine + Environment.NewLine + "Recoveries" + Environment.NewLine;
-            message += "Water:" + (chkWaterInline.Checked ? "Inline" : (chkWaterOver.Checked ? "Over recovery" : "Under recovery")) + Environment.NewLine;
-            message += "Electricity:" + Environment.NewLine;
-            message += Environment.NewLine + Environment.NewLine + "Comments" + Environment.NewLine;
-            message += txtComments.Text;
-            Building building = buildings[cmbBuilding.SelectedIndex];
-            String pmEmail = building.PM;
-            String status;
-            // MessageBox.Show(message);
-            if (Mailer.SendMail(Controller.user.email, new string[] { pmEmail }, "Financial Report Query", message, false, true, false, out status, new String[0]))
-            {
-                MessageBox.Show("Message sent");
-            }
-            else
-            {
-                MessageBox.Show("Message not sent: " + status);
-            }
+            //byte[] attachment = CreateExcel(true);
+
+            //String message = "Queries regarding financials for " + cmbBuilding.Text + " for period " + cmbFinPeriod.SelectedItem.ToString() + "/" + cmbYear.SelectedItem.ToString() + Environment.NewLine + Environment.NewLine;
+            //if (chkEPLevies.Checked || chkEPDomInc.Checked || chkEPElecInc.Checked || chkEPWaterInc.Checked || chkEPSpecialInc.Checked || chkEPOtherInc.Checked || chkEPIntInc.Checked || chkEPBankInc.Checked)
+            //{
+            //    message += "Income Statement - Income" + Environment.NewLine;
+            //    if (chkEPLevies.Checked) { message += "Levies: provision - " + (chkLeviesIncY.Checked ? "Y" : (chkLeviesIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtLevies.Text + Environment.NewLine; }
+            //    if (chkEPDomInc.Checked) { message += "Domestic Effluent Recovery: provision - " + (this.chkDomExpY.Checked ? "Y" : (chkDomExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDomesticIncome.Text + Environment.NewLine; }
+            //    if (chkEPElecInc.Checked) { message += "Electricity Recovery: provision - " + (chkElecIncY.Checked ? "Y" : (chkElecIncN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtElectricityIncome.Text + Environment.NewLine; }
+            //    if (chkEPWaterInc.Checked) { message += "Water Recovery: provision - " + (chkWaterIncY.Checked ? "Y" : (chkWaterIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtWaterIncome.Text + Environment.NewLine; }
+            //    if (chkEPSpecialInc.Checked) { message += "Special Levies: provision - " + (this.chkSpecialIncY.Checked ? "Y" : (chkSpecialIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtSpecialIncome.Text + Environment.NewLine; }
+            //    if (chkEPOtherInc.Checked) { message += "Any other income accounts to be noted: provision - " + (chkOtherIncY.Checked ? "Y" : (chkOtherIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtOtherIncome.Text + Environment.NewLine; }
+            //    if (chkEPIntInc.Checked) { message += "Interest from members: provision - " + (chkIntIncY.Checked ? "Y" : (chkIntIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtInterestIncome.Text + Environment.NewLine; }
+            //    if (chkEPBankInc.Checked) { message += "Interest from bank investments: provision - " + (chkBankIncY.Checked ? "Y" : (chkBankIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtBankIncome.Text + Environment.NewLine; }
+            //}
+            //if (chkEPWater.Checked || chkEPTel.Checked || chkEPSec.Checked || chkEPSal.Checked || chkEPRefuse.Checked || chkEPRepairs.Checked || chkEPPost.Checked || chkEPPrint.Checked ||
+            //    chkEPMeter.Checked || chkEPMan.Checked || chkEPIntExp.Checked || chkEPIns.Checked || chkEPGardens.Checked || chkEPElec.Checked || chkEPDel.Checked || chkEPDomExp.Checked ||
+            //    chkEPBank.Checked || chkEPAcc.Checked || chkEPCSOSLevies.Checked)
+            //{
+            //    message += Environment.NewLine + Environment.NewLine + "Income Statement - Expenses";
+            //    if (chkEPWater.Checked) { message += "Water expense: provision - " + (chkWaterExpY.Checked ? "Y" : (chkWaterExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtWater.Text + Environment.NewLine; }
+            //    if (chkEPCSOSLevies.Checked) { message += "CSOS levies: provision - " + (chkCSOSLeviesExpY.Checked ? "Y" : (chkCSOSLeviesExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtCSOSLevies.Text + Environment.NewLine; }
+            //    if (chkEPTel.Checked) { message += "Telephone expense: provision - " + (chkTelExpY.Checked ? "Y" : (chkTelExpY.Checked ? "N" : "N/A")) + "; Notes - " + txtTelephone.Text + Environment.NewLine; }
+            //    if (chkEPSec.Checked) { message += "Security expense: provision - " + (chkSecExpY.Checked ? "Y" : (chkSecExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtSecurity.Text + Environment.NewLine; }
+            //    if (chkEPSal.Checked) { message += "Salaries & Wages expense: provision - " + (chkSalExpY.Checked ? "Y" : (chkSalExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtSalaries.Text + Environment.NewLine; }
+            //    if (chkEPRefuse.Checked) { message += "Refuse removal expense: provision - " + (this.chkRefuseExpY.Checked ? "Y" : (chkRefuseExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtRefuse.Text + Environment.NewLine; }
+            //    if (chkEPRepairs.Checked) { message += "Repairs & Maintenance expense: provision - " + (chkRepairsExpY.Checked ? "Y" : (chkRepairsExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtRepairs.Text + Environment.NewLine; }
+            //    if (chkEPPost.Checked) { message += "Post & petties expense: provision - " + (chkPostExpY.Checked ? "Y" : (chkPostExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtPost.Text + Environment.NewLine; }
+            //    if (chkEPPrint.Checked) { message += "Printing & stationery expense: provision - " + (chkPrintExpY.Checked ? "Y" : (chkPrintExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtPrinting.Text + Environment.NewLine; }
+            //    if (chkEPMeter.Checked) { message += "Meter reading expense: provision - " + (chkMeterExpY.Checked ? "Y" : (chkMeterExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtMeter.Text + Environment.NewLine; }
+            //    if (chkEPMan.Checked) { message += "Management fees expense: provision - " + (chkManExpY.Checked ? "Y" : (chkManExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtManagementFees.Text + Environment.NewLine; }
+            //    if (chkEPIntExp.Checked) { message += "Interest paid expense: provision - " + (chkIntExpY.Checked ? "Y" : (chkIntExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtInterest.Text + Environment.NewLine; }
+            //    if (chkEPIns.Checked) { message += "Insurance expense: provision - " + (chkInsExpY.Checked ? "Y" : (chkInsExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtInsurance.Text + Environment.NewLine; }
+            //    if (chkEPGardens.Checked) { message += "Gardens expense: provision - " + (chkGardensExpY.Checked ? "Y" : (chkGardensExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtGardens.Text + Environment.NewLine; }
+            //    if (chkEPElec.Checked) { message += "Electricity expense: provision - " + (chkElecExpY.Checked ? "Y" : (chkElecExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtElectricity.Text + Environment.NewLine; }
+            //    if (chkEPDel.Checked) { message += "Deliveries expense: provision - " + (chkDelExpY.Checked ? "Y" : (chkDelExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtDeliveries.Text + Environment.NewLine; }
+            //    if (chkEPDomExp.Checked) { message += "Domestic effluent expense: provision - " + (chkDomExpY.Checked ? "Y" : (chkDomExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDomExpense.Text + Environment.NewLine; }
+            //    if (chkEPBank.Checked) { message += "Bank charges: provision - " + (chkBankExpY.Checked ? "Y" : (chkBankExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtBankCharges.Text + Environment.NewLine; }
+            //    if (chkEPAcc.Checked) { message += "Accounting fees: provision - " + (chkAccExpY.Checked ? "Y" : (chkAccExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAccountFees.Text + Environment.NewLine; }
+            //}
+            //if (chkEPMunDep.Checked || chkEPTrust.Checked || chkEPOwn.Checked || chkEPInv.Checked || chkEPSunAss.Checked || chkEPAss.Checked)
+            //{
+            //    message += Environment.NewLine + Environment.NewLine + "Balance Sheet - Assets" + Environment.NewLine;
+            //    if (chkEPMunDep.Checked) { message += "Municipal deposits: provision - " + (this.chkMunAssetY.Checked ? "Y" : (chkMunAssetN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtMunDep.Text + Environment.NewLine; }
+            //    if (chkEPTrust.Checked) { message += "Trust Account: provision - " + (this.chkTrustAssY.Checked ? "Y" : (chkTrustAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtTrust.Text + Environment.NewLine; }
+            //    if (chkEPOwn.Checked) { message += "Own Account: provision - " + (this.chkOwnAccAssY.Checked ? "Y" : (chkOwnAccAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtOwnAccount.Text + Environment.NewLine; }
+            //    if (chkEPInv.Checked) { message += "Investment Account: provision - " + (this.chkInvestAssY.Checked ? "Y" : (chkInvestAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtInvestment.Text + Environment.NewLine; }
+            //    if (chkEPSunAss.Checked) { message += "Sundry Assets: provision - " + (this.chkSunAssY.Checked ? "Y" : (chkSunAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAccruals.Text + Environment.NewLine; }
+            //    if (chkEPAss.Checked) { message += "Other Assets: provision - " + (this.chkOtherAssY.Checked ? "Y" : (chkOtherAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAssets.Text + Environment.NewLine; }
+            //}
+            //if (chkEPDebtors.Checked || chkEPMunAcc.Checked || chkEPOwnDep.Checked || chkEPSunLia.Checked || chkEPLia.Checked)
+            //{
+            //    message += Environment.NewLine + Environment.NewLine + "Balance Sheet - Liabilities" + Environment.NewLine;
+            //    if (chkEPDebtors.Checked) { message += "Debtors: provision - " + (this.chkDebtLiaY.Checked ? "Y" : (chkDebtLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDebtors.Text + Environment.NewLine; }
+            //    if (chkEPMunAcc.Checked) { message += "Municipal Accounts: provision - " + (this.chkMunLiaY.Checked ? "Y" : (chkMunLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtMunAcc.Text + Environment.NewLine; }
+            //    if (chkEPOwnDep.Checked) { message += "Owners Deposits: provision - " + (this.chkOwnLiaY.Checked ? "Y" : (chkOwnLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtOwnerDep.Text + Environment.NewLine; }
+            //    if (chkEPSunLia.Checked) { message += "Sundry suppliers: provision - " + (this.chkSunLiaY.Checked ? "Y" : (chkSunLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtSuppliers.Text + Environment.NewLine; }
+            //    if (chkEPLia.Checked) { message += "Other liabilities: provision - " + (this.chkOtherLiaY.Checked ? "Y" : (chkOtherLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtLiabilities.Text + Environment.NewLine; }
+            //}
+            //message += Environment.NewLine + Environment.NewLine + "Recoveries" + Environment.NewLine;
+            //message += "Water:" + (chkWaterInline.Checked ? "Inline" : (chkWaterOver.Checked ? "Over recovery" : "Under recovery")) + Environment.NewLine;
+            //message += "Electricity:" + Environment.NewLine;
+            //message += Environment.NewLine + Environment.NewLine + "Comments" + Environment.NewLine;
+            //message += txtComments.Text;
+            //Building building = buildings[cmbBuilding.SelectedIndex];
+            //String pmEmail = building.PM;
+
+            //var attachmentList = new List<Tuple<string, byte[]>>();
+            //attachmentList.Add(new Tuple<string, byte[]>("FinancialReport.pdf", attachment));
+            //string subject = building.Name + " " + cmbFinPeriod.SelectedItem.ToString() + "/" + cmbYear.SelectedItem.ToString();
+
+            //string cced = "";
+            //using (var context = SqlDataHandler.GetDataContext())
+            //{
+            //    var q = from u in context.tblUsers
+            //            where u.ProcessCheckLists && u.Active
+            //            select u.email;
+
+            //    foreach(var email in q.ToList())
+            //    {
+            //        if(!String.IsNullOrWhiteSpace(email) && email != pmEmail)
+            //        {
+            //            if (!String.IsNullOrWhiteSpace(cced))
+            //                cced = cced + ";" + email;
+            //            else
+            //                cced = email;
+            //        }
+            //    }
+            //}
+
+            //OutlookEmail.SendEmail(pmEmail, cced,"", "Financial Report Query - " + subject, message, attachmentList);
+
         }
 
         private void btnEmailDebtor_Click(object sender, EventArgs e)
         {
-            String message = "Queries regarding financials for " + cmbBuilding.Text + " for period " + cmbFinPeriod.SelectedItem.ToString() + "/" + cmbYear.SelectedItem.ToString() + Environment.NewLine + Environment.NewLine;
-            if (chkEDLevies.Checked || chkEDDomInc.Checked || chkEDElecInc.Checked || chkEDWaterInc.Checked || chkEDSpecialInc.Checked || chkEDOtherInc.Checked || chkEDIntInc.Checked || chkEDBankInc.Checked)
-            {
-                message += "Income Statement - Income" + Environment.NewLine;
-                if (chkEDLevies.Checked) { message += "Levies: provision - " + (chkLeviesIncY.Checked ? "Y" : (chkLeviesIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtLevies.Text + Environment.NewLine; }
-                if (chkEDDomInc.Checked) { message += "Domestic Effluent Recovery: provision - " + (this.chkDomExpY.Checked ? "Y" : (chkDomExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDomesticIncome.Text + Environment.NewLine; }
-                if (chkEDElecInc.Checked) { message += "Electricity Recovery: provision - " + (chkElecIncY.Checked ? "Y" : (chkElecIncN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtElectricityIncome.Text + Environment.NewLine; }
-                if (chkEDWaterInc.Checked) { message += "Water Recovery: provision - " + (chkWaterIncY.Checked ? "Y" : (chkWaterIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtWaterIncome.Text + Environment.NewLine; }
-                if (chkEDSpecialInc.Checked) { message += "Special Levies: provision - " + (this.chkSpecialIncY.Checked ? "Y" : (chkSpecialIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtSpecialIncome.Text + Environment.NewLine; }
-                if (chkEDOtherInc.Checked) { message += "Any other income accounts to be noted: provision - " + (chkOtherIncY.Checked ? "Y" : (chkOtherIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtOtherIncome.Text + Environment.NewLine; }
-                if (chkEDIntInc.Checked) { message += "Interest from members: provision - " + (chkIntIncY.Checked ? "Y" : (chkIntIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtInterestIncome.Text + Environment.NewLine; }
-                if (chkEDBankInc.Checked) { message += "Interest from bank investments: provision - " + (chkBankIncY.Checked ? "Y" : (chkBankIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtBankIncome.Text + Environment.NewLine; }
-            }
-            if (chkEDWater.Checked || chkEDTel.Checked || chkEDSec.Checked || chkEDSal.Checked || chkEDRefuse.Checked || chkEDRepairs.Checked || chkEDPost.Checked || chkEDPrint.Checked ||
-    chkEDMeter.Checked || chkEDMan.Checked || chkEDIntExp.Checked || chkEDIns.Checked || chkEDGardens.Checked || chkEDElec.Checked || chkEDDel.Checked || chkEDDomExp.Checked ||
-    chkEDBank.Checked || chkEDAcc.Checked)
-            {
-                message += Environment.NewLine + Environment.NewLine + "Income Statement - Expenses";
-                if (chkEDWater.Checked) { message += "Water expense: provision - " + (chkWaterExpY.Checked ? "Y" : (chkWaterExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtWater.Text + Environment.NewLine; }
-                if (chkEDTel.Checked) { message += "Telephone expense: provision - " + (chkTelExpY.Checked ? "Y" : (chkTelExpY.Checked ? "N" : "N/A")) + "; Notes - " + txtTelephone.Text + Environment.NewLine; }
-                if (chkEDSec.Checked) { message += "Security expense: provision - " + (chkSecExpY.Checked ? "Y" : (chkSecExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtSecurity.Text + Environment.NewLine; }
-                if (chkEDSal.Checked) { message += "Salaries & Wages expense: provision - " + (chkSalExpY.Checked ? "Y" : (chkSalExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtSalaries.Text + Environment.NewLine; }
-                if (chkEDRefuse.Checked) { message += "Refuse removal expense: provision - " + (this.chkRefuseExpY.Checked ? "Y" : (chkRefuseExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtRefuse.Text + Environment.NewLine; }
-                if (chkEDRepairs.Checked) { message += "Repairs & Maintenance expense: provision - " + (chkRepairsExpY.Checked ? "Y" : (chkRepairsExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtRepairs.Text + Environment.NewLine; }
-                if (chkEDPost.Checked) { message += "Post & petties expense: provision - " + (chkPostExpY.Checked ? "Y" : (chkPostExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtPost.Text + Environment.NewLine; }
-                if (chkEDPrint.Checked) { message += "Printing & stationery expense: provision - " + (chkPrintExpY.Checked ? "Y" : (chkPrintExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtPrinting.Text + Environment.NewLine; }
-                if (chkEDMeter.Checked) { message += "Meter reading expense: provision - " + (chkMeterExpY.Checked ? "Y" : (chkMeterExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtMeter.Text + Environment.NewLine; }
-                if (chkEDMan.Checked) { message += "Management fees expense: provision - " + (chkManExpY.Checked ? "Y" : (chkManExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtManagementFees.Text + Environment.NewLine; }
-                if (chkEDIntExp.Checked) { message += "Interest paid expense: provision - " + (chkIntExpY.Checked ? "Y" : (chkIntExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtInterest.Text + Environment.NewLine; }
-                if (chkEDIns.Checked) { message += "Insurance expense: provision - " + (chkInsExpY.Checked ? "Y" : (chkInsExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtInsurance.Text + Environment.NewLine; }
-                if (chkEDGardens.Checked) { message += "Gardens expense: provision - " + (chkGardensExpY.Checked ? "Y" : (chkGardensExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtGardens.Text + Environment.NewLine; }
-                if (chkEDElec.Checked) { message += "Electricity expense: provision - " + (chkElecExpY.Checked ? "Y" : (chkElecExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtElectricity.Text + Environment.NewLine; }
-                if (chkEDDel.Checked) { message += "Deliveries expense: provision - " + (chkDelExpY.Checked ? "Y" : (chkDelExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtDeliveries.Text + Environment.NewLine; }
-                if (chkEDDomExp.Checked) { message += "Domestic effluent expense: provision - " + (chkDomExpY.Checked ? "Y" : (chkDomExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDomExpense.Text + Environment.NewLine; }
-                if (chkEDBank.Checked) { message += "Bank charges: provision - " + (chkBankExpY.Checked ? "Y" : (chkBankExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtBankCharges.Text + Environment.NewLine; }
-                if (chkEDAcc.Checked) { message += "Accounting fees: provision - " + (chkAccExpY.Checked ? "Y" : (chkAccExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAccountFees.Text + Environment.NewLine; }
-            }
-            if (chkEDMunDep.Checked || chkEDTrust.Checked || chkEDOwn.Checked || chkEDInv.Checked || chkEDSunAss.Checked || chkEDAss.Checked)
-            {
-                message += Environment.NewLine + Environment.NewLine + "Balance Sheet - Assets" + Environment.NewLine;
-                if (chkEDMunDep.Checked) { message += "Municipal deposits: provision - " + (this.chkMunAssetY.Checked ? "Y" : (chkMunAssetN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtMunDep.Text + Environment.NewLine; }
-                if (chkEDTrust.Checked) { message += "Trust Account: provision - " + (this.chkTrustAssY.Checked ? "Y" : (chkTrustAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtTrust.Text + Environment.NewLine; }
-                if (chkEDOwn.Checked) { message += "Own Account: provision - " + (this.chkOwnAccAssY.Checked ? "Y" : (chkOwnAccAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtOwnAccount.Text + Environment.NewLine; }
-                if (chkEDInv.Checked) { message += "Investment Account: provision - " + (this.chkInvestAssY.Checked ? "Y" : (chkInvestAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtInvestment.Text + Environment.NewLine; }
-                if (chkEDSunAss.Checked) { message += "Sundry Assets: provision - " + (this.chkSunAssY.Checked ? "Y" : (chkSunAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAccruals.Text + Environment.NewLine; }
-                if (chkEDAss.Checked) { message += "Other Assets: provision - " + (this.chkOtherAssY.Checked ? "Y" : (chkOtherAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAssets.Text + Environment.NewLine; }
-            }
-            if (chkEDDebtors.Checked || chkEDMunAcc.Checked || chkEDOwnDep.Checked || chkEDSunLia.Checked || chkEDLia.Checked)
-            {
-                message += Environment.NewLine + Environment.NewLine + "Balance Sheet - Liabilities" + Environment.NewLine;
-                if (chkEDDebtors.Checked) { message += "Debtors: provision - " + (this.chkDebtLiaY.Checked ? "Y" : (chkDebtLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDebtors.Text + Environment.NewLine; }
-                if (chkEDMunAcc.Checked) { message += "Municipal Accounts: provision - " + (this.chkMunLiaY.Checked ? "Y" : (chkMunLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtMunAcc.Text + Environment.NewLine; }
-                if (chkEDOwnDep.Checked) { message += "Owners Deposits: provision - " + (this.chkOwnLiaY.Checked ? "Y" : (chkOwnLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtOwnerDep.Text + Environment.NewLine; }
-                if (chkEDSunLia.Checked) { message += "Sundry suppliers: provision - " + (this.chkSunLiaY.Checked ? "Y" : (chkSunLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtSuppliers.Text + Environment.NewLine; }
-                if (chkEDLia.Checked) { message += "Other liabilities: provision - " + (this.chkOtherLiaY.Checked ? "Y" : (chkOtherLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtLiabilities.Text + Environment.NewLine; }
-            }
-            message += Environment.NewLine + Environment.NewLine + "Recoveries" + Environment.NewLine;
-            message += "Water:" + (chkWaterInline.Checked ? "Inline" : (chkWaterOver.Checked ? "Over recovery" : "Under recovery")) + Environment.NewLine;
-            message += "Electricity:" + Environment.NewLine;
-            message += Environment.NewLine + Environment.NewLine + "Comments" + Environment.NewLine;
-            message += txtComments.Text;
+            //byte[] attachment = CreateExcel(true);
 
-            Building building = buildings[cmbBuilding.SelectedIndex];
-            String pmEmail = building.Debtor;
-            String status;
-            if (Mailer.SendMail(Controller.user.email, new string[] { pmEmail }, "Financial Report Query", message, false, true, false, out status, new String[0]))
-            {
-                MessageBox.Show("Message sent");
-            }
-            else
-            {
-                MessageBox.Show("Message not sent: " + status);
-            }
+            //String message = "Queries regarding financials for " + cmbBuilding.Text + " for period " + cmbFinPeriod.SelectedItem.ToString() + "/" + cmbYear.SelectedItem.ToString() + Environment.NewLine + Environment.NewLine;
+            //if (chkEDLevies.Checked || chkEDDomInc.Checked || chkEDElecInc.Checked || chkEDWaterInc.Checked || chkEDSpecialInc.Checked || chkEDOtherInc.Checked || chkEDIntInc.Checked 
+            //    || chkEDBankInc.Checked)
+            //{
+            //    message += "Income Statement - Income" + Environment.NewLine;
+            //    if (chkEDLevies.Checked) { message += "Levies: provision - " + (chkLeviesIncY.Checked ? "Y" : (chkLeviesIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtLevies.Text + Environment.NewLine; }
+            //    if (chkEDDomInc.Checked) { message += "Domestic Effluent Recovery: provision - " + (this.chkDomExpY.Checked ? "Y" : (chkDomExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDomesticIncome.Text + Environment.NewLine; }
+            //    if (chkEDElecInc.Checked) { message += "Electricity Recovery: provision - " + (chkElecIncY.Checked ? "Y" : (chkElecIncN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtElectricityIncome.Text + Environment.NewLine; }
+            //    if (chkEDWaterInc.Checked) { message += "Water Recovery: provision - " + (chkWaterIncY.Checked ? "Y" : (chkWaterIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtWaterIncome.Text + Environment.NewLine; }
+            //    if (chkEDSpecialInc.Checked) { message += "Special Levies: provision - " + (this.chkSpecialIncY.Checked ? "Y" : (chkSpecialIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtSpecialIncome.Text + Environment.NewLine; }
+            //    if (chkEDOtherInc.Checked) { message += "Any other income accounts to be noted: provision - " + (chkOtherIncY.Checked ? "Y" : (chkOtherIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtOtherIncome.Text + Environment.NewLine; }
+            //    if (chkEDIntInc.Checked) { message += "Interest from members: provision - " + (chkIntIncY.Checked ? "Y" : (chkIntIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtInterestIncome.Text + Environment.NewLine; }
+            //    if (chkEDBankInc.Checked) { message += "Interest from bank investments: provision - " + (chkBankIncY.Checked ? "Y" : (chkBankIncN.Checked ? "N" : "N/A")) + "; Notes - " + txtBankIncome.Text + Environment.NewLine; }
+            //}
+            //if (chkEDWater.Checked || chkEDTel.Checked || chkEDSec.Checked || chkEDSal.Checked || chkEDRefuse.Checked || chkEDRepairs.Checked || chkEDPost.Checked || chkEDPrint.Checked ||
+            //    chkEDMeter.Checked || chkEDMan.Checked || chkEDIntExp.Checked || chkEDIns.Checked || chkEDGardens.Checked || chkEDElec.Checked || chkEDDel.Checked || chkEDDomExp.Checked ||
+            //    chkEDBank.Checked || chkEDAcc.Checked || chkEDCSOSLevies.Checked 
+            //    )
+            //{
+            //    message += Environment.NewLine + Environment.NewLine + "Income Statement - Expenses";
+            //    if (chkEDWater.Checked) { message += "Water expense: provision - " + (chkWaterExpY.Checked ? "Y" : (chkWaterExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtWater.Text + Environment.NewLine; }
+            //    if (chkEDCSOSLevies.Checked) { message += "CSOS Levies expense: provision - " + (chkCSOSLeviesExpY.Checked ? "Y" : (chkCSOSLeviesExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtCSOSLevies.Text + Environment.NewLine; }
+            //    if (chkEDTel.Checked) { message += "Telephone expense: provision - " + (chkTelExpY.Checked ? "Y" : (chkTelExpY.Checked ? "N" : "N/A")) + "; Notes - " + txtTelephone.Text + Environment.NewLine; }
+            //    if (chkEDSec.Checked) { message += "Security expense: provision - " + (chkSecExpY.Checked ? "Y" : (chkSecExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtSecurity.Text + Environment.NewLine; }
+            //    if (chkEDSal.Checked) { message += "Salaries & Wages expense: provision - " + (chkSalExpY.Checked ? "Y" : (chkSalExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtSalaries.Text + Environment.NewLine; }
+            //    if (chkEDRefuse.Checked) { message += "Refuse removal expense: provision - " + (this.chkRefuseExpY.Checked ? "Y" : (chkRefuseExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtRefuse.Text + Environment.NewLine; }
+            //    if (chkEDRepairs.Checked) { message += "Repairs & Maintenance expense: provision - " + (chkRepairsExpY.Checked ? "Y" : (chkRepairsExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtRepairs.Text + Environment.NewLine; }
+            //    if (chkEDPost.Checked) { message += "Post & petties expense: provision - " + (chkPostExpY.Checked ? "Y" : (chkPostExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtPost.Text + Environment.NewLine; }
+            //    if (chkEDPrint.Checked) { message += "Printing & stationery expense: provision - " + (chkPrintExpY.Checked ? "Y" : (chkPrintExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtPrinting.Text + Environment.NewLine; }
+            //    if (chkEDMeter.Checked) { message += "Meter reading expense: provision - " + (chkMeterExpY.Checked ? "Y" : (chkMeterExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtMeter.Text + Environment.NewLine; }
+            //    if (chkEDMan.Checked) { message += "Management fees expense: provision - " + (chkManExpY.Checked ? "Y" : (chkManExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtManagementFees.Text + Environment.NewLine; }
+            //    if (chkEDIntExp.Checked) { message += "Interest paid expense: provision - " + (chkIntExpY.Checked ? "Y" : (chkIntExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtInterest.Text + Environment.NewLine; }
+            //    if (chkEDIns.Checked) { message += "Insurance expense: provision - " + (chkInsExpY.Checked ? "Y" : (chkInsExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtInsurance.Text + Environment.NewLine; }
+            //    if (chkEDGardens.Checked) { message += "Gardens expense: provision - " + (chkGardensExpY.Checked ? "Y" : (chkGardensExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtGardens.Text + Environment.NewLine; }
+            //    if (chkEDElec.Checked) { message += "Electricity expense: provision - " + (chkElecExpY.Checked ? "Y" : (chkElecExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtElectricity.Text + Environment.NewLine; }
+            //    if (chkEDDel.Checked) { message += "Deliveries expense: provision - " + (chkDelExpY.Checked ? "Y" : (chkDelExpN.Checked ? "N" : "N/A")) + "; Notes - " + txtDeliveries.Text + Environment.NewLine; }
+            //    if (chkEDDomExp.Checked) { message += "Domestic effluent expense: provision - " + (chkDomExpY.Checked ? "Y" : (chkDomExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDomExpense.Text + Environment.NewLine; }
+            //    if (chkEDBank.Checked) { message += "Bank charges: provision - " + (chkBankExpY.Checked ? "Y" : (chkBankExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtBankCharges.Text + Environment.NewLine; }
+            //    if (chkEDAcc.Checked) { message += "Accounting fees: provision - " + (chkAccExpY.Checked ? "Y" : (chkAccExpN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAccountFees.Text + Environment.NewLine; }
+            //}
+            //if (chkEDMunDep.Checked || chkEDTrust.Checked || chkEDOwn.Checked || chkEDInv.Checked || chkEDSunAss.Checked || chkEDAss.Checked)
+            //{
+            //    message += Environment.NewLine + Environment.NewLine + "Balance Sheet - Assets" + Environment.NewLine;
+            //    if (chkEDMunDep.Checked) { message += "Municipal deposits: provision - " + (this.chkMunAssetY.Checked ? "Y" : (chkMunAssetN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtMunDep.Text + Environment.NewLine; }
+            //    if (chkEDTrust.Checked) { message += "Trust Account: provision - " + (this.chkTrustAssY.Checked ? "Y" : (chkTrustAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtTrust.Text + Environment.NewLine; }
+            //    if (chkEDOwn.Checked) { message += "Own Account: provision - " + (this.chkOwnAccAssY.Checked ? "Y" : (chkOwnAccAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtOwnAccount.Text + Environment.NewLine; }
+            //    if (chkEDInv.Checked) { message += "Investment Account: provision - " + (this.chkInvestAssY.Checked ? "Y" : (chkInvestAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtInvestment.Text + Environment.NewLine; }
+            //    if (chkEDSunAss.Checked) { message += "Sundry Assets: provision - " + (this.chkSunAssY.Checked ? "Y" : (chkSunAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAccruals.Text + Environment.NewLine; }
+            //    if (chkEDAss.Checked) { message += "Other Assets: provision - " + (this.chkOtherAssY.Checked ? "Y" : (chkOtherAssN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtAssets.Text + Environment.NewLine; }
+            //}
+            //if (chkEDDebtors.Checked || chkEDMunAcc.Checked || chkEDOwnDep.Checked || chkEDSunLia.Checked || chkEDLia.Checked)
+            //{
+            //    message += Environment.NewLine + Environment.NewLine + "Balance Sheet - Liabilities" + Environment.NewLine;
+            //    if (chkEDDebtors.Checked) { message += "Debtors: provision - " + (this.chkDebtLiaY.Checked ? "Y" : (chkDebtLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtDebtors.Text + Environment.NewLine; }
+            //    if (chkEDMunAcc.Checked) { message += "Municipal Accounts: provision - " + (this.chkMunLiaY.Checked ? "Y" : (chkMunLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtMunAcc.Text + Environment.NewLine; }
+            //    if (chkEDOwnDep.Checked) { message += "Owners Deposits: provision - " + (this.chkOwnLiaY.Checked ? "Y" : (chkOwnLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtOwnerDep.Text + Environment.NewLine; }
+            //    if (chkEDSunLia.Checked) { message += "Sundry suppliers: provision - " + (this.chkSunLiaY.Checked ? "Y" : (chkSunLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtSuppliers.Text + Environment.NewLine; }
+            //    if (chkEDLia.Checked) { message += "Other liabilities: provision - " + (this.chkOtherLiaY.Checked ? "Y" : (chkOtherLiaN.Checked ? "N" : "N/A")) + "; Notes - " + this.txtLiabilities.Text + Environment.NewLine; }
+            //}
+            //message += Environment.NewLine + Environment.NewLine + "Recoveries" + Environment.NewLine;
+            //message += "Water:" + (chkWaterInline.Checked ? "Inline" : (chkWaterOver.Checked ? "Over recovery" : "Under recovery")) + Environment.NewLine;
+            //message += "Electricity:" + Environment.NewLine;
+            //message += Environment.NewLine + Environment.NewLine + "Comments" + Environment.NewLine;
+            //message += txtComments.Text;
+
+            //Building building = buildings[cmbBuilding.SelectedIndex];
+            //String pmEmail = building.Debtor;
+            //String status;
+            //if (Mailer.SendMail(Controller.user.email, new string[] { pmEmail }, "Financial Report Query", message, false, true, false, out status, new String[0]))
+            //{
+            //    MessageBox.Show("Message sent");
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Message not sent: " + status);
+            //}
         }
 
         private byte[] CreateExcel(bool createPDF = false)
@@ -1474,146 +1564,174 @@ namespace Astrodon.Controls
                 ws.Cells[32, "C"].Value2 = this.chkWaterExpY.Checked ? "X" : "";
                 ws.Cells[32, "D"].Value2 = chkWaterExpN.Checked ? "X" : "";
                 ws.Cells[32, "E"].Value2 = this.txtWater.Text;
-                Excel.Range rexp = ws.get_Range("A15", "E32");
+
+                ws.Cells[33, "A"].Value2 = "19";
+                ws.Cells[33, "B"].Value2 = "CSOS Levies";
+                ws.Cells[33, "C"].Value2 = this.chkCSOSLeviesExpY.Checked ? "X" : "";
+                ws.Cells[33, "D"].Value2 = chkCSOSLeviesExpN.Checked ? "X" : "";
+                ws.Cells[33, "E"].Value2 = this.txtCSOSLevies.Text;
+
+                Excel.Range rexp = ws.get_Range("A15", "E33");
                 rexp.Borders.Color = System.Drawing.Color.Black.ToArgb();
 
                 #endregion Expenses
 
                 #region Assets
+                int row = 34;
+                ws.Cells[row, "B"].Value2 = "Balance Sheet - Assets";
+                ws.Cells[row, "C"].Value2 = "Yes";
+                ws.Cells[row, "D"].Value2 = "No";
+                ws.Cells[row, "E"].Value2 = "Reason";
+                ws.Cells[row, "A"].EntireRow.Font.Bold = true;
+                row++;
+                ws.Cells[row, "A"].Value2 = "1";
+                ws.Cells[row, "B"].Value2 = "Municipal deposit verified against council account";
+                ws.Cells[row, "C"].Value2 = this.chkMunAssetY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkMunAssetN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtMunDep.Text;
+                row++;
+                ws.Cells[row, "A"].Value2 = "2";
+                ws.Cells[row, "B"].Value2 = "Trust account balance verified";
+                ws.Cells[row, "C"].Value2 = this.chkTrustAssY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkTrustAssN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtTrust.Text;
+                row++;
+                ws.Cells[row, "A"].Value2 = "3";
+                ws.Cells[row, "B"].Value2 = "Own account balance verified against statement";
+                ws.Cells[row, "C"].Value2 = this.chkOwnAccAssY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkOwnAccAssN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtOwnAccount.Text;
+                row++;
 
-                ws.Cells[33, "B"].Value2 = "Balance Sheet - Assets";
-                ws.Cells[33, "C"].Value2 = "Yes";
-                ws.Cells[33, "D"].Value2 = "No";
-                ws.Cells[33, "E"].Value2 = "Reason";
-                ws.Cells[33, "A"].EntireRow.Font.Bold = true;
-
-                ws.Cells[34, "A"].Value2 = "1";
-                ws.Cells[34, "B"].Value2 = "Municipal deposit verified against council account";
-                ws.Cells[34, "C"].Value2 = this.chkMunAssetY.Checked ? "X" : "";
-                ws.Cells[34, "D"].Value2 = chkMunAssetN.Checked ? "X" : "";
-                ws.Cells[34, "E"].Value2 = this.txtMunDep.Text;
-                ws.Cells[35, "A"].Value2 = "2";
-                ws.Cells[35, "B"].Value2 = "Trust account balance verified";
-                ws.Cells[35, "C"].Value2 = this.chkTrustAssY.Checked ? "X" : "";
-                ws.Cells[35, "D"].Value2 = chkTrustAssN.Checked ? "X" : "";
-                ws.Cells[35, "E"].Value2 = this.txtTrust.Text;
-                ws.Cells[36, "A"].Value2 = "3";
-                ws.Cells[36, "B"].Value2 = "Own account balance verified against statement";
-                ws.Cells[36, "C"].Value2 = this.chkOwnAccAssY.Checked ? "X" : "";
-                ws.Cells[36, "D"].Value2 = chkOwnAccAssN.Checked ? "X" : "";
-                ws.Cells[36, "E"].Value2 = this.txtOwnAccount.Text;
-                ws.Cells[37, "A"].Value2 = "4";
-                ws.Cells[37, "B"].Value2 = "Investment account balance verified against statement";
-                ws.Cells[37, "C"].Value2 = this.chkInvestAssY.Checked ? "X" : "";
-                ws.Cells[37, "D"].Value2 = chkInvestAssN.Checked ? "X" : "";
-                ws.Cells[37, "E"].Value2 = this.txtInvestment.Text;
-                ws.Cells[38, "A"].Value2 = "5";
-                ws.Cells[38, "B"].Value2 = "Sundry accruals verified";
-                ws.Cells[38, "C"].Value2 = this.chkSunAssY.Checked ? "X" : "";
-                ws.Cells[38, "D"].Value2 = chkSunAssN.Checked ? "X" : "";
-                ws.Cells[38, "E"].Value2 = this.txtAccruals.Text;
-                ws.Cells[39, "A"].Value2 = "6";
-                ws.Cells[39, "B"].Value2 = "Any other assets to be noted";
-                ws.Cells[39, "C"].Value2 = this.chkOtherAssY.Checked ? "X" : "";
-                ws.Cells[39, "D"].Value2 = chkOtherAssN.Checked ? "X" : "";
-                ws.Cells[39, "E"].Value2 = this.txtAssets.Text;
-                Excel.Range rass = ws.get_Range("A34", "E39");
+                ws.Cells[row, "A"].Value2 = "4";
+                ws.Cells[row, "B"].Value2 = "Investment account balance verified against statement";
+                ws.Cells[row, "C"].Value2 = this.chkInvestAssY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkInvestAssN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtInvestment.Text;
+                row++;
+                ws.Cells[row, "A"].Value2 = "5";
+                ws.Cells[row, "B"].Value2 = "Sundry accruals verified";
+                ws.Cells[row, "C"].Value2 = this.chkSunAssY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkSunAssN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtAccruals.Text;
+                row++;
+                ws.Cells[row, "A"].Value2 = "6";
+                ws.Cells[row, "B"].Value2 = "Any other assets to be noted";
+                ws.Cells[row, "C"].Value2 = this.chkOtherAssY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkOtherAssN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtAssets.Text;
+                Excel.Range rass = ws.get_Range("A34", "E"+row.ToString());
                 rass.Borders.Color = System.Drawing.Color.Black.ToArgb();
+
+                row++;
 
                 #endregion Assets
 
                 #region Liabilities
 
-                ws.Cells[40, "B"].Value2 = "Balance Sheet - Liabilities";
-                ws.Cells[40, "C"].Value2 = "Yes";
-                ws.Cells[40, "D"].Value2 = "No";
-                ws.Cells[40, "E"].Value2 = "Reason";
-                ws.Cells[40, "A"].EntireRow.Font.Bold = true;
+                ws.Cells[row, "B"].Value2 = "Balance Sheet - Liabilities";
+                ws.Cells[row, "C"].Value2 = "Yes";
+                ws.Cells[row, "D"].Value2 = "No";
+                ws.Cells[row, "E"].Value2 = "Reason";
+                ws.Cells[row, "A"].EntireRow.Font.Bold = true;
+                row++;
+                ws.Cells[row, "A"].Value2 = "1";
+                ws.Cells[row, "B"].Value2 = "Verification of debtors";
+                ws.Cells[row, "C"].Value2 = this.chkDebtLiaY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkDebtLiaN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtDebtors.Text;
+                row++;
 
-                ws.Cells[41, "A"].Value2 = "1";
-                ws.Cells[41, "B"].Value2 = "Verification of debtors";
-                ws.Cells[41, "C"].Value2 = this.chkDebtLiaY.Checked ? "X" : "";
-                ws.Cells[41, "D"].Value2 = chkDebtLiaN.Checked ? "X" : "";
-                ws.Cells[41, "E"].Value2 = this.txtDebtors.Text;
-                ws.Cells[42, "A"].Value2 = "2";
-                ws.Cells[42, "B"].Value2 = "Verification of municipal accounts - all payments reflect";
-                ws.Cells[42, "C"].Value2 = this.chkMunLiaY.Checked ? "X" : "";
-                ws.Cells[42, "D"].Value2 = chkMunLiaN.Checked ? "X" : "";
-                ws.Cells[42, "E"].Value2 = this.txtMunAcc.Text;
-                ws.Cells[43, "A"].Value2 = "3";
-                ws.Cells[43, "B"].Value2 = "Verification of owners deposits - note any changes";
-                ws.Cells[43, "C"].Value2 = this.chkOwnLiaY.Checked ? "X" : "";
-                ws.Cells[43, "D"].Value2 = chkOwnLiaN.Checked ? "X" : "";
-                ws.Cells[43, "E"].Value2 = this.txtOwnerDep.Text;
-                ws.Cells[44, "A"].Value2 = "4";
-                ws.Cells[44, "B"].Value2 = "Sundry suppliers verified";
-                ws.Cells[44, "C"].Value2 = this.chkSunLiaY.Checked ? "X" : "";
-                ws.Cells[44, "D"].Value2 = chkSunLiaN.Checked ? "X" : "";
-                ws.Cells[44, "E"].Value2 = this.txtSuppliers.Text;
-                ws.Cells[45, "A"].Value2 = "5";
-                ws.Cells[45, "B"].Value2 = "Any other liabilities to be noted";
-                ws.Cells[45, "C"].Value2 = this.chkOtherLiaY.Checked ? "X" : "";
-                ws.Cells[45, "D"].Value2 = chkOtherLiaN.Checked ? "X" : "";
-                ws.Cells[45, "E"].Value2 = this.txtLiabilities.Text;
-                Excel.Range rlia = ws.get_Range("A41", "E45");
+                ws.Cells[row, "A"].Value2 = "2";
+                ws.Cells[row, "B"].Value2 = "Verification of municipal accounts - all payments reflect";
+                ws.Cells[row, "C"].Value2 = this.chkMunLiaY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkMunLiaN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtMunAcc.Text;
+                row++;
+
+                ws.Cells[row, "A"].Value2 = "3";
+                ws.Cells[row, "B"].Value2 = "Verification of owners deposits - note any changes";
+                ws.Cells[row, "C"].Value2 = this.chkOwnLiaY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkOwnLiaN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtOwnerDep.Text;
+                row++;
+
+                ws.Cells[row, "A"].Value2 = "4";
+                ws.Cells[row, "B"].Value2 = "Sundry suppliers verified";
+                ws.Cells[row, "C"].Value2 = this.chkSunLiaY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkSunLiaN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtSuppliers.Text;
+                row++;
+
+                ws.Cells[row, "A"].Value2 = "5";
+                ws.Cells[row, "B"].Value2 = "Any other liabilities to be noted";
+                ws.Cells[row, "C"].Value2 = this.chkOtherLiaY.Checked ? "X" : "";
+                ws.Cells[row, "D"].Value2 = chkOtherLiaN.Checked ? "X" : "";
+                ws.Cells[row, "E"].Value2 = this.txtLiabilities.Text;
+                Excel.Range rlia = ws.get_Range("A41", "E" + row.ToString());
                 rlia.Borders.Color = System.Drawing.Color.Black.ToArgb();
+                row++;
 
                 #endregion Liabilities
 
                 #region Recoveries
 
-                ws.Cells[46, "B"].Value2 = "Recoveries v Expense";
-                ws.Cells[46, "A"].EntireRow.Font.Bold = true;
-
-                ws.Cells[47, "A"].Value2 = "1";
-                ws.Cells[47, "B"].Value2 = "Electricity";
+                ws.Cells[row, "B"].Value2 = "Recoveries v Expense";
+                ws.Cells[row, "A"].EntireRow.Font.Bold = true;
+                row++;
+                ws.Cells[row, "A"].Value2 = "1";
+                ws.Cells[row, "B"].Value2 = "Electricity";
                 if (chkElecUnder.Checked)
                 {
-                    ws.Cells[47, "C"].Value2 = "Under Recovery";
+                    ws.Cells[row, "C"].Value2 = "Under Recovery";
                 }
                 else if (chkElecOver.Checked)
                 {
-                    ws.Cells[47, "C"].Value2 = "Over Recovery";
+                    ws.Cells[row, "C"].Value2 = "Over Recovery";
                 }
                 else
                 {
-                    ws.Cells[47, "C"].Value2 = "In Line";
+                    ws.Cells[row, "C"].Value2 = "In Line";
                 }
-                ws.get_Range("C47", "E47").Merge(Type.Missing);
-                ws.Cells[48, "A"].Value2 = "2";
-                ws.Cells[48, "B"].Value2 = "Water";
+                ws.get_Range("C"+row.ToString(), "E"+ row.ToString()).Merge(Type.Missing);
+                row++;
+
+                ws.Cells[row, "A"].Value2 = "2";
+                ws.Cells[row, "B"].Value2 = "Water";
                 if (chkWaterUnder.Checked)
                 {
-                    ws.Cells[48, "C"].Value2 = "Under Recovery";
+                    ws.Cells[row, "C"].Value2 = "Under Recovery";
                 }
                 else if (chkWaterOver.Checked)
                 {
-                    ws.Cells[48, "C"].Value2 = "Over Recovery";
+                    ws.Cells[row, "C"].Value2 = "Over Recovery";
                 }
                 else
                 {
-                    ws.Cells[48, "C"].Value2 = "In Line";
+                    ws.Cells[row, "C"].Value2 = "In Line";
                 }
-                ws.get_Range("C48", "E48").Merge(Type.Missing);
-                Excel.Range rrec = ws.get_Range("A47", "E48");
+                ws.get_Range("C"+ row.ToString(), "E"+row.ToString()).Merge(Type.Missing);
+                Excel.Range rrec = ws.get_Range("A"+row.ToString(), "E"+row.ToString());
                 rrec.Borders.Color = System.Drawing.Color.Black.ToArgb();
-
+                row++;
                 #endregion Recoveries
 
                 if (!string.IsNullOrWhiteSpace(txtComments.Text))
                 {
                     #region Comments
-                    ws.Cells[49, "B"].Value2 = "COMMENTS";
-                    ws.Cells[49, "A"].EntireRow.Font.Bold = true;
+                    ws.Cells[row, "B"].Value2 = "COMMENTS";
+                    ws.Cells[row, "A"].EntireRow.Font.Bold = true;
+                    row++;
 
-                    ws.get_Range("B50", "E52").Merge(Type.Missing);
-                    ws.get_Range("B50", "E52").WrapText = true;
+                    ws.get_Range("B"+row.ToString(), "E" + (row+2).ToString()).Merge(Type.Missing);
+                    ws.get_Range("B" + row.ToString(), "E" + (row+2).ToString()).WrapText = true;
 
                     ws.Cells[50, "B"].Value2 = txtComments.Text;
                     #endregion
                 }
                 ws.Rows.AutoFit();
                 ws.Columns.AutoFit();
+                row = row + 2;
 
                 ws.PageSetup.Zoom = false;
                 ws.PageSetup.FitToPagesWide = 1;

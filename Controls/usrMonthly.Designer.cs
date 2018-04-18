@@ -370,6 +370,16 @@
             this.btnPrint = new System.Windows.Forms.Button();
             this.txtComments = new System.Windows.Forms.TextBox();
             this.label67 = new System.Windows.Forms.Label();
+            this.chkEPCSOSLevies = new System.Windows.Forms.CheckBox();
+            this.chkEDCSOSLevies = new System.Windows.Forms.CheckBox();
+            this.txtPrevCSOSLevies = new System.Windows.Forms.TextBox();
+            this.txtPrevCSOSLeviesExpNotes = new System.Windows.Forms.TextBox();
+            this.chkCSOSLeviesExpN = new System.Windows.Forms.CheckBox();
+            this.chkCSOSLeviesExpY = new System.Windows.Forms.CheckBox();
+            this.txtCSOSLevies = new System.Windows.Forms.TextBox();
+            this.label68 = new System.Windows.Forms.Label();
+            this.cbEmailTo = new System.Windows.Forms.ComboBox();
+            this.lbEmail = new System.Windows.Forms.Label();
             this.tbBuilding.SuspendLayout();
             this.tbIncome.SuspendLayout();
             this.tbExpenses.SuspendLayout();
@@ -459,7 +469,7 @@
             this.tbBuilding.Location = new System.Drawing.Point(16, 32);
             this.tbBuilding.Name = "tbBuilding";
             this.tbBuilding.SelectedIndex = 0;
-            this.tbBuilding.Size = new System.Drawing.Size(1206, 554);
+            this.tbBuilding.Size = new System.Drawing.Size(1206, 572);
             this.tbBuilding.TabIndex = 6;
             // 
             // tbIncome
@@ -1158,6 +1168,14 @@
             // 
             // tbExpenses
             // 
+            this.tbExpenses.Controls.Add(this.chkEPCSOSLevies);
+            this.tbExpenses.Controls.Add(this.chkEDCSOSLevies);
+            this.tbExpenses.Controls.Add(this.txtPrevCSOSLevies);
+            this.tbExpenses.Controls.Add(this.txtPrevCSOSLeviesExpNotes);
+            this.tbExpenses.Controls.Add(this.chkCSOSLeviesExpN);
+            this.tbExpenses.Controls.Add(this.chkCSOSLeviesExpY);
+            this.tbExpenses.Controls.Add(this.txtCSOSLevies);
+            this.tbExpenses.Controls.Add(this.label68);
             this.tbExpenses.Controls.Add(this.chkEPWater);
             this.tbExpenses.Controls.Add(this.chkEPTel);
             this.tbExpenses.Controls.Add(this.chkEDWater);
@@ -1311,7 +1329,7 @@
             this.tbExpenses.Location = new System.Drawing.Point(4, 22);
             this.tbExpenses.Name = "tbExpenses";
             this.tbExpenses.Padding = new System.Windows.Forms.Padding(3);
-            this.tbExpenses.Size = new System.Drawing.Size(1198, 528);
+            this.tbExpenses.Size = new System.Drawing.Size(1198, 546);
             this.tbExpenses.TabIndex = 1;
             this.tbExpenses.Text = "Income Statement - Expenses";
             this.tbExpenses.UseVisualStyleBackColor = true;
@@ -3732,7 +3750,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(1064, 605);
+            this.btnSave.Location = new System.Drawing.Point(1064, 623);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 7;
@@ -3742,7 +3760,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(1145, 605);
+            this.btnReset.Location = new System.Drawing.Point(1145, 623);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
             this.btnReset.TabIndex = 8;
@@ -3752,27 +3770,29 @@
             // 
             // btnEmailDebtor
             // 
-            this.btnEmailDebtor.Location = new System.Drawing.Point(982, 605);
+            this.btnEmailDebtor.Location = new System.Drawing.Point(642, 661);
             this.btnEmailDebtor.Name = "btnEmailDebtor";
             this.btnEmailDebtor.Size = new System.Drawing.Size(76, 23);
             this.btnEmailDebtor.TabIndex = 52;
             this.btnEmailDebtor.Text = "Email Debtor";
             this.btnEmailDebtor.UseVisualStyleBackColor = true;
+            this.btnEmailDebtor.Visible = false;
             this.btnEmailDebtor.Click += new System.EventHandler(this.btnEmailDebtor_Click);
             // 
             // btnEmailPM
             // 
-            this.btnEmailPM.Location = new System.Drawing.Point(900, 605);
+            this.btnEmailPM.Location = new System.Drawing.Point(560, 661);
             this.btnEmailPM.Name = "btnEmailPM";
             this.btnEmailPM.Size = new System.Drawing.Size(76, 23);
             this.btnEmailPM.TabIndex = 53;
             this.btnEmailPM.Text = "Email PM";
             this.btnEmailPM.UseVisualStyleBackColor = true;
+            this.btnEmailPM.Visible = false;
             this.btnEmailPM.Click += new System.EventHandler(this.btnEmailPM_Click);
             // 
             // btnPrint
             // 
-            this.btnPrint.Location = new System.Drawing.Point(818, 605);
+            this.btnPrint.Location = new System.Drawing.Point(810, 682);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(76, 23);
             this.btnPrint.TabIndex = 54;
@@ -3782,7 +3802,7 @@
             // 
             // txtComments
             // 
-            this.txtComments.Location = new System.Drawing.Point(16, 605);
+            this.txtComments.Location = new System.Drawing.Point(16, 623);
             this.txtComments.Multiline = true;
             this.txtComments.Name = "txtComments";
             this.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -3792,16 +3812,110 @@
             // label67
             // 
             this.label67.AutoSize = true;
-            this.label67.Location = new System.Drawing.Point(13, 589);
+            this.label67.Location = new System.Drawing.Point(13, 607);
             this.label67.Name = "label67";
             this.label67.Size = new System.Drawing.Size(56, 13);
             this.label67.TabIndex = 56;
             this.label67.Text = "Comments";
             // 
+            // chkEPCSOSLevies
+            // 
+            this.chkEPCSOSLevies.AutoSize = true;
+            this.chkEPCSOSLevies.Location = new System.Drawing.Point(648, 516);
+            this.chkEPCSOSLevies.Name = "chkEPCSOSLevies";
+            this.chkEPCSOSLevies.Size = new System.Drawing.Size(15, 14);
+            this.chkEPCSOSLevies.TabIndex = 246;
+            this.chkEPCSOSLevies.UseVisualStyleBackColor = true;
+            // 
+            // chkEDCSOSLevies
+            // 
+            this.chkEDCSOSLevies.AutoSize = true;
+            this.chkEDCSOSLevies.Location = new System.Drawing.Point(601, 516);
+            this.chkEDCSOSLevies.Name = "chkEDCSOSLevies";
+            this.chkEDCSOSLevies.Size = new System.Drawing.Size(15, 14);
+            this.chkEDCSOSLevies.TabIndex = 245;
+            this.chkEDCSOSLevies.UseVisualStyleBackColor = true;
+            // 
+            // txtPrevCSOSLevies
+            // 
+            this.txtPrevCSOSLevies.Location = new System.Drawing.Point(675, 514);
+            this.txtPrevCSOSLevies.Name = "txtPrevCSOSLevies";
+            this.txtPrevCSOSLevies.ReadOnly = true;
+            this.txtPrevCSOSLevies.Size = new System.Drawing.Size(60, 20);
+            this.txtPrevCSOSLevies.TabIndex = 244;
+            // 
+            // txtPrevCSOSLeviesExpNotes
+            // 
+            this.txtPrevCSOSLeviesExpNotes.Location = new System.Drawing.Point(749, 514);
+            this.txtPrevCSOSLeviesExpNotes.Name = "txtPrevCSOSLeviesExpNotes";
+            this.txtPrevCSOSLeviesExpNotes.ReadOnly = true;
+            this.txtPrevCSOSLeviesExpNotes.Size = new System.Drawing.Size(357, 20);
+            this.txtPrevCSOSLeviesExpNotes.TabIndex = 243;
+            // 
+            // chkCSOSLeviesExpN
+            // 
+            this.chkCSOSLeviesExpN.AutoSize = true;
+            this.chkCSOSLeviesExpN.Location = new System.Drawing.Point(201, 515);
+            this.chkCSOSLeviesExpN.Name = "chkCSOSLeviesExpN";
+            this.chkCSOSLeviesExpN.Size = new System.Drawing.Size(15, 14);
+            this.chkCSOSLeviesExpN.TabIndex = 242;
+            this.chkCSOSLeviesExpN.UseVisualStyleBackColor = true;
+            this.chkCSOSLeviesExpN.CheckedChanged += new System.EventHandler(this.chkBankIncN_CheckedChanged);
+            // 
+            // chkCSOSLeviesExpY
+            // 
+            this.chkCSOSLeviesExpY.AutoSize = true;
+            this.chkCSOSLeviesExpY.Location = new System.Drawing.Point(176, 515);
+            this.chkCSOSLeviesExpY.Name = "chkCSOSLeviesExpY";
+            this.chkCSOSLeviesExpY.Size = new System.Drawing.Size(15, 14);
+            this.chkCSOSLeviesExpY.TabIndex = 241;
+            this.chkCSOSLeviesExpY.UseVisualStyleBackColor = true;
+            this.chkCSOSLeviesExpY.CheckedChanged += new System.EventHandler(this.chkBankIncN_CheckedChanged);
+            // 
+            // txtCSOSLevies
+            // 
+            this.txtCSOSLevies.Location = new System.Drawing.Point(222, 513);
+            this.txtCSOSLevies.Name = "txtCSOSLevies";
+            this.txtCSOSLevies.Size = new System.Drawing.Size(357, 20);
+            this.txtCSOSLevies.TabIndex = 240;
+            // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.Location = new System.Drawing.Point(12, 516);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(70, 13);
+            this.label68.TabIndex = 239;
+            this.label68.Text = "CSOS Levies";
+            // 
+            // cbEmailTo
+            // 
+            this.cbEmailTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbEmailTo.FormattingEnabled = true;
+            this.cbEmailTo.Items.AddRange(new object[] {
+            "PM",
+            "Debtor",
+            "Both"});
+            this.cbEmailTo.Location = new System.Drawing.Point(899, 625);
+            this.cbEmailTo.Name = "cbEmailTo";
+            this.cbEmailTo.Size = new System.Drawing.Size(159, 21);
+            this.cbEmailTo.TabIndex = 57;
+            // 
+            // lbEmail
+            // 
+            this.lbEmail.AutoSize = true;
+            this.lbEmail.Location = new System.Drawing.Point(810, 628);
+            this.lbEmail.Name = "lbEmail";
+            this.lbEmail.Size = new System.Drawing.Size(86, 13);
+            this.lbEmail.TabIndex = 58;
+            this.lbEmail.Text = "Email Report To:";
+            // 
             // usrMonthly
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbEmail);
+            this.Controls.Add(this.cbEmailTo);
             this.Controls.Add(this.label67);
             this.Controls.Add(this.txtComments);
             this.Controls.Add(this.btnPrint);
@@ -4184,5 +4298,15 @@
         private System.Windows.Forms.Label label66;
         private System.Windows.Forms.TextBox txtComments;
         private System.Windows.Forms.Label label67;
+        private System.Windows.Forms.CheckBox chkEPCSOSLevies;
+        private System.Windows.Forms.CheckBox chkEDCSOSLevies;
+        private System.Windows.Forms.TextBox txtPrevCSOSLevies;
+        private System.Windows.Forms.TextBox txtPrevCSOSLeviesExpNotes;
+        private System.Windows.Forms.CheckBox chkCSOSLeviesExpN;
+        private System.Windows.Forms.CheckBox chkCSOSLeviesExpY;
+        private System.Windows.Forms.TextBox txtCSOSLevies;
+        private System.Windows.Forms.Label label68;
+        private System.Windows.Forms.ComboBox cbEmailTo;
+        private System.Windows.Forms.Label lbEmail;
     }
 }
