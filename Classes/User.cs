@@ -12,8 +12,8 @@ namespace Astrodon
     {
         public User GetUser(String username, String password, out User user, out String status)
         {
-            user = new User();
-            String loginQuery = "SELECT id, admin, email, name, phone, fax, usertype, pmSignature FROM tblUsers WHERE BINARY_CHECKSUM(username) = BINARY_CHECKSUM(@username)";
+            user = new User(); 
+            String loginQuery = "SELECT id, admin, email, name, phone, fax, usertype, pmSignature FROM tblUsers WHERE Active=1 and BINARY_CHECKSUM(username) = BINARY_CHECKSUM(@username)";
             loginQuery += " AND BINARY_CHECKSUM(password) = BINARY_CHECKSUM(@password)";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@username", username);
@@ -52,7 +52,7 @@ namespace Astrodon
         public User GetUser(String email, out User user, out String status)
         {
             user = new User();
-            String loginQuery = "SELECT id, admin, email, name, phone, fax, usertype, pmSignature FROM tblUsers WHERE email = @email";
+            String loginQuery = "SELECT id, admin, email, name, phone, fax, usertype, pmSignature FROM tblUsers WHERE email = @email and Active = 1";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@email", email);
             SqlDataHandler dh = new SqlDataHandler();
@@ -80,7 +80,7 @@ namespace Astrodon
         public User GetUser(int id)
         {
             User user = new User();
-            String loginQuery = "SELECT * FROM tblUsers WHERE id = " + id.ToString();
+            String loginQuery = "SELECT * FROM tblUsers WHERE Active = 1 and id = " + id.ToString();
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             SqlDataHandler dh = new SqlDataHandler();
             String status;
@@ -119,7 +119,7 @@ namespace Astrodon
             User user = new User();
             String loginQuery = "SELECT DISTINCT u.id, u.admin, u.email, u.name, u.phone, u.fax, u.usertype, u.username, u.password";
             loginQuery += " FROM tblUserBuildings ub INNER JOIN tblUsers u ON ub.userid = u.id INNER JOIN tblBuildings b ON ub.buildingid = b.id";
-            loginQuery += " WHERE (b.id = " + id.ToString() + ") AND (u.usertype = 3)";
+            loginQuery += " WHERE (b.id = " + id.ToString() + ") AND (u.usertype = 3) AND (u.Active = 1)";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             SqlDataHandler dh = new SqlDataHandler();
             String status;
@@ -159,7 +159,7 @@ namespace Astrodon
                 users.Add(u);
             }
             String status = String.Empty;
-            String loginQuery = "SELECT id, username, password, admin, email, name, phone, fax, usertype, pmSignature, ProcessCheckLists FROM tblUsers order by name";
+            String loginQuery = "SELECT id, username, password, admin, email, name, phone, fax, usertype, pmSignature, ProcessCheckLists FROM tblUsers where Active = 1 order by name";
             SqlDataHandler dh = new SqlDataHandler();
             DataSet ds = dh.GetData(loginQuery, null, out status);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -202,10 +202,10 @@ namespace Astrodon
             String status = String.Empty;
             String updateUserQuery = "IF EXISTS (SELECT id FROM tblUsers WHERE id = @id)";
             updateUserQuery += " UPDATE tblUsers SET username = @username, password = @password, admin = @admin, email = @email, name = @name, phone = @phone,";
-            updateUserQuery += " fax = @fax, usertype = @usertype, pmSignature = @sig, ProcessCheckLists =@processCheckLists WHERE id = @id";
+            updateUserQuery += " fax = @fax, usertype = @usertype, pmSignature = @sig, ProcessCheckLists =@processCheckLists, Active = 1 WHERE id = @id";
             updateUserQuery += " ELSE ";
-            updateUserQuery += " INSERT INTO tblUsers(username, password, admin, email, name, phone, fax, usertype, pmSignature, ProcessCheckLists)";
-            updateUserQuery += " VALUES(@username, @password, @admin, @email, @name, @phone, @fax, @usertype, @sig, @processCheckLists)";
+            updateUserQuery += " INSERT INTO tblUsers(username, password, admin, email, name, phone, fax, usertype, pmSignature, ProcessCheckLists,Active)";
+            updateUserQuery += " VALUES(@username, @password, @admin, @email, @name, @phone, @fax, @usertype, @sig, @processCheckLists,1)";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@username", u.username);
             sqlParms.Add("@password", u.password);
@@ -282,14 +282,14 @@ namespace Astrodon
         {
             String buildDeleteQuery1 = "DELETE FROM tblUserBuildings WHERE userid = @userid";
             String buildDeleteQuery2 = "UPDATE tblBuildings SET pm = '' WHERE pm = @email";
-            String userDeleteQuery = "DELETE FROM tblUsers WHERE id = @userid";
+            String userDeleteQuery = "UPDATE tblUsers set Active = 0 WHERE id = @userid";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@userid", u.id);
             sqlParms.Add("@email", u.email);
             SqlDataHandler dh = new SqlDataHandler();
             String status;
-            bool bSuccess = (dh.SetData(buildDeleteQuery1, sqlParms, out status) >= 1);
-            bool pSuccess = (dh.SetData(buildDeleteQuery2, sqlParms, out status) >= 1);
+            bool bSuccess = (dh.SetData(buildDeleteQuery1, sqlParms, out status) >= 0);
+            bool pSuccess = (dh.SetData(buildDeleteQuery2, sqlParms, out status) >= 0);
             bool uSuccess = (dh.SetData(userDeleteQuery, sqlParms, out status) >= 1);
             UpdateBuildings();
             return (bSuccess && pSuccess && uSuccess);

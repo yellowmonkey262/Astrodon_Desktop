@@ -135,6 +135,7 @@ namespace Astrodon.Reports.Calendar
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var users = from u in context.tblUsers
+                            where u.Active
                            select u;
 
                 _Users = users.OrderBy(a => a.name).ToList();

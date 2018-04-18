@@ -432,6 +432,7 @@ namespace Astrodon.Controls.Requisitions
                           join pmUser in context.tblUsers on b.pm equals pmUser.email
                           where r.processed == false
                           && b.BuildingDisabled == false
+                          && pmUser.Active
                           select new RequisitionItem()
                           {
                               RequisitionId = r.id,                              

@@ -313,6 +313,10 @@
     <Compile Include="Migrations\201804060921061_UnitAdditionalPremium.Designer.cs">
       <DependentUpon>201804060921061_UnitAdditionalPremium.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804180551302_tblUserActive.cs" />
+    <Compile Include="Migrations\201804180551302_tblUserActive.Designer.cs">
+      <DependentUpon>201804180551302_tblUserActive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -548,6 +552,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804060921061_UnitAdditionalPremium.resx">
       <DependentUpon>201804060921061_UnitAdditionalPremium.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804180551302_tblUserActive.resx">
+      <DependentUpon>201804180551302_tblUserActive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

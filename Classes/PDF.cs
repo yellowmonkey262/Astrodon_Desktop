@@ -2536,12 +2536,12 @@ namespace Astrodon
 
                     writer.DirectContent.SetRGBColorStroke(0, 0, 0);
                     writer.DirectContent.SetLineWidth(1);
-                    writer.DirectContent.MoveTo(curX, picY + 20);
-                    writer.DirectContent.LineTo(curX + 150, picY + 20);
+                    writer.DirectContent.MoveTo(curX, picY);
+                    writer.DirectContent.LineTo(curX + 150, picY);
                     writer.DirectContent.Stroke();
                     actY = picY + 15;
 
-                    for (int i = 0; i < 6; i++)
+                    for (int i = 0; i < 7; i++)
                     {
                         document.Add(pDummy);
                     }
@@ -2802,12 +2802,12 @@ namespace Astrodon
 
                 writer.DirectContent.SetRGBColorStroke(0, 0, 0);
                 writer.DirectContent.SetLineWidth(1);
-                writer.DirectContent.MoveTo(curX, picY + 20);
-                writer.DirectContent.LineTo(curX + 150, picY + 20);
+                writer.DirectContent.MoveTo(curX, picY);
+                writer.DirectContent.LineTo(curX + 150, picY);
                 writer.DirectContent.Stroke();
                 actY = picY + 15;
 
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 7; i++)
                 {
                     document.Add(pDummy);
                 }

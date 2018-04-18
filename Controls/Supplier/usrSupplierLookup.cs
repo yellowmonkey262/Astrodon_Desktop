@@ -50,7 +50,7 @@ namespace Astrodon.Controls.Supplier
             {
                 string username = "Unknown";
                 if (selectedItem.BlacklistedUserId != null)
-                    username = _DataContext.tblUsers.Where(a => a.id == selectedItem.BlacklistedUserId.Value).Select(a => a.name).SingleOrDefault();
+                    username = _DataContext.tblUsers.Where(a => a.Active && a.id == selectedItem.BlacklistedUserId.Value).Select(a => a.name).SingleOrDefault();
 
                 if (String.IsNullOrWhiteSpace(username))
                     username = "Unknown";

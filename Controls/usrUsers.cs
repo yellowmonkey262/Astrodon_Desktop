@@ -84,6 +84,8 @@ namespace Astrodon
                 }
             }
             catch { }
+
+            btnSelectAll.Enabled = true;
         }
 
         private void ClearUser()
@@ -182,6 +184,14 @@ namespace Astrodon
                     MessageBox.Show("User " + selectedUser.name + " deleted");
                     LoadUsers();
                 }
+            }
+        }
+
+        private void btnSelectAll_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < chkBuildings.Items.Count; i++)
+            {
+                chkBuildings.SetItemChecked(i, true);
             }
         }
     }

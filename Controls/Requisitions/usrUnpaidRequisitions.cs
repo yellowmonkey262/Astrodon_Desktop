@@ -35,6 +35,7 @@ namespace Astrodon.Controls.Requisitions
                             where r.paid == false && r.processed == true
                             && r.trnDate <= startDate
                             && b.BuildingDisabled == false
+                            && u.Active == true
                             select new RequistitionGridItem
                             {
                                 Id = r.id,

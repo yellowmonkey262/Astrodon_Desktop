@@ -50,6 +50,7 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.cbProcessCheckLists = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.btnSelectAll = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picSig)).BeginInit();
             this.SuspendLayout();
             // 
@@ -206,7 +207,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(15, 150);
+            this.label10.Location = new System.Drawing.Point(15, 175);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(87, 13);
             this.label10.TabIndex = 19;
@@ -216,9 +217,9 @@
             // 
             this.chkBuildings.CheckOnClick = true;
             this.chkBuildings.FormattingEnabled = true;
-            this.chkBuildings.Location = new System.Drawing.Point(18, 166);
+            this.chkBuildings.Location = new System.Drawing.Point(18, 196);
             this.chkBuildings.Name = "chkBuildings";
-            this.chkBuildings.Size = new System.Drawing.Size(426, 379);
+            this.chkBuildings.Size = new System.Drawing.Size(426, 349);
             this.chkBuildings.TabIndex = 20;
             // 
             // btnSave
@@ -290,10 +291,22 @@
             this.label12.TabIndex = 27;
             this.label12.Text = "Check Lists";
             // 
+            // btnSelectAll
+            // 
+            this.btnSelectAll.Enabled = false;
+            this.btnSelectAll.Location = new System.Drawing.Point(108, 170);
+            this.btnSelectAll.Name = "btnSelectAll";
+            this.btnSelectAll.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectAll.TabIndex = 28;
+            this.btnSelectAll.Text = "Select All";
+            this.btnSelectAll.UseVisualStyleBackColor = true;
+            this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);
+            // 
             // usrUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnSelectAll);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.cbProcessCheckLists);
             this.Controls.Add(this.btnDelete);
@@ -359,5 +372,6 @@
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.CheckBox cbProcessCheckLists;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button btnSelectAll;
     }
 }

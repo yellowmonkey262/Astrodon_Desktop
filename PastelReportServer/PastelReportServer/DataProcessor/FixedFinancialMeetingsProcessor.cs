@@ -216,7 +216,7 @@ namespace Astrodon.DataProcessor
 
             //create a list of building id and user id
             var userIdList = context.tblUsers
-                                    .Where(a => a.ProcessCheckLists == true)
+                                    .Where(a => a.ProcessCheckLists == true && a.Active == true)
                                     .Select(a => a.id).ToList();
 
             var buildingCodeList = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled == true && a.BuildingDisabled == false).Select(a => a.Code).ToList();

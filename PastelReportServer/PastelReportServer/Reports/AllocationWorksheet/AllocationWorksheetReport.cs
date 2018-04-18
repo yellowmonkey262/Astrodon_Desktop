@@ -26,7 +26,7 @@ namespace Astrodon.Reports.AllocationWorksheet
             if (context.PublicHolidaySet.Where(a => a.Date == DateTime.Today).Count() > 0)
                 return; //today is a public holiday
 
-            var userList = context.tblUsers.Where(a => a.ProcessCheckLists && (userId == 0 || a.id == userId)).ToList();
+            var userList = context.tblUsers.Where(a => a.ProcessCheckLists && (userId == 0 || a.id == userId) && a.Active == true).ToList();
 
             foreach (var user in userList)
             {
