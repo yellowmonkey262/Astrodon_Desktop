@@ -1,4 +1,4 @@
-﻿using Astro.Library;
+using Astro.Library;
 using Astro.Library.Entities;
 using Astrodon.Classes;
 using System;
@@ -610,19 +610,25 @@ namespace Astrodon
                     mailBody += "Regards" + Environment.NewLine;
                     mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
                     mailBody += "You're in good hands";
-                    try
+
+                    var canemail = c.Email.Count(d => !String.IsNullOrEmpty(d)) > 0;
+
+                    if (canemail)
                     {
-                        bool sentMail = dh.InsertLetter(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(), mailBody, false, true, true,
-                            new String[] { Path.GetFileName(fileName) }, c.accNumber, out msgStatus);
-                    }
-                    catch
-                    {
-                        MessageBox.Show(uEmail + " - " + c.Email + " - " + docType + " - " + c.accNumber + " - " + DateTime.Now.ToString() + " - " + mailBody + " - "
-                            + Path.GetFileName(fileName) + " - " + c.accNumber);
+                        try
+                        {
+                            bool sentMail = dh.InsertLetter(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(), mailBody, false, true, true,
+                                new String[] { Path.GetFileName(fileName) }, c.accNumber, out msgStatus);
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show(uEmail + " - " + c.Email + " - " + docType + " - " + c.accNumber + " - " + DateTime.Now.ToString() + " - " + mailBody + " - "
+                                + Path.GetFileName(fileName) + " - " + c.accNumber);
+                        }
                     }
                     if (Controller.user.id == 1) { MessageBox.Show(msgStatus); }
                     //}
-                    if ((c.statPrintorEmail == 1 || c.statPrintorEmail == 3) || docType == "Restriction Notice")
+                    if ((c.statPrintorEmail == 1 || c.statPrintorEmail == 3) || docType == "Restriction Notice" || !canemail)
                     {
                         try
                         {
