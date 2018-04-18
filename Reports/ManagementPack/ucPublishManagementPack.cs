@@ -201,6 +201,8 @@ namespace Astrodon.Reports.ManagementPack
             }
         }
 
+      
+
         private void btnDecline_Click(object sender, EventArgs e)
         {
 
@@ -302,6 +304,18 @@ namespace Astrodon.Reports.ManagementPack
 
                 var trustees = customers.Where(a => dbTrustees.Contains(a.accNumber)).ToList();
 
+                string approvalEmail = Controller.ReadResourceString("Astrodon.Reports.ManagementPack.ManagementPackApproved.txt");
+                approvalEmail = approvalEmail.Replace("{NAME}", _SelectedItem.UserCreated);
+                approvalEmail = approvalEmail.Replace("{BUILDINGNAME}", _SelectedItem.Building);
+                approvalEmail = approvalEmail.Replace("{PERIOD}", _SelectedItem.Period.ToString("MMM yyyy"));
+
+                string[] toEmail = { _SelectedItem.UserCreatedEmail };
+                string status;
+                if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + "financial pack appoved.", emailContent, false, false, out status))
+                {
+                    Controller.HandleError("Unable to send notification email : " + status);
+                }
+
                 if (trustees.Count() > 0)
                 {
                     if (Controller.AskQuestion("Are you sure you want to notify " + trustees.Count().ToString() + " trustees?"))
@@ -316,7 +330,7 @@ namespace Astrodon.Reports.ManagementPack
                             Application.DoEvents();
 
                             emailContent = emailContent.Replace("{URL}", fileUrl);
-                            String status = "";
+                            status = "";
                             if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", emailContent, false, false, out status))
                             {
                                 Controller.HandleError("Unable to notify trustees by email : " + status);
@@ -326,7 +340,7 @@ namespace Astrodon.Reports.ManagementPack
                             {
                                 if (trustee.Email != null && trustee.Email.Length > 0)
                                 {
-                                    string[] toEmail = new string[] { trustee.Email[0] };
+                                    toEmail = new string[] { trustee.Email[0] };
                                     tbComments.Text = tbComments.Text + "\nSent email to:" + trustee.accNumber + "-" + toEmail[0];
                                     if (!Mailer.SendDirectMail(building.pm, toEmail, "", "", "Monthly financial pack", emailContent, false, false, out status))
                                     {

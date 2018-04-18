@@ -1193,6 +1193,7 @@
     </None>
     <EmbeddedResource Include="Reports\ManagementPack\ManagementPackEmail.txt" />
     <EmbeddedResource Include="Reports\ManagementPack\ManagementPackDeclined.txt" />
+    <EmbeddedResource Include="Reports\ManagementPack\ManagementPackApproved.txt" />
     <Content Include="Resources\AstradonNewLogo.jpg" />
     <Content Include="Resources\stdmd5.jpg" />
     <None Include="signature.png">
