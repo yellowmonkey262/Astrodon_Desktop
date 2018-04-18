@@ -1,4 +1,4 @@
-﻿using Astro.Library.Entities;
+using Astro.Library.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Astrodon
 {
@@ -265,6 +266,8 @@ namespace Astrodon
             {
                 try
                 {
+                    var canemail = customer.Email.Count(d => !String.IsNullOrEmpty(d)) > 0;
+
                     Statement myStatement = new Statement { AccNo = customer.accNumber };
                     List<String> address = new List<string>();
                     address.Add(customer.description);
@@ -282,8 +285,8 @@ namespace Astrodon
                     if (transactions != null) { myStatement.Transactions = transactions; }
                     myStatement.totalDue = totalDue;
                     myStatement.DebtorEmail = getDebtorEmail(buildingName);
-                    myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 ? false : true);
-                    myStatement.EmailMe = (customer.statPrintorEmail == 4 ? false : true);
+                    myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
+                    myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
                     if (customer.Email != null && customer.Email.Length > 0)
                     {
                         List<String> newEmails = new List<string>();
