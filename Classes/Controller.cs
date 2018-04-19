@@ -95,6 +95,11 @@ namespace Astrodon
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        internal static void ShowWarning(string message, string title = "Warning")
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         internal static bool AskQuestion(string message, string title = "Confirmation")
         {
             return MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
@@ -315,5 +320,7 @@ namespace Astrodon
             }
             return result;
         }
+
+      
     }
 }

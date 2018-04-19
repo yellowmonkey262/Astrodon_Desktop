@@ -1,4 +1,5 @@
 ﻿using Astradon.Data.Utility;
+using Astrodon.Data.BankData;
 using Astrodon.Data.Base;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,12 @@ namespace Astrodon.Data.MaintenanceData
         public decimal UnitPremium { get; set; }
 
         public decimal AdditionalPremium { get; set; }
+
+        public bool BondOriginatorInterestNoted { get; set; }
+
+        public virtual int? BondOriginatorId { get; set; }
+        [ForeignKey(nameof(BondOriginatorId))]
+        public virtual BondOriginator BondOriginator { get; set; }
 
         [MaxLength(1500)]
         public string Notes { get; set; }

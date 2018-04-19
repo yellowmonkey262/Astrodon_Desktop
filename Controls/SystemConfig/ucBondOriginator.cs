@@ -7,37 +7,32 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Astrodon.Data;
-using Astrodon.Data.Calendar;
+using Astrodon.Data.BankData;
 using System.Data.Entity.Infrastructure;
 
 namespace Astrodon.Controls.SystemConfig
 {
-    public partial class ucPublicHoliday : UserControl
+    public partial class ucBondOriginator : UserControl
     {
         private DataContext _Context;
-        private PublicHoliday _Item;
-        private List<PublicHoliday> _Data;
-    
-        public ucPublicHoliday(DataContext context)
+        private BondOriginator _Item;
+        private List<BondOriginator> _Data;
+
+        public ucBondOriginator(DataContext context)
         {
-            _Context = context;
             InitializeComponent();
 
-            dtpDate.Format = DateTimePickerFormat.Custom;
-            dtpDate.CustomFormat = "yyyy/MM/dd";
+            _Context = context;
 
-            LoadPublicHolidays();
+            LoadData();
             GotoReadOnly();
-            
+
         }
 
         private void GotoReadOnly()
         {
-            tbName.Text = "";
-            tbName.ReadOnly = true;
-
-            dtpDate.Value = DateTime.Today;
-            dtpDate.Enabled = false;
+            txCompanyName.Text = "";
+            txCompanyName.ReadOnly = true;
 
             btnSave.Visible = false;
             btnCancel.Visible = false;
@@ -47,8 +42,7 @@ namespace Astrodon.Controls.SystemConfig
 
         private void GotoEditable()
         {
-            tbName.ReadOnly = false;
-            dtpDate.Enabled = true;
+            txCompanyName.ReadOnly = false;
 
             btnSave.Visible = true;
             btnCancel.Visible = true;
@@ -57,14 +51,14 @@ namespace Astrodon.Controls.SystemConfig
 
         }
 
-        private void LoadPublicHolidays()
+        private void LoadData()
         {
             this.Cursor = Cursors.WaitCursor;
             try
             {
                 DateTime startDate = DateTime.Today.AddMonths(-3);
 
-                _Data = _Context.PublicHolidaySet.Where(a => a.Date > startDate).OrderBy(a => a.Date).ToList();
+                _Data = _Context.BondOriginatorSet.OrderBy(a => a.CompanyName).ToList();
 
                 BindDataGrid();
             }
@@ -75,7 +69,7 @@ namespace Astrodon.Controls.SystemConfig
         }
 
 
-    
+
         private void BindDataGrid()
         {
             dgItems.ClearSelection();
@@ -93,31 +87,25 @@ namespace Astrodon.Controls.SystemConfig
             {
                 HeaderText = "Action",
                 Text = "Select",
-                UseColumnTextForButtonValue = true
+                UseColumnTextForButtonValue = true,
+                Width = 50
             });
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
             {
-                DataPropertyName = "HolidayName",
-                HeaderText = "Name",
-                ReadOnly = true
+                DataPropertyName = "CompanyName",
+                HeaderText = "Company Name",
+                ReadOnly = true,
+                Width = 200
             });
-            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "Date",
-                HeaderText = "Date",
-                ReadOnly = true
-            });
-
-
-            dgItems.AutoResizeColumns();
+         //   dgItems.AutoResizeColumns();
 
         }
 
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrWhiteSpace(tbName.Text))
+            if (String.IsNullOrWhiteSpace(txCompanyName.Text))
             {
                 Controller.HandleError("Name is required", "Validation Error");
                 return;
@@ -125,11 +113,10 @@ namespace Astrodon.Controls.SystemConfig
 
             if (_Item == null)
             {
-                _Item = new PublicHoliday();
-                _Context.PublicHolidaySet.Add(_Item);
+                _Item = new BondOriginator();
+                _Context.BondOriginatorSet.Add(_Item);
             }
-            _Item.HolidayName = tbName.Text;
-            _Item.Date = dtpDate.Value.Date;
+            _Item.CompanyName = txCompanyName.Text;
 
             try
             {
@@ -161,23 +148,23 @@ namespace Astrodon.Controls.SystemConfig
         {
             _Context.ClearChanges();
             GotoReadOnly();
-            LoadPublicHolidays();
+            LoadData();
         }
 
         private void EditItem()
         {
-            tbName.Text = _Item.HolidayName;
-            dtpDate.Value = _Item.Date;
+            txCompanyName.Text = _Item.CompanyName;
             GotoEditable();
         }
 
-        private void dgItems_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private void dgItems_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
             var senderGrid = (DataGridView)sender;
 
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
-                _Item = senderGrid.Rows[e.RowIndex].DataBoundItem as PublicHoliday;
+                _Item = senderGrid.Rows[e.RowIndex].DataBoundItem as BondOriginator;
 
                 if (_Item != null)
                 {
@@ -185,5 +172,7 @@ namespace Astrodon.Controls.SystemConfig
                 }
             }
         }
+
+        
     }
 }

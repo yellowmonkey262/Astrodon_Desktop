@@ -173,6 +173,10 @@
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.dgInsurancePq = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tbExcessStructures = new System.Windows.Forms.TextBox();
+            this.label56 = new System.Windows.Forms.Label();
+            this.dtpPolicyRenewalDate = new System.Windows.Forms.DateTimePicker();
+            this.label55 = new System.Windows.Forms.Label();
             this.btnViewPq = new System.Windows.Forms.Button();
             this.btnViewBuildingPlans = new System.Windows.Forms.Button();
             this.btnViewContract = new System.Windows.Forms.Button();
@@ -181,10 +185,6 @@
             this.label50 = new System.Windows.Forms.Label();
             this.txtInsurancePolicyNumber = new System.Windows.Forms.TextBox();
             this.label49 = new System.Windows.Forms.Label();
-            this.cmbBondHolder = new System.Windows.Forms.ComboBox();
-            this.label56 = new System.Windows.Forms.Label();
-            this.cbBondHolderInterest = new System.Windows.Forms.CheckBox();
-            this.label55 = new System.Windows.Forms.Label();
             this.btnDownloadPQ = new System.Windows.Forms.Button();
             this.btnUploadPQ = new System.Windows.Forms.Button();
             this.btnDownloadBuildingPlans = new System.Windows.Forms.Button();
@@ -219,7 +219,10 @@
             this.txtCommonPropertyDim = new System.Windows.Forms.TextBox();
             this.label41 = new System.Windows.Forms.Label();
             this.tbPDFViewer = new System.Windows.Forms.TabPage();
-            this.axAcroPDF1 = new AxAcroPDFLib.AxAcroPDF();
+            this.axAcroPDFNew = new AxAcroPDFLib.AxAcroPDF();
+            this.axAcroPDFOld = new AxAcroPDFLib.AxAcroPDF();
+            this.label78 = new System.Windows.Forms.Label();
+            this.label79 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -240,7 +243,8 @@
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tbPDFViewer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDFNew)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDFOld)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -1665,6 +1669,10 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.tbExcessStructures);
+            this.groupBox3.Controls.Add(this.label56);
+            this.groupBox3.Controls.Add(this.dtpPolicyRenewalDate);
+            this.groupBox3.Controls.Add(this.label55);
             this.groupBox3.Controls.Add(this.btnViewPq);
             this.groupBox3.Controls.Add(this.btnViewBuildingPlans);
             this.groupBox3.Controls.Add(this.btnViewContract);
@@ -1673,10 +1681,6 @@
             this.groupBox3.Controls.Add(this.label50);
             this.groupBox3.Controls.Add(this.txtInsurancePolicyNumber);
             this.groupBox3.Controls.Add(this.label49);
-            this.groupBox3.Controls.Add(this.cmbBondHolder);
-            this.groupBox3.Controls.Add(this.label56);
-            this.groupBox3.Controls.Add(this.cbBondHolderInterest);
-            this.groupBox3.Controls.Add(this.label55);
             this.groupBox3.Controls.Add(this.btnDownloadPQ);
             this.groupBox3.Controls.Add(this.btnUploadPQ);
             this.groupBox3.Controls.Add(this.btnDownloadBuildingPlans);
@@ -1687,15 +1691,49 @@
             this.groupBox3.Controls.Add(this.btnUploadInsuranceContract);
             this.groupBox3.Location = new System.Drawing.Point(9, 241);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(576, 221);
+            this.groupBox3.Size = new System.Drawing.Size(576, 286);
             this.groupBox3.TabIndex = 136;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Insurance Broker Details";
             // 
+            // tbExcessStructures
+            // 
+            this.tbExcessStructures.Location = new System.Drawing.Point(91, 158);
+            this.tbExcessStructures.Multiline = true;
+            this.tbExcessStructures.Name = "tbExcessStructures";
+            this.tbExcessStructures.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbExcessStructures.Size = new System.Drawing.Size(479, 122);
+            this.tbExcessStructures.TabIndex = 155;
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(14, 141);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(92, 13);
+            this.label56.TabIndex = 154;
+            this.label56.Text = "Excess Structures";
+            // 
+            // dtpPolicyRenewalDate
+            // 
+            this.dtpPolicyRenewalDate.Location = new System.Drawing.Point(91, 54);
+            this.dtpPolicyRenewalDate.Name = "dtpPolicyRenewalDate";
+            this.dtpPolicyRenewalDate.Size = new System.Drawing.Size(171, 20);
+            this.dtpPolicyRenewalDate.TabIndex = 153;
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(11, 54);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(75, 13);
+            this.label55.TabIndex = 152;
+            this.label55.Text = "Renewal Date";
+            // 
             // btnViewPq
             // 
             this.btnViewPq.Enabled = false;
-            this.btnViewPq.Location = new System.Drawing.Point(438, 133);
+            this.btnViewPq.Location = new System.Drawing.Point(438, 108);
             this.btnViewPq.Name = "btnViewPq";
             this.btnViewPq.Size = new System.Drawing.Size(63, 23);
             this.btnViewPq.TabIndex = 149;
@@ -1706,7 +1744,7 @@
             // btnViewBuildingPlans
             // 
             this.btnViewBuildingPlans.Enabled = false;
-            this.btnViewBuildingPlans.Location = new System.Drawing.Point(438, 104);
+            this.btnViewBuildingPlans.Location = new System.Drawing.Point(438, 79);
             this.btnViewBuildingPlans.Name = "btnViewBuildingPlans";
             this.btnViewBuildingPlans.Size = new System.Drawing.Size(63, 23);
             this.btnViewBuildingPlans.TabIndex = 148;
@@ -1717,7 +1755,7 @@
             // btnViewContract
             // 
             this.btnViewContract.Enabled = false;
-            this.btnViewContract.Location = new System.Drawing.Point(438, 46);
+            this.btnViewContract.Location = new System.Drawing.Point(438, 21);
             this.btnViewContract.Name = "btnViewContract";
             this.btnViewContract.Size = new System.Drawing.Size(63, 23);
             this.btnViewContract.TabIndex = 146;
@@ -1727,7 +1765,7 @@
             // 
             // btnBrokerLookup
             // 
-            this.btnBrokerLookup.Location = new System.Drawing.Point(98, 133);
+            this.btnBrokerLookup.Location = new System.Drawing.Point(91, 109);
             this.btnBrokerLookup.Name = "btnBrokerLookup";
             this.btnBrokerLookup.Size = new System.Drawing.Size(171, 23);
             this.btnBrokerLookup.TabIndex = 143;
@@ -1738,7 +1776,7 @@
             // lbBrokerName
             // 
             this.lbBrokerName.AutoSize = true;
-            this.lbBrokerName.Location = new System.Drawing.Point(95, 109);
+            this.lbBrokerName.Location = new System.Drawing.Point(88, 85);
             this.lbBrokerName.Name = "lbBrokerName";
             this.lbBrokerName.Size = new System.Drawing.Size(92, 13);
             this.lbBrokerName.TabIndex = 145;
@@ -1747,7 +1785,7 @@
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(18, 109);
+            this.label50.Location = new System.Drawing.Point(11, 85);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(71, 13);
             this.label50.TabIndex = 144;
@@ -1755,7 +1793,7 @@
             // 
             // txtInsurancePolicyNumber
             // 
-            this.txtInsurancePolicyNumber.Location = new System.Drawing.Point(98, 76);
+            this.txtInsurancePolicyNumber.Location = new System.Drawing.Point(91, 24);
             this.txtInsurancePolicyNumber.Name = "txtInsurancePolicyNumber";
             this.txtInsurancePolicyNumber.Size = new System.Drawing.Size(171, 20);
             this.txtInsurancePolicyNumber.TabIndex = 142;
@@ -1763,56 +1801,16 @@
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(17, 79);
+            this.label49.Location = new System.Drawing.Point(10, 27);
             this.label49.Name = "label49";
             this.label49.Size = new System.Drawing.Size(75, 13);
             this.label49.TabIndex = 141;
             this.label49.Text = "Policy Number";
             // 
-            // cmbBondHolder
-            // 
-            this.cmbBondHolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBondHolder.FormattingEnabled = true;
-            this.cmbBondHolder.Location = new System.Drawing.Point(98, 48);
-            this.cmbBondHolder.Name = "cmbBondHolder";
-            this.cmbBondHolder.Size = new System.Drawing.Size(171, 21);
-            this.cmbBondHolder.TabIndex = 140;
-            this.cmbBondHolder.Visible = false;
-            // 
-            // label56
-            // 
-            this.label56.AutoSize = true;
-            this.label56.Location = new System.Drawing.Point(14, 51);
-            this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(78, 13);
-            this.label56.TabIndex = 138;
-            this.label56.Text = "Bond originator";
-            // 
-            // cbBondHolderInterest
-            // 
-            this.cbBondHolderInterest.AutoSize = true;
-            this.cbBondHolderInterest.Location = new System.Drawing.Point(151, 26);
-            this.cbBondHolderInterest.Name = "cbBondHolderInterest";
-            this.cbBondHolderInterest.Size = new System.Drawing.Size(15, 14);
-            this.cbBondHolderInterest.TabIndex = 137;
-            this.cbBondHolderInterest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cbBondHolderInterest.UseVisualStyleBackColor = true;
-            this.cbBondHolderInterest.CheckedChanged += new System.EventHandler(this.cbBondHolderInterest_CheckedChanged);
-            // 
-            // label55
-            // 
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(14, 26);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(131, 13);
-            this.label55.TabIndex = 19;
-            this.label55.Text = "Bond holder interest noted";
-            this.label55.Click += new System.EventHandler(this.label55_Click);
-            // 
             // btnDownloadPQ
             // 
             this.btnDownloadPQ.Enabled = false;
-            this.btnDownloadPQ.Location = new System.Drawing.Point(507, 133);
+            this.btnDownloadPQ.Location = new System.Drawing.Point(507, 108);
             this.btnDownloadPQ.Name = "btnDownloadPQ";
             this.btnDownloadPQ.Size = new System.Drawing.Size(63, 23);
             this.btnDownloadPQ.TabIndex = 18;
@@ -1823,7 +1821,7 @@
             // btnUploadPQ
             // 
             this.btnUploadPQ.Enabled = false;
-            this.btnUploadPQ.Location = new System.Drawing.Point(277, 133);
+            this.btnUploadPQ.Location = new System.Drawing.Point(277, 108);
             this.btnUploadPQ.Name = "btnUploadPQ";
             this.btnUploadPQ.Size = new System.Drawing.Size(158, 23);
             this.btnUploadPQ.TabIndex = 17;
@@ -1834,7 +1832,7 @@
             // btnDownloadBuildingPlans
             // 
             this.btnDownloadBuildingPlans.Enabled = false;
-            this.btnDownloadBuildingPlans.Location = new System.Drawing.Point(507, 104);
+            this.btnDownloadBuildingPlans.Location = new System.Drawing.Point(507, 79);
             this.btnDownloadBuildingPlans.Name = "btnDownloadBuildingPlans";
             this.btnDownloadBuildingPlans.Size = new System.Drawing.Size(63, 23);
             this.btnDownloadBuildingPlans.TabIndex = 16;
@@ -1845,7 +1843,7 @@
             // btnBuildingPlans
             // 
             this.btnBuildingPlans.Enabled = false;
-            this.btnBuildingPlans.Location = new System.Drawing.Point(277, 104);
+            this.btnBuildingPlans.Location = new System.Drawing.Point(277, 79);
             this.btnBuildingPlans.Name = "btnBuildingPlans";
             this.btnBuildingPlans.Size = new System.Drawing.Size(158, 23);
             this.btnBuildingPlans.TabIndex = 15;
@@ -1856,7 +1854,7 @@
             // btnViewClaimForm
             // 
             this.btnViewClaimForm.Enabled = false;
-            this.btnViewClaimForm.Location = new System.Drawing.Point(507, 75);
+            this.btnViewClaimForm.Location = new System.Drawing.Point(507, 50);
             this.btnViewClaimForm.Name = "btnViewClaimForm";
             this.btnViewClaimForm.Size = new System.Drawing.Size(63, 23);
             this.btnViewClaimForm.TabIndex = 14;
@@ -1867,7 +1865,7 @@
             // btnViewInsuranceContract
             // 
             this.btnViewInsuranceContract.Enabled = false;
-            this.btnViewInsuranceContract.Location = new System.Drawing.Point(507, 46);
+            this.btnViewInsuranceContract.Location = new System.Drawing.Point(507, 21);
             this.btnViewInsuranceContract.Name = "btnViewInsuranceContract";
             this.btnViewInsuranceContract.Size = new System.Drawing.Size(63, 23);
             this.btnViewInsuranceContract.TabIndex = 13;
@@ -1878,7 +1876,7 @@
             // btnUploadClaimForm
             // 
             this.btnUploadClaimForm.Enabled = false;
-            this.btnUploadClaimForm.Location = new System.Drawing.Point(277, 75);
+            this.btnUploadClaimForm.Location = new System.Drawing.Point(277, 50);
             this.btnUploadClaimForm.Name = "btnUploadClaimForm";
             this.btnUploadClaimForm.Size = new System.Drawing.Size(158, 23);
             this.btnUploadClaimForm.TabIndex = 12;
@@ -1889,7 +1887,7 @@
             // btnUploadInsuranceContract
             // 
             this.btnUploadInsuranceContract.Enabled = false;
-            this.btnUploadInsuranceContract.Location = new System.Drawing.Point(277, 46);
+            this.btnUploadInsuranceContract.Location = new System.Drawing.Point(277, 21);
             this.btnUploadInsuranceContract.Name = "btnUploadInsuranceContract";
             this.btnUploadInsuranceContract.Size = new System.Drawing.Size(158, 23);
             this.btnUploadInsuranceContract.TabIndex = 11;
@@ -2140,7 +2138,10 @@
             // 
             // tbPDFViewer
             // 
-            this.tbPDFViewer.Controls.Add(this.axAcroPDF1);
+            this.tbPDFViewer.Controls.Add(this.label79);
+            this.tbPDFViewer.Controls.Add(this.label78);
+            this.tbPDFViewer.Controls.Add(this.axAcroPDFOld);
+            this.tbPDFViewer.Controls.Add(this.axAcroPDFNew);
             this.tbPDFViewer.Location = new System.Drawing.Point(4, 22);
             this.tbPDFViewer.Name = "tbPDFViewer";
             this.tbPDFViewer.Padding = new System.Windows.Forms.Padding(3);
@@ -2149,14 +2150,45 @@
             this.tbPDFViewer.Text = "PDF Viewer";
             this.tbPDFViewer.UseVisualStyleBackColor = true;
             // 
-            // axAcroPDF1
+            // axAcroPDFNew
             // 
-            this.axAcroPDF1.Enabled = true;
-            this.axAcroPDF1.Location = new System.Drawing.Point(3, 3);
-            this.axAcroPDF1.Name = "axAcroPDF1";
-            this.axAcroPDF1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDF1.OcxState")));
-            this.axAcroPDF1.Size = new System.Drawing.Size(782, 524);
-            this.axAcroPDF1.TabIndex = 65;
+            this.axAcroPDFNew.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.axAcroPDFNew.Enabled = true;
+            this.axAcroPDFNew.Location = new System.Drawing.Point(3, 23);
+            this.axAcroPDFNew.Name = "axAcroPDFNew";
+            this.axAcroPDFNew.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDFNew.OcxState")));
+            this.axAcroPDFNew.Size = new System.Drawing.Size(658, 504);
+            this.axAcroPDFNew.TabIndex = 65;
+            // 
+            // axAcroPDFOld
+            // 
+            this.axAcroPDFOld.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.axAcroPDFOld.Enabled = true;
+            this.axAcroPDFOld.Location = new System.Drawing.Point(694, 23);
+            this.axAcroPDFOld.Name = "axAcroPDFOld";
+            this.axAcroPDFOld.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axAcroPDFOld.OcxState")));
+            this.axAcroPDFOld.Size = new System.Drawing.Size(669, 504);
+            this.axAcroPDFOld.TabIndex = 66;
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Location = new System.Drawing.Point(4, 4);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(93, 13);
+            this.label78.TabIndex = 67;
+            this.label78.Text = "Current Document";
+            // 
+            // label79
+            // 
+            this.label79.AutoSize = true;
+            this.label79.Location = new System.Drawing.Point(691, 7);
+            this.label79.Name = "label79";
+            this.label79.Size = new System.Drawing.Size(103, 13);
+            this.label79.TabIndex = 68;
+            this.label79.Text = "Previous  Document";
             // 
             // usrBuildings
             // 
@@ -2198,7 +2230,9 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tbPDFViewer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDF1)).EndInit();
+            this.tbPDFViewer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDFNew)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axAcroPDFOld)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2338,17 +2372,13 @@
         private System.Windows.Forms.Button btnUploadPQ;
         private System.Windows.Forms.Button btnDownloadBuildingPlans;
         private System.Windows.Forms.Button btnBuildingPlans;
-        private System.Windows.Forms.Label label56;
-        private System.Windows.Forms.CheckBox cbBondHolderInterest;
-        private System.Windows.Forms.Label label55;
-        private System.Windows.Forms.ComboBox cmbBondHolder;
         private System.Windows.Forms.TextBox txtInsurancePolicyNumber;
         private System.Windows.Forms.Label label49;
         private System.Windows.Forms.Button btnBrokerLookup;
         private System.Windows.Forms.Label lbBrokerName;
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.TabPage tbPDFViewer;
-        private AxAcroPDFLib.AxAcroPDF axAcroPDF1;
+        private AxAcroPDFLib.AxAcroPDF axAcroPDFNew;
         private System.Windows.Forms.Button btnViewPq;
         private System.Windows.Forms.Button btnViewBuildingPlans;
         private System.Windows.Forms.Button btnViewContract;
@@ -2402,5 +2432,12 @@
         private System.Windows.Forms.Label label76;
         private System.Windows.Forms.TextBox txtMonthlyPremium;
         private System.Windows.Forms.Label label77;
+        private System.Windows.Forms.DateTimePicker dtpPolicyRenewalDate;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.TextBox tbExcessStructures;
+        private System.Windows.Forms.Label label56;
+        private AxAcroPDFLib.AxAcroPDF axAcroPDFOld;
+        private System.Windows.Forms.Label label79;
+        private System.Windows.Forms.Label label78;
     }
 }

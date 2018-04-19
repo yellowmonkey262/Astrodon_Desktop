@@ -13,6 +13,7 @@ namespace Astrodon.Data.InsuranceData
     {
         [MaxLength(200)]
         [Required]
+        [Index("IDX_InsuarnceBroker",IsUnique =true)]
         public virtual string CompanyName { get; set; }
 
         [MaxLength(200)]

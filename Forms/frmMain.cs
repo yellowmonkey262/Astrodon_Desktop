@@ -722,5 +722,14 @@ namespace Astrodon
             pnlContents.Controls.Add(dt);
             toolStripStatusLabel1.Text = "Meeting Rooms";
         }
+
+        private void bondOriginatorConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucBondOriginator dt = new ucBondOriginator(_DataContext);
+            dt.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(dt);
+            toolStripStatusLabel1.Text = "Bond Originators";
+        }
     }
 }

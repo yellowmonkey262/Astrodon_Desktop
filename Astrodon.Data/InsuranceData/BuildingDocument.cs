@@ -19,6 +19,9 @@ namespace Astrodon.Data.InsuranceData
         [Index("IDX_BuildingDocumentBuildingId", Order = 1, IsUnique = true)]
         public virtual DocumentType DocumentType { get; set; }
 
+        [Index("IDX_BuildingDocumentBuildingId", Order = 2, IsUnique = true)]
+        public virtual DateTime DateUploaded { get; set; }
+
         [Required]
         public string FileName { get; set; }
 

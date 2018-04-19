@@ -162,6 +162,12 @@
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\webreport.cs" />
     <Compile Include="Classes\WordProcessor.cs" />
+    <Compile Include="Controls\SystemConfig\ucBondOriginator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SystemConfig\ucBondOriginator.Designer.cs">
+      <DependentUpon>ucBondOriginator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SystemConfig\usMeetingVenue.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -689,6 +695,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controls\SystemConfig\ucBondOriginator.resx">
+      <DependentUpon>ucBondOriginator.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SystemConfig\ucPublicHoliday.resx">
       <DependentUpon>ucPublicHoliday.cs</DependentUpon>
     </EmbeddedResource>

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BankData\Bank.cs" />
     <Compile Include="BankData\BankAudit.cs" />
+    <Compile Include="BankData\BondOriginator.cs" />
     <Compile Include="Base\DbEntity.cs" />
     <Compile Include="Base\IdValue.cs" />
     <Compile Include="Base\StringKeyValue.cs" />
@@ -321,6 +322,18 @@
     <Compile Include="Migrations\201804180647209_CheckListCSOSLevies.Designer.cs">
       <DependentUpon>201804180647209_CheckListCSOSLevies.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804190558305_InsuranceUpdates.cs" />
+    <Compile Include="Migrations\201804190558305_InsuranceUpdates.Designer.cs">
+      <DependentUpon>201804190558305_InsuranceUpdates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804190627081_BuildingDocumentHistory.cs" />
+    <Compile Include="Migrations\201804190627081_BuildingDocumentHistory.Designer.cs">
+      <DependentUpon>201804190627081_BuildingDocumentHistory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804190628262_BuildingDocumentHistoryUploaded.cs" />
+    <Compile Include="Migrations\201804190628262_BuildingDocumentHistoryUploaded.Designer.cs">
+      <DependentUpon>201804190628262_BuildingDocumentHistoryUploaded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
@@ -562,6 +575,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804180647209_CheckListCSOSLevies.resx">
       <DependentUpon>201804180647209_CheckListCSOSLevies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804190558305_InsuranceUpdates.resx">
+      <DependentUpon>201804190558305_InsuranceUpdates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804190627081_BuildingDocumentHistory.resx">
+      <DependentUpon>201804190627081_BuildingDocumentHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804190628262_BuildingDocumentHistoryUploaded.resx">
+      <DependentUpon>201804190628262_BuildingDocumentHistoryUploaded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

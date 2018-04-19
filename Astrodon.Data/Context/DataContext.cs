@@ -96,6 +96,7 @@ namespace Astrodon.Data
         public DbSet<Bank> BankSet { get; set; }
         public DbSet<BankAudit> BankAuditSet { get; set; }
         public DbSet<SystemLog> SystemLogSet { get; set; }
+        public DbSet<BondOriginator> BondOriginatorSet { get; set; }
 
         public DbSet<BuildingUnit> BuildingUnitSet { get; set; }
         public DbSet<BuildingDocument> BuildingDocumentSet { get; set; }

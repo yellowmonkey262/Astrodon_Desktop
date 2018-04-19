@@ -116,15 +116,15 @@ namespace Astrodon.Data
 
         public bool InsuranceReplacementValueIncludesCommonProperty { get; set; }
 
-        public bool BondHolderInterestNotedOnPolicy { get; set; }
-
-        public string InsuranceBondHolder { get; set; }
-
         public int? InsuranceBrokerId { get; set; }
         [ForeignKey("InsuranceBrokerId")]
         public virtual InsuranceBroker InsuranceBroker { get; set; }
 
         public decimal MonthlyInsurancePremium { get; set; }
+
+        public DateTime? InsurancePolicyRenewalDate { get; set; }
+
+        public string ExcessStructures { get; set; }
 
         #endregion
 

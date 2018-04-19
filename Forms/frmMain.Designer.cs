@@ -35,6 +35,7 @@
             this.bulkSMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.managementPackTOCDescriptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.publicHolidaysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.meetingRoomConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upgradeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,7 +104,7 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.meetingRoomConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bondOriginatorConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -139,6 +140,7 @@
             this.managementPackTOCDescriptionToolStripMenuItem,
             this.publicHolidaysToolStripMenuItem,
             this.meetingRoomConfigurationToolStripMenuItem,
+            this.bondOriginatorConfigurationToolStripMenuItem,
             this.upgradeDatabaseToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
@@ -201,6 +203,13 @@
             this.publicHolidaysToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.publicHolidaysToolStripMenuItem.Text = "Public Holidays";
             this.publicHolidaysToolStripMenuItem.Click += new System.EventHandler(this.publicHolidaysToolStripMenuItem_Click);
+            // 
+            // meetingRoomConfigurationToolStripMenuItem
+            // 
+            this.meetingRoomConfigurationToolStripMenuItem.Name = "meetingRoomConfigurationToolStripMenuItem";
+            this.meetingRoomConfigurationToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.meetingRoomConfigurationToolStripMenuItem.Text = "Meeting Room Configuration";
+            this.meetingRoomConfigurationToolStripMenuItem.Click += new System.EventHandler(this.meetingRoomConfigurationToolStripMenuItem_Click);
             // 
             // upgradeDatabaseToolStripMenuItem
             // 
@@ -739,12 +748,12 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // meetingRoomConfigurationToolStripMenuItem
+            // bondOriginatorConfigurationToolStripMenuItem
             // 
-            this.meetingRoomConfigurationToolStripMenuItem.Name = "meetingRoomConfigurationToolStripMenuItem";
-            this.meetingRoomConfigurationToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
-            this.meetingRoomConfigurationToolStripMenuItem.Text = "Meeting Room Configuration";
-            this.meetingRoomConfigurationToolStripMenuItem.Click += new System.EventHandler(this.meetingRoomConfigurationToolStripMenuItem_Click);
+            this.bondOriginatorConfigurationToolStripMenuItem.Name = "bondOriginatorConfigurationToolStripMenuItem";
+            this.bondOriginatorConfigurationToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.bondOriginatorConfigurationToolStripMenuItem.Text = "Bond Originator Configuration";
+            this.bondOriginatorConfigurationToolStripMenuItem.Click += new System.EventHandler(this.bondOriginatorConfigurationToolStripMenuItem_Click);
             // 
             // frmMain
             // 
@@ -852,5 +861,6 @@
         private System.Windows.Forms.ToolStripMenuItem publicHolidaysToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem publishManagementPackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem meetingRoomConfigurationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bondOriginatorConfigurationToolStripMenuItem;
     }
 }

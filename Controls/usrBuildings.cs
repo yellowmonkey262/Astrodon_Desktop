@@ -9,6 +9,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Data.Entity;
 using iTextSharp.text.pdf;
+using Astrodon.Data.BankData;
 
 namespace Astrodon
 {
@@ -16,7 +17,7 @@ namespace Astrodon
     {
         private Buildings BuildingManager;
         private Building selectedBuilding = null;
-        private List<Astrodon.Data.BankData.Bank> _Banks;
+        private List<BondOriginator> _BondOriginators;
 
         private List<IInsurancePqRecord> InsurancePqGrid { get; set; }
 
@@ -29,37 +30,22 @@ namespace Astrodon
 
             dtpEventTime.Format = DateTimePickerFormat.Time;
             dtpEventTime.ShowUpDown = true;
+            LoadBondOriginators();
+        }
 
+        private void LoadBondOriginators()
+        {
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                _BondOriginators = context.BondOriginatorSet.OrderBy(a => a.CompanyName).ToList();
+            }
         }
 
         private void usrBuildings_Load(object sender, EventArgs e)
         {
             LoadCombo();
             clearBuilding();
-            LoadBanks();
-        }
-
-        private void LoadBanks()
-        {
-            //_Banks
-            this.Cursor = Cursors.WaitCursor;
-
-            try
-            {
-                using (var context = SqlDataHandler.GetDataContext())
-                {
-                    _Banks = context.BankSet.Where(a => a.IsActive).ToList();
-                    cmbBondHolder.DataSource = _Banks;
-                    cmbBondHolder.ValueMember = "Id";
-                    cmbBondHolder.DisplayMember = "Name";
-                    cmbBondHolder.SelectedIndex = -1;
-                }
-                
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
+            
         }
 
         private void LoadCombo()
@@ -82,8 +68,6 @@ namespace Astrodon
 
         private void LoadBuilding()
         {
-            cmbBondHolder.Visible = false;
-            cmbBondHolder.Text = "";
             txtID.Text = selectedBuilding.ID.ToString();
             txtName.Text = selectedBuilding.Name;
             txtAbbr.Text = selectedBuilding.Abbr;
@@ -210,9 +194,6 @@ namespace Astrodon
                     txtUnitPropertyDim.Text = buildingEntity.UnitPropertyDimensions.ToString();
                     txtReplacementValue.Text = buildingEntity.UnitReplacementCost.ToString("#,##0.00");
                     cbReplacementIncludesCommonProperty.Checked = buildingEntity.InsuranceReplacementValueIncludesCommonProperty;
-                    cbBondHolderInterest.Checked = buildingEntity.BondHolderInterestNotedOnPolicy;
-                    cmbBondHolder.Visible = cbBondHolderInterest.Checked;
-                    cmbBondHolder.SelectedText = buildingEntity.InsuranceBondHolder;
 
                     _SelectedBroker = buildingEntity.InsuranceBroker;
                     if (_SelectedBroker != null)
@@ -223,6 +204,16 @@ namespace Astrodon
                     txtCommonPropertyValue.Text = buildingEntity.CommonPropertyReplacementCost.ToString("#,##0.00");
                     txtAdditionalInsuredValue.Text = buildingEntity.AdditionalInsuredValueCost.ToString("#,##0.00");
                     txtInsurancePolicyNumber.Text = buildingEntity.PolicyNumber;
+                    tbExcessStructures.Text = buildingEntity.ExcessStructures;
+
+                    dtpPolicyRenewalDate.Format = DateTimePickerFormat.Custom;
+                    dtpPolicyRenewalDate.CustomFormat = "yyyy/MM/dd";
+                    dtpPolicyRenewalDate.MinDate = DateTime.Today.AddYears(-5);
+                    if (buildingEntity.InsurancePolicyRenewalDate != null)
+                        dtpPolicyRenewalDate.Value = buildingEntity.InsurancePolicyRenewalDate.Value;
+                    else
+                        dtpPolicyRenewalDate.Value = DateTime.Today;
+
                     txtMonthlyPremium.Text = buildingEntity.MonthlyInsurancePremium.ToString("#,##0.00");
 
                     cbFixedFinalcials.Checked = buildingEntity.IsFixed;
@@ -314,7 +305,7 @@ namespace Astrodon
         {
             var unitRecords = Controller.pastel.AddCustomers(buildingEntity.Code, buildingEntity.DataPath);
             InsurancePqGrid = new List<IInsurancePqRecord>();
-            var items = unitRecords.Select(a => new InsurancePqRecord(InsurancePqGrid)
+            var items = unitRecords.Select(a => new InsurancePqRecord(InsurancePqGrid,_BondOriginators)
             {
                 UnitNo = a.accNumber,
                 SquareMeters = decimal.Round(buildingEntity.UnitPropertyDimensions / unitRecords.Count, 2),
@@ -342,6 +333,8 @@ namespace Astrodon
                         record.Notes = unit.Notes;
                         record.AdditionalInsurance = unit.AdditionalInsurance;
                         record.AdditionalPremium = unit.AdditionalPremium;
+                        record.BondOriginatorInterestNoted = unit.BondOriginatorInterestNoted;
+                        record.BondOriginatorId = unit.BondOriginatorId;
 
                         record.BuildingReplacementValue = buildingEntity.UnitReplacementCost;
                         record.TotalUnitPropertyDimensions = buildingEntity.UnitPropertyDimensions;
@@ -443,6 +436,22 @@ namespace Astrodon
                 DefaultCellStyle = currencyCellFormat,
                 MinimumWidth = 100
 
+            });
+
+            dgInsurancePq.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                Name = "BondOriginator",
+                DataPropertyName = "BondOriginatorId",
+                HeaderText = "Bond Originator",
+                ReadOnly = false                
+            });
+
+            dgInsurancePq.Columns.Add(new DataGridViewCheckBoxColumn()
+            {
+                DataPropertyName = "BondOriginatorInterestNoted",
+                HeaderText = "Interest Noted",
+                ReadOnly = false,
+                MinimumWidth = 300
             });
 
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
@@ -559,6 +568,11 @@ namespace Astrodon
                 return;
             }
 
+            if(dtpPolicyRenewalDate.Value <= DateTime.Today)
+            {
+                Controller.ShowWarning("Policy is set to expire " + dtpPolicyRenewalDate.Value.ToString("yyyy/MM/dd"));
+            }
+
             using (var context = SqlDataHandler.GetDataContext())
             {
                 var buildingEntity = context.tblBuildings
@@ -578,11 +592,8 @@ namespace Astrodon
 
                 buildingEntity.PolicyNumber = txtInsurancePolicyNumber.Text;
                 buildingEntity.InsuranceReplacementValueIncludesCommonProperty = cbReplacementIncludesCommonProperty.Checked;
-
-                buildingEntity.BondHolderInterestNotedOnPolicy = cbBondHolderInterest.Checked;
-                cmbBondHolder.Visible = cbBondHolderInterest.Checked;
-                buildingEntity.InsuranceBondHolder = cmbBondHolder.SelectedText;
-
+                buildingEntity.InsurancePolicyRenewalDate = dtpPolicyRenewalDate.Value;
+                buildingEntity.ExcessStructures = tbExcessStructures.Text;
                 if (_SelectedBroker == null)
                     buildingEntity.InsuranceBrokerId = null;
                 else
@@ -603,7 +614,9 @@ namespace Astrodon
                             SquareMeters = item.SquareMeters,
                             UnitNo = item.UnitNo,
                             UnitPremium = item.UnitPremium,
-                            AdditionalPremium = item.AdditionalPremium
+                            AdditionalPremium = item.AdditionalPremium,
+                            BondOriginatorId = item.BondOriginatorInterestNoted ? item.BondOriginatorId : null,
+                            BondOriginatorInterestNoted = item.BondOriginatorInterestNoted
                         });
                     }
                     else
@@ -617,6 +630,11 @@ namespace Astrodon
                         update.UnitNo = item.UnitNo;
                         update.UnitPremium = item.UnitPremium;
                         update.AdditionalPremium = item.AdditionalPremium;
+                        update.BondOriginatorInterestNoted = item.BondOriginatorInterestNoted;
+                        if (item.BondOriginatorInterestNoted)
+                            update.BondOriginatorId = item.BondOriginatorId;
+                        else
+                            update.BondOriginatorId = null;
                     }
                 }
                 buildingEntity.AdditionalInsuredValueCost = totalAdditionalInsuredValue;
@@ -657,7 +675,8 @@ namespace Astrodon
             //chkWeb.Checked = btnSave.Enabled = false;
             //txtRF.Text = txtRFS.Text = txtFF.Text = txtFFS.Text = txtDCF.Text = txtDCFS.Text = txtSF.Text = txtSFS.Text = txtDF.Text = txtDFS.Text = txtHF.Text = txtHFS.Text = txtAddress1.Text = "";
             //txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = "";
-            DisplayPDF(null);
+            DisplayPDFNew(null);
+            DisplayPDFOld(null);
             tabControl1.SelectedIndex = 0;
             cmbBuilding.SelectedIndex = 0;
             btnViewContract.Enabled = false;
@@ -994,13 +1013,17 @@ namespace Astrodon
 
                     using (var context = SqlDataHandler.GetDataContext())
                     {
+                        var uploadDate = DateTime.Today;
                         var fileEntity = context.BuildingDocumentSet
-                                .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceContract);
+                                .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID 
+                                                  && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceContract
+                                                  && a.DateUploaded == uploadDate);
                         if (fileEntity == null)
                         {
                             fileEntity = new Data.InsuranceData.BuildingDocument();
                             fileEntity.BuildingId = selectedBuilding.ID;
                             fileEntity.DocumentType = Data.InsuranceData.DocumentType.InsuranceContract;
+                            fileEntity.DateUploaded = uploadDate;
                             context.BuildingDocumentSet.Add(fileEntity);
                         }
                         fileEntity.FileData = File.ReadAllBytes(fdOpen.FileName);
@@ -1038,13 +1061,17 @@ namespace Astrodon
 
                     using (var context = SqlDataHandler.GetDataContext())
                     {
+                        var uploadDate = DateTime.Today;
                         var fileEntity = context.BuildingDocumentSet
-                             .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceClaimForm);
+                             .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID 
+                                               && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceClaimForm
+                                               && a.DateUploaded == uploadDate);
                         if (fileEntity == null)
                         {
                             fileEntity = new Data.InsuranceData.BuildingDocument();
                             fileEntity.BuildingId = selectedBuilding.ID;
                             fileEntity.DocumentType = Data.InsuranceData.DocumentType.InsuranceClaimForm;
+                            fileEntity.DateUploaded = uploadDate;
                             context.BuildingDocumentSet.Add(fileEntity);
                         }
                         fileEntity.FileData = File.ReadAllBytes(fUploadClaimForm.FileName);
@@ -1073,7 +1100,9 @@ namespace Astrodon
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     var fileEntity = context.BuildingDocumentSet
-                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceContract);
+                     .Where(a => a.BuildingId == selectedBuilding.ID
+                                       && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceContract)
+                     .OrderByDescending(a => a.DateUploaded).FirstOrDefault();
                     if (fileEntity != null)
                     {
                         fdSave.FileName = fileEntity.FileName;
@@ -1108,7 +1137,11 @@ namespace Astrodon
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     var fileEntity = context.BuildingDocumentSet
-                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceClaimForm);
+                             .Where(a => a.BuildingId == selectedBuilding.ID
+                                       && a.DocumentType == Data.InsuranceData.DocumentType.InsuranceClaimForm)
+                     .OrderByDescending(a => a.DateUploaded).FirstOrDefault();
+
+                
                     if (fileEntity != null)
                     {
                         fdSaveClaimForm.FileName = fileEntity.FileName;
@@ -1222,12 +1255,20 @@ namespace Astrodon
             {
                 IInsurancePqRecord reqItem = row.DataBoundItem as IInsurancePqRecord;
                 reqItem.DataRow = row;
-                if(reqItem is PQTotal)
+                if (reqItem is PQTotal)
                 {
                     row.ReadOnly = true;
                 }
+                else
+                {
+                    var comboBox = row.Cells["BondOriginator"] as DataGridViewComboBoxCell;
+                    comboBox.ReadOnly = false;
+                    comboBox.DataSource = reqItem.BondOriginatorList;
+                    comboBox.DisplayMember = "CompanyName";
+                    comboBox.ValueMember = "id";
 
-
+                  //  comboBox.Value = reqItem.BondOriginatorId;
+                }
 
             }
         }
@@ -1247,13 +1288,18 @@ namespace Astrodon
                     }
                     using (var context = SqlDataHandler.GetDataContext())
                     {
+                        var uploadDate = DateTime.Today;
+
                         var fileEntity = context.BuildingDocumentSet
-                             .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.BuildingPlans);
+                             .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID 
+                                               && a.DocumentType == Data.InsuranceData.DocumentType.BuildingPlans
+                                               && a.DateUploaded == uploadDate);
                         if (fileEntity == null)
                         {
                             fileEntity = new Data.InsuranceData.BuildingDocument();
                             fileEntity.BuildingId = selectedBuilding.ID;
                             fileEntity.DocumentType = Data.InsuranceData.DocumentType.BuildingPlans;
+                            fileEntity.DateUploaded = uploadDate;
                             context.BuildingDocumentSet.Add(fileEntity);
                         }
                         fileEntity.FileData = File.ReadAllBytes(fUploadClaimForm.FileName);
@@ -1283,7 +1329,10 @@ namespace Astrodon
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     var fileEntity = context.BuildingDocumentSet
-                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.BuildingPlans);
+                         .Where(a => a.BuildingId == selectedBuilding.ID
+                                       && a.DocumentType == Data.InsuranceData.DocumentType.BuildingPlans)
+                     .OrderByDescending(a => a.DateUploaded).FirstOrDefault();
+
                     if (fileEntity != null)
                     {
                         fdSaveClaimForm.FileName = fileEntity.FileName;
@@ -1325,13 +1374,17 @@ namespace Astrodon
                     }
                     using (var context = SqlDataHandler.GetDataContext())
                     {
+                        var uploadDate = DateTime.Today;
                         var fileEntity = context.BuildingDocumentSet
-                             .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.PQ);
+                             .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID 
+                                               && a.DocumentType == Data.InsuranceData.DocumentType.PQ
+                                               && a.DateUploaded == uploadDate);
                         if (fileEntity == null)
                         {
                             fileEntity = new Data.InsuranceData.BuildingDocument();
                             fileEntity.BuildingId = selectedBuilding.ID;
                             fileEntity.DocumentType = Data.InsuranceData.DocumentType.PQ;
+                            fileEntity.DateUploaded = uploadDate;
                             context.BuildingDocumentSet.Add(fileEntity);
                         }
                         fileEntity.FileData = File.ReadAllBytes(fUploadClaimForm.FileName);
@@ -1361,7 +1414,10 @@ namespace Astrodon
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     var fileEntity = context.BuildingDocumentSet
-                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == Data.InsuranceData.DocumentType.PQ);
+                      .Where(a => a.BuildingId == selectedBuilding.ID
+                                    && a.DocumentType == Data.InsuranceData.DocumentType.PQ)
+                  .OrderByDescending(a => a.DateUploaded).FirstOrDefault();
+
                     if (fileEntity != null)
                     {
                         fdSaveClaimForm.FileName = fileEntity.FileName;
@@ -1386,11 +1442,6 @@ namespace Astrodon
             {
                 btnDownloadPQ.Enabled = true;
             }
-        }
-
-        private void cbBondHolderInterest_CheckedChanged(object sender, EventArgs e)
-        {
-            cmbBondHolder.Visible = cbBondHolderInterest.Checked;
         }
 
         private void label55_Click(object sender, EventArgs e)
@@ -1436,36 +1487,36 @@ namespace Astrodon
         #region PDF Handler
 
 
-        private string _TempPDFFile = string.Empty;
+        private string _TempPDFNewFile = string.Empty;
 
-        private void DisplayPDF(byte[] pdfData)
+        private void DisplayPDFNew(byte[] pdfData)
         {
             if (pdfData == null)
             {
-                this.axAcroPDF1.Visible = false;
+                this.axAcroPDFNew.Visible = false;
                 return;
             }
-            if (!String.IsNullOrWhiteSpace(_TempPDFFile))
-                File.Delete(_TempPDFFile);
-            _TempPDFFile = Path.GetTempPath();
-            if (!_TempPDFFile.EndsWith(@"\"))
-                _TempPDFFile = _TempPDFFile + @"\";
+            if (!String.IsNullOrWhiteSpace(_TempPDFNewFile))
+                File.Delete(_TempPDFNewFile);
+            _TempPDFNewFile = Path.GetTempPath();
+            if (!_TempPDFNewFile.EndsWith(@"\"))
+                _TempPDFNewFile = _TempPDFNewFile + @"\";
 
-            _TempPDFFile = _TempPDFFile + System.Guid.NewGuid().ToString("N") + ".pdf";
-            File.WriteAllBytes(_TempPDFFile, pdfData);
+            _TempPDFNewFile = _TempPDFNewFile + System.Guid.NewGuid().ToString("N") + ".pdf";
+            File.WriteAllBytes(_TempPDFNewFile, pdfData);
 
 
             try
             {
-                this.axAcroPDF1.Visible = true;
-                this.axAcroPDF1.LoadFile(_TempPDFFile);
-                this.axAcroPDF1.src = _TempPDFFile;
-                this.axAcroPDF1.setShowToolbar(false);
-                this.axAcroPDF1.setView("FitH");
-                this.axAcroPDF1.setLayoutMode("SinglePage");
-                this.axAcroPDF1.setShowToolbar(false);
+                this.axAcroPDFNew.Visible = true;
+                this.axAcroPDFNew.LoadFile(_TempPDFNewFile);
+                this.axAcroPDFNew.src = _TempPDFNewFile;
+                this.axAcroPDFNew.setShowToolbar(false);
+                this.axAcroPDFNew.setView("FitH");
+                this.axAcroPDFNew.setLayoutMode("SinglePage");
+                this.axAcroPDFNew.setShowToolbar(false);
 
-                this.axAcroPDF1.Show();
+                this.axAcroPDFNew.Show();
                 tabControl1.SelectedTab = tbPDFViewer;
             }
             catch (Exception ex)
@@ -1473,8 +1524,49 @@ namespace Astrodon
                 throw ex;
             }
 
-            File.Delete(_TempPDFFile);
+            File.Delete(_TempPDFNewFile);
         }
+
+        private string _TempPDFOldFile = string.Empty;
+
+        private void DisplayPDFOld(byte[] pdfData)
+        {
+            if (pdfData == null)
+            {
+                this.axAcroPDFOld.Visible = false;
+                return;
+            }
+            if (!String.IsNullOrWhiteSpace(_TempPDFOldFile))
+                File.Delete(_TempPDFOldFile);
+            _TempPDFOldFile = Path.GetTempPath();
+            if (!_TempPDFOldFile.EndsWith(@"\"))
+                _TempPDFOldFile = _TempPDFOldFile + @"\";
+
+            _TempPDFOldFile = _TempPDFOldFile + System.Guid.NewGuid().ToString("N") + ".pdf";
+            File.WriteAllBytes(_TempPDFOldFile, pdfData);
+
+
+            try
+            {
+                this.axAcroPDFOld.Visible = true;
+                this.axAcroPDFOld.LoadFile(_TempPDFOldFile);
+                this.axAcroPDFOld.src = _TempPDFOldFile;
+                this.axAcroPDFOld.setShowToolbar(false);
+                this.axAcroPDFOld.setView("FitH");
+                this.axAcroPDFOld.setLayoutMode("SinglePage");
+                this.axAcroPDFOld.setShowToolbar(false);
+
+                this.axAcroPDFOld.Show();
+                tabControl1.SelectedTab = tbPDFViewer;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            File.Delete(_TempPDFOldFile);
+        }
+
 
         private bool IsValidPdf(string filepath)
         {
@@ -1507,16 +1599,30 @@ namespace Astrodon
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     var fileEntity = context.BuildingDocumentSet
-                     .FirstOrDefault(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == documentType);
-                    if (fileEntity != null)
+                     .Where(a => a.BuildingId == selectedBuilding.ID && a.DocumentType == documentType)
+                     .OrderByDescending(a => a.DateUploaded)
+                     .Take(2).ToList();
+
+                    if (fileEntity != null && fileEntity.Count >= 0)
                     {
-                        DisplayPDF(fileEntity.FileData);
+                        DisplayPDFNew(fileEntity[0].FileData);
                     }
                     else
                     {
+                        DisplayPDFNew(null);
                         MessageBox.Show("No document exits");
                         return;
                     }
+
+                    if (fileEntity != null && fileEntity.Count >= 2)
+                    {
+                        DisplayPDFOld(fileEntity[1].FileData);
+                    }
+                    else
+                    {
+                        DisplayPDFOld(null);
+                    }
+                   
                 }
             }
             catch
@@ -1627,21 +1733,30 @@ namespace Astrodon
         decimal PQCalculated { get; }
 
         decimal BuildingReplacementValue { get; set; }
-        decimal UnitReplacementCost { get;  }
-        decimal TotalReplacementValue { get;  }
+        decimal UnitReplacementCost { get; }
+        decimal TotalReplacementValue { get; }
         decimal UnitPremium { get; }
 
         decimal BuildingPremium { get; set; }
 
         DataGridViewRow DataRow { get; set; }
+
+        bool BondOriginatorInterestNoted { get; set; }
+        int? BondOriginatorId { get; set; }
+
+        BondOriginator SelectedBondOriginator { get; set; }
+
+        List<BondOriginator> BondOriginatorList { get; set; }
+
     }
 
     internal class InsurancePqRecord: IInsurancePqRecord
     {
         protected List<IInsurancePqRecord> _Items;
-        public InsurancePqRecord(List<IInsurancePqRecord> items)
+        public InsurancePqRecord(List<IInsurancePqRecord> items, List<BondOriginator> bondOriginators)
         {
             _Items = items;
+            BondOriginatorList = bondOriginators.ToList();
         }
 
         public int? Id { get; set; }
@@ -1695,6 +1810,28 @@ namespace Astrodon
         public decimal UnitPremium { get { return _UnitPremium; }  }
         
         public DataGridViewRow DataRow { get; set; }
+
+        public bool BondOriginatorInterestNoted { get;  set; }
+        public int? BondOriginatorId { get;  set; }
+
+        public BondOriginator SelectedBondOriginator
+        {
+            get
+            {
+                if (BondOriginatorId == null)
+                    return null;
+                return BondOriginatorList.Single(a => a.id == BondOriginatorId.Value);
+            }
+            set
+            {
+                if (value == null)
+                    BondOriginatorId = null;
+                else
+                    BondOriginatorId = value.id;
+            }
+        }
+
+        public List<BondOriginator> BondOriginatorList { get; set; }
 
         private bool _InCalculate = false;
 
@@ -1782,7 +1919,7 @@ namespace Astrodon
             TotalUnitPropertyDimensions = _Items.Where(a => a != this).Sum(a => a.TotalUnitPropertyDimensions);
             BuildingReplacementValue = _Items.Where(a => a != this).Sum(a => a.BuildingReplacementValue);
             UnitPremium = _Items.Where(a => a != this).Sum(a => a.UnitPremium);
-
+            BondOriginatorList = null;
             if (DataRow != null)
             {
                 foreach (var c in DataRow.Cells)
@@ -1818,6 +1955,14 @@ namespace Astrodon
         public decimal UnitPremium { get; set; }
 
         public DataGridViewRow DataRow { get; set; }
+
+        public bool BondOriginatorInterestNoted { get; set; }
+
+        public int? BondOriginatorId { get; set; }
+
+        public List<BondOriginator> BondOriginatorList { get; set; }
+
+        public BondOriginator SelectedBondOriginator { get; set; }
 
     }
 }
