@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -150,6 +151,7 @@
             this.dgDebitOrderArchive = new System.Windows.Forms.DataGridView();
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -898,16 +900,20 @@
             // 
             // txtNewNote
             // 
+            this.txtNewNote.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNewNote.Location = new System.Drawing.Point(11, 407);
             this.txtNewNote.Multiline = true;
             this.txtNewNote.Name = "txtNewNote";
             this.txtNewNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtNewNote.Size = new System.Drawing.Size(600, 85);
+            this.txtNewNote.Size = new System.Drawing.Size(901, 85);
             this.txtNewNote.TabIndex = 78;
             // 
             // btnSaveNote
             // 
-            this.btnSaveNote.Location = new System.Drawing.Point(483, 498);
+            this.btnSaveNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveNote.Location = new System.Drawing.Point(784, 498);
             this.btnSaveNote.Name = "btnSaveNote";
             this.btnSaveNote.Size = new System.Drawing.Size(128, 23);
             this.btnSaveNote.TabIndex = 77;
@@ -922,7 +928,7 @@
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.ReadOnly = true;
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtNotes.Size = new System.Drawing.Size(600, 183);
+            this.txtNotes.Size = new System.Drawing.Size(901, 183);
             this.txtNotes.TabIndex = 76;
             // 
             // label16
@@ -939,6 +945,8 @@
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -949,8 +957,9 @@
             this.colActioned});
             this.dataGridView1.Location = new System.Drawing.Point(17, 40);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(594, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(895, 150);
             this.dataGridView1.TabIndex = 74;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // colID
             // 
@@ -971,6 +980,7 @@
             // 
             // colUser
             // 
+            this.colUser.DataPropertyName = "User";
             this.colUser.HeaderText = "User";
             this.colUser.Name = "colUser";
             this.colUser.ReadOnly = true;
@@ -1439,11 +1449,6 @@
         private System.Windows.Forms.TextBox txtNotes;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colRemDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colUser;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn colActioned;
         private System.Windows.Forms.Button btnSaveReminder;
         private System.Windows.Forms.TextBox txtNote;
         private System.Windows.Forms.Label label15;
@@ -1510,5 +1515,11 @@
         private System.Windows.Forms.CheckBox cbBirthDayNotificaiton;
         private System.Windows.Forms.TextBox tbFullName;
         private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRemDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUser;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNote;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn colActioned;
+        private System.Windows.Forms.Timer timer1;
     }
 }

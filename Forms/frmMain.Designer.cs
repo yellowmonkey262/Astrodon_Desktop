@@ -104,6 +104,7 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -633,7 +634,7 @@
             // accountsToolStripMenuItem
             // 
             this.accountsToolStripMenuItem.Name = "accountsToolStripMenuItem";
-            this.accountsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.accountsToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.accountsToolStripMenuItem.Text = "Accounts";
             this.accountsToolStripMenuItem.Click += new System.EventHandler(this.accountsToolStripMenuItem_Click);
             // 
@@ -746,6 +747,11 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 30000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -852,5 +858,6 @@
         private System.Windows.Forms.ToolStripMenuItem publishManagementPackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem meetingRoomConfigurationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bondOriginatorConfigurationToolStripMenuItem;
+        private System.Windows.Forms.Timer timer1;
     }
 }

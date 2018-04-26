@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Linq;
+using System.Data.Entity;
 
 namespace Astrodon
 {
@@ -77,7 +79,10 @@ namespace Astrodon
                 this.suppliersToolStripMenuItem1.Enabled = false;
             }
             Controller.DependencyInitialization();
-            LoadReminders();
+
+            timer1.Enabled = false;
+            timer1.Interval = 3000;
+            timer1.Enabled = true;
             notifyIcon1.Visible = false;
 
             unPaidRequisitionsMenuItem.Enabled = Controller.UserIsSheldon(); //Sheldon and Tertia
@@ -87,13 +92,12 @@ namespace Astrodon
 
         public void LoadReminders()
         {
-            String status;
-            String remQuery = "SELECT COUNT(*) as rems FROM tblReminders WHERE userid = " + Controller.user.id.ToString() + " AND action = 'False' AND remDate <= getdate()";
-            SqlDataHandler dh = new SqlDataHandler();
-            DataSet dsRems = dh.GetData(remQuery, null, out status);
-            if (dsRems != null && dsRems.Tables.Count > 0 && dsRems.Tables[0].Rows.Count > 0)
+            try
             {
-                int count = int.Parse(dsRems.Tables[0].Rows[0]["rems"].ToString());
+                timer1.Interval = 60*60*5*1000;
+
+                int count = _DataContext.tblReminders.Where(a => a.UserId == Controller.user.id && !a.action && a.remDate <= DateTime.Now).Count();
+
                 if (count > 0)
                 {
                     tmrRem.Interval = 250;
@@ -105,6 +109,10 @@ namespace Astrodon
                     tmrRem.Enabled = false;
                     remindersToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
                 }
+            }
+            catch
+            {
+                //Datacontext is out of sync and i have to dot he db upgrade first
             }
         }
 
@@ -730,6 +738,11 @@ namespace Astrodon
             dt.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(dt);
             toolStripStatusLabel1.Text = "Bond Originators";
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            LoadReminders();
         }
     }
 }

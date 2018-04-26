@@ -1,5 +1,6 @@
 ﻿using Astro.Library.Entities;
 using Astrodon.Classes;
+using Astrodon.Data;
 using Astrodon.Data.DebitOrder;
 using iTextSharp.text.pdf;
 using System;
@@ -412,27 +413,48 @@ namespace Astrodon
         private void LoadReminders()
         {
             bsReminders.Clear();
-            String remQuery = "SELECT r.id, u.name, r.remDate, r.remNote, r.action FROM tblReminders r  INNER JOIN tblUsers u ON r.userid = u.id WHERE r.customer = '" + customer.accNumber + "' AND action = 'False' ORDER BY remDate";
+            DateTime start = DateTime.Today.AddMonths(6);
 
-            String status;
-            DataSet dsRem = dh.GetData(remQuery, null, out status);
-            if (dsRem != null && dsRem.Tables.Count > 0 && dsRem.Tables[0].Rows.Count > 0)
+            using (var context = SqlDataHandler.GetDataContext())
             {
-                foreach (DataRow drRem in dsRem.Tables[0].Rows)
-                {
-                    Reminder r = new Reminder
-                    {
-                        action = bool.Parse(drRem["action"].ToString()),
-                        User = drRem["name"].ToString(),
-                        id = int.Parse(drRem["id"].ToString()),
-                        note = drRem["remNote"].ToString(),
-                        remDate = DateTime.Parse(drRem["remDate"].ToString())
-                    };
-                    bsReminders.Add(r);
-                    dataGridView1.CellValueChanged -= dataGridView1_CellValueChanged;
-                    dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
-                }
+                var q = from r in context.tblReminders
+                        where r.BuildingId == building.ID
+                        && r.customer == customer.accNumber
+                        && (r.action == false || r.actionDate == null || r.actionDate > start)
+                        select new Reminder()
+                        {
+                            action = r.action,
+                            User = r.User.name,
+                            id = r.id,
+                            note = r.remNote,
+                            remDate = r.remDate
+                        };
+                bsReminders.DataSource = q.OrderBy(a => a.remDate).ToList();
+                dataGridView1.CellValueChanged -= dataGridView1_CellValueChanged;
+                dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
             }
+
+            //    String remQuery = "SELECT r.id, u.name, r.remDate, r.remNote, r.action FROM tblReminders r  INNER JOIN tblUsers u ON r.userid = u.id WHERE r.customer = '" + customer.accNumber + "' AND action = 'False' ORDER BY remDate";
+
+            //String status;
+            //DataSet dsRem = dh.GetData(remQuery, null, out status);
+            //if (dsRem != null && dsRem.Tables.Count > 0 && dsRem.Tables[0].Rows.Count > 0)
+            //{
+            //    foreach (DataRow drRem in dsRem.Tables[0].Rows)
+            //    {
+            //        Reminder r = new Reminder
+            //        {
+            //            action = bool.Parse(drRem["action"].ToString()),
+            //            User = drRem["name"].ToString(),
+            //            id = int.Parse(drRem["id"].ToString()),
+            //            note = drRem["remNote"].ToString(),
+            //            remDate = DateTime.Parse(drRem["remDate"].ToString())
+            //        };
+            //        bsReminders.Add(r);
+            //        dataGridView1.CellValueChanged -= dataGridView1_CellValueChanged;
+            //        dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
+            //    }
+            //}
         }
 
         private void LoadNotes()
@@ -812,19 +834,42 @@ namespace Astrodon
 
         private void btnSaveReminder_Click(object sender, EventArgs e)
         {
-            DateTime remDate = new DateTime(dtRemDate.Value.Year, dtRemDate.Value.Month, dtRemDate.Value.Day, dtRemTime.Value.Hour, dtRemTime.Value.Minute, 0);
+            DateTime reminderDate = new DateTime(dtRemDate.Value.Year, dtRemDate.Value.Month, dtRemDate.Value.Day, dtRemTime.Value.Hour, dtRemTime.Value.Minute, 0);
             String note = txtNote.Text;
             if (!String.IsNullOrEmpty(note))
             {
-                String insertRemQuery = "INSERT INTO tblReminders(userid, customer, building, remDate, remNote) VALUES(@userid, @building, @customer, @remDate, @remNote)";
-                Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-                sqlParms.Add("@customer", customer.accNumber);
-                sqlParms.Add("@building", building.ID);
-                sqlParms.Add("@userid", Controller.user.id);
-                sqlParms.Add("@remDate", remDate);
-                sqlParms.Add("@remNote", note);
-                String status;
-                dh.SetData(insertRemQuery, sqlParms, out status);
+
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    string email = string.Empty;
+                    if (customer.Email != null && customer.Email.Length > 0)
+                    {
+                        foreach(var eml in customer.Email)
+                        {
+                            if (!string.IsNullOrWhiteSpace(email))
+                                email = email + ";" + eml;
+                            else
+                                email = eml;
+                        }
+                        email = customer.Email[0];
+                    }
+
+                    var reminder = new tblReminder()
+                    {
+                        UserId = Controller.user.id,
+                        customer = customer.accNumber,
+                        BuildingId = building.ID,
+                        remDate = reminderDate,
+                        remNote = note,
+                        Contacts = customer.Contact,
+                        Phone = customer.CellPhone,
+                        Fax = customer.Fax,
+                        Email = email,
+                    };
+                    context.tblReminders.Add(reminder);
+                    context.SaveChanges();
+                }
+
                 dtRemDate.Value = DateTime.Now;
                 dtRemTime.Value = DateTime.Now;
                 txtNote.Text = "";
@@ -865,21 +910,7 @@ namespace Astrodon
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            try
-            {
-                if (e.ColumnIndex == 3)
-                {
-                    int id = (int)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
-                    bool actioned = (bool)dataGridView1.Rows[e.RowIndex].Cells[3].Value;
-                    String updateRemQuery = "UPDATE tblReminders SET action = '" + actioned.ToString() + "', actionDate = getdate() WHERE id = " + id.ToString();
-                    String status;
-                    dh.SetData(updateRemQuery, null, out status);
-                    LoadReminders();
-                }
-            }
-            catch (Exception ex)
-            {
-            }
+            
         }
 
         private class Categories
@@ -1632,6 +1663,27 @@ namespace Astrodon
 
         }
 
-       
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+            if ( e.RowIndex >= 0)
+            {
+                var selectedItem = senderGrid.Rows[e.RowIndex].DataBoundItem as Reminder;
+                if (selectedItem != null)
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var obj = context.tblReminders.Where(a => a.id == selectedItem.id).FirstOrDefault();
+
+                        obj.action = selectedItem.action;
+                        if (selectedItem.action)
+                            obj.actionDate = DateTime.Now;
+                        else
+                            obj.actionDate = null;
+                        context.SaveChanges();
+                    }
+                }
+            }
+        }
     }
 }
