@@ -102,6 +102,14 @@
             this.txtLevies = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tbExpenses = new System.Windows.Forms.TabPage();
+            this.chkEPCSOSLevies = new System.Windows.Forms.CheckBox();
+            this.chkEDCSOSLevies = new System.Windows.Forms.CheckBox();
+            this.txtPrevCSOSLevies = new System.Windows.Forms.TextBox();
+            this.txtPrevCSOSLeviesExpNotes = new System.Windows.Forms.TextBox();
+            this.chkCSOSLeviesExpN = new System.Windows.Forms.CheckBox();
+            this.chkCSOSLeviesExpY = new System.Windows.Forms.CheckBox();
+            this.txtCSOSLevies = new System.Windows.Forms.TextBox();
+            this.label68 = new System.Windows.Forms.Label();
             this.chkEPWater = new System.Windows.Forms.CheckBox();
             this.chkEPTel = new System.Windows.Forms.CheckBox();
             this.chkEDWater = new System.Windows.Forms.CheckBox();
@@ -370,16 +378,10 @@
             this.btnPrint = new System.Windows.Forms.Button();
             this.txtComments = new System.Windows.Forms.TextBox();
             this.label67 = new System.Windows.Forms.Label();
-            this.chkEPCSOSLevies = new System.Windows.Forms.CheckBox();
-            this.chkEDCSOSLevies = new System.Windows.Forms.CheckBox();
-            this.txtPrevCSOSLevies = new System.Windows.Forms.TextBox();
-            this.txtPrevCSOSLeviesExpNotes = new System.Windows.Forms.TextBox();
-            this.chkCSOSLeviesExpN = new System.Windows.Forms.CheckBox();
-            this.chkCSOSLeviesExpY = new System.Windows.Forms.CheckBox();
-            this.txtCSOSLevies = new System.Windows.Forms.TextBox();
-            this.label68 = new System.Windows.Forms.Label();
             this.cbEmailTo = new System.Windows.Forms.ComboBox();
             this.lbEmail = new System.Windows.Forms.Label();
+            this.label69 = new System.Windows.Forms.Label();
+            this.tbAdditionalInstructions = new System.Windows.Forms.TextBox();
             this.tbBuilding.SuspendLayout();
             this.tbIncome.SuspendLayout();
             this.tbExpenses.SuspendLayout();
@@ -547,7 +549,7 @@
             this.tbIncome.Location = new System.Drawing.Point(4, 22);
             this.tbIncome.Name = "tbIncome";
             this.tbIncome.Padding = new System.Windows.Forms.Padding(3);
-            this.tbIncome.Size = new System.Drawing.Size(1198, 528);
+            this.tbIncome.Size = new System.Drawing.Size(1198, 546);
             this.tbIncome.TabIndex = 0;
             this.tbIncome.Text = "Income Statement - Income";
             this.tbIncome.UseVisualStyleBackColor = true;
@@ -1333,6 +1335,76 @@
             this.tbExpenses.TabIndex = 1;
             this.tbExpenses.Text = "Income Statement - Expenses";
             this.tbExpenses.UseVisualStyleBackColor = true;
+            // 
+            // chkEPCSOSLevies
+            // 
+            this.chkEPCSOSLevies.AutoSize = true;
+            this.chkEPCSOSLevies.Location = new System.Drawing.Point(648, 516);
+            this.chkEPCSOSLevies.Name = "chkEPCSOSLevies";
+            this.chkEPCSOSLevies.Size = new System.Drawing.Size(15, 14);
+            this.chkEPCSOSLevies.TabIndex = 246;
+            this.chkEPCSOSLevies.UseVisualStyleBackColor = true;
+            // 
+            // chkEDCSOSLevies
+            // 
+            this.chkEDCSOSLevies.AutoSize = true;
+            this.chkEDCSOSLevies.Location = new System.Drawing.Point(601, 516);
+            this.chkEDCSOSLevies.Name = "chkEDCSOSLevies";
+            this.chkEDCSOSLevies.Size = new System.Drawing.Size(15, 14);
+            this.chkEDCSOSLevies.TabIndex = 245;
+            this.chkEDCSOSLevies.UseVisualStyleBackColor = true;
+            // 
+            // txtPrevCSOSLevies
+            // 
+            this.txtPrevCSOSLevies.Location = new System.Drawing.Point(675, 514);
+            this.txtPrevCSOSLevies.Name = "txtPrevCSOSLevies";
+            this.txtPrevCSOSLevies.ReadOnly = true;
+            this.txtPrevCSOSLevies.Size = new System.Drawing.Size(60, 20);
+            this.txtPrevCSOSLevies.TabIndex = 244;
+            // 
+            // txtPrevCSOSLeviesExpNotes
+            // 
+            this.txtPrevCSOSLeviesExpNotes.Location = new System.Drawing.Point(749, 514);
+            this.txtPrevCSOSLeviesExpNotes.Name = "txtPrevCSOSLeviesExpNotes";
+            this.txtPrevCSOSLeviesExpNotes.ReadOnly = true;
+            this.txtPrevCSOSLeviesExpNotes.Size = new System.Drawing.Size(357, 20);
+            this.txtPrevCSOSLeviesExpNotes.TabIndex = 243;
+            // 
+            // chkCSOSLeviesExpN
+            // 
+            this.chkCSOSLeviesExpN.AutoSize = true;
+            this.chkCSOSLeviesExpN.Location = new System.Drawing.Point(201, 515);
+            this.chkCSOSLeviesExpN.Name = "chkCSOSLeviesExpN";
+            this.chkCSOSLeviesExpN.Size = new System.Drawing.Size(15, 14);
+            this.chkCSOSLeviesExpN.TabIndex = 242;
+            this.chkCSOSLeviesExpN.UseVisualStyleBackColor = true;
+            this.chkCSOSLeviesExpN.CheckedChanged += new System.EventHandler(this.chkBankIncN_CheckedChanged);
+            // 
+            // chkCSOSLeviesExpY
+            // 
+            this.chkCSOSLeviesExpY.AutoSize = true;
+            this.chkCSOSLeviesExpY.Location = new System.Drawing.Point(176, 515);
+            this.chkCSOSLeviesExpY.Name = "chkCSOSLeviesExpY";
+            this.chkCSOSLeviesExpY.Size = new System.Drawing.Size(15, 14);
+            this.chkCSOSLeviesExpY.TabIndex = 241;
+            this.chkCSOSLeviesExpY.UseVisualStyleBackColor = true;
+            this.chkCSOSLeviesExpY.CheckedChanged += new System.EventHandler(this.chkBankIncN_CheckedChanged);
+            // 
+            // txtCSOSLevies
+            // 
+            this.txtCSOSLevies.Location = new System.Drawing.Point(222, 513);
+            this.txtCSOSLevies.Name = "txtCSOSLevies";
+            this.txtCSOSLevies.Size = new System.Drawing.Size(357, 20);
+            this.txtCSOSLevies.TabIndex = 240;
+            // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.Location = new System.Drawing.Point(12, 516);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(70, 13);
+            this.label68.TabIndex = 239;
+            this.label68.Text = "CSOS Levies";
             // 
             // chkEPWater
             // 
@@ -2707,7 +2779,7 @@
             this.tbAssets.Location = new System.Drawing.Point(4, 22);
             this.tbAssets.Name = "tbAssets";
             this.tbAssets.Padding = new System.Windows.Forms.Padding(3);
-            this.tbAssets.Size = new System.Drawing.Size(1198, 528);
+            this.tbAssets.Size = new System.Drawing.Size(1198, 546);
             this.tbAssets.TabIndex = 2;
             this.tbAssets.Text = "Balance Sheet - Assets";
             this.tbAssets.UseVisualStyleBackColor = true;
@@ -3237,7 +3309,7 @@
             this.tbLiabilities.Location = new System.Drawing.Point(4, 22);
             this.tbLiabilities.Name = "tbLiabilities";
             this.tbLiabilities.Padding = new System.Windows.Forms.Padding(3);
-            this.tbLiabilities.Size = new System.Drawing.Size(1198, 528);
+            this.tbLiabilities.Size = new System.Drawing.Size(1198, 546);
             this.tbLiabilities.TabIndex = 3;
             this.tbLiabilities.Text = "Balance Sheet - Liabilities";
             this.tbLiabilities.UseVisualStyleBackColor = true;
@@ -3659,7 +3731,7 @@
             this.tbReceoveries.Location = new System.Drawing.Point(4, 22);
             this.tbReceoveries.Name = "tbReceoveries";
             this.tbReceoveries.Padding = new System.Windows.Forms.Padding(3);
-            this.tbReceoveries.Size = new System.Drawing.Size(1198, 528);
+            this.tbReceoveries.Size = new System.Drawing.Size(1198, 546);
             this.tbReceoveries.TabIndex = 4;
             this.tbReceoveries.Text = "Recoveries vs Expense";
             this.tbReceoveries.UseVisualStyleBackColor = true;
@@ -3802,91 +3874,21 @@
             // 
             // txtComments
             // 
-            this.txtComments.Location = new System.Drawing.Point(16, 623);
+            this.txtComments.Location = new System.Drawing.Point(399, 623);
             this.txtComments.Multiline = true;
             this.txtComments.Name = "txtComments";
             this.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtComments.Size = new System.Drawing.Size(788, 82);
+            this.txtComments.Size = new System.Drawing.Size(405, 82);
             this.txtComments.TabIndex = 55;
             // 
             // label67
             // 
             this.label67.AutoSize = true;
-            this.label67.Location = new System.Drawing.Point(13, 607);
+            this.label67.Location = new System.Drawing.Point(394, 607);
             this.label67.Name = "label67";
             this.label67.Size = new System.Drawing.Size(56, 13);
             this.label67.TabIndex = 56;
             this.label67.Text = "Comments";
-            // 
-            // chkEPCSOSLevies
-            // 
-            this.chkEPCSOSLevies.AutoSize = true;
-            this.chkEPCSOSLevies.Location = new System.Drawing.Point(648, 516);
-            this.chkEPCSOSLevies.Name = "chkEPCSOSLevies";
-            this.chkEPCSOSLevies.Size = new System.Drawing.Size(15, 14);
-            this.chkEPCSOSLevies.TabIndex = 246;
-            this.chkEPCSOSLevies.UseVisualStyleBackColor = true;
-            // 
-            // chkEDCSOSLevies
-            // 
-            this.chkEDCSOSLevies.AutoSize = true;
-            this.chkEDCSOSLevies.Location = new System.Drawing.Point(601, 516);
-            this.chkEDCSOSLevies.Name = "chkEDCSOSLevies";
-            this.chkEDCSOSLevies.Size = new System.Drawing.Size(15, 14);
-            this.chkEDCSOSLevies.TabIndex = 245;
-            this.chkEDCSOSLevies.UseVisualStyleBackColor = true;
-            // 
-            // txtPrevCSOSLevies
-            // 
-            this.txtPrevCSOSLevies.Location = new System.Drawing.Point(675, 514);
-            this.txtPrevCSOSLevies.Name = "txtPrevCSOSLevies";
-            this.txtPrevCSOSLevies.ReadOnly = true;
-            this.txtPrevCSOSLevies.Size = new System.Drawing.Size(60, 20);
-            this.txtPrevCSOSLevies.TabIndex = 244;
-            // 
-            // txtPrevCSOSLeviesExpNotes
-            // 
-            this.txtPrevCSOSLeviesExpNotes.Location = new System.Drawing.Point(749, 514);
-            this.txtPrevCSOSLeviesExpNotes.Name = "txtPrevCSOSLeviesExpNotes";
-            this.txtPrevCSOSLeviesExpNotes.ReadOnly = true;
-            this.txtPrevCSOSLeviesExpNotes.Size = new System.Drawing.Size(357, 20);
-            this.txtPrevCSOSLeviesExpNotes.TabIndex = 243;
-            // 
-            // chkCSOSLeviesExpN
-            // 
-            this.chkCSOSLeviesExpN.AutoSize = true;
-            this.chkCSOSLeviesExpN.Location = new System.Drawing.Point(201, 515);
-            this.chkCSOSLeviesExpN.Name = "chkCSOSLeviesExpN";
-            this.chkCSOSLeviesExpN.Size = new System.Drawing.Size(15, 14);
-            this.chkCSOSLeviesExpN.TabIndex = 242;
-            this.chkCSOSLeviesExpN.UseVisualStyleBackColor = true;
-            this.chkCSOSLeviesExpN.CheckedChanged += new System.EventHandler(this.chkBankIncN_CheckedChanged);
-            // 
-            // chkCSOSLeviesExpY
-            // 
-            this.chkCSOSLeviesExpY.AutoSize = true;
-            this.chkCSOSLeviesExpY.Location = new System.Drawing.Point(176, 515);
-            this.chkCSOSLeviesExpY.Name = "chkCSOSLeviesExpY";
-            this.chkCSOSLeviesExpY.Size = new System.Drawing.Size(15, 14);
-            this.chkCSOSLeviesExpY.TabIndex = 241;
-            this.chkCSOSLeviesExpY.UseVisualStyleBackColor = true;
-            this.chkCSOSLeviesExpY.CheckedChanged += new System.EventHandler(this.chkBankIncN_CheckedChanged);
-            // 
-            // txtCSOSLevies
-            // 
-            this.txtCSOSLevies.Location = new System.Drawing.Point(222, 513);
-            this.txtCSOSLevies.Name = "txtCSOSLevies";
-            this.txtCSOSLevies.Size = new System.Drawing.Size(357, 20);
-            this.txtCSOSLevies.TabIndex = 240;
-            // 
-            // label68
-            // 
-            this.label68.AutoSize = true;
-            this.label68.Location = new System.Drawing.Point(12, 516);
-            this.label68.Name = "label68";
-            this.label68.Size = new System.Drawing.Size(70, 13);
-            this.label68.TabIndex = 239;
-            this.label68.Text = "CSOS Levies";
             // 
             // cbEmailTo
             // 
@@ -3910,10 +3912,30 @@
             this.lbEmail.TabIndex = 58;
             this.lbEmail.Text = "Email Report To:";
             // 
+            // label69
+            // 
+            this.label69.AutoSize = true;
+            this.label69.Location = new System.Drawing.Point(20, 607);
+            this.label69.Name = "label69";
+            this.label69.Size = new System.Drawing.Size(110, 13);
+            this.label69.TabIndex = 59;
+            this.label69.Text = "Additional Instructions";
+            // 
+            // tbAdditionalInstructions
+            // 
+            this.tbAdditionalInstructions.Location = new System.Drawing.Point(20, 623);
+            this.tbAdditionalInstructions.Multiline = true;
+            this.tbAdditionalInstructions.Name = "tbAdditionalInstructions";
+            this.tbAdditionalInstructions.ReadOnly = true;
+            this.tbAdditionalInstructions.Size = new System.Drawing.Size(355, 82);
+            this.tbAdditionalInstructions.TabIndex = 60;
+            // 
             // usrMonthly
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.tbAdditionalInstructions);
+            this.Controls.Add(this.label69);
             this.Controls.Add(this.lbEmail);
             this.Controls.Add(this.cbEmailTo);
             this.Controls.Add(this.label67);
@@ -4308,5 +4330,7 @@
         private System.Windows.Forms.Label label68;
         private System.Windows.Forms.ComboBox cbEmailTo;
         private System.Windows.Forms.Label lbEmail;
+        private System.Windows.Forms.Label label69;
+        private System.Windows.Forms.TextBox tbAdditionalInstructions;
     }
 }

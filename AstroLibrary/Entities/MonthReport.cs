@@ -95,5 +95,9 @@ namespace Astro.Library.Entities
                 return FinancialPeriodStart.ToString("MMM yyyy") + " - " + FinancialPeriodEnd.ToString("MMM yyyy");
             }
         }
+
+        public int Id { get; set; }
+
+        public string AdditionalComments { get; set; }
     }
 }

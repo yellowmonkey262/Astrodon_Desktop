@@ -189,5 +189,7 @@ namespace Astrodon.Data
 
         public virtual byte[] CheckListPDF { get; set; }
 
+        public string AdditionalComments { get; set; }
+
     }
 }

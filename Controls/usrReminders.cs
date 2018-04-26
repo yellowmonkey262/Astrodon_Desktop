@@ -25,8 +25,12 @@ namespace Astrodon.Controls
         private void LoadReminders()
         {
             bsRem.Clear();
-            String remQuery = "SELECT r.id, b.Building, b.DataPath, r.customer, r.remDate, r.remNote, r.action FROM tblReminders AS r INNER JOIN tblBuildings AS b ON r.building = b.id";
-            remQuery += " WHERE userID = " + Controller.user.id.ToString() + " ORDER BY r.action, r.remDate";
+            string remQuery = "SELECT r.id, b.Building, b.DataPath, r.customer, r.remDate, r.remNote, r.action " +
+                              " FROM tblReminders  r "+
+                              " LEFT JOIN tblBuildings b on CASE WHEN ISNUMERIC(r.building) = 1 THEN CAST(r.building AS INT) ELSE NULL END = b.Id " +
+                              " WHERE userID = "+ Controller.user.id.ToString() + " " +
+                              " ORDER BY r.action, r.remDate";
+
             String status;
             DataSet dsRem = dh.GetData(remQuery, null, out status);
             if (dsRem != null && dsRem.Tables.Count > 0 && dsRem.Tables[0].Rows.Count > 0)
@@ -49,30 +53,33 @@ namespace Astrodon.Controls
                     if (!mr.Action)
                     {
                         Customer c = Controller.pastel.GetOneCustomer(dr["DataPath"].ToString(), mr.Customer);
-                        List<AdditionalAddress> delAddresses = Controller.pastel.GetDeliveryInfo(dr["DataPath"].ToString(), mr.Customer);
-                        var builder = new System.Text.StringBuilder();
-                        builder.Append(mr.Contacts);
-                        var builder1 = new System.Text.StringBuilder();
-                        builder1.Append(mr.Phone);
-                        var builder2 = new System.Text.StringBuilder();
-                        builder2.Append(mr.Phone);
-                        var builder3 = new System.Text.StringBuilder();
-                        builder3.Append(mr.Fax);
-                        var builder4 = new System.Text.StringBuilder();
-                        builder4.Append(mr.Email);
-                        foreach (AdditionalAddress aa in delAddresses)
+                        if (c != null)
                         {
-                            if (!mr.Contacts.Contains(aa.Contact)) { builder.Append(aa.Contact + ";"); }
-                            if (!mr.Phone.Contains(aa.Telephone)) { builder1.Append(aa.Telephone + ";"); }
-                            if (!mr.Phone.Contains(aa.Cell)) { builder2.Append(aa.Cell + ";"); }
-                            if (!mr.Fax.Contains(aa.Fax)) { builder3.Append(aa.Fax + ";"); }
-                            if (!mr.Email.Contains(aa.Email)) { builder4.Append(aa.Email + ";"); }
+                            List<AdditionalAddress> delAddresses = Controller.pastel.GetDeliveryInfo(dr["DataPath"].ToString(), mr.Customer);
+                            var builder = new System.Text.StringBuilder();
+                            builder.Append(mr.Contacts);
+                            var builder1 = new System.Text.StringBuilder();
+                            builder1.Append(mr.Phone);
+                            var builder2 = new System.Text.StringBuilder();
+                            builder2.Append(mr.Phone);
+                            var builder3 = new System.Text.StringBuilder();
+                            builder3.Append(mr.Fax);
+                            var builder4 = new System.Text.StringBuilder();
+                            builder4.Append(mr.Email);
+                            foreach (AdditionalAddress aa in delAddresses)
+                            {
+                                if (!mr.Contacts.Contains(aa.Contact)) { builder.Append(aa.Contact + ";"); }
+                                if (!mr.Phone.Contains(aa.Telephone)) { builder1.Append(aa.Telephone + ";"); }
+                                if (!mr.Phone.Contains(aa.Cell)) { builder2.Append(aa.Cell + ";"); }
+                                if (!mr.Fax.Contains(aa.Fax)) { builder3.Append(aa.Fax + ";"); }
+                                if (!mr.Email.Contains(aa.Email)) { builder4.Append(aa.Email + ";"); }
+                            }
+                            mr.Email = builder4.ToString();
+                            mr.Fax = builder3.ToString();
+                            mr.Phone = builder2.ToString();
+                            mr.Phone = builder1.ToString();
+                            mr.Contacts = builder.ToString();
                         }
-                        mr.Email = builder4.ToString();
-                        mr.Fax = builder3.ToString();
-                        mr.Phone = builder2.ToString();
-                        mr.Phone = builder1.ToString();
-                        mr.Contacts = builder.ToString();
                     }
                     bsRem.Add(mr);
                 }

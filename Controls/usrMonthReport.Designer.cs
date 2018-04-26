@@ -38,9 +38,11 @@
             this.colBuild = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colFinPeriod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colUser = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.YearEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colUser = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AdditionalComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Save = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgMonthly)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,24 +52,29 @@
             this.dgMonthly.AllowUserToDeleteRows = false;
             this.dgMonthly.AllowUserToResizeColumns = false;
             this.dgMonthly.AllowUserToResizeRows = false;
+            this.dgMonthly.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgMonthly.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgMonthly.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgMonthly.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colBuild,
             this.colCode,
             this.colFinPeriod,
+            this.colUser,
             this.YearEnd,
             this.colDate,
-            this.colUser});
+            this.AdditionalComment,
+            this.Save});
             this.dgMonthly.Location = new System.Drawing.Point(20, 130);
             this.dgMonthly.Name = "dgMonthly";
-            this.dgMonthly.ReadOnly = true;
-            this.dgMonthly.Size = new System.Drawing.Size(842, 411);
+            this.dgMonthly.Size = new System.Drawing.Size(868, 493);
             this.dgMonthly.TabIndex = 6;
+            this.dgMonthly.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgMonthly_CellContentClick);
             // 
             // btnPrint
             // 
-            this.btnPrint.Location = new System.Drawing.Point(787, 547);
+            this.btnPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPrint.Location = new System.Drawing.Point(816, 638);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 8;
@@ -176,45 +183,89 @@
             // 
             // colBuild
             // 
+            this.colBuild.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.colBuild.DataPropertyName = "Building";
+            this.colBuild.Frozen = true;
             this.colBuild.HeaderText = "Building";
+            this.colBuild.MinimumWidth = 20;
             this.colBuild.Name = "colBuild";
             this.colBuild.ReadOnly = true;
+            this.colBuild.Width = 133;
             // 
             // colCode
             // 
+            this.colCode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.colCode.DataPropertyName = "Code";
+            this.colCode.Frozen = true;
             this.colCode.HeaderText = "Code";
+            this.colCode.MinimumWidth = 20;
             this.colCode.Name = "colCode";
             this.colCode.ReadOnly = true;
+            this.colCode.Width = 50;
             // 
             // colFinPeriod
             // 
+            this.colFinPeriod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.colFinPeriod.DataPropertyName = "finPeriod";
+            this.colFinPeriod.Frozen = true;
             this.colFinPeriod.HeaderText = "Month / Year";
+            this.colFinPeriod.MinimumWidth = 20;
             this.colFinPeriod.Name = "colFinPeriod";
             this.colFinPeriod.ReadOnly = true;
-            // 
-            // YearEnd
-            // 
-            this.YearEnd.DataPropertyName = "YearEnd";
-            this.YearEnd.HeaderText = "YearEnd";
-            this.YearEnd.Name = "YearEnd";
-            this.YearEnd.ReadOnly = true;
-            // 
-            // colDate
-            // 
-            this.colDate.DataPropertyName = "prcDate";
-            this.colDate.HeaderText = "Process Date";
-            this.colDate.Name = "colDate";
-            this.colDate.ReadOnly = true;
+            this.colFinPeriod.Width = 80;
             // 
             // colUser
             // 
+            this.colUser.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.colUser.DataPropertyName = "User";
+            this.colUser.Frozen = true;
             this.colUser.HeaderText = "User";
+            this.colUser.MinimumWidth = 20;
             this.colUser.Name = "colUser";
             this.colUser.ReadOnly = true;
+            this.colUser.Width = 133;
+            // 
+            // YearEnd
+            // 
+            this.YearEnd.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.YearEnd.DataPropertyName = "YearEnd";
+            this.YearEnd.Frozen = true;
+            this.YearEnd.HeaderText = "YE";
+            this.YearEnd.MinimumWidth = 20;
+            this.YearEnd.Name = "YearEnd";
+            this.YearEnd.ReadOnly = true;
+            this.YearEnd.Width = 80;
+            // 
+            // colDate
+            // 
+            this.colDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colDate.DataPropertyName = "prcDate";
+            this.colDate.Frozen = true;
+            this.colDate.HeaderText = "Process";
+            this.colDate.MinimumWidth = 40;
+            this.colDate.Name = "colDate";
+            this.colDate.ReadOnly = true;
+            this.colDate.Width = 60;
+            // 
+            // AdditionalComment
+            // 
+            this.AdditionalComment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.AdditionalComment.DataPropertyName = "AdditionalComments";
+            this.AdditionalComment.Frozen = true;
+            this.AdditionalComment.HeaderText = "Comments";
+            this.AdditionalComment.MinimumWidth = 20;
+            this.AdditionalComment.Name = "AdditionalComment";
+            this.AdditionalComment.Width = 200;
+            // 
+            // Save
+            // 
+            this.Save.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Save.Frozen = true;
+            this.Save.HeaderText = "Action";
+            this.Save.Name = "Save";
+            this.Save.Text = "Save";
+            this.Save.UseColumnTextForButtonValue = true;
+            this.Save.Width = 150;
             // 
             // usrMonthReport
             // 
@@ -256,8 +307,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colBuild;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFinPeriod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUser;
         private System.Windows.Forms.DataGridViewTextBoxColumn YearEnd;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colUser;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AdditionalComment;
+        private System.Windows.Forms.DataGridViewButtonColumn Save;
     }
 }

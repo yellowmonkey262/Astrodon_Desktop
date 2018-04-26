@@ -101,8 +101,8 @@ namespace Astrodon.Controls
             using (var context = SqlDataHandler.GetDataContext())
             {
 
-                
-                buildings = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled 
+
+                buildings = context.tblBuildings.Where(a => a.BuildingFinancialsEnabled
                                                          && a.BuildingDisabled == false
                                                          && (a.FinancialStartDate == null || a.FinancialStartDate <= DateTime.Today)
                         && (a.FinancialEndDate == null || a.FinancialEndDate >= DateTime.Today)
@@ -147,6 +147,8 @@ namespace Astrodon.Controls
                                 && b.BuildingDisabled == false
                                 select new MonthReport
                                 {
+                                    Id = m.id,
+                                    AdditionalComments = m.AdditionalComments,
                                     Building = b.Building,
                                     Code = b.Code,
                                     User = us == null ? string.Empty : us.name,
@@ -167,6 +169,8 @@ namespace Astrodon.Controls
                                 && (selectedUserId == 0 || (us != null && us.id == selectedUserId))
                                 select new MonthReport
                                 {
+                                    Id = m.id,
+                                    AdditionalComments = m.AdditionalComments,
                                     Building = b.Building,
                                     Code = b.Code,
                                     User = us == null ? string.Empty : us.name,
@@ -230,7 +234,7 @@ namespace Astrodon.Controls
                 }
             }
 
-         
+
         }
 
         private void dtStart_ValueChanged(object sender, EventArgs e)
@@ -274,7 +278,7 @@ namespace Astrodon.Controls
 
             if (!Controller.AskQuestion("Are you sure you want to create the allocation for " + dt.ToString("MMM yyyy") + "?"))
                 return;
-            
+
             this.Cursor = Cursors.WaitCursor;
             try
             {
@@ -284,7 +288,7 @@ namespace Astrodon.Controls
                     var currentAllocations = context.tblMonthFins.Where(a => a.completeDate == null && a.findate == dt).ToList();
                     context.tblMonthFins.RemoveRange(currentAllocations);
                     context.SaveChanges();
-                    
+
                     //create a list of building id and user id
                     var userIdList = context.tblUsers
                                             .Where(a => a.ProcessCheckLists == true && a.Active == true)
@@ -377,6 +381,8 @@ namespace Astrodon.Controls
                     foreach (var key in randomAllocations.Keys)
                     {
                         var curr = context.tblMonthFins.Where(a => a.buildingID == key && a.findate == dt).SingleOrDefault();
+                        var old = currentAllocations.Where(a => a.buildingID == key && a.findate == dt).FirstOrDefault();
+
                         if (curr == null)
                         {
                             curr = new Data.tblMonthFin()
@@ -384,7 +390,8 @@ namespace Astrodon.Controls
                                 buildingID = key,
                                 findate = dt,
                                 finPeriod = dt.Month,
-                                year = dt.Year
+                                year = dt.Year,
+                                AdditionalComments = old != null ? old.AdditionalComments : null
                             };
                             context.tblMonthFins.Add(curr);
                         }
@@ -403,6 +410,31 @@ namespace Astrodon.Controls
 
             Controller.ShowMessage("Random allocations completed");
 
+
+        }
+
+        private void dgMonthly_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+            {
+                var selectedItem = senderGrid.Rows[e.RowIndex].DataBoundItem as MonthReport;
+                if(selectedItem != null)
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var curr = context.tblMonthFins.Where(a => a.id == selectedItem.Id).SingleOrDefault();
+                        if (curr != null)
+                        {
+                            curr.AdditionalComments = selectedItem.AdditionalComments;
+                            context.SaveChanges();
+                            Controller.ShowMessage("Comment updated");
+                        }
+
+
+                    }
+                }
+            }
 
         }
     }

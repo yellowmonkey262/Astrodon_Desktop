@@ -400,6 +400,7 @@ namespace Astrodon.Controls
                     var itm = context.tblMonthFins.SingleOrDefault(a => a.buildingID == building && a.findate == findate);
                     if (itm != null)
                     {
+                        tbAdditionalInstructions.Text = itm.AdditionalComments;
                         PopulateCheckList(itm);
                     }
                     var prefDate = findate.AddMonths(-1);
@@ -582,6 +583,8 @@ namespace Astrodon.Controls
 
         private void ClearCheckList()
         {
+            tbAdditionalInstructions.Text = "";
+
             chkAccExpN.Checked = chkAccExpY.Checked = chkBankExpN.Checked = chkBankExpY.Checked = chkBankIncN.Checked = chkBankIncY.Checked = chkDebtLiaN.Checked = false;
             chkDebtLiaY.Checked = chkDelExpN.Checked = chkDelExpY.Checked = chkDomExpN.Checked = chkDomExpY.Checked = chkDomIncN.Checked = chkDomIncY.Checked = chkWaterUnder.Checked = false;
             chkElecExpN.Checked = chkElecExpY.Checked = chkElecIncN.Checked = chkElecIncY.Checked = chkElecInline.Checked = chkElecOver.Checked = chkElecUnder.Checked = false;

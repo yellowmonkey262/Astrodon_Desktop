@@ -226,13 +226,17 @@ namespace Astrodon
 
         public Customer GetOneCustomer(String buildPath, String accNumber)
         {
-            String customerString = GetCustomer(buildPath, accNumber);
-            Customer newCustomer = new Customer(customerString);
-            String lastCrDate = customerString.Split(new String[] { "|" }, StringSplitOptions.None)[66];
-            String createDate = customerString.Split(new String[] { "|" }, StringSplitOptions.None)[127];
-            newCustomer.lastCrDate = convertDate(lastCrDate).ToString("yyyy/MM/dd");
-            newCustomer.createDate = convertDate(createDate).ToString("yyyy/MM/dd");
-            return newCustomer;
+            if (!string.IsNullOrWhiteSpace(buildPath) && !string.IsNullOrWhiteSpace(accNumber))
+            {
+                String customerString = GetCustomer(buildPath, accNumber);
+                Customer newCustomer = new Customer(customerString);
+                String lastCrDate = customerString.Split(new String[] { "|" }, StringSplitOptions.None)[66];
+                String createDate = customerString.Split(new String[] { "|" }, StringSplitOptions.None)[127];
+                newCustomer.lastCrDate = convertDate(lastCrDate).ToString("yyyy/MM/dd");
+                newCustomer.createDate = convertDate(createDate).ToString("yyyy/MM/dd");
+                return newCustomer;
+            }
+            return null;
         }
 
         public String GetCustomer(String buildPath, String accNumber)

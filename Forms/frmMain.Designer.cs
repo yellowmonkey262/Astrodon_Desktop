@@ -36,6 +36,7 @@
             this.managementPackTOCDescriptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.publicHolidaysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.meetingRoomConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bondOriginatorConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upgradeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,7 +87,6 @@
             this.debtorsReportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debtorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportingToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.remindersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stephenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.accountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,7 +104,6 @@
             this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.bondOriginatorConfigurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -118,7 +117,6 @@
             this.customersToolStripMenuItem,
             this.pMPAToolStripMenuItem,
             this.debtorsReportsToolStripMenuItem,
-            this.helpToolStripMenuItem,
             this.remindersToolStripMenuItem,
             this.stephenToolStripMenuItem,
             this.monthlyFinancialsToolStripMenuItem});
@@ -210,6 +208,13 @@
             this.meetingRoomConfigurationToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.meetingRoomConfigurationToolStripMenuItem.Text = "Meeting Room Configuration";
             this.meetingRoomConfigurationToolStripMenuItem.Click += new System.EventHandler(this.meetingRoomConfigurationToolStripMenuItem_Click);
+            // 
+            // bondOriginatorConfigurationToolStripMenuItem
+            // 
+            this.bondOriginatorConfigurationToolStripMenuItem.Name = "bondOriginatorConfigurationToolStripMenuItem";
+            this.bondOriginatorConfigurationToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.bondOriginatorConfigurationToolStripMenuItem.Text = "Bond Originator Configuration";
+            this.bondOriginatorConfigurationToolStripMenuItem.Click += new System.EventHandler(this.bondOriginatorConfigurationToolStripMenuItem_Click);
             // 
             // upgradeDatabaseToolStripMenuItem
             // 
@@ -609,13 +614,6 @@
             this.reportingToolStripMenuItem1.Text = "Consolidated Debtors Report";
             this.reportingToolStripMenuItem1.Click += new System.EventHandler(this.reportingToolStripMenuItem1_Click);
             // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
-            // 
             // remindersToolStripMenuItem
             // 
             this.remindersToolStripMenuItem.Name = "remindersToolStripMenuItem";
@@ -635,7 +633,7 @@
             // accountsToolStripMenuItem
             // 
             this.accountsToolStripMenuItem.Name = "accountsToolStripMenuItem";
-            this.accountsToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.accountsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.accountsToolStripMenuItem.Text = "Accounts";
             this.accountsToolStripMenuItem.Click += new System.EventHandler(this.accountsToolStripMenuItem_Click);
             // 
@@ -748,13 +746,6 @@
             this.notifyIcon1.Text = "Jobs";
             this.notifyIcon1.Visible = true;
             // 
-            // bondOriginatorConfigurationToolStripMenuItem
-            // 
-            this.bondOriginatorConfigurationToolStripMenuItem.Name = "bondOriginatorConfigurationToolStripMenuItem";
-            this.bondOriginatorConfigurationToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
-            this.bondOriginatorConfigurationToolStripMenuItem.Text = "Bond Originator Configuration";
-            this.bondOriginatorConfigurationToolStripMenuItem.Click += new System.EventHandler(this.bondOriginatorConfigurationToolStripMenuItem_Click);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -795,7 +786,6 @@
         private System.Windows.Forms.ToolStripMenuItem emailToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pMPAToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Panel pnlContents;
