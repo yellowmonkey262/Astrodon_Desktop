@@ -383,6 +383,8 @@ namespace Astrodon.Controls
                         var curr = context.tblMonthFins.Where(a => a.buildingID == key && a.findate == dt).SingleOrDefault();
                         var old = currentAllocations.Where(a => a.buildingID == key && a.findate == dt).FirstOrDefault();
 
+                        var prev = context.tblMonthFins.Where(a => a.buildingID == key && a.findate < dt).OrderByDescending(a => a.findate).FirstOrDefault();
+                         
                         if (curr == null)
                         {
                             curr = new Data.tblMonthFin()
@@ -391,7 +393,7 @@ namespace Astrodon.Controls
                                 findate = dt,
                                 finPeriod = dt.Month,
                                 year = dt.Year,
-                                AdditionalComments = old != null ? old.AdditionalComments : null
+                                AdditionalComments = prev != null ? prev.AdditionalComments : null
                             };
                             context.tblMonthFins.Add(curr);
                         }
@@ -427,6 +429,14 @@ namespace Astrodon.Controls
                         if (curr != null)
                         {
                             curr.AdditionalComments = selectedItem.AdditionalComments;
+
+                            //future
+                            var future = context.tblMonthFins.Where(a => a.buildingID == curr.buildingID && a.findate > curr.findate).ToList();
+                            foreach(var item in future)
+                            {
+                                item.AdditionalComments = selectedItem.AdditionalComments;
+                            }
+
                             context.SaveChanges();
                             Controller.ShowMessage("Comment updated");
                         }
