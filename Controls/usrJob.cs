@@ -1022,8 +1022,14 @@ namespace Astrodon.Controls
                 }
             }
 
+            txtStatus.Text += Environment.NewLine + "Loading HTML: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+            Application.DoEvents();
             String html = ConvertRTFToHtml();
-            //MessageBox.Show(html);
+
+
+            txtStatus.Text += Environment.NewLine + "Loading PDF: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+            Application.DoEvents();
+
             PDF pdf = new PDF();
             int selectedCustomers = 0;
             List<Customer> includedCustomers = new List<Customer>();
@@ -1083,11 +1089,11 @@ namespace Astrodon.Controls
                 //MessageBox.Show(cansend.ToString());
                 //cansend = false;
                 //////////
-                if (!cansend)
-                {
-                    MessageBox.Show("No customers / email addresses selected");
-                    return;
-                }
+                //if (!cansend)
+                //{
+                //    MessageBox.Show("No customers / email addresses selected");
+                //    return;
+                //}
             }
 
             String defaultLocation = "K:\\Debtors System";
@@ -1154,6 +1160,7 @@ namespace Astrodon.Controls
                 }
                 else
                 {
+                    #region Send Now
                     bool success = true;
                     bool delay = includedCustomers.Count > 1;
                     String mailBody = "";
@@ -1176,6 +1183,8 @@ namespace Astrodon.Controls
                     List<String> attachments = new List<string>();
                     Dictionary<String, byte[]> liveAttachments = new Dictionary<string, byte[]>();
                     String filePath = "";
+
+                    #region Has Letters
                     if (HasLetter() && !String.IsNullOrEmpty(fileName) && fileStream != null)
                     {
                         if (CreateDocument(attachmentLocation, fileName, fileStream, out status))
@@ -1186,7 +1195,9 @@ namespace Astrodon.Controls
                             catch { }
                         }
                     }
+                    #endregion
 
+                    #region Attachments in Email
                     foreach (Attachments a in EmailDocs)
                     {
                         int fileID;
@@ -1200,7 +1211,9 @@ namespace Astrodon.Controls
                         Application.DoEvents();
 
                     }
+                    #endregion
 
+                    #region SMS
                     SMSMessage m = new SMSMessage();
                     if (!String.IsNullOrEmpty(txtSMS.Text.Trim()) && !String.IsNullOrEmpty(sendCustomer.CellPhone))
                     {
@@ -1214,15 +1227,21 @@ namespace Astrodon.Controls
                         Application.DoEvents();
 
                     }
+                    #endregion
 
                     if (attachments.Count > 0)
                     {
                         String insertStatus;
                         bool print = false;
-                        int cEmailCount = sendCustomer.Email.Length;
-                        foreach (String cEmail in sendCustomer.Email) { if (String.IsNullOrEmpty(cEmail)) { cEmailCount--; } }
+                        int cEmailCount = 0;
+
+                        if(sendCustomer.Email != null && sendCustomer.Email.Length > 0)
+                        {
+                            cEmailCount = sendCustomer.Email.ToList().Where(a => !String.IsNullOrWhiteSpace(a)).Count();
+                        }
                         print = cEmailCount == 0;
 
+                        #region chkBuilding Checked
                         if (chkBuilding.Checked && cmbFolder.SelectedItem != null && onetimebuildingattachments == false)
                         {
                             onetimebuildingattachments = true;
@@ -1277,9 +1296,12 @@ namespace Astrodon.Controls
                             }
                             attachments.Remove(bfilePath);
                         }
+                        #endregion
 
+                    
                         if (!print)
                         {
+                            #region #print
                             txtStatus.Text += "Setting up email: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                             Application.DoEvents();
 
@@ -1338,6 +1360,7 @@ namespace Astrodon.Controls
                                     Application.DoEvents();
                                 }
                             }
+                            #endregion
                         }
                         else if (!chkDisablePrint.Checked)
                         {
@@ -1351,11 +1374,13 @@ namespace Astrodon.Controls
                             txtStatus.Text += "Completed printing documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                             Application.DoEvents();
                         }
+                      
                     }
                     else
                     {
                         MessageBox.Show("Nothing to print or send");
                     }
+                    #endregion
                 }
             }
             this.Cursor = Cursors.Arrow;
