@@ -948,7 +948,16 @@ namespace Astrodon.Controls
 
         private void btnView_Click(object sender, EventArgs e)
         {
-            ProcessDocuments(false);
+            try
+            {
+                btnView.Enabled = false;
+                Application.DoEvents();
+                ProcessDocuments(false);
+            }
+            finally
+            {
+                btnView.Enabled = true;
+            }
         }
 
         private bool HasLetter()
@@ -1022,6 +1031,8 @@ namespace Astrodon.Controls
             int rowIncludes = 0;
             for (int i = 0; i < dgCustomers.Rows.Count; i++)
             {
+                Application.DoEvents();
+
                 DataGridViewRow dvr = dgCustomers.Rows[i];
                 bool included = (bool)dvr.Cells[0].Value;
                 jobCustomers jAcc = null;
@@ -1045,6 +1056,7 @@ namespace Astrodon.Controls
                 }
             }
             bool cansend = false;
+            Application.DoEvents();
 
             if (includedCustomers.Count == 0)
             {
@@ -1082,6 +1094,10 @@ namespace Astrodon.Controls
             if (!Directory.Exists(defaultLocation)) { defaultLocation = "C:\\Pastel11"; }
             String attachmentLocation = defaultLocation + "\\PA Attachments";
             if (!Directory.Exists(attachmentLocation)) { Directory.CreateDirectory(attachmentLocation); }
+
+            Application.DoEvents();
+
+
             SMS smsSender = new SMS();
             if (!sendNow)
             {
@@ -1155,6 +1171,7 @@ namespace Astrodon.Controls
                     mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
                     mailBody += "You're in good hands";
                     txtStatus.Text += "Creating documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                    Application.DoEvents();
 
                     List<String> attachments = new List<string>();
                     Dictionary<String, byte[]> liveAttachments = new Dictionary<string, byte[]>();
@@ -1180,6 +1197,8 @@ namespace Astrodon.Controls
                             try { liveAttachments.Add(a.FileName, aByte); }
                             catch { }
                         }
+                        Application.DoEvents();
+
                     }
 
                     SMSMessage m = new SMSMessage();
@@ -1192,6 +1211,8 @@ namespace Astrodon.Controls
                         m.number = sendCustomer.CellPhone;
                         m.sender = Controller.user.id.ToString();
                         smsSender.SendMessage(m, !delay, out status);
+                        Application.DoEvents();
+
                     }
 
                     if (attachments.Count > 0)
@@ -1213,6 +1234,7 @@ namespace Astrodon.Controls
                             }
 
                             pdf.CreatePALetter(null, selectedBuilding, GetPM(), txtSubject.Text, DateTime.Now, html, null, justify, chkUseLetterhead.Checked, out fileStream); //.Replace("/", "\\")
+                            Application.DoEvents();
                             String tempFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + selectedBuilding.Abbr + "_" + txtSubject.Text + "_" + cCount.ToString();
                             if (tempFileName.Length > 32) { tempFileName = tempFileName.Substring(0, 32); }
                             String bfileName = tempFileName + ".pdf";
@@ -1228,6 +1250,7 @@ namespace Astrodon.Controls
                             try
                             {
                                 txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                                Application.DoEvents();
                                 foreach (String attach in attachments)
                                 {
                                     if (attach != filePath)
@@ -1243,6 +1266,7 @@ namespace Astrodon.Controls
                                             MessageBox.Show("Error processing...");
                                             return;
                                         }
+                                        Application.DoEvents();
                                     }
                                 }
                                 txtStatus.Text += "Completed uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
@@ -1257,6 +1281,7 @@ namespace Astrodon.Controls
                         if (!print)
                         {
                             txtStatus.Text += "Setting up email: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                            Application.DoEvents();
 
                             String cc = String.IsNullOrEmpty(txtCC.Text) ? " " : txtCC.Text;
                             String bcc = String.IsNullOrEmpty(txtBCC.Text) ? " " : txtBCC.Text;
@@ -1265,6 +1290,7 @@ namespace Astrodon.Controls
                                 if (Controller.user.id != 1)
                                 {
                                     bool insertSuccess = dataHandler.InsertLetter(selectedBuilding.PM, sendCustomer.Email, txtSubject.Text + ": " + sendCustomer.accNumber + " " + DateTime.Now.ToString(), mailBody, true, cc, bcc, false, attachments.ToArray(), sendCustomer.accNumber, out insertStatus);
+                                    Application.DoEvents();
                                     if (!insertSuccess)
                                     {
                                         MessageBox.Show("Error processing..." + insertStatus);
@@ -1275,6 +1301,7 @@ namespace Astrodon.Controls
                             else
                             {
                                 bool mailSuccess = dataHandler.InsertLetter(selectedBuilding.PM, sendCustomer.Email, txtSubject.Text + ": " + sendCustomer.accNumber + " " + DateTime.Now.ToString(), mailBody, true, cc, bcc, false, attachments.ToArray(), sendCustomer.accNumber, out insertStatus, true);
+                                Application.DoEvents();
                                 if (!mailSuccess)
                                 {
                                     MessageBox.Show("Error sending mail to " + sendCustomer.Email[0] + ": " + status);
@@ -1305,16 +1332,24 @@ namespace Astrodon.Controls
                                             MessageBox.Show("Error uploading documents..." + ex.Message);
                                             return;
                                         }
+                                        Application.DoEvents();
                                     }
                                     txtStatus.Text += "Completed Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                                    Application.DoEvents();
                                 }
                             }
                         }
                         else if (!chkDisablePrint.Checked)
                         {
                             txtStatus.Text += "Printing documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                            foreach (String attachment in attachments) { SendToPrinter(attachment); }
+                            Application.DoEvents();
+                            foreach (String attachment in attachments)
+                            {
+                                SendToPrinter(attachment);
+                                Application.DoEvents();
+                            }
                             txtStatus.Text += "Completed printing documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                            Application.DoEvents();
                         }
                     }
                     else
@@ -1357,9 +1392,10 @@ namespace Astrodon.Controls
             }
         }
 
+        private string _PrinterName = string.Empty;
         private void SendToPrinter(String fileName)
         {
-            if (!printerSet)
+            if (!printerSet || String.IsNullOrWhiteSpace(_PrinterName))
             {
                 frmPrintDialog printDialog = new frmPrintDialog();
                 if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -1368,6 +1404,7 @@ namespace Astrodon.Controls
                     Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
                     Properties.Settings.Default.Save();
                     printerSet = true;
+                    _PrinterName = Properties.Settings.Default.defaultPrinter;
                 }
             }
 
@@ -1376,12 +1413,17 @@ namespace Astrodon.Controls
                 StartInfo = new ProcessStartInfo
                 {
                     Verb = "print",
-                    FileName = fileName
+                    FileName = fileName,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    Arguments = _PrinterName
                 }
             })
             {
+                txtStatus.Text += "Printing documents: "+ fileName+" " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                 p.Start();
-                System.Threading.Thread.Sleep(5000);
+                p.WaitForExit(5000);
+                Application.DoEvents();
             }
         }
 
@@ -1457,11 +1499,20 @@ namespace Astrodon.Controls
         {
             //if (ValidateProcess())
             //{
-            UpdateJobStatus("COMPLETED");
-            ProcessDocuments(true);
-            String selfProcess = "UPDATE tblPMJob SET processedBy = " + Controller.user.id.ToString() + ", completedate = getdate() WHERE id = " + jobID.ToString();
-            dataHandler.SetData(selfProcess, null, out status);
-            Controller.mainF.ShowJobs();
+            try
+            {
+                btnProcess.Enabled = false;
+                Application.DoEvents();
+                UpdateJobStatus("COMPLETED");
+                ProcessDocuments(true);
+                String selfProcess = "UPDATE tblPMJob SET processedBy = " + Controller.user.id.ToString() + ", completedate = getdate() WHERE id = " + jobID.ToString();
+                dataHandler.SetData(selfProcess, null, out status);
+                Controller.mainF.ShowJobs();
+            }
+            finally
+            {
+                btnProcess.Enabled = true;
+            }
             //}
         }
 
@@ -1469,21 +1520,39 @@ namespace Astrodon.Controls
         {
             //if (ValidateProcess())
             //{
-            UpdateJobStatus("COMPLETED");
-            ProcessDocuments(true);
-            Controller.mainF.ShowJobs();
+            try
+            {
+                btnApprove.Enabled = false;
+                Application.DoEvents();
+                UpdateJobStatus("COMPLETED");
+                ProcessDocuments(true);
+                Controller.mainF.ShowJobs();
+            }
+            finally
+            {
+                btnApprove.Enabled = true;
+            }
             //}
         }
 
         private void btnRework_Click(object sender, EventArgs e)
         {
-            UpdateJobStatus("REWORK");
-            String submitQuery = "UPDATE tblPMJob SET status = 'REWORK' WHERE id = " + jobID.ToString();
-            String updateQuery = "UPDATE tblJobUpdate SET paLastUpdated = getdate(), paid = " + processor;
-            dataHandler.SetData(updateQuery, null, out status);
-            ProcessMessage("submitted job for rework");
-            dataHandler.SetData(submitQuery, null, out status);
-            Controller.mainF.ShowJobs();
+            try
+            {
+                btnRework.Enabled = false;
+                Application.DoEvents();
+                UpdateJobStatus("REWORK");
+                String submitQuery = "UPDATE tblPMJob SET status = 'REWORK' WHERE id = " + jobID.ToString();
+                String updateQuery = "UPDATE tblJobUpdate SET paLastUpdated = getdate(), paid = " + processor;
+                dataHandler.SetData(updateQuery, null, out status);
+                ProcessMessage("submitted job for rework");
+                dataHandler.SetData(submitQuery, null, out status);
+                Controller.mainF.ShowJobs();
+            }
+            finally
+            {
+                btnRework.Enabled = true;
+            }
         }
 
         private void btnCopy_Click(object sender, EventArgs e)
