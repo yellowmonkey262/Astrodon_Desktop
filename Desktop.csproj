@@ -572,6 +572,12 @@
     <Compile Include="Forms\frmPrintDialog.designer.cs">
       <DependentUpon>frmPrintDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmProgress.Designer.cs">
+      <DependentUpon>frmProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmPrompt.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -887,6 +893,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmPrintDialog.resx">
       <DependentUpon>frmPrintDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmProgress.resx">
+      <DependentUpon>frmProgress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmPrompt.resx">
       <DependentUpon>frmPrompt.cs</DependentUpon>

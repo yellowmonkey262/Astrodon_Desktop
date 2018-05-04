@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Linq;
+using Astrodon.Forms;
 
 namespace Astrodon
 {
@@ -130,8 +131,11 @@ namespace Astrodon
             }
         }
 
+        private frmProgress _ProgressForm = null;
         private void btnProcess_Click(object sender, EventArgs e)
         {
+            _ProgressForm = frmProgress.ShowForm();
+
             this.Cursor = Cursors.WaitCursor;
             statements = new Statements { statements = new List<Statement>() };
             Dictionary<String, bool> hasStatements = new Dictionary<string, bool>();
@@ -140,11 +144,15 @@ namespace Astrodon
                 if ((bool)dvr.Cells[0].Value)
                 {
                     String buildingName = dvr.Cells[1].Value.ToString();
+                    AddProgressString("Loading Building " + buildingName);
+
                     SetBuildingStatement(buildingName);
                     String datapath = dvr.Cells[5].Value.ToString();
                     int period = (int)dvr.Cells[6].Value;
                     if (dvr.Cells[2].Value == null) { MessageBox.Show("ishoa"); }
+
                     List<Statement> bStatements = SetBuildings(buildingName, datapath, period, (bool)dvr.Cells[2].Value);
+
                     int idx = dvr.Index;
                     DataRow dr = dsBuildings.Tables[0].Rows[idx];
                     String pm = dr["pm"].ToString();
@@ -172,73 +180,99 @@ namespace Astrodon
             foreach (Statement stmt in statements.statements)
             {
                 String fileName = String.Empty;
-                generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd);
-
-                #region Upload Letter
-
-                String actFileTitle = Path.GetFileNameWithoutExtension(fileName);
-                String actFile = Path.GetFileName(fileName);
-
-                #endregion Upload Letter
-
-                if (stmt.EmailMe)
+                if (generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd))
                 {
-                    if (!String.IsNullOrEmpty(fileName))
+                    AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload Letter");
+
+                    #region Upload Letter
+
+                    String actFileTitle = Path.GetFileNameWithoutExtension(fileName);
+                    String actFile = Path.GetFileName(fileName);
+
+                    #endregion Upload Letter
+
+                    #region Email Me
+                    if (stmt.EmailMe)
                     {
-                        if (!hasStatements.ContainsKey(stmt.BuildingName)) { hasStatements.Add(stmt.BuildingName, true); }
-                        if (Controller.user.id != 1) { SetupEmail(stmt, fileName); }
-                        if (stmt.PrintMe && Controller.user.id != 1)
+
+                        if (!String.IsNullOrEmpty(fileName))
                         {
-                            if (!printerSet)
+                            if (!hasStatements.ContainsKey(stmt.BuildingName))
                             {
-                                frmPrintDialog printDialog = new frmPrintDialog();
-                                if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                                {
-                                    SetDefaultPrinter(printDialog.selectedPrinter);
-                                    Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
-                                    Properties.Settings.Default.Save();
-                                    printerSet = true;
-                                }
+                                hasStatements.Add(stmt.BuildingName, true);
                             }
-                            SendToPrinter(fileName);
+                            if (Controller.user.id != 1)
+                            {
+                                AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Email statement");
+                                SetupEmail(stmt, fileName);
+                            }
+                            //if (stmt.PrintMe && Controller.user.id != 1)
+                            //{
+                            //    if (!printerSet)
+                            //    {
+                            //        frmPrintDialog printDialog = new frmPrintDialog();
+                            //        if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            //        {
+                            //            SetDefaultPrinter(printDialog.selectedPrinter);
+                            //            Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
+                            //            Properties.Settings.Default.Save();
+                            //            printerSet = true;
+                            //        }
+                            //    }
+                            //    SendToPrinter(fileName);
+                            //}
                         }
                     }
-                }
-                else if (stmt.PrintMe && Controller.user.id != 1)
-                {
-                    if (!printerSet)
+                    #endregion
+
+                    #region Print Me
+                    if (stmt.PrintMe && Controller.user.id != 1)
                     {
-                        frmPrintDialog printDialog = new frmPrintDialog();
-                        if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        if (!printerSet)
                         {
-                            SetDefaultPrinter(printDialog.selectedPrinter);
-                            Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
-                            Properties.Settings.Default.Save();
-                            printerSet = true;
+                            _ProgressForm.Hide();
+                            frmPrintDialog printDialog = new frmPrintDialog();
+                            if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            {
+                                SetDefaultPrinter(printDialog.selectedPrinter);
+                                Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
+                                Properties.Settings.Default.Save();
+                                printerSet = true;
+                                _PrinterName = printDialog.selectedPrinter;
+                            }
+                            _ProgressForm.Show();
+
                         }
+                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Printing statement");
+                        SendToPrinter(fileName);
+
                     }
-                    SendToPrinter(fileName);
+                    #endregion
+
+                    #region Upload Me
                     try
                     {
+                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
                         mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
                         ftpClient.Upload(fileName, actFile, false);
                     }
                     catch { }
+                    #endregion
+
+                    Application.DoEvents();
                 }
                 else
                 {
-                    try
-                    {
-                        mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
-                        ftpClient.Upload(fileName, actFile, false);
-                    }
-                    catch { }
+                    AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - ERROR Processing Statement");
+                    Application.DoEvents();
                 }
             }
+
             foreach (DataGridViewRow dvr in dgBuildings.Rows)
             {
                 dvr.Cells[0].Value = false;
             }
+
             foreach (KeyValuePair<String, bool> hasStatement in hasStatements)
             {
                 String query = "INSERT INTO tblStatements(building, lastProcessed) VALUES(@building, @lastProcessed)";
@@ -248,8 +282,17 @@ namespace Astrodon
                 dh.SetData(query, sqlParms, out status);
             }
             this.Cursor = Cursors.Arrow;
-            MessageBox.Show("Process Complete");
+            _ProgressForm.Focus();
+            _ProgressForm.ProcessComplete();
+            _ProgressForm = null;
         }
+
+        private void AddProgressString(string message)
+        {
+            if (_ProgressForm != null)
+                _ProgressForm.AddMessage(message);
+        }
+        private string _PrinterName = string.Empty;
 
         public List<Statement> SetBuildings(String buildingName, String buildingPath, int buildingPeriod, bool isHOA)
         {
@@ -266,6 +309,8 @@ namespace Astrodon
             {
                 try
                 {
+                    AddProgressString("Loading Statement " + customer.accNumber);
+
                     var canemail = customer.Email.Count(d => !String.IsNullOrEmpty(d)) > 0;
 
                     Statement myStatement = new Statement { AccNo = customer.accNumber };
@@ -285,8 +330,11 @@ namespace Astrodon
                     if (transactions != null) { myStatement.Transactions = transactions; }
                     myStatement.totalDue = totalDue;
                     myStatement.DebtorEmail = getDebtorEmail(buildingName);
-                    myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
-                    myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
+                    myStatement.PrintMe = customer.statPrintorEmail == 1 || customer.statPrintorEmail == 3;
+                    myStatement.EmailMe = customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4;
+
+                    //myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
+                    //myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
                     if (customer.Email != null && customer.Email.Length > 0)
                     {
                         List<String> newEmails = new List<string>();
@@ -296,12 +344,18 @@ namespace Astrodon
                         }
                         myStatement.email1 = newEmails.ToArray();
                     }
+                    else
+                        myStatement.PrintMe = true;
+                    AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
+                    AddProgressString(customer.accNumber + " EmailMe : " + customer.statPrintorEmail.ToString() + " = " + myStatement.EmailMe.ToString());
+
                     myStatements.Add(myStatement);
                 }
                 catch { }
                 ccount++;
                 lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();
                 lblCCount.Refresh();
+                AddProgressString(lblCCount.Text);
                 Application.DoEvents();
             }
             return myStatements;
@@ -355,10 +409,14 @@ namespace Astrodon
                 p.StartInfo = new ProcessStartInfo
                 {
                     Verb = "print",
-                    FileName = fileName
+                    FileName = fileName,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    Arguments = _PrinterName
                 };
                 p.Start();
-                System.Threading.Thread.Sleep(5000);
+                p.WaitForExit(15000);
+                //System.Threading.Thread.Sleep(5000);
             }
         }
 

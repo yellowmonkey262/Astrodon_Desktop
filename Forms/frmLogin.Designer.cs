@@ -40,7 +40,7 @@
             this.lblError.ForeColor = System.Drawing.Color.Red;
             this.lblError.Location = new System.Drawing.Point(4, 95);
             this.lblError.Name = "lblError";
-            this.lblError.Size = new System.Drawing.Size(70, 13);
+            this.lblError.Size = new System.Drawing.Size(84, 15);
             this.lblError.TabIndex = 23;
             this.lblError.Text = "errormessage";
             // 
@@ -86,7 +86,7 @@
             this.Label3.AutoSize = true;
             this.Label3.Location = new System.Drawing.Point(2, 67);
             this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(53, 13);
+            this.Label3.Size = new System.Drawing.Size(61, 15);
             this.Label3.TabIndex = 18;
             this.Label3.Text = "Password";
             // 
@@ -95,7 +95,7 @@
             this.Label2.AutoSize = true;
             this.Label2.Location = new System.Drawing.Point(2, 38);
             this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(55, 13);
+            this.Label2.Size = new System.Drawing.Size(65, 15);
             this.Label2.TabIndex = 17;
             this.Label2.Text = "Username";
             // 
@@ -104,7 +104,7 @@
             this.Label1.AutoSize = true;
             this.Label1.Location = new System.Drawing.Point(2, 9);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(203, 13);
+            this.Label1.Size = new System.Drawing.Size(238, 15);
             this.Label1.TabIndex = 16;
             this.Label1.Text = "Please enter username && password below";
             // 
@@ -113,7 +113,7 @@
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(219, 143);
+            this.ClientSize = new System.Drawing.Size(260, 155);
             this.Controls.Add(this.lblError);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
@@ -122,8 +122,10 @@
             this.Controls.Add(this.Label3);
             this.Controls.Add(this.Label2);
             this.Controls.Add(this.Label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";

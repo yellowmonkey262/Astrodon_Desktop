@@ -66,7 +66,7 @@ namespace Astrodon.Controls
                 p.StartInfo = new ProcessStartInfo
                 {
                     Verb = "print",
-                    FileName = fileName
+                    FileName = fileName,
                 };
                 p.Start();
                 System.Threading.Thread.Sleep(5000);
