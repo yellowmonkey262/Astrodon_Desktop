@@ -182,8 +182,6 @@ namespace Astrodon
                 String fileName = String.Empty;
                 if (generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd))
                 {
-                    AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload Letter");
-
                     #region Upload Letter
 
                     String actFileTitle = Path.GetFileNameWithoutExtension(fileName);
@@ -203,7 +201,6 @@ namespace Astrodon
                             }
                             if (Controller.user.id != 1)
                             {
-                                AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Email statement");
                                 SetupEmail(stmt, fileName);
                             }
                             //if (stmt.PrintMe && Controller.user.id != 1)
@@ -243,8 +240,15 @@ namespace Astrodon
                             _ProgressForm.Show();
 
                         }
-                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Printing statement");
-                        SendToPrinter(fileName);
+                        if (!String.IsNullOrWhiteSpace(fileName))
+                        {
+                            AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Printing statement - " + Path.GetFileName(fileName));
+                            SendToPrinter(fileName, stmt.BuildingName , stmt.AccNo);
+                        }
+                        else
+                        {
+                            AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Error Printing Statement - file name blank");
+                        }
 
                     }
                     #endregion
@@ -263,7 +267,7 @@ namespace Astrodon
                 }
                 else
                 {
-                    AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - ERROR Processing Statement");
+                    AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - ERROR Processing Statement");
                     Application.DoEvents();
                 }
             }
@@ -287,7 +291,7 @@ namespace Astrodon
             _ProgressForm = null;
         }
 
-        private void AddProgressString(string message)
+         private void AddProgressString(string message)
         {
             if (_ProgressForm != null)
                 _ProgressForm.AddMessage(message);
@@ -346,8 +350,9 @@ namespace Astrodon
                     }
                     else
                         myStatement.PrintMe = true;
-                    AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
-                    AddProgressString(customer.accNumber + " EmailMe : " + customer.statPrintorEmail.ToString() + " = " + myStatement.EmailMe.ToString());
+
+                    if(myStatement.PrintMe)
+                       AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
 
                     myStatements.Add(myStatement);
                 }
@@ -355,7 +360,6 @@ namespace Astrodon
                 ccount++;
                 lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();
                 lblCCount.Refresh();
-                AddProgressString(lblCCount.Text);
                 Application.DoEvents();
             }
             return myStatements;
@@ -402,21 +406,30 @@ namespace Astrodon
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetDefaultPrinter(string Name);
 
-        private void SendToPrinter(String fileName)
+        private void SendToPrinter(String fileName, string buildingName, string unitAcc)
         {
-            using (Process p = new Process())
+            if (File.Exists(fileName))
             {
-                p.StartInfo = new ProcessStartInfo
+                using (Process p = new Process())
                 {
-                    Verb = "print",
-                    FileName = fileName,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    Arguments = _PrinterName
-                };
-                p.Start();
-                p.WaitForExit(15000);
-                //System.Threading.Thread.Sleep(5000);
+                    AddProgressString(buildingName + ": " + unitAcc + " - Start Adobe Process on - " + _PrinterName + " for "  + Path.GetFileName(fileName));
+                    p.StartInfo = new ProcessStartInfo
+                    {
+                        Verb = "print",
+                        FileName = fileName,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        Arguments = _PrinterName
+                    };
+                    p.Start();
+                    p.WaitForExit(15000);
+                    //System.Threading.Thread.Sleep(5000);
+                    AddProgressString(buildingName + ": " + unitAcc + " - Adobe Process Completed on - " + _PrinterName + " for " + Path.GetFileName(fileName));
+                }
+            }
+            else
+            {
+                AddProgressString("Error printing " + fileName + " file does not exist");
             }
         }
 
