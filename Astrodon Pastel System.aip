@@ -13,10 +13,10 @@
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="Metathought Development and Design"/>
     <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp"/>
-    <ROW Property="ProductCode" Value="1033:{886D37B3-3F4E-4538-A537-B9E7A1128EBD} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{CBAAA0FB-40EE-4D6E-8C67-1C1A3669641D} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Astrodon Pastel System"/>
-    <ROW Property="ProductVersion" Value="5.2.145" Type="32"/>
+    <ROW Property="ProductVersion" Value="5.2.148" Type="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{05EE21C2-B39F-4AB8-B687-1E49B15014C7}"/>
@@ -55,6 +55,7 @@
     <ROW Component="MySql.Data.dll" ComponentId="{AC9DCDFB-9E69-4C5E-B16D-7BD8FAAAEA0B}" Directory_="APPDIR" Attributes="0" KeyPath="MySql.Data.dll"/>
     <ROW Component="NetSpell.SpellChecker.dll" ComponentId="{C1A2334D-D793-4DBE-822E-762F7D3C06D1}" Directory_="APPDIR" Attributes="0" KeyPath="NetSpell.SpellChecker.dll"/>
     <ROW Component="NotificationWindow.dll" ComponentId="{6D81D79D-4C97-409A-B63A-480354F357B7}" Directory_="APPDIR" Attributes="0" KeyPath="NotificationWindow.dll"/>
+    <ROW Component="O2S.Components.PDFRender4NET.dll" ComponentId="{17413457-818D-473B-8FD0-3CAC8BB200A3}" Directory_="APPDIR" Attributes="0" KeyPath="O2S.Components.PDFRender4NET.dll"/>
     <ROW Component="ProductInformation" ComponentId="{681C0694-AFC9-4500-AE8D-74173A47374E}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
     <ROW Component="Renci.SshNet.dll" ComponentId="{1DFC5142-232B-47C8-A101-1D553A71D320}" Directory_="APPDIR" Attributes="0" KeyPath="Renci.SshNet.dll"/>
     <ROW Component="astlogo.jpg" ComponentId="{6948C787-6839-454E-8B94-001FBE1F3B0A}" Directory_="APPDIR" Attributes="0" KeyPath="astlogo.jpg" Type="0"/>
@@ -65,7 +66,7 @@
     <ROW Component="log4net.dll" ComponentId="{0AF24B94-3EEA-4509-940B-C13773849409}" Directory_="APPDIR" Attributes="0" KeyPath="log4net.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="Astro.Library.dll Astrodon.Data.dll Astrodon.exe Astrodon.vshost.exe AxInterop.AcroPDFLib.dll EPPlus.dll EntityFramework.SqlServer.dll EntityFramework.dll Handle.exe Interop.AcroPDFLib.dll Itenso.Rtf.Converter.Html.dll Itenso.Rtf.Converter.Xml.dll Itenso.Rtf.Interpreter.dll Itenso.Rtf.Parser.dll Itenso.Sys.dll MySql.Data.dll NetSpell.SpellChecker.dll NotificationWindow.dll ProductInformation Renci.SshNet.dll astlogo.jpg deDE.dic itextsharp.dll itextsharp.pdfa.dll itextsharp.xtra.dll log4net.dll"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="Astro.Library.dll Astrodon.Data.dll Astrodon.exe Astrodon.vshost.exe AxInterop.AcroPDFLib.dll EPPlus.dll EntityFramework.SqlServer.dll EntityFramework.dll Handle.exe Interop.AcroPDFLib.dll Itenso.Rtf.Converter.Html.dll Itenso.Rtf.Converter.Xml.dll Itenso.Rtf.Interpreter.dll Itenso.Rtf.Parser.dll Itenso.Sys.dll MySql.Data.dll NetSpell.SpellChecker.dll NotificationWindow.dll O2S.Components.PDFRender4NET.dll ProductInformation Renci.SshNet.dll astlogo.jpg deDE.dic itextsharp.dll itextsharp.pdfa.dll itextsharp.xtra.dll log4net.dll"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
@@ -77,7 +78,7 @@
     <ROW File="Astrodon.vshost.exe" Component_="Astrodon.vshost.exe" FileName="ASTROD~1.EXE|Astrodon.vshost.exe" Attributes="0" SourcePath="bin\Debug\Astrodon.vshost.exe" SelfReg="false" NextFile="itextsharp.dll" DigSign="true"/>
     <ROW File="Astrodon.vshost.exe.config" Component_="astlogo.jpg" FileName="ASTROD~2.CON|Astrodon.vshost.exe.config" Attributes="0" SourcePath="bin\Debug\Astrodon.vshost.exe.config" SelfReg="false" NextFile="Handle.exe"/>
     <ROW File="AxInterop.AcroPDFLib.dll" Component_="AxInterop.AcroPDFLib.dll" FileName="AXINTE~1.DLL|AxInterop.AcroPDFLib.dll" Attributes="0" SourcePath="bin\Debug\AxInterop.AcroPDFLib.dll" SelfReg="false" NextFile="Interop.AcroPDFLib.dll"/>
-    <ROW File="EPPlus.dll" Component_="EPPlus.dll" FileName="EPPlus.dll" Attributes="0" SourcePath="bin\Debug\EPPlus.dll" SelfReg="false"/>
+    <ROW File="EPPlus.dll" Component_="EPPlus.dll" FileName="EPPlus.dll" Attributes="0" SourcePath="bin\Debug\EPPlus.dll" SelfReg="false" NextFile="O2S.Components.PDFRender4NET.dll"/>
     <ROW File="EntityFramework.SqlServer.dll" Component_="EntityFramework.SqlServer.dll" FileName="ENTITY~2.DLL|EntityFramework.SqlServer.dll" Attributes="0" SourcePath="bin\Debug\EntityFramework.SqlServer.dll" SelfReg="false" NextFile="log4net.dll"/>
     <ROW File="EntityFramework.dll" Component_="EntityFramework.dll" FileName="ENTITY~1.DLL|EntityFramework.dll" Attributes="0" SourcePath="bin\Debug\EntityFramework.dll" SelfReg="false" NextFile="EntityFramework.SqlServer.dll"/>
     <ROW File="Envelopefooter.png" Component_="astlogo.jpg" FileName="ENVELO~1.PNG|Envelope-footer.png" Attributes="0" SourcePath="bin\Debug\Envelope-footer.png" SelfReg="false" NextFile="envfooter.jpg"/>
@@ -91,6 +92,7 @@
     <ROW File="MySql.Data.dll" Component_="MySql.Data.dll" FileName="MYSQLD~1.DLL|MySql.Data.dll" Attributes="0" SourcePath="bin\Debug\MySql.Data.dll" SelfReg="false" NextFile="rem_template.pdf"/>
     <ROW File="NetSpell.SpellChecker.dll" Component_="NetSpell.SpellChecker.dll" FileName="NETSPE~1.DLL|NetSpell.SpellChecker.dll" Attributes="0" SourcePath="bin\Debug\NetSpell.SpellChecker.dll" SelfReg="false" NextFile="Itenso.Rtf.Converter.Html.dll"/>
     <ROW File="NotificationWindow.dll" Component_="NotificationWindow.dll" FileName="NOTIFI~1.DLL|NotificationWindow.dll" Attributes="0" SourcePath="bin\Debug\NotificationWindow.dll" SelfReg="false" NextFile="signature.png"/>
+    <ROW File="O2S.Components.PDFRender4NET.dll" Component_="O2S.Components.PDFRender4NET.dll" FileName="O2SCOM~1.DLL|O2S.Components.PDFRender4NET.dll" Attributes="0" SourcePath="bin\Debug\O2S.Components.PDFRender4NET.dll" SelfReg="false"/>
     <ROW File="Renci.SshNet.dll" Component_="Renci.SshNet.dll" FileName="RENCIS~1.DLL|Renci.SshNet.dll" Attributes="0" SourcePath="bin\Debug\Renci.SshNet.dll" SelfReg="false" NextFile="stmt_template.jpg"/>
     <ROW File="astbackground.png" Component_="astlogo.jpg" FileName="ASTBAC~1.PNG|astbackground.png" Attributes="0" SourcePath="bin\Debug\astbackground.png" SelfReg="false" NextFile="astrodon.png"/>
     <ROW File="astlogo.jpg" Component_="astlogo.jpg" FileName="astlogo.jpg" Attributes="0" SourcePath="bin\Debug\astlogo.jpg" SelfReg="false" NextFile="Astrodon.exe"/>

@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Linq;
 using Astrodon.Forms;
+using System.Drawing.Printing;
 
 namespace Astrodon
 {
@@ -410,22 +411,34 @@ namespace Astrodon
         {
             if (File.Exists(fileName))
             {
-                using (Process p = new Process())
+                AddProgressString(buildingName + ": " + unitAcc + " - Start Adobe Process on - " + _PrinterName + " for "  + Path.GetFileName(fileName));
+                using (var memStream = new FileStream(fileName,FileMode.Open,FileAccess.Read))
                 {
-                    AddProgressString(buildingName + ": " + unitAcc + " - Start Adobe Process on - " + _PrinterName + " for "  + Path.GetFileName(fileName));
-                    p.StartInfo = new ProcessStartInfo
+                    using (O2S.Components.PDFRender4NET.PDFFile file = O2S.Components.PDFRender4NET.PDFFile.Open(memStream))
                     {
-                        Verb = "print",
-                        FileName = fileName,
-                        CreateNoWindow = true,
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        Arguments = _PrinterName
-                    };
-                    p.Start();
-                    p.WaitForExit(15000);
-                    //System.Threading.Thread.Sleep(5000);
-                    AddProgressString(buildingName + ": " + unitAcc + " - Adobe Process Completed on - " + _PrinterName + " for " + Path.GetFileName(fileName));
+                        PrinterSettings settings = new PrinterSettings();
+                        settings.PrinterName = _PrinterName;// report.PrinterName;
+                        O2S.Components.PDFRender4NET.Printing.PDFPrintSettings pdfPrintSettings = new O2S.Components.PDFRender4NET.Printing.PDFPrintSettings(settings);
+                        pdfPrintSettings.PageScaling = O2S.Components.PDFRender4NET.Printing.PageScaling.FitToPrinterMargins;
+                        file.Print(pdfPrintSettings);
+                    }
                 }
+
+                //using (Process p = new Process())
+                //{
+                //    p.StartInfo = new ProcessStartInfo
+                //    {
+                //        Verb = "print",
+                //        FileName = fileName,
+                //        CreateNoWindow = true,
+                //        WindowStyle = ProcessWindowStyle.Hidden,
+                //        Arguments = _PrinterName
+                //    };
+                //    p.Start();
+                //    p.WaitForExit(15000);
+                //    //System.Threading.Thread.Sleep(5000);
+                //}
+                AddProgressString(buildingName + ": " + unitAcc + " - Adobe Process Completed on - " + _PrinterName + " for " + Path.GetFileName(fileName));
             }
             else
             {
