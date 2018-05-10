@@ -9,6 +9,9 @@ using System.Windows.Forms;
 using System.Linq;
 using Astrodon.Forms;
 using System.Drawing.Printing;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.Threading;
 
 namespace Astrodon
 {
@@ -137,6 +140,8 @@ namespace Astrodon
         {
             _ProgressForm = frmProgress.ShowForm();
 
+            List<string> statementFileList = new List<string>();
+
             this.Cursor = Cursors.WaitCursor;
             statements = new Statements { statements = new List<Statement>() };
             Dictionary<String, bool> hasStatements = new Dictionary<string, bool>();
@@ -226,25 +231,12 @@ namespace Astrodon
                     #region Print Me
                     if (stmt.PrintMe && Controller.user.id != 1)
                     {
-                        if (!printerSet)
-                        {
-                            _ProgressForm.Hide();
-                            frmPrintDialog printDialog = new frmPrintDialog();
-                            if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                            {
-                                SetDefaultPrinter(printDialog.selectedPrinter);
-                                Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
-                                Properties.Settings.Default.Save();
-                                printerSet = true;
-                                _PrinterName = printDialog.selectedPrinter;
-                            }
-                            _ProgressForm.Show();
-
-                        }
+                       
                         if (!String.IsNullOrWhiteSpace(fileName))
                         {
-                            AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Printing statement - " + Path.GetFileName(fileName));
-                            SendToPrinter(fileName, stmt.BuildingName , stmt.AccNo);
+                            AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Add Statement to List - " + Path.GetFileName(fileName));
+                            statementFileList.Add(fileName);
+                           // SendToPrinter(fileName, stmt.BuildingName , stmt.AccNo);
                         }
                         else
                         {
@@ -257,14 +249,15 @@ namespace Astrodon
                     #region Upload Me
                     try
                     {
-                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
-                        mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
-                        ftpClient.Upload(fileName, actFile, false);
+                    //    AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
+                    //    mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
+                    //    ftpClient.Upload(fileName, actFile, false);
                     }
                     catch { }
                     #endregion
 
                     Application.DoEvents();
+
                 }
                 else
                 {
@@ -286,13 +279,91 @@ namespace Astrodon
                 sqlParms.Add("@lastProcessed", DateTime.Now);
                 dh.SetData(query, sqlParms, out status);
             }
+
+            CombinePDFsAndPrint(statementFileList);
+
             this.Cursor = Cursors.Arrow;
+
             _ProgressForm.Focus();
             _ProgressForm.ProcessComplete();
             _ProgressForm = null;
         }
 
-         private void AddProgressString(string message)
+        private void CombinePDFsAndPrint(List<string> statementFileList)
+        {
+            string outputFileName = "StatementRun_"+DateTime.Now.ToString("yyyyMMdd HHmmss") + ".pdf";
+            string desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            outputFileName = Path.Combine(desktopFolder, outputFileName);
+            if (File.Exists(outputFileName))
+                File.Delete(outputFileName);
+
+            using (FileStream ms = new FileStream(outputFileName, FileMode.Create, FileAccess.ReadWrite))
+            {
+                using (Document doc = new Document())
+                {
+                    using (PdfCopy copy = new PdfCopy(doc, ms))
+                    {
+                        doc.Open();
+
+                        foreach (var file in statementFileList)
+                        {
+                            if (File.Exists(file))
+                            {
+                                AddProgressString("Adding statement " + file + " to " + outputFileName);
+                                using (PdfReader reader = new PdfReader(file))
+                                {
+                                    int n = reader.NumberOfPages;
+                                    for (int page = 0; page < n;)
+                                    {
+                                        copy.AddPage(copy.GetImportedPage(reader, ++page));
+                                    }
+                                    Application.DoEvents();
+                                }
+                            }
+                        }
+
+                        ms.Flush();
+
+
+                    }
+                }
+
+                AddProgressString("Combined File Completed");
+                Application.DoEvents();
+            }
+
+            if(_ProgressForm != null)
+               _ProgressForm.Hide();
+            frmPrintDialog printDialog = new frmPrintDialog();
+            if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                SetDefaultPrinter(printDialog.selectedPrinter);
+                Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
+                Properties.Settings.Default.Save();
+                _PrinterName = printDialog.selectedPrinter;
+            }
+            if (_ProgressForm != null)
+                _ProgressForm.Show();
+
+            AddProgressString("Sending File to Printer");
+
+            using (Process p = new Process())
+            {
+                p.StartInfo = new ProcessStartInfo
+                {
+                    Verb = "print",
+                    FileName = outputFileName,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    Arguments = _PrinterName
+                };
+                p.Start();
+                Thread.Sleep(5000);
+            }
+        }
+
+        private void AddProgressString(string message)
         {
             if (_ProgressForm != null)
                 _ProgressForm.AddMessage(message);
@@ -406,45 +477,6 @@ namespace Astrodon
 
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetDefaultPrinter(string Name);
-
-        private void SendToPrinter(String fileName, string buildingName, string unitAcc)
-        {
-            if (File.Exists(fileName))
-            {
-                AddProgressString(buildingName + ": " + unitAcc + " - Start Adobe Process on - " + _PrinterName + " for "  + Path.GetFileName(fileName));
-                using (var memStream = new FileStream(fileName,FileMode.Open,FileAccess.Read))
-                {
-                    using (O2S.Components.PDFRender4NET.PDFFile file = O2S.Components.PDFRender4NET.PDFFile.Open(memStream))
-                    {
-                        PrinterSettings settings = new PrinterSettings();
-                        settings.PrinterName = _PrinterName;// report.PrinterName;
-                        O2S.Components.PDFRender4NET.Printing.PDFPrintSettings pdfPrintSettings = new O2S.Components.PDFRender4NET.Printing.PDFPrintSettings(settings);
-                        pdfPrintSettings.PageScaling = O2S.Components.PDFRender4NET.Printing.PageScaling.FitToPrinterMargins;
-                        file.Print(pdfPrintSettings);
-                    }
-                }
-
-                //using (Process p = new Process())
-                //{
-                //    p.StartInfo = new ProcessStartInfo
-                //    {
-                //        Verb = "print",
-                //        FileName = fileName,
-                //        CreateNoWindow = true,
-                //        WindowStyle = ProcessWindowStyle.Hidden,
-                //        Arguments = _PrinterName
-                //    };
-                //    p.Start();
-                //    p.WaitForExit(15000);
-                //    //System.Threading.Thread.Sleep(5000);
-                //}
-                AddProgressString(buildingName + ": " + unitAcc + " - Adobe Process Completed on - " + _PrinterName + " for " + Path.GetFileName(fileName));
-            }
-            else
-            {
-                AddProgressString("Error printing " + fileName + " file does not exist");
-            }
-        }
 
         private void btnFile_Click(object sender, EventArgs e)
         {

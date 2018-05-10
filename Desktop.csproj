@@ -101,9 +101,6 @@
     <Reference Include="NotificationWindow">
       <HintPath>..\DLL\NotificationWindow.dll</HintPath>
     </Reference>
-    <Reference Include="O2S.Components.PDFRender4NET">
-      <HintPath>..\Lib\PDF4Net\O2S.Components.PDFRender4NET.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Renci.SshNet">
