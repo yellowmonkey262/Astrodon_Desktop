@@ -697,7 +697,10 @@ namespace Astrodon
                 }
                 docs = docs.OrderBy(c => c.tstamp).ToList();
                 bsDocs.Clear();
-                foreach (CustomerDocument doc in docs) { bsDocs.Add(doc); }
+                foreach (CustomerDocument doc in docs.OrderByDescending(a => a.tstamp))
+                {
+                    bsDocs.Add(doc);
+                }
             }
             catch (Exception ex)
             {
