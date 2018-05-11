@@ -1,5 +1,6 @@
 using Astro.Library.Entities;
 using Astrodon.Classes;
+using Astrodon.Forms;
 using Itenso.Rtf;
 using Itenso.Rtf.Converter.Html;
 using Itenso.Rtf.Support;
@@ -15,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Astrodon.Controls
@@ -43,7 +45,6 @@ namespace Astrodon.Controls
         private NetSpell.SpellChecker.Dictionary.WordDictionary dictionary;
         private bool isEmailBox = false;
         private Dictionary<String, System.Drawing.Image> htmlImages = null;
-        private bool printerSet = false;
         private String uploadDirectory = String.Empty;
         private bool justify = false;
 
@@ -1009,8 +1010,10 @@ namespace Astrodon.Controls
             return atleastone;
         }
 
+
         private void ProcessDocuments(bool sendNow)
         {
+            var filesToPrint = new List<string>();
             this.Cursor = Cursors.WaitCursor;
             if (sendNow) { txtStatus.Text += Environment.NewLine + "Starting processing: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine; }
             String ftpUploadFolder = "";
@@ -1368,7 +1371,7 @@ namespace Astrodon.Controls
                             Application.DoEvents();
                             foreach (String attachment in attachments)
                             {
-                                SendToPrinter(attachment);
+                                filesToPrint.Add(attachment);
                                 Application.DoEvents();
                             }
                             txtStatus.Text += "Completed printing documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
@@ -1392,6 +1395,8 @@ namespace Astrodon.Controls
                     MessageBox.Show("Processing complete");
                 }
             }
+
+            CombinePDFsAndPrint(filesToPrint);
         }
 
         private bool CreateDocument(String attachmentLocation, String fileName, byte[] fileStream, out String status)
@@ -1417,40 +1422,121 @@ namespace Astrodon.Controls
             }
         }
 
-        private string _PrinterName = string.Empty;
-        private void SendToPrinter(String fileName)
-        {
-            if (!printerSet || String.IsNullOrWhiteSpace(_PrinterName))
-            {
-                frmPrintDialog printDialog = new frmPrintDialog();
-                if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    SetDefaultPrinter(printDialog.selectedPrinter);
-                    Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
-                    Properties.Settings.Default.Save();
-                    printerSet = true;
-                    _PrinterName = Properties.Settings.Default.defaultPrinter;
-                }
-            }
+        //private string _PrinterName = string.Empty;
+        //private void SendToPrinter(String fileName)
+        //{
+        //    if (!printerSet || String.IsNullOrWhiteSpace(_PrinterName))
+        //    {
+        //        frmPrintDialog printDialog = new frmPrintDialog();
+        //        if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        //        {
+        //            SetDefaultPrinter(printDialog.selectedPrinter);
+        //            Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
+        //            Properties.Settings.Default.Save();
+        //            printerSet = true;
+        //            _PrinterName = Properties.Settings.Default.defaultPrinter;
+        //        }
+        //    }
 
-            using (Process p = new Process
+        //    using (Process p = new Process
+        //    {
+        //        StartInfo = new ProcessStartInfo
+        //        {
+        //            Verb = "print",
+        //            FileName = fileName,
+        //            CreateNoWindow = true,
+        //            WindowStyle = ProcessWindowStyle.Hidden,
+        //            Arguments = _PrinterName
+        //        }
+        //    })
+        //    {
+        //        txtStatus.Text += "Printing documents: "+ fileName+" " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+        //        p.Start();
+        //        p.WaitForExit(5000);
+        //        Application.DoEvents();
+        //    }
+        //}
+
+        private void AddProgressString(string message)
+        {
+            txtStatus.Text += message + Environment.NewLine;
+            Application.DoEvents();
+        }
+
+        private void CombinePDFsAndPrint(List<string> statementFileList)
+        {
+            string outputFileName = "JobProcessing_" + DateTime.Now.ToString("yyyyMMdd HHmmss") + ".pdf";
+            string desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            outputFileName = Path.Combine(desktopFolder, outputFileName);
+            if (File.Exists(outputFileName))
+                File.Delete(outputFileName);
+
+            using (FileStream ms = new FileStream(outputFileName, FileMode.Create, FileAccess.ReadWrite))
             {
-                StartInfo = new ProcessStartInfo
+                using (iTextSharp.text.Document doc = new iTextSharp.text.Document())
                 {
-                    Verb = "print",
-                    FileName = fileName,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    Arguments = _PrinterName
+                    using (iTextSharp.text.pdf.PdfCopy copy = new iTextSharp.text.pdf.PdfCopy(doc, ms))
+                    {
+                        doc.Open();
+
+                        foreach (var file in statementFileList)
+                        {
+                            if (File.Exists(file))
+                            {
+                                AddProgressString("Adding " + file + " to " + outputFileName);
+                                using (iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(file))
+                                {
+                                    int n = reader.NumberOfPages;
+                                    for (int page = 0; page < n;)
+                                    {
+                                        copy.AddPage(copy.GetImportedPage(reader, ++page));
+                                    }
+                                    Application.DoEvents();
+                                }
+                            }
+                        }
+
+                        ms.Flush();
+                    }
                 }
-            })
-            {
-                txtStatus.Text += "Printing documents: "+ fileName+" " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                p.Start();
-                p.WaitForExit(5000);
+
+                AddProgressString("Combined File Completed");
                 Application.DoEvents();
             }
+
+            var printernName = "";
+            frmPrintDialog printDialog = new frmPrintDialog();
+            if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                SetDefaultPrinter(printDialog.selectedPrinter);
+                Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
+                Properties.Settings.Default.Save();
+                printernName = printDialog.selectedPrinter;
+            }
+            else
+            {
+                Controller.ShowMessage("Printing Cancelled, please open " + Path.GetFileName(outputFileName) + " on your desktop and print manually");
+                return;
+            }
+
+            AddProgressString("Sending File to Printer");
+
+            using (Process p = new Process())
+            {
+                p.StartInfo = new ProcessStartInfo
+                {
+                    Verb = "print",
+                    FileName = outputFileName,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    Arguments = printernName
+                };
+                p.Start();
+                Thread.Sleep(5000);
+            }
         }
+
 
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetDefaultPrinter(string Name);

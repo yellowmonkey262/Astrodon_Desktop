@@ -343,6 +343,13 @@ namespace Astrodon
                 Properties.Settings.Default.Save();
                 _PrinterName = printDialog.selectedPrinter;
             }
+            else
+            {
+                Controller.ShowMessage("Printing Cancelled, please open " + Path.GetFileName(outputFileName) + " on your desktop and print manually");
+                if (_ProgressForm != null)
+                    _ProgressForm.Show();
+                return;
+            }
             if (_ProgressForm != null)
                 _ProgressForm.Show();
 

@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PastelReportService", "Past
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroLibrary", "AstroLibrary\AstroLibrary.csproj", "{CE7D8E45-B945-4013-8633-C2ADD2AC8876}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{7AD1FD3E-B2BB-424D-B3BB-F9874C1382A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pastel8Test", "..\Utilities\Pastel8Test\Pastel8Test.csproj", "{EDD47821-65E4-4095-8859-FA6305551F1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,10 @@ Global
 		{CE7D8E45-B945-4013-8633-C2ADD2AC8876}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE7D8E45-B945-4013-8633-C2ADD2AC8876}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE7D8E45-B945-4013-8633-C2ADD2AC8876}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDD47821-65E4-4095-8859-FA6305551F1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDD47821-65E4-4095-8859-FA6305551F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDD47821-65E4-4095-8859-FA6305551F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDD47821-65E4-4095-8859-FA6305551F1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +63,6 @@ Global
 		{BFD9F879-784A-40B8-A1AC-8E5F0815B0BC} = {D37CCCDF-36F8-4319-8C86-21C948CCF778}
 		{479C6C3D-B394-43E8-A8BC-3569F377FA36} = {D37CCCDF-36F8-4319-8C86-21C948CCF778}
 		{100A030D-7F41-452B-AA4E-14365A6E6D62} = {D37CCCDF-36F8-4319-8C86-21C948CCF778}
+		{EDD47821-65E4-4095-8859-FA6305551F1E} = {7AD1FD3E-B2BB-424D-B3BB-F9874C1382A4}
 	EndGlobalSection
 EndGlobal
