@@ -1485,14 +1485,21 @@ namespace Astrodon.Controls
                             if (File.Exists(file))
                             {
                                 AddProgressString("Adding " + file + " to " + outputFileName);
-                                using (iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(file))
+                                try
                                 {
-                                    int n = reader.NumberOfPages;
-                                    for (int page = 0; page < n;)
+                                    using (iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(file))
                                     {
-                                        copy.AddPage(copy.GetImportedPage(reader, ++page));
+                                        int n = reader.NumberOfPages;
+                                        for (int page = 0; page < n;)
+                                        {
+                                            copy.AddPage(copy.GetImportedPage(reader, ++page));
+                                        }
+                                        Application.DoEvents();
                                     }
-                                    Application.DoEvents();
+                                }
+                                catch (Exception e)
+                                {
+                                    AddProgressString("Error adding " + file + " to " + outputFileName + " " + e.Message);
                                 }
                             }
                         }

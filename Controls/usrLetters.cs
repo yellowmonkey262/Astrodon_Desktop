@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Astrodon
@@ -433,6 +434,7 @@ namespace Astrodon
 
         private void GenerateLetter(int docIdx, List<String> customerAccs)
         {
+            List<string> lettersList = new List<string>();
             wp = new WordProcessor();
             double amt = 0;
             String docType = "";
@@ -630,18 +632,14 @@ namespace Astrodon
                     //}
                     if ((c.statPrintorEmail == 1 || c.statPrintorEmail == 3) || docType == "Restriction Notice" || !canemail)
                     {
-                        try
-                        {
-                            SendToPrinter(fileName);
-                        }
-                        catch (Exception ex)
-                        {
-                        }
+                        if(File.Exists(fileName))
+                          lettersList.Add(fileName);
                     }
                 }
                 else if (docType == "Restriction Notice")
                 {
-                    SendToPrinter(fileName);
+                    if (File.Exists(fileName))
+                        lettersList.Add(fileName);
                 }
                 if (Controller.user.id != 1)
                 {
@@ -687,6 +685,8 @@ namespace Astrodon
                 wp.killprocess("winword");
                 wp = null;
             }
+
+            CombinePDFsAndPrint(lettersList);
         }
 
         private void DisconnectCustomers(List<String> customers)
@@ -874,6 +874,7 @@ namespace Astrodon
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetDefaultPrinter(string Name);
 
+        /*
         private void SendToPrinter(String fileName)
         {
             try
@@ -884,7 +885,7 @@ namespace Astrodon
                     {
                         Verb = "print",
                         FileName = fileName
-                    };
+                    }; 
                     p.Start();
                     System.Threading.Thread.Sleep(3000);
                 }
@@ -893,6 +894,95 @@ namespace Astrodon
             {
                 MessageBox.Show("Cannot print document.  Please print from the folder");
             }
+        }*/
+
+        private void CombinePDFsAndPrint(List<string> statementFileList)
+        {
+            string outputFileName = "Letters_" + DateTime.Now.ToString("yyyyMMdd HHmmss") + ".pdf";
+            string desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            outputFileName = Path.Combine(desktopFolder, outputFileName);
+            if (File.Exists(outputFileName))
+                File.Delete(outputFileName);
+
+            using (FileStream ms = new FileStream(outputFileName, FileMode.Create, FileAccess.ReadWrite))
+            {
+                using (iTextSharp.text.Document doc = new iTextSharp.text.Document())
+                {
+                    using (iTextSharp.text.pdf.PdfCopy copy = new iTextSharp.text.pdf.PdfCopy(doc, ms))
+                    {
+                        doc.Open();
+
+                        foreach (var file in statementFileList)
+                        {
+                            if (File.Exists(file))
+                            {
+                                AddProgressString("Adding " + file + " to " + outputFileName);
+                                try
+                                {
+                                    using (iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(file))
+                                    {
+                                        int n = reader.NumberOfPages;
+                                        for (int page = 0; page < n;)
+                                        {
+                                            copy.AddPage(copy.GetImportedPage(reader, ++page));
+                                        }
+                                        Application.DoEvents();
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    AddProgressString("Error adding " + file + " to " + outputFileName + " " + e.Message);
+                                }
+                            }
+                        }
+
+                        ms.Flush();
+                    }
+                }
+
+                AddProgressString("Combined File Completed");
+                Application.DoEvents();
+            }
+
+            var printernName = "";
+            frmPrintDialog printDialog = new frmPrintDialog();
+            if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                SetDefaultPrinter(printDialog.selectedPrinter);
+                Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
+                Properties.Settings.Default.Save();
+                printernName = printDialog.selectedPrinter;
+            }
+            else
+            {
+                Controller.ShowMessage("Printing Cancelled, please open " + Path.GetFileName(outputFileName) + " on your desktop and print manually");
+                return;
+            }
+
+            AddProgressString("Sending File to Printer");
+
+            using (Process p = new Process())
+            {
+                p.StartInfo = new ProcessStartInfo
+                {
+                    Verb = "print",
+                    FileName = outputFileName,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    Arguments = printernName
+                };
+                p.Start();
+                Thread.Sleep(5000);
+            }
+
+            lbLettersProgress.Text = "";
+        }
+
+        private void AddProgressString(string v)
+        {
+            lbLettersProgress.Text = v;
+            Application.DoEvents();
         }
     }
 }

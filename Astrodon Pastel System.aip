@@ -13,10 +13,10 @@
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="Metathought Development and Design"/>
     <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp"/>
-    <ROW Property="ProductCode" Value="1033:{E5293AEA-18BF-4FA4-A707-55BA24B76347} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{0FDD944F-FDAB-4B8C-BC52-A55A35C451F6} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Astrodon Pastel System"/>
-    <ROW Property="ProductVersion" Value="5.2.150" Type="32"/>
+    <ROW Property="ProductVersion" Value="5.2.153" Type="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{05EE21C2-B39F-4AB8-B687-1E49B15014C7}"/>

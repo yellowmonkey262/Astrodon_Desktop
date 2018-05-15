@@ -45,6 +45,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cmbBuildings = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lbLettersProgress = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.customerGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -242,10 +243,20 @@
             this.label1.TabIndex = 22;
             this.label1.Text = "Please select building:";
             // 
+            // lbLettersProgress
+            // 
+            this.lbLettersProgress.AutoSize = true;
+            this.lbLettersProgress.Location = new System.Drawing.Point(15, 480);
+            this.lbLettersProgress.Name = "lbLettersProgress";
+            this.lbLettersProgress.Size = new System.Drawing.Size(16, 13);
+            this.lbLettersProgress.TabIndex = 31;
+            this.lbLettersProgress.Text = "...";
+            // 
             // usrLetters
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbLettersProgress);
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.btnProcess);
             this.Controls.Add(this.customerGrid);
@@ -289,5 +300,6 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.Label lbLettersProgress;
     }
 }

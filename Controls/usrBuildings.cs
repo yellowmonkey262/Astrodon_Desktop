@@ -363,7 +363,7 @@ namespace Astrodon
 
             DataGridViewCellStyle numberCell = new DataGridViewCellStyle()
             {
-                Format = "0.00",
+                Format = "0.0000",
                 Alignment = DataGridViewContentAlignment.MiddleRight
             };
 
@@ -387,7 +387,7 @@ namespace Astrodon
 
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
-                DataPropertyName = "PQCalculated",
+                DataPropertyName = "PQCalculatedPercentage",
                 HeaderText = "PQ",
                 ReadOnly = true,
                 DefaultCellStyle = numberCell
@@ -413,7 +413,7 @@ namespace Astrodon
             dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "UnitPremium",
-                HeaderText = "Total Premium",
+                HeaderText = "Unit Premium",
                 ReadOnly = true,
                 DefaultCellStyle = currencyCellFormat,
                 MinimumWidth = 100
@@ -423,6 +423,14 @@ namespace Astrodon
             {
                 DataPropertyName = "AdditionalPremium",
                 HeaderText = "Additional Premium",
+                ReadOnly = false,
+                DefaultCellStyle = currencyCellFormat,
+                MinimumWidth = 100
+            });
+            dgInsurancePq.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "TotalPremium",
+                HeaderText = "Total Premium",
                 ReadOnly = false,
                 DefaultCellStyle = currencyCellFormat,
                 MinimumWidth = 100
@@ -1732,10 +1740,13 @@ namespace Astrodon
 
         decimal PQCalculated { get; }
 
+        decimal PQCalculatedPercentage { get; }
+
         decimal BuildingReplacementValue { get; set; }
         decimal UnitReplacementCost { get; }
         decimal TotalReplacementValue { get; }
         decimal UnitPremium { get; }
+        decimal TotalPremium { get; }
 
         decimal BuildingPremium { get; set; }
 
@@ -1782,7 +1793,7 @@ namespace Astrodon
             {
                 if (TotalUnitPropertyDimensions <= 0)
                     return 0;
-                return Math.Round((SquareMeters / TotalUnitPropertyDimensions)*100, 4);
+                return Math.Round((SquareMeters / TotalUnitPropertyDimensions), 8);
             }
         }
 
@@ -1792,7 +1803,7 @@ namespace Astrodon
             {
                 if (PQCalculated <= 0)
                     return 0;
-                return PQCalculated / 100;
+                return Math.Round(PQCalculated * 100.0000M, 4);
             }
         }
 
@@ -1803,7 +1814,7 @@ namespace Astrodon
         private decimal _BuildingPremiumValue;
         public decimal BuildingPremium { get { return _BuildingPremiumValue; } set { _BuildingPremiumValue = value; Calculate(); } }
 
-        public virtual decimal UnitReplacementCost { get { return Math.Round(BuildingReplacementValue * PQCalculatedPercentage, 2); } }
+        public virtual decimal UnitReplacementCost { get { return Math.Round(BuildingReplacementValue * PQCalculated, 2); } }
         public virtual decimal TotalReplacementValue { get { return AdditionalInsurance + UnitReplacementCost; } }
 
         private decimal _UnitPremium = 0;
@@ -1833,14 +1844,19 @@ namespace Astrodon
 
         public List<BondOriginator> BondOriginatorList { get; set; }
 
+        public decimal TotalPremium
+        {
+            get
+            {
+                return UnitPremium + AdditionalPremium;
+            }
+        }
+
         private bool _InCalculate = false;
 
         public decimal CalculatePremium()
         {
-            var totalAdditional = _Items.Where(a => !(a is PQTotal)).Sum(a => a.AdditionalPremium);
-            var totalExcludingAdditional = _BuildingPremiumValue - totalAdditional;
-            var myPremiumPart = totalExcludingAdditional * PQCalculatedPercentage;
-            var insureTemp = myPremiumPart + AdditionalPremium;
+            var insureTemp = _BuildingPremiumValue * PQCalculated; 
 
             if (insureTemp < 0)
                 return 0;
@@ -1919,6 +1935,7 @@ namespace Astrodon
             TotalUnitPropertyDimensions = _Items.Where(a => a != this).Sum(a => a.TotalUnitPropertyDimensions);
             BuildingReplacementValue = _Items.Where(a => a != this).Sum(a => a.BuildingReplacementValue);
             UnitPremium = _Items.Where(a => a != this).Sum(a => a.UnitPremium);
+            PQCalculatedPercentage = _Items.Where(a => a != this).Sum(a => a.PQCalculatedPercentage);
             BondOriginatorList = null;
             if (DataRow != null)
             {
@@ -1964,5 +1981,14 @@ namespace Astrodon
 
         public BondOriginator SelectedBondOriginator { get; set; }
 
+        public decimal TotalPremium
+        {
+            get
+            {
+                return UnitPremium + AdditionalPremium;
+            }
+        }
+
+        public decimal PQCalculatedPercentage { get; set; }
     }
 }
