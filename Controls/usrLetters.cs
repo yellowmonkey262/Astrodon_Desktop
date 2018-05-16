@@ -691,7 +691,8 @@ namespace Astrodon
 
         private void DisconnectCustomers(List<String> customers)
         {
-            String docType = "Disconnect / Reconnect";
+            String docType = "Restrict / Reconnect"; //SM 15/05/2018
+            
             DateTime trnDate = DateTime.Now;
             List<Customer> checkedCustomers = new List<Customer>();
             foreach (String acc in customers) { checkedCustomers.Add(customerDic[acc]); }
