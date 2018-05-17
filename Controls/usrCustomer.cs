@@ -29,7 +29,6 @@ namespace Astrodon
         public usrCustomer()
         {
             InitializeComponent();
-            buildings = new Buildings(false).buildings;
             LoadBanks();
         }
 
@@ -44,6 +43,7 @@ namespace Astrodon
 
         private void LoadBuildings()
         {
+            buildings = new Buildings(false).buildings;
             cmbBuilding.SelectedIndexChanged -= cmbBuilding_SelectedIndexChanged;
             cmbBuilding.Items.Clear();
             cmbBuilding.DataSource = buildings;
@@ -95,6 +95,8 @@ namespace Astrodon
         {
             try
             {
+                DisplayPDFNew(string.Empty);
+
                 this.axAcroPDF1.Visible = false;
                 btnUpload.Visible = false;
                 building = buildings[cmbBuilding.SelectedIndex];
@@ -723,12 +725,13 @@ namespace Astrodon
             {
                 try
                 {
-                    CustomerDocument cd = docs[e.RowIndex];
+                    var cd = dgDocs.Rows[e.RowIndex].DataBoundItem as CustomerDocument;
                     if (download(cd.file))
                     {
                         if (colIdx == 0)
                         {
-                            System.Diagnostics.Process.Start(Path.Combine(Path.GetTempPath(), cd.file));
+                            DisplayPDFNew(Path.Combine(Path.GetTempPath(), cd.file));
+                           // System.Diagnostics.Process.Start(Path.Combine(Path.GetTempPath(), cd.file));
                         }
                         else if (colIdx == 2)
                         {
@@ -760,6 +763,36 @@ namespace Astrodon
             }
         }
 
+
+        private void DisplayPDFNew(string filePath)
+        {
+            if (String.IsNullOrWhiteSpace(filePath))
+            {
+                this.axAcroPDFNew.Visible = false;
+                return;
+            }
+
+            try
+            {
+                this.axAcroPDFNew.Visible = true;
+                this.axAcroPDFNew.LoadFile(filePath);
+                this.axAcroPDFNew.src = filePath;
+                this.axAcroPDFNew.setShowToolbar(false);
+                this.axAcroPDFNew.setView("FitH");
+                this.axAcroPDFNew.setLayoutMode("SinglePage");
+                this.axAcroPDFNew.setShowToolbar(false);
+
+                this.axAcroPDFNew.Show();
+                tbPreview.SelectedTab = tbPreviewPage;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+
         private String CustomerMessage(String accNumber, String debtorEmail)
         {
             String message = "Dear Owner," + Environment.NewLine + Environment.NewLine;
@@ -779,7 +812,11 @@ namespace Astrodon
         {
             Classes.Sftp sftpClient = new Classes.Sftp(String.Empty, true);
             String status = "";
-            bool success = sftpClient.Download(Path.Combine(Path.GetTempPath(), fileName), fileName, false, out status);
+            string outputFilePath = Path.Combine(Path.GetTempPath(), fileName);
+            if (File.Exists(outputFilePath))
+                File.Delete(outputFilePath);
+
+            bool success = sftpClient.Download(outputFilePath, fileName, false, out status);
             if (!success) { MessageBox.Show(status); }
             return success;
         }

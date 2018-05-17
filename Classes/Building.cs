@@ -159,6 +159,7 @@ namespace Astrodon
                 buildings.Add(b);
             }
             LoadBuildings(dh.GetData(buildQuery, null, out status), onlyActiveBuildings);
+
         }
 
         public Buildings(bool addNew, String nameValue, bool onlyActiveBuildings = true)

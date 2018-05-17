@@ -294,6 +294,9 @@ namespace Astrodon
             string outputFileName = "StatementRun_"+DateTime.Now.ToString("yyyyMMdd HHmmss") + ".pdf";
             string desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
+            if (statementFileList.Count() <= 0)
+                return;
+
             outputFileName = Path.Combine(desktopFolder, outputFileName);
             if (File.Exists(outputFileName))
                 File.Delete(outputFileName);

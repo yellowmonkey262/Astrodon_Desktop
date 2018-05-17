@@ -1118,7 +1118,7 @@
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.ReadOnly = true;
             this.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtStatus.Size = new System.Drawing.Size(444, 110);
+            this.txtStatus.Size = new System.Drawing.Size(843, 558);
             this.txtStatus.TabIndex = 6;
             // 
             // lblStatus
