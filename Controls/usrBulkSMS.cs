@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Astrodon
 {
@@ -28,6 +29,7 @@ namespace Astrodon
             dh = new SqlDataHandler();
             smsCustomers = new SMSCustomers { customers = new List<SMSCustomer>() };
             bs = new BindingList<SMSCustomer>();
+            LoadSMSTemplates();
         }
 
         private void usrBulkSMS_Load(object sender, EventArgs e)
@@ -36,6 +38,24 @@ namespace Astrodon
             cmbBuilding.DataSource = buildings;
             cmbBuilding.SelectedIndex = -1;
             cmbBuilding.SelectedIndexChanged += cmbBuilding_SelectedIndexChanged;
+        }
+
+        private void LoadSMSTemplates()
+        {
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var templates = context.NotificationTemplateSet.OrderBy(a => a.TemplateName)
+                                               .Where(a => a.TemplateType == Data.NotificationTemplateData.NotificationTemplateType.General).ToList();
+                templates.Insert(0, new Data.NotificationTemplateData.NotificationTemplate() { TemplateName = "None", MessageText = "" });
+
+                cbSMSTemplate.DataSource = templates;
+                cbSMSTemplate.DisplayMember = "TemplateName";
+                cbSMSTemplate.ValueMember = "MessageText";
+
+                cbSMSTemplate.SelectedIndex = 0;
+
+            }
         }
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
@@ -243,6 +263,17 @@ namespace Astrodon
             {
                 if ((bool)dvr.Cells[0].Value) { messageCount++; }
             }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbSMSTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbSMSTemplate.SelectedIndex >= 0)
+                txtMessage.Text = cbSMSTemplate.SelectedValue as string;
         }
     }
 }

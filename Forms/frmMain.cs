@@ -744,5 +744,14 @@ namespace Astrodon
         {
             LoadReminders();
         }
+
+        private void notificationTemplatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucNotificationTemplate dt = new ucNotificationTemplate(_DataContext);
+            dt.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(dt);
+            toolStripStatusLabel1.Text = "Notification Templates";
+        }
     }
 }

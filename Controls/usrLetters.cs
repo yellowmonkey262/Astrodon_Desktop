@@ -1,10 +1,12 @@
 using Astro.Library;
 using Astro.Library.Entities;
 using Astrodon.Classes;
+using Astrodon.Data.NotificationTemplateData;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -818,32 +820,32 @@ namespace Astrodon
             switch (docType)
             {
                 case 1:
-                    m.text = "Astrodon: reminder - outstanding levies R" + c.ageing[0].ToString("#,##0.00");
+                    m.text = LoadSMS(NotificationTemplateType.Reminder,"Astrodon: reminder - outstanding levies R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]);
                     m.msgType = "Reminder SMS";
                     break;
 
                 case 2:
-                    m.text = "Astrodon: final demand - levies overdue R" + c.ageing[0].ToString("#,##0.00");
+                    m.text = LoadSMS(NotificationTemplateType.FinalDemand, "Astrodon: final demand - levies overdue R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]); 
                     m.msgType = "Final Demand SMS";
                     break;
 
                 case 3:
-                    m.text = "Astrodon: restriction notice served for outstanding levies R" + c.ageing[0].ToString("#,##0.00");
+                    m.text = LoadSMS(NotificationTemplateType.DisconnectionNotice, "Astrodon: restriction notice served for outstanding levies R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]);
                     m.msgType = "Disconnection Notice SMS";
                     break;
 
                 case 4:
-                    m.text = "Astrodon: summons pending letter issued for outstanding levies R" + c.ageing[0].ToString("#,##0.00");
+                    m.text = LoadSMS(NotificationTemplateType.SummonsPending, "Astrodon: summons pending letter issued for outstanding levies R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]);
                     m.msgType = "Summons Pending SMS";
                     break;
 
                 case 5:
-                    m.text = "Astrodon: confirmation of restriction due to non payment as per notice - R" + c.ageing[0].ToString("#,##0.00");
+                    m.text = LoadSMS(NotificationTemplateType.DisconnectionNotice, "Astrodon: confirmation of restriction due to non payment as per notice - R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]);
                     m.msgType = "Disconnection SMS";
                     break;
 
                 case 6:
-                    m.text = "Astrodon: confirmation of legal hand over to appointed attorneys due to non payment of R" + c.ageing[0].ToString("#,##0.00");
+                    m.text = LoadSMS(NotificationTemplateType.LegalHandover, "Astrodon: confirmation of legal hand over to appointed attorneys due to non payment of R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]);
                     m.msgType = "Legal Handover SMS";
                     break;
             }
@@ -857,6 +859,40 @@ namespace Astrodon
             m.nextPolled = DateTime.Now.AddMinutes(5);
             m.pollCount = 0;
             messages.Add(m);
+        }
+
+        private List<NotificationTemplate> _NotificationTemplates = null;
+
+        private string LoadSMS(NotificationTemplateType templateType, string defaultText, double amount)
+        {
+            if (_NotificationTemplates == null)
+            {
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    _NotificationTemplates = context.NotificationTemplateSet.ToList();
+                }
+            }
+
+            var template = _NotificationTemplates.Where(a => a.TemplateType == templateType).FirstOrDefault();
+            if(template != null)
+            {
+                string messageText = template.MessageText;
+
+                var tags = NotificationTypeTag.NotificationTags[templateType];
+                foreach(var tag in tags)
+                {
+                    switch (tag)
+                    {
+                        case NotificationTagType.Amount:
+                            messageText = messageText.Replace(NotificationTemplate.GetTagName(tag), amount.ToString("###,##0.00",CultureInfo.InvariantCulture));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                return messageText;
+            }
+            return defaultText;
         }
 
         private void getDebtorEmail(String buildingName)

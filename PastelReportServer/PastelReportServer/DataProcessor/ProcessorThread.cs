@@ -14,7 +14,6 @@ namespace Astrodon.DataProcessor
         private static String connStringDefault = "Data Source=SERVER-SQL;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=@str0d0n"; //Astrodon
         private static String connStringL = "Data Source=STEPHEN-PC\\MTDNDSQL;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=m3t@p@$$"; //Local
 
-      
 
         private static String connStringD = "Data Source=DEVELOPERPC\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=$DEVELOPER$"; //Astrodon
         private static String connStringLocal = "Data Source=.;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=1q2w#E$R"; //LamaDev
@@ -83,7 +82,17 @@ namespace Astrodon.DataProcessor
                     }
                     catch (Exception e)
                     {
-                        LogException(e, "ScheduleFinancialMeetings");
+                        LogException(e, "ProcessBirthdaySMS");
+                    }
+
+
+                    try
+                    {
+                        ProcessInsuranceReminders();
+                    }
+                    catch (Exception e)
+                    {
+                        LogException(e, "ProcessInsuranceReminders");
                     }
                 }
 
@@ -179,6 +188,16 @@ namespace Astrodon.DataProcessor
             using (var dc = new DataContext(GetConnectionString()))
             {
                 var rp = new BirthdayProcessor(dc);
+
+                rp.Process();
+            }
+        }
+
+        public static void ProcessInsuranceReminders()
+        {
+            using (var dc = new DataContext(GetConnectionString()))
+            {
+                var rp = new InsuranceReminders(dc);
 
                 rp.Process();
             }

@@ -84,6 +84,7 @@
     <Compile Include="DataContracts\PervasiveItem.cs" />
     <Compile Include="DataProcessor\BirthdayProcessor.cs" />
     <Compile Include="DataProcessor\FixedFinancialMeetingsProcessor.cs" />
+    <Compile Include="DataProcessor\InsuranceReminders.cs" />
     <Compile Include="DataProcessor\MaintenanceProcessor.cs" />
     <Compile Include="DataProcessor\ProcessorThread.cs" />
     <Compile Include="DataProcessor\RequisitionProcessor.cs" />

@@ -8,6 +8,7 @@ using Astrodon.Data.InsuranceData;
 using Astrodon.Data.Log;
 using Astrodon.Data.MaintenanceData;
 using Astrodon.Data.ManagementPackData;
+using Astrodon.Data.NotificationTemplateData;
 using Astrodon.Data.RequisitionData;
 using Astrodon.Data.SupplierData;
 using System;
@@ -128,6 +129,10 @@ namespace Astrodon.Data
         public DbSet<MeetingRoom> MeetingRoomSet { get; set; }
 
 
+        #endregion
+
+        #region Notification Data
+        public DbSet<NotificationTemplate> NotificationTemplateSet { get; set; }
         #endregion
 
         public void ClearChanges()

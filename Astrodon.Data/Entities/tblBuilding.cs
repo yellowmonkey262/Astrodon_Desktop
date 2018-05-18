@@ -19,7 +19,7 @@ namespace Astrodon.Data
         public bool BuildingDisabled { get; set; }
 
         [StringLength(50)]
-        [Index("IDX_BuildingCode",IsUnique =true)]
+        [Index("IDX_BuildingCode", IsUnique = true)]
         public string Code { get; set; }
 
         public string AccNumber { get; set; }
@@ -112,6 +112,8 @@ namespace Astrodon.Data
 
         public decimal AdditionalInsuredValueCost { get; set; }
 
+        public decimal AdditionalPremiumValue { get; set; }
+
         public string PolicyNumber { get; set; }
 
         public bool InsuranceReplacementValueIncludesCommonProperty { get; set; }
@@ -123,6 +125,8 @@ namespace Astrodon.Data
         public decimal MonthlyInsurancePremium { get; set; }
 
         public DateTime? InsurancePolicyRenewalDate { get; set; }
+
+        public DateTime? InsurancePolicyExpiryDate { get; set; }
 
         public string ExcessStructures { get; set; }
 

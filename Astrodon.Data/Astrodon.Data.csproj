@@ -350,7 +350,14 @@
     <Compile Include="Migrations\201804261135556_AddReminderContactDetails1.Designer.cs">
       <DependentUpon>201804261135556_AddReminderContactDetails1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805180656408_TemplateTypes.cs" />
+    <Compile Include="Migrations\201805180656408_TemplateTypes.Designer.cs">
+      <DependentUpon>201805180656408_TemplateTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
+    <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
+    <Compile Include="NotificationTemplateData\NotificationTypeTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\tblAttachment.cs" />
     <Compile Include="Entities\tblBankCharge.cs" />
@@ -612,6 +619,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804261135556_AddReminderContactDetails1.resx">
       <DependentUpon>201804261135556_AddReminderContactDetails1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805180656408_TemplateTypes.resx">
+      <DependentUpon>201805180656408_TemplateTypes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

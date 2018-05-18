@@ -128,6 +128,8 @@
             this.btnApprove = new System.Windows.Forms.Button();
             this.btnProcess = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbSMSTemplate = new System.Windows.Forms.ComboBox();
             this.tbContent.SuspendLayout();
             this.tbInstructions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCustomers)).BeginInit();
@@ -622,6 +624,8 @@
             // 
             // tbEmail
             // 
+            this.tbEmail.Controls.Add(this.cbSMSTemplate);
+            this.tbEmail.Controls.Add(this.label1);
             this.tbEmail.Controls.Add(this.label16);
             this.tbEmail.Controls.Add(this.chkBill);
             this.tbEmail.Controls.Add(this.dgAttachments);
@@ -659,7 +663,7 @@
             // chkBill
             // 
             this.chkBill.AutoSize = true;
-            this.chkBill.Location = new System.Drawing.Point(935, 540);
+            this.chkBill.Location = new System.Drawing.Point(935, 513);
             this.chkBill.Name = "chkBill";
             this.chkBill.Size = new System.Drawing.Size(154, 19);
             this.chkBill.TabIndex = 40;
@@ -723,10 +727,10 @@
             // 
             // txtSMS
             // 
-            this.txtSMS.Location = new System.Drawing.Point(93, 541);
+            this.txtSMS.Location = new System.Drawing.Point(107, 541);
             this.txtSMS.MaxLength = 160;
             this.txtSMS.Name = "txtSMS";
-            this.txtSMS.Size = new System.Drawing.Size(836, 20);
+            this.txtSMS.Size = new System.Drawing.Size(822, 20);
             this.txtSMS.TabIndex = 36;
             this.txtSMS.TextChanged += new System.EventHandler(this.txtSMS_TextChanged);
             // 
@@ -812,11 +816,11 @@
             // 
             // txtBody
             // 
-            this.txtBody.Location = new System.Drawing.Point(90, 216);
+            this.txtBody.Location = new System.Drawing.Point(107, 216);
             this.txtBody.Multiline = true;
             this.txtBody.Name = "txtBody";
             this.txtBody.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtBody.Size = new System.Drawing.Size(993, 319);
+            this.txtBody.Size = new System.Drawing.Size(976, 289);
             this.txtBody.TabIndex = 26;
             // 
             // txtSubject
@@ -1179,6 +1183,25 @@
             this.btnSubmit.UseVisualStyleBackColor = true;
             this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 511);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(89, 15);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "SMS Template";
+            // 
+            // cbSMSTemplate
+            // 
+            this.cbSMSTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSMSTemplate.FormattingEnabled = true;
+            this.cbSMSTemplate.Location = new System.Drawing.Point(107, 511);
+            this.cbSMSTemplate.Name = "cbSMSTemplate";
+            this.cbSMSTemplate.Size = new System.Drawing.Size(285, 21);
+            this.cbSMSTemplate.TabIndex = 43;
+            this.cbSMSTemplate.SelectedIndexChanged += new System.EventHandler(this.cbSMSTemplate_SelectedIndexChanged);
+            // 
             // usrJob
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1314,5 +1337,7 @@
         private System.Windows.Forms.CheckBox chkCustomer;
         private System.Windows.Forms.CheckBox chkDisablePrint;
         private System.Windows.Forms.RadioButton rdTrustees;
+        private System.Windows.Forms.ComboBox cbSMSTemplate;
+        private System.Windows.Forms.Label label1;
     }
 }

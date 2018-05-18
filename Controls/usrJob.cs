@@ -178,6 +178,20 @@ namespace Astrodon.Controls
                 pmBuildings = pmBuildings.OrderBy(c => c.Name).ToList();
                 buildingFolder = String.Empty;
             }
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var templates = context.NotificationTemplateSet.OrderBy(a => a.TemplateName)
+                                               .Where(a => a.TemplateType == Data.NotificationTemplateData.NotificationTemplateType.General).ToList();
+                templates.Insert(0, new Data.NotificationTemplateData.NotificationTemplate() { TemplateName = "None", MessageText = "" });
+
+                cbSMSTemplate.DataSource = templates;
+                cbSMSTemplate.DisplayMember = "TemplateName";
+                cbSMSTemplate.ValueMember = "MessageText";
+
+                cbSMSTemplate.SelectedIndex = 0;
+
+            }
         }
 
         private void usrJob_Load(object sender, EventArgs e)
@@ -2120,6 +2134,12 @@ namespace Astrodon.Controls
                 catch { }
             }
             dgCustomers.Invalidate();
+        }
+
+        private void cbSMSTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbSMSTemplate.SelectedIndex >= 0)
+                txtSMS.Text = cbSMSTemplate.SelectedValue as string;
         }
 
         private void chkEmail3_CheckedChanged(object sender, EventArgs e)

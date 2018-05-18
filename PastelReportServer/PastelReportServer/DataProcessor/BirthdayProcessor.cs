@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Astrodon.Data.CustomerData;
+using Astrodon.Data.NotificationTemplateData;
 
 namespace Astrodon.DataProcessor
 {
@@ -40,7 +41,28 @@ namespace Astrodon.DataProcessor
         {
             if (!String.IsNullOrWhiteSpace(bdayCustomer.CellNumber))
             {
+                
                 string smsText = "Happy birthday " + bdayCustomer.CustomerFullName + ". We hope you have a wonderful day. Regards Astrodon";
+
+                var smsTemplate = _Context.NotificationTemplateSet.FirstOrDefault(a => a.TemplateType == NotificationTemplateType.Birthday);
+                if (smsTemplate != null)
+                {
+                    smsText = smsTemplate.MessageText;
+
+                    var supportedTags = NotificationTypeTag.NotificationTags[NotificationTemplateType.Birthday];
+
+                    foreach(var tag in supportedTags)
+                    {
+                        switch (tag)
+                        {
+                            case NotificationTagType.CustomerFullName:
+                                smsText = smsText.Replace(NotificationTypeTag.TagName(tag), bdayCustomer.CustomerFullName);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
 
                 string number = bdayCustomer.CellNumber;
                 var sms = new SMS();

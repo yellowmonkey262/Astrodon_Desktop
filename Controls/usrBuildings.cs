@@ -203,16 +203,28 @@ namespace Astrodon
 
                     txtCommonPropertyValue.Text = buildingEntity.CommonPropertyReplacementCost.ToString("#,##0.00");
                     txtAdditionalInsuredValue.Text = buildingEntity.AdditionalInsuredValueCost.ToString("#,##0.00");
+                    txtAdditionalPremium.Text = buildingEntity.AdditionalPremiumValue.ToString("#,##0.00");
                     txtInsurancePolicyNumber.Text = buildingEntity.PolicyNumber;
                     tbExcessStructures.Text = buildingEntity.ExcessStructures;
 
                     dtpPolicyRenewalDate.Format = DateTimePickerFormat.Custom;
                     dtpPolicyRenewalDate.CustomFormat = "yyyy/MM/dd";
                     dtpPolicyRenewalDate.MinDate = DateTime.Today.AddYears(-5);
+
+                    dtpPolicyExpiryDate.Format = DateTimePickerFormat.Custom;
+                    dtpPolicyExpiryDate.CustomFormat = "yyyy/MM/dd";
+                    dtpPolicyExpiryDate.MinDate = DateTime.Today.AddYears(-5);
+
                     if (buildingEntity.InsurancePolicyRenewalDate != null)
                         dtpPolicyRenewalDate.Value = buildingEntity.InsurancePolicyRenewalDate.Value;
                     else
                         dtpPolicyRenewalDate.Value = DateTime.Today;
+
+                    if (buildingEntity.InsurancePolicyExpiryDate != null)
+                        dtpPolicyExpiryDate.Value = buildingEntity.InsurancePolicyExpiryDate.Value;
+                    else
+                        dtpPolicyExpiryDate.Value = DateTime.Today.AddMonths(12);
+
 
                     txtMonthlyPremium.Text = buildingEntity.MonthlyInsurancePremium.ToString("#,##0.00");
 
@@ -576,9 +588,9 @@ namespace Astrodon
                 return;
             }
 
-            if(dtpPolicyRenewalDate.Value <= DateTime.Today)
+            if (dtpPolicyExpiryDate.Value <= DateTime.Today)
             {
-                Controller.ShowWarning("Policy is set to expire " + dtpPolicyRenewalDate.Value.ToString("yyyy/MM/dd"));
+                Controller.ShowWarning("Policy is set to expire " + dtpPolicyExpiryDate.Value.ToString("yyyy/MM/dd"));
             }
 
             using (var context = SqlDataHandler.GetDataContext())
@@ -601,6 +613,7 @@ namespace Astrodon
                 buildingEntity.PolicyNumber = txtInsurancePolicyNumber.Text;
                 buildingEntity.InsuranceReplacementValueIncludesCommonProperty = cbReplacementIncludesCommonProperty.Checked;
                 buildingEntity.InsurancePolicyRenewalDate = dtpPolicyRenewalDate.Value;
+                buildingEntity.InsurancePolicyExpiryDate = dtpPolicyExpiryDate.Value;
                 buildingEntity.ExcessStructures = tbExcessStructures.Text;
                 if (_SelectedBroker == null)
                     buildingEntity.InsuranceBrokerId = null;
@@ -608,9 +621,11 @@ namespace Astrodon
                     buildingEntity.InsuranceBrokerId = _SelectedBroker.id;
 
                 decimal totalAdditionalInsuredValue = 0;
+                decimal totalAdditionalPremiumValue = 0;
                 foreach (var item in InsurancePqGrid.Where(a => a is InsurancePqRecord).Select(a => a as InsurancePqRecord).ToList())
                 {
                     totalAdditionalInsuredValue += item.AdditionalInsurance;
+                    totalAdditionalPremiumValue += item.AdditionalPremium;
                     if (item.Id == null)
                     {
                         context.BuildingUnitSet.Add(new Data.MaintenanceData.BuildingUnit()
@@ -646,6 +661,7 @@ namespace Astrodon
                     }
                 }
                 buildingEntity.AdditionalInsuredValueCost = totalAdditionalInsuredValue;
+                buildingEntity.AdditionalPremiumValue = totalAdditionalPremiumValue;
                 try
                 {
                     context.SaveChanges();
@@ -1698,7 +1714,11 @@ namespace Astrodon
             if (InsurancePqGrid != null && InsurancePqGrid.Count > 1)
             {
                 if (InsurancePqGrid.Any(a => a is InsurancePqRecord))
+                {
                     txtAdditionalInsuredValue.Text = InsurancePqGrid.Where(a => a is InsurancePqRecord).Sum(a => a.AdditionalInsurance).ToString("#,##0.00");
+                    txtAdditionalPremium.Text = InsurancePqGrid.Where(a => a is InsurancePqRecord).Sum(a => a.AdditionalPremium).ToString("#,##0.00");
+                }
+
                 if (InsurancePqGrid.Any(a => a is PQTotal))
                     txtTotalReplacementValue.Text = InsurancePqGrid.First(a => a is PQTotal).TotalReplacementValue.ToString("#,##0.00");
             }
@@ -1718,9 +1738,10 @@ namespace Astrodon
             txtCommonPropertyValue.Enabled = !cbReplacementIncludesCommonProperty.Checked;
         }
 
-   
-
-      
+        private void dtpPolicyRenewalDate_ValueChanged(object sender, EventArgs e)
+        {
+            dtpPolicyExpiryDate.Value = dtpPolicyRenewalDate.Value.AddMonths(12);
+        }
     }
 
     internal interface IInsurancePqRecord
