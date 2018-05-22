@@ -416,11 +416,8 @@ namespace Astrodon
                     if (transactions != null) { myStatement.Transactions = transactions; }
                     myStatement.totalDue = totalDue;
                     myStatement.DebtorEmail = getDebtorEmail(buildingName);
-                    myStatement.PrintMe = customer.statPrintorEmail == 1 || customer.statPrintorEmail == 3;
-                    myStatement.EmailMe = customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4;
-
-                    //myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
-                    //myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
+                    myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
+                    myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
                     if (customer.Email != null && customer.Email.Length > 0)
                     {
                         List<String> newEmails = new List<string>();

@@ -155,45 +155,34 @@ namespace Astrodon
                 foreach (String addy in customer.address) { addList.Add(addy); }
                 stmt.Address = addList.ToArray();
                 stmt.DebtorEmail = building.Debtor;
-                stmt.PrintMe = customer.statPrintorEmail == 1 || customer.statPrintorEmail == 3;  
-                stmt.EmailMe = customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4;
-                if (stmt.EmailMe)
+                stmt.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 ? false : true);
+                try
                 {
-                    try
+                    if (customer.Email != null && customer.Email.Length > 0)
                     {
-                        if (customer.Email != null && customer.Email.Length > 0)
+                        List<String> newEmails = new List<string>();
+                        foreach (String emailAddress in customer.Email)
                         {
-                            List<String> newEmails = new List<string>();
-                            foreach (String emailAddress in customer.Email)
-                            {
-                                if (!emailAddress.Contains("@imp.ad-one.co.za")) { newEmails.Add(emailAddress); }
-                            }
-                            stmt.email1 = newEmails.ToArray();
+                            if (!emailAddress.Contains("@imp.ad-one.co.za")) { newEmails.Add(emailAddress); }
                         }
-                        else if (makeFile && MessageBox.Show("This customer has no email address. Continue?", "Statement", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                        {
-                            stmt.email1 = new String[] { "" };
-                            stmt.PrintMe = true;
-                            stmt.EmailMe = false;
-                        }
+                        stmt.email1 = newEmails.ToArray();
                     }
-                    catch
+                    else if (makeFile && MessageBox.Show("This customer has no email address. Continue?", "Statement", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        if (makeFile && MessageBox.Show("This customer has no email address. Continue?", "Statement", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                        {
-                            stmt.email1 = new String[] { "" };
-                            stmt.PrintMe = true;
-                            stmt.EmailMe = false;
-                        }
-                        else if (!makeFile)
-                        {
-                            stmt.email1 = new String[] { "" };
-                            stmt.PrintMe = true;
-                            stmt.EmailMe = false;
-                        }
+                        stmt.email1 = new String[] { "" };
                     }
                 }
-
+                catch
+                {
+                    if (makeFile && MessageBox.Show("This customer has no email address. Continue?", "Statement", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        stmt.email1 = new String[] { "" };
+                    }
+                    else if (!makeFile)
+                    {
+                        stmt.email1 = new String[] { "" };
+                    }
+                }
                 stmt.BankDetails = Controller.pastel.GetBankDetails(stmtBuilding.DataPath);
                 stmt.BuildingName = building.Name;
                 stmt.LevyMessage1 = (stmtBuilding.HOA ? HOAMessage1 : BCMessage1);
