@@ -393,53 +393,60 @@ namespace Astrodon
             int ccount = 0;
             foreach (Customer customer in customers)
             {
-                try
+                if (customer.accNumber.ToUpper().Trim().StartsWith("Z"))
                 {
-                    AddProgressString("Loading Statement " + customer.accNumber);
-
-                    var canemail = customer.Email.Count(d => !String.IsNullOrEmpty(d)) > 0;
-
-                    Statement myStatement = new Statement { AccNo = customer.accNumber };
-                    List<String> address = new List<string>();
-                    address.Add(customer.description);
-                    foreach (String addyLine in customer.address) { if (!String.IsNullOrEmpty(addyLine)) { address.Add(addyLine); } }
-                    myStatement.Address = address.ToArray();
-                    myStatement.BankDetails = (!String.IsNullOrEmpty(Controller.pastel.GetBankDetails(buildingPath)) ? Controller.pastel.GetBankDetails(buildingPath) : "");
-                    myStatement.BuildingName = buildingName;
-                    myStatement.LevyMessage1 = (isHOA ? HOAMessage1 : BCMessage1);
-                    myStatement.LevyMessage2 = (!String.IsNullOrEmpty(Message2) ? Message2 : "");
-                    myStatement.Message = (!String.IsNullOrEmpty(txtMessage.Text) ? txtMessage.Text : "");
-                    myStatement.StmtDate = stmtDatePicker.Value;
-                    double totalDue = 0;
-                    String trnMsg;
-                    List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
-                    if (transactions != null) { myStatement.Transactions = transactions; }
-                    myStatement.totalDue = totalDue;
-                    myStatement.DebtorEmail = getDebtorEmail(buildingName);
-                    myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
-                    myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
-                    if (customer.Email != null && customer.Email.Length > 0)
-                    {
-                        List<String> newEmails = new List<string>();
-                        foreach (String emailAddress in customer.Email)
-                        {
-                            if (!emailAddress.Contains("@imp.ad-one.co.za")) { newEmails.Add(emailAddress); }
-                        }
-                        myStatement.email1 = newEmails.ToArray();
-                    }
-                    else
-                        myStatement.PrintMe = true;
-
-                    if(myStatement.PrintMe)
-                       AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
-
-                    myStatements.Add(myStatement);
+                    AddProgressString("Customer Account is a Z account - skipping statement for " + customer.accNumber);
                 }
-                catch { }
-                ccount++;
-                lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();
-                lblCCount.Refresh();
-                Application.DoEvents();
+                else
+                {
+                    try
+                    {
+                        AddProgressString("Loading Statement " + customer.accNumber);
+
+                        var canemail = customer.Email.Count(d => !String.IsNullOrEmpty(d)) > 0;
+
+                        Statement myStatement = new Statement { AccNo = customer.accNumber };
+                        List<String> address = new List<string>();
+                        address.Add(customer.description);
+                        foreach (String addyLine in customer.address) { if (!String.IsNullOrEmpty(addyLine)) { address.Add(addyLine); } }
+                        myStatement.Address = address.ToArray();
+                        myStatement.BankDetails = (!String.IsNullOrEmpty(Controller.pastel.GetBankDetails(buildingPath)) ? Controller.pastel.GetBankDetails(buildingPath) : "");
+                        myStatement.BuildingName = buildingName;
+                        myStatement.LevyMessage1 = (isHOA ? HOAMessage1 : BCMessage1);
+                        myStatement.LevyMessage2 = (!String.IsNullOrEmpty(Message2) ? Message2 : "");
+                        myStatement.Message = (!String.IsNullOrEmpty(txtMessage.Text) ? txtMessage.Text : "");
+                        myStatement.StmtDate = stmtDatePicker.Value;
+                        double totalDue = 0;
+                        String trnMsg;
+                        List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
+                        if (transactions != null) { myStatement.Transactions = transactions; }
+                        myStatement.totalDue = totalDue;
+                        myStatement.DebtorEmail = getDebtorEmail(buildingName);
+                        myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
+                        myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
+                        if (customer.Email != null && customer.Email.Length > 0)
+                        {
+                            List<String> newEmails = new List<string>();
+                            foreach (String emailAddress in customer.Email)
+                            {
+                                if (!emailAddress.Contains("@imp.ad-one.co.za")) { newEmails.Add(emailAddress); }
+                            }
+                            myStatement.email1 = newEmails.ToArray();
+                        }
+                        else
+                            myStatement.PrintMe = true;
+
+                        if (myStatement.PrintMe)
+                            AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
+
+                        myStatements.Add(myStatement);
+                    }
+                    catch { }
+                    ccount++;
+                    lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();
+                    lblCCount.Refresh();
+                    Application.DoEvents();
+                }
             }
             return myStatements;
         }
