@@ -393,9 +393,19 @@ namespace Astrodon
             int ccount = 0;
             foreach (Customer customer in customers)
             {
-                if (customer.accNumber.ToUpper().Trim().StartsWith("Z"))
+                if (!String.IsNullOrWhiteSpace(customer.category) && (
+                       customer.category.Trim() == "2" //Units in Transfer
+                    || customer.category.Trim() == "10" //Units Disconnected
+                         || customer.category.Trim() == "11" //Units Disconnected
+                    ))
                 {
-                    AddProgressString("Customer Account is a Z account - skipping statement for " + customer.accNumber);
+                    if (customer.category.Trim() == "2")
+                        AddProgressString("Customer Account is in Units in Transfer category and will be skipped: " + customer.accNumber);
+                    else if (customer.category.Trim() == "10")
+                        AddProgressString("Customer Account is in Unallocated Deposits category and will be skipped: " + customer.accNumber);
+                    else if (customer.category.Trim() == "11")
+                        AddProgressString("Customer Account is in Transferred Units/PMA category and will be skipped: " + customer.accNumber);
+                    AddProgressString("Customer Account skipped: " + customer.accNumber + " category: " + customer.category);
                 }
                 else
                 {
