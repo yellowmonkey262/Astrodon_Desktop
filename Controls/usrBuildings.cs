@@ -573,19 +573,17 @@ namespace Astrodon
         {
             if (!ValidatePQ())
             {
-                return;
+                throw new Exception("PQ Validation Failed");
             }
 
             if (_SelectedBroker == null)
             {
-                Controller.HandleError("Please select an insurance broker");
-                return;
+                Controller.ShowWarning("Please select an insurance broker");
             }
 
             if(String.IsNullOrWhiteSpace(txtInsurancePolicyNumber.Text))
             {
-                Controller.HandleError("Please enter an Insurance Policy Number.");
-                return;
+                Controller.ShowWarning("Please enter an Insurance Policy Number.");
             }
 
             if (dtpPolicyExpiryDate.Value <= DateTime.Today)
@@ -719,6 +717,7 @@ namespace Astrodon
 
         private void SaveBuilding()
         {
+            bool error = false;
             selectedBuilding.ID = int.Parse(txtID.Text);
             selectedBuilding.Name = txtName.Text;
             selectedBuilding.Abbr = txtAbbr.Text;
@@ -782,7 +781,8 @@ namespace Astrodon
                         }
                         catch (Exception ex1)
                         {
-                            MessageBox.Show("Save Web Building failed: " + ex1.Message + "\r" + ex1.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            error = true;
+                            Controller.HandleError("Save Web Building failed: " + ex1.Message + "\r" + ex1.StackTrace, "Buildings");
                         }
 
                         try
@@ -791,7 +791,8 @@ namespace Astrodon
                         }
                         catch (Exception ex2)
                         {
-                            MessageBox.Show("Update Building Settings failed: " + ex2.Message + "\r" + ex2.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            error = true;
+                            Controller.HandleError("Update Building Settings failed: " + ex2.Message + "\r" + ex2.StackTrace, "Buildings");
                         }
                         try
                         {
@@ -799,7 +800,8 @@ namespace Astrodon
                         }
                         catch (Exception ex3)
                         {
-                            MessageBox.Show("Save Insurance Feailed: " + ex3.Message + "\r" + ex3.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            error = true;
+                            Controller.HandleError("Save Insurance Feailed: " + ex3.Message + "\r" + ex3.StackTrace, "Buildings");
                         }
                         try
                         {
@@ -807,26 +809,30 @@ namespace Astrodon
                         }
                         catch (Exception ex4)
                         {
-                            MessageBox.Show("Save Trustees Failed: " + ex4.Message + "\r" + ex4.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            error = true;
+                            Controller.HandleError("Save Trustees Failed: " + ex4.Message + "\r" + ex4.StackTrace, "Buildings");
                         }
-                        MessageBox.Show("Building updated!", "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        selectedBuilding = null;
-                        clearBuilding();
-                        LoadCombo();
+                        if (!error)
+                        {
+                            MessageBox.Show("Building updated!", "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            selectedBuilding = null;
+                            clearBuilding();
+                            LoadCombo();
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Building update failed: SV1 " + status, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Controller.HandleError("Building update failed: SV1 " + status, "Buildings");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Please enter building name", "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    Controller.HandleError("Please enter building name", "Buildings");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Building update failed: SV2" + ex.Message + "\r" + ex.StackTrace, "Buildings", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Controller.HandleError("Building update failed: SV2" + ex.Message + "\r" + ex.StackTrace, "Buildings");
             }
         }
 

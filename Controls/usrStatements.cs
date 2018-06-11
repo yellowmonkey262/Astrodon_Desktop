@@ -23,6 +23,7 @@ namespace Astrodon
         private BindingSource bs;
         private int userid;
         private Statements statements;
+        private string _AstradonRentalsBuilding = "ASTRODON RENTALS";
 
         public usrStatements()
         {
@@ -393,19 +394,28 @@ namespace Astrodon
             int ccount = 0;
             foreach (Customer customer in customers)
             {
-                if (!String.IsNullOrWhiteSpace(customer.category) && (
-                       customer.category.Trim() == "2" //Units in Transfer
-                    || customer.category.Trim() == "10" //Units Disconnected
-                         || customer.category.Trim() == "11" //Units Disconnected
+                if (buildingName.Trim().ToUpper() != _AstradonRentalsBuilding.ToUpper()   &&(
+                       customer.IntCategory == 2 //Units in Transfer
+                    || customer.IntCategory == 10 //Units Disconnected
+                         || customer.IntCategory == 11 //Units Disconnected
                     ))
                 {
-                    if (customer.category.Trim() == "2")
+                    if (customer.IntCategory == 2)
                         AddProgressString("Customer Account is in Units in Transfer category and will be skipped: " + customer.accNumber);
-                    else if (customer.category.Trim() == "10")
+                    else if (customer.IntCategory == 10)
                         AddProgressString("Customer Account is in Unallocated Deposits category and will be skipped: " + customer.accNumber);
-                    else if (customer.category.Trim() == "11")
+                    else if (customer.IntCategory == 11)
                         AddProgressString("Customer Account is in Transferred Units/PMA category and will be skipped: " + customer.accNumber);
-                    AddProgressString("Customer Account skipped: " + customer.accNumber + " category: " + customer.category);
+                    else
+                       AddProgressString("Customer Account skipped: " + customer.accNumber + " category: " + customer.category);
+                }
+                else if (buildingName.Trim().ToUpper() == _AstradonRentalsBuilding.ToUpper() &&
+                         ( customer.IntCategory == 13
+                         || customer.IntCategory == 16
+                         || customer.IntCategory ==17
+                         || customer.IntCategory == 18))
+                {
+                    AddProgressString("Astrodon Rentals category skipped : " + customer.accNumber + " " + customer.category);
                 }
                 else
                 {

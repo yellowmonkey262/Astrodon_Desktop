@@ -173,6 +173,8 @@
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.dgInsurancePq = new System.Windows.Forms.DataGridView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.dtpPolicyExpiryDate = new System.Windows.Forms.DateTimePicker();
+            this.label82 = new System.Windows.Forms.Label();
             this.tbExcessStructures = new System.Windows.Forms.TextBox();
             this.label56 = new System.Windows.Forms.Label();
             this.dtpPolicyRenewalDate = new System.Windows.Forms.DateTimePicker();
@@ -226,8 +228,6 @@
             this.label78 = new System.Windows.Forms.Label();
             this.axAcroPDFOld = new AxAcroPDFLib.AxAcroPDF();
             this.axAcroPDFNew = new AxAcroPDFLib.AxAcroPDF();
-            this.dtpPolicyExpiryDate = new System.Windows.Forms.DateTimePicker();
-            this.label82 = new System.Windows.Forms.Label();
             this.groupBox5.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbBuilding.SuspendLayout();
@@ -337,7 +337,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 33);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1377, 559);
+            this.tabControl1.Size = new System.Drawing.Size(1403, 559);
             this.tabControl1.TabIndex = 139;
             // 
             // tbBuilding
@@ -1644,7 +1644,7 @@
             this.tbInsurance.Location = new System.Drawing.Point(4, 22);
             this.tbInsurance.Name = "tbInsurance";
             this.tbInsurance.Padding = new System.Windows.Forms.Padding(3);
-            this.tbInsurance.Size = new System.Drawing.Size(1369, 533);
+            this.tbInsurance.Size = new System.Drawing.Size(1395, 533);
             this.tbInsurance.TabIndex = 1;
             this.tbInsurance.Text = "Insurance";
             this.tbInsurance.UseVisualStyleBackColor = true;
@@ -1653,7 +1653,7 @@
             // groupBox8
             // 
             this.groupBox8.Controls.Add(this.dgInsurancePq);
-            this.groupBox8.Location = new System.Drawing.Point(591, 6);
+            this.groupBox8.Location = new System.Drawing.Point(614, 6);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(770, 570);
             this.groupBox8.TabIndex = 139;
@@ -1698,10 +1698,26 @@
             this.groupBox3.Controls.Add(this.btnUploadInsuranceContract);
             this.groupBox3.Location = new System.Drawing.Point(9, 241);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(576, 286);
+            this.groupBox3.Size = new System.Drawing.Size(599, 286);
             this.groupBox3.TabIndex = 136;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Insurance Broker Details";
+            // 
+            // dtpPolicyExpiryDate
+            // 
+            this.dtpPolicyExpiryDate.Location = new System.Drawing.Point(91, 80);
+            this.dtpPolicyExpiryDate.Name = "dtpPolicyExpiryDate";
+            this.dtpPolicyExpiryDate.Size = new System.Drawing.Size(171, 20);
+            this.dtpPolicyExpiryDate.TabIndex = 157;
+            // 
+            // label82
+            // 
+            this.label82.AutoSize = true;
+            this.label82.Location = new System.Drawing.Point(11, 80);
+            this.label82.Name = "label82";
+            this.label82.Size = new System.Drawing.Size(69, 15);
+            this.label82.TabIndex = 156;
+            this.label82.Text = "Expiry Date";
             // 
             // tbExcessStructures
             // 
@@ -1820,7 +1836,7 @@
             this.btnDownloadPQ.Enabled = false;
             this.btnDownloadPQ.Location = new System.Drawing.Point(507, 108);
             this.btnDownloadPQ.Name = "btnDownloadPQ";
-            this.btnDownloadPQ.Size = new System.Drawing.Size(63, 23);
+            this.btnDownloadPQ.Size = new System.Drawing.Size(86, 23);
             this.btnDownloadPQ.TabIndex = 18;
             this.btnDownloadPQ.Text = "Dowload";
             this.btnDownloadPQ.UseVisualStyleBackColor = true;
@@ -1842,7 +1858,7 @@
             this.btnDownloadBuildingPlans.Enabled = false;
             this.btnDownloadBuildingPlans.Location = new System.Drawing.Point(507, 79);
             this.btnDownloadBuildingPlans.Name = "btnDownloadBuildingPlans";
-            this.btnDownloadBuildingPlans.Size = new System.Drawing.Size(63, 23);
+            this.btnDownloadBuildingPlans.Size = new System.Drawing.Size(86, 23);
             this.btnDownloadBuildingPlans.TabIndex = 16;
             this.btnDownloadBuildingPlans.Text = "Dowload";
             this.btnDownloadBuildingPlans.UseVisualStyleBackColor = true;
@@ -1864,7 +1880,7 @@
             this.btnViewClaimForm.Enabled = false;
             this.btnViewClaimForm.Location = new System.Drawing.Point(507, 50);
             this.btnViewClaimForm.Name = "btnViewClaimForm";
-            this.btnViewClaimForm.Size = new System.Drawing.Size(63, 23);
+            this.btnViewClaimForm.Size = new System.Drawing.Size(86, 23);
             this.btnViewClaimForm.TabIndex = 14;
             this.btnViewClaimForm.Text = "Download";
             this.btnViewClaimForm.UseVisualStyleBackColor = true;
@@ -1875,7 +1891,7 @@
             this.btnViewInsuranceContract.Enabled = false;
             this.btnViewInsuranceContract.Location = new System.Drawing.Point(507, 21);
             this.btnViewInsuranceContract.Name = "btnViewInsuranceContract";
-            this.btnViewInsuranceContract.Size = new System.Drawing.Size(63, 23);
+            this.btnViewInsuranceContract.Size = new System.Drawing.Size(86, 23);
             this.btnViewInsuranceContract.TabIndex = 13;
             this.btnViewInsuranceContract.Text = "Download";
             this.btnViewInsuranceContract.UseVisualStyleBackColor = true;
@@ -1927,7 +1943,7 @@
             this.groupBox2.Controls.Add(this.label45);
             this.groupBox2.Location = new System.Drawing.Point(300, 15);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(285, 220);
+            this.groupBox2.Size = new System.Drawing.Size(308, 220);
             this.groupBox2.TabIndex = 135;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Building Costs";
@@ -1935,7 +1951,7 @@
             // label80
             // 
             this.label80.AutoSize = true;
-            this.label80.Location = new System.Drawing.Point(145, 138);
+            this.label80.Location = new System.Drawing.Point(166, 138);
             this.label80.Name = "label80";
             this.label80.Size = new System.Drawing.Size(16, 15);
             this.label80.TabIndex = 148;
@@ -1944,7 +1960,7 @@
             // txtAdditionalPremium
             // 
             this.txtAdditionalPremium.Enabled = false;
-            this.txtAdditionalPremium.Location = new System.Drawing.Point(166, 135);
+            this.txtAdditionalPremium.Location = new System.Drawing.Point(189, 135);
             this.txtAdditionalPremium.Name = "txtAdditionalPremium";
             this.txtAdditionalPremium.Size = new System.Drawing.Size(100, 20);
             this.txtAdditionalPremium.TabIndex = 147;
@@ -1961,7 +1977,7 @@
             // label76
             // 
             this.label76.AutoSize = true;
-            this.label76.Location = new System.Drawing.Point(145, 161);
+            this.label76.Location = new System.Drawing.Point(166, 161);
             this.label76.Name = "label76";
             this.label76.Size = new System.Drawing.Size(16, 15);
             this.label76.TabIndex = 145;
@@ -1969,7 +1985,7 @@
             // 
             // txtMonthlyPremium
             // 
-            this.txtMonthlyPremium.Location = new System.Drawing.Point(166, 158);
+            this.txtMonthlyPremium.Location = new System.Drawing.Point(189, 158);
             this.txtMonthlyPremium.Name = "txtMonthlyPremium";
             this.txtMonthlyPremium.Size = new System.Drawing.Size(100, 20);
             this.txtMonthlyPremium.TabIndex = 144;
@@ -1987,7 +2003,7 @@
             // label74
             // 
             this.label74.AutoSize = true;
-            this.label74.Location = new System.Drawing.Point(145, 187);
+            this.label74.Location = new System.Drawing.Point(166, 187);
             this.label74.Name = "label74";
             this.label74.Size = new System.Drawing.Size(16, 15);
             this.label74.TabIndex = 142;
@@ -1996,7 +2012,7 @@
             // txtTotalReplacementValue
             // 
             this.txtTotalReplacementValue.Enabled = false;
-            this.txtTotalReplacementValue.Location = new System.Drawing.Point(166, 184);
+            this.txtTotalReplacementValue.Location = new System.Drawing.Point(189, 184);
             this.txtTotalReplacementValue.Name = "txtTotalReplacementValue";
             this.txtTotalReplacementValue.Size = new System.Drawing.Size(100, 20);
             this.txtTotalReplacementValue.TabIndex = 141;
@@ -2013,7 +2029,7 @@
             // label72
             // 
             this.label72.AutoSize = true;
-            this.label72.Location = new System.Drawing.Point(145, 116);
+            this.label72.Location = new System.Drawing.Point(166, 116);
             this.label72.Name = "label72";
             this.label72.Size = new System.Drawing.Size(16, 15);
             this.label72.TabIndex = 139;
@@ -2022,7 +2038,7 @@
             // txtAdditionalInsuredValue
             // 
             this.txtAdditionalInsuredValue.Enabled = false;
-            this.txtAdditionalInsuredValue.Location = new System.Drawing.Point(166, 113);
+            this.txtAdditionalInsuredValue.Location = new System.Drawing.Point(189, 113);
             this.txtAdditionalInsuredValue.Name = "txtAdditionalInsuredValue";
             this.txtAdditionalInsuredValue.Size = new System.Drawing.Size(100, 20);
             this.txtAdditionalInsuredValue.TabIndex = 138;
@@ -2039,7 +2055,7 @@
             // cbReplacementIncludesCommonProperty
             // 
             this.cbReplacementIncludesCommonProperty.AutoSize = true;
-            this.cbReplacementIncludesCommonProperty.Location = new System.Drawing.Point(166, 53);
+            this.cbReplacementIncludesCommonProperty.Location = new System.Drawing.Point(189, 53);
             this.cbReplacementIncludesCommonProperty.Name = "cbReplacementIncludesCommonProperty";
             this.cbReplacementIncludesCommonProperty.Size = new System.Drawing.Size(18, 17);
             this.cbReplacementIncludesCommonProperty.TabIndex = 136;
@@ -2059,7 +2075,7 @@
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(145, 90);
+            this.label48.Location = new System.Drawing.Point(166, 90);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(16, 15);
             this.label48.TabIndex = 134;
@@ -2068,7 +2084,7 @@
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(145, 29);
+            this.label47.Location = new System.Drawing.Point(166, 29);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(16, 15);
             this.label47.TabIndex = 133;
@@ -2076,14 +2092,14 @@
             // 
             // txtCommonPropertyValue
             // 
-            this.txtCommonPropertyValue.Location = new System.Drawing.Point(166, 87);
+            this.txtCommonPropertyValue.Location = new System.Drawing.Point(189, 87);
             this.txtCommonPropertyValue.Name = "txtCommonPropertyValue";
             this.txtCommonPropertyValue.Size = new System.Drawing.Size(100, 20);
             this.txtCommonPropertyValue.TabIndex = 3;
             // 
             // txtReplacementValue
             // 
-            this.txtReplacementValue.Location = new System.Drawing.Point(166, 26);
+            this.txtReplacementValue.Location = new System.Drawing.Point(189, 26);
             this.txtReplacementValue.Name = "txtReplacementValue";
             this.txtReplacementValue.Size = new System.Drawing.Size(100, 20);
             this.txtReplacementValue.TabIndex = 2;
@@ -2125,7 +2141,7 @@
             // label44
             // 
             this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(251, 55);
+            this.label44.Location = new System.Drawing.Point(263, 55);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(22, 15);
             this.label44.TabIndex = 135;
@@ -2133,16 +2149,16 @@
             // 
             // txtUnitPropertyDim
             // 
-            this.txtUnitPropertyDim.Location = new System.Drawing.Point(159, 52);
+            this.txtUnitPropertyDim.Location = new System.Drawing.Point(180, 52);
             this.txtUnitPropertyDim.Name = "txtUnitPropertyDim";
-            this.txtUnitPropertyDim.Size = new System.Drawing.Size(86, 20);
+            this.txtUnitPropertyDim.Size = new System.Drawing.Size(77, 20);
             this.txtUnitPropertyDim.TabIndex = 134;
             this.txtUnitPropertyDim.TextChanged += new System.EventHandler(this.txtUnitPropertyDim_TextChanged);
             // 
             // label43
             // 
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(28, 55);
+            this.label43.Location = new System.Drawing.Point(21, 55);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(146, 15);
             this.label43.TabIndex = 133;
@@ -2151,7 +2167,7 @@
             // label42
             // 
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(251, 29);
+            this.label42.Location = new System.Drawing.Point(263, 29);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(22, 15);
             this.label42.TabIndex = 132;
@@ -2159,15 +2175,15 @@
             // 
             // txtCommonPropertyDim
             // 
-            this.txtCommonPropertyDim.Location = new System.Drawing.Point(159, 26);
+            this.txtCommonPropertyDim.Location = new System.Drawing.Point(180, 26);
             this.txtCommonPropertyDim.Name = "txtCommonPropertyDim";
-            this.txtCommonPropertyDim.Size = new System.Drawing.Size(86, 20);
+            this.txtCommonPropertyDim.Size = new System.Drawing.Size(77, 20);
             this.txtCommonPropertyDim.TabIndex = 131;
             // 
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(6, 29);
+            this.label41.Location = new System.Drawing.Point(-1, 29);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(175, 15);
             this.label41.TabIndex = 130;
@@ -2227,22 +2243,6 @@
             this.axAcroPDFNew.Size = new System.Drawing.Size(658, 504);
             this.axAcroPDFNew.TabIndex = 65;
             // 
-            // dtpPolicyExpiryDate
-            // 
-            this.dtpPolicyExpiryDate.Location = new System.Drawing.Point(91, 80);
-            this.dtpPolicyExpiryDate.Name = "dtpPolicyExpiryDate";
-            this.dtpPolicyExpiryDate.Size = new System.Drawing.Size(171, 20);
-            this.dtpPolicyExpiryDate.TabIndex = 157;
-            // 
-            // label82
-            // 
-            this.label82.AutoSize = true;
-            this.label82.Location = new System.Drawing.Point(11, 80);
-            this.label82.Name = "label82";
-            this.label82.Size = new System.Drawing.Size(69, 15);
-            this.label82.TabIndex = 156;
-            this.label82.Text = "Expiry Date";
-            // 
             // usrBuildings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2252,7 +2252,7 @@
             this.Controls.Add(this.cmbBuilding);
             this.Controls.Add(this.label1);
             this.Name = "usrBuildings";
-            this.Size = new System.Drawing.Size(1382, 637);
+            this.Size = new System.Drawing.Size(1414, 637);
             this.Load += new System.EventHandler(this.usrBuildings_Load);
             this.groupBox5.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
