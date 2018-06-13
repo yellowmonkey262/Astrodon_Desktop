@@ -103,7 +103,8 @@ namespace Astrodon.DataProcessor
                                                          Math.Abs(a.Amount) == Math.Abs(req.amount)
                                                          && a.TransactionDate >= minDate
                                                          && a.TransactionDate <= maxDate)
-                                                         .OrderByDescending(a => Math.Abs(DateTime.Compare(a.TransactionDate, req.trnDate))).ToList();
+                                                         .OrderByDescending(a => Math.Abs(DateTime.Compare(a.TransactionDate, req.trnDate)))
+                                                         .ToList();
                 //clear null references
                 foreach (var r in matched.Where(a => a.Reference == null))
                 {

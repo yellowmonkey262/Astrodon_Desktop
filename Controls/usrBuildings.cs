@@ -30,6 +30,7 @@ namespace Astrodon
 
             dtpEventTime.Format = DateTimePickerFormat.Time;
             dtpEventTime.ShowUpDown = true;
+            btnRemove.Visible = Controller.UserIsSheldon();
             LoadBondOriginators();
         }
 
@@ -50,7 +51,7 @@ namespace Astrodon
 
         private void LoadCombo()
         {
-            BuildingManager = new Buildings(true,false);
+            BuildingManager = new Buildings(true,true);
             cmbBuilding.DataSource = BuildingManager.buildings;
             cmbBuilding.DisplayMember = "Name";
             cmbBuilding.ValueMember = "ID";
@@ -1011,15 +1012,16 @@ namespace Astrodon
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            if (selectedBuilding != null)
+            if (Controller.UserIsSheldon())
             {
-                if (MessageBox.Show("Confirm remove building " + selectedBuilding.Name + "?", "Remove building", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (selectedBuilding != null)
                 {
-                    if (Prompt.ShowDialog("Please enter password", "Buildings") == "Sheldon123")
+                    if (MessageBox.Show("Confirm remove building " + selectedBuilding.Name + "?", "Remove building", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         String status = "";
                         BuildingManager.Update(cmbBuilding.SelectedIndex, true, out status);
                         SaveWebBuilding(true);
+                        Controller.ShowMessage("Building " + selectedBuilding.Name + " Removed");
                         clearBuilding();
                         LoadCombo();
                     }

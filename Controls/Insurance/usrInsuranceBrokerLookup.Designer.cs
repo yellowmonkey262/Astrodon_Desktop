@@ -49,7 +49,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(23, 22);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(190, 17);
+            this.lblTitle.Size = new System.Drawing.Size(219, 20);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Insurance Broker Lookup";
             // 
@@ -58,7 +58,7 @@
             this.lblCompanyName.AutoSize = true;
             this.lblCompanyName.Location = new System.Drawing.Point(23, 66);
             this.lblCompanyName.Name = "lblCompanyName";
-            this.lblCompanyName.Size = new System.Drawing.Size(82, 13);
+            this.lblCompanyName.Size = new System.Drawing.Size(96, 15);
             this.lblCompanyName.TabIndex = 1;
             this.lblCompanyName.Text = "Company Name";
             // 
@@ -67,7 +67,7 @@
             this.lblCompanyReg.AutoSize = true;
             this.lblCompanyReg.Location = new System.Drawing.Point(23, 96);
             this.lblCompanyReg.Name = "lblCompanyReg";
-            this.lblCompanyReg.Size = new System.Drawing.Size(81, 13);
+            this.lblCompanyReg.Size = new System.Drawing.Size(92, 15);
             this.lblCompanyReg.TabIndex = 2;
             this.lblCompanyReg.Text = "Company Reg#";
             // 
@@ -76,7 +76,7 @@
             this.lblContactPerson.AutoSize = true;
             this.lblContactPerson.Location = new System.Drawing.Point(23, 125);
             this.lblContactPerson.Name = "lblContactPerson";
-            this.lblContactPerson.Size = new System.Drawing.Size(80, 13);
+            this.lblContactPerson.Size = new System.Drawing.Size(90, 15);
             this.lblContactPerson.TabIndex = 3;
             this.lblContactPerson.Text = "Contact Person";
             // 
@@ -85,7 +85,7 @@
             this.lblContactNumber.AutoSize = true;
             this.lblContactNumber.Location = new System.Drawing.Point(23, 154);
             this.lblContactNumber.Name = "lblContactNumber";
-            this.lblContactNumber.Size = new System.Drawing.Size(84, 13);
+            this.lblContactNumber.Size = new System.Drawing.Size(96, 15);
             this.lblContactNumber.TabIndex = 4;
             this.lblContactNumber.Text = "Contact Number";
             // 
@@ -148,7 +148,6 @@
             this.btnNewInsuranceBroker.TabIndex = 11;
             this.btnNewInsuranceBroker.Text = "New Insurance Broker";
             this.btnNewInsuranceBroker.UseVisualStyleBackColor = true;
-            this.btnNewInsuranceBroker.Visible = false;
             this.btnNewInsuranceBroker.Click += new System.EventHandler(this.btnNewInsuranceBroker_Click);
             // 
             // usrInsuranceBrokerLookup

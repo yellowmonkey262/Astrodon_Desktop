@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Astrodon.Controls
 {
@@ -12,6 +13,7 @@ namespace Astrodon.Controls
             InitializeComponent();
             Controller.JobUpdateEvent += Controller_JobUpdateEvent;
             if (Controller.user.usertype == 4) { Controller.AssignJob(); }
+            dgJobs.Columns[7].Visible = Controller.UserIsSheldon();
         }
 
         private void UpdateGrid()
@@ -102,7 +104,10 @@ namespace Astrodon.Controls
                         }
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Controller.HandleError(ex);
+                }
             }
             if (hasReviews)
             {
@@ -115,14 +120,55 @@ namespace Astrodon.Controls
         {
             try
             {
-                if (e.RowIndex >= 0 && e.ColumnIndex == 6)
+                if (e.RowIndex >= 0)
                 {
                     int jobID = int.Parse(dgJobs[0, e.RowIndex].Value.ToString());
-                    tmrJob.Enabled = false;
-                    Controller.mainF.ShowJob(jobID);
+                    if (e.ColumnIndex == 6)
+                    {
+                        tmrJob.Enabled = false;
+                        Controller.mainF.ShowJob(jobID);
+                    }else
+                    {
+                        DeleteJob(jobID);
+                    }
                 }
             }
             catch { }
+        }
+
+        private void DeleteJob(int jobID)
+        {
+            if (Controller.UserIsSheldon())
+            {
+                if(Controller.AskQuestion("Are you sure you want to delete job " + jobID.ToString()))
+                {
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var job = context.tblJobs.Single(a => a.id == jobID);
+                    
+                        var jobAttachments = context.tblJobAttachments.Where(a => a.jobID == jobID).ToList();
+                        if(jobAttachments.Count > 0)
+                          context.tblJobAttachments.RemoveRange(jobAttachments);
+
+                        var jobCustomers = context.tblJobCustomers.Where(a => a.jobID == jobID).ToList();
+                        if (jobCustomers.Count > 0)
+                            context.tblJobCustomers.RemoveRange(jobCustomers);
+
+                        var jobStatus = context.tblJobStatus.Where(a => a.jobID == jobID).ToList();
+                        if (jobCustomers.Count > 0)
+                            context.tblJobStatus.RemoveRange(jobStatus);
+
+                        context.tblJobs.Remove(job);
+
+                        context.SaveChanges();
+                        Controller.ShowMessage("Job deleted.");
+                    }
+                }
+            }
+            else
+            {
+                Controller.HandleError("You are not allowed to delete jobs");
+            }
         }
 
         private void dgJobs_DataError(object sender, DataGridViewDataErrorEventArgs e)

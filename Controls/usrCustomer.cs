@@ -74,7 +74,10 @@ namespace Astrodon
             cmbCustomer.SelectedIndexChanged -= cmbCustomer_SelectedIndexChanged;
             cmbCustomer.DataSource = null;
             cmbCustomer.Items.Clear();
-            if (selectedIndex > -1) { customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath); }
+            if (selectedIndex > -1)
+            {
+                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath,true);
+            }
             cmbCustomer.DataSource = customers;
             cmbCustomer.DisplayMember = "accNumber";
             cmbCustomer.ValueMember = "accNumber";
@@ -100,13 +103,17 @@ namespace Astrodon
                 this.axAcroPDF1.Visible = false;
                 btnUpload.Visible = false;
                 building = buildings[cmbBuilding.SelectedIndex];
-                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
+
+                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath,true);
+
                 txtAccount.Text = txtAddress1.Text = txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = String.Empty;
                 txtCell.Text = txtContact.Text = txtDescription.Text = txtEmail.Text = txtFax.Text = txtTelephone.Text = String.Empty;
                 customer = null;
                 ClearCustomer();
                 dgTransactions.DataSource = null;
+
                 LoadCustomers(-1);
+
                 categories = Controller.pastel.GetCustomerCategories(building.DataPath);
                 Categories stdCat = new Categories
                 {

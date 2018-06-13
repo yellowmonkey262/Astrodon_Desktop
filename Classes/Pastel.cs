@@ -73,7 +73,7 @@ namespace Astrodon
 
         #region Customer
 
-        public List<Customer> AddCustomers(String buildKey, String buildPath)
+        public List<Customer> AddCustomers(String buildKey, String buildPath, bool showErrors = false)
         {
             List<Customer> customers = new List<Customer>();
             String path = "";
@@ -92,7 +92,8 @@ namespace Astrodon
 
             if (returner.Contains("99"))
             {
-                
+                if (showErrors)
+                    Controller.ShowMessage("Patel returned " + returner + " reading path: " + path);
             }
             else
             {
@@ -113,7 +114,8 @@ namespace Astrodon
                 }
                 else
                 {
-                    MessageBox.Show("Pastel Add Customers: " + returner + " - " + records.ToString());
+                    if (showErrors)
+                        MessageBox.Show("Pastel returned zero customer records");
                 }
             }
             customers = customers.OrderBy(c => c.accNumber).ToList();

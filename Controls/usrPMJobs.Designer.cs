@@ -25,6 +25,10 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.dgJobs = new System.Windows.Forms.DataGridView();
+            this.jobListBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.astrodonDataSet = new Astrodon.AstrodonDataSet();
+            this.jobListAdapter = new Astrodon.AstrodonDataSetTableAdapters.JobListAdapter();
+            this.tmrJob = new System.Windows.Forms.Timer(this.components);
             this.jobIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pMDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.processedByDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -32,10 +36,7 @@
             this.subjectDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.jobListBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.astrodonDataSet = new Astrodon.AstrodonDataSet();
-            this.jobListAdapter = new Astrodon.AstrodonDataSetTableAdapters.JobListAdapter();
-            this.tmrJob = new System.Windows.Forms.Timer(this.components);
+            this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.jobListBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.astrodonDataSet)).BeginInit();
@@ -57,7 +58,8 @@
             this.buildingDataGridViewTextBoxColumn,
             this.subjectDataGridViewTextBoxColumn,
             this.statusDataGridViewTextBoxColumn,
-            this.Column1});
+            this.Column1,
+            this.Delete});
             this.dgJobs.DataSource = this.jobListBindingSource;
             this.dgJobs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgJobs.Location = new System.Drawing.Point(0, 0);
@@ -68,6 +70,25 @@
             this.dgJobs.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgJobs_DataBindingComplete);
             this.dgJobs.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgJobs_DataError);
             this.dgJobs.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgJobs_UserDeletingRow);
+            // 
+            // jobListBindingSource
+            // 
+            this.jobListBindingSource.DataMember = "JobList";
+            this.jobListBindingSource.DataSource = this.astrodonDataSet;
+            // 
+            // astrodonDataSet
+            // 
+            this.astrodonDataSet.DataSetName = "AstrodonDataSet";
+            this.astrodonDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // jobListAdapter
+            // 
+            this.jobListAdapter.ClearBeforeFill = true;
+            // 
+            // tmrJob
+            // 
+            this.tmrJob.Interval = 30000;
+            this.tmrJob.Tick += new System.EventHandler(this.tmrJob_Tick);
             // 
             // jobIDDataGridViewTextBoxColumn
             // 
@@ -108,29 +129,16 @@
             // 
             // Column1
             // 
-            this.Column1.HeaderText = "";
+            this.Column1.HeaderText = "Action";
             this.Column1.Name = "Column1";
             this.Column1.Text = "Select";
             this.Column1.UseColumnTextForButtonValue = true;
             // 
-            // jobListBindingSource
+            // Delete
             // 
-            this.jobListBindingSource.DataMember = "JobList";
-            this.jobListBindingSource.DataSource = this.astrodonDataSet;
-            // 
-            // astrodonDataSet
-            // 
-            this.astrodonDataSet.DataSetName = "AstrodonDataSet";
-            this.astrodonDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // jobListAdapter
-            // 
-            this.jobListAdapter.ClearBeforeFill = true;
-            // 
-            // tmrJob
-            // 
-            this.tmrJob.Interval = 30000;
-            this.tmrJob.Tick += new System.EventHandler(this.tmrJob_Tick);
+            this.Delete.HeaderText = "Delete";
+            this.Delete.Name = "Delete";
+            this.Delete.Visible = false;
             // 
             // usrPMJobs
             // 
@@ -153,6 +161,7 @@
         private System.Windows.Forms.BindingSource jobListBindingSource;
         private AstrodonDataSet astrodonDataSet;
         private AstrodonDataSetTableAdapters.JobListAdapter jobListAdapter;
+        private System.Windows.Forms.Timer tmrJob;
         private System.Windows.Forms.DataGridViewTextBoxColumn jobIDDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn pMDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn processedByDataGridViewTextBoxColumn;
@@ -160,6 +169,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn subjectDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn Column1;
-        private System.Windows.Forms.Timer tmrJob;
+        private System.Windows.Forms.DataGridViewButtonColumn Delete;
     }
 }
