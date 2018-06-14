@@ -15,7 +15,7 @@ namespace Astrodon
     {
         private PastelPartnerSDK SDK;
         private short keyNumber = 0;
-        public String pastelDirectory;
+        public string pastelDirectory { get; private set; }
         public volatile bool runSearch = false;
 
         #region Event Handler
@@ -44,31 +44,34 @@ namespace Astrodon
         {
             String lc, auth;
             SDK = new PastelPartnerSDK();
-            if (Environment.MachineName == "PASTELPARTNER")
+            lc = "DK11110068";
+            auth = "4228113";
+            pastelDirectory = "\\\\SERVER2\\Pastel11\\"; // @"K:\";// (Directory.Exists("K:\\") ? "K:\\" : "C:\\Pastel11\\");
+
+            string searchFolders = "";
+
+            if (!Directory.Exists(pastelDirectory))
             {
-                lc = "DK11110068";
-                auth = "4228113";
-                pastelDirectory = "C:\\Pastel11\\";
-                SDK.SetLicense(lc, auth);
-            }
-            else if (Environment.MachineName == "STEPHEN-PC")
-            {
-                lc = "DK12111473";
-                auth = "3627008";
-                pastelDirectory = "C:\\Pastel12\\";
-                SDK.SetLicense(lc, auth);
-            }
-            else
-            {
-                lc = "DK11110068";
-                auth = "4228113";
-                pastelDirectory = @"K:\";// (Directory.Exists("K:\\") ? "K:\\" : "C:\\Pastel11\\");
+                searchFolders += pastelDirectory + " does not exist\n";
+                pastelDirectory = @"K:\";
                 if (!Directory.Exists(pastelDirectory))
                 {
-                    pastelDirectory = @"C:\Pastel11\";
+                    searchFolders += pastelDirectory + " does not exist\n";
+                    pastelDirectory = "C:\\Pastel11\\";
+                    if(!Directory.Exists(pastelDirectory))
+                    {
+                        searchFolders += pastelDirectory + " does not exist\n";
+                        pastelDirectory = "C:\\Pastel12\\";
+                        lc = "DK12111473";
+                        auth = "3627008";
+
+                        if (!Directory.Exists(pastelDirectory))
+                            throw new Exception("Pastel folder not found - Searched in: "+ searchFolders);
+                    }
+
                 }
-                SDK.SetLicense(lc, auth);
             }
+            SDK.SetLicense(lc, auth);
         }
 
         #region Customer

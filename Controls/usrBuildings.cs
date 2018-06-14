@@ -1079,7 +1079,7 @@ namespace Astrodon
 
         private void btnUploadClaimForm_Click(object sender, EventArgs e)
         {
-            if (fUploadClaimForm.ShowDialog() == DialogResult.OK)
+            if (fdOpen.ShowDialog() == DialogResult.OK)
             {
                 btnUploadClaimForm.Enabled = false;
                 try
@@ -1106,8 +1106,8 @@ namespace Astrodon
                             fileEntity.DateUploaded = uploadDate;
                             context.BuildingDocumentSet.Add(fileEntity);
                         }
-                        fileEntity.FileData = File.ReadAllBytes(fUploadClaimForm.FileName);
-                        fileEntity.FileName = Path.GetFileName(fUploadClaimForm.FileName);
+                        fileEntity.FileData = File.ReadAllBytes(fdOpen.FileName);
+                        fileEntity.FileName = Path.GetFileName(fdOpen.FileName);
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Claim Form");
                     }
@@ -1176,10 +1176,10 @@ namespace Astrodon
                 
                     if (fileEntity != null)
                     {
-                        fdSaveClaimForm.FileName = fileEntity.FileName;
-                        if (fdSaveClaimForm.ShowDialog() == DialogResult.OK)
+                        fdSave.FileName = fileEntity.FileName;
+                        if (fdSave.ShowDialog() == DialogResult.OK)
                         {
-                            File.WriteAllBytes(fdSaveClaimForm.FileName, fileEntity.FileData);
+                            File.WriteAllBytes(fdSave.FileName, fileEntity.FileData);
                             MessageBox.Show("Successfully Downloaded Form");
                         }
                     }
@@ -1307,8 +1307,9 @@ namespace Astrodon
 
         private void btnBuildingPlans_Click(object sender, EventArgs e)
         {
-            if (fUploadClaimForm.ShowDialog() == DialogResult.OK)
+            if (fdOpen.ShowDialog() == DialogResult.OK)
             {
+                
                 btnBuildingPlans.Enabled = false;
                 try
                 {
@@ -1334,8 +1335,8 @@ namespace Astrodon
                             fileEntity.DateUploaded = uploadDate;
                             context.BuildingDocumentSet.Add(fileEntity);
                         }
-                        fileEntity.FileData = File.ReadAllBytes(fUploadClaimForm.FileName);
-                        fileEntity.FileName = Path.GetFileName(fUploadClaimForm.FileName);
+                        fileEntity.FileData = File.ReadAllBytes(fdOpen.FileName);
+                        fileEntity.FileName = Path.GetFileName(fdOpen.FileName);
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded Building Plans");
                     }
@@ -1367,10 +1368,10 @@ namespace Astrodon
 
                     if (fileEntity != null)
                     {
-                        fdSaveClaimForm.FileName = fileEntity.FileName;
-                        if (fdSaveClaimForm.ShowDialog() == DialogResult.OK)
+                        fdSave.FileName = fileEntity.FileName;
+                        if (fdSave.ShowDialog() == DialogResult.OK)
                         {
-                            File.WriteAllBytes(fdSaveClaimForm.FileName, fileEntity.FileData);
+                            File.WriteAllBytes(fdSave.FileName, fileEntity.FileData);
                             MessageBox.Show("Successfully Downloaded");
                         }
                     }
@@ -1393,7 +1394,7 @@ namespace Astrodon
 
         private void btnUploadPQ_Click(object sender, EventArgs e)
         {
-            if (fUploadClaimForm.ShowDialog() == DialogResult.OK)
+            if (fdOpen.ShowDialog() == DialogResult.OK)
             {
                 btnUploadPQ.Enabled = false;
                 try
@@ -1419,8 +1420,8 @@ namespace Astrodon
                             fileEntity.DateUploaded = uploadDate;
                             context.BuildingDocumentSet.Add(fileEntity);
                         }
-                        fileEntity.FileData = File.ReadAllBytes(fUploadClaimForm.FileName);
-                        fileEntity.FileName = Path.GetFileName(fUploadClaimForm.FileName);
+                        fileEntity.FileData = File.ReadAllBytes(fdOpen.FileName);
+                        fileEntity.FileName = Path.GetFileName(fdOpen.FileName);
                         context.SaveChanges();
                         MessageBox.Show("Successfully Uploaded PQ");
                     }
@@ -1452,10 +1453,10 @@ namespace Astrodon
 
                     if (fileEntity != null)
                     {
-                        fdSaveClaimForm.FileName = fileEntity.FileName;
-                        if (fdSaveClaimForm.ShowDialog() == DialogResult.OK)
+                        fdSave.FileName = fileEntity.FileName;
+                        if (fdSave.ShowDialog() == DialogResult.OK)
                         {
-                            File.WriteAllBytes(fdSaveClaimForm.FileName, fileEntity.FileData);
+                            File.WriteAllBytes(fdSave.FileName, fileEntity.FileData);
                             MessageBox.Show("Successfully Downloaded");
                         }
                     }
@@ -1605,7 +1606,6 @@ namespace Astrodon
             bool Ret = true;
 
             PdfReader reader = null;
-
             try
             {
                 using (reader = new PdfReader(filepath))
@@ -1615,6 +1615,7 @@ namespace Astrodon
             }
             catch(Exception ex)
             {
+                Controller.HandleError(filepath + " reader error " + ex.Message);
                 Ret = false;
             }
 

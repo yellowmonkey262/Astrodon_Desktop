@@ -39,17 +39,10 @@ namespace Astrodon
 
         public static void RunProgram()
         {
-            try
-            {
-                pastel = new Pastel();
-            }
-            catch
-            {
-                MessageBox.Show("No pastel");
-            }
             mainF = new frmMain();
             dataHandler = new SqlDataHandler();
             Login();
+            pastel = new Pastel();
         }
 
         private static void Login()
@@ -74,7 +67,6 @@ namespace Astrodon
             commClient.MessageReceived += commClient_MessageReceived;
             commClient.LoginOK += commClient_LoginOK;
             commClient.Login(user.username, user.password);
-            if (user.id == 2) { pastel.pastelDirectory = "\\\\SERVER2\\Pastel11\\"; }
             mainF.Show();
             DependencyInitialization();
         }
