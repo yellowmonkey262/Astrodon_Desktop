@@ -292,7 +292,7 @@ namespace Astrodon
 
         private void CombinePDFsAndPrint(List<string> statementFileList)
         {
-            string outputFileName = "StatementRun_"+DateTime.Now.ToString("yyyyMMdd HHmmss") + ".pdf";
+            string outputFileName = "StatementRun_"+DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
             string desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             if (statementFileList.Count() <= 0)
@@ -359,18 +359,33 @@ namespace Astrodon
 
             AddProgressString("Sending File to Printer");
 
-            using (Process p = new Process())
+            PrintOrViewFile(outputFileName);
+           
+        }
+
+        private void PrintOrViewFile(string outputFileName)
+        {
+            try
             {
-                p.StartInfo = new ProcessStartInfo
+                using (Process p = new Process())
                 {
-                    Verb = "print",
-                    FileName = outputFileName,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    Arguments = _PrinterName
-                };
-                p.Start();
-                Thread.Sleep(5000);
+                    p.StartInfo = new ProcessStartInfo
+                    {
+                        Verb = "print",
+                        FileName = outputFileName,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        Arguments = _PrinterName
+                    };
+                    p.Start();
+                    Thread.Sleep(5000);
+                }
+            }
+            catch (Exception e)
+            {
+                Controller.HandleError("Unable to print file - the file will now open for manual printing.");
+                Process.Start(outputFileName);
+
             }
         }
 

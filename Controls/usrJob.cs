@@ -1436,41 +1436,7 @@ namespace Astrodon.Controls
             }
         }
 
-        //private string _PrinterName = string.Empty;
-        //private void SendToPrinter(String fileName)
-        //{
-        //    if (!printerSet || String.IsNullOrWhiteSpace(_PrinterName))
-        //    {
-        //        frmPrintDialog printDialog = new frmPrintDialog();
-        //        if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-        //        {
-        //            SetDefaultPrinter(printDialog.selectedPrinter);
-        //            Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
-        //            Properties.Settings.Default.Save();
-        //            printerSet = true;
-        //            _PrinterName = Properties.Settings.Default.defaultPrinter;
-        //        }
-        //    }
-
-        //    using (Process p = new Process
-        //    {
-        //        StartInfo = new ProcessStartInfo
-        //        {
-        //            Verb = "print",
-        //            FileName = fileName,
-        //            CreateNoWindow = true,
-        //            WindowStyle = ProcessWindowStyle.Hidden,
-        //            Arguments = _PrinterName
-        //        }
-        //    })
-        //    {
-        //        txtStatus.Text += "Printing documents: "+ fileName+" " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-        //        p.Start();
-        //        p.WaitForExit(5000);
-        //        Application.DoEvents();
-        //    }
-        //}
-
+  
         private void AddProgressString(string message)
         {
             txtStatus.Text += message + Environment.NewLine;
@@ -1545,19 +1511,33 @@ namespace Astrodon.Controls
             }
 
             AddProgressString("Sending File to Printer");
+            PrintOrViewFile(outputFileName,printernName);
+          
+        }
 
-            using (Process p = new Process())
+        private void PrintOrViewFile(string outputFileName,string printerName)
+        {
+            try
             {
-                p.StartInfo = new ProcessStartInfo
+                using (Process p = new Process())
                 {
-                    Verb = "print",
-                    FileName = outputFileName,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    Arguments = printernName
-                };
-                p.Start();
-                Thread.Sleep(5000);
+                    p.StartInfo = new ProcessStartInfo
+                    {
+                        Verb = "print",
+                        FileName = outputFileName,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        Arguments = printerName
+                    };
+                    p.Start();
+                    Thread.Sleep(5000);
+                }
+            }
+            catch (Exception e)
+            {
+                Controller.HandleError("Unable to print file - the file will now open for manual printing.");
+                Process.Start(outputFileName);
+
             }
         }
 

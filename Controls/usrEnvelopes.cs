@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Astrodon.Controls
@@ -58,19 +59,33 @@ namespace Astrodon.Controls
                 }
             }
         }
-
-        private void SendToPrinter(String fileName)
+        private void PrintOrViewFile(string outputFileName,string prinername)
         {
-            using (Process p = new Process())
+            try
             {
-                p.StartInfo = new ProcessStartInfo
+                using (Process p = new Process())
                 {
-                    Verb = "print",
-                    FileName = fileName,
-                };
-                p.Start();
-                System.Threading.Thread.Sleep(5000);
+                    p.StartInfo = new ProcessStartInfo
+                    {
+                        Verb = "print",
+                        FileName = outputFileName,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        Arguments = prinername
+                    };
+                    p.Start();
+                    Thread.Sleep(5000);
+                }
+            }
+            catch (Exception e)
+            {
+                Controller.HandleError("Unable to print file - the file will now open for manual printing.");
+                Process.Start(outputFileName);
+
             }
         }
+
+
+        
     }
 }

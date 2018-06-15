@@ -911,27 +911,7 @@ namespace Astrodon
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetDefaultPrinter(string Name);
 
-        /*
-        private void SendToPrinter(String fileName)
-        {
-            try
-            {
-                using (Process p = new Process())
-                {
-                    p.StartInfo = new ProcessStartInfo
-                    {
-                        Verb = "print",
-                        FileName = fileName
-                    }; 
-                    p.Start();
-                    System.Threading.Thread.Sleep(3000);
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Cannot print document.  Please print from the folder");
-            }
-        }*/
+    
 
         private void CombinePDFsAndPrint(List<string> statementFileList)
         {
@@ -1001,22 +981,35 @@ namespace Astrodon
             }
 
             AddProgressString("Sending File to Printer");
-
-            using (Process p = new Process())
-            {
-                p.StartInfo = new ProcessStartInfo
-                {
-                    Verb = "print",
-                    FileName = outputFileName,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    Arguments = printernName
-                };
-                p.Start();
-                Thread.Sleep(5000);
-            }
+            PrintOrViewFile(outputFileName, printernName);
 
             lbLettersProgress.Text = "";
+        }
+
+        private void PrintOrViewFile(string outputFileName, string printerName)
+        {
+            try
+            {
+                using (Process p = new Process())
+                {
+                    p.StartInfo = new ProcessStartInfo
+                    {
+                        Verb = "print",
+                        FileName = outputFileName,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        Arguments = printerName
+                    };
+                    p.Start();
+                    Thread.Sleep(5000);
+                }
+            }
+            catch (Exception e)
+            {
+                Controller.HandleError("Unable to print file - the file will now open for manual printing.");
+                Process.Start(outputFileName);
+
+            }
         }
 
         private void AddProgressString(string v)
