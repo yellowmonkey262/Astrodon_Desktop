@@ -250,9 +250,9 @@ namespace Astrodon
                     #region Upload Me
                     try
                     {
-                    //    AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
-                    //    mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
-                    //    ftpClient.Upload(fileName, actFile, false);
+                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
+                        mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
+                        ftpClient.Upload(fileName, actFile, false);
                     }
                     catch { }
                     #endregion
