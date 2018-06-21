@@ -182,10 +182,10 @@ namespace Astrodon.Classes
                         Description = "Balance Brought Forward",
                         Reference = "",
                         TrnAmt = os,
-                        TrnDate = trnDate
+                        TrnDate = trnDate,
+                        IsOpeningBalance = true
                     };
                     transactions = Controller.pastel.GetTransactions(building.DataPath, startperiod, endperiod, customer.accNumber).OrderBy(c => c.Date).ToList();
-
                     double subtractAmount = 0;
                     foreach (Trns trn in transactions)
                     {

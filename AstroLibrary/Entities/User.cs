@@ -8,6 +8,9 @@ namespace Astro.Library.Entities
 {
     public class User
     {
+        public static int MaxSignatureHeight = 100;
+        public static int MaxSignatureWidth = 400;
+
         public bool processCheckLists;
 
         public int id { get; set; }

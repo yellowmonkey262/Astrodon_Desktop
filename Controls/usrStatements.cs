@@ -210,21 +210,6 @@ namespace Astrodon
                             {
                                 SetupEmail(stmt, fileName);
                             }
-                            //if (stmt.PrintMe && Controller.user.id != 1)
-                            //{
-                            //    if (!printerSet)
-                            //    {
-                            //        frmPrintDialog printDialog = new frmPrintDialog();
-                            //        if (printDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                            //        {
-                            //            SetDefaultPrinter(printDialog.selectedPrinter);
-                            //            Properties.Settings.Default.defaultPrinter = printDialog.selectedPrinter;
-                            //            Properties.Settings.Default.Save();
-                            //            printerSet = true;
-                            //        }
-                            //    }
-                            //    SendToPrinter(fileName);
-                            //}
                         }
                     }
                     #endregion
@@ -232,12 +217,12 @@ namespace Astrodon
                     #region Print Me
                     if (stmt.PrintMe && Controller.user.id != 1)
                     {
-                       
+
                         if (!String.IsNullOrWhiteSpace(fileName))
                         {
                             AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Add Statement to List - " + Path.GetFileName(fileName));
                             statementFileList.Add(fileName);
-                           // SendToPrinter(fileName, stmt.BuildingName , stmt.AccNo);
+                            // SendToPrinter(fileName, stmt.BuildingName , stmt.AccNo);
                         }
                         else
                         {
@@ -424,11 +409,7 @@ namespace Astrodon
                     else
                        AddProgressString("Customer Account skipped: " + customer.accNumber + " category: " + customer.category);
                 }
-                else if (buildingName.Trim().ToUpper() == _AstradonRentalsBuilding.ToUpper() &&
-                         ( customer.IntCategory == 13
-                         || customer.IntCategory == 16
-                         || customer.IntCategory ==17
-                         || customer.IntCategory == 18))
+                else if (buildingName.Trim().ToUpper() == _AstradonRentalsBuilding.ToUpper() && ( customer.IntCategory == 13 || customer.IntCategory == 16 || customer.IntCategory ==17  || customer.IntCategory == 18))
                 {
                     AddProgressString("Astrodon Rentals category skipped : " + customer.accNumber + " " + customer.category);
                 }
@@ -454,27 +435,34 @@ namespace Astrodon
                         double totalDue = 0;
                         String trnMsg;
                         List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
-                        if (transactions != null) { myStatement.Transactions = transactions; }
-                        myStatement.totalDue = totalDue;
-                        myStatement.DebtorEmail = getDebtorEmail(buildingName);
-                        myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
-                        myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
-                        if (customer.Email != null && customer.Email.Length > 0)
+                        if (transactions != null && transactions.Where(a => a.IsOpeningBalance == false).Count() > 0)
                         {
-                            List<String> newEmails = new List<string>();
-                            foreach (String emailAddress in customer.Email)
+                            myStatement.Transactions = transactions;
+                            myStatement.totalDue = totalDue;
+                            myStatement.DebtorEmail = getDebtorEmail(buildingName);
+                            myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
+                            myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
+                            if (customer.Email != null && customer.Email.Length > 0)
                             {
-                                if (!emailAddress.Contains("@imp.ad-one.co.za")) { newEmails.Add(emailAddress); }
+                                List<String> newEmails = new List<string>();
+                                foreach (String emailAddress in customer.Email)
+                                {
+                                    if (!emailAddress.Contains("@imp.ad-one.co.za")) { newEmails.Add(emailAddress); }
+                                }
+                                myStatement.email1 = newEmails.ToArray();
                             }
-                            myStatement.email1 = newEmails.ToArray();
+                            else
+                                myStatement.PrintMe = true;
+
+                            if (myStatement.PrintMe)
+                                AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
+
+                            myStatements.Add(myStatement);
                         }
                         else
-                            myStatement.PrintMe = true;
-
-                        if (myStatement.PrintMe)
-                            AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
-
-                        myStatements.Add(myStatement);
+                        {
+                            AddProgressString("Statement for " + customer.accNumber + " has zero transactions - statement skipped");
+                        }
                     }
                     catch { }
                     ccount++;

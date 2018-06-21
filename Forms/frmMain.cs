@@ -1,5 +1,4 @@
-﻿using Astrodon.Controls;
-using Astrodon.Controls.Bank;
+﻿using Astrodon.Controls.Bank;
 using Astrodon.Controls.Insurance;
 using Astrodon.Controls.Maintenance;
 using Astrodon.Controls.Requisitions;
@@ -19,7 +18,6 @@ using System.Data;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Linq;
-using System.Data.Entity;
 
 namespace Astrodon
 {
@@ -535,11 +533,7 @@ namespace Astrodon
 
         private void tbMaintenanceConfig_Click(object sender, EventArgs e)
         {
-            pnlContents.Controls.Clear();
-            usrBuildingMaintenanceConfiguration buildingMaintenance = new usrBuildingMaintenanceConfiguration(_DataContext);
-            buildingMaintenance.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(buildingMaintenance);
-            toolStripStatusLabel1.Text = "Building Maintenance Configuration";
+           
         }
 
         private void supplierReportToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -580,11 +574,7 @@ namespace Astrodon
 
         private void bankConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pnlContents.Controls.Clear();
-            usrBankConfiguration control = new usrBankConfiguration(_DataContext);
-            control.Dock = DockStyle.Fill;
-            pnlContents.Controls.Add(control);
-            toolStripStatusLabel1.Text = "Bank Configuration";
+          
         }
 
         private void missingMaintenanceRequisitionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -752,6 +742,33 @@ namespace Astrodon
             dt.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(dt);
             toolStripStatusLabel1.Text = "Notification Templates";
+        }
+
+        private void xToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrBuildingMaintenanceConfiguration buildingMaintenance = new usrBuildingMaintenanceConfiguration(_DataContext);
+            buildingMaintenance.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(buildingMaintenance);
+            toolStripStatusLabel1.Text = "Building Maintenance Configuration";
+        }
+
+        private void bankConfigurationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrBankConfiguration control = new usrBankConfiguration(_DataContext);
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Bank Configuration";
+        }
+
+        private void customerDocumentTypesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucCustomerDocumentType control = new ucCustomerDocumentType(_DataContext);
+            control.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(control);
+            toolStripStatusLabel1.Text = "Customer Document Type Configuration";
         }
     }
 }

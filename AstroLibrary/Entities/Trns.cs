@@ -31,6 +31,8 @@ namespace Astro.Library.Entities
         public double TrnAmt { get; set; }
 
         public double AccAmt { get; set; }
+
+        public bool IsOpeningBalance { get; set; }
     }
 
     public class Transactions

@@ -37,6 +37,7 @@ namespace Astrodon
                 try
                 {
                     byte[] sigArray = (byte[])dr["pmSignature"];
+                    sigArray = Astro.Library.ImageUtils.ResizeToMaxSize(User.MaxSignatureWidth, User.MaxSignatureHeight, sigArray);
                     MemoryStream ms = new MemoryStream(sigArray);
                     user.signature = Image.FromStream(ms);
                 }
@@ -102,6 +103,7 @@ namespace Astrodon
                 try
                 {
                     byte[] sigArray = (byte[])dr["pmSignature"];
+                    sigArray = Astro.Library.ImageUtils.ResizeToMaxSize(User.MaxSignatureWidth, User.MaxSignatureHeight, sigArray);
                     MemoryStream ms = new MemoryStream(sigArray);
                     user.signature = Image.FromStream(ms);
                 }
@@ -182,6 +184,7 @@ namespace Astrodon
                     try
                     {
                         byte[] sigArray = (byte[])dr["pmSignature"];
+                        sigArray = Astro.Library.ImageUtils.ResizeToMaxSize(User.MaxSignatureWidth, User.MaxSignatureHeight, sigArray);
                         MemoryStream ms = new MemoryStream(sigArray);
                         user.signature = Image.FromStream(ms);
                     }
@@ -223,6 +226,7 @@ namespace Astrodon
                 MemoryStream ms = new MemoryStream();
                 u.signature.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
                 sig = ms.ToArray();
+                sig = Astro.Library.ImageUtils.ResizeToMaxSize(User.MaxSignatureWidth, User.MaxSignatureHeight, sig);
             }
             sqlParms.Add("@sig", sig);
             SqlDataHandler dh = new SqlDataHandler();

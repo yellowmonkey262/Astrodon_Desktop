@@ -69,6 +69,7 @@
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\WebBuildingPrint.cs" />
     <Compile Include="Entities\WebReportData.cs" />
+    <Compile Include="ImageUtils.cs" />
     <Compile Include="Methods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Requisition.cs" />

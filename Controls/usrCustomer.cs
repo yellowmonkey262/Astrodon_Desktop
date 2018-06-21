@@ -1,6 +1,7 @@
 ﻿using Astro.Library.Entities;
 using Astrodon.Classes;
 using Astrodon.Data;
+using Docs = Astrodon.Data.CustomerData;
 using Astrodon.Data.DebitOrder;
 using iTextSharp.text.pdf;
 using System;
@@ -30,6 +31,7 @@ namespace Astrodon
         {
             InitializeComponent();
             LoadBanks();
+            LoadCustomerDocumentTypes();
         }
 
         private void usrCustomer_Load(object sender, EventArgs e)
@@ -232,6 +234,7 @@ namespace Astrodon
                 LoadWeb();
                 LoadDebitOrder();
                 LoadCustomerEntity();
+                LoadCustomerDocuments();
                 this.Cursor = Cursors.Default;
             }
             catch (Exception ex)
@@ -771,34 +774,7 @@ namespace Astrodon
         }
 
 
-        private void DisplayPDFNew(string filePath)
-        {
-            if (String.IsNullOrWhiteSpace(filePath))
-            {
-                this.axAcroPDFNew.Visible = false;
-                return;
-            }
-
-            try
-            {
-                this.axAcroPDFNew.Visible = true;
-                this.axAcroPDFNew.LoadFile(filePath);
-                this.axAcroPDFNew.src = filePath;
-                this.axAcroPDFNew.setShowToolbar(false);
-                this.axAcroPDFNew.setView("FitH");
-                this.axAcroPDFNew.setLayoutMode("SinglePage");
-                this.axAcroPDFNew.setShowToolbar(false);
-
-                this.axAcroPDFNew.Show();
-                tbPreview.SelectedTab = tbPreviewPage;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
+      
 
         private String CustomerMessage(String accNumber, String debtorEmail)
         {
@@ -1483,8 +1459,60 @@ namespace Astrodon
 
         #region PDF Handler
 
+        private string _TempPDFNewFile = string.Empty;
+        private void DisplayPDFNew(byte[] pdfData)
+        {
+            if (pdfData == null)
+            {
+                DisplayPDFNew(string.Empty);
+                return;
+            }
+
+            if (!String.IsNullOrWhiteSpace(_TempPDFNewFile))
+                File.Delete(_TempPDFNewFile);
+            _TempPDFNewFile = Path.GetTempPath();
+            if (!_TempPDFNewFile.EndsWith(@"\"))
+                _TempPDFNewFile = _TempPDFNewFile + @"\";
+
+            _TempPDFNewFile = _TempPDFNewFile + System.Guid.NewGuid().ToString("N") + ".pdf";
+            File.WriteAllBytes(_TempPDFNewFile, pdfData);
+
+            DisplayPDFNew(_TempPDFNewFile);
+
+            File.Delete(_TempPDFNewFile);
+        }
+
+        private void DisplayPDFNew(string filePath)
+        {
+            if (String.IsNullOrWhiteSpace(filePath))
+            {
+                this.axAcroPDFNew.Visible = false;
+                return;
+            }
+
+            try
+            {
+                this.axAcroPDFNew.Visible = true;
+                this.axAcroPDFNew.LoadFile(filePath);
+                this.axAcroPDFNew.src = filePath;
+                this.axAcroPDFNew.setShowToolbar(false);
+                this.axAcroPDFNew.setView("FitH");
+                this.axAcroPDFNew.setLayoutMode("SinglePage");
+                this.axAcroPDFNew.setShowToolbar(false);
+
+                this.axAcroPDFNew.Show();
+                tbPreview.SelectedTab = tbPreviewPage;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
 
         private string _TempPDFFile = string.Empty;
+
         private void DisplayPDF(byte[] pdfData)
         {
             if (pdfData == null)
@@ -1732,5 +1760,217 @@ namespace Astrodon
                 }
             }
         }
+
+        #region Customer Documents
+
+        private List<Docs.CustomerDocumentType> _DocumentTypes;
+
+        private void LoadCustomerDocumentTypes()
+        {
+            using (var ct = SqlDataHandler.GetDataContext())
+            {
+                _DocumentTypes = ct.CustomerDocumentTypeSet.Where(a => a.IsActive).ToList();
+            }
+            cbCustomerDocumentType.DataSource = _DocumentTypes;
+            cbCustomerDocumentType.DisplayMember = "Name";
+            cbCustomerDocumentType.ValueMember = "id";
+        }
+
+        private List<CustomerDocumentListItem> _Documents;
+        private void LoadCustomerDocuments()
+        {
+            _Documents = new List<CustomerDocumentListItem>();
+
+            if (customer != null && building != null)
+            {
+
+                using (var ct = SqlDataHandler.GetDataContext())
+                {
+                    var q = from c in ct.CustomerSet
+                            from d in c.Documents
+                            where c.AccountNumber == customer.accNumber
+                            && c.BuildingId == building.ID
+                            select new CustomerDocumentListItem()
+                            {
+                                CustomerId = c.id,
+                                Id = d.id,
+                                DocmentType = d.CustomerDocumentType.Name,
+                                Name = d.FileName,
+                                Notes = d.Notes,
+                                Uploaded = d.Uploaded,
+                                LoadedBy = d.UploadedUser.name
+                            };
+
+                    _Documents = q.OrderByDescending(a => a.Uploaded).ToList();
+                }
+            }
+
+            UpdateCustomerDocumentsGrid();
+        }
+
+        private void UpdateCustomerDocumentsGrid()
+        {
+            dgDocuments.ClearSelection();
+            dgDocuments.MultiSelect = false;
+            dgDocuments.AutoGenerateColumns = false;
+
+            BindingSource bs = new BindingSource();
+            bs.DataSource = _Documents;
+
+            dgDocuments.Columns.Clear();
+
+            dgDocuments.DataSource = bs;
+
+            dgDocuments.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "Action",
+                Text = "View",
+                UseColumnTextForButtonValue = true,
+                Width = 50
+            });
+            dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "UploadedStr",
+                HeaderText = "Uploaded",
+                ReadOnly = true,
+                Width = 200
+            });
+            dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "DocmentType",
+                HeaderText = "Type",
+                ReadOnly = true,
+                Width = 200
+            });
+            dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Name",
+                HeaderText = "Name",
+                ReadOnly = true,
+                Width = 200
+            });
+            dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "LoadedBy",
+                HeaderText = "Loaded By",
+                ReadOnly = true,
+                Width = 200
+            });
+            dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Notes",
+                HeaderText = "Notes",
+                ReadOnly = true,
+                Width = 200
+            });
+
+        }
+
+        private void btnCustomerDocUpload_Click(object sender, EventArgs e)
+        {
+            if (customer == null || building == null)
+            {
+                Controller.HandleError("Please select a building and customer");
+                return;
+            }
+            if (cbCustomerDocumentType.SelectedIndex < 0)
+            {
+                Controller.HandleError("Please select a document type first");
+                return;
+            }
+            fdOpen.Multiselect = false;
+            if (fdOpen.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = fdOpen.FileName;
+                if(!IsValidPdf(filePath))
+                {
+                    Controller.HandleError("Not a valid PDF file");
+                    return;
+                }
+
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    var customerEntity = context.CustomerSet.SingleOrDefault(a => a.BuildingId == building.ID && a.AccountNumber == customer.accNumber);
+                    if (customerEntity == null)
+                    {
+                        customerEntity = new Data.CustomerData.Customer()
+                        {
+                            BuildingId = building.ID,
+                            AccountNumber = customer.accNumber,
+                            Description = customer.description,
+                            IsTrustee = customer.IsTrustee,
+                            Created = DateTime.Now
+                        };
+                        context.CustomerSet.Add(customerEntity);
+                    }
+
+                    var doc = new Docs.CustomerDocument()
+                    {
+                        Customer = customerEntity,
+                        CustomerDocumentTypeId = (int)cbCustomerDocumentType.SelectedValue,
+                        FileName = Path.GetFileName(filePath),
+                        Notes = tbCustomerDocNotes.Text,
+                        FileData = File.ReadAllBytes(filePath),
+                        Uploaded = DateTime.Now,
+                        UploadedUserId = Controller.user.id
+                    };
+
+                    context.CustomerDocumentSet.Add(doc);
+                    context.SaveChanges();
+                }
+
+                LoadCustomerDocuments();
+            }
+        }
+
+        #endregion
+
+        private void dgDocuments_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+            {
+                var doc = senderGrid.Rows[e.RowIndex].DataBoundItem as CustomerDocumentListItem;
+
+                if (doc != null)
+                {
+                    DisplayCustomerDocument(doc.Id);
+                }
+            }
+        }
+
+        private void DisplayCustomerDocument(int id)
+        {
+            using (var ct = SqlDataHandler.GetDataContext())
+            {
+                var doc = ct.CustomerDocumentSet.Single(a => a.id == id);
+                DisplayPDFNew(doc.FileData);
+            }
+        }
+    }
+
+    class CustomerDocumentListItem
+    {
+        public int CustomerId { get;  set; }
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Notes { get; set; }
+
+        public DateTime Uploaded { get; set; }
+
+        public string UploadedStr
+        {
+            get
+            {
+                return Uploaded.ToString("yyyy-MM-dd HH:mm");
+            }
+        }
+
+        public string LoadedBy { get; set; }
+
+        public string DocmentType { get;  set; }
     }
 }

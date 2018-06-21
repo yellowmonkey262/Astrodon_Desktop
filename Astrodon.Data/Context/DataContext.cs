@@ -118,6 +118,8 @@ namespace Astrodon.Data
         public DbSet<CustomerDebitOrderArchive> CustomerDebitOrderArchiveSet { get; set; }
         public DbSet<DebitOrderDocumentArchive> DebitOrderDocumentArchiveSet { get; set; }
         public DbSet<Customer> CustomerSet { get; set; }
+        public DbSet<CustomerDocumentType> CustomerDocumentTypeSet { get; set; }
+        public DbSet<CustomerDocument> CustomerDocumentSet { get; set; }
 
         #endregion
 

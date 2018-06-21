@@ -2246,7 +2246,8 @@ namespace Astrodon
             return success;
         }
 
-        public void CreatePALetter(Customer customer, Building building, User pm, String subject, DateTime letterDate, String html, List<byte[]> images, bool justify, bool letterhead, out Byte[] fStream)
+        public void CreatePALetter(Customer customer, Building building, User pm, 
+            String subject, DateTime letterDate, String html, List<byte[]> images, bool justify, bool letterhead, out Byte[] fStream)
         {
             int myJustify = (justify ? Element.ALIGN_JUSTIFIED : Element.ALIGN_LEFT);
             String fName = String.Empty;

@@ -43,5 +43,7 @@ namespace Astrodon.Data.CustomerData
         public virtual string BirthdaySMSText { get; set; }
         public virtual string BirthDaySMSStatus { get; set; }
         public virtual string BirthDaySMSBatch { get; set; }
+
+        public virtual ICollection<CustomerDocument> Documents { get; set; }
     }
 }

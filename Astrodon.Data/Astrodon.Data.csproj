@@ -65,6 +65,8 @@
     <Compile Include="Context\DataContext.cs" />
     <Compile Include="Context\DataContext_Initial.cs" />
     <Compile Include="CustomerData\Customer.cs" />
+    <Compile Include="CustomerData\CustomerDocument.cs" />
+    <Compile Include="CustomerData\CustomerDocumentType.cs" />
     <Compile Include="DebitOrder\AccountTypeType.cs" />
     <Compile Include="DebitOrder\CustomerDebitOrder.cs" />
     <Compile Include="DebitOrder\CustomerDebitOrderArchive.cs" />
@@ -354,6 +356,10 @@
     <Compile Include="Migrations\201805180656408_TemplateTypes.Designer.cs">
       <DependentUpon>201805180656408_TemplateTypes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806210807505_CustomerDocuments.cs" />
+    <Compile Include="Migrations\201806210807505_CustomerDocuments.Designer.cs">
+      <DependentUpon>201806210807505_CustomerDocuments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
@@ -622,6 +628,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201805180656408_TemplateTypes.resx">
       <DependentUpon>201805180656408_TemplateTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806210807505_CustomerDocuments.resx">
+      <DependentUpon>201806210807505_CustomerDocuments.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
