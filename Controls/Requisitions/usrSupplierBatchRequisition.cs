@@ -460,7 +460,11 @@ namespace Astrodon.Controls.Requisitions
 
         private void dgItems_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            Controller.HandleError("Invalid value added");
+            string row = "Row:" + e.RowIndex.ToString() + " Column:" + e.ColumnIndex.ToString();
+            string err = e.Exception.Message;
+            Controller.HandleError("Invalid value added"+Environment.NewLine +
+                                   err + Environment.NewLine +
+                                   row);
 
             e.Cancel = true;
         }

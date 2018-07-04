@@ -129,5 +129,16 @@ namespace PastelDataService
                  rp.EmailAllocations(userId);
             }
         }
+
+        
+        public List<PeriodItem> CustomerStatementParameterLookup(string sqlConnectionString, int buildingId, string customerCode, DateTime endDate, int numberOfMonths)
+        {
+            using (var dc = new DataContext(sqlConnectionString))
+            {
+                var rp = new DebitOrderExcel(dc);
+
+                 return rp.CustomerStatementParameterLookup(buildingId,customerCode, endDate,numberOfMonths);
+            }
+        }
     }
 }

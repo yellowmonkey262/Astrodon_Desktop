@@ -4,6 +4,7 @@
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts.Maintenance" />
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.ManagementReportCoverPage" />
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" />
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.LevyRoll" />
   <xs:element name="LevyRollReport">
     <xs:complexType>
       <xs:sequence>
@@ -181,6 +182,24 @@
   <xs:element name="RequestAllocationsResponse">
     <xs:complexType>
       <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CustomerStatementParameterLookup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sqlConnectionString" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="buildingId" type="xs:int" />
+        <xs:element minOccurs="0" name="customerCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="numberOfMonths" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CustomerStatementParameterLookupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Astrodon.Reports.LevyRoll" minOccurs="0" name="CustomerStatementParameterLookupResult" nillable="true" type="q5:ArrayOfPeriodItem" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>

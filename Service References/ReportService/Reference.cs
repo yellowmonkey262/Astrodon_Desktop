@@ -603,6 +603,115 @@ namespace Astrodon.ReportService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PeriodItem", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.LevyRoll")]
+    [System.SerializableAttribute()]
+    public partial class PeriodItem : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double ClosingBalanceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> EndField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double OpeningBalanceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PeriodNumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> StartField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double ClosingBalance {
+            get {
+                return this.ClosingBalanceField;
+            }
+            set {
+                if ((this.ClosingBalanceField.Equals(value) != true)) {
+                    this.ClosingBalanceField = value;
+                    this.RaisePropertyChanged("ClosingBalance");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> End {
+            get {
+                return this.EndField;
+            }
+            set {
+                if ((this.EndField.Equals(value) != true)) {
+                    this.EndField = value;
+                    this.RaisePropertyChanged("End");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double OpeningBalance {
+            get {
+                return this.OpeningBalanceField;
+            }
+            set {
+                if ((this.OpeningBalanceField.Equals(value) != true)) {
+                    this.OpeningBalanceField = value;
+                    this.RaisePropertyChanged("OpeningBalance");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int PeriodNumber {
+            get {
+                return this.PeriodNumberField;
+            }
+            set {
+                if ((this.PeriodNumberField.Equals(value) != true)) {
+                    this.PeriodNumberField = value;
+                    this.RaisePropertyChanged("PeriodNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> Start {
+            get {
+                return this.StartField;
+            }
+            set {
+                if ((this.StartField.Equals(value) != true)) {
+                    this.StartField = value;
+                    this.RaisePropertyChanged("Start");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
@@ -639,6 +748,9 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/RequestAllocations", ReplyAction="http://tempuri.org/IReportService/RequestAllocationsResponse")]
         void RequestAllocations(string sqlConnectionString, int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/CustomerStatementParameterLookup", ReplyAction="http://tempuri.org/IReportService/CustomerStatementParameterLookupResponse")]
+        Astrodon.ReportService.PeriodItem[] CustomerStatementParameterLookup(string sqlConnectionString, int buildingId, string customerCode, System.DateTime endDate, int numberOfMonths);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -710,6 +822,10 @@ namespace Astrodon.ReportService {
         
         public void RequestAllocations(string sqlConnectionString, int userId) {
             base.Channel.RequestAllocations(sqlConnectionString, userId);
+        }
+        
+        public Astrodon.ReportService.PeriodItem[] CustomerStatementParameterLookup(string sqlConnectionString, int buildingId, string customerCode, System.DateTime endDate, int numberOfMonths) {
+            return base.Channel.CustomerStatementParameterLookup(sqlConnectionString, buildingId, customerCode, endDate, numberOfMonths);
         }
     }
 }

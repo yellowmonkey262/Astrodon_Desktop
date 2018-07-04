@@ -1102,6 +1102,9 @@
     <None Include="Service References\ReportService\Astrodon.ReportService.PastelMaintenanceTransaction.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\ReportService\Astrodon.ReportService.PeriodItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ReportService\item.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1121,6 +1124,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\item51.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\item6.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />

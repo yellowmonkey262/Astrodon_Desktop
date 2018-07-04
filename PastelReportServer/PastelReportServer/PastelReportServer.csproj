@@ -103,6 +103,7 @@
     <Compile Include="Reports\IdValue.cs" />
     <Compile Include="Reports\InsuranceSchedule\InsuranceScheduleReport.cs" />
     <Compile Include="Reports\InsuranceSchedule\InsuranceScheduleDataItem.cs" />
+    <Compile Include="Reports\LevyRoll\CustomerBalance.cs" />
     <Compile Include="Reports\LevyRoll\LevyRollDataItem.cs" />
     <Compile Include="Reports\LevyRoll\LevyRollReport.cs" />
     <Compile Include="Reports\LevyRoll\PeriodDataItem.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Reports\SupplierReport\SupplierReportDataItem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\Scripts\CustomerBalance.sql" />
     <EmbeddedResource Include="DataProcessor\Scripts\MaintenanceRecordList.sql" />
     <EmbeddedResource Include="DataProcessor\Scripts\PaymentTransactionList.sql" />
     <EmbeddedResource Include="DataProcessor\Scripts\TrustPaymentTransactionList.sql" />

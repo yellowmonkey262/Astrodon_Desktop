@@ -8,6 +8,8 @@ using Astrodon.Reports.LevyRoll;
 using OfficeOpenXml;
 using System.Globalization;
 using System.IO;
+using Desktop.Lib.Pervasive;
+using System.Data;
 
 namespace Astrodon.DebitOrder
 {
@@ -78,13 +80,59 @@ namespace Astrodon.DebitOrder
                     item.CollectionDay = collectionDay;
                 else
                     item.CollectionDay = new DateTime(collectionDay.Year, collectionDay.Month, 15);
-            }
+            } 
 
             return debitOrderItems.Where(a => a.AmountDue > 0).ToList();
         }
 
-       
-    }
 
-   
+
+        public List<PeriodItem> CustomerStatementParameterLookup(int buildingId, string customerCode, DateTime processMonth, int numberOfMonths)
+        {
+
+            var building = _DataContext.tblBuildings.Single(a => a.id == buildingId);
+
+            var dDate = new DateTime(processMonth.Year, processMonth.Month, 1);
+            string sqlPeriodConfig = PervasiveSqlUtilities.ReadResourceScript("Astrodon.Reports.Scripts.PeriodParameters.sql");
+            sqlPeriodConfig = SetDataSource(sqlPeriodConfig, building.DataPath);
+            var periodData = PervasiveSqlUtilities.FetchPervasiveData(sqlPeriodConfig, null);
+
+            string sqlCustomerBalances = PervasiveSqlUtilities.ReadResourceScript("Astrodon.Reports.Scripts.CustomerBalance.sql");
+            sqlCustomerBalances = SetDataSource(sqlCustomerBalances, building.DataPath);
+
+            sqlCustomerBalances = sqlCustomerBalances.Replace("@CUSTOMERCODE", customerCode.Trim());
+            var customerBalanceData = PervasiveSqlUtilities.FetchPervasiveData(sqlCustomerBalances, null);
+
+            CustomerBalance custBalance = new CustomerBalance(customerBalanceData.Rows[0]);
+
+
+            PeriodDataItem periodItem = null;
+            foreach (DataRow row in periodData.Rows)
+            {
+                periodItem = new PeriodDataItem(row);
+                break;
+            }
+
+            List<PeriodItem> result = new List<PeriodItem>();
+            var lastPeriod = periodItem.PeriodLookup(dDate);
+            var firstPeriod = periodItem.PeriodLookup(lastPeriod.Start.Value.AddMonths(numberOfMonths * -1));
+
+            lastPeriod.OpeningBalance = Convert.ToDouble(custBalance.CalcOpening(lastPeriod.PeriodNumber));
+            lastPeriod.ClosingBalance = Convert.ToDouble(custBalance.CalcOpening(lastPeriod.PeriodNumber));
+
+            firstPeriod.OpeningBalance = Convert.ToDouble(custBalance.CalcOpening(firstPeriod.PeriodNumber));
+            firstPeriod.ClosingBalance = Convert.ToDouble(custBalance.CalcOpening(firstPeriod.PeriodNumber));
+
+            result.Add(firstPeriod);
+            result.Add(lastPeriod);
+
+            return result;
+
+        }
+
+        private string SetDataSource(string sqlQuery, string dataPath)
+        {
+            return PervasiveSqlUtilities.SetDataSource(sqlQuery, dataPath);
+        }
+    }
 }

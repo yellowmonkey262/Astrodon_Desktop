@@ -503,7 +503,7 @@ namespace Astrodon
                 }
                 double totalDue = 0;
                 String trnMsg;
-                List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(building, customer, DateTime.Now, out totalDue, out trnMsg);
+                List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(building, customer, DateTime.Now.AddMonths(1), out totalDue, out trnMsg);
                 if (transactions != null && transactions.Count > 0)
                 {
                     dgTransactions.DataSource = transactions;

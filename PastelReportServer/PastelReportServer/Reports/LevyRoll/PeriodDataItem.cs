@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Astrodon.Reports.LevyRoll
@@ -9,7 +10,7 @@ namespace Astrodon.Reports.LevyRoll
     public class PeriodDataItem
     {
 
-        private List<PeriodItem> _ItemList;
+        public List<PeriodItem> _ItemList;
         private int _maxPeriodThis;
         private int _maxPeriodLast;
 
@@ -86,13 +87,37 @@ namespace Astrodon.Reports.LevyRoll
             }
             return x.PeriodNumber;
         }
+
+        public PeriodItem PeriodLookup(DateTime date)
+        {
+            var lastPeriod = _ItemList.Where(a => a.Start == date).FirstOrDefault();
+            if (lastPeriod == null)
+            {
+                if (date > _ItemList.Max(a => a.Start))
+                    lastPeriod = _ItemList.OrderBy(a => a.Start).Last();
+                else if(date < _ItemList.Min(a => a.Start))
+                    lastPeriod = _ItemList.OrderBy(a => a.Start).First();
+            }
+            return lastPeriod;
+        }
     }
 
+    [DataContract]
     public class PeriodItem
     {
+        [DataMember]
         public int PeriodNumber { get; set; }
 
+        [DataMember]
         public DateTime? Start { get; set; }
+
+        [DataMember]
         public DateTime? End { get; set; }
+
+        [DataMember]
+        public double ClosingBalance { get; set; }
+
+        [DataMember]
+        public double OpeningBalance { get; set; }
     }
 }

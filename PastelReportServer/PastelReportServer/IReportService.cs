@@ -1,6 +1,7 @@
 ﻿using Astrodon.DataContracts;
 using Astrodon.DataContracts.Maintenance;
 using Astrodon.DebitOrder;
+using Astrodon.Reports.LevyRoll;
 using Astrodon.Reports.ManagementReportCoverPage;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,9 @@ namespace PastelDataService
 
         [OperationContract]
         void RequestAllocations(string sqlConnectionString, int userId);
+
+        [OperationContract]
+        List<PeriodItem> CustomerStatementParameterLookup(string sqlConnectionString, int buildingId, string customerCode, DateTime endDate, int numberOfMonths);
 
 
     }

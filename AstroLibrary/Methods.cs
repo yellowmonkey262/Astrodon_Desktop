@@ -16,7 +16,7 @@ namespace Astro.Library
             return myMonth;
         }
 
-        public static int getPeriod(DateTime trnDate)
+        public static int getPeriod( DateTime trnDate)
         {
             int myMonth = trnDate.Month;
             myMonth = myMonth - 2;
