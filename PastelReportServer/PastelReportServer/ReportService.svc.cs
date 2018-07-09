@@ -140,5 +140,11 @@ namespace PastelDataService
                  return rp.CustomerStatementParameterLookup(buildingId,customerCode, endDate,numberOfMonths);
             }
         }
+
+        public List<BuildingClosingBalance> BuildingBalancesGet(DateTime processMonth, string buildingDataPath)
+        {
+            var lr = new LevyRollReport();
+            return lr.BuildingBalancesGet(processMonth, buildingDataPath);
+        }
     }
 }

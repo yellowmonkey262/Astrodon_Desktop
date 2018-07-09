@@ -33,6 +33,9 @@ namespace Astro.Library.Entities
                 try { accNumber = customerBits[2]; } catch { accNumber = ""; }
                 try { description = customerBits[3]; } catch { description = ""; }
 
+                if (!string.IsNullOrWhiteSpace(accNumber))
+                    accNumber = accNumber.Trim().ToUpper();
+
                 try { setBalance(double.Parse(customerBits[4]), 0); } catch { setBalance(0, 0); }
                 try { setBalance(double.Parse(customerBits[5]), 1); } catch { setBalance(0, 1); }
                 try { setBalance(double.Parse(customerBits[6]), 2); } catch { setBalance(0, 2); }

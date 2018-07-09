@@ -2,6 +2,7 @@ using Astro.Library;
 using Astro.Library.Entities;
 using Astrodon.Classes;
 using Astrodon.Data.NotificationTemplateData;
+using Astrodon.ReportService;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -152,8 +153,9 @@ namespace Astrodon
                 customerGrid.DataSource = null;
                 getDebtorEmail(building.Name);
             }
-            catch
+            catch (Exception ex)
             {
+                Controller.HandleError(ex);
                 building = null;
             }
         }
@@ -166,7 +168,10 @@ namespace Astrodon
                 category = cmbCategory.SelectedItem.ToString().Split(splitter, StringSplitOptions.None)[0];
                 GetCustomers();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Controller.HandleError(ex);
+            }
         }
 
         private void GetCustomers()
@@ -177,10 +182,17 @@ namespace Astrodon
                 cls = new List<CustomerList>();
                 customerList.Clear();
                 int buildPeriod;
+
                 int trustPeriod = Methods.getPeriod(DateTime.Now, building.Period, out buildPeriod);
+
+
                 List<Customer> customers = new List<Customer>();
                 customers = getCatCustomers(category, buildPeriod);
-                if (customers.Count > 0) { cls.Add(new CustomerList("", "", 0)); }
+
+                cls.Add(new CustomerList("", "", 0));
+
+
+
                 customerDic = new Dictionary<string, Customer>();
                 foreach (Customer customer in customers)
                 {
@@ -225,32 +237,86 @@ namespace Astrodon
 
         public List<Customer> getCatCustomers(String category, int BuildingPeriod)
         {
-            List<Customer> catCustomers = Controller.pastel.AddCustomers(building.Name, building.DataPath);
             List<Customer> _Customers = new List<Customer>();
-            foreach (Customer _customer in catCustomers)
+            using (var reportService = ReportServiceClient.CreateInstance())
             {
-                if (_customer.category == category || building.Abbr == "RENT")
+                lbProgress.Text = "Loading Balances ";
+                Application.DoEvents();
+
+                DateTime periodDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+
+                var balances = reportService.BuildingBalancesGet(periodDate, building.DataPath);
+
+                List<Customer> catCustomers = Controller.pastel.AddCustomers(building.Name, building.DataPath);
+
+
+                int cnt = catCustomers.Count();
+                int x = 0;
+                foreach (Customer _customer in catCustomers)
                 {
-                    double totBal = 0;
-                    for (int li = 0; li < _customer.lastBal.Length; li++) { totBal += _customer.lastBal[li]; }
-                    for (int i = 0; i < BuildingPeriod; i++) { totBal += _customer.balance[i]; }
-                    _customer.setAgeing(Math.Round(totBal, 2), 0);
-                    if (_customer.ageing[0] >= minbal) { _Customers.Add(_customer); }
+                    x++;
+                    lbProgress.Text = "Processing: " + x.ToString() + "/" + cnt.ToString() + " " + _customer.accNumber;
+                    Application.DoEvents();
+                    if (_customer.category == category || building.Abbr == "RENT")
+                    {
+                        var cust = balances.Where(a => a.AccountNumber.Trim().ToUpper() == _customer.accNumber.Trim().ToUpper()).FirstOrDefault();
+                        if (cust != null)
+                        {
+                            if (cust.Due > 0)
+                            {
+                                _customer.setAgeing(Math.Round(Convert.ToDouble(cust.Due), 2), 0);
+                                if (_customer.ageing[0] >= minbal)
+                                {
+                                    _Customers.Add(_customer);
+                                }
+                            }
+                        }
+                    }
                 }
+
+                lbProgress.Text = "Completed";
             }
+
+            //foreach (Customer _customer in catCustomers)
+            //{
+            //    if (_customer.category == category || building.Abbr == "RENT")
+            //    {
+            //        double totBal = 0;
+            //        for (int li = 0; li < _customer.lastBal.Length; li++)
+            //        {
+            //            totBal += _customer.lastBal[li];
+            //        }
+
+            //        for (int i = 0; i < BuildingPeriod; i++)
+            //        {
+            //            totBal += _customer.balance[i];
+            //        }
+            //        _customer.setAgeing(Math.Round(totBal, 2), 0);
+            //        if (_customer.ageing[0] >= minbal) { _Customers.Add(_customer); }
+            //    }
+            //}
             return _Customers;
         }
 
         private void customerGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            DataGridViewRow gvr = customerGrid.Rows[e.RowIndex];
+
+
+
+
             customerGrid.CurrentCell = customerGrid.Rows[customerGrid.CurrentRow.Index].Cells[0];
         }
 
         private void customerGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            DataGridViewRow gvr = customerGrid.Rows[e.RowIndex];
+            if (e.RowIndex > 0 && e.ColumnIndex == 2)
+                gvr.Cells[13].Value = (bool)gvr.Cells[2].Value;
+
             if (e.RowIndex == 0)
             {
-                DataGridViewRow gvr = customerGrid.Rows[e.RowIndex];
+
                 int colNo = 0;
                 if ((bool)gvr.Cells[2].Value == true)
                 {
@@ -296,12 +362,24 @@ namespace Astrodon
                 {
                     if (colNo != 13 || colNo != 15)
                     {
-                        for (int j = 2; j < 10; j++) { customerGrid.Rows[i].Cells[j].Value = false; }
-                        if (colNo == 13) { customerGrid.Rows[i].Cells[15].Value = false; }
-                        if (colNo == 15) { customerGrid.Rows[i].Cells[13].Value = false; }
+                        for (int j = 2; j < 10; j++)
+                        {
+                            customerGrid.Rows[i].Cells[j].Value = false;
+                        }
+                        if (colNo == 13)
+                        {
+                            customerGrid.Rows[i].Cells[15].Value = false;
+                        }
+                        if (colNo == 15)
+                        {
+                            customerGrid.Rows[i].Cells[13].Value = false;
+                        }
                     }
 
-                    if (colNo > 0) { customerGrid.Rows[i].Cells[colNo].Value = true; }
+                    if (colNo > 0)
+                    {
+                        customerGrid.Rows[i].Cells[colNo].Value = true;
+                    }
                 }
             }
         }
@@ -634,8 +712,8 @@ namespace Astrodon
                     //}
                     if ((c.statPrintorEmail == 1 || c.statPrintorEmail == 3) || docType == "Restriction Notice" || !canemail)
                     {
-                        if(File.Exists(fileName))
-                          lettersList.Add(fileName);
+                        if (File.Exists(fileName))
+                            lettersList.Add(fileName);
                     }
                 }
                 else if (docType == "Restriction Notice")
@@ -694,7 +772,7 @@ namespace Astrodon
         private void DisconnectCustomers(List<String> customers)
         {
             String docType = "Restrict / Reconnect"; //SM 15/05/2018
-            
+
             DateTime trnDate = DateTime.Now;
             List<Customer> checkedCustomers = new List<Customer>();
             foreach (String acc in customers) { checkedCustomers.Add(customerDic[acc]); }
@@ -820,12 +898,12 @@ namespace Astrodon
             switch (docType)
             {
                 case 1:
-                    m.text = LoadSMS(NotificationTemplateType.Reminder,"Astrodon: reminder - outstanding levies R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]);
+                    m.text = LoadSMS(NotificationTemplateType.Reminder, "Astrodon: reminder - outstanding levies R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]);
                     m.msgType = "Reminder SMS";
                     break;
 
                 case 2:
-                    m.text = LoadSMS(NotificationTemplateType.FinalDemand, "Astrodon: final demand - levies overdue R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]); 
+                    m.text = LoadSMS(NotificationTemplateType.FinalDemand, "Astrodon: final demand - levies overdue R" + c.ageing[0].ToString("#,##0.00"), c.ageing[0]);
                     m.msgType = "Final Demand SMS";
                     break;
 
@@ -874,17 +952,17 @@ namespace Astrodon
             }
 
             var template = _NotificationTemplates.Where(a => a.TemplateType == templateType).FirstOrDefault();
-            if(template != null)
+            if (template != null)
             {
                 string messageText = template.MessageText;
 
                 var tags = NotificationTypeTag.NotificationTags[templateType];
-                foreach(var tag in tags)
+                foreach (var tag in tags)
                 {
                     switch (tag)
                     {
                         case NotificationTagType.Amount:
-                            messageText = messageText.Replace(NotificationTemplate.GetTagName(tag), amount.ToString("###,##0.00",CultureInfo.InvariantCulture));
+                            messageText = messageText.Replace(NotificationTemplate.GetTagName(tag), amount.ToString("###,##0.00", CultureInfo.InvariantCulture));
                             break;
                         default:
                             break;
@@ -911,7 +989,7 @@ namespace Astrodon
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetDefaultPrinter(string Name);
 
-    
+
 
         private void CombinePDFsAndPrint(List<string> statementFileList)
         {

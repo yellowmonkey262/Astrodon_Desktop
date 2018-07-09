@@ -84,6 +84,12 @@
   <wsdl:message name="IReportService_CustomerStatementParameterLookup_OutputMessage">
     <wsdl:part name="parameters" element="tns:CustomerStatementParameterLookupResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_BuildingBalancesGet_InputMessage">
+    <wsdl:part name="parameters" element="tns:BuildingBalancesGet" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BuildingBalancesGet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BuildingBalancesGetResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="LevyRollReport">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/LevyRollReport" message="tns:IReportService_LevyRollReport_InputMessage" />
@@ -132,6 +138,10 @@
     <wsdl:operation name="CustomerStatementParameterLookup">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/CustomerStatementParameterLookup" message="tns:IReportService_CustomerStatementParameterLookup_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/IReportService/CustomerStatementParameterLookupResponse" message="tns:IReportService_CustomerStatementParameterLookup_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BuildingBalancesGet">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/BuildingBalancesGet" message="tns:IReportService_BuildingBalancesGet_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/BuildingBalancesGetResponse" message="tns:IReportService_BuildingBalancesGet_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -237,6 +247,15 @@
     </wsdl:operation>
     <wsdl:operation name="CustomerStatementParameterLookup">
       <soap:operation soapAction="http://tempuri.org/IReportService/CustomerStatementParameterLookup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BuildingBalancesGet">
+      <soap:operation soapAction="http://tempuri.org/IReportService/BuildingBalancesGet" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

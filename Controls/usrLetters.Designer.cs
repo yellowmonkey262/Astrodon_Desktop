@@ -46,12 +46,13 @@
             this.cmbBuildings = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lbLettersProgress = new System.Windows.Forms.Label();
+            this.lbProgress = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.customerGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // btnPrint
             // 
-            this.btnPrint.Location = new System.Drawing.Point(717, 480);
+            this.btnPrint.Location = new System.Drawing.Point(913, 480);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(137, 23);
             this.btnPrint.TabIndex = 30;
@@ -61,7 +62,7 @@
             // 
             // btnProcess
             // 
-            this.btnProcess.Location = new System.Drawing.Point(860, 480);
+            this.btnProcess.Location = new System.Drawing.Point(1056, 480);
             this.btnProcess.Name = "btnProcess";
             this.btnProcess.Size = new System.Drawing.Size(137, 23);
             this.btnProcess.TabIndex = 29;
@@ -94,7 +95,7 @@
             this.customerGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.customerGrid.Location = new System.Drawing.Point(15, 115);
             this.customerGrid.Name = "customerGrid";
-            this.customerGrid.Size = new System.Drawing.Size(982, 359);
+            this.customerGrid.Size = new System.Drawing.Size(1178, 359);
             this.customerGrid.TabIndex = 28;
             this.customerGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.customerGrid_CellContentClick);
             this.customerGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.customerGrid_CellEndEdit);
@@ -197,7 +198,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(12, 82);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(155, 13);
+            this.label4.Size = new System.Drawing.Size(177, 15);
             this.label4.TabIndex = 26;
             this.label4.Text = "Disconnect Date (if applicable):";
             // 
@@ -221,7 +222,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 45);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(117, 13);
+            this.label2.Size = new System.Drawing.Size(132, 15);
             this.label2.TabIndex = 24;
             this.label2.Text = "Please select category:";
             // 
@@ -239,7 +240,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(112, 13);
+            this.label1.Size = new System.Drawing.Size(130, 15);
             this.label1.TabIndex = 22;
             this.label1.Text = "Please select building:";
             // 
@@ -248,14 +249,24 @@
             this.lbLettersProgress.AutoSize = true;
             this.lbLettersProgress.Location = new System.Drawing.Point(15, 480);
             this.lbLettersProgress.Name = "lbLettersProgress";
-            this.lbLettersProgress.Size = new System.Drawing.Size(16, 13);
+            this.lbLettersProgress.Size = new System.Drawing.Size(16, 15);
             this.lbLettersProgress.TabIndex = 31;
             this.lbLettersProgress.Text = "...";
+            // 
+            // lbProgress
+            // 
+            this.lbProgress.AutoSize = true;
+            this.lbProgress.Location = new System.Drawing.Point(383, 42);
+            this.lbProgress.Name = "lbProgress";
+            this.lbProgress.Size = new System.Drawing.Size(30, 15);
+            this.lbProgress.TabIndex = 32;
+            this.lbProgress.Text = "Idle.";
             // 
             // usrLetters
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbProgress);
             this.Controls.Add(this.lbLettersProgress);
             this.Controls.Add(this.btnPrint);
             this.Controls.Add(this.btnProcess);
@@ -267,7 +278,7 @@
             this.Controls.Add(this.cmbBuildings);
             this.Controls.Add(this.label1);
             this.Name = "usrLetters";
-            this.Size = new System.Drawing.Size(1000, 519);
+            this.Size = new System.Drawing.Size(1196, 519);
             this.Load += new System.EventHandler(this.usrLetters_Load);
             this.Leave += new System.EventHandler(this.usrLetters_Leave);
             ((System.ComponentModel.ISupportInitialize)(this.customerGrid)).EndInit();
@@ -301,5 +312,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.Label lbLettersProgress;
+        private System.Windows.Forms.Label lbProgress;
     }
 }

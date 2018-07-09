@@ -1096,6 +1096,9 @@
     <None Include="rem_template.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Service References\ReportService\Astrodon.ReportService.BuildingClosingBalance.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ReportService\Astrodon.ReportService.DebitOrderItem.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

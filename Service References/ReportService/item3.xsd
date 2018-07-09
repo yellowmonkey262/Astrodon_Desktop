@@ -202,4 +202,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="BuildingBalancesGet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="processMonth" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="buildingDataPath" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BuildingBalancesGetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" minOccurs="0" name="BuildingBalancesGetResult" nillable="true" type="q6:ArrayOfBuildingClosingBalance" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

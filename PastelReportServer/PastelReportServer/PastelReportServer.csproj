@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Classes\Mailer.cs" />
     <Compile Include="Classes\SMS.cs" />
+    <Compile Include="DataContracts\BuildingClosingBalance.cs" />
     <Compile Include="DataContracts\MaintenanceReportType.cs" />
     <Compile Include="DataContracts\Maintenance\PastelMaintenanceTransaction.cs" />
     <Compile Include="DataContracts\PaymentTransaction.cs" />

@@ -712,6 +712,147 @@ namespace Astrodon.ReportService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BuildingClosingBalance", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts")]
+    [System.SerializableAttribute()]
+    public partial class BuildingClosingBalance : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AccountNumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal ClosingBalanceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CustomerNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal DueField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal OpeningBalanceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PeriodField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime PeriodDateField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AccountNumber {
+            get {
+                return this.AccountNumberField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountNumberField, value) != true)) {
+                    this.AccountNumberField = value;
+                    this.RaisePropertyChanged("AccountNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal ClosingBalance {
+            get {
+                return this.ClosingBalanceField;
+            }
+            set {
+                if ((this.ClosingBalanceField.Equals(value) != true)) {
+                    this.ClosingBalanceField = value;
+                    this.RaisePropertyChanged("ClosingBalance");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CustomerName {
+            get {
+                return this.CustomerNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CustomerNameField, value) != true)) {
+                    this.CustomerNameField = value;
+                    this.RaisePropertyChanged("CustomerName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Due {
+            get {
+                return this.DueField;
+            }
+            set {
+                if ((this.DueField.Equals(value) != true)) {
+                    this.DueField = value;
+                    this.RaisePropertyChanged("Due");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal OpeningBalance {
+            get {
+                return this.OpeningBalanceField;
+            }
+            set {
+                if ((this.OpeningBalanceField.Equals(value) != true)) {
+                    this.OpeningBalanceField = value;
+                    this.RaisePropertyChanged("OpeningBalance");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Period {
+            get {
+                return this.PeriodField;
+            }
+            set {
+                if ((this.PeriodField.Equals(value) != true)) {
+                    this.PeriodField = value;
+                    this.RaisePropertyChanged("Period");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime PeriodDate {
+            get {
+                return this.PeriodDateField;
+            }
+            set {
+                if ((this.PeriodDateField.Equals(value) != true)) {
+                    this.PeriodDateField = value;
+                    this.RaisePropertyChanged("PeriodDate");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
@@ -751,6 +892,9 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/CustomerStatementParameterLookup", ReplyAction="http://tempuri.org/IReportService/CustomerStatementParameterLookupResponse")]
         Astrodon.ReportService.PeriodItem[] CustomerStatementParameterLookup(string sqlConnectionString, int buildingId, string customerCode, System.DateTime endDate, int numberOfMonths);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/BuildingBalancesGet", ReplyAction="http://tempuri.org/IReportService/BuildingBalancesGetResponse")]
+        Astrodon.ReportService.BuildingClosingBalance[] BuildingBalancesGet(System.DateTime processMonth, string buildingDataPath);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -826,6 +970,10 @@ namespace Astrodon.ReportService {
         
         public Astrodon.ReportService.PeriodItem[] CustomerStatementParameterLookup(string sqlConnectionString, int buildingId, string customerCode, System.DateTime endDate, int numberOfMonths) {
             return base.Channel.CustomerStatementParameterLookup(sqlConnectionString, buildingId, customerCode, endDate, numberOfMonths);
+        }
+        
+        public Astrodon.ReportService.BuildingClosingBalance[] BuildingBalancesGet(System.DateTime processMonth, string buildingDataPath) {
+            return base.Channel.BuildingBalancesGet(processMonth, buildingDataPath);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Desktop.Lib.Pervasive;
+﻿using Astrodon.DataContracts;
+using Desktop.Lib.Pervasive;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -109,7 +110,6 @@ namespace Astrodon.Reports.LevyRoll
 
             return data;
         }
-
        
         private byte[] RunReportToPdf(List<LevyRollDataItem> data, List<SundryDataItem> sundries, DateTime dDate, string building)
         {
@@ -145,6 +145,25 @@ namespace Astrodon.Reports.LevyRoll
         private string SetDataSource(string sqlQuery, string dataPath)
         {
             return PervasiveSqlUtilities.SetDataSource(sqlQuery, dataPath);
+        }
+
+        public List<BuildingClosingBalance> BuildingBalancesGet(DateTime processMonth, string buildingDataPath)
+        {
+            int period;
+         //   processMonth = new DateTime(processMonth.Year, processMonth.Day, 1);
+            var reportData = LoadReportData(processMonth, buildingDataPath, new List<string>(), out period);
+            var result = reportData.Select(a => new BuildingClosingBalance()
+            {
+                AccountNumber = a.CustomerCode.Trim().ToUpper(),
+                ClosingBalance = a.ClosingBalance,
+                Due = a.Due,
+                OpeningBalance = a.OpeningBalance,
+                CustomerName = a.CustomerDesc,
+                Period = period,
+                PeriodDate = processMonth
+            }).OrderBy(a => a.AccountNumber).ToList();
+
+            return result;
         }
     }
 }

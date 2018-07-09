@@ -52,6 +52,7 @@ namespace PastelDataService
         [OperationContract]
         List<PeriodItem> CustomerStatementParameterLookup(string sqlConnectionString, int buildingId, string customerCode, DateTime endDate, int numberOfMonths);
 
-
+        [OperationContract]
+        List<BuildingClosingBalance> BuildingBalancesGet(DateTime processMonth, string buildingDataPath);
     }
 }
