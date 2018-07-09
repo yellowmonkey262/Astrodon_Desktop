@@ -150,9 +150,8 @@ namespace Astrodon
                     }
                 }
             }
-            catch
-            {
-            }
+            catch (Exception ex) { Controller.HandleError(ex); }
+
             finally
             {
                 if (connection.State != ConnectionState.Closed) { connection.Close(); }

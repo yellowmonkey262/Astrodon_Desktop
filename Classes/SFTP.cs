@@ -94,7 +94,8 @@ namespace Astrodon.Classes {
             try {
                 client.Disconnect();
                 return !client.IsConnected;
-            } catch {
+            } catch(Exception ex) {
+                Controller.HandleError(ex);
                 return false;
             }
         }
@@ -120,7 +121,7 @@ namespace Astrodon.Classes {
                     }
                 }
             } catch (Exception ex) {
-                MessageBox.Show("Upload exception " + ex.Message);
+                Controller.HandleError(ex);
             }
             return success;
         }
@@ -144,7 +145,7 @@ namespace Astrodon.Classes {
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Upload exception " + ex.Message);
+                Controller.HandleError(ex);
                 success = false;
             }
             return success;
@@ -198,9 +199,9 @@ namespace Astrodon.Classes {
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Controller.HandleError(e);
+                Controller.HandleError(ex);
                 return false;
             }
         }
@@ -218,7 +219,7 @@ namespace Astrodon.Classes {
                     success = true;
                 }
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message);
+                Controller.HandleError(ex);
             }
             return success;
         }
@@ -243,7 +244,7 @@ namespace Astrodon.Classes {
                     return true;
                 }
             } catch (Exception ex) {
-                MessageBox.Show("E2 : " + ex.Message + " -> " + client.WorkingDirectory + "/" + path);
+                Controller.HandleError(ex);
                 return false;
             }
         }
@@ -266,7 +267,7 @@ namespace Astrodon.Classes {
                 List<String> folders = RemoteFolders(trustee);
                 return !folders.Contains(path);
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message);
+                Controller.HandleError(ex);
                 return false;
             }
         }
@@ -279,6 +280,7 @@ namespace Astrodon.Classes {
                 return true;
             } catch (Exception ex) {
                 success = ex.Message;
+                Controller.HandleError(ex);
                 return false;
             }
         }
@@ -310,7 +312,8 @@ namespace Astrodon.Classes {
                 if (client == null || !client.IsConnected) { ConnectClient(trustee); }
                 foreach (String file in files) { client.DeleteFile((trustee ? trusteeDirectory : workingdirectory) + "/" + file); }
                 return true;
-            } catch {
+            } catch(Exception ex) {
+                Controller.HandleError(ex);
                 return false;
             }
         }
@@ -320,7 +323,8 @@ namespace Astrodon.Classes {
                 if (client == null || !client.IsConnected) { ConnectClient(trustee); }
                 client.DeleteFile(file);
                 return true;
-            } catch {
+            } catch(Exception ex) {
+                Controller.HandleError(ex);
                 return false;
             }
         }
@@ -337,7 +341,7 @@ namespace Astrodon.Classes {
                         directories.Add(file.Name);
                     }
                 }
-            } catch { }
+            } catch(Exception ex) { Controller.HandleError(ex); }
             return directories;
         }
 
@@ -361,7 +365,7 @@ namespace Astrodon.Classes {
             DateTime accessDate = DateTime.Now.AddYears(-10);
             try {
                 accessDate = client.GetLastWriteTime(file);
-            } catch { }
+            } catch(Exception ex) { Controller.HandleError(ex); }
             return accessDate;
         }
     }

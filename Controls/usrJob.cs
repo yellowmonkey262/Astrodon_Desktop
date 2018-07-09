@@ -259,7 +259,7 @@ namespace Astrodon.Controls
                 {
                     if (c.GetType() == typeof(TextBox)) { (c as TextBox).ReadOnly = disable; } else { c.Enabled = !disable; }
                 }
-                catch { }
+                catch (Exception ex) { Controller.HandleError(ex); }
             }
         }
 
@@ -535,7 +535,7 @@ namespace Astrodon.Controls
                             Attachments a = new Attachments { FileName = drDoc["fileName"].ToString() };
                             supportDocs.Add(a);
                         }
-                        catch { }
+                        catch (Exception ex) { Controller.HandleError(ex); }
                     }
                     else if (attachmentType == 2)
                     { //email
@@ -544,7 +544,8 @@ namespace Astrodon.Controls
                             Attachments a = new Attachments { FileName = drDoc["fileName"].ToString() };
                             EmailDocs.Add(a);
                         }
-                        catch { }
+                        catch (Exception ex) { Controller.HandleError(ex); }
+                     
                     }
                     else if (attachmentType == 3)
                     { //document
@@ -558,7 +559,7 @@ namespace Astrodon.Controls
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message);
+                            Controller.HandleError(ex);
                         }
                     }
                 }
@@ -602,7 +603,7 @@ namespace Astrodon.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Controller.HandleError(ex);
             }
         }
 
@@ -949,14 +950,14 @@ namespace Astrodon.Controls
                     }
                     catch (Exception ex1)
                     {
-                        //MessageBox.Show(ex1.Message);
+                        Controller.HandleError(ex1);
                     }
                 }
                 return html;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Controller.HandleError(ex);
                 return String.Empty;
             }
         }

@@ -70,7 +70,7 @@ namespace Astrodon
                         }
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
                     status = "Invalid email address";
                     foreach (var stream in attachmentStreams.Values)
@@ -78,6 +78,7 @@ namespace Astrodon
                         stream.Close();
                         stream.Dispose();
                     }
+                   
                     return false;
                 }
                 if (!string.IsNullOrWhiteSpace(bccEmail))

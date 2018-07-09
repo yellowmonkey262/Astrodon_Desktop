@@ -124,7 +124,7 @@ namespace Astrodon.Classes {
                 }
                 if (_conn)
                     CloseConn();
-            } catch { }
+            } catch (Exception ex) { Controller.HandleError(ex); }
         }
 
         private void Heartbeat() {
@@ -163,7 +163,7 @@ namespace Astrodon.Classes {
                         OnMessageReceived(new IMReceivedEventArgs(msg));
                     }
                 }
-            } catch (IOException) { }
+            } catch (IOException) {  }
 
             _logged = false;
         }

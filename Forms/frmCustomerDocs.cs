@@ -88,7 +88,7 @@ namespace Astrodon.Forms
         {
             String status;
             String buildPath = "Y:\\Buildings Managed\\" + building.Name;
-            if (!Directory.Exists(buildPath)) { try { Directory.CreateDirectory(buildPath); } catch { } }
+            if (!Directory.Exists(buildPath)) { try { Directory.CreateDirectory(buildPath); } catch (Exception ex) { Controller.HandleError(ex); } }
             Classes.Sftp transferClient = new Classes.Sftp(String.Empty, true);
             foreach (String remoteFile in myFiles)
             {

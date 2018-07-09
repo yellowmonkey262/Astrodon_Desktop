@@ -287,12 +287,14 @@ namespace Astrodon
                     {
                         if (rCustAcc == customerAcc && delBits[13] != nextBits[13] && nextBits[13] != "") { delBits[13] += (delBits[13] != "" ? ";" : "") + nextBits[13]; }
                     }
-                    catch { }
+                    catch(Exception ex) { Controller.HandleError(ex); }
+                    
                 }
                 //MessageBox.Show(delBits[13]);
             }
             catch (Exception ex)
             {
+                Controller.HandleError(ex);
                 returner = "error:" + ex.Message;
             }
             return delBits;
@@ -323,12 +325,13 @@ namespace Astrodon
                         {
                             if (rCustAcc == customerAcc && delBits[13] != nextBits[13] && nextBits[13] != "") { delBits[13] += (delBits[13] != "" ? ";" : "") + nextBits[13]; }
                         }
-                        catch { }
+                        catch(Exception ex) { Controller.HandleError(ex); }
                     }
                 }
             }
             catch (Exception ex)
             {
+                Controller.HandleError(ex);
                 returner = "error:" + ex.Message;
             }
             return delBits;
@@ -393,8 +396,9 @@ namespace Astrodon
             }
             catch (Exception ex)
             {
+                Controller.HandleError(ex);
                 returner = "error:" + ex.Message;
-                MessageBox.Show(returner);
+               // MessageBox.Show(returner);
             }
             return aas;
         }
@@ -435,6 +439,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     returner = "error:" + ex.Message;
                 }
             }
@@ -473,7 +478,8 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.StackTrace);
+                    Controller.HandleError(ex);
+                    
                 }
             }
             return notes;
@@ -524,7 +530,7 @@ namespace Astrodon
                         DateTime jDate = SDK.BtrieveToVBDate(responseBits[7]);
                         //MessageBox.Show(jDate.ToString());
                     }
-                    catch { }
+                    catch(Exception ex) { Controller.HandleError(ex); }
                     rs.Add(response);
 
                     if (!response.StartsWith("5") && !response.StartsWith("9|"))
@@ -543,7 +549,7 @@ namespace Astrodon
                                     DateTime jDate = SDK.BtrieveToVBDate(responseBits[7]);
                                     MessageBox.Show(jDate.ToString());
                                 }
-                                catch { }
+                                catch(Exception ex) { Controller.HandleError(ex); }
 
                                 //MessageBox.Show(response);
                             }
@@ -555,6 +561,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     returner = "error:" + ex.Message;
                 }
             }
@@ -602,7 +609,7 @@ namespace Astrodon
                                 rs.Add(trn);
                             }
                         }
-                        catch { }
+                        catch(Exception ex) { Controller.HandleError(ex); }
                         while (response.StartsWith("0|"))
                         {
                             response = SDK.GetNext(fileName, 11);
@@ -624,7 +631,7 @@ namespace Astrodon
                                         rs.Add(trn);
                                     }
                                 }
-                                catch { }
+                                catch(Exception ex) { Controller.HandleError(ex); }
                             }
                             else
                             {
@@ -635,6 +642,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     returner = "error:" + ex.Message;
                 }
             }
@@ -676,7 +684,7 @@ namespace Astrodon
                                 rs.Add(trn);
                             }
                         }
-                        catch { }
+                        catch(Exception ex) { Controller.HandleError(ex); }
                         while (!response.StartsWith("9|"))
                         {
                             response = SDK.GetNext(fileName, 11);
@@ -696,7 +704,7 @@ namespace Astrodon
                                         rs.Add(trn);
                                     }
                                 }
-                                catch { }
+                                catch(Exception ex) { Controller.HandleError(ex); }
                             }
                             else
                             {
@@ -707,6 +715,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     returner = "error:" + ex.Message;
                 }
             }
@@ -736,6 +745,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     returner = "error:" + ex.Message;
                 }
             }
@@ -774,6 +784,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     returner = "error:" + ex.Message;
                 }
             }
@@ -795,6 +806,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     returner = "error:" + ex.Message;
                 }
             }
@@ -821,6 +833,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     returner = "error:" + ex.Message;
                 }
             }
@@ -869,6 +882,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     returner = "error:" + ex.Message;
                 }
             }
@@ -896,6 +910,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                     bankDetails = ex.Message;
                 }
             }
@@ -935,6 +950,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
+                    Controller.HandleError(ex);
                 }
             }
             return categories;

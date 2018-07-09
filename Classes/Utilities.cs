@@ -124,7 +124,7 @@ namespace Astrodon
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    Controller.HandleError(ex);
                 }
             }
             return repBuildings;

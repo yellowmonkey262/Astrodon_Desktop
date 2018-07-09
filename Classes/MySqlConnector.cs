@@ -45,6 +45,7 @@ namespace Astrodon
             catch (Exception ex)
             {
                 String msg = ex.Message;
+                Controller.HandleError(ex);
             }
         }
 
@@ -82,6 +83,7 @@ namespace Astrodon
             }
             catch (Exception excep)
             {
+                Controller.HandleError(excep);
             }
             finally
             {
@@ -693,8 +695,9 @@ namespace Astrodon
                     return String.Empty;
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                Controller.HandleError(ex);
                 uid = "0";
                 return String.Empty;
             }
@@ -841,7 +844,7 @@ namespace Astrodon
                     catch (Exception ex)
                     {
                         status = ex.Message;
-                        //MessageBox.Show(status);
+                        Controller.HandleError(ex);
                     }
                     finally
                     {

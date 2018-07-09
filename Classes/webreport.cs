@@ -67,7 +67,7 @@ namespace Astrodon.Classes
                 {
                     wrd.files.Add(folder, ListFiles(building.webFolder, folder));
                 }
-                catch { }
+                catch(Exception ex) { Controller.HandleError(ex); }
             }
             return wrd;
         }
@@ -83,7 +83,7 @@ namespace Astrodon.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Controller.HandleError(ex);
                 return null;
             }
         }

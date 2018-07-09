@@ -193,7 +193,7 @@ namespace Astrodon.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Loading " + lineNumber + ":" + ex.Message + "\n" + ex.StackTrace);
+                Controller.HandleError(ex);
             }
         }
 
@@ -234,7 +234,7 @@ namespace Astrodon.Controls
                         bal += lbal;
                     }
                 }
-                catch { }
+                catch(Exception ex) { Controller.HandleError(ex); }
                 return bal;
             }
         }
@@ -307,7 +307,7 @@ namespace Astrodon.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Controller.HandleError(ex);
             }
             this.Cursor = Cursors.Default;
         }
@@ -349,7 +349,7 @@ namespace Astrodon.Controls
                 cmbAccount.Items.Add("OWN");
                 cmbAccount.SelectedItem = lblBank.Text;
             }
-            catch { }
+            catch(Exception ex) { Controller.HandleError(ex); }
 
             LoadRequisitions();
 
@@ -361,7 +361,7 @@ namespace Astrodon.Controls
                     cmbLedger.Items.Add(reqAcc.Key + ": " + reqAcc.Value);
                 }
             }
-            catch { }
+            catch (Exception ex) { Controller.HandleError(ex); }
         }
 
         private void cmbAccount_SelectedIndexChanged(object sender, EventArgs e)
@@ -370,7 +370,7 @@ namespace Astrodon.Controls
             {
                 UpdateBalanceLabel();
             }
-            catch { }
+            catch (Exception ex) { Controller.HandleError(ex); }
         }
 
         private void UpdateBalanceLabel()
@@ -1018,7 +1018,7 @@ namespace Astrodon.Controls
                     }
                 }
             }
-            catch { }
+            catch (Exception ex) { Controller.HandleError(ex); }
         }
 
         private void cmbLedger_SelectedIndexChanged(object sender, EventArgs e)
@@ -1028,7 +1028,7 @@ namespace Astrodon.Controls
                 String ledger = cmbLedger.SelectedItem.ToString();
                 String[] ledgerBits = ledger.Split(new String[] { ":" }, StringSplitOptions.None);
             }
-            catch { }
+            catch (Exception ex) { Controller.HandleError(ex); }
         }
 
         private void btnSupplierLookup_Click(object sender, EventArgs e)

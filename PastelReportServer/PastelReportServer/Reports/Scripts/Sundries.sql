@@ -8,5 +8,6 @@ from [DataSet].CustomerMaster m join
 where t.LinkAcc not in ('1000000','1045000','1010000','1030000','1020000','1085000') 
   and t.LinkAcc not like '84%'
   and t.Description != 'Interest Charged'
+  and t.GDC = 'D'
   and t.PPeriod = ?
 order by l.AccDesc,L.AccNumber,m.CustomerDesc,t.DDate

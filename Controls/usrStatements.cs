@@ -100,7 +100,7 @@ namespace Astrodon
                     }
                 }
             }
-            catch { }
+            catch (Exception ex) { Controller.HandleError(ex); }
         }
 
         private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
@@ -239,7 +239,7 @@ namespace Astrodon
                         mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
                         ftpClient.Upload(fileName, actFile, false);
                     }
-                    catch { }
+                    catch (Exception ex) { Controller.HandleError(ex); }
                     #endregion
 
                     Application.DoEvents();
@@ -464,7 +464,7 @@ namespace Astrodon
                             AddProgressString("Statement for " + customer.accNumber + " has zero transactions - statement skipped");
                         }
                     }
-                    catch { }
+                    catch (Exception ex) { Controller.HandleError(ex); }
                     ccount++;
                     lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();
                     lblCCount.Refresh();
@@ -509,7 +509,7 @@ namespace Astrodon
                     if (!String.IsNullOrEmpty(status)) { MessageBox.Show(status); }
                 }
             }
-            catch { }
+            catch (Exception ex) { Controller.HandleError(ex); }
         }
 
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]

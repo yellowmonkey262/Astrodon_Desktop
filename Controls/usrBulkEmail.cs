@@ -54,7 +54,7 @@ namespace Astrodon
                 LoadCustomers(String.Empty);
                 LoadCategories();
             }
-            catch { }
+            catch (Exception ex) { Controller.HandleError(ex); }
         }
 
         private void LoadCategories()

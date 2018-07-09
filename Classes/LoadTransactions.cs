@@ -13,7 +13,7 @@ namespace Astrodon.Classes
 
         public void ShowDebug(string message)
         {
-            //  MessageBox.Show(message);
+            
         }
 
         public List<Transaction> LoadTransactions(Building building, Customer customer, DateTime transDate, out double totalDue, out String trnMsg)
@@ -269,6 +269,8 @@ namespace Astrodon.Classes
             }
             catch (Exception e)
             {
+                Controller.HandleError(e);
+
                 ShowDebug(e.Message);
                 totalDue = 0;
                 return null;

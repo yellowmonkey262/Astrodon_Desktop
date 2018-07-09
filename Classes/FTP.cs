@@ -48,13 +48,13 @@ namespace Astrodon.Classes {
                         localFileStream.Write(byteBuffer, 0, bytesRead);
                         bytesRead = ftpStream.Read(byteBuffer, 0, bufferSize);
                     }
-                } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                } catch (Exception ex) { Controller.HandleError(ex); }
                 /* Resource Cleanup */
                 localFileStream.Close();
                 ftpStream.Close();
                 ftpResponse.Close();
                 ftpRequest = null;
-            } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            } catch (Exception ex) { Controller.HandleError(ex); }
             return;
         }
 
@@ -86,12 +86,12 @@ namespace Astrodon.Classes {
                         ftpStream.Write(byteBuffer, 0, bytesSent);
                         bytesSent = localFileStream.Read(byteBuffer, 0, bufferSize);
                     }
-                } catch (Exception ex) { status = ex.Message; }
+                } catch (Exception ex) { status = ex.Message; Controller.HandleError(ex); }
                 /* Resource Cleanup */
                 localFileStream.Close();
                 ftpStream.Close();
                 ftpRequest = null;
-            } catch (Exception ex) { status = ex.Message; }
+            } catch (Exception ex) { status = ex.Message; Controller.HandleError(ex); }
             return;
         }
 
@@ -114,7 +114,7 @@ namespace Astrodon.Classes {
                 /* Resource Cleanup */
                 ftpResponse.Close();
                 ftpRequest = null;
-            } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            } catch (Exception ex) { Controller.HandleError(ex); }
             return;
         }
 
@@ -139,7 +139,7 @@ namespace Astrodon.Classes {
                 /* Resource Cleanup */
                 ftpResponse.Close();
                 ftpRequest = null;
-            } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            } catch (Exception ex) { Controller.HandleError(ex); }
             return;
         }
 
@@ -162,7 +162,7 @@ namespace Astrodon.Classes {
                 /* Resource Cleanup */
                 ftpResponse.Close();
                 ftpRequest = null;
-            } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            } catch (Exception ex) { Controller.HandleError(ex); }
             return;
         }
 
@@ -189,7 +189,7 @@ namespace Astrodon.Classes {
                 /* Store the Raw Response */
                 string fileInfo = null;
                 /* Read the Full Response Stream */
-                try { fileInfo = ftpReader.ReadToEnd(); } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                try { fileInfo = ftpReader.ReadToEnd(); } catch (Exception ex) { Controller.HandleError(ex); }
                 /* Resource Cleanup */
                 ftpReader.Close();
                 ftpStream.Close();
@@ -197,7 +197,7 @@ namespace Astrodon.Classes {
                 ftpRequest = null;
                 /* Return File Created Date Time */
                 return fileInfo;
-            } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            } catch (Exception ex) { Controller.HandleError(ex); }
             /* Return an Empty string Array if an Exception Occurs */
             return "";
         }
@@ -225,7 +225,7 @@ namespace Astrodon.Classes {
                 /* Store the Raw Response */
                 string fileInfo = null;
                 /* Read the Full Response Stream */
-                try { while (ftpReader.Peek() != -1) { fileInfo = ftpReader.ReadToEnd(); } } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                try { while (ftpReader.Peek() != -1) { fileInfo = ftpReader.ReadToEnd(); } } catch (Exception ex) { Controller.HandleError(ex); }
                 /* Resource Cleanup */
                 ftpReader.Close();
                 ftpStream.Close();
@@ -233,7 +233,7 @@ namespace Astrodon.Classes {
                 ftpRequest = null;
                 /* Return File Size */
                 return fileInfo;
-            } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            } catch (Exception ex) { Controller.HandleError(ex); }
             /* Return an Empty string Array if an Exception Occurs */
             return "";
         }
@@ -261,15 +261,15 @@ namespace Astrodon.Classes {
                 /* Store the Raw Response */
                 string directoryRaw = null;
                 /* Read Each Line of the Response and Append a Pipe to Each Line for Easy Parsing */
-                try { while (ftpReader.Peek() != -1) { directoryRaw += ftpReader.ReadLine() + "|"; } } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                try { while (ftpReader.Peek() != -1) { directoryRaw += ftpReader.ReadLine() + "|"; } } catch (Exception ex) { Controller.HandleError(ex); }
                 /* Resource Cleanup */
                 ftpReader.Close();
                 ftpStream.Close();
                 ftpResponse.Close();
                 ftpRequest = null;
                 /* Return the Directory Listing as a string Array by Parsing 'directoryRaw' with the Delimiter you Append (I use | in This Example) */
-                try { string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList; } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-            } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                try { string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList; } catch (Exception ex) { Controller.HandleError(ex); }
+            } catch (Exception ex) { Controller.HandleError(ex); }
             /* Return an Empty string Array if an Exception Occurs */
             return new string[] { "" };
         }
@@ -297,15 +297,15 @@ namespace Astrodon.Classes {
                 /* Store the Raw Response */
                 string directoryRaw = null;
                 /* Read Each Line of the Response and Append a Pipe to Each Line for Easy Parsing */
-                try { while (ftpReader.Peek() != -1) { directoryRaw += ftpReader.ReadLine() + "|"; } } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                try { while (ftpReader.Peek() != -1) { directoryRaw += ftpReader.ReadLine() + "|"; } } catch (Exception ex) { Controller.HandleError(ex); }
                 /* Resource Cleanup */
                 ftpReader.Close();
                 ftpStream.Close();
                 ftpResponse.Close();
                 ftpRequest = null;
                 /* Return the Directory Listing as a string Array by Parsing 'directoryRaw' with the Delimiter you Append (I use | in This Example) */
-                try { string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList; } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-            } catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                try { string[] directoryList = directoryRaw.Split("|".ToCharArray()); return directoryList; } catch (Exception ex) { Controller.HandleError(ex); }
+            } catch (Exception ex) { Controller.HandleError(ex); }
             /* Return an Empty string Array if an Exception Occurs */
             return new string[] { "" };
         }

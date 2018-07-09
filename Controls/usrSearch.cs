@@ -85,7 +85,7 @@ namespace Astrodon.Controls
                     myNewThread.Join();
                     btnSearch.Text = "Search";
                 }
-                catch { }
+                catch (Exception ex) { Controller.HandleError(ex); }
             }
         }
 
