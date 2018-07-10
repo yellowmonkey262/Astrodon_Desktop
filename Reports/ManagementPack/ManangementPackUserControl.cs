@@ -227,26 +227,33 @@ namespace Astrodon.Reports
             if (string.IsNullOrWhiteSpace(dataFolder))
                 return null;
 
-            string folder = "Invoices" + @"\" + dt.ToString("yyyy") + @"\" + dt.ToString("MMM yyyy"); 
+            string folder = "Invoices" + @"\" + dt.ToString("yyyy",CultureInfo.InvariantCulture) + @"\" + dt.ToString("MMM yyyy", CultureInfo.InvariantCulture); 
             string outputPath = (dataFolder + folder).Trim();
 
             if(!Directory.Exists(outputPath))
             {
-                folder = "Invoices" + @"\" + dt.ToString("MMM yyyy");
+                folder = "Invoices" + @"\" + dt.ToString("MMM yyyy", CultureInfo.InvariantCulture);
                 outputPath = (dataFolder + folder).Trim();
                 if (!Directory.Exists(outputPath))
                 {
+
+                    folder = "Invoices" + @"\" + dt.ToString("yyyy", CultureInfo.InvariantCulture) + @"\" + dt.ToString("MMMM yyyy", CultureInfo.InvariantCulture);
+                    outputPath = (dataFolder + folder).Trim();
+
                     if (!Directory.Exists(outputPath))
                     {
-                        folder = "Invoices" + @"\" + dt.ToString("yyyy") + @"\" + dt.ToString("MMM");
+                        folder = "Invoices" + @"\" + dt.ToString("yyyy", CultureInfo.InvariantCulture) + @"\" + dt.ToString("MMM", CultureInfo.InvariantCulture);
                         outputPath = (dataFolder + folder).Trim();
-
+                        if (!Directory.Exists(outputPath))
+                        {
+                            folder = "Invoices" + @"\" + dt.ToString("yyyy", CultureInfo.InvariantCulture) + @"\" + dt.ToString("MMMM", CultureInfo.InvariantCulture);
+                            outputPath = (dataFolder + folder).Trim();
+                        }
                     }
-
-
                 }
             }
 
+            
             if (Directory.Exists(outputPath))
             {
                 var items = Directory.GetFiles(outputPath).ToList();
@@ -256,6 +263,9 @@ namespace Astrodon.Reports
             }
             else
             {
+                folder = "Invoices" + @"\" + dt.ToString("yyyy", CultureInfo.InvariantCulture) + @"\" + dt.ToString("MMMM yyyy", CultureInfo.InvariantCulture);
+                outputPath = (dataFolder + folder).Trim();
+
                 if (Controller.AskQuestion("Folder does not exist [" + outputPath + "], would you like to create the folder?"))
                     Directory.CreateDirectory(outputPath);
                 

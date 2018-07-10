@@ -844,7 +844,7 @@ namespace Astrodon
                     catch (Exception ex)
                     {
                         status = ex.Message;
-                        Controller.HandleError(ex);
+                       // Controller.HandleError(ex);
                     }
                     finally
                     {

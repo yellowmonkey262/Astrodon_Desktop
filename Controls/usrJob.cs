@@ -1905,7 +1905,7 @@ namespace Astrodon.Controls
             {
                 jobMessage = Controller.user.name + message + ": Job ID - " + jobID.ToString();
             }
-            Controller.commClient.SendMessage(jobMessage);
+            //Controller.commClient.SendMessage(jobMessage);
         }
 
         private void txtLetter_TextChanged(object sender, EventArgs e)

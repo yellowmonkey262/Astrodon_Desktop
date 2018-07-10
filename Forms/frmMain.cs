@@ -129,7 +129,7 @@ namespace Astrodon
         private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             Controller.DependencyTermination();
-            if (Controller.commClient != null) { Controller.commClient.Disconnect(); }
+        //    if (Controller.commClient != null) { Controller.commClient.Disconnect(); }
             Application.Exit();
             Environment.Exit(0);
         }

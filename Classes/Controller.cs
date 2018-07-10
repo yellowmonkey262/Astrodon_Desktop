@@ -15,7 +15,7 @@ namespace Astrodon
         public static frmMain mainF;
         public static User user;
         public static Pastel pastel;
-        public static Classes.CommClient commClient;
+      //  public static Classes.CommClient commClient;
         private static SqlDataHandler dataHandler;
         private static System.Timers.Timer tmrDependency;
         private static DataSet dsDependency;
@@ -63,10 +63,10 @@ namespace Astrodon
                     Environment.Exit(0);
                 }
             }
-            commClient = new Classes.CommClient();
-            commClient.MessageReceived += commClient_MessageReceived;
-            commClient.LoginOK += commClient_LoginOK;
-            commClient.Login(user.username, user.password);
+            //commClient = new Classes.CommClient();
+            //commClient.MessageReceived += commClient_MessageReceived;
+            //commClient.LoginOK += commClient_LoginOK;
+            //commClient.Login(user.username, user.password);
             mainF.Show();
             DependencyInitialization();
         }
@@ -99,7 +99,7 @@ namespace Astrodon
 
         private static void commClient_LoginOK(object sender, EventArgs e)
         {
-            commClient.SendMessage("hello server");
+            //commClient.SendMessage("hello server");
         }
 
         public static void DependencyInitialization()
@@ -235,12 +235,12 @@ namespace Astrodon
                 String user = myMessage.ToLower().Replace("hello ", "").ToUpper();
                 mainF.SetNotifications(user + " connected to server");
             }
-            if (!e.Message.ToUpper().Contains(commClient.UserName.ToUpper()))
-            {
-                mainF.PopupNotification(e.Message);
-                FiredUpdate = false;
-                if (JobUpdateEvent != null) { JobUpdateEvent(null, new EventArgs()); }
-            }
+            //if (!e.Message.ToUpper().Contains(commClient.UserName.ToUpper()))
+            //{
+            //    mainF.PopupNotification(e.Message);
+            //    FiredUpdate = false;
+            //    if (JobUpdateEvent != null) { JobUpdateEvent(null, new EventArgs()); }
+            //}
             Thread.Sleep(5000);
             JobHandler();
         }
@@ -289,7 +289,7 @@ namespace Astrodon
                     String eQ = String.Format(updateQuery, drPA["paID"].ToString(), drQ["id"].ToString(), drPA["paID"].ToString());
                     UpdateJobStatus("ASSIGNED", drQ["id"].ToString(), drPA["paID"].ToString());
                     String jobMessage = "Job ID " + drQ["id"].ToString() + " has been assigned to " + Controller.user.name;
-                    commClient.SendMessage(jobMessage);
+                    //commClient.SendMessage(jobMessage);
                     String eQ2 = String.Format(updQ2, drPA["paID"].ToString());
                     dm.SetData(eQ, null, out status);
                     dm.SetData(eQ2, null, out status);
