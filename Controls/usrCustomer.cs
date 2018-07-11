@@ -1113,6 +1113,7 @@ namespace Astrodon
                             Created = DateTime.Now
                         };
                         context.CustomerSet.Add(customerEntity);
+                        customerEntity.LoadEmails(customer.Email);
                         context.SaveChanges();
                     }
                     cbTrustee.Checked = customerEntity.IsTrustee;
@@ -1606,6 +1607,7 @@ namespace Astrodon
                 }
                 customerEntity.IsTrustee = cbTrustee.Checked;
                 customerEntity.Description = customer.description;
+                customerEntity.LoadEmails(customer.Email);
                 context.SaveChanges();
             }
         }
@@ -1636,6 +1638,8 @@ namespace Astrodon
                         customerEntity.Description = cust.description;
                     if (customerEntity.CellNumber != cust.CellPhone)
                         customerEntity.CellNumber = cust.CellPhone;
+
+                    customerEntity.LoadEmails(cust.Email);
                 }
                 context.SaveChanges();
             }
@@ -1681,6 +1685,8 @@ namespace Astrodon
                 if (!String.IsNullOrWhiteSpace(customerEntity.CustomerFullName))
                     tbFullName.Text = customerEntity.CustomerFullName;
 
+                customerEntity.LoadEmails(customer.Email);
+
             }
         }
 
@@ -1716,6 +1722,7 @@ namespace Astrodon
                 customerEntity.SendBirthdayNotification = cbBirthDayNotificaiton.Checked;
                 customerEntity.CellNumber = customer.CellPhone;
                 customerEntity.CustomerFullName = tbFullName.Text;
+                customerEntity.LoadEmails(customer.Email);
                 context.SaveChanges();
 
                 Controller.ShowMessage("Birthday details updated");
@@ -1902,6 +1909,7 @@ namespace Astrodon
                             Created = DateTime.Now
                         };
                         context.CustomerSet.Add(customerEntity);
+                        customerEntity.LoadEmails(customer.Email);
                     }
 
                     var doc = new Docs.CustomerDocument()

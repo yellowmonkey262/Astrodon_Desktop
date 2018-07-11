@@ -360,6 +360,10 @@
     <Compile Include="Migrations\201806210807505_CustomerDocuments.Designer.cs">
       <DependentUpon>201806210807505_CustomerDocuments.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807111350109_CustomerEmailAddress.cs" />
+    <Compile Include="Migrations\201807111350109_CustomerEmailAddress.Designer.cs">
+      <DependentUpon>201807111350109_CustomerEmailAddress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
@@ -631,6 +635,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806210807505_CustomerDocuments.resx">
       <DependentUpon>201806210807505_CustomerDocuments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807111350109_CustomerEmailAddress.resx">
+      <DependentUpon>201807111350109_CustomerEmailAddress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

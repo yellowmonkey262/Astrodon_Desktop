@@ -132,7 +132,7 @@ namespace Astrodon
                 bool saveChanges = false;
                 foreach (var acc in customers)
                 {
-                    var cust = dbCustomers.SingleOrDefault(a => a.BuildingId == selectedBuilding.ID 
+                    var cust = dbCustomers.SingleOrDefault(a => a.BuildingId == selectedBuilding.ID
                                                              && a.AccountNumber == acc.accNumber);
                     if (cust == null)
                     {
@@ -143,6 +143,7 @@ namespace Astrodon
                             Created = DateTime.Now,
                             IsTrustee = acc.IsTrustee
                         };
+
                         context.CustomerSet.Add(cust);
                         dbCustomers.Add(cust);
                         saveChanges = true;
@@ -151,10 +152,12 @@ namespace Astrodon
                     if (cust.Description != acc.description)
                     {
                         cust.Description = acc.description;
-                        saveChanges = true;
                     }
+                    cust.LoadEmails(acc.Email);
+                    saveChanges = true;
+
                 }
-                if(saveChanges)
+                if (saveChanges)
                   context.SaveChanges();
 
                 //foreach (Customer c in customers)
@@ -869,7 +872,7 @@ namespace Astrodon
                     dbCust.Description = customer.description;
                     dbCust.IsTrustee = customer.IsTrustee;
                     vCustomer.IsTrustee = customer.IsTrustee;
-
+                    dbCust.LoadEmails(vCustomer.Email);
                     dbContext.SaveChanges();
 
                     UpdateCustomer(vCustomer, dbCust.IsTrustee);
