@@ -55,8 +55,16 @@ namespace Astro.Library.Entities
             set { period = value; }
         }
 
-        public StatementBuilding(String build, String dp, int p, DateTime lastProcessed)
+        private int _buildingId = 0;
+
+        public int GetBuildingId()
         {
+            return _buildingId;
+        }
+
+        public StatementBuilding(int buildingId, String build, String dp, int p, DateTime lastProcessed)
+        {
+            _buildingId = buildingId;
             Process = false;
             Building = build;
             DataPath = dp;
