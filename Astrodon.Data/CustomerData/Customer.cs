@@ -44,6 +44,55 @@ namespace Astrodon.Data.CustomerData
         public virtual string BirthDaySMSStatus { get; set; }
         public virtual string BirthDaySMSBatch { get; set; }
 
+        [MaxLength(200)]
+        public virtual string EmailAddress1 { get; set; }
+
+        [MaxLength(200)]
+        public virtual string EmailAddress2 { get; set; }
+
+        [MaxLength(200)]
+        public virtual string EmailAddress3 { get; set; }
+
+        [MaxLength(200)]
+        public virtual string EmailAddress4 { get; set; }
+
         public virtual ICollection<CustomerDocument> Documents { get; set; }
+
+        public void LoadEmails()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadEmails(string[] emailList)
+        {
+
+            if (emailList != null)
+            {
+                for (int x = 0; x < emailList.Length; x++)
+                {
+                    switch (x)
+                    {
+                        case 0:
+                            if(!String.IsNullOrWhiteSpace(emailList[x]))
+                            EmailAddress1 = emailList[x];
+                            break;
+                        case 1:
+                            if (!String.IsNullOrWhiteSpace(emailList[x]))
+                                EmailAddress2 = emailList[x];
+                            break;
+                        case 2:
+                            if (!String.IsNullOrWhiteSpace(emailList[x]))
+                                EmailAddress3 = emailList[x];
+                            break;
+                        case 3:
+                            if (!String.IsNullOrWhiteSpace(emailList[x]))
+                                EmailAddress4 = emailList[x];
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
     }
 }
