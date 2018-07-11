@@ -49,12 +49,6 @@
     <Compile Include="SQL\SQLUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Astrodon.Data\Astrodon.Data.csproj">
-      <Project>{89422917-7104-43aa-b124-bccabf3c733b}</Project>
-      <Name>Astrodon.Data</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Scripts\SyncBuildingsAndUnits.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +92,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\GetBuildingFile.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\UpdatePrimaryEmail.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

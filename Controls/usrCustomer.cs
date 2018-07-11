@@ -542,6 +542,12 @@ namespace Astrodon
                 Controller.HandleError("Customer not selected");
                 return;
             }
+
+            string oldEmail = string.Empty;
+            string newEmail = txtEmail.Text;
+            if (customer.Email != null && !String.IsNullOrWhiteSpace(customer.Email[0]))
+                oldEmail = customer.Email[0];
+
             String[] delAddress = customer.getDelAddress();
             String[] uDef = customer.userDefined;
 
@@ -599,7 +605,39 @@ namespace Astrodon
                             "Please configure an email address and try again.");
                     }
                 }
-                new ClientPortal.AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString()).SyncBuildingAndClients(building.ID);
+
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    var custEntity = context.CustomerSet.Where(a => a.AccountNumber == customer.accNumber && a.BuildingId == building.ID).SingleOrDefault();
+                    if (custEntity == null)
+                    {
+                        custEntity = new Docs.Customer()
+                        {
+                            BuildingId = building.ID,
+                            AccountNumber = customer.accNumber,
+                            Description = customer.description,
+                            IsTrustee = customer.IsTrustee,
+                            Created = DateTime.Now
+                        };
+                        context.CustomerSet.Add(custEntity);
+                    }
+                    custEntity.LoadEmails(customer.Email);
+                    if (!String.IsNullOrWhiteSpace(newEmail))
+                        custEntity.EmailAddress1 = newEmail;
+                    context.SaveChanges();
+                }
+
+
+                if (oldEmail != newEmail)
+                {
+                    if(!String.IsNullOrWhiteSpace(newEmail))
+                    {
+                        _ClientPortal.UpdatePrimaryEmail(building.ID, customer.accNumber, oldEmail, newEmail);
+                    }
+                }
+
+                _ClientPortal.SyncBuildingAndClients(building.ID);
+
             }
             else
             {

@@ -15,6 +15,8 @@ namespace Astro.Library.Entities
         public bool bc = false;
         private String lastProcessed = String.Empty;
 
+        private int _BuildingId { get; set; }
+
         public bool Process
         {
             get { return process; }
@@ -55,8 +57,14 @@ namespace Astro.Library.Entities
             set { period = value; }
         }
 
-        public StatementBuilding(String build, String dp, int p, DateTime lastProcessed)
+        public int GetBuildingId()
         {
+            return _BuildingId;
+        }
+
+        public StatementBuilding(int buildingId, String build, String dp, int p, DateTime lastProcessed)
+        {
+            _BuildingId = buildingId;
             Process = false;
             Building = build;
             DataPath = dp;

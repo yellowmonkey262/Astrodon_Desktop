@@ -1,5 +1,4 @@
 ﻿using Astrodon.ClientPortal.SQL;
-using Astrodon.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -139,6 +138,21 @@ namespace Astrodon.ClientPortal
         #endregion
 
         #region Unit Documents
+
+        public void UpdatePrimaryEmail(int buildingId, string accountNumber, string oldEmail, string newEmail)
+        {
+            if (!String.IsNullOrWhiteSpace(oldEmail) && !string.IsNullOrWhiteSpace(newEmail))
+            {
+                string script = ReadSQLScript("UpdatePrimaryEmail.sql");
+                var parameters = new List<System.Data.SqlClient.SqlParameter>()
+                { new System.Data.SqlClient.SqlParameter("@BuildingId",buildingId),
+                  new System.Data.SqlClient.SqlParameter("@AccountNumber",accountNumber),
+                  new System.Data.SqlClient.SqlParameter("@OldEmail",oldEmail),
+                  new System.Data.SqlClient.SqlParameter("@NewEmail",newEmail),
+                  };
+                SQLUtilities.ExecuteSqlCommand(_ClientProtalConnection, script, parameters);
+            }
+        }
 
         public string InsertStatement(int buildingId, string accountNumber,  DateTime statementDate, string filename, byte[] fileData)
         {
@@ -345,6 +359,8 @@ namespace Astrodon.ClientPortal
             else
                 return (byte[])fieldValue;
         }
+
+       
 
         #endregion
 

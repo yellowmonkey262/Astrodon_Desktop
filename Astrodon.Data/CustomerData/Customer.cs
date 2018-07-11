@@ -58,11 +58,6 @@ namespace Astrodon.Data.CustomerData
 
         public virtual ICollection<CustomerDocument> Documents { get; set; }
 
-        public void LoadEmails()
-        {
-            throw new NotImplementedException();
-        }
-
         public void LoadEmails(string[] emailList)
         {
 

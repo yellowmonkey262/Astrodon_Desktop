@@ -50,16 +50,27 @@ namespace Astrodon
         {
             String point = "0";
             String build = String.Empty;
+
+            String query = "SELECT DISTINCT b.id, b.Building, b.DataPath, b.Period, '' as [Last Processed], b.pm, b.bankName, b.accName, b.bankAccNumber, b.branch, b.bank FROM tblBuildings AS b ";
+            query += " INNER JOIN tblUserBuildings AS u ON b.id = u.buildingid WHERE u.userid = {0} ORDER BY b.Building";
             try
             {
-                String query = "SELECT DISTINCT b.Building, b.DataPath, b.Period, '' as [Last Processed], b.pm, b.bankName, b.accName, b.bankAccNumber, b.branch, b.bank FROM tblBuildings AS b ";
-                query += " INNER JOIN tblUserBuildings AS u ON b.id = u.buildingid WHERE u.userid = {0} ORDER BY b.Building";
-                try { query = String.Format(query, userid.ToString()); } catch { MessageBox.Show("query generator" + userid.ToString()); }
-                dsBuildings = dh.GetData(query, null, out status);
-                if (dsBuildings != null && dsBuildings.Tables.Count > 0 && dsBuildings.Tables[0].Rows.Count > 0)
+                query = String.Format(query, userid.ToString());
+            }
+            catch
+            {
+                MessageBox.Show("query generator" + userid.ToString());
+            }
+            dsBuildings = dh.GetData(query, null, out status);
+            if (dsBuildings != null && dsBuildings.Tables.Count > 0 && dsBuildings.Tables[0].Rows.Count > 0)
+            {
+                List<StatementBuilding> dataList = new List<StatementBuilding>();
+
+                foreach (DataRow dr in dsBuildings.Tables[0].Rows)
                 {
-                    foreach (DataRow dr in dsBuildings.Tables[0].Rows)
+                    try
                     {
+                        int buildingId = (int)dr["id"];
                         String building = dr["Building"].ToString();
                         String lpQuery = String.Format("SELECT top(1) lastProcessed FROM tblStatements WHERE building = '{0}' ORDER BY lastProcessed DESC", building);
                         DataSet dsLP = dh.GetData(lpQuery, null, out status);
@@ -75,20 +86,27 @@ namespace Astrodon
                         build = dr["Building"].ToString();
                         String dp = dr["DataPath"].ToString();
                         int p = int.Parse(dr["Period"].ToString());
-                        StatementBuilding stmtBuilding = new StatementBuilding(build, dp, p, lastProcessed);
-                        if (!bs.Contains(stmtBuilding)) { bs.Add(stmtBuilding); }
+                        StatementBuilding stmtBuilding = new StatementBuilding(buildingId, build, dp, p, lastProcessed);
+
+                        var existing = dataList.Where(a => a.DataPath == stmtBuilding.DataPath).FirstOrDefault();
+                        if (existing == null)
+                            dataList.Add(stmtBuilding);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Controller.HandleError(ex);
                     }
                 }
+                bs.DataSource = dataList;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+
         }
 
         private void dgBuildings_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            try
+
+            if (dsBuildings != null)
             {
                 if (dgBuildings.Rows.Count == dsBuildings.Tables[0].Rows.Count)
                 {
@@ -98,12 +116,26 @@ namespace Astrodon
                         TimeSpan elapsed = DateTime.Now - lastProcessed;
                         for (int i = 0; i < dgBuildings.ColumnCount; i++)
                         {
-                            if (elapsed.TotalDays > 5) { dvr.Cells[i].Style.BackColor = System.Drawing.Color.Red; } else { dvr.Cells[i].Style.BackColor = System.Drawing.Color.White; }
+                            try
+                            {
+                                if (elapsed.TotalDays > 5)
+                                {
+                                    dvr.Cells[i].Style.BackColor = System.Drawing.Color.Red;
+                                }
+                                else
+                                {
+                                    dvr.Cells[i].Style.BackColor = System.Drawing.Color.White;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Controller.HandleError(ex);
+                            }
                         }
                     }
                 }
             }
-            catch (Exception ex) { Controller.HandleError(ex); }
+
         }
 
         private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
@@ -144,6 +176,7 @@ namespace Astrodon
         {
             _ProgressForm = frmProgress.ShowForm();
 
+
             List<string> statementFileList = new List<string>();
 
             this.Cursor = Cursors.WaitCursor;
@@ -160,8 +193,10 @@ namespace Astrodon
                     String datapath = dvr.Cells[5].Value.ToString();
                     int period = (int)dvr.Cells[6].Value;
                     if (dvr.Cells[2].Value == null) { MessageBox.Show("ishoa"); }
+                    StatementBuilding strm = dvr.DataBoundItem as StatementBuilding;
+                    _ClientPortal.SyncBuildingAndClients(strm.GetBuildingId());
 
-                    List<Statement> bStatements = SetBuildings(buildingName, datapath, period, (bool)dvr.Cells[2].Value);
+                    List<Statement> bStatements = SetBuildings(strm.GetBuildingId(),buildingName, datapath, period, (bool)dvr.Cells[2].Value);
 
                     int idx = dvr.Index;
                     DataRow dr = dsBuildings.Tables[0].Rows[idx];
@@ -173,6 +208,7 @@ namespace Astrodon
                     bool isStd = bankName.ToLower().Contains("standard");// dr["bank"].ToString() == "STANDARD";
                     foreach (Statement s in bStatements)
                     {
+                        s.BuildingId = strm.GetBuildingId();
                         s.pm = pm;
                         s.bankName = bankName;
                         s.accName = accName;
@@ -239,10 +275,13 @@ namespace Astrodon
                         AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
                         _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName));
 
-                      //  mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
-                     //   ftpClient.Upload(fileName, actFile, false);
+                        //  mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
+                        //   ftpClient.Upload(fileName, actFile, false);
                     }
-                    catch (Exception ex) { Controller.HandleError(ex); }
+                    catch (Exception ex)
+                    {
+                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " ERROR " + ex.Message);
+                    }
                     #endregion
 
                     Application.DoEvents();
@@ -384,12 +423,14 @@ namespace Astrodon
         }
         private string _PrinterName = string.Empty;
 
-        public List<Statement> SetBuildings(String buildingName, String buildingPath, int buildingPeriod, bool isHOA)
+        public List<Statement> SetBuildings(int buildingId, String buildingName, String buildingPath, int buildingPeriod, bool isHOA)
         {
             Building build = new Building();
             build.Name = buildingName;
             build.DataPath = buildingPath;
             build.Period = buildingPeriod;
+            build.ID = buildingId;
+
             List<Customer> customers = Controller.pastel.AddCustomers(buildingName, buildingPath);
             List<Statement> myStatements = new List<Statement>();
             lblCCount.Text = build.Name + " 0/" + customers.Count.ToString();
@@ -424,7 +465,7 @@ namespace Astrodon
 
                         var canemail = customer.Email.Count(d => !String.IsNullOrEmpty(d)) > 0;
 
-                        Statement myStatement = new Statement { AccNo = customer.accNumber };
+                        Statement myStatement = new Statement { AccNo = customer.accNumber, BuildingId = buildingId };
                         List<String> address = new List<string>();
                         address.Add(customer.description);
                         foreach (String addyLine in customer.address) { if (!String.IsNullOrEmpty(addyLine)) { address.Add(addyLine); } }

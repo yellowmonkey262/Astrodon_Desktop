@@ -1157,7 +1157,7 @@ namespace Astrodon
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                throw ex;
             }
             finally
             {
