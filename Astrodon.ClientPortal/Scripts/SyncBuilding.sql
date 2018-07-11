@@ -1,3 +1,6 @@
+--declare @BuildingId int
+
+
 /*CREATE/UPDATE BUILDINGS*/
 
 insert into Building
@@ -7,6 +10,7 @@ select NEWID() ,b.id,b.Building,null,
 from Astrodon..tblBuildings b
 left join Building bl on bl.BuildingId = b.id
 where bl.Id is null
+and b.id = @BuildingId
 
 --update existing
 Update Building 
@@ -14,6 +18,7 @@ SET Building.BuildingName = b.Building,
     Building.IsActive = case b.BuildingDisabled when 0 then 1  else 0 end
 FROM Astrodon..tblBuildings b
 JOIN Building bl on bl.BuildingId = b.id
+where b.id = @BuildingId
 
 
 /*COPY BUILDING UNITS*/
@@ -25,6 +30,7 @@ from Astrodon..Customer c
 join Building b on b.BuildingId = c.BuildingId
 left join BuildingUnit bu on bu.UnitId = c.id
 where bu.Id is null
+  and b.BuildingId = @BuildingId
 
 Update BuildingUnit
 set BuildingUnit.AccountNumber = c.AccountNumber,
@@ -33,7 +39,5 @@ set BuildingUnit.AccountNumber = c.AccountNumber,
 from Astrodon..Customer c
 join Building b on b.BuildingId = c.BuildingId
 join BuildingUnit bu on bu.UnitId = c.id
-
-
-
+where b.BuildingId = @BuildingId
 

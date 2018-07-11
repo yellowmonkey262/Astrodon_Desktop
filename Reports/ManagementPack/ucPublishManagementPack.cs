@@ -382,7 +382,9 @@ namespace Astrodon.Reports.ManagementPack
             string fileName = "ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
             string description = "Management Pack " + dataItem.Period;
 
-            url = _ClientPortal.UploadBuildingDocument(DocumentCategoryType.MonthlyFinancial, building.id, description, fileName, dataItem.ReportData);
+            url = _ClientPortal.UploadBuildingDocument(DocumentCategoryType.MonthlyFinancial,
+                dataItem.Period,
+                building.id, description, fileName, dataItem.ReportData);
             return true;
             /*
             url = string.Empty;

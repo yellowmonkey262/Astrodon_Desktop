@@ -196,6 +196,11 @@ namespace Astro.Library
             }
         }
 
+        public static byte[] ResizeBuildingImage(byte[] image)
+        {
+            return ResizeToMaxSize(800, 800, image);
+        }
+
         /// <summary>
         ///     Will create a square of size x size and proportionally center the image in that square
         /// </summary>

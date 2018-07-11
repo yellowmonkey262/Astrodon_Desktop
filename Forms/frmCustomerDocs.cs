@@ -29,7 +29,7 @@ namespace Astrodon.Forms
             try
             {
 
-                var docs = _ClientPortal.GetBuildingCustomerFiles(building.ID);
+                var docs = _ClientPortal.GetBuildingUnitFiles(building.ID);
 
                 var customerDocuments = docs.Select(a => new CustomerDocument()
                 {
@@ -70,7 +70,7 @@ namespace Astrodon.Forms
                     myIDS.Add(cd.FileID);
                 }
             }
-            _ClientPortal.MarkDocumentsInactive(myIDS);
+            _ClientPortal.MarkUnitFilesInactive(myIDS);
         }
 
         private void TransferFiles(List<String> myFiles)
@@ -101,7 +101,7 @@ namespace Astrodon.Forms
                     myIDS.Add(cd.FileID);
                 }
             }
-            _ClientPortal.MarkDocumentsInactive(myIDS);
+            _ClientPortal.MarkUnitFilesInactive(myIDS);
         }
 
         private void dgDocs_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)

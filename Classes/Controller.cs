@@ -227,24 +227,6 @@ namespace Astrodon
             SqlDependency.Stop(dataHandler.connString);
         }
 
-        private static void commClient_MessageReceived(object sender, Classes.IMReceivedEventArgs e)
-        {
-            String myMessage = e.Message;
-            if (myMessage.ToLower().StartsWith("hello"))
-            {
-                String user = myMessage.ToLower().Replace("hello ", "").ToUpper();
-                mainF.SetNotifications(user + " connected to server");
-            }
-            //if (!e.Message.ToUpper().Contains(commClient.UserName.ToUpper()))
-            //{
-            //    mainF.PopupNotification(e.Message);
-            //    FiredUpdate = false;
-            //    if (JobUpdateEvent != null) { JobUpdateEvent(null, new EventArgs()); }
-            //}
-            Thread.Sleep(5000);
-            JobHandler();
-        }
-
         private static void UpdateJobStatus(String status, String jobID, String userID)
         {
             String query = "INSERT INTO tblPMJobStatus(jobID, actioned, status) VALUES(@jobID, @actioned, @status)";

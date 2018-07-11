@@ -1,4 +1,5 @@
-﻿using Astro.Library.Entities;
+﻿using Astro.Library;
+using Astro.Library.Entities;
 using Astrodon.ClientPortal;
 using System;
 using System.Collections.Generic;
@@ -101,7 +102,7 @@ namespace Astrodon.Controls
                     deleteMe.Add((fileList.Items[i] as FileDetail).Id);
                 }
             }
-            _ClientPortal.DeleteBuildingFiles(building.ID,deleteMe);
+            _ClientPortal.DeleteBuildingFiles(deleteMe);
 
             ListFiles();
         }
@@ -133,7 +134,7 @@ namespace Astrodon.Controls
                 if (ofd.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(ofd.FileName))
                 {
                     var fileData = File.ReadAllBytes(ofd.FileName);
-                    _ClientPortal.UploadBuildingDocument(DocumentCategoryType.Letter, building.ID, Path.GetFileName(ofd.FileName), Path.GetFileName(ofd.FileName), fileData);
+                    _ClientPortal.UploadBuildingDocument(DocumentCategoryType.Letter, DateTime.Today, building.ID, Path.GetFileName(ofd.FileName), Path.GetFileName(ofd.FileName), fileData);
                     ListFiles();
                 }
             }
@@ -152,7 +153,9 @@ namespace Astrodon.Controls
             try
             {
                 String newImage = (imgWeb != imgLocal1 && !String.IsNullOrEmpty(copyPic1) ? Path.GetFileName(copyPic2) : Path.GetFileName(webPic2));
-                var result = _ClientPortal.SaveBuildingImage(building.ID, File.ReadAllBytes(newImage));
+                var image = File.ReadAllBytes(newImage);
+
+                var result = _ClientPortal.SaveBuildingImage(building.ID, ImageUtils.ResizeBuildingImage(image));
                 using (var mem = new MemoryStream(result))
                 {
                     picImage.Image = Image.FromStream(mem);

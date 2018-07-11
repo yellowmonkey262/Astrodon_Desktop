@@ -446,7 +446,8 @@ namespace Astrodon
                 {
                     try
                     {
-                        clientPortal.UploadDocument(DocumentCategoryType.Letter, building.ID, customerAccount,  filename, description, data);
+                        clientPortal.UploadUnitDocument(DocumentCategoryType.Letter,DateTime.Today
+                            , building.ID, customerAccount,  filename, description, data);
                     }catch(Exception ex)
                     {
                         Controller.HandleError(ex);

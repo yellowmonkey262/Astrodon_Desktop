@@ -1280,7 +1280,7 @@ namespace Astrodon.Controls
                                 {
                                     if (attach != filePath)
                                     {
-                                        _ClientPortal.UploadBuildingDocument(DocumentCategoryType.Letter,selectedBuilding.ID,
+                                        _ClientPortal.UploadBuildingDocument(DocumentCategoryType.Letter,DateTime.Today,selectedBuilding.ID,
                                             txtSubject.Text,Path.GetFileName(attach),File.ReadAllBytes(attach));
                                         Application.DoEvents();
                                     }
@@ -1337,7 +1337,8 @@ namespace Astrodon.Controls
                                     {
                                         try
                                         {
-                                            _ClientPortal.UploadDocument(DocumentCategoryType.Letter, selectedBuilding.ID, sendCustomer.accNumber, printAttachment.Key, txtSubject.Text, printAttachment.Value);
+                                            _ClientPortal.UploadUnitDocument(DocumentCategoryType.Letter,DateTime.Today
+                                                , selectedBuilding.ID, sendCustomer.accNumber, printAttachment.Key, txtSubject.Text, printAttachment.Value);
                                         }
                                         catch (Exception ex)
                                         {

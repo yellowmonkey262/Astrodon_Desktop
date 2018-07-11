@@ -135,14 +135,12 @@
     <Compile Include="Classes\BuildingComparer.cs" />
     <Compile Include="Classes\CashDepositFee.cs" />
     <Compile Include="Classes\ClearanceValues.cs" />
-    <Compile Include="Classes\CommClient.cs" />
     <Compile Include="Classes\Comparers.cs" />
     <Compile Include="Classes\Controller.cs" />
     <Compile Include="Classes\DataHandler.cs" />
     <Compile Include="Classes\Detail.cs" />
     <Compile Include="Classes\FTP.cs" />
     <Compile Include="Classes\IDValidator.cs" />
-    <Compile Include="Classes\IMEvents.cs" />
     <Compile Include="Classes\LoadTransactions.cs" />
     <Compile Include="Classes\Mailer.cs" />
     <Compile Include="Classes\MonthlyFinancials.cs" />

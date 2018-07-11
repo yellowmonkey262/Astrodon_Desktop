@@ -251,37 +251,37 @@ namespace Astrodon
         {
             try
             {
-                    bool loginFound = false;
+                bool loginFound = false;
 
                 var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
-                    String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
-                    int i = 0;
-                    List<String> linkedUnits = new List<string>();
-                    while (!loginFound)
+                String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
+                int i = 0;
+                List<String> linkedUnits = new List<string>();
+                while (!loginFound)
+                {
+                    string password = clientPortal.GetLoginPassword(emails[i]);
+                    if (!string.IsNullOrWhiteSpace(password))
                     {
-                        string password = clientPortal.GetLoginPassword(emails[i]);
-                        if (!string.IsNullOrWhiteSpace(password))
-                        {
-                            txtWebLogin.Text = emails[i];
-                            txtWebPassword.Text = password;
-                            linkedUnits = clientPortal.GetLinkedUnits(emails[i]);
-                            loginFound = true;
-                        }
-                        i++;
+                        txtWebLogin.Text = emails[i];
+                        txtWebPassword.Text = password;
+                        linkedUnits = clientPortal.GetLinkedUnits(building.ID, emails[i]);
+                        loginFound = true;
                     }
-                    if (!loginFound)
-                    {
-                        txtWebLogin.Text = "Not found";
-                        txtWebPassword.Text = "Not found";
-                    }
-                    lstUnits.Items.Clear();
-                    foreach (string linkedUnit in linkedUnits)
-                    {
-                        lstUnits.Items.Add(linkedUnit);
-                    }
+                    i++;
+                }
+                if (!loginFound)
+                {
+                    txtWebLogin.Text = "Not found";
+                    txtWebPassword.Text = "Not found";
+                }
+                lstUnits.Items.Clear();
+                foreach (string linkedUnit in linkedUnits)
+                {
+                    lstUnits.Items.Add(linkedUnit);
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Controller.HandleError(e.Message);
             }
@@ -645,7 +645,7 @@ namespace Astrodon
                 var customerDocuments = docs.Select(a => new CustomerDocument()
                 {
                     file = a.File,
-                    subject = a.Subject,
+                    subject = a.Title,
                     title = a.Title,
                     tstamp = a.DocumentDate,
                     Id = a.Id
