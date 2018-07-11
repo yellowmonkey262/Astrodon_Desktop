@@ -10,7 +10,7 @@ declare @Data  varbinary(max)*/
 
 declare @LocalBuildingId UniqueIdentifier
 declare @WebDocumentId UniqueIdentifier
-set @WebDocumentId =  NEWID()
+
 
 set @LocalBuildingId = ( select b.Id
 						from Building b
@@ -19,19 +19,61 @@ set @LocalBuildingId = ( select b.Id
 Begin transaction tran_upload_building_document
 BEGIN TRY
 
-   insert into WebDocument
-   (Id,DocumentData)
-   values
-   (@WebDocumentId,@Data)
+   declare @ExistingDocumentId uniqueidentifier
+   Select top 1 @ExistingDocumentId = id, @WebDocumentId = WebDocumentId
+   from BuildingDocument
+   where BuildingId = @LocalBuildingId
+	and FileYear = DATEPART(year,@FileDate)
+	and FileMonth = DATEPART(month,@FileDate)
+	and DocumentCategory = @DocumentType
+	and FileName = @Filename
+	and IsActive = 1
+   order by DateUploaded desc
 
-   insert into BuildingDocument
-   (Id,Title,FileYear,FileMonth,DateUploaded,DocumentCategory,BuildingId,FileName,WebDocumentId,IsActive)
-   values
-   (@DocumentId,@Description,DATEPART(year,@FileDate),DATEPART(month,@FileDate),GetDate(),@DocumentType,@LocalBuildingId,@Filename,@WebDocumentId,1)
-   
+	if(@ExistingDocumentId is null)
+	begin
+	   set @WebDocumentId =  NEWID()
+	   insert into WebDocument
+	   (Id,DocumentData)
+	   values
+	   (@WebDocumentId,@Data)
+
+	   insert into BuildingDocument
+	   (Id,Title,FileYear,FileMonth,DateUploaded,DocumentCategory,BuildingId,FileName,WebDocumentId,IsActive)
+	   values
+	   (@DocumentId,@Description,DATEPART(year,@FileDate),DATEPART(month,@FileDate),GetDate(),@DocumentType,@LocalBuildingId,@Filename,@WebDocumentId,1)
+    end
+	else
+	begin
+	 Update WebDocument set DocumentData = @Data where Id = @WebDocumentId
+
+	  Update BuildingDocument
+	  set Id = @DocumentId,
+	      Title = @Description,
+		  IsActive = 1,
+		  DateUploaded = GetDate()
+	  where Id = @ExistingDocumentId
+	end
+
+
     Commit transaction tran_upload_building_document
 END TRY
 BEGIN CATCH
    rollback transaction tran_upload_building_document
-   RAISERROR('Unable to upload file - transaction aborted',16,1)
+   DECLARE @ErrorMessage NVARCHAR(4000);
+    DECLARE @ErrorSeverity INT;
+    DECLARE @ErrorState INT;
+
+    SELECT 
+        @ErrorMessage = ERROR_MESSAGE(),
+        @ErrorSeverity = ERROR_SEVERITY(),
+        @ErrorState = ERROR_STATE();
+
+    -- Use RAISERROR inside the CATCH block to return error
+    -- information about the original error that caused
+    -- execution to jump to the CATCH block.
+    RAISERROR (@ErrorMessage, -- Message text.
+               @ErrorSeverity, -- Severity.
+               @ErrorState -- State.
+               )
 END CATCH
