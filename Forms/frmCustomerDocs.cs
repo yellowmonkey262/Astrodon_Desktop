@@ -1,18 +1,20 @@
 ﻿using Astro.Library.Entities;
+using Astrodon.ClientPortal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Astrodon.Forms
 {
     public partial class frmCustomerDocs : Form
     {
-        private MySqlConnector mySql = new MySqlConnector();
         private BindingList<CustomerDocument> docs = new BindingList<CustomerDocument>();
         private Building building;
+        private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
         public frmCustomerDocs(Building Building)
         {
@@ -26,32 +28,24 @@ namespace Astrodon.Forms
             String status;
             try
             {
-                DataSet dsFiles = mySql.GetCustomerDocs(building.Name, out status);
-                if (dsFiles != null && dsFiles.Tables.Count > 0 && dsFiles.Tables[0].Rows.Count > 0)
+
+                var docs = _ClientPortal.GetBuildingCustomerFiles(building.ID);
+
+                var customerDocuments = docs.Select(a => new CustomerDocument()
                 {
-                    foreach (DataRow drFile in dsFiles.Tables[0].Rows)
-                    {
-                        CustomerDocument cd = new CustomerDocument
-                        {
-                            Select = false,
-                            FileID = drFile["uid"].ToString(),
-                            Customer = drFile["unitno"].ToString(),
-                            Title = drFile["title"].ToString(),
-                            FileName = drFile["file"].ToString(),
-                            Upload_Date = UnixTimeStampToDateTime(double.Parse(drFile["tstamp"].ToString()))
-                        };
-                        docs.Add(cd);
-                    }
-                    dgDocs.DataSource = docs;
-                }
-                else
-                {
-                    MessageBox.Show(status);
-                }
+                    Select = false,
+                    Customer = a.AccountNumber,
+                    Title = a.Title,
+                    FileName = a.File,
+                    Upload_Date = a.DocumentDate,
+                    FileID = a.Id
+                }).OrderByDescending(a => a.Upload_Date).ToList();
+                dgDocs.DataSource = customerDocuments;
+               
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Controller.HandleError(ex);
             }
             this.Cursor = Cursors.Arrow;
         }
@@ -67,7 +61,7 @@ namespace Astrodon.Forms
         private void btnDelete_Click(object sender, EventArgs e)
         {
             List<String> myFiles = new List<string>();
-            List<String> myIDS = new List<string>();
+            List<Guid> myIDS = new List<Guid>();
             foreach (CustomerDocument cd in docs)
             {
                 if (cd.Select)
@@ -76,17 +70,12 @@ namespace Astrodon.Forms
                     myIDS.Add(cd.FileID);
                 }
             }
-            TransferFiles(myFiles);
-            String query = "DELETE FROM tx_astro_docs WHERE uid in (";
-            query += String.Join(",", myIDS.ToArray());
-            query += ")";
-            String status;
-            mySql.SetData(query, null, out status);
+            _ClientPortal.MarkDocumentsInactive(myIDS);
         }
 
         private void TransferFiles(List<String> myFiles)
         {
-            String status;
+          /*  String status;
             String buildPath = "Y:\\Buildings Managed\\" + building.Name;
             if (!Directory.Exists(buildPath)) { try { Directory.CreateDirectory(buildPath); } catch (Exception ex) { Controller.HandleError(ex); } }
             Classes.Sftp transferClient = new Classes.Sftp(String.Empty, true);
@@ -96,13 +85,13 @@ namespace Astrodon.Forms
                 String localPath = Path.Combine(buildPath, fileName);
                 transferClient.Download(localPath, transferClient.WorkingDirectory + "//" + remoteFile, false, out status);
                 transferClient.DeleteFile(transferClient.WorkingDirectory + "//" + remoteFile, false);
-            }
+            }*/
         }
 
         private void btnPurge_Click(object sender, EventArgs e)
         {
             List<String> myFiles = new List<string>();
-            List<String> myIDS = new List<string>();
+            List<Guid> myIDS = new List<Guid>();
             DateTime checkDate = DateTime.Now.AddMonths(-16);
             foreach (CustomerDocument cd in docs)
             {
@@ -112,12 +101,7 @@ namespace Astrodon.Forms
                     myIDS.Add(cd.FileID);
                 }
             }
-            TransferFiles(myFiles);
-            String query = "DELETE FROM tx_astro_docs WHERE uid in (";
-            query += String.Join(",", myIDS.ToArray());
-            query += ")";
-            String status;
-            mySql.SetData(query, null, out status);
+            _ClientPortal.MarkDocumentsInactive(myIDS);
         }
 
         private void dgDocs_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -126,15 +110,21 @@ namespace Astrodon.Forms
             {
                 try
                 {
+                    var doc = dgDocs.Rows[e.RowIndex].DataBoundItem as CustomerDocument;
+                    byte[] fileData = _ClientPortal.GetUnitFile(doc.FileID);
+
                     String localPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dgDocs.Rows[e.RowIndex].Cells[3].Value.ToString());
-                    Classes.Sftp ftpClient = new Classes.Sftp(String.Empty, true);
-                    String status;
-                    ftpClient.Download(localPath, ftpClient.WorkingDirectory + "//" + dgDocs.Rows[e.RowIndex].Cells[3].Value.ToString(), false, out status);
+
+                    if (File.Exists(localPath))
+                        File.Delete(localPath);
+
+                    File.WriteAllBytes(localPath, fileData);
+
                     System.Diagnostics.Process.Start(localPath);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    Controller.HandleError(ex);
                 }
             }
         }

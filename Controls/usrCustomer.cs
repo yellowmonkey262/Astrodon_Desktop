@@ -11,6 +11,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Astrodon.ClientPortal;
+using Astrodon;
 
 namespace Astrodon
 {
@@ -26,6 +28,7 @@ namespace Astrodon
         private SqlDataHandler dh = new SqlDataHandler();
         private bool[] sortOrder = new bool[4];
         private Dictionary<int, String> categories;
+        private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
         public usrCustomer()
         {
@@ -248,23 +251,21 @@ namespace Astrodon
         {
             try
             {
-                //if (building.Name != "ASTRODON RENTALS")
-                //{
                     bool loginFound = false;
-                    MySqlConnector mySql = new MySqlConnector();
-                    //mySql.ToggleConnection(true);
+
+                var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
+
                     String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
                     int i = 0;
-                    String uid = "0";
                     List<String> linkedUnits = new List<string>();
                     while (!loginFound)
                     {
-                        String password = mySql.GetLoginPassword(emails[i], out uid);
-                        if (uid != "0")
+                        string password = clientPortal.GetLoginPassword(emails[i]);
+                        if (!string.IsNullOrWhiteSpace(password))
                         {
                             txtWebLogin.Text = emails[i];
                             txtWebPassword.Text = password;
-                            linkedUnits = mySql.GetLinkedUnits(uid);
+                            linkedUnits = clientPortal.GetLinkedUnits(emails[i]);
                             loginFound = true;
                         }
                         i++;
@@ -275,16 +276,14 @@ namespace Astrodon
                         txtWebPassword.Text = "Not found";
                     }
                     lstUnits.Items.Clear();
-                    foreach (String linkedUnit in linkedUnits)
+                    foreach (string linkedUnit in linkedUnits)
                     {
                         lstUnits.Items.Add(linkedUnit);
                     }
-                //}
             }
-            catch
+            catch(Exception e)
             {
-                //UpdateCustomer(false);
-                //LoadWeb();
+                Controller.HandleError(e.Message);
             }
             lstUnits.Refresh();
         }
@@ -584,9 +583,7 @@ namespace Astrodon
             if (Controller.user.id == 1) { MessageBox.Show(building.DataPath + " === " + customerString); }
             if (result == "0")
             {
-                MySqlConnector mySqlConn = new MySqlConnector();
                 String status = String.Empty;
-                mySqlConn.ToggleConnection(true);
                 if (customer.Email.Length == 0)
                 {
                     customer.Email = new string[] { customer.accNumber + "@astrodon.co.za" };
@@ -602,39 +599,7 @@ namespace Astrodon
                             "Please configure an email address and try again.");
                     }
                 }
-                if (emails != null && emails.Length > 0 && !String.IsNullOrWhiteSpace(emails[0]))
-                {
-                    bool updatedWeb = mySqlConn.UpdateWebCustomer(building.Name, customer.accNumber, emails);
-                    foreach (var email in emails)
-                    {
-                        String[] logins = mySqlConn.HasLogin(email);
-                        if (logins != null)
-                        {
-                            foreach (var login in logins)
-                            {
-                                if (login != null)
-                                {
-                                    string usergroup;
-                                    if (cbTrustee.Checked)
-                                    {
-                                        usergroup = "1,2,4";
-                                    }
-                                    else
-                                    {
-                                        usergroup = "1,2";
-                                    }
-                                    mySqlConn.UpdateGroup(login, usergroup);
-                                }
-                            }
-                        }
-                    }
-                    if (showMessage)
-                    {
-                        MessageBox.Show(!updatedWeb ? "Pastel updated! Cannot save customer on web!" : "Customer updated!");
-                    }
-                }
-                //mySqlConn.InsertCustomer(building, txtAccount.Text, new string[] { txtEmail.Text }, out status);
-                mySqlConn.ToggleConnection(false);
+                new ClientPortal.AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString()).SyncBuildingAndClients(building.ID);
             }
             else
             {
@@ -668,55 +633,70 @@ namespace Astrodon
         {
             try
             {
-                String customerCode = customer.accNumber;
-                MySqlConnector mySqlConnector = new MySqlConnector();
-                DataSet dsDocs = building.Name != "ASTRODON RENTALS" ? mySqlConnector.GetFiles(customerCode, building.Name) : mySqlConnector.GetFilesRental(customerCode);
-                docs = new List<CustomerDocument>();
-                if (dsDocs != null && dsDocs.Tables.Count > 0 && dsDocs.Tables[0].Rows.Count > 0)
+                //String customerCode = customer.accNumber;
+                //   MySqlConnector mySqlConnector = new MySqlConnector();
+                //    DataSet dsDocs = building.Name != "ASTRODON RENTALS" ? mySqlConnector.GetFiles(customerCode, building.Name) : mySqlConnector.GetFilesRental(customerCode);
+                //docs = new List<CustomerDocument>();
+
+                //  var customerDocuments = 
+
+                var docs = _ClientPortal.GetUnitFiles(building.ID, customer.accNumber);
+
+                var customerDocuments = docs.Select(a => new CustomerDocument()
                 {
-                    foreach (DataRow drDoc in dsDocs.Tables[0].Rows)
-                    {
-                        CustomerDocument crDoc = new CustomerDocument();
-                        crDoc.tstamp = UnixTimeStampToDateTime(double.Parse(drDoc["tstamp"].ToString()));
-                        crDoc.title = drDoc["title"].ToString();
-                        if (crDoc.title.ToUpper().Contains("REMINDER"))
-                        {
-                            crDoc.subject = "Reminder";
-                        }
-                        else if (crDoc.title.ToUpper().Contains("FINALDEMAND"))
-                        {
-                            crDoc.subject = "Final Demand";
-                        }
-                        else if (crDoc.title.ToUpper().Contains("SUMMONS"))
-                        {
-                            crDoc.subject = "Summons Pending";
-                        }
-                        else if (crDoc.title.ToUpper().Contains("DISCONNECT"))
-                        {
-                            crDoc.subject = "Restriction Notice";
-                        }
-                        else if (crDoc.title.ToUpper().Contains("STATEMENT"))
-                        {
-                            crDoc.subject = "Statement";
-                        }
-                        else
-                        {
-                            crDoc.subject = "Other";
-                        }
-                        crDoc.file = drDoc["file"].ToString();
-                        docs.Add(crDoc);
-                    }
-                }
-                docs = docs.OrderBy(c => c.tstamp).ToList();
+                    file = a.File,
+                    subject = a.Subject,
+                    title = a.Title,
+                    tstamp = a.DocumentDate,
+                    Id = a.Id
+                }).OrderByDescending(a => a.tstamp).ToList();
+
+
+                //if (dsDocs != null && dsDocs.Tables.Count > 0 && dsDocs.Tables[0].Rows.Count > 0)
+                //{
+                //    foreach (DataRow drDoc in dsDocs.Tables[0].Rows)
+                //    {
+                //        CustomerDocument crDoc = new CustomerDocument();
+                //        crDoc.tstamp = UnixTimeStampToDateTime(double.Parse(drDoc["tstamp"].ToString()));
+                //        crDoc.title = drDoc["title"].ToString();
+                //        if (crDoc.title.ToUpper().Contains("REMINDER"))
+                //        {
+                //            crDoc.subject = "Reminder";
+                //        }
+                //        else if (crDoc.title.ToUpper().Contains("FINALDEMAND"))
+                //        {
+                //            crDoc.subject = "Final Demand";
+                //        }
+                //        else if (crDoc.title.ToUpper().Contains("SUMMONS"))
+                //        {
+                //            crDoc.subject = "Summons Pending";
+                //        }
+                //        else if (crDoc.title.ToUpper().Contains("DISCONNECT"))
+                //        {
+                //            crDoc.subject = "Restriction Notice";
+                //        }
+                //        else if (crDoc.title.ToUpper().Contains("STATEMENT"))
+                //        {
+                //            crDoc.subject = "Statement";
+                //        }
+                //        else
+                //        {
+                //            crDoc.subject = "Other";
+                //        }
+                //        crDoc.file = drDoc["file"].ToString();
+                //        docs.Add(crDoc);
+                //    }
+                //}
+                //docs = docs.OrderBy(c => c.tstamp).ToList();
                 bsDocs.Clear();
-                foreach (CustomerDocument doc in docs.OrderByDescending(a => a.tstamp))
+                foreach (CustomerDocument doc in customerDocuments.OrderByDescending(a => a.tstamp))
                 {
                     bsDocs.Add(doc);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Controller.HandleError(ex);
             }
         }
 
@@ -736,45 +716,47 @@ namespace Astrodon
                 try
                 {
                     var cd = dgDocs.Rows[e.RowIndex].DataBoundItem as CustomerDocument;
-                    if (download(cd.file))
+                    if (colIdx == 0)
                     {
-                        if (colIdx == 0)
+                        byte[] data = _ClientPortal.GetUnitFile(cd.Id);
+                        DisplayPDFNew(data);
+                    }
+                    else if (colIdx == 2)
+                    {
+                        using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
                         {
-                            DisplayPDFNew(Path.Combine(Path.GetTempPath(), cd.file));
-                           // System.Diagnostics.Process.Start(Path.Combine(Path.GetTempPath(), cd.file));
-                        }
-                        else if (colIdx == 2)
-                        {
-                            using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
+                            if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
                             {
-                                if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
-                                {
-                                    deleteFile(cd.file);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            String status;
-                            String[] att = { Path.Combine(Path.GetTempPath(), cd.file) };
-                            String[] emailTo = txtEmailTo.Text.Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                            if (Mailer.SendMail("noreply@astrodon.co.za", emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
-                            {
-                                MessageBox.Show("Message Sent");
-                            }
-                            else
-                            {
-                                MessageBox.Show("Unable to send mail: " + status);
+                                _ClientPortal.DeleteUnitFile(cd.Id);
                             }
                         }
                     }
+                    else
+                    {
+                        String status;
+                        byte[] data = _ClientPortal.GetUnitFile(cd.Id);
+                        string fileName = Path.Combine(Path.GetTempPath(), cd.file);
+
+                        File.WriteAllBytes(fileName, data);
+
+                        String[] att = { fileName };
+                        String[] emailTo = txtEmailTo.Text.Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (Mailer.SendMail("noreply@astrodon.co.za", emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
+                        {
+                            MessageBox.Show("Message Sent");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Unable to send mail: " + status);
+                        }
+                    }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Controller.HandleError(ex);
+                }
             }
         }
-
-
-      
 
         private String CustomerMessage(String accNumber, String debtorEmail)
         {
@@ -790,37 +772,7 @@ namespace Astrodon
 
             return message;
         }
-
-        private bool download(String fileName)
-        {
-            Classes.Sftp sftpClient = new Classes.Sftp(String.Empty, true);
-            String status = "";
-            string outputFilePath = Path.Combine(Path.GetTempPath(), fileName);
-            if (File.Exists(outputFilePath))
-                File.Delete(outputFilePath);
-
-            bool success = sftpClient.Download(outputFilePath, fileName, false, out status);
-            if (!success) { MessageBox.Show(status); }
-            return success;
-        }
-
-        private bool deleteFile(String fileName)
-        {
-            Classes.Sftp sftpClient = new Classes.Sftp(String.Empty, true);
-            String status = "";
-            bool success = sftpClient.DeleteFile(fileName, false);
-            if (!success)
-            {
-                MessageBox.Show(status);
-                return success;
-            }
-            else
-            {
-                MySqlConnector mySql = new MySqlConnector();
-                return mySql.SetData("DELETE FROM tx_astro_docs WHERE file = '" + fileName + "'", null, out status);
-            }
-        }
-
+ 
         private void dgDocs_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             int colIdx = e.ColumnIndex;
@@ -981,59 +933,7 @@ namespace Astrodon
         private void btnTrustees_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            MySqlConnector myConn = new MySqlConnector();
-            myConn.ToggleConnection(true);
-            String usergroup = "";
-
-            using (var context = SqlDataHandler.GetDataContext())
-            {
-
-                foreach (var entity in context.CustomerSet.Where(a => a.BuildingId == building.ID).ToList())
-                {
-                    var c = customers.Where(a => a.accNumber == entity.AccountNumber).FirstOrDefault();
-                    if (c != null)
-                    {
-                        if (entity.IsTrustee)
-                        {
-                            if (c.Email == null || c.Email.Length == 0)
-                            {
-                                Controller.HandleError("Trustee " + customer.description + " does not have an email address configured.\r" +
-                                    "The trustee will not be able to login to the website without an email\r" +
-                                    "Please configure an email address and try again.");
-                            }
-                        }
-                        if (c.Email != null)
-                        {
-                            foreach (String email in c.Email)
-                            {
-                                if (email != "sheldon@astrodon.co.za")
-                                {
-                                    String[] logins = myConn.HasLogin(email);
-                                    if (logins != null)
-                                    {
-                                        foreach (var login in logins)
-                                        {
-                                            if (login != null)
-                                            {
-                                                if (entity.IsTrustee)
-                                                {
-                                                    usergroup = "1,2,4";
-                                                }
-                                                else
-                                                {
-                                                    usergroup = "1,2";
-                                                }
-                                                myConn.UpdateGroup(login, usergroup);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            myConn.ToggleConnection(false);
+            _ClientPortal.SyncBuildingAndClients(building.ID);
             this.Cursor = Cursors.Arrow;
             MessageBox.Show("Complete");
         }

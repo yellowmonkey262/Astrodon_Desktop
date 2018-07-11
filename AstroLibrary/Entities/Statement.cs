@@ -12,6 +12,8 @@ namespace Astro.Library.Entities
 
     public class Statement
     {
+        public int BuildingId { get; set; }
+
         public DateTime StmtDate { get; set; }
 
         public String DebtorEmail { get; set; }

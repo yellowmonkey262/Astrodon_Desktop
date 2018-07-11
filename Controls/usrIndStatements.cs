@@ -185,6 +185,7 @@ namespace Astrodon
                 }
                 stmt.BankDetails = Controller.pastel.GetBankDetails(stmtBuilding.DataPath);
                 stmt.BuildingName = building.Name;
+                stmt.BuildingId = building.ID;
                 stmt.LevyMessage1 = (stmtBuilding.HOA ? HOAMessage1 : BCMessage1);
                 stmt.LevyMessage2 = Message2;
                 stmt.Message = txtMessage.Text;

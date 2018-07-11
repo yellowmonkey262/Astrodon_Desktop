@@ -356,10 +356,10 @@ namespace Astrodon
 
         private void webMaintenanceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pnlContents.Controls.Clear();
-            Astrodon.Controls.usrWebDocs upload = new Controls.usrWebDocs { Dock = DockStyle.Fill };
-            pnlContents.Controls.Add(upload);
-            toolStripStatusLabel1.Text = "Web Maintenance";
+            //pnlContents.Controls.Clear();
+            //Astrodon.Controls.usrWebDocs upload = new Controls.usrWebDocs { Dock = DockStyle.Fill };
+            //pnlContents.Controls.Add(upload);
+            //toolStripStatusLabel1.Text = "Web Maintenance";
         }
 
         private void remindersToolStripMenuItem_Click(object sender, EventArgs e)

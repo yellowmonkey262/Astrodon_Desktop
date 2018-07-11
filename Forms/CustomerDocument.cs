@@ -9,14 +9,14 @@ namespace Astrodon.Forms
     {
         public bool Select { get; set; }
 
-        public String FileID { get; set; }
+        public Guid FileID { get; set; }
 
-        public String Customer { get; set; }
+        public string Customer { get; set; }
 
-        public String Title { get; set; }
+        public string Title { get; set; }
 
         public DateTime Upload_Date { get; set; }
 
-        public String FileName { get; set; }
+        public string FileName { get; set; }
     }
 }

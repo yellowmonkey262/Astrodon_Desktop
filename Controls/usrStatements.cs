@@ -12,6 +12,7 @@ using System.Drawing.Printing;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Threading;
+using Astrodon.ClientPortal;
 
 namespace Astrodon
 {
@@ -24,6 +25,8 @@ namespace Astrodon
         private int userid;
         private Statements statements;
         private string _AstradonRentalsBuilding = "ASTRODON RENTALS";
+        private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
+
 
         public usrStatements()
         {
@@ -182,8 +185,6 @@ namespace Astrodon
             }
             bool printerSet = false;
             PDF generator = new PDF(true);
-            MySqlConnector mySqlConn = new MySqlConnector();
-            Classes.Sftp ftpClient = new Classes.Sftp(String.Empty, true);
             foreach (Statement stmt in statements.statements)
             {
                 String fileName = String.Empty;
@@ -236,8 +237,10 @@ namespace Astrodon
                     try
                     {
                         AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
-                        mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
-                        ftpClient.Upload(fileName, actFile, false);
+                        _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName));
+
+                      //  mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
+                     //   ftpClient.Upload(fileName, actFile, false);
                     }
                     catch (Exception ex) { Controller.HandleError(ex); }
                     #endregion

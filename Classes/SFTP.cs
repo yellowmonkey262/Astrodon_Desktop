@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Astrodon.Classes {
 
-    public class Sftp {
+    public class SftpX {
         private const int port = 22;
         private const string host = "www.astrodon.co.za";
         private const string username = "root";
@@ -20,7 +20,7 @@ namespace Astrodon.Classes {
         private bool isBuilding;
         private String buildingFolder = String.Empty;
 
-        public Sftp(String where, bool isclient) {
+        public SftpX(String where, bool isclient) {
             isBuilding = !isclient;
             if (isclient) {
                 workingdirectory = clientdirectory;
@@ -30,7 +30,7 @@ namespace Astrodon.Classes {
             }
         }
 
-        public Sftp(String where, bool isclient, bool isTrustee) {
+        public SftpX(String where, bool isclient, bool isTrustee) {
             isBuilding = !isclient;
             if (isTrustee) {
                 workingdirectory = trusteeDirectory;

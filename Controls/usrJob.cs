@@ -1,5 +1,6 @@
 using Astro.Library.Entities;
 using Astrodon.Classes;
+using Astrodon.ClientPortal;
 using Astrodon.Forms;
 using Itenso.Rtf;
 using Itenso.Rtf.Converter.Html;
@@ -36,7 +37,6 @@ namespace Astrodon.Controls
         private String status = String.Empty;
         private String buildingFolder, sms, jobstatus;
         private BindingList<jobCustomers> JobCustomers = new BindingList<jobCustomers>();
-        private Classes.Sftp ftpClient;
         private List<Attachments> supportDocs = new List<Attachments>();
         private List<Attachments> EmailDocs = new List<Attachments>();
         private String letterContent;
@@ -47,6 +47,7 @@ namespace Astrodon.Controls
         private Dictionary<String, System.Drawing.Image> htmlImages = null;
         private String uploadDirectory = String.Empty;
         private bool justify = false;
+        private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
         #endregion Variables
 
@@ -592,19 +593,19 @@ namespace Astrodon.Controls
 
         private void LoadFolders()
         {
-            try
-            {
-                ftpClient = new Classes.Sftp(selectedBuilding.webFolder, false);
-                List<String> folders = ftpClient.RemoteFolders(false);
-                folders.Sort();
-                folders.Insert(0, "Root");
-                cmbFolder.Items.Clear();
-                foreach (String folder in folders) { cmbFolder.Items.Add(folder); }
-            }
-            catch (Exception ex)
-            {
-                Controller.HandleError(ex);
-            }
+            //try
+            //{
+            //    ftpClient = new Classes.Sftp(selectedBuilding.webFolder, false);
+            //    List<String> folders = ftpClient.RemoteFolders(false);
+            //    folders.Sort();
+            //    folders.Insert(0, "Root");
+            //    cmbFolder.Items.Clear();
+            //    foreach (String folder in folders) { cmbFolder.Items.Add(folder); }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Controller.HandleError(ex);
+            //}
         }
 
         private void rdAllCustomers_CheckedChanged(object sender, EventArgs e)
@@ -1032,13 +1033,6 @@ namespace Astrodon.Controls
             this.Cursor = Cursors.WaitCursor;
             if (sendNow) { txtStatus.Text += Environment.NewLine + "Starting processing: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine; }
             String ftpUploadFolder = "";
-            if (chkBuilding.Checked && cmbFolder.SelectedItem != null)
-            {
-                if (buildingFolder.ToLower() != "root" && ftpUploadFolder != ftpClient.WorkingDirectory)
-                {
-                    ftpUploadFolder = ftpClient.WorkingDirectory + "/" + buildingFolder;
-                }
-            }
 
             txtStatus.Text += Environment.NewLine + "Loading HTML: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
             Application.DoEvents();
@@ -1263,12 +1257,6 @@ namespace Astrodon.Controls
                         if (chkBuilding.Checked && cmbFolder.SelectedItem != null && onetimebuildingattachments == false)
                         {
                             onetimebuildingattachments = true;
-                            if (buildingFolder.ToLower() != "root" && ftpUploadFolder != ftpClient.WorkingDirectory)
-                            {
-                                ftpClient.WorkingDirectory = ftpUploadFolder;
-                                //MessageBox.Show(ftpClient.WorkingDirectory);
-                                ftpClient.ChangeDirectory(false);
-                            }
 
                             pdf.CreatePALetter(null, selectedBuilding, GetPM(), txtSubject.Text, DateTime.Now, html, null, justify, chkUseLetterhead.Checked, out fileStream); //.Replace("/", "\\")
                             Application.DoEvents();
@@ -1292,17 +1280,8 @@ namespace Astrodon.Controls
                                 {
                                     if (attach != filePath)
                                     {
-                                        if (ftpClient.Upload(attach, Path.GetFileName(attach), false))
-                                        {
-                                            txtStatus.Text += Path.GetFileName(attach) + " uploaded: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                        }
-                                        else
-                                        {
-                                            txtStatus.Text += "Error uploading " + Path.GetFileName(attach) + ": " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                            success = false;
-                                            MessageBox.Show("Error processing...");
-                                            return;
-                                        }
+                                        _ClientPortal.UploadBuildingDocument(DocumentCategoryType.Letter,selectedBuilding.ID,
+                                            txtSubject.Text,Path.GetFileName(attach),File.ReadAllBytes(attach));
                                         Application.DoEvents();
                                     }
                                 }
@@ -1356,22 +1335,15 @@ namespace Astrodon.Controls
                                     txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                                     foreach (KeyValuePair<String, byte[]> printAttachment in liveAttachments)
                                     {
-                                        String uploadFileName = Path.Combine(attachmentLocation, printAttachment.Key);
-                                        File.WriteAllBytes(uploadFileName, printAttachment.Value);
-                                        String actFileTitle = Path.GetFileNameWithoutExtension(uploadFileName);
-                                        String actFile = Path.GetFileName(uploadFileName);
                                         try
                                         {
-                                            MySqlConnector mySqlConn = new MySqlConnector();
-                                            mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, sendCustomer.accNumber, sendCustomer.Email);
-                                            Classes.Sftp ftpClient = new Classes.Sftp(null, true);
-                                            ftpClient.Upload(uploadFileName, actFile, false);
+                                            _ClientPortal.UploadDocument(DocumentCategoryType.Letter, selectedBuilding.ID, sendCustomer.accNumber, printAttachment.Key, txtSubject.Text, printAttachment.Value);
                                         }
                                         catch (Exception ex)
                                         {
-                                            MessageBox.Show("Error uploading documents..." + ex.Message);
-                                            return;
+                                            Controller.HandleError(ex);
                                         }
+
                                         Application.DoEvents();
                                     }
                                     txtStatus.Text += "Completed Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;

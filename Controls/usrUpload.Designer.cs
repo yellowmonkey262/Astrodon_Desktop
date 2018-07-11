@@ -33,9 +33,6 @@
             this.picImage = new System.Windows.Forms.PictureBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtNewFolder = new System.Windows.Forms.TextBox();
-            this.btnCreate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -136,41 +133,10 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(381, 36);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(95, 13);
-            this.label3.TabIndex = 11;
-            this.label3.Text = "Create New Folder";
-            // 
-            // txtNewFolder
-            // 
-            this.txtNewFolder.Location = new System.Drawing.Point(482, 37);
-            this.txtNewFolder.Name = "txtNewFolder";
-            this.txtNewFolder.Size = new System.Drawing.Size(261, 20);
-            this.txtNewFolder.TabIndex = 12;
-            // 
-            // btnCreate
-            // 
-            this.btnCreate.Location = new System.Drawing.Point(749, 36);
-            this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(75, 23);
-            this.btnCreate.TabIndex = 13;
-            this.btnCreate.Text = "Create";
-            this.btnCreate.UseVisualStyleBackColor = true;
-            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
-
-            // 
             // usrUpload
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-
-            this.Controls.Add(this.btnCreate);
-            this.Controls.Add(this.txtNewFolder);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.picImage);
@@ -202,9 +168,6 @@
         private System.Windows.Forms.PictureBox picImage;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtNewFolder;
-        private System.Windows.Forms.Button btnCreate;
 
     }
 }

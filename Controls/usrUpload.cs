@@ -1,4 +1,5 @@
 ﻿using Astro.Library.Entities;
+using Astrodon.ClientPortal;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,9 +15,7 @@ namespace Astrodon.Controls
     public partial class usrUpload : UserControl
     {
         private List<Building> buildings;
-        private Classes.Sftp ftpClient;
         private String workingDirectory = String.Empty;
-        private MySqlConnector mysql = new MySqlConnector();
         private Building building;
         private String web;
 
@@ -27,6 +26,7 @@ namespace Astrodon.Controls
 
         private Image imgWeb = null;
         private Image imgLocal1 = null;
+        private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
         public usrUpload()
         {
@@ -56,52 +56,19 @@ namespace Astrodon.Controls
             {
                 building = buildings[cmbBuilding.SelectedIndex - 1];
                 web = building.webFolder;
-                String status;
-                DataSet dsPic = mysql.GetData("SELECT image FROM tt_content WHERE pid = " + building.pid + " AND CType = 'image'", null, out status);
-                if (dsPic != null && dsPic.Tables.Count > 0 && dsPic.Tables[0].Rows.Count > 0)
+
+
+                var logoData = _ClientPortal.GetBuildingImage(building.ID);
+                if (logoData != null)
                 {
-                    String picture = dsPic.Tables[0].Rows[0]["image"].ToString();
-                    Classes.Sftp sftpClient = new Classes.Sftp(String.Empty, true) { WorkingDirectory = "/srv/www/htdocs/uploads/pics" };
-                    String thisDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                    String file1 = picture.Replace(Path.GetFileNameWithoutExtension(picture), Path.GetFileNameWithoutExtension(picture) + "_web1");
-                    String file2 = picture.Replace(Path.GetFileNameWithoutExtension(picture), Path.GetFileNameWithoutExtension(picture) + "_web2");
-                    String tempPath = Path.Combine(thisDirectory, file1);
-                    bool success = sftpClient.Download(tempPath, picture, false, out status);
-                    if (!success)
+                    using (var memLogo = new MemoryStream(logoData))
                     {
-                        MessageBox.Show(status);
-                    }
-                    else
-                    {
-                        webPic1 = tempPath;
-                        webPic2 = Path.Combine(thisDirectory, file2);
-                        imgWeb = Image.FromFile(tempPath);
-                        picImage.Image = imgWeb;
+                        Image img = Image.FromStream(memLogo);
+                        picImage.Image = img;
                     }
                 }
-                LoadFolders();
             }
             cmbFolder.SelectedIndexChanged += cmbFolder_SelectedIndexChanged;
-        }
-
-        private List<String> LoadFolders()
-        {
-            try
-            {
-                ftpClient = new Classes.Sftp(web, false);
-                workingDirectory = ftpClient.WorkingDirectory;
-                List<String> folders = ftpClient.RemoteFolders(false);
-                folders.Sort();
-                folders.Insert(0, "Root");
-                cmbFolder.Items.Clear();
-                foreach (String folder in folders) { cmbFolder.Items.Add(folder); }
-                return folders;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return null;
-            }
         }
 
         private void cmbFolder_SelectedIndexChanged(object sender, EventArgs e)
@@ -111,37 +78,31 @@ namespace Astrodon.Controls
 
         private void ListFiles()
         {
+            building = buildings[cmbBuilding.SelectedIndex - 1];
+
             this.Cursor = Cursors.WaitCursor;
-            String uploadDirectory = String.Empty;
-            if (cmbFolder.SelectedItem != null && cmbFolder.SelectedIndex > 0)
-            {
-                uploadDirectory = workingDirectory + "//" + cmbFolder.SelectedItem.ToString();
-            }
-            else
-            {
-                uploadDirectory = workingDirectory;
-            }
+            var files = _ClientPortal.BuildingDocumentList(building.ID);
+
             fileList.Items.Clear();
-            if (!String.IsNullOrEmpty(uploadDirectory))
-            {
-                ftpClient.WorkingDirectory = uploadDirectory;
-                List<String> files = ftpClient.RemoteFiles(false);
-                foreach (String file in files) { fileList.Items.Add(file); }
-            }
+            foreach (var itm in files.OrderByDescending(a => a.DocumentDate))
+                fileList.Items.Add(itm);
+
             this.Cursor = Cursors.Arrow;
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            List<String> deleteMe = new List<string>();
+            building = buildings[cmbBuilding.SelectedIndex - 1];
+            List<Guid> deleteMe = new List<Guid>();
             for (int i = 0; i < fileList.Items.Count; i++)
             {
                 if (fileList.GetItemChecked(i))
                 {
-                    deleteMe.Add(fileList.Items[i].ToString());
+                    deleteMe.Add((fileList.Items[i] as FileDetail).Id);
                 }
             }
-            if (deleteMe.Count > 0) { ftpClient.DeleteFile(deleteMe, false); }
+            _ClientPortal.DeleteBuildingFiles(building.ID,deleteMe);
+
             ListFiles();
         }
 
@@ -150,17 +111,18 @@ namespace Astrodon.Controls
             int index = this.fileList.IndexFromPoint(e.Location);
             if (index != System.Windows.Forms.ListBox.NoMatches)
             {
-                String file = fileList.Items[index].ToString();
-                String status;
-                try
-                {
-                    ftpClient.Download(Path.Combine(Path.GetTempPath(), file), ftpClient.WorkingDirectory + "/" + file, false, out status);
-                    Process.Start(Path.Combine(Path.GetTempPath(), file));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                building = buildings[cmbBuilding.SelectedIndex - 1];
+
+                var file = (fileList.Items[index] as FileDetail);
+                byte[] fileData = _ClientPortal.GetBuildingFile(building.ID, file.Id);
+
+                string fileName = Path.Combine(Path.GetTempPath(), file.File);
+                if (File.Exists(fileName))
+                    File.Delete(fileName);
+
+                File.WriteAllBytes(fileName, fileData);
+
+                Process.Start(fileName);
             }
         }
 
@@ -170,10 +132,9 @@ namespace Astrodon.Controls
             {
                 if (ofd.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(ofd.FileName))
                 {
-                    if (ftpClient.Upload(ofd.FileName, ftpClient.WorkingDirectory + "/" + Path.GetFileName(ofd.FileName), false))
-                    {
-                        ListFiles();
-                    }
+                    var fileData = File.ReadAllBytes(ofd.FileName);
+                    _ClientPortal.UploadBuildingDocument(DocumentCategoryType.Letter, building.ID, Path.GetFileName(ofd.FileName), Path.GetFileName(ofd.FileName), fileData);
+                    ListFiles();
                 }
             }
         }
@@ -182,9 +143,7 @@ namespace Astrodon.Controls
         {
             if (picImage.Image != null)
             {
-                String deleteQuery = "DELETE FROM tt_content WHERE pid = " + building.pid + " AND CType = 'image'";
-                String status;
-                if (mysql.SetData(deleteQuery, null, out status)) { picImage.Image = null; }
+                _ClientPortal.DeleteBuildingImage(building.ID);
             }
         }
 
@@ -193,29 +152,15 @@ namespace Astrodon.Controls
             try
             {
                 String newImage = (imgWeb != imgLocal1 && !String.IsNullOrEmpty(copyPic1) ? Path.GetFileName(copyPic2) : Path.GetFileName(webPic2));
-                String status;
-
-                Classes.Sftp sftpClient = new Classes.Sftp(String.Empty, true) { WorkingDirectory = "/srv/www/htdocs/uploads/pics" };
-                picImage.Image = null;
-                if (sftpClient.Upload((imgWeb != imgLocal1 && !String.IsNullOrEmpty(copyPic1) ? copyPic2 : webPic1), newImage, false))
+                var result = _ClientPortal.SaveBuildingImage(building.ID, File.ReadAllBytes(newImage));
+                using (var mem = new MemoryStream(result))
                 {
-                    DataSet dsPic = mysql.GetData("SELECT image FROM tt_content WHERE pid = " + building.pid + " AND CType = 'image'", null, out status);
-                    String query = "";
-                    if (dsPic != null && dsPic.Tables.Count > 0 && dsPic.Tables[0].Rows.Count > 0)
-                    {
-                        query = "UPDATE tt_content SET image = '" + newImage + "' WHERE pid = " + building.pid + " AND CType = 'image'";
-                    }
-                    else
-                    {
-                        query = "INSERT INTO tt_content(image, pid, CType) VALUES('" + newImage + "', '" + building.pid + "', 'image')";
-                    }
-                    picImage.Image = (Image)Image.FromFile(copyPic1).Clone();
-                    mysql.SetData(query, null, out status);
+                    picImage.Image = Image.FromStream(mem);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Controller.HandleError(ex);
             }
         }
 
@@ -273,15 +218,6 @@ namespace Astrodon.Controls
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            if (cmbBuilding.SelectedItem != null && !String.IsNullOrEmpty(txtNewFolder.Text))
-            {
-                String path = txtNewFolder.Text.Replace("\'", " ");
-                if (!LoadFolders().Contains(path))
-                {
-                    bool success = ftpClient.CreateDirectory(path, false);
-                    if (success) { LoadFolders(); }
-                }
-            }
         }
     }
 }

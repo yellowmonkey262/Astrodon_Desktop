@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Data.Entity;
 using iTextSharp.text.pdf;
 using Astrodon.Data.BankData;
+using Astrodon.ClientPortal;
 
 namespace Astrodon
 {
@@ -844,9 +845,6 @@ namespace Astrodon
             using (var dbContext = SqlDataHandler.GetDataContext())
             {
                 List<Customer> vCustomers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
-                MySqlConnector myConn = new MySqlConnector();
-                myConn.ToggleConnection(true);
-                String usergroup = "";
                 List<Customer> customers = dgTrustees.DataSource as List<Customer>;
                 var dbCustomers = dbContext.CustomerSet.Where(a => a.BuildingId == selectedBuilding.ID).ToList();
 
@@ -878,43 +876,15 @@ namespace Astrodon
                         if (customer.Email == null || customer.Email.Length == 0)
                         {
                             Controller.HandleError("Trustee " + customer.description + " does not have an email address configured.\r" +
-                                "The trustee will not be able to login to the website without an email\r"+
+                                "The trustee will not be able to login to the website without an email\r" +
                                 "Please configure an email address and try again.");
                         }
                     }
-                    if (customer.Email != null && customer.Email.Length > 0)
-                    {
-                        bool updatedWeb = myConn.UpdateWebCustomer(selectedBuilding.Name, customer.accNumber, customer.Email);
-                        foreach (String email in customer.Email)
-                        {
-                            if (email != "sheldon@astrodon.co.za")
-                            {
-                                String[] logins = myConn.HasLogin(email);
-                                if (logins != null)
-                                {
-                                    foreach (var login in logins)
-                                    {
-                                        if (login != null)
-                                        {
-                                            if (dbCust.IsTrustee)
-                                            {
-                                                usergroup = "1,2,4";
-                                            }
-                                            else
-                                            {
-                                                usergroup = "1,2";
-                                            }
-                                            myConn.UpdateGroup(login, usergroup);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
-
-                myConn.ToggleConnection(false);
             }
+
+            new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString()).SyncBuildingAndClients(selectedBuilding.ID);
+
             this.Cursor = Cursors.Arrow;
 
         }
@@ -942,8 +912,6 @@ namespace Astrodon
 
         private void SaveWebBuilding(bool remove)
         {
-            MySqlConnector mysql = new MySqlConnector();
-            Classes.Sftp ftpClient = new Classes.Sftp(String.Empty, false);
             String websafeName = selectedBuilding.Name.Replace(" ", "_").Replace("/", "_").Replace("\\", "_");
             selectedBuilding.webFolder = websafeName;
             try
@@ -954,30 +922,32 @@ namespace Astrodon
                     if (BuildingManager.Update(selectedBuilding, out status))
                     {
                         String newID = "";
-                        mysql.InsertBuilding(selectedBuilding, selectedBuilding.Name, selectedBuilding.Abbr, out newID, out status);
+                        new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString()).SyncBuildingAndClients(selectedBuilding.ID);
+
                         selectedBuilding.pid = newID;
                         BuildingManager.Update(selectedBuilding, out status);
-                        if (ftpClient.CreateDirectory(websafeName, false))
-                        {
-                            ftpClient.WorkingDirectory += "/" + websafeName;
-                            ftpClient.ChangeDirectory(false);
-                            ftpClient.CreateDirectory("Annual Financial Statements", false);
-                            ftpClient.CreateDirectory("Conduct Rules", false);
-                            ftpClient.CreateDirectory("Insurance Information", false);
-                            ftpClient.CreateDirectory("Meeting Minutes", false);
-                            ftpClient.CreateDirectory("Meeting Notices", false);
-                            ftpClient.CreateDirectory("Sectional Title Plans", false);
-                        }
-                        ftpClient.CreateDirectory(websafeName, true);
+                        //if (ftpClient.CreateDirectory(websafeName, false))
+                        //{
+                        //    ftpClient.WorkingDirectory += "/" + websafeName;
+                        //    ftpClient.ChangeDirectory(false);
+                        //    ftpClient.CreateDirectory("Annual Financial Statements", false);
+                        //    ftpClient.CreateDirectory("Conduct Rules", false);
+                        //    ftpClient.CreateDirectory("Insurance Information", false);
+                        //    ftpClient.CreateDirectory("Meeting Minutes", false);
+                        //    ftpClient.CreateDirectory("Meeting Notices", false);
+                        //    ftpClient.CreateDirectory("Sectional Title Plans", false);
+                        //}
+                        //ftpClient.CreateDirectory(websafeName, true);
                     }
                 }
                 else
                 {
-                    mysql.DeleteBuilding(selectedBuilding, selectedBuilding.Name, selectedBuilding.Abbr, out status);
+                    new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString()).DeleteBuilding(selectedBuilding.ID);
                 }
             }
             catch (Exception ex)
             {
+                Controller.HandleError(ex);
             }
         }
 

@@ -45,6 +45,13 @@ namespace Astrodon
             return connStringDefault;
         }
 
+        public static string GetClientPortalConnectionString()
+        {
+            string result = GetConnectionString();
+            result = result.Replace("Initial Catalog=Astrodon;", "Initial Catalog=ClientPortal;");
+            return result;
+        }
+
         #region Entity Framework Hooks
         public static Astrodon.Data.DataContext GetDataContext()
         {

@@ -301,10 +301,11 @@ namespace Astrodon
 
         private void UpdateBuildings()
         {
-            MySqlConnector mysql = new MySqlConnector();
-            List<Building> buildings = new Buildings(false).buildings;
-            String status;
-            foreach (Building b in buildings) { mysql.UpdateBuilding(b, b.Name, b.Abbr, out status); }
+            //MySqlConnector mysql = new MySqlConnector();
+            //List<Building> buildings = new Buildings(false).buildings;
+            //String status;
+            //foreach (Building b in buildings) { mysql.UpdateBuilding(b, b.Name, b.Abbr, out status); }
+            new ClientPortal.AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString()).SyncBuildings();
         }
 
         public List<int> GetBuildingsIDs(int usertype, int userid, String email, out String status)

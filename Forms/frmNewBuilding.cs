@@ -1,4 +1,5 @@
 ﻿using Astro.Library.Entities;
+using Astrodon.ClientPortal;
 using System;
 using System.Windows.Forms;
 
@@ -103,8 +104,6 @@ namespace Astrodon.Forms
             building.addy5 = txtAddress5.Text;
 
             Buildings BuildingManager = new Buildings(true);
-            MySqlConnector mysql = new MySqlConnector();
-            Classes.Sftp ftpClient = new Classes.Sftp(String.Empty, false);
             String websafeName = building.Name.Replace(" ", "_").Replace("/", "_").Replace("\\", "_");
             building.webFolder = websafeName;
             try
@@ -113,20 +112,10 @@ namespace Astrodon.Forms
                 if (BuildingManager.Update(building, out status))
                 {
                     String newID = "";
-                    mysql.InsertBuilding(building, oldName, oldAbbr, out newID, out status);
                     building.pid = newID;
                     BuildingManager.Update(building, out status);
-                    if (ftpClient.CreateDirectory(websafeName, false))
-                    {
-                        ftpClient.WorkingDirectory += "/" + websafeName;
-                        ftpClient.ChangeDirectory(false);
-                        ftpClient.CreateDirectory("Annual Financial Statements", false);
-                        ftpClient.CreateDirectory("Conduct Rules", false);
-                        ftpClient.CreateDirectory("Insurance Information", false);
-                        ftpClient.CreateDirectory("Meeting Minutes", false);
-                        ftpClient.CreateDirectory("Meeting Notices", false);
-                        ftpClient.CreateDirectory("Sectional Title Plans", false);
-                    }
+
+                    new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString()).SyncBuildingAndClients(building.ID);
 
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;
                     this.Close();

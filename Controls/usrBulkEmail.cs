@@ -1,4 +1,5 @@
 ﻿using Astro.Library.Entities;
+using Astrodon.ClientPortal;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -136,19 +137,19 @@ namespace Astrodon
 
         private void LoadFolders()
         {
-            try
-            {
-                Classes.Sftp ftpClient = new Classes.Sftp(building.webFolder, false);
-                String workingDirectory = ftpClient.WorkingDirectory;
-                List<String> folders = ftpClient.RemoteFolders(false);
-                folders.Sort();
-                cmbFolder.Items.Clear();
-                foreach (String folder in folders) { cmbFolder.Items.Add(folder); }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Folder error:" + ex.Message);
-            }
+            //try
+            //{
+            //    Classes.Sftp ftpClient = new Classes.Sftp(building.webFolder, false);
+            //    String workingDirectory = ftpClient.WorkingDirectory;
+            //    List<String> folders = ftpClient.RemoteFolders(false);
+            //    folders.Sort();
+            //    cmbFolder.Items.Clear();
+            //    foreach (String folder in folders) { cmbFolder.Items.Add(folder); }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Folder error:" + ex.Message);
+            //}
         }
 
         private void chkIncludeAll_CheckedChanged(object sender, EventArgs e)
@@ -414,7 +415,7 @@ namespace Astrodon
                                 }
                                 else
                                 {
-                                    UploadToWeb(bytes, filename, sentToList);
+                                    UploadToWeb(bytes, filename, message, sentToList);
                                     success = true;
                                 }
                             }
@@ -436,35 +437,20 @@ namespace Astrodon
             return success;
         }
 
-        private void UploadToWeb(byte[] data, string filename, List<EmailList> sendToList)
+        private void UploadToWeb(byte[] data, string filename,string description, List<EmailList> sendToList)
         {
             if (data != null)
             {
-                try
+                var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
+                foreach (string customerAccount in sendToList.Select(a => a.AccNumber).Distinct())
                 {
-                    String tempFolder = System.IO.Path.GetTempPath();
-                    String tempFileName = filename;
-                    Classes.Sftp ftpClient = new Classes.Sftp("", true);
-                    filename = System.IO.Path.Combine(tempFolder, filename);
-                    File.WriteAllBytes(filename, data);
-                    if (chkIncludeAll.Checked)
+                    try
                     {
-                        ftpClient = new Classes.Sftp((cmbFolder.SelectedItem == null ? building.webFolder : cmbFolder.SelectedItem.ToString()), false);
-                        ftpClient.Upload(filename, tempFileName, false);
-                    }
-                    else
+                        clientPortal.UploadDocument(DocumentCategoryType.Letter, building.ID, customerAccount,  filename, description, data);
+                    }catch(Exception ex)
                     {
-                        MySqlConnector mySqlConn = new MySqlConnector();
-                        foreach (EmailList el in sendToList)
-                        {
-                            mySqlConn.InsertStatement(tempFileName, "Customer Statements", filename, el.AccNumber, new String[] { el.EmailAddress });
-                            ftpClient.Upload(filename, tempFileName, false);
-                        }
+                        Controller.HandleError(ex);
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Upload error: " + ex.Message);
                 }
             }
         }

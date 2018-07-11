@@ -490,12 +490,6 @@
     <Compile Include="Controls\usrUsers.Designer.cs">
       <DependentUpon>usrUsers.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\usrWebDocs.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\usrWebDocs.Designer.cs">
-      <DependentUpon>usrWebDocs.cs</DependentUpon>
-    </Compile>
     <Compile Include="DataSets\AstrodonDataSet.cs">
       <DependentUpon>AstrodonDataSet.xsd</DependentUpon>
     </Compile>
@@ -874,9 +868,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\usrUsers.resx">
       <DependentUpon>usrUsers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\usrWebDocs.resx">
-      <DependentUpon>usrWebDocs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmBuildingTrans.resx">
       <DependentUpon>frmBuildingTrans.cs</DependentUpon>
@@ -1296,6 +1287,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Astrodon.ClientPortal\Astrodon.ClientPortal.csproj">
+      <Project>{deb2fa21-cb92-498b-8a6c-2f29b2aaefb6}</Project>
+      <Name>Astrodon.ClientPortal</Name>
+    </ProjectReference>
     <ProjectReference Include="Astrodon.Data\Astrodon.Data.csproj">
       <Project>{89422917-7104-43aa-b124-bccabf3c733b}</Project>
       <Name>Astrodon.Data</Name>

@@ -11,6 +11,7 @@ using System.IO;
 using System.Diagnostics;
 using Astrodon.Data.ManagementPackData;
 using System.Web;
+using Astrodon.ClientPortal;
 
 namespace Astrodon.Reports.ManagementPack
 {
@@ -19,6 +20,8 @@ namespace Astrodon.Reports.ManagementPack
         private List<ManagementPackPreviewItem> _Data;
         private string _Webfolder = "Monthly_Financial_";
         private string _RootURL = "http://www.astrodon.co.za/fileadmin/Trustees/";
+
+        private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
         public ucPublishManagementPack()
         {
@@ -376,6 +379,12 @@ namespace Astrodon.Reports.ManagementPack
 
         private bool UploadFileToBuilding(tblBuilding building, Data.ManagementPackData.ManagementPack dataItem,out string url)
         {
+            string fileName = "ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
+            string description = "Management Pack " + dataItem.Period;
+
+            url = _ClientPortal.UploadBuildingDocument(DocumentCategoryType.MonthlyFinancial, building.id, description, fileName, dataItem.ReportData);
+            return true;
+            /*
             url = string.Empty;
             try
             {
@@ -424,7 +433,9 @@ namespace Astrodon.Reports.ManagementPack
             {
                 Controller.HandleError(e);
                 return false;
-            }
+            }*/
+
+
         }
 
         private void button2_Click(object sender, EventArgs e)

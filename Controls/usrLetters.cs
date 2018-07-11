@@ -574,9 +574,6 @@ namespace Astrodon
                 uPhone = debtor.phone;
                 uEmail = debtor.email;
             }
-            MySqlConnector mysqlConn = new MySqlConnector();
-            Classes.Sftp ftpClient = new Classes.Sftp(String.Empty, true);
-            ftpClient.ConnectClient(false);
 
             foreach (Customer c in checkedCustomers)
             {
