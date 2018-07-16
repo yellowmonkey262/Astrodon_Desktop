@@ -16,17 +16,17 @@ namespace Astrodon.ClientPortal
         {
             _ClientProtalConnection = clientPortalConnection;
         }
-
-        private const string _documentLinkURL = "http://clientportal.astrodon.co.za/View";
+        //'api/building/GetUnitDocument/' + id;
+        private const string _documentLinkURL = "http://clientportal.astrodon.co.za/api/building/";
 
         public string GetUnitDocumentLink(Guid documentId)
         {
-            return _documentLinkURL + "?documentId=" + documentId.ToString("N") + "&documentType=unit";
+            return _documentLinkURL + "GetUnitDocument/" + documentId.ToString("N");
         }
 
         public string GetBuildingDocumentLink(Guid documentId)
         {
-            return _documentLinkURL + "?documentId=" + documentId.ToString("N") + "&documentType=building";
+            return _documentLinkURL + "GetBuildingDocument/" + documentId.ToString("N");
         }
 
         #region Building Sync
