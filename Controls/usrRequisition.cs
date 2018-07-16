@@ -230,8 +230,11 @@ namespace Astrodon.Controls
                 {
                     for (int i = 7; i <= 32; i++)
                     {
-                        double lbal = (double.TryParse(accBits[i], out lbal) ? lbal : 0);
-                        bal += lbal;
+                        if (i < accBits.Length)
+                        {
+                            double lbal = (double.TryParse(accBits[i], out lbal) ? lbal : 0);
+                            bal += lbal;
+                        }
                     }
                 }
                 catch(Exception ex) { Controller.HandleError(ex); }
@@ -654,7 +657,7 @@ namespace Astrodon.Controls
             if (showPassword)
             {
                 String password;
-                using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
+                using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password",true))
                 {
                     if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
                     {
@@ -1274,6 +1277,47 @@ namespace Astrodon.Controls
         private void label12_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            List<int> requisitionIds = new List<int>();
+            foreach (DataGridViewRow dvr in dgUnpaid.SelectedRows)
+            {
+                RequisitionList r = unPaidRequisitions[dvr.Index];
+                requisitionIds.Add(Convert.ToInt32(r.ID));
+            }
+
+            if (requisitionIds.Count > 0)
+            {
+
+                using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password",true))
+                {
+                    if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
+                    {
+                        MessageBox.Show("Invalid password entered", "Requisitions", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        this.Cursor = Cursors.Arrow;
+                        return;
+                    }
+                }
+
+                if (Controller.AskQuestion("Are you sure you want to delete " + requisitionIds.Count + " requisitions?" + Environment.NewLine
+                                         + "Please note that this will also delete linked documents and maintenance records"))
+                {
+                    foreach (var requisitionId in requisitionIds)
+                        DeleteRequisition(requisitionId);
+
+                    LoadRequisitions();
+                    dgUnpaid.Invalidate();
+                    UpdateBalanceLabel();
+                }
+
+                foreach (DataGridViewRow dvr in dgUnpaid.SelectedRows)
+                {
+                    dvr.Selected = false;
+                }
+
+            }
         }
     }
 

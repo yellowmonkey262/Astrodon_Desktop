@@ -771,9 +771,9 @@ namespace Astrodon.Controls
         {
             if (MessageBox.Show("Confirm delete " + selectedNode.Text, "Web Maintenance", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using (Forms.frmPrompt passwordForm1 = new Forms.frmPrompt("Confirm", "Please enter password"))
+                using (Forms.frmPrompt passwordForm1 = new Forms.frmPrompt("Confirm", "Please enter password",true))
                 {
-                    using (Forms.frmPrompt passwordForm2 = new Forms.frmPrompt("Confirm", "Please confirm password"))
+                    using (Forms.frmPrompt passwordForm2 = new Forms.frmPrompt("Confirm", "Please confirm password",true))
                     {
                         if (passwordForm1.ShowDialog() == DialogResult.OK && passwordForm1.fileName == "sheldon!@#")
                         {
@@ -859,7 +859,7 @@ namespace Astrodon.Controls
 
         private void mnuAddFolder_Click(object sender, EventArgs e)
         {
-            using (Forms.frmPrompt promptF = new Forms.frmPrompt("Web Maintenance", "Please enter folder name"))
+            using (Forms.frmPrompt promptF = new Forms.frmPrompt("Web Maintenance", "Please enter folder name",false))
             {
                 if (promptF.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(promptF.fileName))
                 {

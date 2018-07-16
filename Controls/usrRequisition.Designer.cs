@@ -23,9 +23,9 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrRequisition));
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -105,6 +105,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.cbPaymentNotification = new System.Windows.Forms.CheckBox();
             this.tbNotificationEmail = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgUnprocessed)).BeginInit();
@@ -130,7 +131,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 15);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 13);
+            this.label2.Size = new System.Drawing.Size(100, 15);
             this.label2.TabIndex = 4;
             this.label2.Text = "New Requisition:";
             // 
@@ -139,7 +140,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(16, 65);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 13);
+            this.label3.Size = new System.Drawing.Size(89, 15);
             this.label3.TabIndex = 5;
             this.label3.Text = "Select Building";
             // 
@@ -148,7 +149,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(16, 92);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(80, 13);
+            this.label4.Size = new System.Drawing.Size(87, 15);
             this.label4.TabIndex = 7;
             this.label4.Text = "Select Account";
             // 
@@ -166,7 +167,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(368, 95);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 13);
+            this.label5.Size = new System.Drawing.Size(55, 15);
             this.label5.TabIndex = 8;
             this.label5.Text = "Balance:";
             // 
@@ -175,7 +176,7 @@
             this.lblBalance.AutoSize = true;
             this.lblBalance.Location = new System.Drawing.Point(423, 95);
             this.lblBalance.Name = "lblBalance";
-            this.lblBalance.Size = new System.Drawing.Size(28, 13);
+            this.lblBalance.Size = new System.Drawing.Size(31, 15);
             this.lblBalance.TabIndex = 9;
             this.lblBalance.Text = "0.00";
             // 
@@ -184,7 +185,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(16, 260);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(70, 13);
+            this.label7.Size = new System.Drawing.Size(81, 15);
             this.label7.TabIndex = 12;
             this.label7.Text = "Enter amount";
             // 
@@ -211,7 +212,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(368, 260);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(49, 13);
+            this.label8.Size = new System.Drawing.Size(55, 15);
             this.label8.TabIndex = 17;
             this.label8.Text = "Balance:";
             // 
@@ -220,7 +221,7 @@
             this.lblAvAmt.AutoSize = true;
             this.lblAvAmt.Location = new System.Drawing.Point(423, 260);
             this.lblAvAmt.Name = "lblAvAmt";
-            this.lblAvAmt.Size = new System.Drawing.Size(28, 13);
+            this.lblAvAmt.Size = new System.Drawing.Size(31, 15);
             this.lblAvAmt.TabIndex = 18;
             this.lblAvAmt.Text = "0.00";
             // 
@@ -229,7 +230,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(16, 203);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(116, 13);
+            this.label9.Size = new System.Drawing.Size(129, 15);
             this.label9.TabIndex = 20;
             this.label9.Text = "Select Ledger Account";
             // 
@@ -247,7 +248,7 @@
             this.lblBank.AutoSize = true;
             this.lblBank.Location = new System.Drawing.Point(368, 68);
             this.lblBank.Name = "lblBank";
-            this.lblBank.Size = new System.Drawing.Size(0, 13);
+            this.lblBank.Size = new System.Drawing.Size(0, 15);
             this.lblBank.TabIndex = 21;
             // 
             // trnDatePicker
@@ -264,7 +265,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(16, 39);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(63, 13);
+            this.label10.Size = new System.Drawing.Size(70, 15);
             this.label10.TabIndex = 23;
             this.label10.Text = "Select Date";
             // 
@@ -273,7 +274,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(16, 231);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(126, 13);
+            this.label11.Size = new System.Drawing.Size(145, 15);
             this.label11.TabIndex = 24;
             this.label11.Text = "Enter Supplier Reference";
             // 
@@ -407,9 +408,9 @@
             // colAmount
             // 
             this.colAmount.DataPropertyName = "amount";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Format = "N2";
-            this.colAmount.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle4.Format = "N2";
+            this.colAmount.DefaultCellStyle = dataGridViewCellStyle4;
             this.colAmount.HeaderText = "Amount";
             this.colAmount.Name = "colAmount";
             this.colAmount.ReadOnly = true;
@@ -423,6 +424,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button1);
             this.tabPage2.Controls.Add(this.btnViewTrans);
             this.tabPage2.Controls.Add(this.dgUnpaid);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -517,9 +519,9 @@
             // dataGridViewTextBoxColumn8
             // 
             this.dataGridViewTextBoxColumn8.DataPropertyName = "amount";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "N2";
-            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle5.Format = "N2";
+            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewTextBoxColumn8.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
             this.dataGridViewTextBoxColumn8.ReadOnly = true;
@@ -616,9 +618,9 @@
             // dataGridViewTextBoxColumn16
             // 
             this.dataGridViewTextBoxColumn16.DataPropertyName = "amount";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "N2";
-            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Format = "N2";
+            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridViewTextBoxColumn16.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
             this.dataGridViewTextBoxColumn16.ReadOnly = true;
@@ -635,7 +637,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(370, 39);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 13);
+            this.label1.Size = new System.Drawing.Size(96, 15);
             this.label1.TabIndex = 26;
             this.label1.Text = "Set as recurring:";
             this.label1.Visible = false;
@@ -659,7 +661,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(589, 45);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(50, 13);
+            this.label6.Size = new System.Drawing.Size(56, 15);
             this.label6.TabIndex = 29;
             this.label6.Text = "End date";
             this.label6.Visible = false;
@@ -679,7 +681,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(16, 120);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(78, 13);
+            this.label12.Size = new System.Drawing.Size(90, 15);
             this.label12.TabIndex = 31;
             this.label12.Text = "Select Supplier";
             this.label12.Click += new System.EventHandler(this.label12_Click);
@@ -689,7 +691,7 @@
             this.lbSupplierName.AutoSize = true;
             this.lbSupplierName.Location = new System.Drawing.Point(158, 120);
             this.lbSupplierName.Name = "lbSupplierName";
-            this.lbSupplierName.Size = new System.Drawing.Size(92, 13);
+            this.lbSupplierName.Size = new System.Drawing.Size(106, 15);
             this.lbSupplierName.TabIndex = 32;
             this.lbSupplierName.Text = "-- none selected --";
             this.lbSupplierName.Click += new System.EventHandler(this.lbSupplierName_Click);
@@ -709,7 +711,7 @@
             this.lbBankName.AutoSize = true;
             this.lbBankName.Location = new System.Drawing.Point(158, 139);
             this.lbBankName.Name = "lbBankName";
-            this.lbBankName.Size = new System.Drawing.Size(81, 13);
+            this.lbBankName.Size = new System.Drawing.Size(94, 15);
             this.lbBankName.TabIndex = 34;
             this.lbBankName.Text = "-- Bank Name --";
             // 
@@ -718,7 +720,7 @@
             this.lbAccountNumber.AutoSize = true;
             this.lbAccountNumber.Location = new System.Drawing.Point(158, 155);
             this.lbAccountNumber.Name = "lbAccountNumber";
-            this.lbAccountNumber.Size = new System.Drawing.Size(105, 13);
+            this.lbAccountNumber.Size = new System.Drawing.Size(120, 15);
             this.lbAccountNumber.TabIndex = 35;
             this.lbAccountNumber.Text = "-- Account Number --";
             // 
@@ -727,7 +729,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(16, 139);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(81, 13);
+            this.label13.Size = new System.Drawing.Size(93, 15);
             this.label13.TabIndex = 36;
             this.label13.Text = "Banking Details";
             // 
@@ -743,7 +745,7 @@
             this.lbInvoiceNumber.AutoSize = true;
             this.lbInvoiceNumber.Location = new System.Drawing.Point(16, 283);
             this.lbInvoiceNumber.Name = "lbInvoiceNumber";
-            this.lbInvoiceNumber.Size = new System.Drawing.Size(82, 13);
+            this.lbInvoiceNumber.Size = new System.Drawing.Size(93, 15);
             this.lbInvoiceNumber.TabIndex = 38;
             this.lbInvoiceNumber.Text = "Invoice Number";
             // 
@@ -752,7 +754,7 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(16, 314);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(68, 13);
+            this.label14.Size = new System.Drawing.Size(74, 15);
             this.label14.TabIndex = 39;
             this.label14.Text = "Invoice Date";
             // 
@@ -812,7 +814,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(17, 172);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(104, 13);
+            this.label15.Size = new System.Drawing.Size(119, 15);
             this.label15.TabIndex = 44;
             this.label15.Text = "Payment Notification";
             // 
@@ -821,7 +823,7 @@
             this.cbPaymentNotification.AutoSize = true;
             this.cbPaymentNotification.Location = new System.Drawing.Point(158, 174);
             this.cbPaymentNotification.Name = "cbPaymentNotification";
-            this.cbPaymentNotification.Size = new System.Drawing.Size(15, 14);
+            this.cbPaymentNotification.Size = new System.Drawing.Size(18, 17);
             this.cbPaymentNotification.TabIndex = 5;
             this.cbPaymentNotification.UseVisualStyleBackColor = true;
             this.cbPaymentNotification.CheckedChanged += new System.EventHandler(this.cbPaymentNotification_CheckedChanged);
@@ -832,6 +834,16 @@
             this.tbNotificationEmail.Name = "tbNotificationEmail";
             this.tbNotificationEmail.Size = new System.Drawing.Size(271, 20);
             this.tbNotificationEmail.TabIndex = 6;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1105, 262);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(136, 23);
+            this.button1.TabIndex = 33;
+            this.button1.Text = "Delete Selected";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // usrRequisition
             // 
@@ -974,5 +986,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colAccount;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAmount;
         private System.Windows.Forms.DataGridViewTextBoxColumn supplierName;
+        private System.Windows.Forms.Button button1;
     }
 }

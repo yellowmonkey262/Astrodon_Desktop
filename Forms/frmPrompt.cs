@@ -8,14 +8,15 @@ namespace Astrodon.Forms {
         public String windowText = String.Empty;
         public String labelText = String.Empty;
 
-        public frmPrompt() {
+        public frmPrompt(bool isPassword) {
             InitializeComponent();
+            txtFile.PasswordChar = 'X';
         }
 
-        public frmPrompt(String winText, String lblText) {
+        public frmPrompt(String winText, String lblText, bool isPassword):
+            this(isPassword){
             windowText = winText;
             labelText = lblText;
-            InitializeComponent();
         }
 
         private void btnSave_Click(object sender, EventArgs e) {

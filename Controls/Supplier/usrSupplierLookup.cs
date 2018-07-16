@@ -62,7 +62,7 @@ namespace Astrodon.Controls.Supplier
                 if (showPassword)
                 {
                     string password = string.Empty;
-                    using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
+                    using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password",true))
                     {
                         if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
                         {

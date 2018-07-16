@@ -745,7 +745,7 @@ namespace Astrodon
                         }
                         else if (colIdx == 2)
                         {
-                            using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
+                            using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password",true))
                             {
                                 if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
                                 {
