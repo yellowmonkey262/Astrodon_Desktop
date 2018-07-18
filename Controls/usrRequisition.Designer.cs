@@ -23,9 +23,9 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrRequisition));
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -61,6 +61,7 @@
             this.colAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.supplierName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnViewTrans = new System.Windows.Forms.Button();
             this.dgUnpaid = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -105,7 +106,6 @@
             this.label15 = new System.Windows.Forms.Label();
             this.cbPaymentNotification = new System.Windows.Forms.CheckBox();
             this.tbNotificationEmail = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgUnprocessed)).BeginInit();
@@ -293,7 +293,7 @@
             this.tabControl1.Location = new System.Drawing.Point(15, 384);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1255, 326);
+            this.tabControl1.Size = new System.Drawing.Size(1255, 262);
             this.tabControl1.TabIndex = 25;
             // 
             // tabPage1
@@ -303,14 +303,14 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1247, 300);
+            this.tabPage1.Size = new System.Drawing.Size(1247, 236);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Unprocessed";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(1105, 240);
+            this.btnDelete.Location = new System.Drawing.Point(1105, 11);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(136, 23);
             this.btnDelete.TabIndex = 12;
@@ -335,10 +335,10 @@
             this.colAccount,
             this.colAmount,
             this.supplierName});
-            this.dgUnprocessed.Location = new System.Drawing.Point(6, 6);
+            this.dgUnprocessed.Location = new System.Drawing.Point(6, 40);
             this.dgUnprocessed.Name = "dgUnprocessed";
             this.dgUnprocessed.ReadOnly = true;
-            this.dgUnprocessed.Size = new System.Drawing.Size(1235, 228);
+            this.dgUnprocessed.Size = new System.Drawing.Size(1235, 194);
             this.dgUnprocessed.TabIndex = 10;
             this.dgUnprocessed.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dg_CellContentClick);
             this.dgUnprocessed.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgUnprocessed_DataBindingComplete);
@@ -408,9 +408,9 @@
             // colAmount
             // 
             this.colAmount.DataPropertyName = "amount";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Format = "N2";
-            this.colAmount.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle1.Format = "N2";
+            this.colAmount.DefaultCellStyle = dataGridViewCellStyle1;
             this.colAmount.HeaderText = "Amount";
             this.colAmount.Name = "colAmount";
             this.colAmount.ReadOnly = true;
@@ -434,6 +434,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Unpaid";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(932, 8);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(136, 23);
+            this.button1.TabIndex = 33;
+            this.button1.Text = "Delete Selected";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnViewTrans
             // 
@@ -519,9 +529,9 @@
             // dataGridViewTextBoxColumn8
             // 
             this.dataGridViewTextBoxColumn8.DataPropertyName = "amount";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Format = "N2";
-            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "N2";
+            this.dataGridViewTextBoxColumn8.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewTextBoxColumn8.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
             this.dataGridViewTextBoxColumn8.ReadOnly = true;
@@ -618,9 +628,9 @@
             // dataGridViewTextBoxColumn16
             // 
             this.dataGridViewTextBoxColumn16.DataPropertyName = "amount";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Format = "N2";
-            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Format = "N2";
+            this.dataGridViewTextBoxColumn16.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewTextBoxColumn16.HeaderText = "Amount";
             this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
             this.dataGridViewTextBoxColumn16.ReadOnly = true;
@@ -835,16 +845,6 @@
             this.tbNotificationEmail.Size = new System.Drawing.Size(271, 20);
             this.tbNotificationEmail.TabIndex = 6;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1105, 262);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(136, 23);
-            this.button1.TabIndex = 33;
-            this.button1.Text = "Delete Selected";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // usrRequisition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -890,7 +890,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbBuilding);
             this.Name = "usrRequisition";
-            this.Size = new System.Drawing.Size(1279, 714);
+            this.Size = new System.Drawing.Size(1265, 651);
             this.Load += new System.EventHandler(this.usrRequisition_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

@@ -38,6 +38,8 @@
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbIncludeSundries = new System.Windows.Forms.CheckBox();
+            this.btnAllBuildings = new System.Windows.Forms.Button();
+            this.lbAllProgress = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -130,10 +132,31 @@
             this.cbIncludeSundries.TabIndex = 9;
             this.cbIncludeSundries.UseVisualStyleBackColor = true;
             // 
+            // btnAllBuildings
+            // 
+            this.btnAllBuildings.Location = new System.Drawing.Point(19, 130);
+            this.btnAllBuildings.Name = "btnAllBuildings";
+            this.btnAllBuildings.Size = new System.Drawing.Size(75, 23);
+            this.btnAllBuildings.TabIndex = 10;
+            this.btnAllBuildings.Text = "Run All";
+            this.btnAllBuildings.UseVisualStyleBackColor = true;
+            this.btnAllBuildings.Click += new System.EventHandler(this.btnAllBuildings_Click);
+            // 
+            // lbAllProgress
+            // 
+            this.lbAllProgress.AutoSize = true;
+            this.lbAllProgress.Location = new System.Drawing.Point(19, 175);
+            this.lbAllProgress.Name = "lbAllProgress";
+            this.lbAllProgress.Size = new System.Drawing.Size(16, 15);
+            this.lbAllProgress.TabIndex = 11;
+            this.lbAllProgress.Text = "...";
+            // 
             // LevyRollUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lbAllProgress);
+            this.Controls.Add(this.btnAllBuildings);
             this.Controls.Add(this.cbIncludeSundries);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cmbBuilding);
@@ -144,7 +167,7 @@
             this.Controls.Add(this.cmbYear);
             this.Controls.Add(this.label1);
             this.Name = "LevyRollUserControl";
-            this.Size = new System.Drawing.Size(376, 156);
+            this.Size = new System.Drawing.Size(489, 210);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,5 +185,7 @@
         private System.Windows.Forms.ComboBox cmbBuilding;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox cbIncludeSundries;
+        private System.Windows.Forms.Button btnAllBuildings;
+        private System.Windows.Forms.Label lbAllProgress;
     }
 }

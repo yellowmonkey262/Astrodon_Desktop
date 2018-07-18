@@ -30,6 +30,8 @@ namespace Astrodon
         public usrCustomer()
         {
             InitializeComponent();
+            dtDocumentExpiry.Format = DateTimePickerFormat.Custom;
+            dtDocumentExpiry.CustomFormat = "yyyy/MM/dd";
             LoadBanks();
             LoadCustomerDocumentTypes();
         }
@@ -78,7 +80,7 @@ namespace Astrodon
             cmbCustomer.Items.Clear();
             if (selectedIndex > -1)
             {
-                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath,true);
+                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath, true);
             }
             cmbCustomer.DataSource = customers;
             cmbCustomer.DisplayMember = "accNumber";
@@ -106,7 +108,7 @@ namespace Astrodon
                 btnUpload.Visible = false;
                 building = buildings[cmbBuilding.SelectedIndex];
 
-                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath,true);
+                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath, true);
 
                 txtAccount.Text = txtAddress1.Text = txtAddress2.Text = txtAddress3.Text = txtAddress4.Text = txtAddress5.Text = String.Empty;
                 txtCell.Text = txtContact.Text = txtDescription.Text = txtEmail.Text = txtFax.Text = txtTelephone.Text = String.Empty;
@@ -137,7 +139,7 @@ namespace Astrodon
 
                 var trustee = myCats.Where(a => a.categoryID == 7).FirstOrDefault();
                 if (trustee != null)
-                   myCats.Remove(trustee);
+                    myCats.Remove(trustee);
 
                 cmbCategory.DataSource = myCats;
                 cmbCategory.ValueMember = "categoryID";
@@ -176,7 +178,7 @@ namespace Astrodon
             btnUpload.Visible = false;
             cbDebitOrderActive.Checked = false;
             cbBanks.SelectedIndex = -1;
-            txtBranchCode.Text =string.Empty;
+            txtBranchCode.Text = string.Empty;
             txtAccountNumber.Text = string.Empty;
             tbMaxAmount.Text = string.Empty;
             cbAccountType.SelectedIndex = -1;
@@ -250,35 +252,35 @@ namespace Astrodon
             {
                 //if (building.Name != "ASTRODON RENTALS")
                 //{
-                    bool loginFound = false;
-                    MySqlConnector mySql = new MySqlConnector();
-                    //mySql.ToggleConnection(true);
-                    String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
-                    int i = 0;
-                    String uid = "0";
-                    List<String> linkedUnits = new List<string>();
-                    while (!loginFound)
+                bool loginFound = false;
+                MySqlConnector mySql = new MySqlConnector();
+                //mySql.ToggleConnection(true);
+                String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
+                int i = 0;
+                String uid = "0";
+                List<String> linkedUnits = new List<string>();
+                while (!loginFound)
+                {
+                    String password = mySql.GetLoginPassword(emails[i], out uid);
+                    if (uid != "0")
                     {
-                        String password = mySql.GetLoginPassword(emails[i], out uid);
-                        if (uid != "0")
-                        {
-                            txtWebLogin.Text = emails[i];
-                            txtWebPassword.Text = password;
-                            linkedUnits = mySql.GetLinkedUnits(uid);
-                            loginFound = true;
-                        }
-                        i++;
+                        txtWebLogin.Text = emails[i];
+                        txtWebPassword.Text = password;
+                        linkedUnits = mySql.GetLinkedUnits(uid);
+                        loginFound = true;
                     }
-                    if (!loginFound)
-                    {
-                        txtWebLogin.Text = "Not found";
-                        txtWebPassword.Text = "Not found";
-                    }
-                    lstUnits.Items.Clear();
-                    foreach (String linkedUnit in linkedUnits)
-                    {
-                        lstUnits.Items.Add(linkedUnit);
-                    }
+                    i++;
+                }
+                if (!loginFound)
+                {
+                    txtWebLogin.Text = "Not found";
+                    txtWebPassword.Text = "Not found";
+                }
+                lstUnits.Items.Clear();
+                foreach (String linkedUnit in linkedUnits)
+                {
+                    lstUnits.Items.Add(linkedUnit);
+                }
                 //}
             }
             catch
@@ -481,7 +483,14 @@ namespace Astrodon
                 builder.Append(txtNotes.Text);
                 foreach (DataRow drNote in dsNotes.Tables[0].Rows)
                 {
-                    builder.Append(DateTime.Parse(drNote["noteDate"].ToString()).ToString("yyyy/MM/dd HH:mm") + ": " + drNote["notes"].ToString() + Environment.NewLine);
+                    try
+                    {
+                        builder.Append(DateTime.Parse(drNote["noteDate"].ToString()).ToString("yyyy/MM/dd HH:mm", CultureInfo.InvariantCulture) + ": " + drNote["notes"].ToString() + Environment.NewLine);
+                    }
+                    catch
+                    {
+                        builder.Append(drNote["noteDate"].ToString() + ": " + drNote["notes"].ToString() + Environment.NewLine);
+                    }
                 }
                 txtNotes.Text = builder.ToString();
             }
@@ -546,7 +555,7 @@ namespace Astrodon
             String[] delAddress = customer.getDelAddress();
             String[] uDef = customer.userDefined;
 
-            if(delAddress == null)
+            if (delAddress == null)
                 delAddress = new string[] { "", "", "", "", "" };
 
             if (uDef == null)
@@ -741,11 +750,11 @@ namespace Astrodon
                         if (colIdx == 0)
                         {
                             DisplayPDFNew(Path.Combine(Path.GetTempPath(), cd.file));
-                           // System.Diagnostics.Process.Start(Path.Combine(Path.GetTempPath(), cd.file));
+                            // System.Diagnostics.Process.Start(Path.Combine(Path.GetTempPath(), cd.file));
                         }
                         else if (colIdx == 2)
                         {
-                            using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password",true))
+                            using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password", true))
                             {
                                 if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
                                 {
@@ -774,7 +783,7 @@ namespace Astrodon
         }
 
 
-      
+
 
         private String CustomerMessage(String accNumber, String debtorEmail)
         {
@@ -867,7 +876,7 @@ namespace Astrodon
                     string email = string.Empty;
                     if (customer.Email != null && customer.Email.Length > 0)
                     {
-                        foreach(var eml in customer.Email)
+                        foreach (var eml in customer.Email)
                         {
                             if (!string.IsNullOrWhiteSpace(email))
                                 email = email + ";" + eml;
@@ -933,7 +942,7 @@ namespace Astrodon
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            
+
         }
 
         private class Categories
@@ -1066,7 +1075,7 @@ namespace Astrodon
                 this.Cursor = Cursors.Default;
             }
             cbAccountType.Items.Clear();
-            foreach ( AccountTypeType c in Enum.GetValues(typeof(AccountTypeType)))
+            foreach (AccountTypeType c in Enum.GetValues(typeof(AccountTypeType)))
             {
                 cbAccountType.Items.Add(c);
             }
@@ -1102,7 +1111,7 @@ namespace Astrodon
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     var customerEntity = context.CustomerSet.SingleOrDefault(a => a.BuildingId == building.ID && a.AccountNumber == customer.accNumber);
-                    if(customerEntity == null)
+                    if (customerEntity == null)
                     {
                         customerEntity = new Data.CustomerData.Customer()
                         {
@@ -1238,7 +1247,7 @@ namespace Astrodon
             });
         }
 
-      
+
 
         private void btnSaveDebitOrder_Click(object sender, EventArgs e)
         {
@@ -1282,7 +1291,7 @@ namespace Astrodon
                 return;
             }
 
-            if(maxAmount < 0)
+            if (maxAmount < 0)
             {
                 Controller.HandleError("Debit order max amount cannot be negative", "Validation Error");
                 return;
@@ -1579,7 +1588,7 @@ namespace Astrodon
         private void cbDebitOrderCancelled_CheckedChanged(object sender, EventArgs e)
         {
             dtpDebitOrderCancelled.Visible = cbDebitOrderCancelled.Checked;
-         
+
         }
 
         private void UpdateTrusteeTick()
@@ -1618,10 +1627,10 @@ namespace Astrodon
             {
                 var customerEntities = context.CustomerSet.Where(a => a.BuildingId == building.ID).ToList();
 
-                foreach(var cust in customers)
+                foreach (var cust in customers)
                 {
                     var customerEntity = customerEntities.Where(a => a.AccountNumber == cust.accNumber).SingleOrDefault();
-                    if(customerEntity == null)
+                    if (customerEntity == null)
                     {
                         customerEntity = new Data.CustomerData.Customer()
                         {
@@ -1694,7 +1703,7 @@ namespace Astrodon
         {
             if (dtpDateOfBirth.Value < DateTime.Today.AddYears(-140))
                 cbBirthDayNotificaiton.Checked = false;
-            if(String.IsNullOrWhiteSpace(tbFullName.Text))
+            if (String.IsNullOrWhiteSpace(tbFullName.Text))
             {
                 Controller.HandleError("Full Name is required for Birthday SMS", "Validation Error");
                 return;
@@ -1748,7 +1757,7 @@ namespace Astrodon
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             var senderGrid = (DataGridView)sender;
-            if ( e.RowIndex >= 0)
+            if (e.RowIndex >= 0)
             {
                 var selectedItem = senderGrid.Rows[e.RowIndex].DataBoundItem as Reminder;
                 if (selectedItem != null)
@@ -1797,15 +1806,18 @@ namespace Astrodon
                             from d in c.Documents
                             where c.AccountNumber == customer.accNumber
                             && c.BuildingId == building.ID
+                            && d.ExpireNotificationDisabled == false
                             select new CustomerDocumentListItem()
                             {
                                 CustomerId = c.id,
                                 Id = d.id,
                                 DocmentType = d.CustomerDocumentType.Name,
+                                DocumentTypeId = d.CustomerDocumentTypeId,
                                 Name = d.FileName,
                                 Notes = d.Notes,
                                 Uploaded = d.Uploaded,
-                                LoadedBy = d.UploadedUser.name
+                                LoadedBy = d.UploadedUser.name,
+                                Expire = d.DocumentExpires
                             };
 
                     _Documents = q.OrderByDescending(a => a.Uploaded).ToList();
@@ -1835,42 +1847,61 @@ namespace Astrodon
                 UseColumnTextForButtonValue = true,
                 Width = 50
             });
+            dgDocuments.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "Action",
+                Text = "Edit",
+                UseColumnTextForButtonValue = true,
+                Width = 50
+            });
+           
             dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "UploadedStr",
                 HeaderText = "Uploaded",
                 ReadOnly = true,
-                Width = 200
             });
             dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "DocmentType",
                 HeaderText = "Type",
                 ReadOnly = true,
-                Width = 200
             });
             dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "Name",
                 HeaderText = "Name",
                 ReadOnly = true,
-                Width = 200
             });
             dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "LoadedBy",
                 HeaderText = "Loaded By",
                 ReadOnly = true,
-                Width = 200
             });
             dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "Notes",
                 HeaderText = "Notes",
                 ReadOnly = true,
-                Width = 200
+            });
+            dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "ExpireStr",
+                HeaderText = "Expire",
+                ReadOnly = true,
             });
 
+            dgDocuments.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "Action",
+                Text = "Delete",
+                UseColumnTextForButtonValue = true,
+                Width = 50
+            });
+
+            dgDocuments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgDocuments.AutoResizeColumns();
         }
 
         private void btnCustomerDocUpload_Click(object sender, EventArgs e)
@@ -1885,11 +1916,27 @@ namespace Astrodon
                 Controller.HandleError("Please select a document type first");
                 return;
             }
+
+            var documentType = (cbCustomerDocumentType.SelectedItem as Docs.CustomerDocumentType);
+            if (documentType == null)
+            {
+                Controller.HandleError("Please select a document type first");
+                return;
+            }
+            if (documentType.SetExpiry)
+            {
+                if (dtDocumentExpiry.Value <= DateTime.Today)
+                {
+                    Controller.HandleError("Document has already expired, please correct the expiry date");
+                    return;
+                }
+            }
+
             fdOpen.Multiselect = false;
             if (fdOpen.ShowDialog() == DialogResult.OK)
             {
                 var filePath = fdOpen.FileName;
-                if(!IsValidPdf(filePath))
+                if (!IsValidPdf(filePath))
                 {
                     Controller.HandleError("Not a valid PDF file");
                     return;
@@ -1912,6 +1959,7 @@ namespace Astrodon
                         customerEntity.LoadEmails(customer.Email);
                     }
 
+
                     var doc = new Docs.CustomerDocument()
                     {
                         Customer = customerEntity,
@@ -1920,11 +1968,33 @@ namespace Astrodon
                         Notes = tbCustomerDocNotes.Text,
                         FileData = File.ReadAllBytes(filePath),
                         Uploaded = DateTime.Now,
-                        UploadedUserId = Controller.user.id
+                        UploadedUserId = Controller.user.id,
+                        ExpireNotificationDisabled = false
+
                     };
 
+                    //find all previous documents that has expired and reset their notifications
+                    if (documentType.SetExpiry)
+                    {
+                        doc.DocumentExpires = dtDocumentExpiry.Value;
+
+                        var docList = context.CustomerDocumentSet
+                            .Where(a => a.CustomerDocumentTypeId == doc.CustomerDocumentTypeId
+                                     && a.ExpireNotificationDisabled == false).ToList();
+
+                        foreach (var d in docList)
+                            d.ExpireNotificationDisabled = true;
+                    }
+
                     context.CustomerDocumentSet.Add(doc);
-                    context.SaveChanges();
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        Controller.HandleError(ex);
+                    }
                 }
 
                 LoadCustomerDocuments();
@@ -1943,7 +2013,36 @@ namespace Astrodon
 
                 if (doc != null)
                 {
-                    DisplayCustomerDocument(doc.Id);
+                    if (e.ColumnIndex == 0)
+                        DisplayCustomerDocument(doc.Id);
+                    else if (e.ColumnIndex == 1)
+                        EditDocument(doc);
+                    else if(e.ColumnIndex > 6)
+                        DeleteDocument(doc);
+                }
+            }
+        }
+
+        private void DeleteDocument(CustomerDocumentListItem doc)
+        {
+            using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password", true))
+            {
+                if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
+                {
+                    MessageBox.Show("Invalid password entered", "Requisitions", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    this.Cursor = Cursors.Arrow;
+                    return;
+                }
+            }
+
+            if (Controller.AskQuestion("Are you sure you want to delete " + doc.Name + Environment.NewLine))
+            {
+                using (var ctx = new DataContext())
+                {
+                    var cdoc = ctx.CustomerDocumentSet.Single(a => a.id == doc.Id);
+                    ctx.CustomerDocumentSet.Remove(cdoc);
+                    ctx.SaveChanges();
+                    LoadCustomerDocuments();
                 }
             }
         }
@@ -1955,6 +2054,104 @@ namespace Astrodon
                 var doc = ct.CustomerDocumentSet.Single(a => a.id == id);
                 DisplayPDFNew(doc.FileData);
             }
+        }
+
+        CustomerDocumentListItem _editDoc;
+        private void cbCustomerDocumentType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selected = (cbCustomerDocumentType.SelectedItem as Docs.CustomerDocumentType);
+            if (selected != null)
+            {
+                lbCustDocumentExpiry.Visible = selected.SetExpiry;
+                dtDocumentExpiry.Visible = selected.SetExpiry;
+                if (selected.DefaultExpiryMonths > 0)
+                {
+                    var dt = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+
+                    dtDocumentExpiry.Value = dt.AddMonths(selected.DefaultExpiryMonths);
+
+                    if (_editDoc != null && _editDoc.Expire != null)
+                        dtDocumentExpiry.Value = _editDoc.Expire.Value;
+
+                }
+            }
+        }
+
+
+        private void EditDocument(CustomerDocumentListItem doc)
+        {
+            btnCustomerDocUpload.Visible = false;
+            _editDoc = doc;
+            btnSaveCustDoc.Visible = true;
+            btnCustDocCancel.Visible = true;
+
+            if (_editDoc.Expire != null)
+            {
+                dtDocumentExpiry.Value = _editDoc.Expire.Value;
+             }
+
+            cbCustomerDocumentType.SelectedValue = _editDoc.DocumentTypeId;
+            tbCustomerDocNotes.Text = _editDoc.Notes ?? string.Empty;
+
+
+        }
+
+        private void btnSaveCustDoc_Click(object sender, EventArgs e)
+        {
+            if (_editDoc == null)
+            {
+                Controller.HandleError("Please select a document to edit first.");
+                return;
+            }
+           
+            var documentType = (cbCustomerDocumentType.SelectedItem as Docs.CustomerDocumentType);
+            if (documentType == null)
+            {
+                Controller.HandleError("Please select a document type first");
+                return;
+            }
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var doc = context.CustomerDocumentSet.Single(a => a.id == _editDoc.Id);
+
+                doc.CustomerDocumentTypeId = documentType.id;
+                doc.Notes = tbCustomerDocNotes.Text;
+
+                //find all previous documents that has expired and reset their notifications
+                if (documentType.SetExpiry)
+                {
+                    doc.DocumentExpires = dtDocumentExpiry.Value;
+
+                    var docList = context.CustomerDocumentSet
+                        .Where(a => a.CustomerDocumentTypeId == doc.CustomerDocumentTypeId
+                                 && a.ExpireNotificationDisabled == false).ToList();
+
+                    foreach (var d in docList)
+                        d.ExpireNotificationDisabled = true;
+                }
+                else
+                {
+                    doc.DocumentExpires = null;
+                }
+
+                context.SaveChanges();
+            }
+            tbCustomerDocNotes.Text = "";
+            btnCustomerDocUpload.Visible = true;
+            btnSaveCustDoc.Visible = false;
+            btnCustDocCancel.Visible = false;
+            _editDoc = null;
+            LoadCustomerDocuments();
+        }
+
+        private void btnCustDocCancel_Click(object sender, EventArgs e)
+        {
+            btnCustomerDocUpload.Visible = true;
+            btnSaveCustDoc.Visible = false;
+            btnCustDocCancel.Visible = false;
+            tbCustomerDocNotes.Text = "";
+            _editDoc = null;
         }
     }
 
@@ -1980,5 +2177,19 @@ namespace Astrodon
         public string LoadedBy { get; set; }
 
         public string DocmentType { get;  set; }
+
+        public DateTime? Expire { get;  set; }
+
+        public string ExpireStr
+        {
+            get
+            {
+                if (Expire == null)
+                    return string.Empty;
+                return Expire.Value.ToString("yyyy/MM/dd");
+            }
+        }
+
+        public int DocumentTypeId { get; internal set; }
     }
 }

@@ -63,7 +63,7 @@ namespace Astrodon.DataProcessor
 
 
             List<string> toAddress = new List<string>();
-            toAddress.Add(building.pm);
+            toAddress.Add(pm);
 
 
             if (!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", toAddress.Distinct().ToArray(),

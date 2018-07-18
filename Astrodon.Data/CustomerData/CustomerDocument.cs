@@ -16,7 +16,7 @@ namespace Astrodon.Data.CustomerData
         [ForeignKey("CustomerId")]
         public virtual Customer Customer { get; set; }
 
-        [Index("IDX_MaintenanceDocument", Order = 0)]
+        [Index("IDX_CustomerDocument", Order = 1)]
         public virtual int CustomerDocumentTypeId { get; set; }
         [ForeignKey("CustomerDocumentTypeId")]
         public virtual CustomerDocumentType CustomerDocumentType { get; set; }
@@ -26,9 +26,7 @@ namespace Astrodon.Data.CustomerData
         public virtual string FileName { get; set; }
 
         [MaxLength(500)]
-        [Required]
         public virtual string Notes { get; set; }
-
 
         public byte[] FileData { get; set; }
 
@@ -37,6 +35,14 @@ namespace Astrodon.Data.CustomerData
         public virtual int UploadedUserId { get; set; }
         [ForeignKey("UploadedUserId")]
         public virtual tblUser UploadedUser { get; set; }
+
+        [Index("IDX_CustomerDocument", Order = 2)]
+        public virtual DateTime? DocumentExpires { get; set; }
+
+        public virtual DateTime? ExpireNotification { get; set; }
+
+        [Index("IDX_CustomerDocument", Order = 3)]
+        public virtual bool ExpireNotificationDisabled { get; set; }
 
     }
 }
