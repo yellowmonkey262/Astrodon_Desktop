@@ -34,6 +34,7 @@ namespace Astrodon.ReportService
             binding.MaxBufferPoolSize = int.MaxValue;
             binding.ReaderQuotas.MaxArrayLength = int.MaxValue;
             binding.ReaderQuotas.MaxDepth = int.MaxValue;
+            binding.UseDefaultWebProxy = false;
             //"BasicHttpBinding_IReportService"
             return new ReportServiceClient(binding, new EndpointAddress("http://" + url + ":8080"));
         }
