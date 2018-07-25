@@ -43,6 +43,7 @@ namespace Astrodon
         {
             LoadBuildings();
             for (int i = 0; i < 4; i++) { sortOrder[i] = true; }
+            dgDocs.AutoGenerateColumns = false;
             dgDocs.DataSource = bsDocs;
             dataGridView1.CellValueChanged -= dataGridView1_CellValueChanged;
             dataGridView1.DataSource = bsReminders;
@@ -260,17 +261,20 @@ namespace Astrodon
                 String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
                 int i = 0;
                 List<String> linkedUnits = new List<string>();
-                while (!loginFound)
+                if (emails != null && emails.Length > 0)
                 {
-                    string password = clientPortal.GetLoginPassword(emails[i]);
-                    if (!string.IsNullOrWhiteSpace(password))
+                    while (!loginFound && i < emails.Length)
                     {
-                        txtWebLogin.Text = emails[i];
-                        txtWebPassword.Text = password;
-                        linkedUnits = clientPortal.GetLinkedUnits(building.ID, emails[i]);
-                        loginFound = true;
+                        string password = clientPortal.GetLoginPassword(emails[i]);
+                        if (!string.IsNullOrWhiteSpace(password))
+                        {
+                            txtWebLogin.Text = emails[i];
+                            txtWebPassword.Text = password;
+                            linkedUnits = clientPortal.GetLinkedUnits(building.ID, emails[i]);
+                            loginFound = true;
+                        }
+                        i++;
                     }
-                    i++;
                 }
                 if (!loginFound)
                 {
@@ -758,50 +762,50 @@ namespace Astrodon
         private void dgDocs_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             int colIdx = e.ColumnIndex;
-            if (e.RowIndex >= 0 && colIdx < 3)
+            try
             {
-                try
+                var cd = dgDocs.Rows[e.RowIndex].DataBoundItem as CustomerDocument;
+                if (colIdx == 4)
                 {
-                    var cd = dgDocs.Rows[e.RowIndex].DataBoundItem as CustomerDocument;
-                    if (colIdx == 0)
+                    byte[] data = _ClientPortal.GetUnitFile(cd.Id);
+                    DisplayPDFNew(data);
+                }
+               
+                else if(colIdx == 5)
+                {
+                    String status;
+                    byte[] data = _ClientPortal.GetUnitFile(cd.Id);
+                    string fileName = Path.Combine(Path.GetTempPath(), cd.file);
+
+                    File.WriteAllBytes(fileName, data);
+
+                    String[] att = { fileName };
+                    String[] emailTo = txtEmailTo.Text.Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (Mailer.SendMail("noreply@astrodon.co.za", emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
                     {
-                        byte[] data = _ClientPortal.GetUnitFile(cd.Id);
-                        DisplayPDFNew(data);
-                    }
-                    else if (colIdx == 2)
-                    {
-                        using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password"))
-                        {
-                            if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
-                            {
-                                _ClientPortal.DeleteUnitFile(cd.Id);
-                            }
-                        }
+                        MessageBox.Show("Message Sent");
                     }
                     else
                     {
-                        String status;
-                        byte[] data = _ClientPortal.GetUnitFile(cd.Id);
-                        string fileName = Path.Combine(Path.GetTempPath(), cd.file);
-
-                        File.WriteAllBytes(fileName, data);
-
-                        String[] att = { fileName };
-                        String[] emailTo = txtEmailTo.Text.Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                        if (Mailer.SendMail("noreply@astrodon.co.za", emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
+                        MessageBox.Show("Unable to send mail: " + status);
+                    }
+                }
+                else if (colIdx == 6)
+                {
+                    using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password","Password", true))
+                    {
+                        if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
                         {
-                            MessageBox.Show("Message Sent");
-                        }
-                        else
-                        {
-                            MessageBox.Show("Unable to send mail: " + status);
+                            _ClientPortal.DeleteUnitFile(cd.Id);
+
+                            LoadDocuments();
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    Controller.HandleError(ex);
-                }
+            }
+            catch (Exception ex)
+            {
+                Controller.HandleError(ex);
             }
         }
 

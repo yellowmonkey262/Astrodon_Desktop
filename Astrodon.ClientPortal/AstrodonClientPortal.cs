@@ -156,13 +156,17 @@ namespace Astrodon.ClientPortal
 
         public string InsertStatement(int buildingId, string accountNumber,  DateTime statementDate, string filename, byte[] fileData)
         {
-            return UploadUnitDocument(DocumentCategoryType.FinancialStatement, statementDate, buildingId, accountNumber, filename, statementDate.ToString("yyyy-MM-dd",CultureInfo.InvariantCulture), fileData);
+            string title = "Statement " + statementDate.ToString("dd-MMMM-yyyy", CultureInfo.InstalledUICulture);
+
+            return UploadUnitDocument(DocumentCategoryType.FinancialStatement, statementDate, buildingId, accountNumber, filename, title, fileData);
         }
 
         public string UploadUnitDocument(DocumentCategoryType documentType,DateTime fileDate, int buildingId,
-            string accountNumber, string filename, string description, byte[] data)
+            string accountNumber, string filename, string title, byte[] data)
         {
             filename = Path.GetFileName(filename);
+
+            filename = filename.Replace(" ", "");
             //return a URL to the uploaded document
 
             Guid documentId = System.Guid.NewGuid();
@@ -174,7 +178,7 @@ namespace Astrodon.ClientPortal
                     new System.Data.SqlClient.SqlParameter("@BuildingId",buildingId),
                     new System.Data.SqlClient.SqlParameter("@AccountNumber",accountNumber),
                     new System.Data.SqlClient.SqlParameter("@Filename",filename),
-                    new System.Data.SqlClient.SqlParameter("@Description",description),
+                    new System.Data.SqlClient.SqlParameter("@Description",title),
                     new System.Data.SqlClient.SqlParameter("@FileDate",fileDate),
                     new System.Data.SqlClient.SqlParameter("@DocumentId",documentId),
                     new System.Data.SqlClient.SqlParameter("@Data",data),

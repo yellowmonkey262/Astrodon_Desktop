@@ -182,10 +182,10 @@ namespace Astrodon
         }
 
         private frmProgress _ProgressForm = null;
+
         private void btnProcess_Click(object sender, EventArgs e)
         {
             _ProgressForm = frmProgress.ShowForm();
-
 
             List<string> statementFileList = new List<string>();
 
@@ -194,22 +194,20 @@ namespace Astrodon
             Dictionary<String, bool> hasStatements = new Dictionary<string, bool>();
             foreach (DataGridViewRow dvr in dgBuildings.Rows)
             {
-              
-                    if ((bool)dvr.Cells[0].Value)
-                    {
-                    try
-                    {
-                        String buildingName = dvr.Cells[1].Value.ToString();
-                        AddProgressString("Loading Building " + buildingName);
+                if ((bool)dvr.Cells[0].Value)
+                {
+                    String buildingName = dvr.Cells[1].Value.ToString();
+                    AddProgressString("Loading Building " + buildingName);
 
                     SetBuildingStatement(buildingName);
                     String datapath = dvr.Cells[5].Value.ToString();
                     int period = (int)dvr.Cells[6].Value;
                     if (dvr.Cells[2].Value == null) { MessageBox.Show("ishoa"); }
-                    StatementBuilding strm = dvr.DataBoundItem as StatementBuilding;
-                    _ClientPortal.SyncBuildingAndClients(strm.GetBuildingId());
 
-                    List<Statement> bStatements = SetBuildings(strm.GetBuildingId(),buildingName, datapath, period, (bool)dvr.Cells[2].Value);
+                    StatementBuilding strm = dvr.DataBoundItem as StatementBuilding;
+
+
+                    List<Statement> bStatements = SetBuildings(strm.GetBuildingId(), buildingName, datapath, period, (bool)dvr.Cells[2].Value);
 
                     int idx = dvr.Index;
                     DataRow dr = dsBuildings.Tables[0].Rows[idx];
@@ -221,7 +219,6 @@ namespace Astrodon
                     bool isStd = bankName.ToLower().Contains("standard");// dr["bank"].ToString() == "STANDARD";
                     foreach (Statement s in bStatements)
                     {
-                        s.BuildingId = strm.GetBuildingId();
                         s.pm = pm;
                         s.bankName = bankName;
                         s.accName = accName;
@@ -236,103 +233,74 @@ namespace Astrodon
             PDF generator = new PDF(true);
             foreach (Statement stmt in statements.statements)
             {
-                try
+                String fileName = String.Empty;
+                if (generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd))
                 {
-                    String fileName = String.Empty;
-                    if (generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd))
+                    #region Upload Letter
+
+                    String actFileTitle = Path.GetFileNameWithoutExtension(fileName);
+                    String actFile = Path.GetFileName(fileName);
+
+                    #endregion Upload Letter
+
+                    #region Email Me
+                    if (stmt.EmailMe)
                     {
-                        #region Upload Letter
 
-                        String actFileTitle = Path.GetFileNameWithoutExtension(fileName);
-                        String actFile = Path.GetFileName(fileName);
-
-                        #endregion Upload Letter
-
-                        #region Email Me
-                        if (stmt.EmailMe)
+                        if (!String.IsNullOrEmpty(fileName))
                         {
-
-                            if (!String.IsNullOrEmpty(fileName))
+                            if (!hasStatements.ContainsKey(stmt.BuildingName))
                             {
-                                if (!hasStatements.ContainsKey(stmt.BuildingName))
-                                {
-                                    hasStatements.Add(stmt.BuildingName, true);
-                                }
-                                if (Controller.user.id != 1)
-                                {
-                                    SetupEmail(stmt, fileName);
-                                }
+                                hasStatements.Add(stmt.BuildingName, true);
+                            }
+                            if (Controller.user.id != 1)
+                            {
+                                SetupEmail(stmt, fileName);
                             }
                         }
-                        #endregion
+                    }
+                    #endregion
 
-                        #region Print Me
-                        if (stmt.PrintMe && Controller.user.id != 1)
+                    #region Print Me
+                    if (stmt.PrintMe && Controller.user.id != 1)
+                    {
+
+                        if (!String.IsNullOrWhiteSpace(fileName))
                         {
-
-                            if (!String.IsNullOrWhiteSpace(fileName))
-                            {
-                                AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Add Statement to List - " + Path.GetFileName(fileName));
-                                statementFileList.Add(fileName);
-                                // SendToPrinter(fileName, stmt.BuildingName , stmt.AccNo);
-                            }
-                            else
-                            {
-                                AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Error Printing Statement - file name blank");
-                            }
-
+                            AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Add Statement to List - " + Path.GetFileName(fileName));
+                            statementFileList.Add(fileName);
+                            // SendToPrinter(fileName, stmt.BuildingName , stmt.AccNo);
                         }
-                        #endregion
+                        else
+                        {
+                            AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Error Printing Statement - file name blank");
+                        }
+
+                    }
+                    #endregion
 
                     #region Upload Me
                     try
                     {
                         AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
                         _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName));
-
                         //  mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
                         //   ftpClient.Upload(fileName, actFile, false);
                     }
                     catch (Exception ex)
                     {
-                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " ERROR " + ex.Message);
+                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Error Upload statement to website " + ex.Message);
+
                     }
                     #endregion
 
-                        try
-                        {
-                            string folder = @"C:\Pastel11\Debtors System\StatementRun\"+DateTime.Now.ToString("yyyyMMdd")+"\\" + stmt.BuildingName + "\\";
-                            if (!Directory.Exists(folder))
-                                Directory.CreateDirectory(folder);
+                    Application.DoEvents();
 
-                            string file = Path.Combine(folder, Path.GetFileName(fileName));
-                            if (File.Exists(file))
-                                File.Delete(file);
-
-                            File.WriteAllBytes(file, File.ReadAllBytes(fileName));
-                            AddProgressString("Statement saved to: " + file);
-
-                        }
-                        catch (Exception ex2)
-                        {
-                            AddProgressString("Error saving statement " + ex2.Message);
-                        }
-
-                        Application.DoEvents();
-
-                    }
-                    else
-                    {
-                        AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - ERROR Processing Statement");
-                        Application.DoEvents();
-                    }
                 }
-                catch (Exception ex2)
+                else
                 {
-                    if (stmt != null)
-                    {
-                        AddProgressString("ERROR : " + stmt.BuildingName + ": " + stmt.accName + " - " + ex2.Message);
-                    }
+                    AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - ERROR Processing Statement");
+                    Application.DoEvents();
                 }
             }
 
@@ -465,6 +433,7 @@ namespace Astrodon
         }
         private string _PrinterName = string.Empty;
 
+
         public List<Statement> SetBuildings(int buildingId, String buildingName, String buildingPath, int buildingPeriod, bool isHOA)
         {
             Building build = new Building();
@@ -550,7 +519,10 @@ namespace Astrodon
                             AddProgressString("Statement for " + customer.accNumber + " has zero transactions - statement skipped");
                         }
                     }
-                    catch (Exception ex) { Controller.HandleError(ex); }
+                    catch (Exception ex)
+                    {
+                        AddProgressString("Error processing " + customer.accNumber + " " + ex.Message);
+                    }
                     ccount++;
                     lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();
                     lblCCount.Refresh();

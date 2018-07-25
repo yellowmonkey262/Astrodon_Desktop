@@ -269,11 +269,9 @@ namespace Astrodon.Classes
             }
             catch (Exception e)
             {
-                Controller.HandleError(e);
-
                 ShowDebug(e.Message);
                 totalDue = 0;
-                return null;
+                throw e;
             }
         }
     }

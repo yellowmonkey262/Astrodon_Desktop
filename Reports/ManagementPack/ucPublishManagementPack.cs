@@ -18,8 +18,6 @@ namespace Astrodon.Reports.ManagementPack
     public partial class ucPublishManagementPack : UserControl
     {
         private List<ManagementPackPreviewItem> _Data;
-        private string _Webfolder = "Monthly_Financial_";
-        private string _RootURL = "http://www.astrodon.co.za/fileadmin/Trustees/";
 
         private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
