@@ -364,6 +364,18 @@
     <Compile Include="Migrations\201807111350109_CustomerEmailAddress.Designer.cs">
       <DependentUpon>201807111350109_CustomerEmailAddress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807171145073_CustomerDocumentsNotifications.cs" />
+    <Compile Include="Migrations\201807171145073_CustomerDocumentsNotifications.Designer.cs">
+      <DependentUpon>201807171145073_CustomerDocumentsNotifications.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807180551217_CustomerDocumentsNotesRequired.cs" />
+    <Compile Include="Migrations\201807180551217_CustomerDocumentsNotesRequired.Designer.cs">
+      <DependentUpon>201807180551217_CustomerDocumentsNotesRequired.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807180634079_CustomerDocumentsNotesIndex.cs" />
+    <Compile Include="Migrations\201807180634079_CustomerDocumentsNotesIndex.Designer.cs">
+      <DependentUpon>201807180634079_CustomerDocumentsNotesIndex.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
@@ -638,6 +650,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807111350109_CustomerEmailAddress.resx">
       <DependentUpon>201807111350109_CustomerEmailAddress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807171145073_CustomerDocumentsNotifications.resx">
+      <DependentUpon>201807171145073_CustomerDocumentsNotifications.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807180551217_CustomerDocumentsNotesRequired.resx">
+      <DependentUpon>201807180551217_CustomerDocumentsNotesRequired.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807180634079_CustomerDocumentsNotesIndex.resx">
+      <DependentUpon>201807180634079_CustomerDocumentsNotesIndex.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

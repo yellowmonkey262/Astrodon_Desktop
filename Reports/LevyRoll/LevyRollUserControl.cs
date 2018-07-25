@@ -29,6 +29,9 @@ namespace Astrodon.Reports
         public LevyRollUserControl()
         {
             InitializeComponent();
+
+            btnAllBuildings.Visible = Controller.UserIsSheldon();
+
             LoadBuildings();
             LoadYears();
         }
@@ -64,7 +67,7 @@ namespace Astrodon.Reports
         private void LoadBuildings()
         {
             var userid = Controller.user.id;
-            Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
+            Buildings bManager = (userid  == 0 || Controller.UserIsSheldon() ? new Buildings(false) : new Buildings(userid));
 
             _Buildings = bManager.buildings;
             cmbBuilding.DataSource = _Buildings;
@@ -91,7 +94,8 @@ namespace Astrodon.Reports
                                 reportData = reportService.LevyRollExcludeSundries(dDate, (cmbBuilding.SelectedItem as Building).Name, (cmbBuilding.SelectedItem as Building).DataPath);
                             File.WriteAllBytes(dlgSave.FileName, reportData);
                             Process.Start(dlgSave.FileName);
-                        }catch(Exception ex)
+                        }
+                        catch (Exception ex)
                         {
                             Controller.HandleError(ex);
 
@@ -104,6 +108,63 @@ namespace Astrodon.Reports
                     button1.Enabled = true;
                 }
             }
+        }
+
+        private void btnAllBuildings_Click(object sender, EventArgs e)
+        {
+            lbAllProgress.Text = "Starting";
+            btnAllBuildings.Enabled = false;
+            int errors = 0;
+
+            try
+            {
+
+                int buildingNumber = 1;
+                int numBuildings = _Buildings.Count;
+                DateTime dDate = new DateTime((cmbYear.SelectedItem as IdValue).Id, (cmbMonth.SelectedItem as IdValue).Id, 1);
+
+                if (dlgSave.ShowDialog() == DialogResult.OK)
+                {
+                    string outputFolder = Path.GetDirectoryName(dlgSave.FileName);
+
+                    string errorFile = Path.Combine(outputFolder, "LevyErrorList.txt");
+                    foreach (var building in _Buildings.OrderBy(a => a.DataPath))
+                    {
+                        string outputFile = Path.Combine(outputFolder, building.Abbr 
+                            +".pdf");
+
+                        lbAllProgress.Text = "Processing " + buildingNumber.ToString() + "/" + numBuildings.ToString() + " " + building.Name;
+                        Application.DoEvents();
+
+                        try
+                        {
+                            using (var reportService = ReportServiceClient.CreateInstance())
+                            {
+                                byte[] reportData = null;
+                                reportData = reportService.LevyRollExcludeSundries(dDate, building.Name, building.DataPath);
+
+                                if (File.Exists(outputFile))
+                                    File.Delete(outputFile);
+
+                                File.WriteAllBytes(outputFile, reportData);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            File.AppendAllText(errorFile, building.ID.ToString() + ": " + " [" + building.DataPath + "] " + building.Name + " -> " + ex.Message + Environment.NewLine);
+                            errors++;
+                        }
+
+                        buildingNumber++;
+                    }
+                }
+            }
+            finally
+            {
+                btnAllBuildings.Enabled = true;
+            }
+
+            Controller.ShowMessage("Completed batch with " + errors.ToString() + " errors.");
         }
     }
 }

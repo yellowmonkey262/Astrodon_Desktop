@@ -112,24 +112,34 @@ namespace Astrodon
                 {
                     foreach (DataGridViewRow dvr in dgBuildings.Rows)
                     {
-                        DateTime lastProcessed = DateTime.Parse(dvr.Cells[7].Value.ToString());
-                        TimeSpan elapsed = DateTime.Now - lastProcessed;
-                        for (int i = 0; i < dgBuildings.ColumnCount; i++)
+                        if (dvr.Cells.Count >= 8)
                         {
                             try
                             {
-                                if (elapsed.TotalDays > 5)
+                                DateTime lastProcessed = DateTime.Parse(dvr.Cells[7].Value.ToString());
+                                TimeSpan elapsed = DateTime.Now - lastProcessed;
+                                for (int i = 0; i < dgBuildings.ColumnCount; i++)
                                 {
-                                    dvr.Cells[i].Style.BackColor = System.Drawing.Color.Red;
-                                }
-                                else
-                                {
-                                    dvr.Cells[i].Style.BackColor = System.Drawing.Color.White;
+                                    try
+                                    {
+                                        if (elapsed.TotalDays > 5)
+                                        {
+                                            dvr.Cells[i].Style.BackColor = System.Drawing.Color.Red;
+                                        }
+                                        else
+                                        {
+                                            dvr.Cells[i].Style.BackColor = System.Drawing.Color.White;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Controller.HandleError(ex);
+                                    }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                Controller.HandleError(ex);
+                              //  Controller.HandleError(ex);
                             }
                         }
                     }
@@ -184,10 +194,13 @@ namespace Astrodon
             Dictionary<String, bool> hasStatements = new Dictionary<string, bool>();
             foreach (DataGridViewRow dvr in dgBuildings.Rows)
             {
-                if ((bool)dvr.Cells[0].Value)
-                {
-                    String buildingName = dvr.Cells[1].Value.ToString();
-                    AddProgressString("Loading Building " + buildingName);
+              
+                    if ((bool)dvr.Cells[0].Value)
+                    {
+                    try
+                    {
+                        String buildingName = dvr.Cells[1].Value.ToString();
+                        AddProgressString("Loading Building " + buildingName);
 
                     SetBuildingStatement(buildingName);
                     String datapath = dvr.Cells[5].Value.ToString();
@@ -223,51 +236,53 @@ namespace Astrodon
             PDF generator = new PDF(true);
             foreach (Statement stmt in statements.statements)
             {
-                String fileName = String.Empty;
-                if (generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd))
+                try
                 {
-                    #region Upload Letter
-
-                    String actFileTitle = Path.GetFileNameWithoutExtension(fileName);
-                    String actFile = Path.GetFileName(fileName);
-
-                    #endregion Upload Letter
-
-                    #region Email Me
-                    if (stmt.EmailMe)
+                    String fileName = String.Empty;
+                    if (generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd))
                     {
+                        #region Upload Letter
 
-                        if (!String.IsNullOrEmpty(fileName))
+                        String actFileTitle = Path.GetFileNameWithoutExtension(fileName);
+                        String actFile = Path.GetFileName(fileName);
+
+                        #endregion Upload Letter
+
+                        #region Email Me
+                        if (stmt.EmailMe)
                         {
-                            if (!hasStatements.ContainsKey(stmt.BuildingName))
+
+                            if (!String.IsNullOrEmpty(fileName))
                             {
-                                hasStatements.Add(stmt.BuildingName, true);
+                                if (!hasStatements.ContainsKey(stmt.BuildingName))
+                                {
+                                    hasStatements.Add(stmt.BuildingName, true);
+                                }
+                                if (Controller.user.id != 1)
+                                {
+                                    SetupEmail(stmt, fileName);
+                                }
                             }
-                            if (Controller.user.id != 1)
+                        }
+                        #endregion
+
+                        #region Print Me
+                        if (stmt.PrintMe && Controller.user.id != 1)
+                        {
+
+                            if (!String.IsNullOrWhiteSpace(fileName))
                             {
-                                SetupEmail(stmt, fileName);
+                                AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Add Statement to List - " + Path.GetFileName(fileName));
+                                statementFileList.Add(fileName);
+                                // SendToPrinter(fileName, stmt.BuildingName , stmt.AccNo);
                             }
-                        }
-                    }
-                    #endregion
+                            else
+                            {
+                                AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Error Printing Statement - file name blank");
+                            }
 
-                    #region Print Me
-                    if (stmt.PrintMe && Controller.user.id != 1)
-                    {
-
-                        if (!String.IsNullOrWhiteSpace(fileName))
-                        {
-                            AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Add Statement to List - " + Path.GetFileName(fileName));
-                            statementFileList.Add(fileName);
-                            // SendToPrinter(fileName, stmt.BuildingName , stmt.AccNo);
                         }
-                        else
-                        {
-                            AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - Error Printing Statement - file name blank");
-                        }
-
-                    }
-                    #endregion
+                        #endregion
 
                     #region Upload Me
                     try
@@ -284,13 +299,40 @@ namespace Astrodon
                     }
                     #endregion
 
-                    Application.DoEvents();
+                        try
+                        {
+                            string folder = @"C:\Pastel11\Debtors System\StatementRun\"+DateTime.Now.ToString("yyyyMMdd")+"\\" + stmt.BuildingName + "\\";
+                            if (!Directory.Exists(folder))
+                                Directory.CreateDirectory(folder);
 
+                            string file = Path.Combine(folder, Path.GetFileName(fileName));
+                            if (File.Exists(file))
+                                File.Delete(file);
+
+                            File.WriteAllBytes(file, File.ReadAllBytes(fileName));
+                            AddProgressString("Statement saved to: " + file);
+
+                        }
+                        catch (Exception ex2)
+                        {
+                            AddProgressString("Error saving statement " + ex2.Message);
+                        }
+
+                        Application.DoEvents();
+
+                    }
+                    else
+                    {
+                        AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - ERROR Processing Statement");
+                        Application.DoEvents();
+                    }
                 }
-                else
+                catch (Exception ex2)
                 {
-                    AddProgressString(stmt.BuildingName + ": " + stmt.AccNo + " - ERROR Processing Statement");
-                    Application.DoEvents();
+                    if (stmt != null)
+                    {
+                        AddProgressString("ERROR : " + stmt.BuildingName + ": " + stmt.accName + " - " + ex2.Message);
+                    }
                 }
             }
 
@@ -438,7 +480,7 @@ namespace Astrodon
             int ccount = 0;
             foreach (Customer customer in customers)
             {
-                if (buildingName.Trim().ToUpper() != _AstradonRentalsBuilding.ToUpper()   &&(
+                if (buildingName.Trim().ToUpper() != _AstradonRentalsBuilding.ToUpper() && (
                        customer.IntCategory == 2 //Units in Transfer
                     || customer.IntCategory == 10 //Units Disconnected
                          || customer.IntCategory == 11 //Units Disconnected
@@ -451,9 +493,9 @@ namespace Astrodon
                     else if (customer.IntCategory == 11)
                         AddProgressString("Customer Account is in Transferred Units/PMA category and will be skipped: " + customer.accNumber);
                     else
-                       AddProgressString("Customer Account skipped: " + customer.accNumber + " category: " + customer.category);
+                        AddProgressString("Customer Account skipped: " + customer.accNumber + " category: " + customer.category);
                 }
-                else if (buildingName.Trim().ToUpper() == _AstradonRentalsBuilding.ToUpper() && ( customer.IntCategory == 13 || customer.IntCategory == 16 || customer.IntCategory ==17  || customer.IntCategory == 18))
+                else if (buildingName.Trim().ToUpper() == _AstradonRentalsBuilding.ToUpper() && (customer.IntCategory == 13 || customer.IntCategory == 16 || customer.IntCategory == 17 || customer.IntCategory == 18))
                 {
                     AddProgressString("Astrodon Rentals category skipped : " + customer.accNumber + " " + customer.category);
                 }
@@ -527,8 +569,27 @@ namespace Astrodon
                 String emailAddy = "";
                 var builder = new System.Text.StringBuilder();
                 builder.Append(emailAddy);
-                foreach (String addy in stmt.email1) { builder.Append(addy + ";"); }
-                emailAddy = builder.ToString();
+                if (stmt != null && stmt.email1 != null && stmt.email1.Length > 0)
+                {
+                    foreach (String addy in stmt.email1)
+                    {
+                        builder.Append(addy + ";");
+                    }
+                    emailAddy = builder.ToString();
+                }
+                else
+                {
+                    AddProgressString("No email address available for " + stmt.accName);
+                    return;
+
+                }
+                emailAddy = emailAddy.Trim();
+                if(String.IsNullOrWhiteSpace(emailAddy))
+                {
+                    AddProgressString("No email address available for " + stmt.accName);
+                    return;
+                }
+
                 sqlParms.Add("@email1", emailAddy);
                 sqlParms.Add("@queueDate", DateTime.Now);
                 sqlParms.Add("@fileName", Path.GetFileName(fileName));

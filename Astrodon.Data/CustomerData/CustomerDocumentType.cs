@@ -19,5 +19,9 @@ namespace Astrodon.Data.CustomerData
 
         public virtual bool IsActive { get; set; }
 
+        public virtual bool SetExpiry { get; set; }
+
+        public virtual int DefaultExpiryMonths { get; set; }
+
     }
 }

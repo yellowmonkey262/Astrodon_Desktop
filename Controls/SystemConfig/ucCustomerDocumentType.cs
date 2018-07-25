@@ -34,6 +34,8 @@ namespace Astrodon.Controls.SystemConfig
             txDocumentType.ReadOnly = true;
             cbActive.Enabled = false;
             cbActive.Checked = true;
+            cbExpires.Enabled = false;
+            numExpiry.ReadOnly = true;
 
             btnSave.Visible = false;
             btnCancel.Visible = false;
@@ -50,6 +52,9 @@ namespace Astrodon.Controls.SystemConfig
             btnCancel.Visible = true;
             btnNew.Visible = false;
             dgItems.Enabled = false;
+
+            cbExpires.Enabled = true;
+            numExpiry.ReadOnly = false;
 
         }
 
@@ -106,6 +111,23 @@ namespace Astrodon.Controls.SystemConfig
                 ReadOnly = true,
                 Width = 200
             });
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "SetExpiry",
+                HeaderText = "Expires",
+                ReadOnly = true,
+                Width = 200
+            });
+
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "DefaultExpiryMonths",
+                HeaderText = "Expiry Months",
+                ReadOnly = true,
+                Width = 200
+            });
             //   dgItems.AutoResizeColumns();
 
         }
@@ -115,6 +137,10 @@ namespace Astrodon.Controls.SystemConfig
         {
             _Item = null;
             cbActive.Checked = true;
+
+            cbExpires.Checked = true;
+            numExpiry.Value = 12;
+
             GotoEditable();
         }
 
@@ -122,6 +148,10 @@ namespace Astrodon.Controls.SystemConfig
         {
             txDocumentType.Text = _Item.Name;
             cbActive.Checked = _Item.IsActive;
+
+            cbExpires.Checked = _Item.SetExpiry;
+            numExpiry.Value = _Item.DefaultExpiryMonths;
+
             GotoEditable();
         }
 
@@ -140,6 +170,8 @@ namespace Astrodon.Controls.SystemConfig
             }
             _Item.Name = txDocumentType.Text;
             _Item.IsActive = cbActive.Checked;
+            _Item.SetExpiry = cbExpires.Checked;
+            _Item.DefaultExpiryMonths = Convert.ToInt32(numExpiry.Value);
 
             try
             {

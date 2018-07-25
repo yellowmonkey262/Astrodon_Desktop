@@ -13,6 +13,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Astrodon
 {
@@ -191,8 +193,6 @@ namespace Astrodon
 
                 cls.Add(new CustomerList("", "", 0));
 
-
-
                 customerDic = new Dictionary<string, Customer>();
                 foreach (Customer customer in customers)
                 {
@@ -235,6 +235,30 @@ namespace Astrodon
             }
         }
 
+        public void SerializeObject<T>(T serializableObject, string fileName)
+        {
+            if (serializableObject == null) { return; }
+
+            try
+            {
+                XmlDocument xmlDocument = new XmlDocument();
+                XmlSerializer serializer = new XmlSerializer(serializableObject.GetType());
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    serializer.Serialize(stream, serializableObject);
+                    stream.Position = 0;
+                    xmlDocument.Load(stream);
+                    xmlDocument.Save(fileName);
+                    stream.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                //Log exception here
+            }
+        }
+
+
         public List<Customer> getCatCustomers(String category, int BuildingPeriod)
         {
             List<Customer> _Customers = new List<Customer>();
@@ -247,6 +271,8 @@ namespace Astrodon
 
                 var balances = reportService.BuildingBalancesGet(periodDate, building.DataPath);
 
+             //   SerializeObject<BuildingClosingBalance[]>(balances, @"C:\FromWillie\Balances.xml");
+
                 List<Customer> catCustomers = Controller.pastel.AddCustomers(building.Name, building.DataPath);
 
 
@@ -255,7 +281,7 @@ namespace Astrodon
                 foreach (Customer _customer in catCustomers)
                 {
                     x++;
-                    lbProgress.Text = "Processing: " + x.ToString() + "/" + cnt.ToString() + " " + _customer.accNumber;
+                    lbProgress.Text = "Processing: " + x.ToString() + "/" + cnt.ToString() + " " + _customer.accNumber + " minimum allowed is " + minbal.ToString();
                     Application.DoEvents();
                     if (_customer.category == category || building.Abbr == "RENT")
                     {
@@ -269,32 +295,20 @@ namespace Astrodon
                                 {
                                     _Customers.Add(_customer);
                                 }
+                               
                             }
+                        }
+                        else
+                        {
+                            Controller.HandleError("Customer " + _customer.accNumber + " not found. Please run a Levy Roll report and confirm if the correct customer information and balances are returned.");
                         }
                     }
                 }
 
-                lbProgress.Text = "Completed";
             }
 
-            //foreach (Customer _customer in catCustomers)
-            //{
-            //    if (_customer.category == category || building.Abbr == "RENT")
-            //    {
-            //        double totBal = 0;
-            //        for (int li = 0; li < _customer.lastBal.Length; li++)
-            //        {
-            //            totBal += _customer.lastBal[li];
-            //        }
+                lbProgress.Text = "Completed checking for minimum of " + minbal.ToString() + " returned " + _Customers.Count().ToString();
 
-            //        for (int i = 0; i < BuildingPeriod; i++)
-            //        {
-            //            totBal += _customer.balance[i];
-            //        }
-            //        _customer.setAgeing(Math.Round(totBal, 2), 0);
-            //        if (_customer.ageing[0] >= minbal) { _Customers.Add(_customer); }
-            //    }
-            //}
             return _Customers;
         }
 

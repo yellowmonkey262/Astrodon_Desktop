@@ -182,6 +182,12 @@ namespace Astrodon.Data
             Database.ExecuteSqlCommand("delete from Maintenance where Id=" + maintenanceId.ToString());
         }
 
+        public void CustomerDocumentNotificationSent(int documentId)
+        {
+            Database.ExecuteSqlCommand("update CustomerDocument set ExpireNotification = GetDate() where id = " + documentId.ToString());
+
+        }
+
         public void DeleteRequisition(int requisitionId)
         {
             //all maintenance records

@@ -65,6 +65,7 @@ namespace Astrodon
                 stmtBuilding = new StatementBuilding(building.ID, building.Name, building.DataPath, building.Period, DateTime.Now);
                 stmt = new Statement
                 {
+                    BuildingId = building.ID,
                     pm = building.PM,
                     bankName = building.Bank_Name,
                     accName = building.Acc_Name,

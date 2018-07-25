@@ -150,7 +150,6 @@ namespace Astrodon.Reports.LevyRoll
         public List<BuildingClosingBalance> BuildingBalancesGet(DateTime processMonth, string buildingDataPath)
         {
             int period;
-         //   processMonth = new DateTime(processMonth.Year, processMonth.Day, 1);
             var reportData = LoadReportData(processMonth, buildingDataPath, new List<string>(), out period);
             var result = reportData.Select(a => new BuildingClosingBalance()
             {

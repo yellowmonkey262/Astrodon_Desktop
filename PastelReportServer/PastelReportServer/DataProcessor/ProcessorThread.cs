@@ -16,6 +16,8 @@ namespace Astrodon.DataProcessor
 
 
         private static String connStringD = "Data Source=DEVELOPERPC\\SQLEXPRESS;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=$DEVELOPER$"; //Astrodon
+
+  
         private static String connStringLocal = "Data Source=.;Initial Catalog=Astrodon;Persist Security Info=True;User ID=sa;Password=1q2w#E$R"; //LamaDev
 
         private DateTime _NextRun = DateTime.Now.AddMinutes(1);
@@ -56,7 +58,7 @@ namespace Astrodon.DataProcessor
                     LogException(e, "ProcessWorkSchedule");
                 }
 
-                if(DateTime.Now > _NextSchedule)
+                if (DateTime.Now > _NextSchedule)
                 {
                     _NextSchedule = _NextSchedule.AddDays(1);
                     try
@@ -93,6 +95,15 @@ namespace Astrodon.DataProcessor
                     catch (Exception e)
                     {
                         LogException(e, "ProcessInsuranceReminders");
+                    }
+
+                    try
+                    {
+                        ProcessCustomerDocumentReminders();
+                    }
+                    catch (Exception e)
+                    {
+                        LogException(e, "ProcessCustomerDocumentReminders");
                     }
                 }
 
@@ -202,6 +213,17 @@ namespace Astrodon.DataProcessor
                 rp.Process();
             }
         }
+
+        public static void ProcessCustomerDocumentReminders()
+        {
+            using (var dc = new DataContext(GetConnectionString()))
+            {
+                var rp = new CustomerDocumentReminders(dc);
+
+                rp.Process();
+            }
+        }
+
 
     }
 }
