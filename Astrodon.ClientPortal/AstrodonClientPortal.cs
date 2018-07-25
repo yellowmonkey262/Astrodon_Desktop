@@ -60,6 +60,20 @@ namespace Astrodon.ClientPortal
 
         #region User Setup
 
+        public void CreateUserRecord(string emailAddress, string password)
+        {
+            password = Cipher.Encrypt(password);
+
+            string script = ReadSQLScript("CreateUserRecord.sql");
+            var parameters = new List<System.Data.SqlClient.SqlParameter>()
+                {
+                new System.Data.SqlClient.SqlParameter("@EmailAddress",emailAddress),
+                 new System.Data.SqlClient.SqlParameter("@PasswordHash",password),
+
+            };
+            SQLUtilities.ExecuteSqlCommand(_ClientProtalConnection, script, parameters);
+        }
+
         public string GetLoginPassword(string emailAddress)
         {
             string script = ReadSQLScript("GetLoginPassword.sql");
