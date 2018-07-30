@@ -14,6 +14,7 @@ namespace Astro.Library.Entities
         public String title { get; set; }
 
         public String file { get; set; }
+
         public Guid Id { get; set; }
     }
 }

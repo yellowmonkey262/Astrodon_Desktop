@@ -115,7 +115,7 @@ namespace Astrodon.DebitOrder
 
             List<PeriodItem> result = new List<PeriodItem>();
             var lastPeriod = periodItem.PeriodLookup(dDate);
-            var firstPeriod = periodItem.PeriodLookup(lastPeriod.Start.Value.AddMonths(numberOfMonths * -1));
+            var firstPeriod = periodItem.PeriodLookup(lastPeriod.Start.Value.AddMonths((numberOfMonths * -1)+1));
 
             lastPeriod.OpeningBalance = Convert.ToDouble(custBalance.CalcOpening(lastPeriod.PeriodNumber));
             lastPeriod.ClosingBalance = Convert.ToDouble(custBalance.CalcOpening(lastPeriod.PeriodNumber));

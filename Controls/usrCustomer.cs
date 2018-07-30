@@ -696,49 +696,12 @@ namespace Astrodon
                 var customerDocuments = docs.Select(a => new CustomerDocument()
                 {
                     file = a.File,
-                    subject = a.Title,
+                    subject = a.DocumentTypeStr,
                     title = a.Title,
                     tstamp = a.DocumentDate,
                     Id = a.Id
                 }).OrderByDescending(a => a.tstamp).ToList();
 
-
-                //if (dsDocs != null && dsDocs.Tables.Count > 0 && dsDocs.Tables[0].Rows.Count > 0)
-                //{
-                //    foreach (DataRow drDoc in dsDocs.Tables[0].Rows)
-                //    {
-                //        CustomerDocument crDoc = new CustomerDocument();
-                //        crDoc.tstamp = UnixTimeStampToDateTime(double.Parse(drDoc["tstamp"].ToString()));
-                //        crDoc.title = drDoc["title"].ToString();
-                //        if (crDoc.title.ToUpper().Contains("REMINDER"))
-                //        {
-                //            crDoc.subject = "Reminder";
-                //        }
-                //        else if (crDoc.title.ToUpper().Contains("FINALDEMAND"))
-                //        {
-                //            crDoc.subject = "Final Demand";
-                //        }
-                //        else if (crDoc.title.ToUpper().Contains("SUMMONS"))
-                //        {
-                //            crDoc.subject = "Summons Pending";
-                //        }
-                //        else if (crDoc.title.ToUpper().Contains("DISCONNECT"))
-                //        {
-                //            crDoc.subject = "Restriction Notice";
-                //        }
-                //        else if (crDoc.title.ToUpper().Contains("STATEMENT"))
-                //        {
-                //            crDoc.subject = "Statement";
-                //        }
-                //        else
-                //        {
-                //            crDoc.subject = "Other";
-                //        }
-                //        crDoc.file = drDoc["file"].ToString();
-                //        docs.Add(crDoc);
-                //    }
-                //}
-                //docs = docs.OrderBy(c => c.tstamp).ToList();
                 bsDocs.Clear();
                 foreach (CustomerDocument doc in customerDocuments.OrderByDescending(a => a.tstamp))
                 {
@@ -2095,6 +2058,34 @@ namespace Astrodon
             tbCustomerDocNotes.Text = "";
             _editDoc = null;
         }
+
+        private void btnSelectFile_Click(object sender, EventArgs e)
+        {
+            if(string.IsNullOrWhiteSpace(tbTitle.Text))
+            {
+                Controller.HandleError("File title required", "Validation Error");
+                return;
+            }
+            if (fdOpen.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = fdOpen.FileName;
+                if (!IsValidPdf(filePath))
+                {
+                    Controller.HandleError("Not a valid PDF file");
+                    return;
+                }
+
+                var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
+
+                clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Now, building.ID, customer.accNumber, tbTitle.Text, filePath);
+
+                Controller.ShowMessage("File Uploaded");
+
+                usrCustomer_Load(sender, EventArgs.Empty);
+            }
+        }
+
+      
     }
 
     class CustomerDocumentListItem

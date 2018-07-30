@@ -180,6 +180,17 @@ namespace Astrodon.ClientPortal
             return UploadUnitDocument(DocumentCategoryType.FinancialStatement, statementDate, buildingId, accountNumber, filename, title, fileData);
         }
 
+        public string UploadUnitDocument(DocumentCategoryType documentType, DateTime fileDate, int buildingId,
+            string accountNumber,  string title, string filePath)
+        {
+            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                byte[] buffer = new byte[fs.Length];
+                fs.Read(buffer, 0, buffer.Length);
+                return UploadUnitDocument(documentType, fileDate, buildingId, accountNumber, Path.GetFileName(filePath),title, buffer);
+            }
+        }
+
         public string UploadUnitDocument(DocumentCategoryType documentType,DateTime fileDate, int buildingId,
             string accountNumber, string filename, string title, byte[] data)
         {

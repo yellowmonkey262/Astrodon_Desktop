@@ -89,6 +89,9 @@
             this.txtWebLogin = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label37 = new System.Windows.Forms.Label();
+            this.btnSelectFile = new System.Windows.Forms.Button();
+            this.tbTitle = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.txtEmailTo = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -100,7 +103,6 @@
             this.colView = new System.Windows.Forms.DataGridViewButtonColumn();
             this.colSend = new System.Windows.Forms.DataGridViewButtonColumn();
             this.colRemove = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.label13 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
             this.dgTransactions = new System.Windows.Forms.DataGridView();
@@ -150,6 +152,8 @@
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.dgDebitOrderArchive = new System.Windows.Forms.DataGridView();
             this.tbDocuments = new System.Windows.Forms.TabPage();
+            this.btnCustDocCancel = new System.Windows.Forms.Button();
+            this.btnSaveCustDoc = new System.Windows.Forms.Button();
             this.dtDocumentExpiry = new System.Windows.Forms.DateTimePicker();
             this.lbCustDocumentExpiry = new System.Windows.Forms.Label();
             this.dgDocuments = new System.Windows.Forms.DataGridView();
@@ -163,8 +167,6 @@
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnSaveCustDoc = new System.Windows.Forms.Button();
-            this.btnCustDocCancel = new System.Windows.Forms.Button();
             this.tbPreview.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -736,11 +738,13 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label37);
+            this.tabPage3.Controls.Add(this.btnSelectFile);
+            this.tabPage3.Controls.Add(this.tbTitle);
             this.tabPage3.Controls.Add(this.button1);
             this.tabPage3.Controls.Add(this.txtEmailTo);
             this.tabPage3.Controls.Add(this.label19);
             this.tabPage3.Controls.Add(this.dgDocs);
-            this.tabPage3.Controls.Add(this.label13);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -748,6 +752,32 @@
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "Web Documents";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(6, 35);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(30, 15);
+            this.label37.TabIndex = 94;
+            this.label37.Text = "Title";
+            // 
+            // btnSelectFile
+            // 
+            this.btnSelectFile.Location = new System.Drawing.Point(335, 35);
+            this.btnSelectFile.Name = "btnSelectFile";
+            this.btnSelectFile.Size = new System.Drawing.Size(104, 23);
+            this.btnSelectFile.TabIndex = 93;
+            this.btnSelectFile.Text = "Upload Document";
+            this.btnSelectFile.UseVisualStyleBackColor = true;
+            this.btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
+            // 
+            // tbTitle
+            // 
+            this.tbTitle.Location = new System.Drawing.Point(42, 35);
+            this.tbTitle.Name = "tbTitle";
+            this.tbTitle.Size = new System.Drawing.Size(287, 20);
+            this.tbTitle.TabIndex = 91;
             // 
             // button1
             // 
@@ -763,15 +793,15 @@
             // 
             // txtEmailTo
             // 
-            this.txtEmailTo.Location = new System.Drawing.Point(352, 35);
+            this.txtEmailTo.Location = new System.Drawing.Point(567, 37);
             this.txtEmailTo.Name = "txtEmailTo";
-            this.txtEmailTo.Size = new System.Drawing.Size(513, 20);
+            this.txtEmailTo.Size = new System.Drawing.Size(298, 20);
             this.txtEmailTo.TabIndex = 60;
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(244, 38);
+            this.label19.Location = new System.Drawing.Point(445, 35);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(116, 15);
             this.label19.TabIndex = 59;
@@ -793,9 +823,9 @@
             this.colView,
             this.colSend,
             this.colRemove});
-            this.dgDocs.Location = new System.Drawing.Point(6, 61);
+            this.dgDocs.Location = new System.Drawing.Point(6, 64);
             this.dgDocs.Name = "dgDocs";
-            this.dgDocs.Size = new System.Drawing.Size(859, 467);
+            this.dgDocs.Size = new System.Drawing.Size(859, 464);
             this.dgDocs.TabIndex = 58;
             this.dgDocs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgDocs_CellContentClick);
             // 
@@ -857,15 +887,6 @@
             this.colRemove.Text = "Remove";
             this.colRemove.UseColumnTextForButtonValue = true;
             this.colRemove.Width = 5;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 38);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(73, 15);
-            this.label13.TabIndex = 57;
-            this.label13.Text = "Documents:";
             // 
             // tabPage4
             // 
@@ -1379,6 +1400,28 @@
             this.tbDocuments.Text = "Documents";
             this.tbDocuments.UseVisualStyleBackColor = true;
             // 
+            // btnCustDocCancel
+            // 
+            this.btnCustDocCancel.Location = new System.Drawing.Point(473, 49);
+            this.btnCustDocCancel.Name = "btnCustDocCancel";
+            this.btnCustDocCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCustDocCancel.TabIndex = 15;
+            this.btnCustDocCancel.Text = "Cancel";
+            this.btnCustDocCancel.UseVisualStyleBackColor = true;
+            this.btnCustDocCancel.Visible = false;
+            this.btnCustDocCancel.Click += new System.EventHandler(this.btnCustDocCancel_Click);
+            // 
+            // btnSaveCustDoc
+            // 
+            this.btnSaveCustDoc.Location = new System.Drawing.Point(554, 49);
+            this.btnSaveCustDoc.Name = "btnSaveCustDoc";
+            this.btnSaveCustDoc.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveCustDoc.TabIndex = 14;
+            this.btnSaveCustDoc.Text = "Save";
+            this.btnSaveCustDoc.UseVisualStyleBackColor = true;
+            this.btnSaveCustDoc.Visible = false;
+            this.btnSaveCustDoc.Click += new System.EventHandler(this.btnSaveCustDoc_Click);
+            // 
             // dtDocumentExpiry
             // 
             this.dtDocumentExpiry.CustomFormat = "yyyy/MM/dd";
@@ -1495,28 +1538,6 @@
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
             // 
-            // btnSaveCustDoc
-            // 
-            this.btnSaveCustDoc.Location = new System.Drawing.Point(554, 49);
-            this.btnSaveCustDoc.Name = "btnSaveCustDoc";
-            this.btnSaveCustDoc.Size = new System.Drawing.Size(75, 23);
-            this.btnSaveCustDoc.TabIndex = 14;
-            this.btnSaveCustDoc.Text = "Save";
-            this.btnSaveCustDoc.UseVisualStyleBackColor = true;
-            this.btnSaveCustDoc.Visible = false;
-            this.btnSaveCustDoc.Click += new System.EventHandler(this.btnSaveCustDoc_Click);
-            // 
-            // btnCustDocCancel
-            // 
-            this.btnCustDocCancel.Location = new System.Drawing.Point(473, 49);
-            this.btnCustDocCancel.Name = "btnCustDocCancel";
-            this.btnCustDocCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCustDocCancel.TabIndex = 15;
-            this.btnCustDocCancel.Text = "Cancel";
-            this.btnCustDocCancel.UseVisualStyleBackColor = true;
-            this.btnCustDocCancel.Visible = false;
-            this.btnCustDocCancel.Click += new System.EventHandler(this.btnCustDocCancel_Click);
-            // 
             // usrCustomer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1606,7 +1627,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.DataGridView dgDocs;
-        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.DataGridView dgTransactions;
@@ -1700,5 +1720,8 @@
         private System.Windows.Forms.DateTimePicker dtDocumentExpiry;
         private System.Windows.Forms.Button btnSaveCustDoc;
         private System.Windows.Forms.Button btnCustDocCancel;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Button btnSelectFile;
+        private System.Windows.Forms.TextBox tbTitle;
     }
 }

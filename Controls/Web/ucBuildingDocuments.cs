@@ -185,6 +185,12 @@ namespace Astrodon.Controls.Web
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(tbTitle.Text))
+            {
+                Controller.HandleError("File title required", "Validation Error");
+                return;
+            }
+
             var documentType = (DocumentCategoryType)cbDocumentCategory.SelectedValue;
             if (fdOpen.ShowDialog() == DialogResult.OK)
             {
