@@ -9,7 +9,8 @@ begin
           ud.DateUploaded as DocumentDate,
 		  ud.Title,
 		  ud.[FileName] as [File],
-		  null as AccountNumber
+		  null as AccountNumber,
+		  ud.DocumentCategory
    from Building b 
    join BuildingDocument ud on ud.BuildingId = b.Id
    where b.BuildingId = @BuildingId
@@ -21,7 +22,8 @@ begin
           ud.DateUploaded as DocumentDate,
 		  ud.Title,
 		  ud.[FileName] as [File],
-		  null as AccountNumber
+		  null as AccountNumber,
+		  ud.DocumentCategory
   from Building b 
    join BuildingDocument ud on ud.BuildingId = b.Id
    where b.BuildingId = @BuildingId

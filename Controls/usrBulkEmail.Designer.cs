@@ -43,8 +43,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.cmbBill = new System.Windows.Forms.ComboBox();
             this.txtBill = new System.Windows.Forms.TextBox();
-            this.cmbFolder = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.cmbCategory = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.chkPriority = new System.Windows.Forms.CheckBox();
@@ -67,7 +65,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(14, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
+            this.label1.Size = new System.Drawing.Size(89, 15);
             this.label1.TabIndex = 29;
             this.label1.Text = "Select Building";
             // 
@@ -87,7 +85,7 @@
             this.chkIncludeAll.AutoSize = true;
             this.chkIncludeAll.Location = new System.Drawing.Point(17, 70);
             this.chkIncludeAll.Name = "chkIncludeAll";
-            this.chkIncludeAll.Size = new System.Drawing.Size(127, 17);
+            this.chkIncludeAll.Size = new System.Drawing.Size(147, 19);
             this.chkIncludeAll.TabIndex = 32;
             this.chkIncludeAll.Text = "Include All Customers";
             this.chkIncludeAll.UseVisualStyleBackColor = true;
@@ -105,7 +103,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(14, 290);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.Size = new System.Drawing.Size(34, 15);
             this.label2.TabIndex = 34;
             this.label2.Text = "BCC:";
             // 
@@ -114,7 +112,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(14, 318);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 13);
+            this.label3.Size = new System.Drawing.Size(51, 15);
             this.label3.TabIndex = 36;
             this.label3.Text = "Subject:";
             // 
@@ -130,7 +128,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(14, 344);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 13);
+            this.label4.Size = new System.Drawing.Size(61, 15);
             this.label4.TabIndex = 38;
             this.label4.Text = "Message:";
             // 
@@ -150,7 +148,7 @@
             this.chkBCC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkBCC.Location = new System.Drawing.Point(312, 289);
             this.chkBCC.Name = "chkBCC";
-            this.chkBCC.Size = new System.Drawing.Size(53, 17);
+            this.chkBCC.Size = new System.Drawing.Size(60, 19);
             this.chkBCC.TabIndex = 39;
             this.chkBCC.Text = "BCC?";
             this.chkBCC.UseVisualStyleBackColor = true;
@@ -168,7 +166,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(14, 498);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(69, 13);
+            this.label5.Size = new System.Drawing.Size(77, 15);
             this.label5.TabIndex = 41;
             this.label5.Text = "Attachments:";
             // 
@@ -217,7 +215,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(14, 604);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(23, 13);
+            this.label6.Size = new System.Drawing.Size(27, 15);
             this.label6.TabIndex = 46;
             this.label6.Text = "Bill:";
             // 
@@ -241,23 +239,6 @@
             this.txtBill.TabIndex = 48;
             this.txtBill.Text = "0.00";
             // 
-            // cmbFolder
-            // 
-            this.cmbFolder.FormattingEnabled = true;
-            this.cmbFolder.Location = new System.Drawing.Point(431, 19);
-            this.cmbFolder.Name = "cmbFolder";
-            this.cmbFolder.Size = new System.Drawing.Size(173, 21);
-            this.cmbFolder.TabIndex = 50;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(312, 19);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(113, 13);
-            this.label7.TabIndex = 49;
-            this.label7.Text = "Upload Documents to:";
-            // 
             // cmbCategory
             // 
             this.cmbCategory.FormattingEnabled = true;
@@ -273,7 +254,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(14, 43);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(49, 13);
+            this.label8.Size = new System.Drawing.Size(55, 15);
             this.label8.TabIndex = 51;
             this.label8.Text = "Category";
             this.label8.Visible = false;
@@ -283,7 +264,7 @@
             this.chkPriority.AutoSize = true;
             this.chkPriority.Location = new System.Drawing.Point(315, 47);
             this.chkPriority.Name = "chkPriority";
-            this.chkPriority.Size = new System.Drawing.Size(97, 17);
+            this.chkPriority.Size = new System.Drawing.Size(111, 19);
             this.chkPriority.TabIndex = 53;
             this.chkPriority.Text = "Mark as urgent";
             this.chkPriority.UseVisualStyleBackColor = true;
@@ -303,7 +284,7 @@
             this.chkTrustees.AutoSize = true;
             this.chkTrustees.Location = new System.Drawing.Point(150, 70);
             this.chkTrustees.Name = "chkTrustees";
-            this.chkTrustees.Size = new System.Drawing.Size(89, 17);
+            this.chkTrustees.Size = new System.Drawing.Size(101, 19);
             this.chkTrustees.TabIndex = 55;
             this.chkTrustees.Text = "Trustees only";
             this.chkTrustees.UseVisualStyleBackColor = true;
@@ -318,8 +299,6 @@
             this.Controls.Add(this.chkPriority);
             this.Controls.Add(this.cmbCategory);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.cmbFolder);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.txtBill);
             this.Controls.Add(this.cmbBill);
             this.Controls.Add(this.label6);
@@ -371,8 +350,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cmbBill;
         private System.Windows.Forms.TextBox txtBill;
-        private System.Windows.Forms.ComboBox cmbFolder;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cmbCategory;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox chkPriority;

@@ -48,3 +48,14 @@ join BuildingUnit bu on bu.UnitId = c.id
 where b.BuildingId = @BuildingId
   
 
+insert into UserBuildingUnit
+(Id,BuildingUnitId,UserIdentityId)
+Select  NEWID(),bu.Id,ui.Id
+from BuildingUnit bu
+join Building b on b.Id = bu.BuildingId
+join UserIdentity ui on bu.EmailAddress1 = ui.EmailAddress 
+                    
+left join UserBuildingUnit uu on bu.Id = uu.BuildingUnitId
+          and uu.UserIdentityId = ui.Id
+where uu.Id is null
+and b.BuildingId = @BuildingId

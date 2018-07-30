@@ -488,6 +488,12 @@
     <Compile Include="Controls\usrUsers.Designer.cs">
       <DependentUpon>usrUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Web\ucBuildingDocuments.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Web\ucBuildingDocuments.Designer.cs">
+      <DependentUpon>ucBuildingDocuments.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataSets\AstrodonDataSet.cs">
       <DependentUpon>AstrodonDataSet.xsd</DependentUpon>
     </Compile>
@@ -866,6 +872,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\usrUsers.resx">
       <DependentUpon>usrUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Web\ucBuildingDocuments.resx">
+      <DependentUpon>ucBuildingDocuments.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmBuildingTrans.resx">
       <DependentUpon>frmBuildingTrans.cs</DependentUpon>

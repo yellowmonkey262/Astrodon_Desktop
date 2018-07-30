@@ -51,7 +51,6 @@ namespace Astrodon
                 mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
                 mailBody += "You're in good hands";
                 txtMessage.Text = Environment.NewLine + Environment.NewLine + mailBody;
-                LoadFolders();
                 LoadCustomers(String.Empty);
                 LoadCategories();
             }
@@ -133,23 +132,6 @@ namespace Astrodon
 
         private void LoadTrustees()
         {
-        }
-
-        private void LoadFolders()
-        {
-            //try
-            //{
-            //    Classes.Sftp ftpClient = new Classes.Sftp(building.webFolder, false);
-            //    String workingDirectory = ftpClient.WorkingDirectory;
-            //    List<String> folders = ftpClient.RemoteFolders(false);
-            //    folders.Sort();
-            //    cmbFolder.Items.Clear();
-            //    foreach (String folder in folders) { cmbFolder.Items.Add(folder); }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Folder error:" + ex.Message);
-            //}
         }
 
         private void chkIncludeAll_CheckedChanged(object sender, EventArgs e)

@@ -8,7 +8,7 @@ namespace Astrodon.ClientPortal
     public enum DocumentCategoryType
     {
         FinancialStatement = 0,
-        ConductRule = 1,
+        ConductRules = 1,
         InsuranceInformation = 2,
         MeetingMinutes = 3,
         MeetingNotice = 4,

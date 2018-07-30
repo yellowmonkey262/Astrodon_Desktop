@@ -60,7 +60,7 @@ namespace Astrodon.ClientPortal
 
         #region User Setup
 
-        public void CreateUserRecord(string emailAddress, string password)
+        public void CreateUserRecord(string emailAddress, string password, string accountNumber)
         {
             password = Cipher.Encrypt(password);
 
@@ -69,6 +69,7 @@ namespace Astrodon.ClientPortal
                 {
                 new System.Data.SqlClient.SqlParameter("@EmailAddress",emailAddress),
                  new System.Data.SqlClient.SqlParameter("@PasswordHash",password),
+                   new System.Data.SqlClient.SqlParameter("@AccountNumber",accountNumber),
 
             };
             SQLUtilities.ExecuteSqlCommand(_ClientProtalConnection, script, parameters);
@@ -115,6 +116,7 @@ namespace Astrodon.ClientPortal
 
         public byte[] GetBuildingImage(int buildingId)
         {
+            byte[] result = null;
             string script = ReadSQLScript("GetBuildingImage.sql");
             var parameters = new List<System.Data.SqlClient.SqlParameter>()
                 { new System.Data.SqlClient.SqlParameter("@BuildingId",buildingId) };
@@ -122,9 +124,12 @@ namespace Astrodon.ClientPortal
             if (ds.Tables.Count == 1 && ds.Tables[0].Rows.Count == 1)
             {
                 var val = ds.Tables[0].Rows[0]["BuildingImage"];
-                return ReadBinaryValue(val);
+                result = ReadBinaryValue(val);
             }
-            return null;
+            if(result == null)
+                result = ReadDefaultImage();
+
+            return result;
         }
    
         public byte[] SaveBuildingImage(int buildingId, byte[] image)
@@ -285,6 +290,17 @@ namespace Astrodon.ClientPortal
         #region Building Document
 
         public string UploadBuildingDocument(DocumentCategoryType documentType, DateTime fileDate,
+           int buildingId, string description, string filePath)
+        {
+            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                byte[] buffer = new byte[fs.Length];
+                fs.Read(buffer, 0, buffer.Length);
+                return UploadBuildingDocument(documentType, fileDate, buildingId, description, Path.GetFileName(filePath), buffer);
+            }
+        }
+
+        public string UploadBuildingDocument(DocumentCategoryType documentType, DateTime fileDate,
           int buildingId, string description, string filename, byte[] fileData)
         {
             filename = Path.GetFileName(filename);
@@ -368,6 +384,18 @@ namespace Astrodon.ClientPortal
         {
             string resourcePath = "Astrodon.ClientPortal.Scripts." + scriptName;
             return SQLUtilities.ReadResourceScript(this.GetType().Assembly, resourcePath);
+        }
+
+        private byte[] ReadDefaultImage()
+        {
+            string resourcePath = "Astrodon.ClientPortal.Images.logo.jpg";
+
+            using (var stream = this.GetType().Assembly.GetManifestResourceStream(resourcePath))
+            {
+                var result = new byte[stream.Length];
+                stream.Read(result, 0, result.Length);
+                return result;
+            }
         }
 
         private byte[] ReadBinaryValue(object fieldValue)

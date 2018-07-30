@@ -18,6 +18,7 @@ using System.Data;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Linq;
+using Astrodon.Controls.Web;
 
 namespace Astrodon
 {
@@ -69,7 +70,6 @@ namespace Astrodon
                 pMJobListToolStripMenuItem.Enabled = false;
                 this.jobListToolStripMenuItem.Enabled = false;
                 this.webMaintenanceToolStripMenuItem.Enabled = false;
-                this.webReportToolStripMenuItem.Enabled = false;
                 this.bulkEmailToolStripMenuItem.Enabled = false;
                 this.managementReportToolStripMenuItem.Enabled = false;
                 this.requisitionsToolStripMenuItem.Enabled = true;
@@ -356,10 +356,10 @@ namespace Astrodon
 
         private void webMaintenanceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //pnlContents.Controls.Clear();
-            //Astrodon.Controls.usrWebDocs upload = new Controls.usrWebDocs { Dock = DockStyle.Fill };
-            //pnlContents.Controls.Add(upload);
-            //toolStripStatusLabel1.Text = "Web Maintenance";
+            pnlContents.Controls.Clear();
+            var upload = new ucBuildingDocuments() { Dock = DockStyle.Fill };
+            pnlContents.Controls.Add(upload);
+            toolStripStatusLabel1.Text = "Web Maintenance";
         }
 
         private void remindersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -402,9 +402,7 @@ namespace Astrodon
             toolStripStatusLabel1.Text = "Debtors Report";
         }
 
-        private void webReportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
+       
 
         private void managementReportToolStripMenuItem_Click(object sender, EventArgs e)
         {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Astrodon.ClientPortal
 {
@@ -16,6 +18,18 @@ namespace Astrodon.ClientPortal
 
         [FromDB]
         public Guid Id { get; set; }
+
+      
+        public string DocumentTypeStr
+        {
+            get
+            {
+                return SplitCamelCase(DocumentType.ToString());
+            }
+        }
+
+        [FromDB]
+        public int DocumentCategory { get; set; }
 
         [FromDB]
         public DateTime DocumentDate { get; set; }
@@ -33,5 +47,26 @@ namespace Astrodon.ClientPortal
         {
             return File;
         }
+
+        public DocumentCategoryType DocumentType
+        {
+            get { return (DocumentCategoryType)DocumentCategory; }
+        }
+
+        public string DocumentDateStr
+        {
+            get
+            {
+                return DocumentDate.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+            }
+        }
+
+        private string SplitCamelCase(string value)
+        {
+            if (value == null)
+                return null;
+            return Regex.Replace(Regex.Replace(value, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2"), @"(\p{Ll})(\P{Ll})", "$1 $2");
+        }
+
     }
 }
