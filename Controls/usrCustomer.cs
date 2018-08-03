@@ -558,15 +558,15 @@ namespace Astrodon
             if (delAddress == null)
                 delAddress = new string[] { "", "", "", "", "" };
 
-            if (uDef == null)
+            if (uDef == null || uDef.Length < 5)
                 uDef = new string[] { "", "", "", "", "" };
 
-            if (delAddress.Length < 5)
+            if (delAddress == null || delAddress.Length < 5)
             {
                 delAddress = new string[] { "", "", "", "", "" };
                 customer.SetDelAddress(delAddress);
             }
-            if (uDef.Length < 5)
+            if (uDef == null || uDef.Length < 5)
             {
                 uDef = new string[] { "", "", "", "", "" };
                 customer.userDefined = uDef;
@@ -593,57 +593,67 @@ namespace Astrodon
             if (Controller.user.id == 1) { MessageBox.Show(building.DataPath + " === " + customerString); }
             if (result == "0")
             {
-                MySqlConnector mySqlConn = new MySqlConnector();
-                String status = String.Empty;
-                mySqlConn.ToggleConnection(true);
-                if (customer.Email.Length == 0)
+                try
                 {
-                    customer.Email = new string[] { customer.accNumber + "@astrodon.co.za" };
-                }
-
-                String[] emails = { txtEmail.Text };
-                if (cbTrustee.Checked)
-                {
-                    if (emails == null || emails.Length == 0 || String.IsNullOrWhiteSpace(emails[0]))
+                    MySqlConnector mySqlConn = new MySqlConnector();
+                    String status = String.Empty;
+                    mySqlConn.ToggleConnection(true);
+                    if (customer.Email.Length == 0)
                     {
-                        Controller.HandleError("Trustee " + customer.description + " does not have an email address configured.\r" +
-                            "The trustee will not be able to login to the website without an email\r" +
-                            "Please configure an email address and try again.");
+                        customer.Email = new string[] { customer.accNumber + "@astrodon.co.za" };
                     }
-                }
-                if (emails != null && emails.Length > 0 && !String.IsNullOrWhiteSpace(emails[0]))
-                {
-                    bool updatedWeb = mySqlConn.UpdateWebCustomer(building.Name, customer.accNumber, emails);
-                    foreach (var email in emails)
+
+                    String[] emails = { txtEmail.Text };
+                    if (cbTrustee.Checked)
                     {
-                        String[] logins = mySqlConn.HasLogin(email);
-                        if (logins != null)
+                        if (emails == null || emails.Length == 0 || String.IsNullOrWhiteSpace(emails[0]))
                         {
-                            foreach (var login in logins)
+                            Controller.HandleError("Trustee " + customer.description + " does not have an email address configured.\r" +
+                                "The trustee will not be able to login to the website without an email\r" +
+                                "Please configure an email address and try again.");
+                        }
+                    }
+                    if (emails != null && emails.Length > 0 && !String.IsNullOrWhiteSpace(emails[0]))
+                    {
+
+                        bool updatedWeb = mySqlConn.UpdateWebCustomer(building.Name, customer.accNumber, emails);
+                        foreach (var email in emails)
+                        {
+                            String[] logins = mySqlConn.HasLogin(email);
+                            if (logins != null)
                             {
-                                if (login != null)
+                                foreach (var login in logins)
                                 {
-                                    string usergroup;
-                                    if (cbTrustee.Checked)
+                                    if (login != null)
                                     {
-                                        usergroup = "1,2,4";
+                                        string usergroup;
+                                        if (cbTrustee.Checked)
+                                        {
+                                            usergroup = "1,2,4";
+                                        }
+                                        else
+                                        {
+                                            usergroup = "1,2";
+                                        }
+                                        mySqlConn.UpdateGroup(login, usergroup);
                                     }
-                                    else
-                                    {
-                                        usergroup = "1,2";
-                                    }
-                                    mySqlConn.UpdateGroup(login, usergroup);
                                 }
                             }
                         }
+                        if (showMessage)
+                        {
+                            MessageBox.Show(!updatedWeb ? "Pastel updated! Cannot save customer on web!" : "Customer updated!");
+                        }
+
                     }
-                    if (showMessage)
-                    {
-                        MessageBox.Show(!updatedWeb ? "Pastel updated! Cannot save customer on web!" : "Customer updated!");
-                    }
+                    //mySqlConn.InsertCustomer(building, txtAccount.Text, new string[] { txtEmail.Text }, out status);
+                    mySqlConn.ToggleConnection(false);
+
                 }
-                //mySqlConn.InsertCustomer(building, txtAccount.Text, new string[] { txtEmail.Text }, out status);
-                mySqlConn.ToggleConnection(false);
+                catch (Exception e)
+                {
+                    Controller.HandleError("Unable to update Web Site " + e.Message);
+                }
             }
             else
             {
