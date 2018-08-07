@@ -1,6 +1,8 @@
 using Astro.Library;
 using Astro.Library.Entities;
 using Astrodon.Classes;
+using Astrodon.ClientPortal;
+using Astrodon.Data;
 using Astrodon.Data.NotificationTemplateData;
 using Astrodon.ReportService;
 using System;
@@ -20,6 +22,8 @@ namespace Astrodon
 {
     public partial class usrLetters : UserControl
     {
+        private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
+
         #region Variables
 
         private List<Building> buildings;
@@ -691,12 +695,17 @@ namespace Astrodon
                     MessageBox.Show(c.statPrintorEmail.ToString() + " - " + created.ToString());
                 }
 
+                string url = _ClientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today,
+                           building.ID, c.accNumber, Path.GetFileName(fileName), docType, File.ReadAllBytes(fileName));
+
                 if ((c.statPrintorEmail <= 3) && created)
                 {
+                  
                     String msgStatus = String.Empty;
                     //if (Controller.user.id != 1) {
                     String mailBody = "Dear Owner" + Environment.NewLine + Environment.NewLine;
-                    mailBody += "Attached please find " + docType + " for your attention." + Environment.NewLine + Environment.NewLine;
+                    mailBody += "Please find a link to " + docType + " for your attention bellow." + Environment.NewLine + Environment.NewLine;
+                    mailBody += url + Environment.NewLine + Environment.NewLine;
                     mailBody += "Account #: " + c.accNumber + ". For any queries on your account, please contact " + uName + " on email: " + uEmail;
                     mailBody += ", tel: " + uPhone + "." + Environment.NewLine + Environment.NewLine;
                     mailBody += "Do not reply to this e-mail address" + Environment.NewLine + Environment.NewLine;
@@ -708,19 +717,13 @@ namespace Astrodon
 
                     if (canemail)
                     {
-                        try
-                        {
-                            bool sentMail = dh.InsertLetter(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(), mailBody, false, true, true,
-                                new String[] { Path.GetFileName(fileName) }, c.accNumber, out msgStatus);
-                        }
-                        catch (Exception)
-                        {
-                            MessageBox.Show(uEmail + " - " + c.Email + " - " + docType + " - " + c.accNumber + " - " + DateTime.Now.ToString() + " - " + mailBody + " - "
-                                + Path.GetFileName(fileName) + " - " + c.accNumber);
-                        }
+
+                        SendLettersWithLinks(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(), mailBody, false, true, true,
+                                     new String[] { Path.GetFileName(fileName) }, c.accNumber, out msgStatus);
                     }
                     if (Controller.user.id == 1) { MessageBox.Show(msgStatus); }
-                    //}
+                
+
                     if ((c.statPrintorEmail == 1 || c.statPrintorEmail == 3) || docType == "Restriction Notice" || !canemail)
                     {
                         if (File.Exists(fileName))
@@ -732,6 +735,10 @@ namespace Astrodon
                     if (File.Exists(fileName))
                         lettersList.Add(fileName);
                 }
+
+
+
+
                 if (Controller.user.id != 1)
                 {
                     pastelReturn = Controller.pastel.PostBatch(letterDate, building.Period, centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, c.accNumber, building.Centrec_Building,
@@ -779,6 +786,53 @@ namespace Astrodon
 
             CombinePDFsAndPrint(lettersList);
         }
+
+        private void SendLettersWithLinks(String fromEmail, String[] toEmail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt,
+            String[] attachments, String unitNo, out String status)
+        {
+            status = string.Empty;
+            string toMailAddr = String.Join(";", toEmail);
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var letter = new tblLetterRun()
+                {
+                    fromEmail = fromEmail,
+                    toEmail = toMailAddr,
+                    subject = subject,
+                    message = message,
+                    html = htmlMail,
+                    readreceipt = readreceipt,
+                    attachment = string.Empty,
+                    unitno = unitNo,
+                    addcc = addcc,
+                    queueDate = DateTime.Now,
+                    sentDate = DateTime.Now
+                };
+
+                try
+                {
+                    if (Mailer.SendDirectMail(fromEmail, toEmail, addcc ? Controller.user.email : string.Empty, string.Empty, subject, message, htmlMail, readreceipt, out status))
+                    {
+                        letter.status = "Email sent";
+                        letter.errorMessage = "";
+                    }
+                    else
+                    {
+                        letter.status = status;
+                        letter.errorMessage = "";
+                    }
+                }
+                catch (Exception exp)
+                {
+                    letter.status = "ERROR";
+                    letter.errorMessage = exp.Message;
+                }
+
+                context.tblLetterRuns.Add(letter);
+                context.SaveChanges();
+            }
+        }
+
 
         private void DisconnectCustomers(List<String> customers)
         {

@@ -17,7 +17,7 @@ namespace Astrodon.ClientPortal
             _ClientProtalConnection = clientPortalConnection;
         }
         //'api/building/GetUnitDocument/' + id;
-        private const string _documentLinkURL = "http://clientportal.astrodon.co.za/api/building/";
+        private const string _documentLinkURL = "https://clientportal.astrodon.co.za/api/building/";
 
         public string GetUnitDocumentLink(Guid documentId)
         {

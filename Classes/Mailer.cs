@@ -159,7 +159,8 @@ namespace Astrodon
             return true;
         }
 
-        public static bool SendMail(String fromEmail, String[] toMail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, String[] attachments = null)
+        public static bool SendMail(String fromEmail, String[] toMail, 
+            String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, String[] attachments = null)
         {
            
             if (attachments != null && attachments.Length == 0)
@@ -180,18 +181,28 @@ namespace Astrodon
                 SmtpClient smtpClient = new SmtpClient();
                 MailMessage objMail = new MailMessage();
                 MailAddress objMail_fromaddress = new MailAddress(fromEmail);
+                bool toAdded = false;
                 try
                 {
                     foreach (String emailAddress in toMail)
                     {
                         if (!emailAddress.Contains("@imp.ad-one.co.za"))
                         {
-                            MailAddress objMail_toaddress = new MailAddress(emailAddress);
-                            objMail.To.Add(objMail_toaddress);
+                            if (!String.IsNullOrWhiteSpace(emailAddress) && emailAddress.Contains("@"))
+                            {
+                                MailAddress objMail_toaddress = new MailAddress(emailAddress);
+                                objMail.To.Add(objMail_toaddress);
+                                toAdded = true;
+                            }
                         }
                     }
                 }
                 catch
+                {
+                    status = "Invalid email address";
+                    return false;
+                }
+                if(!toAdded)
                 {
                     status = "Invalid email address";
                     return false;
@@ -273,14 +284,21 @@ namespace Astrodon
                 MailMessage objMail = new MailMessage();
                 errorTrapper = "From address = " + fromEmail;
                 MailAddress objMail_fromaddress = new MailAddress(fromEmail);
+
+
+                bool toAdded = false;
                 try
                 {
                     foreach (String emailAddress in toMail)
                     {
                         if (!emailAddress.Contains("@imp.ad-one.co.za"))
                         {
-                            MailAddress objMail_toaddress = new MailAddress(emailAddress);
-                            objMail.To.Add(objMail_toaddress);
+                            if (!String.IsNullOrWhiteSpace(emailAddress) && emailAddress.Contains("@"))
+                            {
+                                MailAddress objMail_toaddress = new MailAddress(emailAddress);
+                                objMail.To.Add(objMail_toaddress);
+                                toAdded = true;
+                            }
                         }
                     }
                 }
@@ -289,6 +307,13 @@ namespace Astrodon
                     status = "Invalid email address";
                     return false;
                 }
+                if (!toAdded)
+                {
+                    status = "Invalid email address";
+                    return false;
+                }
+
+              
                 objMail.From = objMail_fromaddress;
                 objMail.IsBodyHtml = htmlMail;
                 errorTrapper = "Mail body";

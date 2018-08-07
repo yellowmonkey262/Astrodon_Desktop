@@ -1,6 +1,7 @@
 using Astro.Library.Entities;
 using Astrodon.Classes;
 using Astrodon.ClientPortal;
+using Astrodon.Data;
 using Astrodon.Forms;
 using Itenso.Rtf;
 using Itenso.Rtf.Converter.Html;
@@ -1302,56 +1303,35 @@ namespace Astrodon.Controls
                             txtStatus.Text += "Setting up email: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                             Application.DoEvents();
 
+                            txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                            List<string> fileURLs = new List<string>();
+                            foreach (KeyValuePair<String, byte[]> printAttachment in liveAttachments)
+                            {
+                                try
+                                {
+                                   string url = _ClientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, selectedBuilding.ID, sendCustomer.accNumber, printAttachment.Key, txtSubject.Text, printAttachment.Value);
+                                   fileURLs.Add(url);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Controller.HandleError(ex);
+                                }
+
+                                Application.DoEvents();
+                            }
+                            txtStatus.Text += "Completed Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                            Application.DoEvents();
+
+
                             String cc = String.IsNullOrEmpty(txtCC.Text) ? " " : txtCC.Text;
                             String bcc = String.IsNullOrEmpty(txtBCC.Text) ? " " : txtBCC.Text;
-                            if (delay)
-                            {
-                                if (Controller.user.id != 1)
-                                {
-                                    bool insertSuccess = dataHandler.InsertLetter(selectedBuilding.PM, sendCustomer.Email, txtSubject.Text + ": " + sendCustomer.accNumber + " " + DateTime.Now.ToString(), mailBody, true, cc, bcc, false, attachments.ToArray(), sendCustomer.accNumber, out insertStatus);
-                                    Application.DoEvents();
-                                    if (!insertSuccess)
-                                    {
-                                        MessageBox.Show("Error processing..." + insertStatus);
-                                        return;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                bool mailSuccess = dataHandler.InsertLetter(selectedBuilding.PM, sendCustomer.Email, txtSubject.Text + ": " + sendCustomer.accNumber + " " + DateTime.Now.ToString(), mailBody, true, cc, bcc, false, attachments.ToArray(), sendCustomer.accNumber, out insertStatus, true);
-                                Application.DoEvents();
-                                if (!mailSuccess)
-                                {
-                                    MessageBox.Show("Error sending mail to " + sendCustomer.Email[0] + ": " + status);
-                                    return;
-                                }
-                                else
-                                {
-                                    txtStatus.Text += "Mail sent: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                }
-                                if (chkInbox.Checked)
-                                {
-                                    txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                    foreach (KeyValuePair<String, byte[]> printAttachment in liveAttachments)
-                                    {
-                                        try
-                                        {
-                                            _ClientPortal.UploadUnitDocument(DocumentCategoryType.Letter,DateTime.Today
-                                                , selectedBuilding.ID, sendCustomer.accNumber, printAttachment.Key, txtSubject.Text, printAttachment.Value);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Controller.HandleError(ex);
-                                        }
 
-                                        Application.DoEvents();
-                                    }
-                                    txtStatus.Text += "Completed Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                                    Application.DoEvents();
-                                }
-                            }
+                            SendLettersWithLinks(selectedBuilding.PM, sendCustomer.Email, 
+                                txtSubject.Text + ": " + sendCustomer.accNumber + " " + DateTime.Now.ToString(), 
+                                mailBody, true, cc, bcc, false, sendCustomer.accNumber,fileURLs, out insertStatus);
+
                             #endregion
+
                         }
                         else if (!chkDisablePrint.Checked)
                         {
@@ -1385,6 +1365,72 @@ namespace Astrodon.Controls
             }
 
             CombinePDFsAndPrint(filesToPrint);
+        }
+
+        private void SendLettersWithLinks(String fromEmail, String[] toEmail, String subject, String message, 
+            bool htmlMail, String cc, String bcc, bool readreceipt,  String unitNo,
+            List<string> links, out String status)
+        {
+            status = string.Empty;
+            if (links != null)
+            {
+                if (links.Count() == 1)
+                {
+                    message = message + Environment.NewLine + Environment.NewLine;
+                    message = message + "Please download your document using the link below: " + Environment.NewLine +  links[0];
+                }
+                else
+                {
+                    message = message + Environment.NewLine + Environment.NewLine;
+                    message = message + "Please download your documents using the links below." + Environment.NewLine;
+                    foreach(var link in links)
+                    {
+                        message = message + link + Environment.NewLine;
+                    }
+                }
+            }
+
+            string toMailAddr = String.Join(";", toEmail);
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var letter = new tblLetterRun()
+                {
+                    fromEmail = fromEmail,
+                    toEmail = toMailAddr,
+                    subject = subject,
+                    message = message,
+                    html = htmlMail,
+                    readreceipt = readreceipt,
+                    attachment = string.Empty,
+                    unitno = unitNo,
+                    cc = cc,
+                    bcc = bcc,
+                    queueDate = DateTime.Now,
+                    sentDate = DateTime.Now
+                };
+
+                try
+                {
+                    if (Mailer.SendDirectMail(fromEmail, toEmail, cc, bcc, subject, message, htmlMail, readreceipt, out status))
+                    {
+                        letter.status = "Email sent";
+                        letter.errorMessage = "";
+                    }
+                    else
+                    {
+                        letter.status = status;
+                        letter.errorMessage = "";
+                    }
+                }
+                catch (Exception exp)
+                {
+                    letter.status = "ERROR";
+                    letter.errorMessage = exp.Message;
+                }
+
+                context.tblLetterRuns.Add(letter);
+                context.SaveChanges();
+            }
         }
 
         private bool CreateDocument(String attachmentLocation, String fileName, byte[] fileStream, out String status)

@@ -244,71 +244,7 @@ namespace Astrodon
             }
         }
 
-        public bool InsertLetter(String fromEmail, String[] toEmail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt, String[] attachments, String unitNo, out String status)
-        {
-            bool success = false;
-            status = String.Empty;
-            String attachment = String.Empty;
-            List<String> emails = toEmail.ToList();
-            List<String> checkedEmails = new List<string>();
-            foreach (String s in emails)
-            {
-                if (!s.Contains("@imp.ad-one.co.za")) { checkedEmails.Add(s); }
-            }
-            String[] cEmails = checkedEmails.ToArray();
-            String toMail = String.Join(";", cEmails);
 
-            foreach (String att in attachments) { attachment += att + ";"; }
-            String query = " INSERT INTO tblLetterRun(fromEmail, toEmail, subject, message, html, addcc, readreceipt, attachment, unitno)";
-            query += " VALUES (@fromEmail, @toEmail, @subject, @message, @html, @addcc, @readreceipt, @attachment, @unitno)";
-            Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-            sqlParms.Add("@fromEmail", fromEmail);
-            sqlParms.Add("@toEmail", toMail);
-            sqlParms.Add("@subject", subject);
-            sqlParms.Add("@message", message);
-            sqlParms.Add("@html", htmlMail);
-            sqlParms.Add("@addcc", addcc);
-            sqlParms.Add("@readreceipt", readreceipt);
-            sqlParms.Add("@attachment", attachment);
-            sqlParms.Add("@unitno", unitNo);
-            SetData(query, sqlParms, out status);
-            if (String.IsNullOrEmpty(status)) { success = true; }
-            return success;
-        }
-
-        public bool InsertLetter(String fromEmail, String[] toEmail, String subject, String message, bool htmlMail, String cc, String bcc, bool readreceipt, String[] attachments, String unitNo, out String status, bool sendnow = false)
-        {
-            bool success = false;
-            status = String.Empty;
-            String attachment = String.Empty;
-            List<String> emails = toEmail.ToList();
-            List<String> checkedEmails = new List<string>();
-            foreach (String s in emails)
-            {
-                if (!s.Contains("@imp.ad-one.co.za")) { checkedEmails.Add(s); }
-            }
-            String[] cEmails = checkedEmails.ToArray();
-            String toMail = String.Join(";", cEmails);
-            foreach (String att in attachments) { attachment += att + ";"; }
-            String query = " INSERT INTO tblLetterRun(fromEmail, toEmail, subject, message, html, readreceipt, attachment, unitno, cc, bcc, processDate)";
-            query += " VALUES (@fromEmail, @toEmail, @subject, @message, @html, @readreceipt, @attachment, @unitno, @cc, @bcc, @processDate)";
-            Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-            sqlParms.Add("@fromEmail", fromEmail);
-            sqlParms.Add("@toEmail", toMail);
-            sqlParms.Add("@subject", subject);
-            sqlParms.Add("@message", message);
-            sqlParms.Add("@html", htmlMail);
-            sqlParms.Add("@cc", cc);
-            sqlParms.Add("@bcc", bcc);
-            sqlParms.Add("@readreceipt", readreceipt);
-            sqlParms.Add("@attachment", attachment);
-            sqlParms.Add("@unitno", unitNo);
-            Object processDate = DBNull.Value;
-            if (sendnow) { processDate = DateTime.Now; }
-            sqlParms.Add("@processDate", processDate);
-            SetData(query, sqlParms, out status);
-            if (String.IsNullOrEmpty(status)) { success = true; }
-            return success;
-        }
+   
     }
 }

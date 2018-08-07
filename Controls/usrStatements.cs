@@ -13,6 +13,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Threading;
 using Astrodon.ClientPortal;
+using Astrodon.Data;
 
 namespace Astrodon
 {
@@ -229,7 +230,6 @@ namespace Astrodon
                     }
                 }
             }
-            bool printerSet = false;
             PDF generator = new PDF(true);
             foreach (Statement stmt in statements.statements)
             {
@@ -243,6 +243,22 @@ namespace Astrodon
 
                     #endregion Upload Letter
 
+                    string statementURL = string.Empty;
+
+                    #region Upload Me
+                    try
+                    {
+                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
+                        statementURL = _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName));
+                    }
+                    catch (Exception ex)
+                    {
+                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Error Upload statement to website " + ex.Message);
+
+                    }
+                    #endregion
+
+
                     #region Email Me
                     if (stmt.EmailMe)
                     {
@@ -255,7 +271,7 @@ namespace Astrodon
                             }
                             if (Controller.user.id != 1)
                             {
-                                SetupEmail(stmt, fileName);
+                                SetupEmail(stmt, fileName, statementURL);
                             }
                         }
                     }
@@ -279,21 +295,7 @@ namespace Astrodon
                     }
                     #endregion
 
-                    #region Upload Me
-                    try
-                    {
-                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
-                        _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName));
-                        //  mySqlConn.InsertStatement(actFileTitle, "Customer Statements", actFile, stmt.AccNo, stmt.email1);
-                        //   ftpClient.Upload(fileName, actFile, false);
-                    }
-                    catch (Exception ex)
-                    {
-                        AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Error Upload statement to website " + ex.Message);
-
-                    }
-                    #endregion
-
+        
                     Application.DoEvents();
 
                 }
@@ -532,61 +534,110 @@ namespace Astrodon
             return myStatements;
         }
 
-        private void SetupEmail(Statement stmt, String fileName)
+        private string OrdinaryMessage(String accNumber, String debtorEmail, string statmentUrl, bool rental = false)
         {
-            try
+            String message = "Dear " + (rental ? "tenant" : "owner") + "," + Environment.NewLine + Environment.NewLine;
+            message += "Please download your statement from the link below." + Environment.NewLine + Environment.NewLine;
+
+            message += statmentUrl + Environment.NewLine + Environment.NewLine;
+
+            message += "Account #: " + accNumber + " For any queries on your statement, please email:" + debtorEmail + Environment.NewLine + Environment.NewLine;
+            message += "Do not reply to this e-mail address" + Environment.NewLine + Environment.NewLine;
+            message += RegisterMessage();
+            message += "Regards" + Environment.NewLine + Environment.NewLine;
+            message += "Astrodon (Pty) Ltd" + Environment.NewLine;
+            message += "You're in Good Hands" + Environment.NewLine + Environment.NewLine;
+
+            return message;
+        }
+
+        private String RegisterMessage()
+        {
+            String message = "Did you know that you can log on to our website and download historic levy statements, Conduct Rules, Insurance information, newsletters and much more?" + Environment.NewLine + Environment.NewLine;
+            message += "Simply register at www.astrodon.co.za & follow the below instructions:" + Environment.NewLine + Environment.NewLine;
+            message += "1.  On the homepage, please click on the \"Registration for Owner\" button." + Environment.NewLine + Environment.NewLine;
+            message += "2.  Choose the option to \"register as owner\"." + Environment.NewLine + Environment.NewLine;
+            message += "3.  Type in your email address and click \"next\"." + Environment.NewLine + Environment.NewLine;
+            message += "You will receive a confirmation email with a link that you can follow to finish the registration process.  If you click next and you get a message telling ";
+            message += "you that your email is not found on the database, please contact your debtor controller at Astrodon to double check that we have your correct email address on our system." + Environment.NewLine + Environment.NewLine;
+            message += "Once registered, you can log onto the site by typing your email address and password in the blocks provided on the top right hand corner of the page." + Environment.NewLine + Environment.NewLine;
+            message += "After you have logged on, you will be directed to the \"My Astrodon\" page where you can access your statements and any other information that has been uploaded for your complex." + Environment.NewLine + Environment.NewLine;
+            message += "Investor owners with more that one unit will be happy to know that you will use the same login details for all your units, simply click on the drop down box at the top of the \"My Astrodon\" page and select the unit you wish to view." + Environment.NewLine + Environment.NewLine;
+            message += "If you experience any problems with this service, please contact our offices so that we can assist you." + Environment.NewLine + Environment.NewLine;
+            message += "Just another way we try to make your life easier." + Environment.NewLine + Environment.NewLine;
+            return message;
+        }
+
+
+        private void SetupEmail(Statement stmt,string fileName, String url)
+        {
+            String emailAddy = "";
+            var builder = new System.Text.StringBuilder();
+            builder.Append(emailAddy);
+            if (stmt != null && stmt.email1 != null && stmt.email1.Length > 0)
             {
-                String query = "INSERT INTO tblStatementRun(email1, queueDate, fileName, debtorEmail, unit, attachment, subject) VALUES(@email1, @queueDate, @fileName, @debtorEmail, @unit, @attachment, @subject)";
-                Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-                String emailAddy = "";
-                var builder = new System.Text.StringBuilder();
-                builder.Append(emailAddy);
-                if (stmt != null && stmt.email1 != null && stmt.email1.Length > 0)
+                foreach (String addy in stmt.email1)
                 {
-                    foreach (String addy in stmt.email1)
-                    {
-                        builder.Append(addy + ";");
-                    }
-                    emailAddy = builder.ToString();
+                    if(!string.IsNullOrWhiteSpace(addy) && addy.Contains("@"))
+                      builder.Append(addy + ";");
                 }
-                else
-                {
-                    AddProgressString("No email address available for " + stmt.accName);
-                    return;
-
-                }
-                emailAddy = emailAddy.Trim();
-                if(String.IsNullOrWhiteSpace(emailAddy))
-                {
-                    AddProgressString("No email address available for " + stmt.accName);
-                    return;
-                }
-
-                sqlParms.Add("@email1", emailAddy);
-                sqlParms.Add("@queueDate", DateTime.Now);
-                sqlParms.Add("@fileName", Path.GetFileName(fileName));
-                sqlParms.Add("@debtorEmail", stmt.DebtorEmail);
-                sqlParms.Add("@unit", stmt.AccNo + (stmt.BuildingName == "ASTRODON RENTALS" ? "R" : ""));
-                sqlParms.Add("@subject", Path.GetFileNameWithoutExtension(fileName) + " " + DateTime.Now.ToString());
-                String attachment = "none";
-                if (!String.IsNullOrEmpty(txtAttachment.Text))
-                {
-                    attachment = txtAttachment.Text;
-                    if (!attachment.StartsWith("K:"))
-                    {
-                        File.Copy(attachment, Path.Combine("K:\\Debtors System\\statement", Path.GetFileName(attachment)), true);
-                        attachment = Path.GetFileName(attachment);
-                    }
-                }
-
-                sqlParms.Add("@attachment", attachment);
-                if (emailAddy != "")
-                {
-                    dh.SetData(query, sqlParms, out status);
-                    if (!String.IsNullOrEmpty(status)) { MessageBox.Show(status); }
-                }
+                emailAddy = builder.ToString();
             }
-            catch (Exception ex) { Controller.HandleError(ex); }
+            else
+            {
+                AddProgressString("No email address available for " + stmt.accName);
+                return;
+            }
+
+            if(string.IsNullOrWhiteSpace(emailAddy))
+            {
+                AddProgressString("No email address available for " + stmt.accName);
+                return;
+            }
+
+            using (var context = SqlDataHandler.GetDataContext())
+            {
+                var statementItem = new tblStatementRun()
+                {
+                    email1 = emailAddy,
+                    queueDate = DateTime.Now,
+                    fileName = Path.GetFileName(fileName),
+                    debtorEmail = stmt.DebtorEmail,
+                    unit = stmt.AccNo + (stmt.BuildingName == "ASTRODON RENTALS" ? "R" : ""),
+                    attachment = string.Empty,
+                    subject = Path.GetFileNameWithoutExtension(fileName) + " " + DateTime.Now.ToString(),
+                    //URL = url,
+                    sentDate1 = DateTime.Now                    
+                };
+
+                bool isRental = statementItem.fileName.ToUpper().EndsWith("_R.PDF");
+
+                string emailBody = OrdinaryMessage(stmt.AccNo, statementItem.debtorEmail, url, isRental);
+
+                string emailStatus;
+                string[] toMail = statementItem.email1.Split(";".ToCharArray());
+
+                try
+                {
+                    if (Mailer.SendMail("noreply@astrodon.co.za", toMail, statementItem.subject, emailBody, false, false, false, out emailStatus, new string[] { }))
+                    {
+                        statementItem.errorMessage = "Processed & Sent";
+                    }
+                    else
+                    {
+                        statementItem.errorMessage = "Error: " + emailStatus;
+                    }
+                }
+                catch (Exception exp)
+                {
+                    statementItem.errorMessage = "Exception:" + exp.Message;
+                }
+
+                context.tblStatementRuns.Add(statementItem);
+                context.SaveChanges();
+                    
+            }
+         
         }
 
         [DllImport("winspool.drv", CharSet = CharSet.Auto, SetLastError = true)]
