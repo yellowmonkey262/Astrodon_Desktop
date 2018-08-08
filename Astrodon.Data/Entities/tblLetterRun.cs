@@ -46,5 +46,7 @@ namespace Astrodon.Data
         public string cc { get; set; }
 
         public string bcc { get; set; }
+
+        public string URL { get; set; }
     }
 }

@@ -1372,12 +1372,15 @@ namespace Astrodon.Controls
             List<string> links, out String status)
         {
             status = string.Empty;
+            string url = "";
+
             if (links != null)
             {
                 if (links.Count() == 1)
                 {
                     message = message + Environment.NewLine + Environment.NewLine;
                     message = message + "Please download your document using the link below: " + Environment.NewLine +  links[0];
+                    url = url + links[0];
                 }
                 else
                 {
@@ -1386,6 +1389,10 @@ namespace Astrodon.Controls
                     foreach(var link in links)
                     {
                         message = message + link + Environment.NewLine;
+                        if (string.IsNullOrWhiteSpace(url))
+                            url = url + link;
+                        else
+                            url = url + " " + link;
                     }
                 }
             }
@@ -1406,7 +1413,8 @@ namespace Astrodon.Controls
                     cc = cc,
                     bcc = bcc,
                     queueDate = DateTime.Now,
-                    sentDate = DateTime.Now
+                    sentDate = DateTime.Now,
+                    URL = url
                 };
 
                 try

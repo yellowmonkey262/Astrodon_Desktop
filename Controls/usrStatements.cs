@@ -606,7 +606,7 @@ namespace Astrodon
                     unit = stmt.AccNo + (stmt.BuildingName == "ASTRODON RENTALS" ? "R" : ""),
                     attachment = string.Empty,
                     subject = Path.GetFileNameWithoutExtension(fileName) + " " + DateTime.Now.ToString(),
-                    //URL = url,
+                    URL = url,
                     sentDate1 = DateTime.Now                    
                 };
 

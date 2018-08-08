@@ -34,6 +34,6 @@ namespace Astrodon.Data
 
         public string status { get; set; }
 
-      //  public string URL { get; set; }
+        public string URL { get; set; }
     }
 }

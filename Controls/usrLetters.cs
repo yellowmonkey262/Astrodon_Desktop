@@ -719,7 +719,7 @@ namespace Astrodon
                     {
 
                         SendLettersWithLinks(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(), mailBody, false, true, true,
-                                     new String[] { Path.GetFileName(fileName) }, c.accNumber, out msgStatus);
+                                     new String[] { Path.GetFileName(fileName) }, c.accNumber, url, out msgStatus);
                     }
                     if (Controller.user.id == 1) { MessageBox.Show(msgStatus); }
                 
@@ -788,7 +788,7 @@ namespace Astrodon
         }
 
         private void SendLettersWithLinks(String fromEmail, String[] toEmail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt,
-            String[] attachments, String unitNo, out String status)
+            String[] attachments, String unitNo, string url, out String status)
         {
             status = string.Empty;
             string toMailAddr = String.Join(";", toEmail);
@@ -806,7 +806,8 @@ namespace Astrodon
                     unitno = unitNo,
                     addcc = addcc,
                     queueDate = DateTime.Now,
-                    sentDate = DateTime.Now
+                    sentDate = DateTime.Now,
+                    URL = url
                 };
 
                 try
