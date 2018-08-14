@@ -899,11 +899,11 @@ namespace Astrodon.Controls.Requisitions
             using (var context = SqlDataHandler.GetDataContext())
             {
                 context.CommitRequisitionBatch(batch.id);
-                SendPaymentNotifications(context,batch.id);
+                SendPaymentNotifications(context,batch.id,Controller.user.email);
             }
         }
 
-        private void SendPaymentNotifications(DataContext context, int batchId)
+        private void SendPaymentNotifications(DataContext context, int batchId, string fromEmail)
         {
             var q = (from req in context.tblRequisitions.Include(a => a.Supplier)
                      where req.RequisitionBatchId == batchId
@@ -935,7 +935,7 @@ namespace Astrodon.Controls.Requisitions
                     sb.AppendLine("Astrodon PTY LTD");
                     try
                     {
-                        Mailer.SendMail("noreply@astrodon.co.za", new string[] { itm.NotifyEmailAddress }, "Payment Scheduled",
+                        Mailer.SendMail(fromEmail, new string[] { itm.NotifyEmailAddress }, "Payment Scheduled",
                             sb.ToString(), false, false, false, out status, new string[] { });
                     }
                     catch (Exception e)
@@ -952,7 +952,7 @@ namespace Astrodon.Controls.Requisitions
         private void SendEmail(DataContext context, string emailAddress,  Dictionary<string, byte[]> attachments)
         {
             string status;
-            if(!Mailer.SendMailWithAttachments("noreply@astrodon.co.za", new string[] { "payments@astrodon.co.za", emailAddress },  
+            if(!Mailer.SendMailWithAttachments(Controller.user.email, new string[] { "payments@astrodon.co.za", emailAddress },  
                 "Payment Requisitions" , 
                 "Please find attached requisitions", false, false, false, out status, attachments))
             {

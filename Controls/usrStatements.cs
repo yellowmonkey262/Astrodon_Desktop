@@ -542,7 +542,6 @@ namespace Astrodon
             message += statmentUrl + Environment.NewLine + Environment.NewLine;
 
             message += "Account #: " + accNumber + " For any queries on your statement, please email:" + debtorEmail + Environment.NewLine + Environment.NewLine;
-            message += "Do not reply to this e-mail address" + Environment.NewLine + Environment.NewLine;
             message += RegisterMessage();
             message += "Regards" + Environment.NewLine + Environment.NewLine;
             message += "Astrodon (Pty) Ltd" + Environment.NewLine;
@@ -619,7 +618,7 @@ namespace Astrodon
 
                 try
                 {
-                    if (Mailer.SendMail("noreply@astrodon.co.za", toMail, statementItem.subject, emailBody, false, false, false, out emailStatus, new string[] { }))
+                    if (Mailer.SendMail(statementItem.debtorEmail, toMail, statementItem.subject, emailBody, false, false, false, out emailStatus, new string[] { }))
                     {
                         statementItem.errorMessage = "Processed & Sent";
                     }

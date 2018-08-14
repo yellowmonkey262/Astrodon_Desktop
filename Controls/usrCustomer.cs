@@ -744,7 +744,7 @@ namespace Astrodon
 
                     String[] att = { fileName };
                     String[] emailTo = txtEmailTo.Text.Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (Mailer.SendMail("noreply@astrodon.co.za", emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
+                    if (Mailer.SendMail(building.Debtor, emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
                     {
                         MessageBox.Show("Message Sent");
                     }

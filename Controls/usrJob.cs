@@ -1184,9 +1184,10 @@ namespace Astrodon.Controls
                     else
                     {
                         mailBody = "Dear Owner" + Environment.NewLine + Environment.NewLine;
-                        mailBody += "Attached please find correspondence for your attention." + Environment.NewLine + Environment.NewLine;
+                        mailBody += "Please find correspondence below for your attention." + Environment.NewLine + Environment.NewLine;
                     }
-                    mailBody += "Account #: " + sendCustomer.accNumber + ". For any queries on your account, please contact " + Controller.user.name + " on email: " + Controller.user.email + ", tel: " + Controller.user.phone + "." + Environment.NewLine + Environment.NewLine;
+                    mailBody += "Account #: " + sendCustomer.accNumber + "." + Environment.NewLine
+                               +"For any queries on your account, please contact " + Controller.user.name + " on email: " + Controller.user.email + ", tel: " + Controller.user.phone + "." + Environment.NewLine + Environment.NewLine;
                     mailBody += "Regards" + Environment.NewLine;
                     mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
                     mailBody += "You're in good hands";
