@@ -36,8 +36,6 @@
             this.lblSavePlease = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.txtNotes = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.cmbFolder = new System.Windows.Forms.ComboBox();
             this.btnCancel1 = new System.Windows.Forms.Button();
             this.btnSave1 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -74,6 +72,8 @@
             this.sptRemove = new System.Windows.Forms.DataGridViewButtonColumn();
             this.btnAddSupport = new System.Windows.Forms.Button();
             this.tbEmail = new System.Windows.Forms.TabPage();
+            this.cbSMSTemplate = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.chkBill = new System.Windows.Forms.CheckBox();
             this.dgAttachments = new System.Windows.Forms.DataGridView();
@@ -128,8 +128,6 @@
             this.btnApprove = new System.Windows.Forms.Button();
             this.btnProcess = new System.Windows.Forms.Button();
             this.btnSubmit = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cbSMSTemplate = new System.Windows.Forms.ComboBox();
             this.tbContent.SuspendLayout();
             this.tbInstructions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgCustomers)).BeginInit();
@@ -169,8 +167,6 @@
             this.tbInstructions.Controls.Add(this.lblSavePlease);
             this.tbInstructions.Controls.Add(this.label13);
             this.tbInstructions.Controls.Add(this.txtNotes);
-            this.tbInstructions.Controls.Add(this.label12);
-            this.tbInstructions.Controls.Add(this.cmbFolder);
             this.tbInstructions.Controls.Add(this.btnCancel1);
             this.tbInstructions.Controls.Add(this.btnSave1);
             this.tbInstructions.Controls.Add(this.label5);
@@ -199,7 +195,7 @@
             this.rdTrustees.AutoSize = true;
             this.rdTrustees.Location = new System.Drawing.Point(304, 57);
             this.rdTrustees.Name = "rdTrustees";
-            this.rdTrustees.Size = new System.Drawing.Size(75, 19);
+            this.rdTrustees.Size = new System.Drawing.Size(66, 17);
             this.rdTrustees.TabIndex = 35;
             this.rdTrustees.TabStop = true;
             this.rdTrustees.Text = "Trustees";
@@ -211,7 +207,7 @@
             this.chkDisablePrint.AutoSize = true;
             this.chkDisablePrint.Location = new System.Drawing.Point(453, 374);
             this.chkDisablePrint.Name = "chkDisablePrint";
-            this.chkDisablePrint.Size = new System.Drawing.Size(99, 19);
+            this.chkDisablePrint.Size = new System.Drawing.Size(85, 17);
             this.chkDisablePrint.TabIndex = 34;
             this.chkDisablePrint.Text = "Disable Print";
             this.chkDisablePrint.UseVisualStyleBackColor = true;
@@ -221,7 +217,7 @@
             this.chkEmail3.AutoSize = true;
             this.chkEmail3.Location = new System.Drawing.Point(684, 58);
             this.chkEmail3.Name = "chkEmail3";
-            this.chkEmail3.Size = new System.Drawing.Size(134, 19);
+            this.chkEmail3.Size = new System.Drawing.Size(115, 17);
             this.chkEmail3.TabIndex = 33;
             this.chkEmail3.Text = "All Email Address 3";
             this.chkEmail3.UseVisualStyleBackColor = true;
@@ -232,7 +228,7 @@
             this.chkSMS.AutoSize = true;
             this.chkSMS.Location = new System.Drawing.Point(1027, 58);
             this.chkSMS.Name = "chkSMS";
-            this.chkSMS.Size = new System.Drawing.Size(72, 19);
+            this.chkSMS.Size = new System.Drawing.Size(63, 17);
             this.chkSMS.TabIndex = 32;
             this.chkSMS.Text = "All SMS";
             this.chkSMS.UseVisualStyleBackColor = true;
@@ -243,7 +239,7 @@
             this.chkEmail2.AutoSize = true;
             this.chkEmail2.Location = new System.Drawing.Point(535, 58);
             this.chkEmail2.Name = "chkEmail2";
-            this.chkEmail2.Size = new System.Drawing.Size(134, 19);
+            this.chkEmail2.Size = new System.Drawing.Size(115, 17);
             this.chkEmail2.TabIndex = 31;
             this.chkEmail2.Text = "All Email Address 2";
             this.chkEmail2.UseVisualStyleBackColor = true;
@@ -254,7 +250,7 @@
             this.chkEmail4.AutoSize = true;
             this.chkEmail4.Location = new System.Drawing.Point(829, 58);
             this.chkEmail4.Name = "chkEmail4";
-            this.chkEmail4.Size = new System.Drawing.Size(134, 19);
+            this.chkEmail4.Size = new System.Drawing.Size(115, 17);
             this.chkEmail4.TabIndex = 30;
             this.chkEmail4.Text = "All Email Address 4";
             this.chkEmail4.UseVisualStyleBackColor = true;
@@ -265,7 +261,7 @@
             this.chkEmail1.AutoSize = true;
             this.chkEmail1.Location = new System.Drawing.Point(389, 58);
             this.chkEmail1.Name = "chkEmail1";
-            this.chkEmail1.Size = new System.Drawing.Size(134, 19);
+            this.chkEmail1.Size = new System.Drawing.Size(115, 17);
             this.chkEmail1.TabIndex = 29;
             this.chkEmail1.Text = "All Email Address 1";
             this.chkEmail1.UseVisualStyleBackColor = true;
@@ -276,7 +272,7 @@
             this.lblSavePlease.AutoSize = true;
             this.lblSavePlease.Location = new System.Drawing.Point(8, 569);
             this.lblSavePlease.Name = "lblSavePlease";
-            this.lblSavePlease.Size = new System.Drawing.Size(211, 15);
+            this.lblSavePlease.Size = new System.Drawing.Size(185, 13);
             this.lblSavePlease.TabIndex = 28;
             this.lblSavePlease.Text = "Please save the job before continuing";
             // 
@@ -285,7 +281,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(450, 401);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(42, 15);
+            this.label13.Size = new System.Drawing.Size(38, 13);
             this.label13.TabIndex = 27;
             this.label13.Text = "Notes:";
             // 
@@ -297,24 +293,6 @@
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtNotes.Size = new System.Drawing.Size(340, 155);
             this.txtNotes.TabIndex = 26;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(301, 35);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(73, 15);
-            this.label12.TabIndex = 25;
-            this.label12.Text = "Web Folder:";
-            // 
-            // cmbFolder
-            // 
-            this.cmbFolder.FormattingEnabled = true;
-            this.cmbFolder.Location = new System.Drawing.Point(386, 34);
-            this.cmbFolder.Name = "cmbFolder";
-            this.cmbFolder.Size = new System.Drawing.Size(289, 21);
-            this.cmbFolder.TabIndex = 24;
-            this.cmbFolder.SelectedIndexChanged += new System.EventHandler(this.cmbFolder_SelectedIndexChanged);
             // 
             // btnCancel1
             // 
@@ -341,7 +319,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(8, 401);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(72, 15);
+            this.label5.Size = new System.Drawing.Size(64, 13);
             this.label5.TabIndex = 21;
             this.label5.Text = "Instructions:";
             // 
@@ -366,7 +344,7 @@
             this.lblTopic.AutoSize = true;
             this.lblTopic.Location = new System.Drawing.Point(8, 375);
             this.lblTopic.Name = "lblTopic";
-            this.lblTopic.Size = new System.Drawing.Size(90, 15);
+            this.lblTopic.Size = new System.Drawing.Size(84, 13);
             this.lblTopic.TabIndex = 18;
             this.lblTopic.Text = "Topic / Subject:";
             // 
@@ -478,7 +456,7 @@
             this.chkInbox.AutoSize = true;
             this.chkInbox.Location = new System.Drawing.Point(187, 34);
             this.chkInbox.Name = "chkInbox";
-            this.chkInbox.Size = new System.Drawing.Size(59, 19);
+            this.chkInbox.Size = new System.Drawing.Size(52, 17);
             this.chkInbox.TabIndex = 16;
             this.chkInbox.Text = "Inbox";
             this.chkInbox.UseVisualStyleBackColor = true;
@@ -488,7 +466,7 @@
             this.chkBuilding.AutoSize = true;
             this.chkBuilding.Location = new System.Drawing.Point(94, 34);
             this.chkBuilding.Name = "chkBuilding";
-            this.chkBuilding.Size = new System.Drawing.Size(74, 19);
+            this.chkBuilding.Size = new System.Drawing.Size(63, 17);
             this.chkBuilding.TabIndex = 15;
             this.chkBuilding.Text = "Building";
             this.chkBuilding.UseVisualStyleBackColor = true;
@@ -499,7 +477,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(8, 34);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(63, 15);
+            this.label3.Size = new System.Drawing.Size(56, 13);
             this.label3.TabIndex = 14;
             this.label3.Text = "Upload to:";
             // 
@@ -508,7 +486,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(8, 57);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(52, 15);
+            this.label2.Size = new System.Drawing.Size(47, 13);
             this.label2.TabIndex = 13;
             this.label2.Text = "Send to:";
             // 
@@ -517,7 +495,7 @@
             this.rdCustomers.AutoSize = true;
             this.rdCustomers.Location = new System.Drawing.Point(184, 57);
             this.rdCustomers.Name = "rdCustomers";
-            this.rdCustomers.Size = new System.Drawing.Size(138, 19);
+            this.rdCustomers.Size = new System.Drawing.Size(119, 17);
             this.rdCustomers.TabIndex = 12;
             this.rdCustomers.TabStop = true;
             this.rdCustomers.Text = "Selected Customers";
@@ -529,7 +507,7 @@
             this.rdAllCustomers.AutoSize = true;
             this.rdAllCustomers.Location = new System.Drawing.Point(94, 57);
             this.rdAllCustomers.Name = "rdAllCustomers";
-            this.rdAllCustomers.Size = new System.Drawing.Size(101, 19);
+            this.rdAllCustomers.Size = new System.Drawing.Size(87, 17);
             this.rdAllCustomers.TabIndex = 11;
             this.rdAllCustomers.TabStop = true;
             this.rdAllCustomers.Text = "All customers";
@@ -550,7 +528,7 @@
             this.lblBuildSelect.AutoSize = true;
             this.lblBuildSelect.Location = new System.Drawing.Point(8, 7);
             this.lblBuildSelect.Name = "lblBuildSelect";
-            this.lblBuildSelect.Size = new System.Drawing.Size(92, 15);
+            this.lblBuildSelect.Size = new System.Drawing.Size(80, 13);
             this.lblBuildSelect.TabIndex = 9;
             this.lblBuildSelect.Text = "Select Building:";
             // 
@@ -572,7 +550,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(148, 11);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(393, 15);
+            this.label15.Size = new System.Drawing.Size(341, 13);
             this.label15.TabIndex = 26;
             this.label15.Text = "Please note that these documents will NOT be emailed to the customer";
             // 
@@ -651,12 +629,31 @@
             this.tbEmail.Text = "Email  / SMS Content";
             this.tbEmail.UseVisualStyleBackColor = true;
             // 
+            // cbSMSTemplate
+            // 
+            this.cbSMSTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSMSTemplate.FormattingEnabled = true;
+            this.cbSMSTemplate.Location = new System.Drawing.Point(107, 511);
+            this.cbSMSTemplate.Name = "cbSMSTemplate";
+            this.cbSMSTemplate.Size = new System.Drawing.Size(285, 21);
+            this.cbSMSTemplate.TabIndex = 43;
+            this.cbSMSTemplate.SelectedIndexChanged += new System.EventHandler(this.cbSMSTemplate_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 511);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(77, 13);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "SMS Template";
+            // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(145, 84);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(365, 15);
+            this.label16.Size = new System.Drawing.Size(315, 13);
             this.label16.TabIndex = 41;
             this.label16.Text = "Please note that these documents will be emailed to the customer";
             // 
@@ -665,7 +662,7 @@
             this.chkBill.AutoSize = true;
             this.chkBill.Location = new System.Drawing.Point(935, 513);
             this.chkBill.Name = "chkBill";
-            this.chkBill.Size = new System.Drawing.Size(154, 19);
+            this.chkBill.Size = new System.Drawing.Size(132, 17);
             this.chkBill.TabIndex = 40;
             this.chkBill.Text = "Bill customer for SMS?";
             this.chkBill.UseVisualStyleBackColor = true;
@@ -721,7 +718,7 @@
             this.lblSMS.AutoSize = true;
             this.lblSMS.Location = new System.Drawing.Point(48, 544);
             this.lblSMS.Name = "lblSMS";
-            this.lblSMS.Size = new System.Drawing.Size(36, 15);
+            this.lblSMS.Size = new System.Drawing.Size(31, 13);
             this.lblSMS.TabIndex = 37;
             this.lblSMS.Text = "(160)";
             // 
@@ -739,7 +736,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(3, 544);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(37, 15);
+            this.label10.Size = new System.Drawing.Size(33, 13);
             this.label10.TabIndex = 35;
             this.label10.Text = "SMS:";
             // 
@@ -755,7 +752,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(3, 32);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(34, 15);
+            this.label9.Size = new System.Drawing.Size(31, 13);
             this.label9.TabIndex = 33;
             this.label9.Text = "BCC:";
             // 
@@ -771,7 +768,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(3, 6);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(26, 15);
+            this.label8.Size = new System.Drawing.Size(24, 13);
             this.label8.TabIndex = 31;
             this.label8.Text = "CC:";
             // 
@@ -810,7 +807,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(3, 214);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(37, 15);
+            this.label6.Size = new System.Drawing.Size(34, 13);
             this.label6.TabIndex = 27;
             this.label6.Text = "Body:";
             // 
@@ -836,7 +833,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(3, 56);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(86, 15);
+            this.label7.Size = new System.Drawing.Size(74, 13);
             this.label7.TabIndex = 24;
             this.label7.Text = "Email Subject:";
             // 
@@ -868,7 +865,7 @@
             this.chkCustomer.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCustomer.Location = new System.Drawing.Point(556, 36);
             this.chkCustomer.Name = "chkCustomer";
-            this.chkCustomer.Size = new System.Drawing.Size(128, 19);
+            this.chkCustomer.Size = new System.Drawing.Size(111, 17);
             this.chkCustomer.TabIndex = 32;
             this.chkCustomer.Text = "Use customer info";
             this.chkCustomer.UseVisualStyleBackColor = true;
@@ -880,7 +877,7 @@
             this.chkUseLetterhead.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkUseLetterhead.Location = new System.Drawing.Point(455, 35);
             this.chkUseLetterhead.Name = "chkUseLetterhead";
-            this.chkUseLetterhead.Size = new System.Drawing.Size(109, 19);
+            this.chkUseLetterhead.Size = new System.Drawing.Size(95, 17);
             this.chkUseLetterhead.TabIndex = 31;
             this.chkUseLetterhead.Text = "Use letterhead";
             this.chkUseLetterhead.UseVisualStyleBackColor = true;
@@ -909,7 +906,7 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(4, 11);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(113, 15);
+            this.label17.Size = new System.Drawing.Size(99, 13);
             this.label17.TabIndex = 28;
             this.label17.Text = "Please select letter:";
             // 
@@ -926,7 +923,7 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(4, 36);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(85, 15);
+            this.label14.Size = new System.Drawing.Size(76, 13);
             this.label14.TabIndex = 26;
             this.label14.Text = "Letter Subject:";
             // 
@@ -958,26 +955,26 @@
             this.ctxInsertImage,
             this.insertSupportingDocumentToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(262, 76);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(223, 70);
             // 
             // ctxPageBreak
             // 
             this.ctxPageBreak.Name = "ctxPageBreak";
-            this.ctxPageBreak.Size = new System.Drawing.Size(261, 24);
+            this.ctxPageBreak.Size = new System.Drawing.Size(222, 22);
             this.ctxPageBreak.Text = "Insert Page Break";
             this.ctxPageBreak.Click += new System.EventHandler(this.ctxPageBreak_Click);
             // 
             // ctxInsertImage
             // 
             this.ctxInsertImage.Name = "ctxInsertImage";
-            this.ctxInsertImage.Size = new System.Drawing.Size(261, 24);
+            this.ctxInsertImage.Size = new System.Drawing.Size(222, 22);
             this.ctxInsertImage.Text = "Insert Image";
             this.ctxInsertImage.Click += new System.EventHandler(this.ctxInsertImage_Click);
             // 
             // insertSupportingDocumentToolStripMenuItem
             // 
             this.insertSupportingDocumentToolStripMenuItem.Name = "insertSupportingDocumentToolStripMenuItem";
-            this.insertSupportingDocumentToolStripMenuItem.Size = new System.Drawing.Size(261, 24);
+            this.insertSupportingDocumentToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
             this.insertSupportingDocumentToolStripMenuItem.Text = "Insert supporting document";
             this.insertSupportingDocumentToolStripMenuItem.Click += new System.EventHandler(this.insertSupportingDocumentToolStripMenuItem_Click);
             // 
@@ -1130,7 +1127,7 @@
             this.lblStatus.AutoSize = true;
             this.lblStatus.Location = new System.Drawing.Point(104, 17);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(35, 15);
+            this.lblStatus.Size = new System.Drawing.Size(33, 13);
             this.lblStatus.TabIndex = 5;
             this.lblStatus.Text = "NEW";
             // 
@@ -1139,7 +1136,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(12, 17);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(87, 15);
+            this.label11.Size = new System.Drawing.Size(77, 13);
             this.label11.TabIndex = 4;
             this.label11.Text = "Current Status:";
             // 
@@ -1182,25 +1179,6 @@
             this.btnSubmit.Text = "Submit";
             this.btnSubmit.UseVisualStyleBackColor = true;
             this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 511);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 15);
-            this.label1.TabIndex = 42;
-            this.label1.Text = "SMS Template";
-            // 
-            // cbSMSTemplate
-            // 
-            this.cbSMSTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSMSTemplate.FormattingEnabled = true;
-            this.cbSMSTemplate.Location = new System.Drawing.Point(107, 511);
-            this.cbSMSTemplate.Name = "cbSMSTemplate";
-            this.cbSMSTemplate.Size = new System.Drawing.Size(285, 21);
-            this.cbSMSTemplate.TabIndex = 43;
-            this.cbSMSTemplate.SelectedIndexChanged += new System.EventHandler(this.cbSMSTemplate_SelectedIndexChanged);
             // 
             // usrJob
             // 
@@ -1292,8 +1270,6 @@
         private System.Windows.Forms.Button btnProcess;
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.TextBox txtStatus;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ComboBox cmbFolder;
         private System.Windows.Forms.DataGridView dgAttachments;
         private System.Windows.Forms.Button btnEmailAttach;
         private System.Windows.Forms.Label label13;

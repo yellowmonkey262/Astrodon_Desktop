@@ -36,7 +36,7 @@ namespace Astrodon.Controls
         private Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
         private SqlDataHandler dataHandler = new SqlDataHandler();
         private String status = String.Empty;
-        private String buildingFolder, sms, jobstatus;
+        private String sms, jobstatus;
         private BindingList<jobCustomers> JobCustomers = new BindingList<jobCustomers>();
         private List<Attachments> supportDocs = new List<Attachments>();
         private List<Attachments> EmailDocs = new List<Attachments>();
@@ -178,7 +178,6 @@ namespace Astrodon.Controls
                     }
                 }
                 pmBuildings = pmBuildings.OrderBy(c => c.Name).ToList();
-                buildingFolder = String.Empty;
             }
 
             using (var context = SqlDataHandler.GetDataContext())
@@ -300,7 +299,6 @@ namespace Astrodon.Controls
                     LoadTemplates();
                     creator = int.Parse(drJob["creator"].ToString());
                     processor = (int.TryParse(drJob["processedBy"].ToString(), out processor) ? processor : 0);
-                    buildingFolder = drJob["buildingFolder"].ToString();
 
                     chkBuilding.Checked = bool.Parse(drJob["buildingUpload"].ToString());
                     chkInbox.Checked = bool.Parse(drJob["inboxUpload"].ToString());
@@ -585,28 +583,9 @@ namespace Astrodon.Controls
             {
                 this.Cursor = Cursors.WaitCursor;
                 chkBuilding.Enabled = false;
-                LoadFolders();
-                if (!String.IsNullOrEmpty(buildingFolder)) { cmbFolder.SelectedItem = buildingFolder; }
                 this.Cursor = Cursors.Arrow;
                 chkBuilding.Enabled = true;
             }
-        }
-
-        private void LoadFolders()
-        {
-            //try
-            //{
-            //    ftpClient = new Classes.Sftp(selectedBuilding.webFolder, false);
-            //    List<String> folders = ftpClient.RemoteFolders(false);
-            //    folders.Sort();
-            //    folders.Insert(0, "Root");
-            //    cmbFolder.Items.Clear();
-            //    foreach (String folder in folders) { cmbFolder.Items.Add(folder); }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Controller.HandleError(ex);
-            //}
         }
 
         private void rdAllCustomers_CheckedChanged(object sender, EventArgs e)
@@ -666,17 +645,6 @@ namespace Astrodon.Controls
             if (selectedBuilding != null)
             {
                 String buildingCode = selectedBuilding.Abbr;
-                String buildingFolder = "";
-                if (chkBuilding.Checked && cmbFolder.SelectedItem != null && !String.IsNullOrEmpty(cmbFolder.SelectedItem.ToString()))
-                {
-                    buildingFolder = cmbFolder.SelectedItem.ToString();
-                }
-                else if (chkBuilding.Checked)
-                {
-                    MessageBox.Show("Please select a folder", "Job Management", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    cmbFolder.Focus();
-                    return;
-                }
                 int selectedCustomers = 0;
                 foreach (jobCustomers jc in JobCustomers) { if (jc.Include) { selectedCustomers++; } }
                 if (selectedCustomers == 0)
@@ -706,7 +674,7 @@ namespace Astrodon.Controls
                 sqlParms.Add("@buildingCode", buildingCode);
                 sqlParms.Add("@buildingUpload", chkBuilding.Checked);
                 sqlParms.Add("@inboxUpload", chkInbox.Checked);
-                sqlParms.Add("@buildingFolder", buildingFolder);
+                sqlParms.Add("@buildingFolder", "NEWSITE");
                 sqlParms.Add("@topic", txtTopic.Text);
                 sqlParms.Add("@instructions", txtInstructions.Text);
                 sqlParms.Add("@notes", txtNotes.Text);
@@ -1256,7 +1224,7 @@ namespace Astrodon.Controls
                         print = cEmailCount == 0;
 
                         #region chkBuilding Checked
-                        if (chkBuilding.Checked && cmbFolder.SelectedItem != null && onetimebuildingattachments == false)
+                        if (chkBuilding.Checked && onetimebuildingattachments == false)
                         {
                             onetimebuildingattachments = true;
 
@@ -1910,17 +1878,7 @@ namespace Astrodon.Controls
             }
         }
 
-        private void cmbFolder_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbFolder.SelectedItem != null && cmbFolder.SelectedIndex > 0)
-            {
-                uploadDirectory = selectedBuilding.webFolder + "//" + cmbFolder.SelectedItem.ToString();
-            }
-            else
-            {
-                uploadDirectory = selectedBuilding.webFolder;
-            }
-        }
+     
 
         private void ProcessMessage(String message)
         {
