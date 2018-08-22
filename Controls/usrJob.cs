@@ -1388,7 +1388,7 @@ namespace Astrodon.Controls
 
                 try
                 {
-                    if (Mailer.SendDirectMail(fromEmail, toEmail, cc, bcc, subject, message, htmlMail, readreceipt, out status))
+                    if (Email.EmailProvider.SendUserJobEmail(fromEmail, toEmail, cc, bcc, subject, message))
                     {
                         letter.status = "Email sent";
                         letter.errorMessage = "";

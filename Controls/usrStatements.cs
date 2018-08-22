@@ -618,13 +618,13 @@ namespace Astrodon
 
                 try
                 {
-                    if (Mailer.SendMail(statementItem.debtorEmail, toMail, statementItem.subject, emailBody, false, false, false, out emailStatus, new string[] { }))
+                    if (Email.EmailProvider.SendStatement(statementItem.debtorEmail, toMail, stmt.accNumber,fileName,stmt.StmtDate,url,isRental))
                     {
                         statementItem.errorMessage = "Processed & Sent";
                     }
                     else
                     {
-                        statementItem.errorMessage = "Error: " + emailStatus;
+                        statementItem.errorMessage = "Error";
                     }
                 }
                 catch (Exception exp)

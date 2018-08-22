@@ -16,6 +16,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Data.Entity;
 using System.Globalization;
+using Astrodon.Email;
 
 namespace Astrodon.Controls.Requisitions
 {
@@ -920,29 +921,7 @@ namespace Astrodon.Controls.Requisitions
             {
                 if (!String.IsNullOrWhiteSpace(itm.NotifyEmailAddress))
                 {
-                    string status;
-                    StringBuilder sb = new StringBuilder();
-                    if (!String.IsNullOrWhiteSpace(itm.ContactPerson))
-                        sb.AppendLine("Good Day " + itm.ContactPerson);
-                    else
-                        sb.AppendLine("Good Day " + itm.ContactPerson);
-                    sb.AppendLine("");
-                    sb.AppendLine("Your payment of R"+itm.Amount.ToString("###,##0.00",CultureInfo.InvariantCulture)+" with reference " + itm.Payreference + " has been instructed for processing.");
-                    sb.AppendLine("");
-                    sb.AppendLine("The payment will be processed within 72 hours.");
-                    sb.AppendLine("");
-                    sb.AppendLine("Kind Regards");
-                    sb.AppendLine("Astrodon PTY LTD");
-                    try
-                    {
-                        Mailer.SendMail(fromEmail, new string[] { itm.NotifyEmailAddress }, "Payment Scheduled",
-                            sb.ToString(), false, false, false, out status, new string[] { });
-                    }
-                    catch (Exception e)
-                    {
-                        Controller.HandleError(e);
-                    }
-
+                    EmailProvider.RequisitionBatchSendPaymentNotifications(fromEmail, itm.NotifyEmailAddress, itm.ContactPerson, itm.Amount, itm.Payreference);
                 }
 
             }
@@ -951,12 +930,9 @@ namespace Astrodon.Controls.Requisitions
 
         private void SendEmail(DataContext context, string emailAddress,  Dictionary<string, byte[]> attachments)
         {
-            string status;
-            if(!Mailer.SendMailWithAttachments(Controller.user.email, new string[] { "payments@astrodon.co.za", emailAddress },  
-                "Payment Requisitions" , 
-                "Please find attached requisitions", false, false, false, out status, attachments))
+            if(!EmailProvider.SendRequisitionNotification(emailAddress, attachments))
             {
-                Controller.HandleError("Error seding email " + status +"\n Please save your requisition report and email it manually", "Email error");
+                Controller.HandleError("Error seding email\n Please save your requisition report and email it manually", "Email error");
 
                 foreach(var key in attachments.Keys)
                 {

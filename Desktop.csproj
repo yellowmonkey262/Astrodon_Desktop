@@ -139,7 +139,6 @@
     <Compile Include="Classes\Controller.cs" />
     <Compile Include="Classes\DataHandler.cs" />
     <Compile Include="Classes\Detail.cs" />
-    <Compile Include="Classes\FTP.cs" />
     <Compile Include="Classes\IDValidator.cs" />
     <Compile Include="Classes\LoadTransactions.cs" />
     <Compile Include="Classes\Mailer.cs" />
@@ -153,7 +152,6 @@
     <Compile Include="Classes\ReportServiceClient.cs" />
     <Compile Include="Classes\ReportWriter.cs" />
     <Compile Include="Classes\RtfConvertor.cs" />
-    <Compile Include="Classes\SFTP.cs" />
     <Compile Include="Classes\SMS.cs" />
     <Compile Include="Classes\Prompt.cs" />
     <Compile Include="Classes\User.cs" />
@@ -515,6 +513,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Clearances.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Email\EmailProvider.cs" />
+    <Compile Include="Email\ResourceManager.cs" />
     <Compile Include="Forms\CustomerDocument.cs" />
     <Compile Include="Forms\frmBuildingTrans.cs">
       <SubType>Form</SubType>
@@ -1265,6 +1265,12 @@
     <EmbeddedResource Include="Reports\ManagementPack\ManagementPackEmail.txt" />
     <EmbeddedResource Include="Reports\ManagementPack\ManagementPackDeclined.txt" />
     <EmbeddedResource Include="Reports\ManagementPack\ManagementPackApproved.txt" />
+    <EmbeddedResource Include="Email\Templates\StatementEmailTemplate.html" />
+    <EmbeddedResource Include="Email\Templates\Template.html" />
+    <EmbeddedResource Include="Email\Templates\CustomerLetter.html" />
+    <EmbeddedResource Include="Email\Templates\RequisitionPayment.html" />
+    <EmbeddedResource Include="Email\Templates\Attachment.html" />
+    <EmbeddedResource Include="Email\Templates\ReminderLetter.html" />
     <Content Include="Resources\AstradonNewLogo.jpg" />
     <Content Include="Resources\stdmd5.jpg" />
     <None Include="signature.png">

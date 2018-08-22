@@ -702,24 +702,13 @@ namespace Astrodon
                 {
                   
                     String msgStatus = String.Empty;
-                    //if (Controller.user.id != 1) {
-                    String mailBody = "Dear Owner" + Environment.NewLine + Environment.NewLine;
-                    mailBody += "Please find a link to " + docType + " for your attention bellow." + Environment.NewLine + Environment.NewLine;
-                    mailBody += url + Environment.NewLine + Environment.NewLine;
-                    mailBody += "Account #: " + c.accNumber + ". For any queries on your account, please contact " + uName + " on email: " + uEmail;
-                    mailBody += ", tel: " + uPhone + "." + Environment.NewLine + Environment.NewLine;
-                    mailBody += "Do not reply to this e-mail address" + Environment.NewLine + Environment.NewLine;
-                    mailBody += "Regards" + Environment.NewLine;
-                    mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
-                    mailBody += "You're in good hands";
-
                     var canemail = c.Email.Count(d => !String.IsNullOrEmpty(d)) > 0;
 
                     if (canemail)
                     {
 
-                        SendLettersWithLinks(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(), mailBody, false, true, true,
-                                     new String[] { Path.GetFileName(fileName) }, c.accNumber, url, out msgStatus);
+                        SendLettersWithLinks(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(),
+                           "Reminder Letter", new String[] { Path.GetFileName(fileName) }, c.accNumber, url, out msgStatus);
                     }
                     if (Controller.user.id == 1) { MessageBox.Show(msgStatus); }
                 
@@ -787,7 +776,7 @@ namespace Astrodon
             CombinePDFsAndPrint(lettersList);
         }
 
-        private void SendLettersWithLinks(String fromEmail, String[] toEmail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt,
+        private void SendLettersWithLinks(String fromEmail, String[] toEmail, String subject, String message,
             String[] attachments, String unitNo, string url, out String status)
         {
             status = string.Empty;
@@ -799,12 +788,12 @@ namespace Astrodon
                     fromEmail = fromEmail,
                     toEmail = toMailAddr,
                     subject = subject,
-                    message = message,
-                    html = htmlMail,
-                    readreceipt = readreceipt,
+                    message = "Reminder letter",
+                    html = false,
+                    readreceipt = true,
                     attachment = string.Empty,
                     unitno = unitNo,
-                    addcc = addcc,
+                    addcc = true,
                     queueDate = DateTime.Now,
                     sentDate = DateTime.Now,
                     URL = url
@@ -812,7 +801,7 @@ namespace Astrodon
 
                 try
                 {
-                    if (Mailer.SendDirectMail(fromEmail, toEmail, addcc ? Controller.user.email : string.Empty, string.Empty, subject, message, htmlMail, readreceipt, out status))
+                    if (Email.EmailProvider.SendCustomerFile(fromEmail, toMailAddr,true, subject, unitNo,url))                        
                     {
                         letter.status = "Email sent";
                         letter.errorMessage = "";

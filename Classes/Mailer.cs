@@ -1,3 +1,4 @@
+using Astrodon.Email;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -5,18 +6,59 @@ using System.Net;
 using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Threading;
+using System.Linq;
 
 namespace Astrodon
 {
     public class Mailer
     {
+        static string smtpHost = "10.0.1.1";
+        static Data.tblUser _LastUserSent = null;
         public Mailer()
         {
             // TODO: Add constructor logic here
         }
 
-        private static String generatHTMLEmail(String requestString, String emailString)
+        private static String generatHTMLEmail(String requestString, String emailString, string fromEmail)
         {
+            if (!emailString.ToLower().Contains("<br />"))
+                emailString = emailString.Replace(Environment.NewLine, "<br />");
+
+            string html = ResourceManager.EmailLayout(requestString);
+            html = html.Replace("{{SenderEmail}}", fromEmail);
+            html = html.Replace("{{CONTENT-GOES-HERE}}", emailString);
+
+            if (_LastUserSent == null || _LastUserSent.email != fromEmail)
+            {
+
+                using (var context = SqlDataHandler.GetDataContext())
+                {
+                    var sender = context.tblUsers.Where(a => a.email == fromEmail).FirstOrDefault();
+                    if(sender == null)
+                    {
+                        _LastUserSent = new Data.tblUser()
+                        {
+                            email = fromEmail,
+                            name = "Astrodon",
+                            phone = "011 867 3183",
+                            fax = "011 867 3163"
+                        };
+                    }
+                    else
+                    {
+                        _LastUserSent = sender;
+                    }
+
+                }
+            }
+
+            html = html.Replace("{{SENDER_TEL_NUMBER}}", _LastUserSent.email);
+            html = html.Replace("{{SENDER_FAX_NUMBER}}", _LastUserSent.fax);
+            html = html.Replace("{{SENDER_NAME}}", _LastUserSent.name);
+
+
+            /*
+
             String html = "";
             html += "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>";
             html += "<html xmlns='http://www.w3.org/1999/xhtml'>";
@@ -25,18 +67,17 @@ namespace Astrodon
             html += "<title>" + requestString + "</title>";
             html += "</head>";
             html += "<body>";
-            html += "<form id='form1' name='form1' method='post' action=''>";
-            html += "<p>";
+
             html += emailString;
-            html += "</p>";
-            html += "</form>";
+
             html += "</body>";
-            html += "</html>";
+            html += "</html>";*/
+
             return html;
         }
 
         public static bool SendMailWithAttachments(String fromEmail, String[] toMail,
-            String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status,
+            String subject, String message, bool addcc, bool readreceipt, out String status,
             Dictionary<string, byte[]> attachments, string bccEmail = null)
         {
             Dictionary<string, MemoryStream> attachmentStreams = new Dictionary<string, MemoryStream>();
@@ -46,14 +87,8 @@ namespace Astrodon
             }
             String mailBody = "";
             status = String.Empty;
-            if (htmlMail)
-            {
-                mailBody = generatHTMLEmail(subject, message);
-            }
-            else
-            {
-                mailBody = message;
-            }
+            mailBody = generatHTMLEmail(subject, message,fromEmail);
+
             try
             {
                 SmtpClient smtpClient = new SmtpClient();
@@ -63,14 +98,11 @@ namespace Astrodon
                 {
                     foreach (String emailAddress in toMail)
                     {
-                        if (!emailAddress.Contains("@imp.ad-one.co.za"))
-                        {
-                            MailAddress objMail_toaddress = new MailAddress(emailAddress);
-                            objMail.To.Add(objMail_toaddress);
-                        }
+                        MailAddress objMail_toaddress = new MailAddress(emailAddress);
+                        objMail.To.Add(objMail_toaddress);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     status = "Invalid email address";
                     foreach (var stream in attachmentStreams.Values)
@@ -78,7 +110,7 @@ namespace Astrodon
                         stream.Close();
                         stream.Dispose();
                     }
-                   
+
                     return false;
                 }
                 if (!string.IsNullOrWhiteSpace(bccEmail))
@@ -86,7 +118,7 @@ namespace Astrodon
                     objMail.Bcc.Add(bccEmail);
                 }
                 objMail.From = objMail_fromaddress;
-                objMail.IsBodyHtml = htmlMail;
+                objMail.IsBodyHtml = true;
                 objMail.Body = mailBody;
                 objMail.Priority = MailPriority.High;
                 if (addcc)
@@ -111,23 +143,14 @@ namespace Astrodon
                     }
                     return false;
                 }
-                if (Environment.MachineName == "STEPHEN-PC" || Environment.MachineName == "PASTELPARTNER")
-                {
-                    smtpClient.Host = "mail.npsa.co.za";
-                    smtpClient.Credentials = new NetworkCredential("info@metathought.co.za", "info01");
-                }
-                else
-                {
-                    smtpClient.Host = "10.0.1.1";
-                }
+
+                smtpClient.Host = smtpHost;
 
                 try
                 {
                     objMail.Subject = subject;
                     if (readreceipt)
-                    {
                         objMail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnSuccess;
-                    }
                     smtpClient.Send(objMail);
                 }
                 catch (Exception ex)
@@ -159,23 +182,17 @@ namespace Astrodon
             return true;
         }
 
-        public static bool SendMail(String fromEmail, String[] toMail, 
-            String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, String[] attachments = null)
+        public static bool SendMail(String fromEmail, String[] toMail,
+            String subject, String message, bool addcc, bool readreceipt,
+            out String status, String[] attachments = null)
         {
-           
+
             if (attachments != null && attachments.Length == 0)
                 attachments = null;
 
             String mailBody = "";
             status = String.Empty;
-            if (htmlMail)
-            {
-                mailBody = generatHTMLEmail(subject, message);
-            }
-            else
-            {
-                mailBody = message;
-            }
+            mailBody = generatHTMLEmail(subject, message, fromEmail);
             try
             {
                 SmtpClient smtpClient = new SmtpClient();
@@ -186,14 +203,11 @@ namespace Astrodon
                 {
                     foreach (String emailAddress in toMail)
                     {
-                        if (!emailAddress.Contains("@imp.ad-one.co.za"))
+                        if (!String.IsNullOrWhiteSpace(emailAddress) && emailAddress.Contains("@"))
                         {
-                            if (!String.IsNullOrWhiteSpace(emailAddress) && emailAddress.Contains("@"))
-                            {
-                                MailAddress objMail_toaddress = new MailAddress(emailAddress);
-                                objMail.To.Add(objMail_toaddress);
-                                toAdded = true;
-                            }
+                            MailAddress objMail_toaddress = new MailAddress(emailAddress);
+                            objMail.To.Add(objMail_toaddress);
+                            toAdded = true;
                         }
                     }
                 }
@@ -202,13 +216,13 @@ namespace Astrodon
                     status = "Invalid email address";
                     return false;
                 }
-                if(!toAdded)
+                if (!toAdded)
                 {
                     status = "Invalid email address";
                     return false;
                 }
                 objMail.From = objMail_fromaddress;
-                objMail.IsBodyHtml = htmlMail;
+                objMail.IsBodyHtml = true;
                 objMail.Body = mailBody;
                 objMail.Priority = MailPriority.High;
                 if (addcc)
@@ -231,15 +245,8 @@ namespace Astrodon
                     status = "Invalid attachment";
                     return false;
                 }
-                if (Environment.MachineName == "STEPHEN-PC")
-                {
-                    smtpClient.Host = "mail.npsa.co.za";
-                    smtpClient.Credentials = new NetworkCredential("info@metathought.co.za", "info01");
-                }
-                else
-                {
-                    smtpClient.Host = "10.0.1.1";
-                }
+
+                smtpClient.Host = smtpHost;
 
                 try
                 {
@@ -264,19 +271,13 @@ namespace Astrodon
             return true;
         }
 
-        public static bool SendDirectMail(String fromEmail, String[] toMail, String cc, String bcc, String subject, String message, bool htmlMail, bool readreceipt, out String status, String[] attachments = null)
+        public static bool SendDirectMail(String fromEmail, String[] toMail, String cc, String bcc, String subject, String message,
+            bool readreceipt, out String status, String[] attachments = null)
         {
-          
+
             String mailBody = "";
             status = String.Empty;
-            if (htmlMail)
-            {
-                mailBody = generatHTMLEmail(subject, message);
-            }
-            else
-            {
-                mailBody = message;
-            }
+            mailBody = generatHTMLEmail(subject, message, fromEmail);
             try
             {
                 String errorTrapper = "";
@@ -291,14 +292,11 @@ namespace Astrodon
                 {
                     foreach (String emailAddress in toMail)
                     {
-                        if (!emailAddress.Contains("@imp.ad-one.co.za"))
+                        if (!String.IsNullOrWhiteSpace(emailAddress) && emailAddress.Contains("@"))
                         {
-                            if (!String.IsNullOrWhiteSpace(emailAddress) && emailAddress.Contains("@"))
-                            {
-                                MailAddress objMail_toaddress = new MailAddress(emailAddress);
-                                objMail.To.Add(objMail_toaddress);
-                                toAdded = true;
-                            }
+                            MailAddress objMail_toaddress = new MailAddress(emailAddress);
+                            objMail.To.Add(objMail_toaddress);
+                            toAdded = true;
                         }
                     }
                 }
@@ -313,9 +311,9 @@ namespace Astrodon
                     return false;
                 }
 
-              
+
                 objMail.From = objMail_fromaddress;
-                objMail.IsBodyHtml = htmlMail;
+                objMail.IsBodyHtml = true;
                 errorTrapper = "Mail body";
                 objMail.Body = mailBody;
                 objMail.Priority = MailPriority.High;
@@ -360,15 +358,8 @@ namespace Astrodon
                     status = "Invalid attachment";
                     return false;
                 }
-                if (Environment.MachineName == "STEPHEN-PC")
-                {
-                    smtpClient.Host = "mail.npsa.co.za";
-                    smtpClient.Credentials = new NetworkCredential("info@metathought.co.za", "info01");
-                }
-                else
-                {
-                    smtpClient.Host = "10.0.1.1";
-                }
+
+                smtpClient.Host = smtpHost;
 
                 try
                 {
@@ -393,19 +384,13 @@ namespace Astrodon
             return true;
         }
 
-        public static bool SendMail(String fromEmail, String[] toMail, String subject, String message, bool htmlMail, bool addcc, bool readreceipt, out String status, Dictionary<String, byte[]> attachments = null)
+        public static bool SendMail(String fromEmail, String[] toMail, String subject, String message,
+            bool addcc, bool readreceipt, out String status, Dictionary<String, byte[]> attachments = null)
         {
-        
+
             String mailBody = "";
             status = String.Empty;
-            if (htmlMail)
-            {
-                mailBody = generatHTMLEmail(subject, message);
-            }
-            else
-            {
-                mailBody = message;
-            }
+            mailBody = generatHTMLEmail(subject, message, fromEmail);
             try
             {
                 SmtpClient smtpClient = new SmtpClient();
@@ -415,11 +400,8 @@ namespace Astrodon
                 {
                     foreach (String emailAddress in toMail)
                     {
-                        if (!emailAddress.Contains("@imp.ad-one.co.za"))
-                        {
-                            MailAddress objMail_toaddress = new MailAddress(emailAddress.Trim());
-                            objMail.To.Add(objMail_toaddress);
-                        }
+                        MailAddress objMail_toaddress = new MailAddress(emailAddress.Trim());
+                        objMail.To.Add(objMail_toaddress);
                     }
                 }
                 catch (Exception ex)
@@ -428,7 +410,7 @@ namespace Astrodon
                     return false;
                 }
                 objMail.From = objMail_fromaddress;
-                objMail.IsBodyHtml = htmlMail;
+                objMail.IsBodyHtml = true;
                 objMail.Body = mailBody;
                 objMail.Priority = MailPriority.High;
                 if (addcc)
@@ -452,15 +434,7 @@ namespace Astrodon
                         }
                     }
                 }
-                if (Environment.MachineName == "STEPHEN-PC")
-                {
-                    smtpClient.Host = "mail.npsa.co.za";
-                    smtpClient.Credentials = new NetworkCredential("info@metathought.co.za", "info01");
-                }
-                else
-                {
-                    smtpClient.Host = "10.0.1.1";
-                }
+                smtpClient.Host = smtpHost;
 
                 try
                 {
@@ -504,9 +478,9 @@ namespace Astrodon
             return isAvailable;
         }
 
-        public static bool SendMail(String fromEmail, String[] toMail, String cc, String bcc, String subject, String message, bool htmlMail, out String status, Dictionary<String, byte[]> attachments = null)
+        public static bool SendMail(String fromEmail, String[] toMail, String cc, String bcc, String subject, String message, out String status, Dictionary<String, byte[]> attachments = null)
         {
-          
+
             int count = 0;
             while (count <= 3 && !CheckPort())
             {
@@ -520,14 +494,7 @@ namespace Astrodon
             }
             String mailBody = "";
             status = String.Empty;
-            if (htmlMail)
-            {
-                mailBody = generatHTMLEmail(subject, message);
-            }
-            else
-            {
-                mailBody = message;
-            }
+            mailBody = generatHTMLEmail(subject, message, fromEmail);
             try
             {
                 SmtpClient smtpClient = new SmtpClient();
@@ -539,11 +506,8 @@ namespace Astrodon
                     {
                         try
                         {
-                            if (!emailAddress.Contains("@imp.ad-one.co.za"))
-                            {
-                                MailAddress objMail_toaddress = new MailAddress(emailAddress);
-                                objMail.To.Add(objMail_toaddress);
-                            }
+                            MailAddress objMail_toaddress = new MailAddress(emailAddress);
+                            objMail.To.Add(objMail_toaddress);
                         }
                         catch { }
                     }
@@ -559,7 +523,7 @@ namespace Astrodon
                     return false;
                 }
                 objMail.From = objMail_fromaddress;
-                objMail.IsBodyHtml = htmlMail;
+                objMail.IsBodyHtml = true;
                 objMail.Body = mailBody;
                 objMail.Priority = MailPriority.High;
                 if (cc.Trim() != "")
@@ -596,15 +560,8 @@ namespace Astrodon
                         }
                     }
                 }
-                if (Environment.MachineName == "STEPHEN-PC")
-                {
-                    smtpClient.Host = "mail.npsa.co.za";
-                    smtpClient.Credentials = new NetworkCredential("info@metathought.co.za", "info01");
-                }
-                else
-                {
-                    smtpClient.Host = "10.0.1.1";
-                }
+
+                smtpClient.Host = smtpHost;
 
                 try
                 {

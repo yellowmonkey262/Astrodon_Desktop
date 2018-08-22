@@ -240,7 +240,7 @@ namespace Astrodon.Reports.ManagementPack
 
                     string[] toEmail = { _SelectedItem.UserCreatedEmail };
                     string status;
-                    if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + "financial pack declined.", emailContent, false, false, out status))
+                    if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + "financial pack declined.", emailContent, false, out status))
                     {
                         Controller.HandleError("Unable to send notification email : " + status);
                     }
@@ -312,7 +312,7 @@ namespace Astrodon.Reports.ManagementPack
 
                 string[] toEmail = { _SelectedItem.UserCreatedEmail };
                 string status;
-                if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + "financial pack appoved.", emailContent, false, false, out status))
+                if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + "financial pack appoved.", emailContent, false, out status))
                 {
                     Controller.HandleError("Unable to send notification email : " + status);
                 }
@@ -332,7 +332,7 @@ namespace Astrodon.Reports.ManagementPack
 
                             emailContent = emailContent.Replace("{URL}", fileUrl);
                             status = "";
-                            if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", emailContent, false, false, out status))
+                            if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", emailContent, false, out status))
                             {
                                 Controller.HandleError("Unable to notify trustees by email : " + status);
                             }
@@ -343,7 +343,7 @@ namespace Astrodon.Reports.ManagementPack
                                 {
                                     toEmail = new string[] { trustee.Email[0] };
                                     tbComments.Text = tbComments.Text + "\nSent email to:" + trustee.accNumber + "-" + toEmail[0];
-                                    if (!Mailer.SendDirectMail(building.pm, toEmail, "", "", "Monthly financial pack", emailContent, false, false, out status))
+                                    if (!Mailer.SendDirectMail(building.pm, toEmail, "", "", "Monthly financial pack", emailContent, false, out status))
                                     {
                                         Controller.HandleError("Unable to notify trustees by email : " + status);
                                     }

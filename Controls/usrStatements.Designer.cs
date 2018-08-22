@@ -45,6 +45,7 @@
             this.btnFile.TabIndex = 19;
             this.btnFile.Text = "Select File";
             this.btnFile.UseVisualStyleBackColor = true;
+            this.btnFile.Visible = false;
             this.btnFile.Click += new System.EventHandler(this.btnFile_Click);
             // 
             // txtAttachment
@@ -53,6 +54,7 @@
             this.txtAttachment.Name = "txtAttachment";
             this.txtAttachment.Size = new System.Drawing.Size(148, 20);
             this.txtAttachment.TabIndex = 18;
+            this.txtAttachment.Visible = false;
             // 
             // label3
             // 
@@ -62,6 +64,7 @@
             this.label3.Size = new System.Drawing.Size(85, 13);
             this.label3.TabIndex = 17;
             this.label3.Text = "Add attachment:";
+            this.label3.Visible = false;
             // 
             // txtMessage
             // 

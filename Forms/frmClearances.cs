@@ -464,12 +464,16 @@ namespace Astrodon
                     {
                         String fromAddress = Controller.user.email;
                         String toAddress = Controller.user.email;
-                        if (!Mailer.SendMail(fromAddress, new String[] { toAddress }, "Clearance Certificate", "Please find attached clearance certificate", false, false, false, out status, new String[] { fileName }))
+
+                        if (!Email.EmailProvider.SendClearanceCertificate(fromAddress, toAddress, new String[] { fileName }))
                         {
-                            MessageBox.Show(status);
+                            MessageBox.Show("Error sending email");
                         }
-                        if (Environment.MachineName != "STEPHEN-PC") { ProcessJournals(id); }
-                        MessageBox.Show("Clearance processed and certificate sent!");
+                        else
+                        {
+                            ProcessJournals(id);
+                            MessageBox.Show("Clearance processed and certificate sent!");
+                        }
                     }
                 }
                 else if (id != 0)

@@ -105,6 +105,7 @@
             this.btnUpload.TabIndex = 23;
             this.btnUpload.Text = "Select File";
             this.btnUpload.UseVisualStyleBackColor = true;
+            this.btnUpload.Visible = false;
             // 
             // txtAttachment
             // 
@@ -112,6 +113,7 @@
             this.txtAttachment.Name = "txtAttachment";
             this.txtAttachment.Size = new System.Drawing.Size(231, 20);
             this.txtAttachment.TabIndex = 22;
+            this.txtAttachment.Visible = false;
             // 
             // txtMessage
             // 
@@ -159,6 +161,7 @@
             this.label4.Size = new System.Drawing.Size(64, 13);
             this.label4.TabIndex = 17;
             this.label4.Text = "Attachment:";
+            this.label4.Visible = false;
             // 
             // label2
             // 

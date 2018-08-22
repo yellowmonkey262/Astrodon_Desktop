@@ -19,6 +19,9 @@ namespace Astrodon.ClientPortal
         //'api/building/GetUnitDocument/' + id;
         private const string _documentLinkURL = "https://clientportal.astrodon.co.za/api/building/";
 
+        private const int MAX_TITLE_LENGTH = 500;
+        private const int MAX_FILENAME_LENGTH = 200;
+
         public string GetUnitDocumentLink(Guid documentId)
         {
             return _documentLinkURL + "GetUnitDocument/" + documentId.ToString("N");
@@ -194,12 +197,21 @@ namespace Astrodon.ClientPortal
         public string UploadUnitDocument(DocumentCategoryType documentType,DateTime fileDate, int buildingId,
             string accountNumber, string filename, string title, byte[] data)
         {
+            if (string.IsNullOrWhiteSpace(title))
+                title = "Correspondence ";
+
             filename = Path.GetFileName(filename);
 
             filename = filename.Replace(" ", "");
             //return a URL to the uploaded document
 
             Guid documentId = System.Guid.NewGuid();
+
+            if (title.Length > MAX_TITLE_LENGTH)
+                title = title.Substring(0, MAX_TITLE_LENGTH);
+
+            if (filename.Length > MAX_FILENAME_LENGTH)
+                filename = Path.GetFileNameWithoutExtension(filename).Substring(0, MAX_FILENAME_LENGTH - 4) + "." + Path.GetExtension(filename);
 
             string script = ReadSQLScript("UploadUnitDocument.sql");
             var parameters = new List<System.Data.SqlClient.SqlParameter>()
@@ -316,6 +328,15 @@ namespace Astrodon.ClientPortal
         {
             filename = Path.GetFileName(filename);
             //return a URL to the uploaded document
+
+
+            if (description.Length > MAX_TITLE_LENGTH)
+                description = description.Substring(0, MAX_TITLE_LENGTH);
+
+            if (filename.Length > MAX_FILENAME_LENGTH)
+                filename = Path.GetFileNameWithoutExtension(filename).Substring(0, MAX_FILENAME_LENGTH - 4) + "." + Path.GetExtension(filename);
+
+
 
             Guid documentId = System.Guid.NewGuid();
 

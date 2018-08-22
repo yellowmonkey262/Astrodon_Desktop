@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using System.Linq;
+using Astrodon.ClientPortal;
 
 namespace Astrodon
 {
@@ -17,6 +18,8 @@ namespace Astrodon
         private List<Customer> customers;
         private StatementBuilding stmtBuilding;
         private Statement stmt;
+        private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
+
 
         public usrIndStatements()
         {
@@ -80,13 +83,15 @@ namespace Astrodon
         private void btnGenView_Click(object sender, EventArgs e)
         {
             String fileName = String.Empty;
-            if (CreateStatement(true, out fileName)) { Process.Start(fileName); } else { MessageBox.Show("Unable to create statement"); }
+            DateTime statementDate;
+            if (CreateStatement(true, out fileName, out statementDate)) { Process.Start(fileName); } else { MessageBox.Show("Unable to create statement"); }
         }
 
         private void btnGenSend_Click(object sender, EventArgs e)
         {
             String fileName = String.Empty;
-            if (CreateStatement(true, out fileName))
+            DateTime statementDate;
+            if (CreateStatement(true, out fileName, out statementDate))
             {
                 List<String> attachments = new List<string>();
                 attachments.Add(fileName);
@@ -99,7 +104,10 @@ namespace Astrodon
                 if (!String.IsNullOrEmpty(attachment)) { attachments.Add(attachment); }
                 String[] att = attachments.ToArray();
                 String status = String.Empty;
-                if (Mailer.SendMail(stmt.DebtorEmail, stmt.email1, "Customer Statements", CustomerMessage(stmt.accNumber, stmt.DebtorEmail), false, false, false, out status, att))
+                var statementURL = _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName));
+
+                bool isRental = stmt.BuildingName == "ASTRODON RENTALS";
+                if(Email.EmailProvider.SendStatement(stmt.DebtorEmail, stmt.email1, stmt.accNumber, fileName, stmt.StmtDate, statementURL, isRental))
                 {
                     MessageBox.Show("Message Sent");
                 }
@@ -107,6 +115,7 @@ namespace Astrodon
                 {
                     MessageBox.Show("Unable to send mail: " + status);
                 }
+
             }
             else
             {
@@ -138,15 +147,16 @@ namespace Astrodon
             cmbCustomer.SelectedIndex = -1;
         }
 
-        private bool CreateStatement(bool makeFile, out String fileName, bool excludeStationery = false)
+        private bool CreateStatement(bool makeFile, out String fileName,out DateTime statementDate, bool excludeStationery = false)
         {
+            statementDate = stmtDatePicker.Value;
             this.Cursor = Cursors.WaitCursor;
             bool success = false;
             try
             {
                 double totalDue = 0;
                 String trnMsg;
-                stmt.Transactions = (new Classes.LoadTrans()).LoadTransactions(building, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
+                stmt.Transactions = (new Classes.LoadTrans()).LoadTransactions(building, customer, statementDate, out totalDue, out trnMsg);
                 //MessageBox.Show(trnMsg);
                 bool isStd = building.Bank_Name.ToLower().Contains("standard");
                 stmt.totalDue = totalDue;
@@ -248,7 +258,8 @@ namespace Astrodon
             {
                 customer = customers[cmbCustomer.SelectedIndex];
                 String fileName = String.Empty;
-                CreateStatement(false, out fileName);
+                DateTime statementDate;
+                CreateStatement(false, out fileName, out statementDate);
             }
             catch { }
         }

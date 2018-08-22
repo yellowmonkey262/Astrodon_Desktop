@@ -558,7 +558,7 @@ namespace Astrodon
 
             string oldEmail = string.Empty;
             string newEmail = txtEmail.Text;
-            if (customer.Email != null && !String.IsNullOrWhiteSpace(customer.Email[0]))
+            if (customer.Email != null && customer.Email.Length > 0 && !String.IsNullOrWhiteSpace(customer.Email[0]))
                 oldEmail = customer.Email[0];
 
             String[] delAddress = customer.getDelAddress();
@@ -736,22 +736,18 @@ namespace Astrodon
                
                 else if(colIdx == 5)
                 {
-                    String status;
-                    byte[] data = _ClientPortal.GetUnitFile(cd.Id);
-                    string fileName = Path.Combine(Path.GetTempPath(), cd.file);
+                    var link = _ClientPortal.GetUnitDocumentLink(cd.Id);
 
-                    File.WriteAllBytes(fileName, data);
-
-                    String[] att = { fileName };
-                    String[] emailTo = txtEmailTo.Text.Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (Mailer.SendMail(building.Debtor, emailTo, "Customer Statements", CustomerMessage(customer.accNumber, building.Debtor), false, false, false, out status, att))
+                    if (Email.EmailProvider.SendCustomerFile(building.Debtor, txtEmailTo.Text,true,cd.title, customer.accNumber, link))
                     {
                         MessageBox.Show("Message Sent");
                     }
                     else
                     {
-                        MessageBox.Show("Unable to send mail: " + status);
+                        MessageBox.Show("Unable to send mail");
                     }
+
+                  
                 }
                 else if (colIdx == 6)
                 {
@@ -772,20 +768,6 @@ namespace Astrodon
             }
         }
 
-        private String CustomerMessage(String accNumber, String debtorEmail)
-        {
-            String message = "Dear Owner," + Environment.NewLine + Environment.NewLine;
-            message += "Please find attached your statement." + Environment.NewLine + Environment.NewLine;
-            message += "Remember, you can access your statements online. Paste the link below into your browser to access your online statements." + Environment.NewLine + Environment.NewLine;
-            message += "www.astrodon.co.za" + Environment.NewLine + Environment.NewLine;
-            message += "Regards" + Environment.NewLine + Environment.NewLine;
-            message += "Astrodon (Pty) Ltd" + Environment.NewLine;
-            message += "You're in Good Hands" + Environment.NewLine + Environment.NewLine;
-            message += "Account #: " + accNumber + " For any queries on your statement, please email:" + debtorEmail + Environment.NewLine + Environment.NewLine;
-            message += "Do not reply to this e-mail address";
-
-            return message;
-        }
  
         private void dgDocs_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {

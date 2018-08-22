@@ -89,14 +89,13 @@ namespace Astrodon.Controls
                 List<String> att = new List<string>();
                 foreach (Object obj in lstAttachments.Items) { att.Add(obj.ToString()); }
                 String[] attachments = att.ToArray();
-                String status;
-                if (Mailer.SendDirectMail(Controller.user.email, emails, txtCC.Text, txtBCC.Text, txtSubject.Text, txtMessage.Text, false, true, out status, attachments))
+                if (Email.EmailProvider.SendDirectMail(emails, txtCC.Text, txtBCC.Text, txtSubject.Text, txtMessage.Text, attachments))
                 {
                     MessageBox.Show("Message sent");
                 }
                 else
                 {
-                    MessageBox.Show("Message not sent: " + status);
+                    MessageBox.Show("Message not sent");
                 }
             }
             else

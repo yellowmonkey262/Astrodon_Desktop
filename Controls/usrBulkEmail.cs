@@ -214,6 +214,7 @@ namespace Astrodon
 
         private bool CreateMail(bool queue, out String status, out int msgID)
         {
+            queue = false;
             SqlDataHandler dh = new SqlDataHandler();
             bool success = false;
             int incCount = 0;
@@ -375,13 +376,12 @@ namespace Astrodon
                             {
                                 Byte[] bytes;
                                 //if (File.Exists(fileName)) {
-                                Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                                BinaryReader br = new BinaryReader(fs);
-                                bytes = br.ReadBytes((Int32)fs.Length);
-                                //} else {
-                                //bytes = new byte[0];
-                                //fileName = "Y:\\Users\\Buildings Managed\\Dolphin Cove BC\\Meetings\\2015\\Proxy & Nomination forms 16.04.2015.pdf";
-                                //}
+                                using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                                {
+                                    BinaryReader br = new BinaryReader(fs);
+                                    bytes = br.ReadBytes((Int32)fs.Length);
+                                }
+                             
                                 String fileQuery = "INSERT INTO tblMsgData(msgID, Name, ContentType, Data) VALUES (@msgID, @Name, @ContentType, @Data)";
                                 sqlParms.Clear();
                                 sqlParms.Add("@msgID", msgID);
@@ -395,11 +395,7 @@ namespace Astrodon
                                     MessageBox.Show(status, "Attachments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                     return false;
                                 }
-                                else
-                                {
-                                    UploadToWeb(bytes, filename, message, sentToList);
-                                    success = true;
-                                }
+                               
                             }
                             else
                             {
@@ -419,7 +415,7 @@ namespace Astrodon
             return success;
         }
 
-        private void UploadToWeb(byte[] data, string filename,string description, List<EmailList> sendToList)
+     /*   private void UploadToWeb(byte[] data, string filename,string description, List<EmailList> sendToList)
         {
             if (data != null)
             {
@@ -437,10 +433,13 @@ namespace Astrodon
                 }
             }
         }
+        */
 
         private void SendMail(int msgID)
         {
-            String mailQuery = "SELECT msg.id, msg.fromAddress, b.Code, b.DataPath, msg.incBCC, msg.bccAddy, msg.subject, msg.message, msg.billBuilding, msg.billAmount FROM tblMsg AS msg ";
+            var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
+
+            String mailQuery = "SELECT msg.id, msg.fromAddress, b.Code, b.DataPath, msg.incBCC, msg.bccAddy, msg.subject, msg.message, msg.billBuilding, msg.billAmount, msg.buildingID FROM tblMsg AS msg ";
             mailQuery += " INNER JOIN tblBuildings AS b ON msg.buildingID = b.id WHERE (msg.queue = 'False') AND msg.id = " + msgID.ToString();
             SqlDataHandler dh = new SqlDataHandler();
             String status = String.Empty;
@@ -449,6 +448,8 @@ namespace Astrodon
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
+                    int buildingId = (int)dr["buildingID"];
+
                     String bCode = dr["Code"].ToString();
                     String dataPath = dr["DataPath"].ToString();
                     String fromAddress = dr["fromAddress"].ToString();
@@ -465,20 +466,44 @@ namespace Astrodon
                     {
                         foreach (DataRow drA in dsAttachment.Tables[0].Rows)
                         {
-                            if (!attachments.ContainsKey(drA["Name"].ToString())) { attachments.Add(drA["Name"].ToString(), (byte[])drA["Data"]); }
+                            if (!attachments.ContainsKey(drA["Name"].ToString()))
+                            {
+                                attachments.Add(drA["Name"].ToString(), (byte[])drA["Data"]);
+                            }
                         }
                     }
                     String billableCustomersQuery = "SELECT distinct accNo FROM tblMsgRecipients WHERE billCustomer = 'True' and msgID = " + msgID.ToString();
-                    String allRecipientsQuery = "SELECT id, accNo, recipient FROM tblMsgRecipients WHERE msgID = " + msgID.ToString();
+                    
                     DataSet billableCustomers = dh.GetData(billableCustomersQuery, null, out status);
+
+                    String allRecipientsQuery = "SELECT id, accNo, recipient FROM tblMsgRecipients WHERE msgID = " + msgID.ToString();
                     DataSet receivers = dh.GetData(allRecipientsQuery, null, out status);
+
                     Dictionary<String, bool> emails = new Dictionary<string, bool>();
+                    Dictionary<string, string> bulkMailAttachments = null;
+
                     if (receivers != null && receivers.Tables.Count > 0 && receivers.Tables[0].Rows.Count > 0)
                     {
                         foreach (DataRow rrece in receivers.Tables[0].Rows)
                         {
+                            bulkMailAttachments = new Dictionary<string, string>();
+
                             String[] emailAddys = rrece["recipient"].ToString().Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                            bool success = Mailer.SendMail(fromAddress, emailAddys, subject, message, false, false, false, out status, attachments);
+                            string accNumber = rrece["accNo"].ToString();
+
+                            foreach (string file in attachments.Keys.ToList())
+                            {
+                                var data = attachments[file];
+                                if (data != null && data.Length > 0)
+                                {
+                                    string url = clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, buildingId, accNumber, file, "Correspondence", data);
+                                    bulkMailAttachments.Add(file, url);
+                                }
+
+                            }
+
+                            bool success = Email.EmailProvider.SendBulkMail(fromAddress, emailAddys, subject, message, bulkMailAttachments);
+
                             String updateQuery = "UPDATE tblMsgRecipients SET sentDate = getdate() WHERE id = " + rrece["id"].ToString();
                             dh.SetData(updateQuery, null, out status);
                             if (!emails.ContainsKey(rrece["accNo"].ToString())) { emails.Add(rrece["accNo"].ToString(), success); }
@@ -496,7 +521,8 @@ namespace Astrodon
                     if (incBCC)
                     {
                         String[] bccs = bccAddy.Split(new String[] { ";" }, StringSplitOptions.None);
-                        Mailer.SendMail(fromAddress, bccs, subject, message, false, false, false, out status, attachments);
+
+                        Email.EmailProvider.SendBulkMail(fromAddress, bccs, subject, message, new Dictionary<string, string>());
                     }
                 }
             }

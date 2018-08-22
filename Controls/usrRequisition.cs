@@ -296,7 +296,8 @@ namespace Astrodon.Controls
                             String[] attachments = null;
                             String email = myBuildings[cmbBuilding.SelectedIndex].PM;
                             //email = "stephen@metathought.co.za";
-                            Mailer.SendMail(Controller.user.email, new string[] { email }, "Payment Requisitions", message, false, false, false, out status, attachments);
+                            Email.EmailProvider.SendPaymentRequisitionMessage(email, message, attachments);
+                            
                         }
                         dh.SetData(query, null, out status);
                         balance -= reqAmt;

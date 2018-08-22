@@ -37,7 +37,6 @@
             this.lstAttachments = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.btnAttachment = new System.Windows.Forms.Button();
-            this.btnSend = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSendNow = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
@@ -65,7 +64,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(14, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 15);
+            this.label1.Size = new System.Drawing.Size(77, 13);
             this.label1.TabIndex = 29;
             this.label1.Text = "Select Building";
             // 
@@ -85,7 +84,7 @@
             this.chkIncludeAll.AutoSize = true;
             this.chkIncludeAll.Location = new System.Drawing.Point(17, 70);
             this.chkIncludeAll.Name = "chkIncludeAll";
-            this.chkIncludeAll.Size = new System.Drawing.Size(147, 19);
+            this.chkIncludeAll.Size = new System.Drawing.Size(127, 17);
             this.chkIncludeAll.TabIndex = 32;
             this.chkIncludeAll.Text = "Include All Customers";
             this.chkIncludeAll.UseVisualStyleBackColor = true;
@@ -103,7 +102,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(14, 290);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 15);
+            this.label2.Size = new System.Drawing.Size(31, 13);
             this.label2.TabIndex = 34;
             this.label2.Text = "BCC:";
             // 
@@ -112,7 +111,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(14, 318);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 15);
+            this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 36;
             this.label3.Text = "Subject:";
             // 
@@ -128,7 +127,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(14, 344);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(61, 15);
+            this.label4.Size = new System.Drawing.Size(53, 13);
             this.label4.TabIndex = 38;
             this.label4.Text = "Message:";
             // 
@@ -148,7 +147,7 @@
             this.chkBCC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkBCC.Location = new System.Drawing.Point(312, 289);
             this.chkBCC.Name = "chkBCC";
-            this.chkBCC.Size = new System.Drawing.Size(60, 19);
+            this.chkBCC.Size = new System.Drawing.Size(53, 17);
             this.chkBCC.TabIndex = 39;
             this.chkBCC.Text = "BCC?";
             this.chkBCC.UseVisualStyleBackColor = true;
@@ -166,7 +165,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(14, 498);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(77, 15);
+            this.label5.Size = new System.Drawing.Size(69, 13);
             this.label5.TabIndex = 41;
             this.label5.Text = "Attachments:";
             // 
@@ -180,16 +179,6 @@
             this.btnAttachment.UseVisualStyleBackColor = true;
             this.btnAttachment.Click += new System.EventHandler(this.btnAttachment_Click);
             // 
-            // btnSend
-            // 
-            this.btnSend.Location = new System.Drawing.Point(484, 599);
-            this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(75, 23);
-            this.btnSend.TabIndex = 43;
-            this.btnSend.Text = "Queue Mails";
-            this.btnSend.UseVisualStyleBackColor = true;
-            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
-            // 
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(565, 599);
@@ -202,7 +191,7 @@
             // 
             // btnSendNow
             // 
-            this.btnSendNow.Location = new System.Drawing.Point(403, 599);
+            this.btnSendNow.Location = new System.Drawing.Point(484, 599);
             this.btnSendNow.Name = "btnSendNow";
             this.btnSendNow.Size = new System.Drawing.Size(75, 23);
             this.btnSendNow.TabIndex = 45;
@@ -215,7 +204,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(14, 604);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(27, 15);
+            this.label6.Size = new System.Drawing.Size(23, 13);
             this.label6.TabIndex = 46;
             this.label6.Text = "Bill:";
             // 
@@ -254,7 +243,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(14, 43);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(55, 15);
+            this.label8.Size = new System.Drawing.Size(49, 13);
             this.label8.TabIndex = 51;
             this.label8.Text = "Category";
             this.label8.Visible = false;
@@ -264,7 +253,7 @@
             this.chkPriority.AutoSize = true;
             this.chkPriority.Location = new System.Drawing.Point(315, 47);
             this.chkPriority.Name = "chkPriority";
-            this.chkPriority.Size = new System.Drawing.Size(111, 19);
+            this.chkPriority.Size = new System.Drawing.Size(97, 17);
             this.chkPriority.TabIndex = 53;
             this.chkPriority.Text = "Mark as urgent";
             this.chkPriority.UseVisualStyleBackColor = true;
@@ -284,7 +273,7 @@
             this.chkTrustees.AutoSize = true;
             this.chkTrustees.Location = new System.Drawing.Point(150, 70);
             this.chkTrustees.Name = "chkTrustees";
-            this.chkTrustees.Size = new System.Drawing.Size(101, 19);
+            this.chkTrustees.Size = new System.Drawing.Size(89, 17);
             this.chkTrustees.TabIndex = 55;
             this.chkTrustees.Text = "Trustees only";
             this.chkTrustees.UseVisualStyleBackColor = true;
@@ -304,7 +293,6 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnSendNow);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnSend);
             this.Controls.Add(this.btnAttachment);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.lstAttachments);
@@ -344,7 +332,6 @@
         private System.Windows.Forms.ListBox lstAttachments;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnAttachment;
-        private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSendNow;
         private System.Windows.Forms.Label label6;

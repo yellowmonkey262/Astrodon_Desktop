@@ -1018,18 +1018,6 @@ namespace Astrodon.Reports.Calendar
             if (String.IsNullOrWhiteSpace(bodyContent))
                 bodyContent = "";
 
-            bodyContent = bodyContent + Environment.NewLine + Environment.NewLine;
-
-            bodyContent += "Kind Regards" + Environment.NewLine;
-            bodyContent += entry.PM + Environment.NewLine;
-            bodyContent += "Tel: 011 867 3183" + Environment.NewLine;
-            bodyContent += "Fax: 011 867 3163" + Environment.NewLine;
-            bodyContent += "Direct Fax: 086 657 6199" + Environment.NewLine;
-            bodyContent += "BEE Level 4 Contributor" + Environment.NewLine;
-
-            bodyContent += "FOR AND ON BEHALF OF ASTRODON(PTY) LTD" + Environment.NewLine;
-            bodyContent += "The information contained in this communication is confidential and may be legally privileged.It is intended solely for the use of the individual or entity to whom it is addressed and others authorized to receive it.If you are not the intended recipient you are hereby notified that any disclosure, copying, distribution or taking action in reliance of the contents of this information is strictly prohibited and may be unlawful.The company is neither liable for proper, complete transmission of the information contained in this communication nor any delay in its receipt." + Environment.NewLine;
-
             string bccEmail = entry.BCCEmailAddress;
             if (bccEmail == string.Empty)
                 bccEmail = null;
@@ -1055,11 +1043,9 @@ namespace Astrodon.Reports.Calendar
 
                 }
 
-                if (!Mailer.SendMailWithAttachments(entry.PMEmail, toAddress.Distinct().ToArray(),
-                    subject, bodyContent,
-                    false, false, false, out status, attachments, bccEmail))
+                if (!Email.EmailProvider.SendCalendarInvite(entry.PMEmail, toAddress.Distinct().ToArray(),subject, bodyContent, attachments, bccEmail))
                 {
-                    Controller.HandleError("Error seding email " + status, "Email error");
+                    Controller.HandleError("Error seding email ", "Email error");
                 }
 
                 if (entry.NotifyTrustees && entry.EventyType == CalendarEntryType.Financial)
@@ -1076,10 +1062,9 @@ namespace Astrodon.Reports.Calendar
                             {
                                 if (trustee.Email != null && trustee.Email.Length > 0)
                                 {
-                                    if (!Mailer.SendMailWithAttachments(entry.PMEmail, trustee.Email,
-                                         subject, bodyContent, false, false, false, out status, attachments, bccEmail))
+                                    if (!Email.EmailProvider.SendCalendarInvite(entry.PMEmail, trustee.Email,subject,bodyContent,attachments,bccEmail))
                                     {
-                                        Controller.HandleError("Error seding email " + status, "Email error");
+                                        Controller.HandleError("Error seding email", "Email error");
                                     }
                                 }
                             }

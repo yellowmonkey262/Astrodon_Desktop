@@ -54,11 +54,10 @@ namespace Astrodon
                 String fromAddress = Controller.user.email;
                 String toAddress = Controller.user.email;
                 String status = String.Empty;
-                if (!Mailer.SendMail(fromAddress, new String[] { toAddress }, "Clearance Certificate", "Please find attached clearance certificate", false, false, false, out status, attachments.ToArray()))
-                {
-                    MessageBox.Show(status);
-                }
-                MessageBox.Show("Certificates sent");
+                if (!Email.EmailProvider.SendClearanceCertificate(fromAddress, toAddress, attachments.ToArray()))
+                    MessageBox.Show("Error sending clearance certificate");
+                else
+                    MessageBox.Show("Certificates sent");
             }
             else if (attachments.Count == 0)
             {
@@ -259,10 +258,14 @@ namespace Astrodon
                 String fromAddress = Controller.user.email;
                 String toAddress = Controller.user.email;
                 String status = String.Empty;
-                if (!Mailer.SendMail(fromAddress, new String[] { toAddress }, "Clearance Certificate", "Please find attached clearance certificate", false, false, false, out status, attachments.ToArray()))
+                if (!Email.EmailProvider.SendClearanceCertificate(fromAddress, toAddress, attachments.ToArray()))
                 {
-                    MessageBox.Show(status);
+                    MessageBox.Show("Error sending email");
                 }
+                else
+                  MessageBox.Show("Certificates sent");
+
+              
             }
             else if (attachments.Count == 0)
             {
