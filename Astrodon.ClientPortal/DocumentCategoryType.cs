@@ -14,6 +14,7 @@ namespace Astrodon.ClientPortal
         MeetingNotice = 4,
         Plan = 5,
         Letter = 6,
-        MonthlyFinancial = 7
+        MonthlyFinancial = 7,
+        PrivilegedCorrespondence = 8
     }
 }

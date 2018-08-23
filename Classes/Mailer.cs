@@ -47,12 +47,17 @@ namespace Astrodon
                     else
                     {
                         _LastUserSent = sender;
+
+                        if (string.IsNullOrWhiteSpace(_LastUserSent.phone))
+                            _LastUserSent.phone = "011 867 3183";
+                        if (string.IsNullOrWhiteSpace(_LastUserSent.fax))
+                            _LastUserSent.fax = "011 867 3163";
                     }
 
                 }
             }
 
-            html = html.Replace("{{SENDER_TEL_NUMBER}}", _LastUserSent.email);
+            html = html.Replace("{{SENDER_TEL_NUMBER}}", _LastUserSent.phone);
             html = html.Replace("{{SENDER_FAX_NUMBER}}", _LastUserSent.fax);
             html = html.Replace("{{SENDER_NAME}}", _LastUserSent.name);
 

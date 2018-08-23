@@ -1,4 +1,5 @@
 ﻿using Astro.Library.Entities;
+using Astrodon.ClientPortal;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -56,13 +57,13 @@ namespace Astrodon.Controls
                     builder.Append(email + ";");
                 }
                 txtEmail.Text = builder.ToString();
-                txtMessage.Text = "";
+          /*      txtMessage.Text = "";
                 String mailBody = "Account #: " + customers[cmbCustomer.SelectedIndex].accNumber + ". For any queries on your account, please contact " + building.Debtor + Environment.NewLine + Environment.NewLine;
                 mailBody += "For any maintenance queries, please contact " + building.PM + Environment.NewLine + Environment.NewLine;
                 mailBody += "Regards" + Environment.NewLine;
                 mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
                 mailBody += "You're in good hands";
-                txtMessage.Text += Environment.NewLine + Environment.NewLine + mailBody;
+                txtMessage.Text += Environment.NewLine + Environment.NewLine + mailBody;*/
             }
             catch { }
         }
@@ -83,13 +84,28 @@ namespace Astrodon.Controls
 
         private void btnSendNow_Click(object sender, EventArgs e)
         {
-            if (txtEmail.Text != "" && txtSubject.Text != "" && txtMessage.Text != "")
+            if (txtEmail.Text != "" && txtSubject.Text != "" && txtMessage.Text != "" && cmbCustomer.SelectedIndex >= 0 && cmbBuilding.SelectedIndex >= 0)
             {
+                var customer = customers[cmbCustomer.SelectedIndex];
+                var building = buildings[cmbBuilding.SelectedIndex];
                 String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
-                List<String> att = new List<string>();
-                foreach (Object obj in lstAttachments.Items) { att.Add(obj.ToString()); }
-                String[] attachments = att.ToArray();
-                if (Email.EmailProvider.SendDirectMail(emails, txtCC.Text, txtBCC.Text, txtSubject.Text, txtMessage.Text, attachments))
+
+                var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
+
+                Dictionary<string, string> attachmentsData = new Dictionary<string, string>();
+                foreach (Object obj in lstAttachments.Items)
+                {
+                    string fileName = obj.ToString();
+                    if(File.Exists(fileName))
+                    {
+                        attachmentsData.Add(Path.GetFileName(fileName), 
+                            clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, building.ID, customer.accNumber, txtSubject.Text, fileName));   
+                    }
+                }
+             
+
+
+                if (Email.EmailProvider.SendDirectMail(building.ID, customer.accNumber, emails, txtCC.Text, txtBCC.Text, txtSubject.Text, txtMessage.Text, attachmentsData))
                 {
                     MessageBox.Show("Message sent");
                 }

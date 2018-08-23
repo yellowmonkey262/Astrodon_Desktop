@@ -15,6 +15,7 @@ using Astrodon.Data.Calendar;
 using System.Data.Entity;
 using iTextSharp.text.pdf;
 using System.IO;
+using Astrodon.ClientPortal;
 
 namespace Astrodon.Reports.Calendar
 {
@@ -1000,7 +1001,6 @@ namespace Astrodon.Reports.Calendar
 
         private void SendCalenderInvite(CalendarPrintItem entry)
         {
-            string status;
             if (string.IsNullOrWhiteSpace(entry.PMEmail))
             {
                 Controller.HandleError("Email address not found for " + entry.PM);
@@ -1009,6 +1009,7 @@ namespace Astrodon.Reports.Calendar
 
             var calendarInvite = CreateCalendarInvite(entry.BuildingName + " - " + entry.Event, "", entry.Venue, entry.EventDate, entry.EventToDate != null ? entry.EventToDate.Value : entry.EventDate.AddHours(2));
             Dictionary<string, byte[]> attachments = new Dictionary<string, byte[]>();
+
             attachments.Add("Appointment.ics", calendarInvite);
             string subject = entry.InviteSubject;
             if (String.IsNullOrWhiteSpace(subject))
@@ -1052,9 +1053,23 @@ namespace Astrodon.Reports.Calendar
                 {
                     var customers = Controller.pastel.AddCustomers(entry.BuildingAbreviation, entry.BuildingDataPath);
                     var dbCustomers = context.CustomerSet.Where(a => a.BuildingId == entry.BuildingId && a.IsTrustee == true).ToList();
+                    var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
                     if (dbCustomers.Count() > 0 && Controller.AskQuestion("Are you sure you want to send the invite to " + dbCustomers.Count().ToString() + " trustees?"))
                     {
+
+                        //upload building documents
+
+                        Dictionary<string, string> trusteeAttachmentLinks = new Dictionary<string, string>();
+                        foreach(var fileName in attachments.Keys.ToList())
+                        {
+                            if (fileName != "Appointment.ics")
+                            {
+                                var url = clientPortal.UploadBuildingDocument(DocumentCategoryType.PrivilegedCorrespondence, DateTime.Today, entry.BuildingId.Value, Path.GetFileNameWithoutExtension(fileName),fileName, attachments[fileName]);
+                                trusteeAttachmentLinks.Add(fileName, url);
+                            }
+                        }
+
                         foreach (var dbCustomer in dbCustomers)
                         {
                             var trustee = customers.Where(a => a.accNumber == dbCustomer.AccountNumber).FirstOrDefault();
@@ -1062,7 +1077,7 @@ namespace Astrodon.Reports.Calendar
                             {
                                 if (trustee.Email != null && trustee.Email.Length > 0)
                                 {
-                                    if (!Email.EmailProvider.SendCalendarInvite(entry.PMEmail, trustee.Email,subject,bodyContent,attachments,bccEmail))
+                                    if (!Email.EmailProvider.SendTrusteeCalendarInvite(entry.PMEmail, trustee.Email,subject,bodyContent,attachments,bccEmail,trusteeAttachmentLinks))
                                     {
                                         Controller.HandleError("Error seding email", "Email error");
                                     }

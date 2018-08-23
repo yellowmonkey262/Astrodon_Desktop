@@ -1273,13 +1273,14 @@ namespace Astrodon.Controls
                             Application.DoEvents();
 
                             txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
-                            List<string> fileURLs = new List<string>();
+                            Dictionary<string,string> fileURLs = new Dictionary<string, string>();
                             foreach (KeyValuePair<String, byte[]> printAttachment in liveAttachments)
                             {
                                 try
                                 {
-                                   string url = _ClientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, selectedBuilding.ID, sendCustomer.accNumber, printAttachment.Key, txtSubject.Text, printAttachment.Value);
-                                   fileURLs.Add(url);
+                                    string url = _ClientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, selectedBuilding.ID, sendCustomer.accNumber, 
+                                        printAttachment.Key, txtSubject.Text, printAttachment.Value);
+                                    fileURLs.Add(printAttachment.Key, url);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1338,33 +1339,10 @@ namespace Astrodon.Controls
 
         private void SendLettersWithLinks(String fromEmail, String[] toEmail, String subject, String message, 
             bool htmlMail, String cc, String bcc, bool readreceipt,  String unitNo,
-            List<string> links, out String status)
+            Dictionary<string, string> links, out String status)
         {
             status = string.Empty;
             string url = "";
-
-            if (links != null)
-            {
-                if (links.Count() == 1)
-                {
-                    message = message + Environment.NewLine + Environment.NewLine;
-                    message = message + "Please download your document using the link below: " + Environment.NewLine +  links[0];
-                    url = url + links[0];
-                }
-                else
-                {
-                    message = message + Environment.NewLine + Environment.NewLine;
-                    message = message + "Please download your documents using the links below." + Environment.NewLine;
-                    foreach(var link in links)
-                    {
-                        message = message + link + Environment.NewLine;
-                        if (string.IsNullOrWhiteSpace(url))
-                            url = url + link;
-                        else
-                            url = url + " " + link;
-                    }
-                }
-            }
 
             string toMailAddr = String.Join(";", toEmail);
             using (var context = SqlDataHandler.GetDataContext())
@@ -1388,7 +1366,7 @@ namespace Astrodon.Controls
 
                 try
                 {
-                    if (Email.EmailProvider.SendUserJobEmail(fromEmail, toEmail, cc, bcc, subject, message))
+                    if (Email.EmailProvider.SendUserJobEmail(fromEmail, toEmail, cc, bcc, subject, message, links))
                     {
                         letter.status = "Email sent";
                         letter.errorMessage = "";
