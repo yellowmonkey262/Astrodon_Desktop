@@ -42,6 +42,8 @@ namespace Astrodon
 
         private String folderPath = "";
 
+        public string StatementFolderPath { get { return folderPath; } }
+
         public PDF()
         {
             dh = new SqlDataHandler();
@@ -3104,6 +3106,7 @@ namespace Astrodon
             return p;
         }
 
+        
         #region Content Writing
 
         private void PrintXAxis(int y)

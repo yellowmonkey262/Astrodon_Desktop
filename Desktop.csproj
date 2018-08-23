@@ -636,6 +636,7 @@
     <Compile Include="Forms\PrintOptions.Designer.cs">
       <DependentUpon>PrintOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Letter\LetterProvider.cs" />
     <Compile Include="Lib\SQL\PervasiveSqlUtilities.cs" />
     <Compile Include="Partial\PastelMaintenanceTransaction.cs" />
     <Compile Include="Program.cs" />
@@ -1271,6 +1272,7 @@
     <EmbeddedResource Include="Email\Templates\RequisitionPayment.html" />
     <EmbeddedResource Include="Email\Templates\Attachment.html" />
     <EmbeddedResource Include="Email\Templates\ReminderLetter.html" />
+    <EmbeddedResource Include="Letter\Templates\IntransferLetter.html" />
     <Content Include="Resources\AstradonNewLogo.jpg" />
     <Content Include="Resources\stdmd5.jpg" />
     <None Include="signature.png">

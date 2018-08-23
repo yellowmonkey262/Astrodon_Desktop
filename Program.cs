@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Linq;
+using Astrodon.Letter;
 
 namespace Astrodon {
 
@@ -20,7 +21,6 @@ namespace Astrodon {
 
             iTextSharp.text.pdf.PdfReader.unethicalreading = true;
 
-           
 
             Application.Run();
         }

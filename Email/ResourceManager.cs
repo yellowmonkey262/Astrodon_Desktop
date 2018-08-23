@@ -21,6 +21,12 @@ namespace Astrodon.Email
             return result;
         }
 
+        public static string ReadFilePath(string path)
+        {
+            var template = new ResourceManager().ReadResource(path);
+            return Encoding.UTF8.GetString(template);
+        }
+
         public static string EmailTemplate(string templateName)
         {
             var template = new ResourceManager().ReadResource("Astrodon.Email.Templates." + templateName);

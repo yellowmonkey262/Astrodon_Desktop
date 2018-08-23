@@ -123,21 +123,7 @@ namespace Astrodon
             }
         }
 
-        private String CustomerMessage(String accNumber, String debtorEmail)
-        {
-            String message = "Dear Owner," + Environment.NewLine + Environment.NewLine;
-            message += "Please find attached your statement." + Environment.NewLine + Environment.NewLine;
-            message += "Remember, you can access your statements online. Paste the link below into your browser to access your online statements." + Environment.NewLine + Environment.NewLine;
-            message += "www.astrodon.co.za" + Environment.NewLine + Environment.NewLine;
-            message += "Regards" + Environment.NewLine + Environment.NewLine;
-            message += "Astrodon (Pty) Ltd" + Environment.NewLine;
-            message += "You're in Good Hands" + Environment.NewLine + Environment.NewLine;
-            message += "Account #: " + accNumber + " For any queries on your statement, please email:" + debtorEmail + Environment.NewLine + Environment.NewLine;
-            message += "Do not reply to this e-mail address";
-
-            return message;
-        }
-
+     
         private void btnCancel_Click(object sender, EventArgs e)
         {
             dgTransactions.DataSource = null;

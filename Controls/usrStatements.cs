@@ -14,6 +14,7 @@ using iTextSharp.text.pdf;
 using System.Threading;
 using Astrodon.ClientPortal;
 using Astrodon.Data;
+using Astrodon.Letter;
 
 namespace Astrodon
 {
@@ -217,7 +218,7 @@ namespace Astrodon
                     String accName = dr["accName"].ToString();
                     String bankAccNumber = dr["bankAccNumber"].ToString();
                     String branch = dr["branch"].ToString();
-                    bool isStd = bankName.ToLower().Contains("standard");// dr["bank"].ToString() == "STANDARD";
+                    bool isStd = bankName.ToLower().Contains("standard");
                     foreach (Statement s in bStatements)
                     {
                         s.pm = pm;
@@ -234,7 +235,24 @@ namespace Astrodon
             foreach (Statement stmt in statements.statements)
             {
                 String fileName = String.Empty;
-                if (generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd))
+                bool canProcess = false;
+                if (stmt.IsInTransfer && stmt.InTransferLetter != null)
+                {
+                    string folderPath = generator.StatementFolderPath;
+                    fileName = Path.Combine(folderPath, String.Format("{0} - InTransfer - {1}{2}.pdf", stmt.AccNo.Replace(@"/", "-").Replace(@"\", "-"), DateTime.Now.ToString("dd-MMMM-yyyy"), ""));
+                    if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+                        Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+                    if (File.Exists(fileName))
+                        File.Delete(fileName);
+                    File.WriteAllBytes(fileName, stmt.InTransferLetter);
+                    canProcess = true;
+                }
+                else
+                {
+                    canProcess = generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, stmt.isStd);
+                }
+
+                if (canProcess)
                 {
                     #region Upload Letter
 
@@ -257,7 +275,6 @@ namespace Astrodon
 
                     }
                     #endregion
-
 
                     #region Email Me
                     if (stmt.EmailMe)
@@ -295,7 +312,6 @@ namespace Astrodon
                     }
                     #endregion
 
-        
                     Application.DoEvents();
 
                 }
@@ -435,31 +451,43 @@ namespace Astrodon
         }
         private string _PrinterName = string.Empty;
 
-
+        List<Building> _BuildingList = null;
         public List<Statement> SetBuildings(int buildingId, String buildingName, String buildingPath, int buildingPeriod, bool isHOA)
         {
-            Building build = new Building();
+            if (_BuildingList == null)
+                _BuildingList = new Buildings(false, false).buildings;
+
+            Building build = _BuildingList.Where(a => a.ID == buildingId).FirstOrDefault();
+            if (build == null)
+                build = new Building();
+
             build.Name = buildingName;
             build.DataPath = buildingPath;
             build.Period = buildingPeriod;
             build.ID = buildingId;
 
-            List<Customer> customers = Controller.pastel.AddCustomers(buildingName, buildingPath);
+            User portfolioManager = null;
+
+            using (var ctx = SqlDataHandler.GetDataContext())
+            {
+                var pmUser = ctx.tblUsers.Where(a => a.email == build.PM).FirstOrDefault();
+                if(pmUser != null)
+                    portfolioManager = new Users().GetUser(pmUser.id);
+            }
+
+                List<Customer> customers = Controller.pastel.AddCustomers(buildingName, buildingPath);
             List<Statement> myStatements = new List<Statement>();
             lblCCount.Text = build.Name + " 0/" + customers.Count.ToString();
             lblCCount.Refresh();
             int ccount = 0;
             foreach (Customer customer in customers)
             {
-                if (buildingName.Trim().ToUpper() != _AstradonRentalsBuilding.ToUpper() && (
-                       customer.IntCategory == 2 //Units in Transfer
-                    || customer.IntCategory == 10 //Units Disconnected
-                         || customer.IntCategory == 11 //Units Disconnected
+                if (buildingName.Trim().ToUpper() != _AstradonRentalsBuilding.ToUpper() && (                      
+                       customer.IntCategory == 10 //Units Disconnected
+                    || customer.IntCategory == 11 //Units Disconnected
                     ))
                 {
-                    if (customer.IntCategory == 2)
-                        AddProgressString("Customer Account is in Units in Transfer category and will be skipped: " + customer.accNumber);
-                    else if (customer.IntCategory == 10)
+                    if (customer.IntCategory == 10)
                         AddProgressString("Customer Account is in Unallocated Deposits category and will be skipped: " + customer.accNumber);
                     else if (customer.IntCategory == 11)
                         AddProgressString("Customer Account is in Transferred Units/PMA category and will be skipped: " + customer.accNumber);
@@ -491,34 +519,54 @@ namespace Astrodon
                         myStatement.StmtDate = stmtDatePicker.Value;
                         double totalDue = 0;
                         String trnMsg;
-                        List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
-                        if (transactions != null && transactions.Where(a => a.IsOpeningBalance == false).Count() > 0)
+
+                        myStatement.DebtorEmail = getDebtorEmail(buildingName);
+                        myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
+                        myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
+                        if (customer.Email != null && customer.Email.Length > 0)
                         {
-                            myStatement.Transactions = transactions;
-                            myStatement.totalDue = totalDue;
-                            myStatement.DebtorEmail = getDebtorEmail(buildingName);
-                            myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
-                            myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
-                            if (customer.Email != null && customer.Email.Length > 0)
+                            List<String> newEmails = new List<string>();
+                            foreach (String emailAddress in customer.Email)
                             {
-                                List<String> newEmails = new List<string>();
-                                foreach (String emailAddress in customer.Email)
-                                {
-                                    if (!emailAddress.Contains("@imp.ad-one.co.za")) { newEmails.Add(emailAddress); }
-                                }
-                                myStatement.email1 = newEmails.ToArray();
+                                newEmails.Add(emailAddress);
+                            }
+                            myStatement.email1 = newEmails.ToArray();
+                        }
+                        else
+                            myStatement.PrintMe = true;
+
+                        if (myStatement.PrintMe)
+                            AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
+
+                        //check for in transfer and create a transfer letter instead of a statement.
+                        myStatement.IsInTransfer = customer.IntCategory == 2;
+                        if (myStatement.IsInTransfer)
+                        {
+                            if (portfolioManager != null)
+                            {
+                                var fileData = GenerateCustomerTransferLetter(build, customer, portfolioManager);
+                                myStatement.InTransferLetter = fileData;
+                                myStatement.Transactions = new List<Transaction>();
+                                myStatement.totalDue = 0;
+                                myStatements.Add(myStatement);
                             }
                             else
-                                myStatement.PrintMe = true;
-
-                            if (myStatement.PrintMe)
-                                AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
-
-                            myStatements.Add(myStatement);
+                                AddProgressString("Building PM not found for: " + buildingName);
                         }
                         else
                         {
-                            AddProgressString("Statement for " + customer.accNumber + " has zero transactions - statement skipped");
+
+                            List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
+                            if (transactions != null && transactions.Where(a => a.IsOpeningBalance == false).Count() > 0)
+                            {
+                                myStatement.Transactions = transactions;
+                                myStatement.totalDue = totalDue;
+                                myStatements.Add(myStatement);
+                            }
+                            else
+                            {
+                                AddProgressString("Statement for " + customer.accNumber + " has zero transactions - statement skipped");
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -534,39 +582,10 @@ namespace Astrodon
             return myStatements;
         }
 
-        private string OrdinaryMessage(String accNumber, String debtorEmail, string statmentUrl, bool rental = false)
+        private byte[] GenerateCustomerTransferLetter(Building building, Customer customer, User portfolioManager)
         {
-            String message = "Dear " + (rental ? "tenant" : "owner") + "," + Environment.NewLine + Environment.NewLine;
-            message += "Please download your statement from the link below." + Environment.NewLine + Environment.NewLine;
-
-            message += statmentUrl + Environment.NewLine + Environment.NewLine;
-
-            message += "Account #: " + accNumber + " For any queries on your statement, please email:" + debtorEmail + Environment.NewLine + Environment.NewLine;
-            message += RegisterMessage();
-            message += "Regards" + Environment.NewLine + Environment.NewLine;
-            message += "Astrodon (Pty) Ltd" + Environment.NewLine;
-            message += "You're in Good Hands" + Environment.NewLine + Environment.NewLine;
-
-            return message;
+            return LetterProvider.CreateIntransferLetter(customer, building, portfolioManager);
         }
-
-        private String RegisterMessage()
-        {
-            String message = "Did you know that you can log on to our website and download historic levy statements, Conduct Rules, Insurance information, newsletters and much more?" + Environment.NewLine + Environment.NewLine;
-            message += "Simply register at www.astrodon.co.za & follow the below instructions:" + Environment.NewLine + Environment.NewLine;
-            message += "1.  On the homepage, please click on the \"Registration for Owner\" button." + Environment.NewLine + Environment.NewLine;
-            message += "2.  Choose the option to \"register as owner\"." + Environment.NewLine + Environment.NewLine;
-            message += "3.  Type in your email address and click \"next\"." + Environment.NewLine + Environment.NewLine;
-            message += "You will receive a confirmation email with a link that you can follow to finish the registration process.  If you click next and you get a message telling ";
-            message += "you that your email is not found on the database, please contact your debtor controller at Astrodon to double check that we have your correct email address on our system." + Environment.NewLine + Environment.NewLine;
-            message += "Once registered, you can log onto the site by typing your email address and password in the blocks provided on the top right hand corner of the page." + Environment.NewLine + Environment.NewLine;
-            message += "After you have logged on, you will be directed to the \"My Astrodon\" page where you can access your statements and any other information that has been uploaded for your complex." + Environment.NewLine + Environment.NewLine;
-            message += "Investor owners with more that one unit will be happy to know that you will use the same login details for all your units, simply click on the drop down box at the top of the \"My Astrodon\" page and select the unit you wish to view." + Environment.NewLine + Environment.NewLine;
-            message += "If you experience any problems with this service, please contact our offices so that we can assist you." + Environment.NewLine + Environment.NewLine;
-            message += "Just another way we try to make your life easier." + Environment.NewLine + Environment.NewLine;
-            return message;
-        }
-
 
         private void SetupEmail(Statement stmt,string fileName, String url)
         {
@@ -611,9 +630,6 @@ namespace Astrodon
 
                 bool isRental = statementItem.fileName.ToUpper().EndsWith("_R.PDF");
 
-                string emailBody = OrdinaryMessage(stmt.AccNo, statementItem.debtorEmail, url, isRental);
-
-                string emailStatus;
                 string[] toMail = statementItem.email1.Split(";".ToCharArray());
 
                 try
