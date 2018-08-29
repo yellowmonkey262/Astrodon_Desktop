@@ -557,6 +557,9 @@ namespace Astrodon
                         {
 
                             List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
+                            if(!string.IsNullOrWhiteSpace(trnMsg))
+                                AddProgressString("Statement for " + customer.accNumber + " has messages " + trnMsg);
+
                             if (transactions != null && transactions.Where(a => a.IsOpeningBalance == false).Count() > 0)
                             {
                                 myStatement.Transactions = transactions;

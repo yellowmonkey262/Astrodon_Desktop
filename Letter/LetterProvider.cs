@@ -23,21 +23,6 @@ namespace Astrodon.Letter
             return result;
         }
 
-        public static void Test()
-        {
-            var building = new Buildings(false).buildings.Where(a => a.ID == 212).First();
-            var pm = new Users().GetUser(20);
-
-            using (var context = SqlDataHandler.GetDataContext())
-            {
-                var customer = context.CustomerSet.Where(a => a.BuildingId == 212).First();
-                var cust = new Customer()
-                {
-                    accNumber = customer.AccountNumber,
-                };
-                var data = CreateIntransferLetter(cust, building, pm);
-                File.WriteAllBytes(@"C:\Temp\Test.pdf", data);
-            }
-        }
+     
     }
 }

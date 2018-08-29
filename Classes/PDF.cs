@@ -36,7 +36,7 @@ namespace Astrodon
         private iTextSharp.text.Font fontPABI = FontFactory.GetFont("Arial Narrow", 11f, iTextSharp.text.Font.BOLD | iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
         private iTextSharp.text.Font fontPABU = FontFactory.GetFont("Arial Narrow", 11f, iTextSharp.text.Font.BOLD | iTextSharp.text.Font.UNDERLINE, BaseColor.BLACK);
         private iTextSharp.text.Font fontPABIU = FontFactory.GetFont("Arial Narrow", 11f, iTextSharp.text.Font.BOLD | iTextSharp.text.Font.ITALIC | iTextSharp.text.Font.UNDERLINE, BaseColor.BLACK);
-
+        private int _SignaturePageBreak = 200;
         //
         private ClearanceObject clr = null;
 
@@ -2518,7 +2518,10 @@ namespace Astrodon
                 if (letterhead)
                 {
                     float sigY = writer.GetVerticalPosition(true);
-                    if (sigY < 175) { document.NewPage(); }
+                    if (sigY < _SignaturePageBreak)
+                    {
+                        document.NewPage();
+                    }
 
                     p = new Paragraph("Yours faithfully", fontPA);
                     p.SetLeading(0, 1);
@@ -2784,7 +2787,9 @@ namespace Astrodon
                 //document.Add(p);
                 //document.Add(pDummy);
                 float sigY = writer.GetVerticalPosition(true);
-                if (sigY < 175) { document.NewPage(); }
+                if (sigY < _SignaturePageBreak) {
+                    document.NewPage();
+                }
 
                 p = new Paragraph("Yours faithfully", fontPA);
                 p.SetLeading(0, 1);

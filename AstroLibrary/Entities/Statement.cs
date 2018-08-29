@@ -57,6 +57,7 @@ namespace Astro.Library.Entities
         public String pm { get; set; }
 
         public bool IsInTransfer { get; set; }
+
         public byte[] InTransferLetter { get; set; }
     }
 }

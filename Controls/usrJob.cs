@@ -1156,9 +1156,6 @@ namespace Astrodon.Controls
                     }
                     mailBody += "Account #: " + sendCustomer.accNumber + "." + Environment.NewLine
                                +"For any queries on your account, please contact " + Controller.user.name + " on email: " + Controller.user.email + ", tel: " + Controller.user.phone + "." + Environment.NewLine + Environment.NewLine;
-                    mailBody += "Regards" + Environment.NewLine;
-                    mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
-                    mailBody += "You're in good hands";
                     txtStatus.Text += "Creating documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                     Application.DoEvents();
 

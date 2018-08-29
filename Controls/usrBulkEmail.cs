@@ -47,9 +47,6 @@ namespace Astrodon
                 if (Controller.user.email != building.PM) { txtBCC.Text += "; " + Controller.user.email; }
                 String mailBody = "For any queries on your account, please contact " + building.Debtor + Environment.NewLine + Environment.NewLine;
                 mailBody += "For any maintenance queries, please contact " + building.PM + Environment.NewLine + Environment.NewLine;
-                mailBody += "Regards" + Environment.NewLine;
-                mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
-                mailBody += "You're in good hands";
                 txtMessage.Text = Environment.NewLine + Environment.NewLine + mailBody;
                 LoadCustomers(String.Empty);
                 LoadCategories();
@@ -278,13 +275,6 @@ namespace Astrodon
                 pmUser = Controller.user;
             }
             message += Environment.NewLine + Environment.NewLine;
-            message += "Kind Regards" + Environment.NewLine;
-            message += pmUser.name + Environment.NewLine;
-            message += "Portfolio Manager" + Environment.NewLine;
-            message += "Tel: " + pmUser.phone + Environment.NewLine;
-            message += "Fax: 011 867 3163" + Environment.NewLine;
-            message += "Direct Fax: " + pmUser.fax + Environment.NewLine;
-            message += "For and on behalf of Astrodon Pty Ltd";
 
             sqlParms.Add("@message", message);
             sqlParms.Add("@billBuilding", cmbBill.SelectedItem != null && cmbBill.SelectedItem.ToString() == "Building" ? true : false);
@@ -482,6 +472,7 @@ namespace Astrodon
                     Dictionary<String, bool> emails = new Dictionary<string, bool>();
                     Dictionary<string, string> bulkMailAttachments = null;
 
+
                     if (receivers != null && receivers.Tables.Count > 0 && receivers.Tables[0].Rows.Count > 0)
                     {
                         foreach (DataRow rrece in receivers.Tables[0].Rows)
@@ -522,7 +513,7 @@ namespace Astrodon
                     {
                         String[] bccs = bccAddy.Split(new String[] { ";" }, StringSplitOptions.None);
 
-                        Email.EmailProvider.SendBulkMail(fromAddress, bccs, subject, message, new Dictionary<string, string>());
+                        Email.EmailProvider.SendBulkMail(fromAddress, bccs, subject, message, bulkMailAttachments);
                     }
                 }
             }

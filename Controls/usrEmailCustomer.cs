@@ -57,13 +57,7 @@ namespace Astrodon.Controls
                     builder.Append(email + ";");
                 }
                 txtEmail.Text = builder.ToString();
-          /*      txtMessage.Text = "";
-                String mailBody = "Account #: " + customers[cmbCustomer.SelectedIndex].accNumber + ". For any queries on your account, please contact " + building.Debtor + Environment.NewLine + Environment.NewLine;
-                mailBody += "For any maintenance queries, please contact " + building.PM + Environment.NewLine + Environment.NewLine;
-                mailBody += "Regards" + Environment.NewLine;
-                mailBody += "Astrodon (Pty) Ltd" + Environment.NewLine;
-                mailBody += "You're in good hands";
-                txtMessage.Text += Environment.NewLine + Environment.NewLine + mailBody;*/
+       
             }
             catch { }
         }

@@ -40,6 +40,9 @@ namespace Astrodon.Classes
 
                 DateTime trnDate = startPeriod.Start.Value;
 
+                DateTime dt1 = new DateTime(transDate.Year, transDate.Month, 1);
+                var minDate = dt1.AddMonths(-3);
+
                 var opBal = startPeriod.OpeningBalance;
                 Transaction optran = new Transaction
                 {
