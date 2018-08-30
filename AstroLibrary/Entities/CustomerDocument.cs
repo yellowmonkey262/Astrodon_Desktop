@@ -7,6 +7,8 @@ namespace Astro.Library.Entities
 {
     public class CustomerDocument
     {
+        public int documentType;
+
         public DateTime tstamp { get; set; }
 
         public String subject { get; set; }

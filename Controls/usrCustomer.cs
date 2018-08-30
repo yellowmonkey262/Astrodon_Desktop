@@ -699,7 +699,8 @@ namespace Astrodon
                     subject = a.DocumentTypeStr,
                     title = a.Title,
                     tstamp = a.DocumentDate,
-                    Id = a.Id
+                    Id = a.Id,
+                    documentType = (int)a.DocumentType
                 }).OrderByDescending(a => a.tstamp).ToList();
 
                 bsDocs.Clear();
@@ -738,7 +739,15 @@ namespace Astrodon
                 {
                     var link = _ClientPortal.GetUnitDocumentLink(cd.Id);
 
-                    if (Email.EmailProvider.SendCustomerFile(building.Debtor, txtEmailTo.Text,true,cd.title, customer.accNumber, link))
+                    string fromEmail = Controller.user.email;
+
+                    if (cd.documentType == (int)DocumentCategoryType.FinancialStatement)
+                        fromEmail = building.Debtor;
+                    else
+                        fromEmail = building.PM;
+
+
+                    if (Email.EmailProvider.SendCustomerFile(fromEmail, txtEmailTo.Text,true,cd.title, customer.accNumber, link))
                     {
                         MessageBox.Show("Message Sent");
                     }
