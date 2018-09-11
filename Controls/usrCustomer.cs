@@ -630,14 +630,24 @@ namespace Astrodon
                             AccountNumber = customer.accNumber,
                             Description = customer.description,
                             IsTrustee = customer.IsTrustee,
-                            Created = DateTime.Now
+                            Created = DateTime.Now,
                         };
                         context.CustomerSet.Add(custEntity);
                     }
                     custEntity.LoadEmails(customer.Email);
                     if (!String.IsNullOrWhiteSpace(newEmail))
                         custEntity.EmailAddress1 = newEmail;
+
+                    if(dtpDateOfBirth.Value.Year > 1890)
+                      custEntity.DateOfBirth = dtpDateOfBirth.Value;
+
+                    custEntity.IDNumber = tbRSAIDNumber.Text;
+                    custEntity.SendBirthdayNotification = cbBirthDayNotificaiton.Checked;
+                    custEntity.CellNumber = customer.CellPhone;
+                    custEntity.CustomerFullName = tbFullName.Text;
+                    custEntity.LoadEmails(customer.Email);
                     context.SaveChanges();
+
                 }
 
 
@@ -655,6 +665,10 @@ namespace Astrodon
             else
             {
                 MessageBox.Show("Cannot save customer: " + result);
+            }
+            if (showMessage)
+            {
+                Controller.ShowMessage("Customer record updated");
             }
             LoadCustomers(cmbCustomer.SelectedIndex);
         }
@@ -1544,6 +1558,8 @@ namespace Astrodon
                     if (customerEntity.CellNumber != cust.CellPhone)
                         customerEntity.CellNumber = cust.CellPhone;
 
+
+
                     customerEntity.LoadEmails(cust.Email);
                 }
                 context.SaveChanges();
@@ -1555,6 +1571,7 @@ namespace Astrodon
         {
             cbBirthDayNotificaiton.Checked = false;
             tbRSAIDNumber.Text = "";
+            tbRSAIDNumber.ReadOnly = false;
             dtpDateOfBirth.Value = new DateTime(1900, 01, 01);
             dtpDateOfBirth.MaxDate = DateTime.Today;
             dtpDateOfBirth.MinDate = DateTime.Today.AddYears(-150);
@@ -1581,8 +1598,7 @@ namespace Astrodon
                 }
                 cbBirthDayNotificaiton.Checked = customerEntity.SendBirthdayNotification;
 
-                if (!String.IsNullOrWhiteSpace(customerEntity.IDNumber))
-                    tbRSAIDNumber.Text = customerEntity.IDNumber;
+                tbRSAIDNumber.Text = customerEntity.IDNumber;
 
                 if (customerEntity.DateOfBirth != null)
                     dtpDateOfBirth.Value = customerEntity.DateOfBirth.Value;
@@ -1596,6 +1612,12 @@ namespace Astrodon
         }
 
         private void btnSaveBirthDay_Click(object sender, EventArgs e)
+        {
+            SaveCustomerDetails();
+            Controller.ShowMessage("Birthday details updated");
+        }
+
+        private void SaveCustomerDetails()
         {
             if (dtpDateOfBirth.Value < DateTime.Today.AddYears(-140))
                 cbBirthDayNotificaiton.Checked = false;
@@ -1629,8 +1651,6 @@ namespace Astrodon
                 customerEntity.CustomerFullName = tbFullName.Text;
                 customerEntity.LoadEmails(customer.Email);
                 context.SaveChanges();
-
-                Controller.ShowMessage("Birthday details updated");
             }
         }
 
