@@ -201,7 +201,7 @@ namespace Astrodon.Controls.Web
                     return;
                 }
 
-                clientPortal.UploadBuildingDocument(documentType, DateTime.Now, _SelectedBuilding.ID, tbTitle.Text, filePath);
+                clientPortal.UploadBuildingDocument(documentType, DateTime.Now, _SelectedBuilding.ID, tbTitle.Text, filePath,string.Empty);
 
                 Controller.ShowMessage("File Uploaded");
 

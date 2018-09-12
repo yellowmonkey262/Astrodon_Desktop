@@ -630,6 +630,12 @@
     <Compile Include="Forms\frmSupport.Designer.cs">
       <DependentUpon>frmSupport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmWebDocumentAccessLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmWebDocumentAccessLog.Designer.cs">
+      <DependentUpon>frmWebDocumentAccessLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PrintOptions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -934,6 +940,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSupport.resx">
       <DependentUpon>frmSupport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmWebDocumentAccessLog.resx">
+      <DependentUpon>frmWebDocumentAccessLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PrintOptions.resx">
       <DependentUpon>PrintOptions.cs</DependentUpon>

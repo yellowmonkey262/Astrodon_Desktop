@@ -695,8 +695,11 @@ namespace Astrodon
                     MessageBox.Show(c.statPrintorEmail.ToString() + " - " + created.ToString());
                 }
 
+                string emailAddress = c.Email != null ? c.Email.Where(d => !String.IsNullOrEmpty(d)).FirstOrDefault() : string.Empty;
+
+
                 string url = _ClientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today,
-                           building.ID, c.accNumber, Path.GetFileName(fileName), docType, File.ReadAllBytes(fileName));
+                           building.ID, c.accNumber, Path.GetFileName(fileName), docType, File.ReadAllBytes(fileName),emailAddress);
 
                 if ((c.statPrintorEmail <= 3) && created)
                 {

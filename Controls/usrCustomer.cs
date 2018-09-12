@@ -751,7 +751,7 @@ namespace Astrodon
                
                 else if(colIdx == 5)
                 {
-                    var link = _ClientPortal.GetUnitDocumentLink(cd.Id);
+                    var link = _ClientPortal.GetUnitDocumentLink(cd.Id, txtEmailTo.Text);
 
                     string fromEmail = Controller.user.email;
 
@@ -783,6 +783,9 @@ namespace Astrodon
                             LoadDocuments();
                         }
                     }
+                }else if (colIdx == 7)
+                {
+                    Astrodon.Forms.frmWebDocumentAccessLog.ShowUnitDocumentHistory(cd.Id, cd.title);
                 }
             }
             catch (Exception ex)
@@ -2088,7 +2091,7 @@ namespace Astrodon
 
                 var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
-                clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Now, building.ID, customer.accNumber, tbTitle.Text, filePath);
+                clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Now, building.ID, customer.accNumber, tbTitle.Text, filePath,string.Empty);
 
                 Controller.ShowMessage("File Uploaded");
 

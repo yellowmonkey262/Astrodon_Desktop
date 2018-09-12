@@ -134,7 +134,7 @@ namespace Astrodon.Controls
                 if (ofd.ShowDialog() == DialogResult.OK && !String.IsNullOrEmpty(ofd.FileName))
                 {
                     var fileData = File.ReadAllBytes(ofd.FileName);
-                    _ClientPortal.UploadBuildingDocument(DocumentCategoryType.Letter, DateTime.Today, building.ID, Path.GetFileName(ofd.FileName), Path.GetFileName(ofd.FileName), fileData);
+                    _ClientPortal.UploadBuildingDocument(DocumentCategoryType.Letter, DateTime.Today, building.ID, Path.GetFileName(ofd.FileName), Path.GetFileName(ofd.FileName), fileData,string.Empty);
                     ListFiles();
                 }
             }

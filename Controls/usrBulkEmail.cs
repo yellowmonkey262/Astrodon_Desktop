@@ -481,13 +481,15 @@ namespace Astrodon
 
                             String[] emailAddys = rrece["recipient"].ToString().Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                             string accNumber = rrece["accNo"].ToString();
-
+                            string emailAddress = string.Empty;
+                            if (emailAddys.Length > 0)
+                                emailAddress = emailAddys[0];
                             foreach (string file in attachments.Keys.ToList())
                             {
                                 var data = attachments[file];
                                 if (data != null && data.Length > 0)
                                 {
-                                    string url = clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, buildingId, accNumber, file, "Correspondence", data);
+                                    string url = clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, buildingId, accNumber, file, "Correspondence", data, emailAddress);
                                     bulkMailAttachments.Add(file, url);
                                 }
 

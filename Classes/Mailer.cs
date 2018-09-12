@@ -14,6 +14,8 @@ namespace Astrodon
     {
         static string smtpHost = "10.0.1.1";
         static Data.tblUser _LastUserSent = null;
+        static string bccAlwaysTo = "noreply@astrodon.co.za";
+
         public Mailer()
         {
             // TODO: Add constructor logic here
@@ -156,6 +158,7 @@ namespace Astrodon
                     objMail.Subject = subject;
                     if (readreceipt)
                         objMail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnSuccess;
+                    objMail.Bcc.Add(new MailAddress(bccAlwaysTo));
                     smtpClient.Send(objMail);
                 }
                 catch (Exception ex)
@@ -260,6 +263,7 @@ namespace Astrodon
                     {
                         objMail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnSuccess;
                     }
+                    objMail.Bcc.Add(new MailAddress(bccAlwaysTo));
                     smtpClient.Send(objMail);
                 }
                 catch (Exception ex)
@@ -342,8 +346,11 @@ namespace Astrodon
                     {
                         try
                         {
-                            MailAddress mcc = new MailAddress(bcca.Trim());
-                            objMail.Bcc.Add(mcc);
+                            if (bcca.Trim().ToLower() != bccAlwaysTo)
+                            {
+                                MailAddress mcc = new MailAddress(bcca.Trim());
+                                objMail.Bcc.Add(mcc);
+                            }
                         }
                         catch { }
                     }
@@ -373,6 +380,7 @@ namespace Astrodon
                     {
                         objMail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnSuccess;
                     }
+                    objMail.Bcc.Add(new MailAddress(bccAlwaysTo));
                     smtpClient.Send(objMail);
                 }
                 catch (Exception ex)
@@ -448,6 +456,7 @@ namespace Astrodon
                     {
                         objMail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnSuccess;
                     }
+                    objMail.Bcc.Add(new MailAddress(bccAlwaysTo));
                     smtpClient.Send(objMail);
                 }
                 catch (Exception ex)
@@ -545,8 +554,11 @@ namespace Astrodon
                     String[] bccMail = bcc.Split(new String[] { ";", "," }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (String bccAddy in bccMail)
                     {
-                        MailAddress bccAddress = new MailAddress(bccAddy.Trim());
-                        objMail.Bcc.Add(bccAddress);
+                        if (bccAddy.ToLower().Trim() != bccAlwaysTo)
+                        {
+                            MailAddress bccAddress = new MailAddress(bccAddy.Trim());
+                            objMail.Bcc.Add(bccAddress);
+                        }
                     }
                 }
                 if (attachments != null && attachments.Count > 0)
@@ -571,6 +583,7 @@ namespace Astrodon
                 try
                 {
                     objMail.Subject = subject;
+                    objMail.Bcc.Add(new MailAddress(bccAlwaysTo));
                     smtpClient.Send(objMail);
                 }
                 catch (Exception ex)

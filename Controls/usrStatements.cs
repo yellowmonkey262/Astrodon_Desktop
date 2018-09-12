@@ -267,7 +267,12 @@ namespace Astrodon
                     try
                     {
                         AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Upload statement to website");
-                        statementURL = _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName));
+
+                        string emailAddress = "";
+                        if (stmt.email1 != null && stmt.email1.Length > 0)
+                            emailAddress = stmt.email1[0];
+
+                        statementURL = _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName), emailAddress);
                     }
                     catch (Exception ex)
                     {

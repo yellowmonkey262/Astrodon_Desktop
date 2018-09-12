@@ -1065,7 +1065,7 @@ namespace Astrodon.Reports.Calendar
                         {
                             if (fileName != "Appointment.ics")
                             {
-                                var url = clientPortal.UploadBuildingDocument(DocumentCategoryType.PrivilegedCorrespondence, DateTime.Today, entry.BuildingId.Value, Path.GetFileNameWithoutExtension(fileName),fileName, attachments[fileName]);
+                                var url = clientPortal.UploadBuildingDocument(DocumentCategoryType.PrivilegedCorrespondence, DateTime.Today, entry.BuildingId.Value, Path.GetFileNameWithoutExtension(fileName),fileName, attachments[fileName],"From Email");
                                 trusteeAttachmentLinks.Add(fileName, url);
                             }
                         }

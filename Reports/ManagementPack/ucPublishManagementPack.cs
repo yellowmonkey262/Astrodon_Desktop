@@ -382,7 +382,7 @@ namespace Astrodon.Reports.ManagementPack
 
             url = _ClientPortal.UploadBuildingDocument(DocumentCategoryType.MonthlyFinancial,
                 dataItem.Period,
-                building.id, description, fileName, dataItem.ReportData);
+                building.id, description, fileName, dataItem.ReportData,string.Empty);
             return true;
             /*
             url = string.Empty;

@@ -93,7 +93,7 @@ namespace Astrodon.Controls
                     if(File.Exists(fileName))
                     {
                         attachmentsData.Add(Path.GetFileName(fileName), 
-                            clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, building.ID, customer.accNumber, txtSubject.Text, fileName));   
+                            clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, building.ID, customer.accNumber, txtSubject.Text, fileName, txtEmail.Text));   
                     }
                 }
              

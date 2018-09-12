@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrCustomer));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmbCustomer = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
@@ -96,13 +96,6 @@
             this.txtEmailTo = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.dgDocs = new System.Windows.Forms.DataGridView();
-            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSubject = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colView = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.colSend = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.colRemove = new System.Windows.Forms.DataGridViewButtonColumn();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
             this.dgTransactions = new System.Windows.Forms.DataGridView();
@@ -167,6 +160,14 @@
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSubject = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colView = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.colSend = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.colRemove = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.colHistory = new System.Windows.Forms.DataGridViewButtonColumn();
             this.tbPreview.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -204,7 +205,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(97, 15);
+            this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 27;
             this.label2.Text = "Select Customer";
             // 
@@ -222,7 +223,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 15);
+            this.label1.Size = new System.Drawing.Size(77, 13);
             this.label1.TabIndex = 25;
             this.label1.Text = "Select Building";
             // 
@@ -232,7 +233,7 @@
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.Location = new System.Drawing.Point(9, 65);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(191, 25);
+            this.label12.Size = new System.Drawing.Size(157, 20);
             this.label12.TabIndex = 52;
             this.label12.Text = "Total Outstanding:";
             // 
@@ -242,7 +243,7 @@
             this.lblOS.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblOS.Location = new System.Drawing.Point(166, 65);
             this.lblOS.Name = "lblOS";
-            this.lblOS.Size = new System.Drawing.Size(0, 25);
+            this.lblOS.Size = new System.Drawing.Size(0, 20);
             this.lblOS.TabIndex = 53;
             // 
             // tbPreview
@@ -306,7 +307,7 @@
             this.label34.AutoSize = true;
             this.label34.Location = new System.Drawing.Point(5, 121);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(98, 15);
+            this.label34.Size = new System.Drawing.Size(81, 13);
             this.label34.TabIndex = 91;
             this.label34.Text = "Full Name (sms)";
             // 
@@ -336,7 +337,7 @@
             this.label33.AutoSize = true;
             this.label33.Location = new System.Drawing.Point(5, 95);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(74, 15);
+            this.label33.Size = new System.Drawing.Size(66, 13);
             this.label33.TabIndex = 88;
             this.label33.Text = "Date of Birth";
             // 
@@ -353,7 +354,7 @@
             this.label32.AutoSize = true;
             this.label32.Location = new System.Drawing.Point(5, 67);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(94, 15);
+            this.label32.Size = new System.Drawing.Size(83, 13);
             this.label32.TabIndex = 86;
             this.label32.Text = "RSA ID Number";
             // 
@@ -362,7 +363,7 @@
             this.label31.AutoSize = true;
             this.label31.Location = new System.Drawing.Point(352, 91);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(81, 15);
+            this.label31.Size = new System.Drawing.Size(71, 13);
             this.label31.TabIndex = 85;
             this.label31.Text = "Birthday SMS";
             // 
@@ -371,7 +372,7 @@
             this.cbBirthDayNotificaiton.AutoSize = true;
             this.cbBirthDayNotificaiton.Location = new System.Drawing.Point(431, 90);
             this.cbBirthDayNotificaiton.Name = "cbBirthDayNotificaiton";
-            this.cbBirthDayNotificaiton.Size = new System.Drawing.Size(18, 17);
+            this.cbBirthDayNotificaiton.Size = new System.Drawing.Size(15, 14);
             this.cbBirthDayNotificaiton.TabIndex = 84;
             this.cbBirthDayNotificaiton.UseVisualStyleBackColor = true;
             // 
@@ -380,7 +381,7 @@
             this.label30.AutoSize = true;
             this.label30.Location = new System.Drawing.Point(352, 66);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(48, 15);
+            this.label30.Size = new System.Drawing.Size(43, 13);
             this.label30.TabIndex = 83;
             this.label30.Text = "Trustee";
             // 
@@ -389,7 +390,7 @@
             this.cbTrustee.AutoSize = true;
             this.cbTrustee.Location = new System.Drawing.Point(431, 67);
             this.cbTrustee.Name = "cbTrustee";
-            this.cbTrustee.Size = new System.Drawing.Size(18, 17);
+            this.cbTrustee.Size = new System.Drawing.Size(15, 14);
             this.cbTrustee.TabIndex = 82;
             this.cbTrustee.UseVisualStyleBackColor = true;
             // 
@@ -416,7 +417,7 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(351, 41);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(83, 15);
+            this.label18.Size = new System.Drawing.Size(74, 13);
             this.label18.TabIndex = 79;
             this.label18.Text = "New Category";
             // 
@@ -434,7 +435,7 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(6, 38);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(98, 15);
+            this.label17.Size = new System.Drawing.Size(86, 13);
             this.label17.TabIndex = 77;
             this.label17.Text = "Current Category";
             // 
@@ -510,7 +511,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(367, 110);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(39, 15);
+            this.label9.Size = new System.Drawing.Size(32, 13);
             this.label9.TabIndex = 69;
             this.label9.Text = "Email";
             // 
@@ -527,7 +528,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(367, 84);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(67, 15);
+            this.label10.Size = new System.Drawing.Size(58, 13);
             this.label10.TabIndex = 67;
             this.label10.Text = "Cell Phone";
             // 
@@ -544,7 +545,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(367, 58);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(48, 15);
+            this.label7.Size = new System.Drawing.Size(44, 13);
             this.label7.TabIndex = 65;
             this.label7.Text = "Contact";
             // 
@@ -561,7 +562,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(367, 32);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(27, 15);
+            this.label8.Size = new System.Drawing.Size(24, 13);
             this.label8.TabIndex = 63;
             this.label8.Text = "Fax";
             // 
@@ -578,7 +579,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(367, 6);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(66, 15);
+            this.label6.Size = new System.Drawing.Size(58, 13);
             this.label6.TabIndex = 61;
             this.label6.Text = "Telephone";
             // 
@@ -627,7 +628,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(8, 6);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(51, 15);
+            this.label5.Size = new System.Drawing.Size(45, 13);
             this.label5.TabIndex = 55;
             this.label5.Text = "Address";
             // 
@@ -644,7 +645,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(365, 12);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(69, 15);
+            this.label4.Size = new System.Drawing.Size(60, 13);
             this.label4.TabIndex = 74;
             this.label4.Text = "Description";
             // 
@@ -662,7 +663,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 12);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(98, 15);
+            this.label3.Size = new System.Drawing.Size(87, 13);
             this.label3.TabIndex = 72;
             this.label3.Text = "Account Number";
             // 
@@ -695,7 +696,7 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(11, 43);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(75, 15);
+            this.label21.Size = new System.Drawing.Size(66, 13);
             this.label21.TabIndex = 85;
             this.label21.Text = "Linked Units";
             // 
@@ -714,7 +715,7 @@
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(370, 17);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(61, 15);
+            this.label22.Size = new System.Drawing.Size(53, 13);
             this.label22.TabIndex = 83;
             this.label22.Text = "Password";
             // 
@@ -732,7 +733,7 @@
             this.label23.AutoSize = true;
             this.label23.Location = new System.Drawing.Point(11, 17);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(38, 15);
+            this.label23.Size = new System.Drawing.Size(33, 13);
             this.label23.TabIndex = 81;
             this.label23.Text = "Login";
             // 
@@ -758,7 +759,7 @@
             this.label37.AutoSize = true;
             this.label37.Location = new System.Drawing.Point(6, 35);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(30, 15);
+            this.label37.Size = new System.Drawing.Size(27, 13);
             this.label37.TabIndex = 94;
             this.label37.Text = "Title";
             // 
@@ -803,7 +804,7 @@
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(445, 35);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(116, 15);
+            this.label19.Size = new System.Drawing.Size(102, 13);
             this.label19.TabIndex = 59;
             this.label19.Text = "Send documents to:";
             // 
@@ -822,71 +823,13 @@
             this.colFileName,
             this.colView,
             this.colSend,
-            this.colRemove});
+            this.colRemove,
+            this.colHistory});
             this.dgDocs.Location = new System.Drawing.Point(6, 64);
             this.dgDocs.Name = "dgDocs";
             this.dgDocs.Size = new System.Drawing.Size(859, 464);
             this.dgDocs.TabIndex = 58;
             this.dgDocs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgDocs_CellContentClick);
-            // 
-            // colDate
-            // 
-            this.colDate.DataPropertyName = "tstamp";
-            dataGridViewCellStyle1.Format = "d";
-            dataGridViewCellStyle1.NullValue = null;
-            this.colDate.DefaultCellStyle = dataGridViewCellStyle1;
-            this.colDate.HeaderText = "Date";
-            this.colDate.Name = "colDate";
-            this.colDate.ReadOnly = true;
-            this.colDate.Width = 62;
-            // 
-            // colSubject
-            // 
-            this.colSubject.DataPropertyName = "subject";
-            this.colSubject.HeaderText = "Subject";
-            this.colSubject.Name = "colSubject";
-            this.colSubject.Width = 77;
-            // 
-            // colTitle
-            // 
-            this.colTitle.DataPropertyName = "title";
-            this.colTitle.HeaderText = "Title";
-            this.colTitle.Name = "colTitle";
-            this.colTitle.ReadOnly = true;
-            this.colTitle.Width = 59;
-            // 
-            // colFileName
-            // 
-            this.colFileName.DataPropertyName = "file";
-            this.colFileName.HeaderText = "File Name";
-            this.colFileName.Name = "colFileName";
-            this.colFileName.ReadOnly = true;
-            this.colFileName.Visible = false;
-            this.colFileName.Width = 79;
-            // 
-            // colView
-            // 
-            this.colView.HeaderText = "";
-            this.colView.Name = "colView";
-            this.colView.Text = "View";
-            this.colView.UseColumnTextForButtonValue = true;
-            this.colView.Width = 5;
-            // 
-            // colSend
-            // 
-            this.colSend.HeaderText = "";
-            this.colSend.Name = "colSend";
-            this.colSend.Text = "Send";
-            this.colSend.UseColumnTextForButtonValue = true;
-            this.colSend.Width = 5;
-            // 
-            // colRemove
-            // 
-            this.colRemove.HeaderText = "";
-            this.colRemove.Name = "colRemove";
-            this.colRemove.Text = "Remove";
-            this.colRemove.UseColumnTextForButtonValue = true;
-            this.colRemove.Width = 5;
             // 
             // tabPage4
             // 
@@ -904,7 +847,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(10, 9);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(77, 15);
+            this.label11.Size = new System.Drawing.Size(68, 13);
             this.label11.TabIndex = 53;
             this.label11.Text = "Transactions";
             // 
@@ -976,7 +919,7 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(14, 202);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(98, 15);
+            this.label16.Size = new System.Drawing.Size(85, 13);
             this.label16.TabIndex = 75;
             this.label16.Text = "Customer Notes:";
             // 
@@ -1063,7 +1006,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(279, 14);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(36, 15);
+            this.label15.Size = new System.Drawing.Size(33, 13);
             this.label15.TabIndex = 71;
             this.label15.Text = "Note:";
             // 
@@ -1091,7 +1034,7 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(14, 14);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(94, 15);
+            this.label14.Size = new System.Drawing.Size(81, 13);
             this.label14.TabIndex = 68;
             this.label14.Text = "Reminder Date:";
             // 
@@ -1158,7 +1101,7 @@
             this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label29.Location = new System.Drawing.Point(128, 226);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(283, 17);
+            this.label29.Size = new System.Drawing.Size(212, 13);
             this.label29.TabIndex = 74;
             this.label29.Text = "Please use 0.00 to disable the max amount.";
             // 
@@ -1174,7 +1117,7 @@
             this.label28.AutoSize = true;
             this.label28.Location = new System.Drawing.Point(6, 202);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(79, 15);
+            this.label28.Size = new System.Drawing.Size(69, 13);
             this.label28.TabIndex = 73;
             this.label28.Text = "Max Amount ";
             // 
@@ -1190,7 +1133,7 @@
             this.cbDebitOrderCancelled.AutoSize = true;
             this.cbDebitOrderCancelled.Location = new System.Drawing.Point(128, 254);
             this.cbDebitOrderCancelled.Name = "cbDebitOrderCancelled";
-            this.cbDebitOrderCancelled.Size = new System.Drawing.Size(18, 17);
+            this.cbDebitOrderCancelled.Size = new System.Drawing.Size(15, 14);
             this.cbDebitOrderCancelled.TabIndex = 70;
             this.cbDebitOrderCancelled.UseVisualStyleBackColor = true;
             this.cbDebitOrderCancelled.CheckedChanged += new System.EventHandler(this.cbDebitOrderCancelled_CheckedChanged);
@@ -1200,7 +1143,7 @@
             this.label27.AutoSize = true;
             this.label27.Location = new System.Drawing.Point(7, 254);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(128, 15);
+            this.label27.Size = new System.Drawing.Size(111, 13);
             this.label27.TabIndex = 69;
             this.label27.Text = "Debit Order Cancelled";
             // 
@@ -1210,7 +1153,7 @@
             this.cbDisableDebitOrderFee.Enabled = false;
             this.cbDisableDebitOrderFee.Location = new System.Drawing.Point(128, 44);
             this.cbDisableDebitOrderFee.Name = "cbDisableDebitOrderFee";
-            this.cbDisableDebitOrderFee.Size = new System.Drawing.Size(18, 17);
+            this.cbDisableDebitOrderFee.Size = new System.Drawing.Size(15, 14);
             this.cbDisableDebitOrderFee.TabIndex = 68;
             this.cbDisableDebitOrderFee.UseVisualStyleBackColor = true;
             // 
@@ -1219,7 +1162,7 @@
             this.label26.AutoSize = true;
             this.label26.Location = new System.Drawing.Point(7, 44);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(139, 15);
+            this.label26.Size = new System.Drawing.Size(120, 13);
             this.label26.TabIndex = 67;
             this.label26.Text = "Disable Debit Order Fee";
             // 
@@ -1266,7 +1209,7 @@
             this.label25.AutoSize = true;
             this.label25.Location = new System.Drawing.Point(7, 147);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(79, 15);
+            this.label25.Size = new System.Drawing.Size(74, 13);
             this.label25.TabIndex = 53;
             this.label25.Text = "Account Type";
             // 
@@ -1284,7 +1227,7 @@
             this.label24.AutoSize = true;
             this.label24.Location = new System.Drawing.Point(7, 176);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(80, 15);
+            this.label24.Size = new System.Drawing.Size(71, 13);
             this.label24.TabIndex = 51;
             this.label24.Text = "Process Date";
             // 
@@ -1310,7 +1253,7 @@
             this.lblAccountNumber.AutoSize = true;
             this.lblAccountNumber.Location = new System.Drawing.Point(6, 120);
             this.lblAccountNumber.Name = "lblAccountNumber";
-            this.lblAccountNumber.Size = new System.Drawing.Size(98, 15);
+            this.lblAccountNumber.Size = new System.Drawing.Size(87, 13);
             this.lblAccountNumber.TabIndex = 50;
             this.lblAccountNumber.Text = "Account Number";
             // 
@@ -1326,7 +1269,7 @@
             this.lblBranchCode.AutoSize = true;
             this.lblBranchCode.Location = new System.Drawing.Point(6, 94);
             this.lblBranchCode.Name = "lblBranchCode";
-            this.lblBranchCode.Size = new System.Drawing.Size(78, 15);
+            this.lblBranchCode.Size = new System.Drawing.Size(69, 13);
             this.lblBranchCode.TabIndex = 49;
             this.lblBranchCode.Text = "Branch Code";
             // 
@@ -1335,7 +1278,7 @@
             this.lblBank.AutoSize = true;
             this.lblBank.Location = new System.Drawing.Point(6, 67);
             this.lblBank.Name = "lblBank";
-            this.lblBank.Size = new System.Drawing.Size(35, 15);
+            this.lblBank.Size = new System.Drawing.Size(32, 13);
             this.lblBank.TabIndex = 47;
             this.lblBank.Text = "Bank";
             // 
@@ -1344,7 +1287,7 @@
             this.cbDebitOrderActive.AutoSize = true;
             this.cbDebitOrderActive.Location = new System.Drawing.Point(128, 20);
             this.cbDebitOrderActive.Name = "cbDebitOrderActive";
-            this.cbDebitOrderActive.Size = new System.Drawing.Size(18, 17);
+            this.cbDebitOrderActive.Size = new System.Drawing.Size(15, 14);
             this.cbDebitOrderActive.TabIndex = 1;
             this.cbDebitOrderActive.UseVisualStyleBackColor = true;
             // 
@@ -1353,7 +1296,7 @@
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(7, 20);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(119, 15);
+            this.label20.Size = new System.Drawing.Size(103, 13);
             this.label20.TabIndex = 0;
             this.label20.Text = "Debit Order Enabled";
             // 
@@ -1436,7 +1379,7 @@
             this.lbCustDocumentExpiry.AutoSize = true;
             this.lbCustDocumentExpiry.Location = new System.Drawing.Point(376, 21);
             this.lbCustDocumentExpiry.Name = "lbCustDocumentExpiry";
-            this.lbCustDocumentExpiry.Size = new System.Drawing.Size(48, 15);
+            this.lbCustDocumentExpiry.Size = new System.Drawing.Size(41, 13);
             this.lbCustDocumentExpiry.TabIndex = 12;
             this.lbCustDocumentExpiry.Text = "Expires";
             this.lbCustDocumentExpiry.Visible = false;
@@ -1459,7 +1402,7 @@
             this.label36.AutoSize = true;
             this.label36.Location = new System.Drawing.Point(10, 59);
             this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(39, 15);
+            this.label36.Size = new System.Drawing.Size(35, 13);
             this.label36.TabIndex = 4;
             this.label36.Text = "Notes";
             // 
@@ -1495,7 +1438,7 @@
             this.label35.AutoSize = true;
             this.label35.Location = new System.Drawing.Point(7, 21);
             this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(93, 15);
+            this.label35.Size = new System.Drawing.Size(83, 13);
             this.label35.TabIndex = 0;
             this.label35.Text = "Document Type";
             // 
@@ -1537,6 +1480,73 @@
             // fdOpen
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
+            // 
+            // colDate
+            // 
+            this.colDate.DataPropertyName = "tstamp";
+            dataGridViewCellStyle1.Format = "d";
+            dataGridViewCellStyle1.NullValue = null;
+            this.colDate.DefaultCellStyle = dataGridViewCellStyle1;
+            this.colDate.HeaderText = "Date";
+            this.colDate.Name = "colDate";
+            this.colDate.ReadOnly = true;
+            this.colDate.Width = 55;
+            // 
+            // colSubject
+            // 
+            this.colSubject.DataPropertyName = "subject";
+            this.colSubject.HeaderText = "Subject";
+            this.colSubject.Name = "colSubject";
+            this.colSubject.Width = 68;
+            // 
+            // colTitle
+            // 
+            this.colTitle.DataPropertyName = "title";
+            this.colTitle.HeaderText = "Title";
+            this.colTitle.Name = "colTitle";
+            this.colTitle.ReadOnly = true;
+            this.colTitle.Width = 52;
+            // 
+            // colFileName
+            // 
+            this.colFileName.DataPropertyName = "file";
+            this.colFileName.HeaderText = "File Name";
+            this.colFileName.Name = "colFileName";
+            this.colFileName.ReadOnly = true;
+            this.colFileName.Visible = false;
+            this.colFileName.Width = 79;
+            // 
+            // colView
+            // 
+            this.colView.HeaderText = "";
+            this.colView.Name = "colView";
+            this.colView.Text = "View";
+            this.colView.UseColumnTextForButtonValue = true;
+            this.colView.Width = 5;
+            // 
+            // colSend
+            // 
+            this.colSend.HeaderText = "";
+            this.colSend.Name = "colSend";
+            this.colSend.Text = "Send";
+            this.colSend.UseColumnTextForButtonValue = true;
+            this.colSend.Width = 5;
+            // 
+            // colRemove
+            // 
+            this.colRemove.HeaderText = "";
+            this.colRemove.Name = "colRemove";
+            this.colRemove.Text = "Remove";
+            this.colRemove.UseColumnTextForButtonValue = true;
+            this.colRemove.Width = 5;
+            // 
+            // colHistory
+            // 
+            this.colHistory.HeaderText = "";
+            this.colHistory.Name = "colHistory";
+            this.colHistory.Text = "History";
+            this.colHistory.UseColumnTextForButtonValue = true;
+            this.colHistory.Width = 5;
             // 
             // usrCustomer
             // 
@@ -1645,13 +1655,6 @@
         private System.Windows.Forms.TextBox txtEntry;
         private System.Windows.Forms.TextBox txtEmailTo;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colSubject;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTitle;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colFileName;
-        private System.Windows.Forms.DataGridViewButtonColumn colView;
-        private System.Windows.Forms.DataGridViewButtonColumn colSend;
-        private System.Windows.Forms.DataGridViewButtonColumn colRemove;
         private System.Windows.Forms.TabPage tbMaintenance;
         private System.Windows.Forms.DataGridView dgMaintenance;
         private System.Windows.Forms.Button button1;
@@ -1723,5 +1726,13 @@
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Button btnSelectFile;
         private System.Windows.Forms.TextBox tbTitle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSubject;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTitle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFileName;
+        private System.Windows.Forms.DataGridViewButtonColumn colView;
+        private System.Windows.Forms.DataGridViewButtonColumn colSend;
+        private System.Windows.Forms.DataGridViewButtonColumn colRemove;
+        private System.Windows.Forms.DataGridViewButtonColumn colHistory;
     }
 }

@@ -1241,14 +1241,19 @@ namespace Astrodon.Controls
 
                             try
                             {
-                                txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                                string emailAddress = "";
+                                if (sendCustomer.Email != null && sendCustomer.Email.Length > 0)
+                                {
+                                    emailAddress = sendCustomer.Email.ToList().Where(a => !String.IsNullOrWhiteSpace(a)).FirstOrDefault();
+                                }
+                                    txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                                 Application.DoEvents();
                                 foreach (String attach in attachments)
                                 {
                                     if (attach != filePath)
                                     {
                                         _ClientPortal.UploadBuildingDocument(DocumentCategoryType.Letter,DateTime.Today,selectedBuilding.ID,
-                                            txtSubject.Text,Path.GetFileName(attach),File.ReadAllBytes(attach));
+                                            txtSubject.Text,Path.GetFileName(attach),File.ReadAllBytes(attach), emailAddress);
                                         Application.DoEvents();
                                     }
                                 }
@@ -1271,12 +1276,14 @@ namespace Astrodon.Controls
 
                             txtStatus.Text += "Uploading documents: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                             Dictionary<string,string> fileURLs = new Dictionary<string, string>();
+
+                            string emailAddress = sendCustomer.Email != null ? sendCustomer.Email.Where(d => !String.IsNullOrEmpty(d)).FirstOrDefault() : string.Empty;
                             foreach (KeyValuePair<String, byte[]> printAttachment in liveAttachments)
                             {
                                 try
                                 {
                                     string url = _ClientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, selectedBuilding.ID, sendCustomer.accNumber, 
-                                        printAttachment.Key, txtSubject.Text, printAttachment.Value);
+                                        printAttachment.Key, txtSubject.Text, printAttachment.Value, emailAddress);
                                     fileURLs.Add(printAttachment.Key, url);
                                 }
                                 catch (Exception ex)

@@ -22,14 +22,29 @@ namespace Astrodon.ClientPortal
         private const int MAX_TITLE_LENGTH = 500;
         private const int MAX_FILENAME_LENGTH = 200;
 
-        public string GetUnitDocumentLink(Guid documentId)
+        public string GetUnitDocumentLink(Guid documentId, string accessToken)
         {
-            return _documentLinkURL + "GetUnitDocument/" + documentId.ToString("N");
+            
+            string encryptedToken = "";
+            if (!string.IsNullOrWhiteSpace(accessToken))
+            {
+                if (accessToken.Length > 20)
+                    accessToken = accessToken.Substring(0, 20);
+                encryptedToken = "?accessToken=" + Cipher.Encrypt(accessToken);
+            }
+            return _documentLinkURL + "GetUnitDocument/" + documentId.ToString("N")+encryptedToken;
         }
 
-        public string GetBuildingDocumentLink(Guid documentId)
+        public string GetBuildingDocumentLink(Guid documentId, string accessToken)
         {
-            return _documentLinkURL + "GetBuildingDocument/" + documentId.ToString("N");
+            string encryptedToken = "";
+            if (!string.IsNullOrWhiteSpace(accessToken))
+            {
+                if (accessToken.Length > 20)
+                    accessToken = accessToken.Substring(0, 20);
+                encryptedToken = "?accessToken=" + Cipher.Encrypt(accessToken);
+            }
+            return _documentLinkURL + "GetBuildingDocument/" + documentId.ToString("N") + encryptedToken;
         }
 
         #region Building Sync
@@ -176,26 +191,26 @@ namespace Astrodon.ClientPortal
             }
         }
 
-        public string InsertStatement(int buildingId, string accountNumber,  DateTime statementDate, string filename, byte[] fileData)
+        public string InsertStatement(int buildingId, string accountNumber,  DateTime statementDate, string filename, byte[] fileData, string emailAddress)
         {
             string title = "Statement " + statementDate.ToString("dd-MMMM-yyyy", CultureInfo.InstalledUICulture);
 
-            return UploadUnitDocument(DocumentCategoryType.FinancialStatement, statementDate, buildingId, accountNumber, filename, title, fileData);
+            return UploadUnitDocument(DocumentCategoryType.FinancialStatement, statementDate, buildingId, accountNumber, filename, title, fileData, emailAddress);
         }
 
         public string UploadUnitDocument(DocumentCategoryType documentType, DateTime fileDate, int buildingId,
-            string accountNumber,  string title, string filePath)
+            string accountNumber,  string title, string filePath, string emailAddress)
         {
             using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 byte[] buffer = new byte[fs.Length];
                 fs.Read(buffer, 0, buffer.Length);
-                return UploadUnitDocument(documentType, fileDate, buildingId, accountNumber, Path.GetFileName(filePath),title, buffer);
+                return UploadUnitDocument(documentType, fileDate, buildingId, accountNumber, Path.GetFileName(filePath),title, buffer, emailAddress);
             }
         }
 
         public string UploadUnitDocument(DocumentCategoryType documentType,DateTime fileDate, int buildingId,
-            string accountNumber, string filename, string title, byte[] data)
+            string accountNumber, string filename, string title, byte[] data,string emailAddress)
         {
             if (string.IsNullOrWhiteSpace(title))
                 title = "Correspondence ";
@@ -227,7 +242,7 @@ namespace Astrodon.ClientPortal
                   };
             SQLUtilities.ExecuteSqlCommand(_ClientProtalConnection, script, parameters);
 
-            return GetUnitDocumentLink(documentId);
+            return GetUnitDocumentLink(documentId, emailAddress);
         }
       
         public List<FileDetail> GetUnitFiles(int buildingId, string accountNumber,bool activeOnly = true)
@@ -308,23 +323,42 @@ namespace Astrodon.ClientPortal
             return null;
         }
 
+        public List<WebDocumentAccessLogItem> GetUnitFileAccessHistory(Guid unitDocumentId)
+        {
+            string script = ReadSQLScript("GetUnitFileAccesHistory.sql");
+            var parameters = new List<System.Data.SqlClient.SqlParameter>()
+                {
+                    new System.Data.SqlClient.SqlParameter("@UnitDocumentId",unitDocumentId),
+                  };
+
+            var ds = SQLUtilities.FetchData(_ClientProtalConnection, script, parameters);
+
+            List<WebDocumentAccessLogItem> result = new List<WebDocumentAccessLogItem>();
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+                result.Add(new WebDocumentAccessLogItem(row));
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region Building Document
 
         public string UploadBuildingDocument(DocumentCategoryType documentType, DateTime fileDate,
-           int buildingId, string description, string filePath)
+           int buildingId, string description, string filePath, string emailAddress)
         {
             using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 byte[] buffer = new byte[fs.Length];
                 fs.Read(buffer, 0, buffer.Length);
-                return UploadBuildingDocument(documentType, fileDate, buildingId, description, Path.GetFileName(filePath), buffer);
+                return UploadBuildingDocument(documentType, fileDate, buildingId, description, Path.GetFileName(filePath), buffer, emailAddress);
             }
         }
 
         public string UploadBuildingDocument(DocumentCategoryType documentType, DateTime fileDate,
-          int buildingId, string description, string filename, byte[] fileData)
+          int buildingId, string description, string filename, byte[] fileData, string emailAddress)
         {
             filename = Path.GetFileName(filename);
             //return a URL to the uploaded document
@@ -353,7 +387,7 @@ namespace Astrodon.ClientPortal
                   };
             SQLUtilities.ExecuteSqlCommand(_ClientProtalConnection, script, parameters);
 
-            return GetBuildingDocumentLink(documentId);
+            return GetBuildingDocumentLink(documentId, emailAddress);
         }
 
         public List<FileDetail> BuildingDocumentList(int buildingId, bool activeOnly = true)

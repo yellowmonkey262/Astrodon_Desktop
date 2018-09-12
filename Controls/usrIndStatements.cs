@@ -104,7 +104,11 @@ namespace Astrodon
                 if (!String.IsNullOrEmpty(attachment)) { attachments.Add(attachment); }
                 String[] att = attachments.ToArray();
                 String status = String.Empty;
-                var statementURL = _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName));
+                string emailAddress = "";
+                if (stmt != null && stmt.email1 != null && stmt.email1.Length > 0)
+                    emailAddress = stmt.email1[0];
+
+                var statementURL = _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName), emailAddress);
 
                 bool isRental = stmt.BuildingName == "ASTRODON RENTALS";
                 if(Email.EmailProvider.SendStatement(stmt.DebtorEmail, stmt.email1, stmt.accNumber, fileName, stmt.StmtDate, statementURL, isRental))
