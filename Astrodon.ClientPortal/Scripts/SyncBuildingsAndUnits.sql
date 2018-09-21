@@ -3,9 +3,10 @@
 /*CREATE/UPDATE BUILDINGS*/
 
 insert into Building
-(Id,BuildingId,BuildingName,BuildingImage,IsActive)
+(Id,BuildingId,BuildingName,BuildingImage,IsActive,PortfolioManagerEmailAddress)
 select NEWID() ,b.id,b.Building,null,
-  case b.BuildingDisabled when 0 then 1  else 0 end
+  case b.BuildingDisabled when 0 then 1  else 0 end,
+  b.pm
 from Astrodon..tblBuildings b
 left join Building bl on bl.BuildingId = b.id
 where bl.Id is null
@@ -13,7 +14,8 @@ where bl.Id is null
 --update existing
 Update Building 
 SET Building.BuildingName = b.Building,
-    Building.IsActive = case b.BuildingDisabled when 0 then 1  else 0 end
+    Building.IsActive = case b.BuildingDisabled when 0 then 1  else 0 end,
+	PortfolioManagerEmailAddress = b.pm
 FROM Astrodon..tblBuildings b
 JOIN Building bl on bl.BuildingId = b.id
 
@@ -50,7 +52,6 @@ insert into UserBuildingUnit
 Select  NEWID(),bu.Id,ui.Id
 from BuildingUnit bu
 join UserIdentity ui on bu.EmailAddress1 = ui.EmailAddress 
-                    
 left join UserBuildingUnit uu on bu.Id = uu.BuildingUnitId
           and uu.UserIdentityId = ui.Id
 where uu.Id is null
