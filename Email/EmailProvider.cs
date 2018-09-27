@@ -78,6 +78,7 @@ namespace Astrodon.Email
             string ownerType = (rental ? "tenant" : "owner");
             emailBody = emailBody.Replace("{{OWNER_TYPE}}", ownerType);
             emailBody = emailBody.Replace("{{URL}}", statmentUrl);
+            emailBody = emailBody.Replace("{{Account_Number}}", customerAccountNumber);
 
             return Mailer.SendMail(debtorEmail, emailTo, subject, emailBody, false, false, out status, new string[] { });
         }

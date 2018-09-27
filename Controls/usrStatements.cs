@@ -276,6 +276,7 @@ namespace Astrodon
                     }
                     catch (Exception ex)
                     {
+                        statementURL = "";
                         AddProgressString(stmt.BuildingName + ": " + stmt.accName + " - Error Upload statement to website " + ex.Message);
 
                     }
@@ -291,7 +292,7 @@ namespace Astrodon
                             {
                                 hasStatements.Add(stmt.BuildingName, true);
                             }
-                            if (Controller.user.id != 1)
+                            if (Controller.user.id != 1 && !String.IsNullOrWhiteSpace(statementURL))
                             {
                                 SetupEmail(stmt, fileName, statementURL);
                             }

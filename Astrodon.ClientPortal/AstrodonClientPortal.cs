@@ -28,8 +28,8 @@ namespace Astrodon.ClientPortal
             string encryptedToken = "";
             if (!string.IsNullOrWhiteSpace(accessToken))
             {
-                if (accessToken.Length > 20)
-                    accessToken = accessToken.Substring(0, 20);
+                if (accessToken.Length > 30)
+                    accessToken = accessToken.Substring(0, 30);
                 encryptedToken = "?accessToken=" + Cipher.Encrypt(accessToken);
             }
             return _documentLinkURL + "GetUnitDocument/" + documentId.ToString("N")+encryptedToken;
@@ -40,8 +40,8 @@ namespace Astrodon.ClientPortal
             string encryptedToken = "";
             if (!string.IsNullOrWhiteSpace(accessToken))
             {
-                if (accessToken.Length > 20)
-                    accessToken = accessToken.Substring(0, 20);
+                if (accessToken.Length > 30)
+                    accessToken = accessToken.Substring(0, 30);
                 encryptedToken = "?accessToken=" + Cipher.Encrypt(accessToken);
             }
             return _documentLinkURL + "GetBuildingDocument/" + documentId.ToString("N") + encryptedToken;
