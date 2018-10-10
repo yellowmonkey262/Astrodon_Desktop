@@ -760,14 +760,15 @@ namespace Astrodon
                     else
                         fromEmail = building.PM;
 
-
-                    if (Email.EmailProvider.SendCustomerFile(fromEmail, txtEmailTo.Text,true,cd.title, customer.accNumber, link))
+                    string status;
+                    
+                    if (Email.EmailProvider.SendCustomerFile(fromEmail, txtEmailTo.Text,true,cd.title, customer.accNumber,building.IsRentalBuilding, link,out status))
                     {
                         MessageBox.Show("Message Sent");
                     }
                     else
                     {
-                        MessageBox.Show("Unable to send mail");
+                        Controller.HandleError("Unable to send email. Error returned:" + Environment.NewLine + status);
                     }
 
                   

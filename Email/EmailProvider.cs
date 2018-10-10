@@ -46,16 +46,17 @@ namespace Astrodon.Email
             return Mailer.SendMail(fromAddress, emailAddys, subject, message, false, false, out status, new string[] { });
         }
 
-        public static bool SendCustomerFile(string debtorEmail, string emailAddresses, bool addcc, string subject, string accountNumber, string url)
+        public static bool SendCustomerFile(string debtorEmail, string emailAddresses, bool addcc, string subject, 
+            string accountNumber,bool isRental, string url, out string status)
         {
             string emailBody = ResourceManager.ReadCustomerLetterTemplate();
 
             emailBody = emailBody.Replace("{{URL}}", url);
             emailBody = emailBody.Replace("{{Account_Number}}", accountNumber);
+            emailBody = emailBody.Replace("{{OWNERTYPE}}", isRental ? " Tenant":"Owner");
 
             string[] emailTo = emailAddresses.Split(new String[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
-            string status;
             return Mailer.SendMail(debtorEmail, emailTo, subject, emailBody, addcc, false, out status, new string[] { });
         }
 

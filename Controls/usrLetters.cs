@@ -448,7 +448,6 @@ namespace Astrodon
             List<String> clearances = new List<string>();
             List<String> exClearances = new List<string>();
             List<String> rentals = new List<string>();
-            Dictionary<String, String> journals = new Dictionary<string, string>();
 
             for (int i = 1; i < customerGrid.Rows.Count; i++)
             {
@@ -569,7 +568,10 @@ namespace Astrodon
             String fileName = "";
             DateTime letterDate = DateTime.Now;
             List<Customer> checkedCustomers = new List<Customer>();
-            foreach (String acc in customerAccs) { checkedCustomers.Add(customerDic[acc]); }
+            foreach (String acc in customerAccs) {
+                if(customerDic.ContainsKey(acc))
+                  checkedCustomers.Add(customerDic[acc]);
+            }
             BuildingValues values = new BuildingValues(building.ID, reminder_fee, final_fee, summons_fee, discon_notice_fee, discon_fee, handover_fee);
             double regPost = (building.Abbr == "LR" ? 23.65 : 0);
             String trustAcc = "";
@@ -711,7 +713,7 @@ namespace Astrodon
                     {
 
                         SendLettersWithLinks(uEmail, c.Email, docType + ": " + c.accNumber + " " + DateTime.Now.ToString(),
-                           "Reminder Letter", new String[] { Path.GetFileName(fileName) }, c.accNumber, url, out msgStatus);
+                           "Reminder Letter", new String[] { Path.GetFileName(fileName) }, c.accNumber,  url, building.IsRentalBuilding, out msgStatus);
                     }
                     if (Controller.user.id == 1) { MessageBox.Show(msgStatus); }
                 
@@ -780,7 +782,7 @@ namespace Astrodon
         }
 
         private void SendLettersWithLinks(String fromEmail, String[] toEmail, String subject, String message,
-            String[] attachments, String unitNo, string url, out String status)
+            String[] attachments, String unitNo, string url,bool isRental, out String status)
         {
             status = string.Empty;
             string toMailAddr = String.Join(";", toEmail);
@@ -804,7 +806,8 @@ namespace Astrodon
 
                 try
                 {
-                    if (Email.EmailProvider.SendCustomerFile(fromEmail, toMailAddr,true, subject, unitNo,url))                        
+                    string emailsenterror;
+                    if (Email.EmailProvider.SendCustomerFile(fromEmail, toMailAddr,true, subject, unitNo, isRental, url, out emailsenterror))                        
                     {
                         letter.status = "Email sent";
                         letter.errorMessage = "";
@@ -812,7 +815,7 @@ namespace Astrodon
                     else
                     {
                         letter.status = status;
-                        letter.errorMessage = "";
+                        letter.errorMessage = emailsenterror;
                     }
                 }
                 catch (Exception exp)
@@ -833,7 +836,13 @@ namespace Astrodon
 
             DateTime trnDate = DateTime.Now;
             List<Customer> checkedCustomers = new List<Customer>();
-            foreach (String acc in customers) { checkedCustomers.Add(customerDic[acc]); }
+            foreach (String acc in customers)
+            {
+                if (customerDic.ContainsKey(acc))
+                {
+                    checkedCustomers.Add(customerDic[acc]);
+                }
+            }
             BuildingValues values = new BuildingValues(building.ID, reminder_fee, final_fee, summons_fee, discon_notice_fee, discon_fee, handover_fee);
             List<String> excludedBuildings = new List<string>();
             excludedBuildings.Add("LR");
@@ -879,7 +888,13 @@ namespace Astrodon
             BuildingValues values = new BuildingValues(building.ID, reminder_fee, final_fee, summons_fee, discon_notice_fee, discon_fee, handover_fee);
             DateTime trnDate = DateTime.Now;
             List<Customer> checkedCustomers = new List<Customer>();
-            foreach (String acc in customers) { checkedCustomers.Add(customerDic[acc]); }
+            foreach (String acc in customers)
+            {
+                if (customerDic.ContainsKey(acc))
+                {
+                    checkedCustomers.Add(customerDic[acc]);
+                }
+            }
             String pastelReturn, pastelString;
             foreach (Customer c in checkedCustomers)
             {

@@ -242,7 +242,7 @@ namespace Astrodon
             }
             else if (!success)
             {
-                return false;
+                throw new Exception("Unable to create or update user record. Error returned: " + Environment.NewLine + status);
             }
             sqlParms.Clear();
             sqlParms.Add("@userid", u.id);
@@ -264,8 +264,11 @@ namespace Astrodon
                 {
                     sqlParms["@buildID"] = bid;
                     dh.SetData(buildQuery, sqlParms, out status);
+                    if (!string.IsNullOrWhiteSpace(status))
+                    {
+                        Controller.HandleError("Unable to create or update user record. Error returned: " + Environment.NewLine + status);
+                    }
                 }
-                UpdateBuildings();
             }
             else
             {
@@ -276,8 +279,11 @@ namespace Astrodon
                 {
                     sqlParms["@buildID"] = bid;
                     dh.SetData(buildQuery, sqlParms, out status);
+                    if (!string.IsNullOrWhiteSpace(status))
+                    {
+                        Controller.HandleError("Unable to create or update user record. Error returned: " + Environment.NewLine + status);
+                    }
                 }
-                UpdateBuildings();
             }
             return true;
         }
@@ -301,10 +307,6 @@ namespace Astrodon
 
         private void UpdateBuildings()
         {
-            //MySqlConnector mysql = new MySqlConnector();
-            //List<Building> buildings = new Buildings(false).buildings;
-            //String status;
-            //foreach (Building b in buildings) { mysql.UpdateBuilding(b, b.Name, b.Abbr, out status); }
             new ClientPortal.AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString()).SyncBuildings();
         }
 

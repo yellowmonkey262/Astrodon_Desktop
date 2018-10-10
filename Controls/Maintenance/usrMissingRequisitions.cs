@@ -270,7 +270,7 @@ namespace Astrodon.Controls.Maintenance
                     {
                         Requisition = item,
                         FileData = _Documents[key],
-                        FileName = key,
+                        FileName = Path.GetFileName(key),
                         IsInvoice = true
                     });
                 }

@@ -399,7 +399,7 @@ namespace Astrodon.Controls.Requisitions
             }
             catch (Exception e)
             {
-                Controller.HandleError("Unable to add PDF document " + documentName);
+                Controller.HandleError("Unable to add PDF document " + Path.GetFileName( documentName));
                 throw e;
             }
         }

@@ -545,7 +545,8 @@ namespace Astrodon
                             AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
 
                         //check for in transfer and create a transfer letter instead of a statement.
-                        myStatement.IsInTransfer = customer.IntCategory == 2;
+                        if(myStatement.IsRental == false)
+                           myStatement.IsInTransfer = customer.IntCategory == 2;
                         if (myStatement.IsInTransfer)
                         {
                             if (portfolioManager != null)

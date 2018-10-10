@@ -59,5 +59,16 @@ namespace Astro.Library.Entities
         public bool IsInTransfer { get; set; }
 
         public byte[] InTransferLetter { get; set; }
+
+
+        public bool IsRental
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(BuildingName))
+                    return false;
+                return BuildingName.Trim().ToUpper() == "ASTRODON RENTALS";
+            }
+        }
     }
 }

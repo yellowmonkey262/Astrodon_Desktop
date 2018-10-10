@@ -137,18 +137,33 @@ namespace Astrodon
                         selectedBuildings.Add(bid);
                     }
                 }
-                catch { }
-                if (selectedUser.buildings == null) { selectedUser.buildings = new List<int>(); }
+                catch (Exception ex)
+                {
+                    Controller.HandleError(ex);
+                }
+
+                if (selectedUser.buildings == null)
+                {
+                    selectedUser.buildings = new List<int>();
+                }
+
                 selectedUser.buildings.Clear();
                 selectedUser.buildings = selectedBuildings;
-                if (userManager.SaveUser(selectedUser))
+                try
                 {
-                    MessageBox.Show("User updated!", "Users", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearUser();
+                    if (userManager.SaveUser(selectedUser))
+                    {
+                        MessageBox.Show("User updated!", "Users", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ClearUser();
+                    }
+                    else
+                    {
+                        Controller.HandleError("User update failed!");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("User update failed!", "Users", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Controller.HandleError(ex);
                 }
             }
         }

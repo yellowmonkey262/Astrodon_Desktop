@@ -122,6 +122,16 @@ namespace Astro.Library.Entities
         public double limitW { get; set; }
         public double limitD { get; set; }
 
+        public bool IsRentalBuilding
+        {
+            get
+            {
+                if (String.IsNullOrWhiteSpace(Name))
+                    return false;
+                return Name.ToUpper().Trim() == "ASTRODON RENTALS";
+            }
+        }
+
         public Building()
         {
             reminderTemplate = "";
