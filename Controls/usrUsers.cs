@@ -59,6 +59,11 @@ namespace Astrodon
         {
             txtID.Text = selectedUser.id.ToString();
             cmbType.SelectedValue = selectedUser.usertype;
+            if (selectedUser.usertype == 3)
+                cmbType.Enabled = false;
+            else
+                cmbType.Enabled = true;
+
             txtUserName.Text = selectedUser.username;
             txtPassword.Text = selectedUser.password;
             txtEmail.Text = selectedUser.email;
@@ -102,6 +107,7 @@ namespace Astrodon
             txtFax.Text = "";
             cbProcessCheckLists.Checked = false;
             picSig.Image = null;
+            cmbType.Enabled = true;
             for (int i = 0; i < chkBuildings.Items.Count; i++) { chkBuildings.SetItemChecked(i, false); }
         }
 
@@ -207,6 +213,25 @@ namespace Astrodon
             for (int i = 0; i < chkBuildings.Items.Count; i++)
             {
                 chkBuildings.SetItemChecked(i, true);
+            }
+        }
+
+        private void cmbType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrWhiteSpace(txtID.Text) && txtID.Text != "0" && cmbType.SelectedIndex >= 0)
+            {
+                var itm = cmbType.Items[cmbType.SelectedIndex] as UserType;
+
+                if (itm != null && itm.typeID == 3 && selectedUser != null && selectedUser.usertype != 3)
+                {
+                    cmbType.SelectedValue = selectedUser.usertype;
+
+                    Controller.HandleError("You are not allowed to change a user to a Debtor. " + Environment.NewLine +
+                        "To perform this function please log a call Sheldon for RTMSoft");
+
+                    //Changing debtors you must unlink all buildings on the other users that are linked as a debtor and then
+                    //link the new building. Buildings are only allowed to have 1 debtor.
+                }
             }
         }
     }

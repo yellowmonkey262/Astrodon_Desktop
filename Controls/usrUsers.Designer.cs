@@ -189,11 +189,13 @@
             // 
             // cmbType
             // 
+            this.cmbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbType.FormattingEnabled = true;
             this.cmbType.Location = new System.Drawing.Point(305, 41);
             this.cmbType.Name = "cmbType";
             this.cmbType.Size = new System.Drawing.Size(139, 21);
             this.cmbType.TabIndex = 18;
+            this.cmbType.SelectedIndexChanged += new System.EventHandler(this.cmbType_SelectedIndexChanged);
             // 
             // label9
             // 
