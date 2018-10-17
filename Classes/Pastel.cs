@@ -46,14 +46,14 @@ namespace Astrodon
             SDK = new PastelPartnerSDK();
             lc = "DK11110068";
             auth = "4228113";
-            pastelDirectory = "\\\\SERVER2\\Pastel11\\"; // @"K:\";// (Directory.Exists("K:\\") ? "K:\\" : "C:\\Pastel11\\");
+            pastelDirectory = @"K:\Pastel11\";   // @"K:\";// (Directory.Exists("K:\\") ? "K:\\" : "C:\\Pastel11\\");
 
             string searchFolders = "";
 
             if (!Directory.Exists(pastelDirectory))
             {
                 searchFolders += pastelDirectory + " does not exist\n";
-                pastelDirectory = @"K:\";
+                pastelDirectory = "\\\\SERVER2\\Pastel11\\";
                 if (!Directory.Exists(pastelDirectory))
                 {
                     searchFolders += pastelDirectory + " does not exist\n";
@@ -512,7 +512,10 @@ namespace Astrodon
         {
             List<Detail> customers = new List<Detail>();
             List<String> rs = new List<string>();
+
+
             String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+
             if (returner == "0")
             {
                 //11 = GDC + ACC + Per + Refrence
@@ -581,6 +584,8 @@ namespace Astrodon
         {
             List<Trns> rs = new List<Trns>();
             String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+
+            Controller.ShowMessage("Load transactions in " + pastelDirectory + "\\" + buildPath + " returned " + returner);
             //period = 6
             if (returner == "0")
             {

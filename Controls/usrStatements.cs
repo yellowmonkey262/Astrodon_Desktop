@@ -88,7 +88,7 @@ namespace Astrodon
                         build = dr["Building"].ToString();
                         String dp = dr["DataPath"].ToString();
                         int p = int.Parse(dr["Period"].ToString());
-                        StatementBuilding stmtBuilding = new StatementBuilding(buildingId, build, dp, p, lastProcessed);
+                        StatementBuilding stmtBuilding = new StatementBuilding(buildingId, build, dp, p, lastProcessed, Controller.UserIsSheldon());
 
                         var existing = dataList.Where(a => a.DataPath == stmtBuilding.DataPath).FirstOrDefault();
                         if (existing == null)

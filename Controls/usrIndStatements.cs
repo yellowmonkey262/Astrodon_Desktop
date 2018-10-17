@@ -65,7 +65,7 @@ namespace Astrodon
                 cmbCustomer.SelectedIndex = -1;
                 cmbCustomer.SelectedIndexChanged += cmbCustomer_SelectedIndexChanged;
 
-                stmtBuilding = new StatementBuilding(building.ID, building.Name, building.DataPath, building.Period, DateTime.Now);
+                stmtBuilding = new StatementBuilding(building.ID, building.Name, building.DataPath, building.Period, DateTime.Now, Controller.UserIsSheldon());
                 stmt = new Statement
                 {
                     BuildingId = building.ID,
