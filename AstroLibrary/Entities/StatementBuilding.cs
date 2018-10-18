@@ -82,17 +82,28 @@ namespace Astro.Library.Entities
             return _BuildingId;
         }
 
+        private bool _HasBeenProcessed = false;
+        public bool StatementAlreadyProcessed()
+        {
+            return _HasBeenProcessed;
+        }
+
         public StatementBuilding(int buildingId, String build, String dp, int p, DateTime lastProcessed, bool elevatedUser)
         {
             Allowed = true;
-            _ElevatedUser = elevatedUser;
+            _ElevatedUser = false;// elevatedUser;
             _BuildingId = buildingId;
             Process = false;
             Building = build;
             DataPath = dp;
             Period = p;
             if (lastProcessed > DateTime.Today.AddDays(-7))
-                Allowed = false;
+            {
+                _HasBeenProcessed = true;
+                if (!_ElevatedUser)
+                    Allowed = false;
+            }
+                
             LastProcessed = lastProcessed.ToString("yyyy/MM/dd");
             if (building.ToLower().Contains("hoa"))
             {

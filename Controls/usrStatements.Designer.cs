@@ -61,7 +61,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(523, 34);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(85, 13);
+            this.label3.Size = new System.Drawing.Size(95, 15);
             this.label3.TabIndex = 17;
             this.label3.Text = "Add attachment:";
             this.label3.Visible = false;
@@ -78,7 +78,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(369, 11);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(239, 13);
+            this.label2.Size = new System.Drawing.Size(277, 15);
             this.label2.TabIndex = 15;
             this.label2.Text = "Additional message to be displayed on statement:";
             // 
@@ -106,7 +106,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(153, 11);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 13);
+            this.label1.Size = new System.Drawing.Size(95, 15);
             this.label1.TabIndex = 12;
             this.label1.Text = "Statement Date:";
             // 
@@ -115,7 +115,7 @@
             this.chkSelectAll.AutoSize = true;
             this.chkSelectAll.Location = new System.Drawing.Point(12, 10);
             this.chkSelectAll.Name = "chkSelectAll";
-            this.chkSelectAll.Size = new System.Drawing.Size(123, 17);
+            this.chkSelectAll.Size = new System.Drawing.Size(136, 19);
             this.chkSelectAll.TabIndex = 11;
             this.chkSelectAll.Text = "Select / Deselect All";
             this.chkSelectAll.UseVisualStyleBackColor = true;
@@ -131,6 +131,7 @@
             this.dgBuildings.Name = "dgBuildings";
             this.dgBuildings.Size = new System.Drawing.Size(994, 514);
             this.dgBuildings.TabIndex = 10;
+            this.dgBuildings.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgBuildings_CellBeginEdit);
             this.dgBuildings.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgBuildings_DataBindingComplete);
             // 
             // lblCCount
@@ -138,7 +139,7 @@
             this.lblCCount.AutoSize = true;
             this.lblCCount.Location = new System.Drawing.Point(849, 36);
             this.lblCCount.Name = "lblCCount";
-            this.lblCCount.Size = new System.Drawing.Size(0, 13);
+            this.lblCCount.Size = new System.Drawing.Size(0, 15);
             this.lblCCount.TabIndex = 20;
             // 
             // usrStatements

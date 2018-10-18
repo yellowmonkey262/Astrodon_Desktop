@@ -108,51 +108,44 @@ namespace Astrodon
         private void dgBuildings_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
 
-            if (dsBuildings != null)
+            foreach (DataGridViewRow dvr in dgBuildings.Rows)
             {
-                if (dgBuildings.Rows.Count == dsBuildings.Tables[0].Rows.Count)
+                StatementBuilding statementBuilding = dvr.DataBoundItem as StatementBuilding;
+                if (statementBuilding != null)
                 {
-                    foreach (DataGridViewRow dvr in dgBuildings.Rows)
+                    for (int i = 0; i < dgBuildings.ColumnCount; i++)
                     {
-                        if (dvr.Cells.Count >= 8)
+                        if (statementBuilding.StatementAlreadyProcessed())
                         {
-                            try
-                            {
-                                DateTime lastProcessed = DateTime.Parse(dvr.Cells[7].Value.ToString());
-                                TimeSpan elapsed = DateTime.Now - lastProcessed;
-                                for (int i = 0; i < dgBuildings.ColumnCount; i++)
-                                {
-                                    try
-                                    {
-                                        if (elapsed.TotalDays > 5)
-                                        {
-                                            dvr.Cells[i].Style.BackColor = System.Drawing.Color.Red;
-                                        }
-                                        else
-                                        {
-                                            dvr.Cells[i].Style.BackColor = System.Drawing.Color.White;
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Controller.HandleError(ex);
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                              //  Controller.HandleError(ex);
-                            }
+                            dvr.Cells[i].Style.BackColor = System.Drawing.Color.Red;
+                        }
+                        else
+                        {
+                            dvr.Cells[i].Style.BackColor = System.Drawing.Color.White;
                         }
                     }
                 }
             }
-
+            dgBuildings.Refresh();
         }
 
         private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow dvr in dgBuildings.Rows) { dvr.Cells[0].Value = chkSelectAll.Checked; }
+            foreach (DataGridViewRow dvr in dgBuildings.Rows)
+            {
+                if (chkSelectAll.Checked)
+                {
+                    StatementBuilding statementBuilding = dvr.DataBoundItem as StatementBuilding;
+                    if (statementBuilding != null && statementBuilding.Allowed)
+                    {
+                        dvr.Cells[0].Value = true;
+                    }
+                }
+                else
+                {
+                    dvr.Cells[0].Value = chkSelectAll.Checked;
+                }
+            }
         }
 
         private String getDebtorEmail(String buildingName)
@@ -331,6 +324,7 @@ namespace Astrodon
             foreach (DataGridViewRow dvr in dgBuildings.Rows)
             {
                 dvr.Cells[0].Value = false;
+           
             }
 
             foreach (KeyValuePair<String, bool> hasStatement in hasStatements)
@@ -709,6 +703,25 @@ namespace Astrodon
             {
                 String hoaMessage = "***PLEASE ENSURE THAT ALL PAYMENTS REFLECTS IN OUR NOMINATED ACCOUNT ON OR BEFORE DUE DATE TO AVOID ANY PENALTIES, REFER TO TERMS AND CONDITIONS.***";
                 return hoaMessage;
+            }
+        }
+
+        private void dgBuildings_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+           if(e.RowIndex >= 0)
+            {
+                if (e.ColumnIndex > 0)
+                    e.Cancel = true;
+                else
+                {
+                    var itm = dgBuildings.Rows[e.RowIndex].DataBoundItem as StatementBuilding;
+                    if (itm.Allowed == false)
+                    {
+                        Controller.ShowWarning("This building statements has already been processed." + Environment.NewLine +
+                            "Only Sheldon or Tertia is allowed to process this building");
+                        e.Cancel = true;
+                    }
+                }
             }
         }
     }
