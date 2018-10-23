@@ -62,7 +62,7 @@ namespace Astrodon
             bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, false);
             bf2 = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, false);
             statementFolder = "statements";
-            String serverDrive = "K:\\Debtors System";
+            String serverDrive = "K:\\Pastel11\\Debtors System";
             //String serverDrive = AppDomain.CurrentDomain.BaseDirectory;
             folderPath = Path.Combine(serverDrive, statementFolder);
             if (!Directory.Exists(folderPath))
@@ -1590,7 +1590,7 @@ namespace Astrodon
                 cell0.HorizontalAlignment = 0;
                 table.AddCell(cell0);
 
-                cell0 = new PdfPCell(new Paragraph(statement.accNumber, fontB));
+                cell0 = new PdfPCell(new Paragraph(statement.BankAccountNumber, fontB));
                 cell0.HorizontalAlignment = 0;
                 cell0.Border = Rectangle.NO_BORDER;
                 table.AddCell(cell0);
@@ -1673,7 +1673,7 @@ namespace Astrodon
                     _pcb.SetTextMatrix(leftM + 87, 165);
                     _pcb.ShowText(statement.accName);
 
-                    List<String> accNumber = SplitWord(statement.accNumber);
+                    List<String> accNumber = SplitWord(statement.BankAccountNumber);
                     float stdx = leftM + 87;
                     float stdy = 145;
                     for (int i = 0; i < accNumber.Count; i++)
@@ -1951,7 +1951,7 @@ namespace Astrodon
             FileStream stream;
             try
             {
-                folderPath = (Directory.Exists("K:\\Debtors System\\Letters") ? "K:\\Debtors System\\Letters" : "C:\\Pastel11\\Debtors System\\Letters");
+                folderPath = (Directory.Exists("K:\\Pastel11\\Debtors System\\Letters") ? "K:\\Pastel11\\Debtors System\\Letters" : "C:\\Pastel11\\Debtors System\\Letters");
                 fName = Path.Combine(folderPath, String.Format("{0}_{1}_REMINDER.pdf", letterDate.Replace(@"/", ""), accNo.Replace(@"/", "-").Replace(@"\", "-")));
                 if (File.Exists(fName)) { File.Delete(fName); }
                 stream = new FileStream(fName, FileMode.CreateNew);
@@ -2112,7 +2112,7 @@ namespace Astrodon
             FileStream stream;
             try
             {
-                folderPath = (Directory.Exists("K:\\Debtors System\\Letters") ? "K:\\Debtors System\\Letters" : "C:\\Pastel11\\Debtors System\\Letters");
+                folderPath = (Directory.Exists("K:\\Pastel11\\Debtors System\\Letters") ? "K:\\Pastel11\\Debtors System\\Letters" : "C:\\Pastel11\\Debtors System\\Letters");
                 fName = Path.Combine(folderPath, String.Format("{0}_{1}_REMINDER.pdf", letterDate.Replace(@"/", ""), accNo.Replace(@"/", "-").Replace(@"\", "-")));
                 if (File.Exists(fName)) { File.Delete(fName); }
                 stream = new FileStream(fName, FileMode.CreateNew);

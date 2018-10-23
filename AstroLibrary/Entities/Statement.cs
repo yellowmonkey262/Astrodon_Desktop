@@ -50,7 +50,7 @@ namespace Astro.Library.Entities
 
         public String branch { get; set; }
 
-        public String accNumber { get; set; }
+        public String BankAccountNumber { get; set; }
 
         public bool isStd { get; set; }
 

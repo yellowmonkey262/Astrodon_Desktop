@@ -217,7 +217,7 @@ namespace Astrodon
                         s.pm = pm;
                         s.bankName = bankName;
                         s.accName = accName;
-                        s.accNumber = bankAccNumber;
+                        s.BankAccountNumber = bankAccNumber;
                         s.branch = branch;
                         s.isStd = isStd;
                         statements.statements.Add(s);
@@ -638,7 +638,7 @@ namespace Astrodon
 
                 try
                 {
-                    if (Email.EmailProvider.SendStatement(statementItem.debtorEmail, toMail, stmt.accNumber,fileName,stmt.StmtDate,url,isRental))
+                    if (Email.EmailProvider.SendStatement(statementItem.debtorEmail, toMail, stmt.AccNo, fileName,stmt.StmtDate,url,isRental))
                     {
                         statementItem.errorMessage = "Processed & Sent";
                     }

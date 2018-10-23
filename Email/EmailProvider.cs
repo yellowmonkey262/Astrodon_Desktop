@@ -69,7 +69,8 @@ namespace Astrodon.Email
             return Mailer.SendDirectMail(Controller.user.email, emails, cc, bcc, subject, message, true, out status, new string[] { });
         }
 
-        public static bool SendStatement(string debtorEmail, string[] emailTo, string customerAccountNumber, string fileName, DateTime statementDate, string statmentUrl, bool rental)
+        public static bool SendStatement(string debtorEmail, string[] emailTo, string customerAccountNumber,
+            string fileName, DateTime statementDate, string statmentUrl, bool rental)
         {
             string status;
             string subject = Path.GetFileNameWithoutExtension(fileName) + " " + DateTime.Now.ToString();

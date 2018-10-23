@@ -222,6 +222,7 @@ namespace Astrodon.Reports
                         .FirstOrDefault(a => a.id == buildingId)?.DataFolder;
             }
 
+
             var dt = new DateTime(year, month, 1);
 
             if (string.IsNullOrWhiteSpace(dataFolder))
@@ -253,7 +254,8 @@ namespace Astrodon.Reports
                 }
             }
 
-            
+        
+
             if (Directory.Exists(outputPath))
             {
                 var items = Directory.GetFiles(outputPath).ToList();

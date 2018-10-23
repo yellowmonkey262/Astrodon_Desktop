@@ -585,7 +585,6 @@ namespace Astrodon
             List<Trns> rs = new List<Trns>();
             String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
 
-            Controller.ShowMessage("Load transactions in " + pastelDirectory + "\\" + buildPath + " returned " + returner);
             //period = 6
             if (returner == "0")
             {

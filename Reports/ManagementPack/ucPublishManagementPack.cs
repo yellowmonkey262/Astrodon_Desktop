@@ -316,7 +316,7 @@ namespace Astrodon.Reports.ManagementPack
                 {
                     Controller.HandleError("Unable to send notification email : " + status);
                 }
-
+                int trusteeEmailsSent = 0;
                 if (trustees.Count() > 0)
                 {
                     if (Controller.AskQuestion("Are you sure you want to notify " + trustees.Count().ToString() + " trustees?"))
@@ -346,10 +346,15 @@ namespace Astrodon.Reports.ManagementPack
                                     if (!Mailer.SendDirectMail(building.pm, toEmail, "", "", "Monthly financial pack", emailContent, false, out status))
                                     {
                                         Controller.HandleError("Unable to notify trustees by email : " + status);
+                                    }else
+                                    {
+                                        trusteeEmailsSent++;
                                     }
                                     Application.DoEvents();
                                 }
                             }
+                            if (trusteeEmailsSent > 0)
+                                Controller.ShowMessage("Sent email to " + trusteeEmailsSent.ToString() + " trustees");
                             _SelectedItem.Processed = true;
                             dataItem.Published = true;
                             dataItem.Commments = tbComments.Text;

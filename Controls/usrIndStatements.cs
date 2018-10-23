@@ -72,7 +72,7 @@ namespace Astrodon
                     pm = building.PM,
                     bankName = building.Bank_Name,
                     accName = building.Acc_Name,
-                    accNumber = building.Bank_Acc_Number,
+                    BankAccountNumber = building.Bank_Acc_Number,
                     branch = building.Branch_Code,
                     DebtorEmail = building.Debtor
                 };
@@ -98,7 +98,7 @@ namespace Astrodon
                 String attachment = txtAttachment.Text;
                 if (!attachment.StartsWith("K:") && !String.IsNullOrEmpty(attachment))
                 {
-                    File.Copy(attachment, Path.Combine("K:\\Debtors System\\statement test", Path.GetFileName(attachment)), true);
+                    File.Copy(attachment, Path.Combine("K:\\Pastel11\\Debtors System\\statement test", Path.GetFileName(attachment)), true);
                     attachment = Path.GetFileName(attachment);
                 }
                 if (!String.IsNullOrEmpty(attachment)) { attachments.Add(attachment); }
@@ -111,7 +111,7 @@ namespace Astrodon
                 var statementURL = _ClientPortal.InsertStatement(stmt.BuildingId, stmt.AccNo, stmt.StmtDate, fileName, File.ReadAllBytes(fileName), emailAddress);
 
                 bool isRental = stmt.BuildingName == "ASTRODON RENTALS";
-                if(Email.EmailProvider.SendStatement(stmt.DebtorEmail, stmt.email1, stmt.accNumber, fileName, stmt.StmtDate, statementURL, isRental))
+                if(Email.EmailProvider.SendStatement(stmt.DebtorEmail, stmt.email1, stmt.AccNo, fileName, stmt.StmtDate, statementURL, isRental))
                 {
                     MessageBox.Show("Message Sent");
                 }

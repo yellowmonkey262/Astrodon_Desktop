@@ -1077,7 +1077,7 @@ namespace Astrodon.Controls
                 //}
             }
 
-            String defaultLocation = "K:\\Debtors System";
+            String defaultLocation = "K:\\Pastel11\\Debtors System";
             if (!Directory.Exists(defaultLocation)) { defaultLocation = "C:\\Pastel11"; }
             String attachmentLocation = defaultLocation + "\\PA Attachments";
             if (!Directory.Exists(attachmentLocation)) { Directory.CreateDirectory(attachmentLocation); }
