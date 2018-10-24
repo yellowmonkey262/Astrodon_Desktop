@@ -148,16 +148,17 @@ namespace Astrodon
             }
         }
 
-        private String getDebtorEmail(String buildingName)
-        {
-            List<Building> testBuildings = new Buildings(false).buildings;
-            String dEmail = "";
-            foreach (Building b in testBuildings)
-            {
-                if (b.Name == buildingName) { dEmail = b.Debtor; }
-            }
-            return (dEmail != "" ? dEmail : Controller.user.email);
-        }
+        //private String getDebtorEmail(int buildingId)
+        //{
+        //    List<Building> testBuildings = new Buildings(false).buildings;
+        //    var b = testBuildings.Where(a => a.Bu)
+        //    String dEmail = "";
+        //    foreach (Building b in testBuildings)
+        //    {
+        //        if (b.Name == buildingName) { dEmail = b.Debtor; }
+        //    }
+        //    return (dEmail != "" ? dEmail : Controller.user.email);
+        //}
 
         private void SetBuildingStatement(String buildingName)
         {
@@ -475,7 +476,7 @@ namespace Astrodon
                     portfolioManager = new Users().GetUser(pmUser.id);
             }
 
-                List<Customer> customers = Controller.pastel.AddCustomers(buildingName, buildingPath);
+            List<Customer> customers = Controller.pastel.AddCustomers(buildingName, buildingPath);
             List<Statement> myStatements = new List<Statement>();
             lblCCount.Text = build.Name + " 0/" + customers.Count.ToString();
             lblCCount.Refresh();
@@ -520,7 +521,10 @@ namespace Astrodon
                         double totalDue = 0;
                         String trnMsg;
 
-                        myStatement.DebtorEmail = getDebtorEmail(buildingName);
+                        myStatement.DebtorEmail = build.Debtor;
+                        if (String.IsNullOrWhiteSpace(myStatement.DebtorEmail))
+                            Controller.HandleError("Debtor not configured on this building. Please check building configuration.");
+
                         myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
                         myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
                         if (customer.Email != null && customer.Email.Length > 0)

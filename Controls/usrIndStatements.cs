@@ -78,6 +78,10 @@ namespace Astrodon
                 };
             }
             catch { }
+
+            if (String.IsNullOrWhiteSpace(stmt.DebtorEmail))
+                Controller.HandleError("Debtor not configured on this building. Please check building configuration.");
+                    
         }
 
         private void btnGenView_Click(object sender, EventArgs e)
@@ -156,6 +160,9 @@ namespace Astrodon
                 foreach (String addy in customer.address) { addList.Add(addy); }
                 stmt.Address = addList.ToArray();
                 stmt.DebtorEmail = building.Debtor;
+                if (String.IsNullOrWhiteSpace(stmt.DebtorEmail))
+                    Controller.HandleError("Debtor not configured on this building. Please check building configuration.");
+
                 stmt.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 ? false : true);
                 try
                 {
