@@ -14,11 +14,37 @@ declare @BuildingUnitId UniqueIdentifier
 declare @WebDocumentId UniqueIdentifier
 set @WebDocumentId =  NEWID()
 
+
 set @BuildingUnitId = ( select bu.Id
 						from BuildingUnit bu
 						join Building b on b.Id = bu.BuildingId
 						where b.BuildingId = @BuildingId
 						  and bu.AccountNumber = @AccountNumber)
+
+if(@BuildingUnitId is null)
+begin
+	insert into BuildingUnit
+	(Id,UnitId,AccountNumber,BuildingId,IsTrustee,EmailAddress1,EmailAddress2,EmailAddress3,EmailAddress4)
+	select NEWID() ,c.Id, c.AccountNumber,b.Id,c.IsTrustee,
+		   c.EmailAddress1,c.EmailAddress2,c.EmailAddress3,c.EmailAddress4
+	from Astrodon..Customer c
+	join Building b on b.BuildingId = c.BuildingId
+	left join BuildingUnit bu on bu.UnitId = c.id
+	where bu.Id is null
+	  and b.BuildingId = @BuildingId
+
+
+  set @BuildingUnitId = ( select bu.Id
+						from BuildingUnit bu
+						join Building b on b.Id = bu.BuildingId
+						where b.BuildingId = @BuildingId
+						  and bu.AccountNumber = @AccountNumber)
+end
+
+if(@BuildingUnitId is null)
+begin
+  RAISERROR('Building unit %s on building id %d not found',18,1,@AccountNumber,@BuildingId)
+end
 
 Begin transaction tran_upload_document
 BEGIN TRY

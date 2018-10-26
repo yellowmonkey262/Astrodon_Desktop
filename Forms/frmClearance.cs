@@ -23,6 +23,7 @@ namespace Astrodon
 
         private void frmClearance_Load(object sender, EventArgs e)
         {
+       
             buildings = new Buildings(false).buildings;
             ReloadGrids();
         }

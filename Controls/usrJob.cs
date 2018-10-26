@@ -1077,10 +1077,7 @@ namespace Astrodon.Controls
                 //}
             }
 
-            String defaultLocation = "K:\\Pastel11\\Debtors System";
-            if (!Directory.Exists(defaultLocation)) { defaultLocation = "C:\\Pastel11"; }
-            String attachmentLocation = defaultLocation + "\\PA Attachments";
-            if (!Directory.Exists(attachmentLocation)) { Directory.CreateDirectory(attachmentLocation); }
+            String attachmentLocation = @"K:\Pastel11\Debtors System\PA Attachments";
 
             Application.DoEvents();
 
@@ -1171,7 +1168,7 @@ namespace Astrodon.Controls
                             filePath = Path.Combine(attachmentLocation, fileName);
                             attachments.Add(filePath);
                             try { liveAttachments.Add(fileName, fileStream); }
-                            catch { }
+                            catch(Exception e) { Controller.HandleError(e); }
                         }
                     }
                     #endregion
@@ -1185,7 +1182,7 @@ namespace Astrodon.Controls
                         {
                             attachments.Add(Path.Combine(attachmentLocation, a.FileName));
                             try { liveAttachments.Add(a.FileName, aByte); }
-                            catch { }
+                            catch (Exception e) { Controller.HandleError(e); }
                         }
                         Application.DoEvents();
 
