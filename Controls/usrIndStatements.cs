@@ -56,7 +56,7 @@ namespace Astrodon
             {
                 cmbCustomer.SelectedIndexChanged -= cmbCustomer_SelectedIndexChanged;
                 building = buildings[cmbBuilding.SelectedIndex];
-                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
+                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath,true);
                 cmbCustomer.DataSource = null;
                 cmbCustomer.Items.Clear();
                 cmbCustomer.DataSource = customers;
@@ -102,7 +102,7 @@ namespace Astrodon
                 String attachment = txtAttachment.Text;
                 if (!attachment.StartsWith("K:") && !String.IsNullOrEmpty(attachment))
                 {
-                    File.Copy(attachment, Path.Combine("K:\\Pastel11\\Debtors System\\statement test", Path.GetFileName(attachment)), true);
+                    File.Copy(attachment, Path.Combine(Pastel.PastelRoot + "Debtors System\\statement test", Path.GetFileName(attachment)), true);
                     attachment = Path.GetFileName(attachment);
                 }
                 if (!String.IsNullOrEmpty(attachment)) { attachments.Add(attachment); }

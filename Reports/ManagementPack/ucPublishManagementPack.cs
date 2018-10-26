@@ -294,7 +294,7 @@ namespace Astrodon.Reports.ManagementPack
 
                 string emailContent = Controller.ReadResourceString("Astrodon.Reports.ManagementPack.ManagementPackEmail.txt");
 
-                var customers = Controller.pastel.AddCustomers(building.Code, building.DataPath);
+                var customers = Controller.pastel.AddCustomers(building.Code, building.DataPath, true);
                 var dbCustomers = context.CustomerSet
                                           .Where(a => a.BuildingId == building.id)
                                           .ToList();

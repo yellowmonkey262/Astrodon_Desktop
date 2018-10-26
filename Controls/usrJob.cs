@@ -396,7 +396,7 @@ namespace Astrodon.Controls
         {
             if (customers == null) { customers = new List<Customer>(); }
             customers.Clear();
-            customers = Controller.pastel.AddCustomers(String.Empty, selectedBuilding.DataPath);
+            customers = Controller.pastel.AddCustomers(String.Empty, selectedBuilding.DataPath, true);
 
             using (var context = SqlDataHandler.GetDataContext())
             {
@@ -1077,7 +1077,7 @@ namespace Astrodon.Controls
                 //}
             }
 
-            String attachmentLocation = @"K:\Pastel11\Debtors System\PA Attachments";
+            String attachmentLocation = Pastel.PastelRoot + @"Debtors System\PA Attachments";
 
             Application.DoEvents();
 

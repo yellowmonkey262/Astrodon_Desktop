@@ -121,7 +121,7 @@ namespace Astrodon
 
         private void LoadCustomers()
         {
-            List<Customer> customers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
+            List<Customer> customers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath, true);
 
             //merge trustees db and override setting in pastel
 
@@ -320,7 +320,7 @@ namespace Astrodon
 
         private void LoadInsuranceUnitPq(Data.tblBuilding buildingEntity)
         {
-            var unitRecords = Controller.pastel.AddCustomers(buildingEntity.Code, buildingEntity.DataPath);
+            var unitRecords = Controller.pastel.AddCustomers(buildingEntity.Code, buildingEntity.DataPath, true);
             InsurancePqGrid = new List<IInsurancePqRecord>();
             var items = unitRecords.Select(a => new InsurancePqRecord(InsurancePqGrid,_BondOriginators)
             {
@@ -847,7 +847,7 @@ namespace Astrodon
             this.Cursor = Cursors.WaitCursor;
             using (var dbContext = SqlDataHandler.GetDataContext())
             {
-                List<Customer> vCustomers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath);
+                List<Customer> vCustomers = Controller.pastel.AddCustomers(selectedBuilding.Abbr, selectedBuilding.DataPath, true);
                 List<Customer> customers = dgTrustees.DataSource as List<Customer>;
                 var dbCustomers = dbContext.CustomerSet.Where(a => a.BuildingId == selectedBuilding.ID).ToList();
 

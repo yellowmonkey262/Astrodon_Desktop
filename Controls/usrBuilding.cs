@@ -313,7 +313,7 @@ namespace Astrodon.Controls
             totalOS = 0;
             int buildPeriod;
             int trustPeriod = Methods.getPeriod(DateTime.Now, b.Period, out buildPeriod);
-            List<Customer> catCustomers = Controller.pastel.AddCustomers(b.Name, b.DataPath);
+            List<Customer> catCustomers = Controller.pastel.AddCustomers(b.Name, b.DataPath,true);
             List<Customer> _Customers = new List<Customer>();
             foreach (Customer _customer in catCustomers)
             {

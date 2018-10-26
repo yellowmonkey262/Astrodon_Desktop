@@ -34,7 +34,7 @@ namespace Astrodon.Controls
                 building = buildings[cmbBuilding.SelectedIndex];
                 txtBCC.Text = building.PM;
                 if (!txtBCC.Text.Contains(Controller.user.email)) { txtBCC.Text += "; " + Controller.user.email; }
-                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
+                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath, true);
                 cmbCustomer.Items.Clear();
                 foreach (Customer c in customers)
                 {

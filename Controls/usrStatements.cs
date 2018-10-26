@@ -476,7 +476,7 @@ namespace Astrodon
                     portfolioManager = new Users().GetUser(pmUser.id);
             }
 
-            List<Customer> customers = Controller.pastel.AddCustomers(buildingName, buildingPath);
+            List<Customer> customers = Controller.pastel.AddCustomers(buildingName, buildingPath, true);
             List<Statement> myStatements = new List<Statement>();
             lblCCount.Text = build.Name + " 0/" + customers.Count.ToString();
             lblCCount.Refresh();

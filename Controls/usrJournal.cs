@@ -57,7 +57,7 @@ namespace Astrodon.Controls
             try
             {
                 building = buildings[cmbBuilding.SelectedIndex];
-                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
+                customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath, true);
                 customer = null;
                 LoadCustomers();
             }

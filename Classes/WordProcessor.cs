@@ -26,8 +26,10 @@ namespace Astrodon
         public WordProcessor()
         {
             killprocess("winword");
-            templateDir = (!Directory.Exists("K:\\Pastel11\\Debtors System\\") ? "K:\\Pastel11\\Debtors System\\" : "K:\\Pastel11\\Debtors System\\");
-            letterDir = (Directory.Exists("K:\\Pastel11\\Debtors System\\Letters\\") ? "K:\\Pastel11\\Debtors System\\Letters\\" : "K:\\Pastel11\\Debtors System\\Letters\\");
+            templateDir = Pastel.PastelRoot + "Debtors System\\";
+
+            letterDir = Pastel.PastelRoot + "Debtors System\\Letters\\";
+
             if (!Directory.Exists(letterDir)) { Directory.CreateDirectory(letterDir); }
             wordApp = new Word.Application
             {

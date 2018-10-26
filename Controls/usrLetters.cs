@@ -277,7 +277,7 @@ namespace Astrodon
 
              //   SerializeObject<BuildingClosingBalance[]>(balances, @"C:\FromWillie\Balances.xml");
 
-                List<Customer> catCustomers = Controller.pastel.AddCustomers(building.Name, building.DataPath);
+                List<Customer> catCustomers = Controller.pastel.AddCustomers(building.Name, building.DataPath, true);
 
 
                 int cnt = catCustomers.Count();

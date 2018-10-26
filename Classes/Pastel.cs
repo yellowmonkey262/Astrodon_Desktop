@@ -15,7 +15,7 @@ namespace Astrodon
     {
         private PastelPartnerSDK SDK;
         private short keyNumber = 0;
-        public string pastelDirectory { get; private set; }
+        public static string PastelRoot { get; private set; }
         public volatile bool runSearch = false;
 
         #region Event Handler
@@ -46,31 +46,36 @@ namespace Astrodon
             SDK = new PastelPartnerSDK();
             lc = "DK11110068";
             auth = "4228113";
-            pastelDirectory = @"K:\Pastel11\";   // @"K:\";// (Directory.Exists("K:\\") ? "K:\\" : "C:\\Pastel11\\");
+            if (Environment.MachineName == "SERVER2")
+                PastelRoot = @"K:\Pastel11\";  
+            else
+                PastelRoot = @"K:\";
 
+          
             string searchFolders = "";
 
-            if (!Directory.Exists(pastelDirectory))
+            if (!Directory.Exists(PastelRoot))
             {
-                searchFolders += pastelDirectory + " does not exist\n";
-                pastelDirectory = "\\\\SERVER2\\Pastel11\\";
-                if (!Directory.Exists(pastelDirectory))
+                searchFolders += PastelRoot + " does not exist\n";
+                PastelRoot = "\\\\SERVER2\\Pastel11\\";
+                if (!Directory.Exists(PastelRoot))
                 {
-                    searchFolders += pastelDirectory + " does not exist\n";
-                    pastelDirectory = "C:\\Pastel11\\";
-                    if (!Directory.Exists(pastelDirectory))
+                    searchFolders += PastelRoot + " does not exist\n";
+                    PastelRoot = "C:\\Pastel11\\";
+                    if (!Directory.Exists(PastelRoot))
                     {
-                        searchFolders += pastelDirectory + " does not exist\n";
-                        pastelDirectory = "C:\\Pastel12\\";
+                        searchFolders += PastelRoot + " does not exist\n";
+                        PastelRoot = "C:\\Pastel12\\";
                         lc = "DK12111473";
                         auth = "3627008";
 
-                        if (!Directory.Exists(pastelDirectory))
+                        if (!Directory.Exists(PastelRoot))
                             throw new Exception("Pastel folder not found - Searched in: " + searchFolders);
                     }
 
                 }
             }
+
             SDK.SetLicense(lc, auth);
         }
 
@@ -80,15 +85,15 @@ namespace Astrodon
         {
             List<Customer> customers = new List<Customer>();
             String path = "";
-            path = Path.Combine(pastelDirectory, buildPath);
+            path = Path.Combine(PastelRoot, buildPath);
             if (!Directory.Exists(path))
             {
-                path = Path.Combine(pastelDirectory, buildPath);
+                path = Path.Combine(PastelRoot, buildPath);
             }
             else if (Directory.Exists(Path.Combine("C:\\Pastel12", buildPath)))
             {
                 path = Path.Combine("C:\\Pastel12", buildPath);
-                pastelDirectory = "C:\\Pastel12";
+                PastelRoot = "C:\\Pastel12";
             }
             String returner = SDK.SetDataPath(path);
 
@@ -96,7 +101,7 @@ namespace Astrodon
             if (returner.Contains("99"))
             {
                 if (showErrors)
-                    Controller.ShowMessage("Patel returned " + returner + " reading path: " + path);
+                    Controller.HandleError("Patel returned " + returner + " reading path: " + path);
             }
             else
             {
@@ -134,10 +139,10 @@ namespace Astrodon
             {
                 foreach (KeyValuePair<String, String> building in buildings)
                 {
-                    String returner = SDK.SetDataPath(pastelDirectory + "\\" + building.Value);
+                    String returner = SDK.SetDataPath(PastelRoot + "\\" + building.Value);
                     if (returner != "0")
                     {
-                        status = "Returner = " + returner + " Customers: " + pastelDirectory + "\\" + building.Value;
+                        status = "Returner = " + returner + " Customers: " + PastelRoot + "\\" + building.Value;
                         if (showErrors)
                             RaiseEvent(status);
                     }
@@ -206,7 +211,7 @@ namespace Astrodon
         public List<String> GetCustomers(String buildPath)
         {
             List<String> customers = new List<string>();
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (returner == "0")
             {
                 try
@@ -247,7 +252,7 @@ namespace Astrodon
         public String GetCustomer(String buildPath, String accNumber)
         {
             String account = "";
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (returner == "0")
             {
                 try
@@ -307,7 +312,7 @@ namespace Astrodon
             String[] delBits = new string[1];
             try
             {
-                returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+                returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
                 if (returner == "0")
                 {
                     String fileName = "ACCDELIV";
@@ -345,7 +350,7 @@ namespace Astrodon
             String[] delBits = new string[1];
             try
             {
-                returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+                returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
                 if (returner == "0")
                 {
                     String fileName = "ACCDELIV";
@@ -414,7 +419,7 @@ namespace Astrodon
         public Dictionary<int, String> GetCustomerCategories(String buildPath)
         {
             Dictionary<int, String> categories = new Dictionary<int, string>();
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (returner == "0")
             {
                 try
@@ -448,7 +453,7 @@ namespace Astrodon
 
         public List<String> getNotes(String customerCode, String buildPath)
         {
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             List<String> notes = new List<string>();
             if (returner.Contains("99"))
             {
@@ -487,7 +492,7 @@ namespace Astrodon
 
         public String UpdateCustomer(String customer, String buildPath)
         {
-            String pathReturner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String pathReturner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             String returner = String.Empty;
             if (pathReturner.Contains("99"))
             {
@@ -514,7 +519,7 @@ namespace Astrodon
             List<String> rs = new List<string>();
 
 
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
 
             if (returner == "0")
             {
@@ -583,7 +588,7 @@ namespace Astrodon
         public List<Trns> GetTransactions(String buildPath, int startperiod, int endperiod, String acc)
         {
             List<Trns> rs = new List<Trns>();
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
 
             //period = 6
             if (returner == "0")
@@ -660,7 +665,7 @@ namespace Astrodon
         public List<Trns> GetTransactions(String buildPath, String gdc, int startperiod, int endperiod, String acc)
         {
             List<Trns> rs = new List<Trns>();
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             //period = 6
             if (returner == "0")
             {
@@ -737,7 +742,7 @@ namespace Astrodon
         public String GetAccount(String buildPath)
         {
             String account = "";
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (returner == "0")
             {
                 try
@@ -758,7 +763,7 @@ namespace Astrodon
 
         public Dictionary<String, String> GetAccountList(String buildPath)
         {
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             Dictionary<String, String> accounts = new Dictionary<string, string>();
             if (returner == "0")
             {
@@ -798,7 +803,7 @@ namespace Astrodon
         public String GetAccount(String buildPath, String acc)
         {
             String account = "";
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (returner == "0")
             {
                 try
@@ -820,7 +825,7 @@ namespace Astrodon
         public List<String> GetAccounts(String buildPath)
         {
             List<String> accounts = new List<string>();
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (returner == "0")
             {
                 try
@@ -850,8 +855,8 @@ namespace Astrodon
 
         public String SetPath(String buildPath, out String myPath)
         {
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
-            myPath = pastelDirectory + "\\" + buildPath;
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
+            myPath = PastelRoot + "\\" + buildPath;
             if (returner != "0")
             {
                 myPath = "\\\\SERVER2\\Pastel11\\" + buildPath;
@@ -863,7 +868,7 @@ namespace Astrodon
         public int GetPeriod(String buildPath)
         {
             int period = 0;
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (returner == "0")
             {
                 try
@@ -900,7 +905,7 @@ namespace Astrodon
         public String GetBankDetails(String buildPath)
         {
             String bankDetails = String.Empty;
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (returner == "0")
             {
                 try
@@ -924,7 +929,7 @@ namespace Astrodon
         public Dictionary<String, String> GetCategories(String buildPath)
         {
             Dictionary<String, String> categories = new Dictionary<string, string>();
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (returner == "0")
             {
                 try
@@ -980,7 +985,7 @@ namespace Astrodon
         {
             String StrReturn = "0";
             String strCodeIn;
-            String returner = SDK.SetDataPath(pastelDirectory + "\\" + buildPath);
+            String returner = SDK.SetDataPath(PastelRoot + "\\" + buildPath);
             if (StrReturn == "0") { StrReturn = SDK.SetGLPath("K:\\Pastel11"); }
             if (StrReturn == "0")
             {

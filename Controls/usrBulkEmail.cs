@@ -88,7 +88,7 @@ namespace Astrodon
 
         private void LoadCustomers(String category)
         {
-            customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath);
+            customers = Controller.pastel.AddCustomers(building.Abbr, building.DataPath, true);
             emailList = new List<EmailList>();
             using (var context = SqlDataHandler.GetDataContext())
             {

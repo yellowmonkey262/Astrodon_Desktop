@@ -1051,7 +1051,7 @@ namespace Astrodon.Reports.Calendar
 
                 if (entry.NotifyTrustees && entry.EventyType == CalendarEntryType.Financial)
                 {
-                    var customers = Controller.pastel.AddCustomers(entry.BuildingAbreviation, entry.BuildingDataPath);
+                    var customers = Controller.pastel.AddCustomers(entry.BuildingAbreviation, entry.BuildingDataPath, true);
                     var dbCustomers = context.CustomerSet.Where(a => a.BuildingId == entry.BuildingId && a.IsTrustee == true).ToList();
                     var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 

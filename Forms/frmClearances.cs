@@ -178,7 +178,7 @@ namespace Astrodon
                         }
                     }
                     txtComplex.Text = build.Name;
-                    customers = Controller.pastel.AddCustomers(build.Abbr, build.DataPath);
+                    customers = Controller.pastel.AddCustomers(build.Abbr, build.DataPath, true);
                     if (build != null && customers.Count > 0)
                     {
                         cmbCustomer.DataSource = customers;

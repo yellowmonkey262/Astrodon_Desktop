@@ -39,7 +39,7 @@ namespace Astrodon.Controls
                 {
                     if (chkBuildings.GetItemChecked(i))
                     {
-                        List<Customer> customers = Controller.pastel.AddCustomers("", BuildingManager.buildings[i].DataPath);
+                        List<Customer> customers = Controller.pastel.AddCustomers("", BuildingManager.buildings[i].DataPath, true);
                         foreach (Customer c in customers)
                         {
                             String fullAddy = String.Join("", c.address).Trim();

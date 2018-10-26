@@ -73,7 +73,7 @@ namespace Astrodon
 
         private void LoadCustomers()
         {
-            List<Customer> customers = Controller.pastel.AddCustomers(selectedBuilding.Name, selectedBuilding.DataPath);
+            List<Customer> customers = Controller.pastel.AddCustomers(selectedBuilding.Name, selectedBuilding.DataPath, true);
             foreach (Customer c in customers)
             {
                 SMSCustomer smsc = new SMSCustomer
