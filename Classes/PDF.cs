@@ -1129,10 +1129,12 @@ namespace Astrodon
                 if (File.Exists(fName)) { File.Delete(fName); }
                 stream = new FileStream(fName, FileMode.CreateNew);
             }
-            catch
+            catch(Exception ex1)
             {
                 fName = String.Empty;
-                return false;
+                throw new Exception("Unable to create statement PDF " + fName + Environment.NewLine+
+                    folderPath + Environment.NewLine + ex1.Message);
+                    
             }
             message = "creating";
 
@@ -1720,7 +1722,7 @@ namespace Astrodon
 
         private String GetUserName(String emailAddress)
         {
-            String query = "SELECT name FROM tblUsers WHERE email = '" + emailAddress + "'";
+            String query = "SELECT name FROM tblUsers WHERE email = '" + emailAddress + "' and Active = 1";
             SqlDataHandler dh = new SqlDataHandler();
             String status;
             DataSet ds = dh.GetData(query, null, out status);

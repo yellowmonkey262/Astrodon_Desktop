@@ -1077,7 +1077,7 @@ namespace Astrodon.Controls
                 //}
             }
 
-            String attachmentLocation = Pastel.PastelRoot + @"Debtors System\PA Attachments";
+            String attachmentLocation = @"\\SERVER2\Pastel11\Debtors System\PA Attachments\";// +DateTime.Today.ToString("yyyyMM")+"\\";
 
             Application.DoEvents();
 
@@ -1163,26 +1163,65 @@ namespace Astrodon.Controls
                     #region Has Letters
                     if (HasLetter() && !String.IsNullOrEmpty(fileName) && fileStream != null)
                     {
+                        txtStatus.Text += "Loading letter " + attachmentLocation + " " + fileName + " " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+
                         if (CreateDocument(attachmentLocation, fileName, fileStream, out status))
                         {
                             filePath = Path.Combine(attachmentLocation, fileName);
+                            txtStatus.Text += "Add letter :  " + filePath + " " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
                             attachments.Add(filePath);
-                            try { liveAttachments.Add(fileName, fileStream); }
-                            catch(Exception e) { Controller.HandleError(e); }
+                            try
+                            {
+                                liveAttachments.Add(fileName, fileStream);
+                            }
+                            catch (Exception e)
+                            {
+                                txtStatus.Text += "Error adding letter :  " + e.Message + " " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                                Controller.HandleError(e);
+                            }
+                        }
+                        else
+                        {
+                            Controller.HandleError("Unable to store attachment - job aborted (1)");
+                            txtStatus.Text += "Unable to store letter - job aborted (1): " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                            return;
                         }
                     }
                     #endregion
+
+                    txtStatus.Text += "Creating attachments: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                    Application.DoEvents();
+
 
                     #region Attachments in Email
                     foreach (Attachments a in EmailDocs)
                     {
                         int fileID;
+                        txtStatus.Text += "Get Attachment: " + a.FileName + " Type: 2 "  + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+
                         byte[] aByte = GetAttachment(a.FileName, 2, out fileID);
                         if (CreateDocument(attachmentLocation, a.FileName, aByte, out status))
                         {
-                            attachments.Add(Path.Combine(attachmentLocation, a.FileName));
-                            try { liveAttachments.Add(a.FileName, aByte); }
-                            catch (Exception e) { Controller.HandleError(e); }
+                            string path = Path.Combine(attachmentLocation, a.FileName);
+                            txtStatus.Text += "Add Attachment :  " + path + " " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+
+                            attachments.Add(path);
+                            try
+                            {
+                                liveAttachments.Add(a.FileName, aByte);
+                            }
+                            catch (Exception e)
+                            {
+                                txtStatus.Text += "Error adding attachment :  " + e.Message + " " + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+
+                                Controller.HandleError(e);
+                            }
+                        }
+                        else
+                        {
+                            txtStatus.Text += "Unable to store attachment - job aborted (2)" + DateTime.Now.ToString("yyyy/MM/dd HH:mm") + Environment.NewLine;
+                            Controller.HandleError("Unable to store attachment - job aborted (2)");
+                            return;
                         }
                         Application.DoEvents();
 
@@ -1233,9 +1272,15 @@ namespace Astrodon.Controls
                             bfileName = r.Replace(bfileName, "");
 
                             String bfilePath = Path.Combine(attachmentLocation, bfileName);
-                            CreateDocument(attachmentLocation, bfileName, fileStream, out status);
-                            attachments.Add(bfilePath);
-
+                            if (CreateDocument(attachmentLocation, bfileName, fileStream, out status))
+                            {
+                                attachments.Add(bfilePath);
+                            }
+                            else
+                            {
+                                Controller.HandleError("Unable to store attachment - job aborted. (3)");
+                                return;
+                            }
                             try
                             {
                                 string emailAddress = "";
@@ -1389,8 +1434,15 @@ namespace Astrodon.Controls
             }
         }
 
-        private bool CreateDocument(String attachmentLocation, String fileName, byte[] fileStream, out String status)
+        private bool CreateDocument(String attachmentLocation, String fileName, 
+            byte[] fileStream, out String status)
         {
+            string outputPath = Path.Combine(attachmentLocation, fileName);
+            if (fileStream == null)
+            {
+                Controller.HandleError("Unable to file " + outputPath + " the fileStream is null");
+                throw new Exception("Unable to file " + outputPath + " the fileStream is null");
+            }
             if (File.Exists(Path.Combine(attachmentLocation, fileName)))
             {
                 status = "OK";
@@ -1398,6 +1450,19 @@ namespace Astrodon.Controls
             }
             else
             {
+                if (!Directory.Exists(attachmentLocation))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(attachmentLocation);
+                        if (!Directory.Exists(attachmentLocation))
+                            Controller.HandleError("Unable to create folder " + Environment.NewLine + attachmentLocation);
+                    }
+                    catch (Exception de)
+                    {
+                        Controller.HandleError("Unable to create folder " + Environment.NewLine + de.Message + Environment.NewLine + attachmentLocation);
+                    }
+                }
                 try
                 {
                     File.WriteAllBytes(Path.Combine(attachmentLocation, fileName), fileStream);
@@ -1407,6 +1472,7 @@ namespace Astrodon.Controls
                 catch (Exception ex)
                 {
                     status = ex.Message;
+                    Controller.HandleError("Unable to create attachment file " + ex.Message);
                     return false;
                 }
             }
@@ -1839,7 +1905,7 @@ namespace Astrodon.Controls
 
         private byte[] GetAttachment(String fileName, int attachmentType, out int fileID)
         {
-            String fileQuery = "SELECT * FROM tblAttachments WHERE fileName = '" + fileName + "' AND attachmentType = " + attachmentType.ToString();
+            String fileQuery = "SELECT * FROM tblAttachments WHERE fileName = @filename AND attachmentType = @at";
             sqlParms.Clear();
             sqlParms.Add("@fileName", fileName);
             sqlParms.Add("@at", attachmentType);

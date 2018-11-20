@@ -36,7 +36,7 @@ namespace Astrodon.Controls
         private void LoadDebtors()
         {
             cmbDebtor.SelectedIndexChanged -= cmbDebtor_SelectedIndexChanged;
-            String query = "SELECT id, name FROM tblUsers WHERE (usertype = 3) ORDER BY name";
+            String query = "SELECT id, name FROM tblUsers WHERE (usertype = 3) and Active = 1 ORDER BY name";
             String status;
             DataSet ds = dh.GetData(query, null, out status);
             List<DebtorSelector> debtors = new List<DebtorSelector>();

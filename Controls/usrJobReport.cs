@@ -205,7 +205,7 @@ namespace Astrodon.Controls
 
         private void LoadUsers(String type)
         {
-            String query = "SELECT DISTINCT id, name FROM tblUsers WHERE usertype = " + type;
+            String query = "SELECT DISTINCT id, name FROM tblUsers WHERE usertype = " + type + " and Active = 1";
             DataSet dsStatus = dh.GetData(query, null, out status);
             if (dsStatus != null && dsStatus.Tables.Count > 0 && dsStatus.Tables[0].Rows.Count > 0)
             {

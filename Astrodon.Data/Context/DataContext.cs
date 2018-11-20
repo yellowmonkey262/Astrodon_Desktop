@@ -199,5 +199,18 @@ namespace Astrodon.Data
             Database.ExecuteSqlCommand("delete from RequisitionDocument where RequisitionId=" + requisitionId.ToString());
             Database.ExecuteSqlCommand("delete from tblRequisition where Id=" + requisitionId.ToString());
         }
+
+
+        public void WriteStatementRunLog(string accNumber, string name, string v)
+        {
+            var sysLog = new SystemLog()
+            {
+                EventTime = DateTime.Now,
+                Message = "Statement Run: " + accNumber + " - " + name + " -> " + v,
+                StackTrace = accNumber
+            };
+            SystemLogSet.Add(sysLog);
+            SaveChanges();
+        }
     }
 }

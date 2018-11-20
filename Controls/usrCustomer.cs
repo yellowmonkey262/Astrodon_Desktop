@@ -599,7 +599,10 @@ namespace Astrodon
             customerString += customer.taxCode.ToString() + "|" + customer.cashAccount;
             txtEntry.Text = customerString;
             String result = Controller.pastel.UpdateCustomer(customerString, building.DataPath);
-            if (Controller.user.id == 1) { MessageBox.Show(building.DataPath + " === " + customerString); }
+            if (Controller.user.id == 1)
+            {
+                MessageBox.Show(building.DataPath + " === " + customerString);
+            }
             if (result == "0")
             {
                 String status = String.Empty;

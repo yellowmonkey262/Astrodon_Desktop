@@ -471,123 +471,140 @@ namespace Astrodon
 
             using (var ctx = SqlDataHandler.GetDataContext())
             {
-                var pmUser = ctx.tblUsers.Where(a => a.email == build.PM).FirstOrDefault();
-                if(pmUser != null)
+                var pmUser = ctx.tblUsers.Where(a => a.email == build.PM && a.Active).FirstOrDefault();
+                if (pmUser != null)
                     portfolioManager = new Users().GetUser(pmUser.id);
-            }
 
-            List<Customer> customers = Controller.pastel.AddCustomers(buildingName, buildingPath, true);
-            List<Statement> myStatements = new List<Statement>();
-            lblCCount.Text = build.Name + " 0/" + customers.Count.ToString();
-            lblCCount.Refresh();
-            int ccount = 0;
-            foreach (Customer customer in customers)
-            {
-                if (buildingName.Trim().ToUpper() != _AstradonRentalsBuilding.ToUpper() && (                      
-                       customer.IntCategory == 10 //Units Disconnected
-                    || customer.IntCategory == 11 //Units Disconnected
-                    ))
+
+
+                List<Customer> customers = Controller.pastel.AddCustomers(buildingName, buildingPath, true);
+                List<Statement> myStatements = new List<Statement>();
+                lblCCount.Text = build.Name + " 0/" + customers.Count.ToString();
+                lblCCount.Refresh();
+                int ccount = 0;
+                foreach (Customer customer in customers)
                 {
-                    if (customer.IntCategory == 10)
-                        AddProgressString("Customer Account is in Unallocated Deposits category and will be skipped: " + customer.accNumber);
-                    else if (customer.IntCategory == 11)
-                        AddProgressString("Customer Account is in Transferred Units/PMA category and will be skipped: " + customer.accNumber);
+                    if (buildingName.Trim().ToUpper() != _AstradonRentalsBuilding.ToUpper() && (
+                           customer.IntCategory == 10 //Units Disconnected
+                        || customer.IntCategory == 11 //Units Disconnected
+                        ))
+                    {
+                        string reason = "Customer Account skipped: " + customer.accNumber + " category: " + customer.category;
+
+                        if (customer.IntCategory == 10)
+                            reason = "Customer Account is in Unallocated Deposits category and will be skipped: " + customer.accNumber;
+
+                        else if (customer.IntCategory == 11)
+                            reason = "Customer Account is in Transferred Units/PMA category and will be skipped: " + customer.accNumber;
+                        AddProgressString(reason);
+
+                        ctx.WriteStatementRunLog(customer.accNumber, Controller.user.name, reason);
+
+
+                    }
+                    else if (buildingName.Trim().ToUpper() == _AstradonRentalsBuilding.ToUpper() && (customer.IntCategory == 13 || customer.IntCategory == 16 || customer.IntCategory == 17 || customer.IntCategory == 18))
+                    {
+
+                        AddProgressString("Astrodon Rentals category skipped : " + customer.accNumber + " " + customer.category);
+
+                        ctx.WriteStatementRunLog(customer.accNumber, Controller.user.name, "Astrodon Rentals category skipped : " + customer.accNumber + " " + customer.category);
+                    }
                     else
-                        AddProgressString("Customer Account skipped: " + customer.accNumber + " category: " + customer.category);
-                }
-                else if (buildingName.Trim().ToUpper() == _AstradonRentalsBuilding.ToUpper() && (customer.IntCategory == 13 || customer.IntCategory == 16 || customer.IntCategory == 17 || customer.IntCategory == 18))
-                {
-                    AddProgressString("Astrodon Rentals category skipped : " + customer.accNumber + " " + customer.category);
-                }
-                else
-                {
-                    try
                     {
-                        AddProgressString("Loading Statement " + customer.accNumber);
-
-                        var canemail = customer.Email.Count(d => !String.IsNullOrEmpty(d)) > 0;
-
-                        Statement myStatement = new Statement { AccNo = customer.accNumber, BuildingId = buildingId };
-                        List<String> address = new List<string>();
-                        address.Add(customer.description);
-                        foreach (String addyLine in customer.address) { if (!String.IsNullOrEmpty(addyLine)) { address.Add(addyLine); } }
-                        myStatement.Address = address.ToArray();
-                        myStatement.BankDetails = (!String.IsNullOrEmpty(Controller.pastel.GetBankDetails(buildingPath)) ? Controller.pastel.GetBankDetails(buildingPath) : "");
-                        myStatement.BuildingName = buildingName;
-                        myStatement.LevyMessage1 = (isHOA ? HOAMessage1 : BCMessage1);
-                        myStatement.LevyMessage2 = (!String.IsNullOrEmpty(Message2) ? Message2 : "");
-                        myStatement.Message = (!String.IsNullOrEmpty(txtMessage.Text) ? txtMessage.Text : "");
-                        myStatement.StmtDate = stmtDatePicker.Value;
-                        double totalDue = 0;
-                        String trnMsg;
-
-                        myStatement.DebtorEmail = build.Debtor;
-                        if (String.IsNullOrWhiteSpace(myStatement.DebtorEmail))
-                            Controller.HandleError("Debtor not configured on this building. Please check building configuration.");
-
-                        myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
-                        myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
-                        if (customer.Email != null && customer.Email.Length > 0)
+                        try
                         {
-                            List<String> newEmails = new List<string>();
-                            foreach (String emailAddress in customer.Email)
-                            {
-                                newEmails.Add(emailAddress);
-                            }
-                            myStatement.email1 = newEmails.ToArray();
-                        }
-                        else
-                            myStatement.PrintMe = true;
+                            AddProgressString("Loading Statement " + customer.accNumber);
 
-                        if (myStatement.PrintMe)
-                            AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
+                            var canemail = customer.Email.Count(d => !String.IsNullOrEmpty(d)) > 0;
 
-                        //check for in transfer and create a transfer letter instead of a statement.
-                        if(myStatement.IsRental == false)
-                           myStatement.IsInTransfer = customer.IntCategory == 2;
-                        if (myStatement.IsInTransfer)
-                        {
-                            if (portfolioManager != null)
+                            Statement myStatement = new Statement { AccNo = customer.accNumber, BuildingId = buildingId };
+                            List<String> address = new List<string>();
+                            address.Add(customer.description);
+                            foreach (String addyLine in customer.address) { if (!String.IsNullOrEmpty(addyLine)) { address.Add(addyLine); } }
+                            myStatement.Address = address.ToArray();
+                            myStatement.BankDetails = (!String.IsNullOrEmpty(Controller.pastel.GetBankDetails(buildingPath)) ? Controller.pastel.GetBankDetails(buildingPath) : "");
+                            myStatement.BuildingName = buildingName;
+                            myStatement.LevyMessage1 = (isHOA ? HOAMessage1 : BCMessage1);
+                            myStatement.LevyMessage2 = (!String.IsNullOrEmpty(Message2) ? Message2 : "");
+                            myStatement.Message = (!String.IsNullOrEmpty(txtMessage.Text) ? txtMessage.Text : "");
+                            myStatement.StmtDate = stmtDatePicker.Value;
+                            double totalDue = 0;
+                            String trnMsg;
+
+                            myStatement.DebtorEmail = build.Debtor;
+                            if (String.IsNullOrWhiteSpace(myStatement.DebtorEmail))
+                                Controller.HandleError("Debtor not configured on this building. Please check building configuration.");
+
+                            myStatement.PrintMe = (customer.statPrintorEmail == 2 || customer.statPrintorEmail == 4 || !canemail ? false : true);
+                            myStatement.EmailMe = (customer.statPrintorEmail == 4 && canemail ? false : true);
+                            if (customer.Email != null && customer.Email.Length > 0)
                             {
-                                var fileData = GenerateCustomerTransferLetter(build, customer, portfolioManager);
-                                myStatement.InTransferLetter = fileData;
-                                myStatement.Transactions = new List<Transaction>();
-                                myStatement.totalDue = 0;
-                                myStatements.Add(myStatement);
+                                List<String> newEmails = new List<string>();
+                                foreach (String emailAddress in customer.Email)
+                                {
+                                    newEmails.Add(emailAddress);
+                                }
+                                myStatement.email1 = newEmails.ToArray();
                             }
                             else
-                                AddProgressString("Building PM not found for: " + buildingName);
-                        }
-                        else
-                        {
+                                myStatement.PrintMe = true;
 
-                            List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
-                            if(!string.IsNullOrWhiteSpace(trnMsg))
-                                AddProgressString("Statement for " + customer.accNumber + " has messages " + trnMsg);
+                            if (myStatement.PrintMe)
+                                AddProgressString(customer.accNumber + " Print : " + customer.statPrintorEmail.ToString() + " = " + myStatement.PrintMe.ToString());
 
-                            if (transactions != null && transactions.Where(a => a.IsOpeningBalance == false).Count() > 0)
+                            //check for in transfer and create a transfer letter instead of a statement.
+                            if (myStatement.IsRental == false)
+                                myStatement.IsInTransfer = customer.IntCategory == 2;
+                            if (myStatement.IsInTransfer)
                             {
-                                myStatement.Transactions = transactions;
-                                myStatement.totalDue = totalDue;
-                                myStatements.Add(myStatement);
+                                if (portfolioManager != null)
+                                {
+                                    var fileData = GenerateCustomerTransferLetter(build, customer, portfolioManager);
+                                    myStatement.InTransferLetter = fileData;
+                                    myStatement.Transactions = new List<Transaction>();
+                                    myStatement.totalDue = 0;
+                                    myStatements.Add(myStatement);
+                                }
+                                else
+                                {
+                                    ctx.WriteStatementRunLog("ALL", Controller.user.name, "Building PM not found for: " + buildingName);
+                                    AddProgressString("Building PM not found for: " + buildingName);
+                                }
+
                             }
                             else
                             {
-                                AddProgressString("Statement for " + customer.accNumber + " has zero transactions - statement skipped");
+
+                                List<Transaction> transactions = (new Classes.LoadTrans()).LoadTransactions(build, customer, stmtDatePicker.Value, out totalDue, out trnMsg);
+                                if (!string.IsNullOrWhiteSpace(trnMsg))
+                                    AddProgressString("Statement for " + customer.accNumber + " has messages " + trnMsg);
+
+                                if (transactions != null && transactions.Where(a => a.IsOpeningBalance == false).Count() > 0)
+                                {
+                                    myStatement.Transactions = transactions;
+                                    myStatement.totalDue = totalDue;
+                                    myStatements.Add(myStatement);
+                                }
+                                else
+                                {
+                                    ctx.WriteStatementRunLog(customer.accNumber, Controller.user.name, "zero transactions - statement skipped");
+                                    AddProgressString("Statement for " + customer.accNumber + " has zero transactions - statement skipped");
+                                }
                             }
                         }
+                        catch (Exception ex)
+                        {
+                            AddProgressString("Error processing " + customer.accNumber + " " + ex.Message);
+                            ctx.WriteStatementRunLog(customer.accNumber, Controller.user.name, ex.Message);
+                        }
+                        ccount++;
+                        lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();
+                        lblCCount.Refresh();
+                        Application.DoEvents();
                     }
-                    catch (Exception ex)
-                    {
-                        AddProgressString("Error processing " + customer.accNumber + " " + ex.Message);
-                    }
-                    ccount++;
-                    lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();
-                    lblCCount.Refresh();
-                    Application.DoEvents();
                 }
+                return myStatements;
             }
-            return myStatements;
         }
 
         private byte[] GenerateCustomerTransferLetter(Building building, Customer customer, User portfolioManager)

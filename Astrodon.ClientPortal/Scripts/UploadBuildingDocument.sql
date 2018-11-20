@@ -16,9 +16,11 @@ set @LocalBuildingId = ( select b.Id
 						from Building b
 						where b.BuildingId = @BuildingId)
 
+declare @resultDocId uniqueidentifier						
+
 Begin transaction tran_upload_building_document
 BEGIN TRY
-
+   set @resultDocId = @DocumentId
    declare @ExistingDocumentId uniqueidentifier
    Select top 1 @ExistingDocumentId = id, @WebDocumentId = WebDocumentId
    from BuildingDocument
@@ -42,21 +44,23 @@ BEGIN TRY
 	   (Id,Title,FileYear,FileMonth,DateUploaded,DocumentCategory,BuildingId,FileName,WebDocumentId,IsActive)
 	   values
 	   (@DocumentId,@Description,DATEPART(year,@FileDate),DATEPART(month,@FileDate),GetDate(),@DocumentType,@LocalBuildingId,@Filename,@WebDocumentId,1)
+	  
     end
 	else
 	begin
 	 Update WebDocument set DocumentData = @Data where Id = @WebDocumentId
 
 	  Update BuildingDocument
-	  set Id = @DocumentId,
-	      Title = @Description,
+	  set Title = @Description,
 		  IsActive = 1,
 		  DateUploaded = GetDate()
 	  where Id = @ExistingDocumentId
+	  set @resultDocId = @ExistingDocumentId
 	end
 
-
     Commit transaction tran_upload_building_document
+
+	select @resultDocId as Id
 END TRY
 BEGIN CATCH
    rollback transaction tran_upload_building_document

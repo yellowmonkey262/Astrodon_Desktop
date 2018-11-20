@@ -385,7 +385,10 @@ namespace Astrodon.ClientPortal
                     new System.Data.SqlClient.SqlParameter("@DocumentId",documentId),
                     new System.Data.SqlClient.SqlParameter("@Data",fileData),
                   };
-            SQLUtilities.ExecuteSqlCommand(_ClientProtalConnection, script, parameters);
+            var result = SQLUtilities.FetchData(_ClientProtalConnection, script, parameters);
+
+            documentId = (Guid)result.Tables[0].Rows[0]["Id"];
+
 
             return GetBuildingDocumentLink(documentId, emailAddress);
         }

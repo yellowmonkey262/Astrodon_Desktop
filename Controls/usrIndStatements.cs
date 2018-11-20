@@ -88,7 +88,14 @@ namespace Astrodon
         {
             String fileName = String.Empty;
             DateTime statementDate;
-            if (CreateStatement(true, out fileName, out statementDate)) { Process.Start(fileName); } else { MessageBox.Show("Unable to create statement"); }
+            if (CreateStatement(true, out fileName, out statementDate))
+            {
+                Process.Start(fileName);
+            }
+            else
+            {
+               Controller.HandleError("Unable to create statement");
+            }
         }
 
         private void btnGenSend_Click(object sender, EventArgs e)
@@ -121,13 +128,13 @@ namespace Astrodon
                 }
                 else
                 {
-                    MessageBox.Show("Unable to send mail: " + status);
+                    Controller.HandleError("Unable to send mail: " + status);
                 }
 
             }
             else
             {
-                MessageBox.Show("Unable to create statement");
+                Controller.HandleError("Unable to create statement");
             }
         }
 
@@ -171,7 +178,7 @@ namespace Astrodon
                         List<String> newEmails = new List<string>();
                         foreach (String emailAddress in customer.Email)
                         {
-                            if (!emailAddress.Contains("@imp.ad-one.co.za")) { newEmails.Add(emailAddress); }
+                             newEmails.Add(emailAddress); 
                         }
                         stmt.email1 = newEmails.ToArray();
                     }
@@ -180,8 +187,10 @@ namespace Astrodon
                         stmt.email1 = new String[] { "" };
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
+                    Controller.HandleError(ex);
+
                     if (makeFile && MessageBox.Show("This customer has no email address. Continue?", "Statement", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         stmt.email1 = new String[] { "" };
@@ -203,8 +212,12 @@ namespace Astrodon
                 {
                     PDF generator = new PDF(true);
                     generator.CreateStatement(stmt, stmt.BuildingName != "ASTRODON RENTALS" ? true : false, out fileName, isStd);
-                    //generator.CreateStatement(stmt, out fileName);
-                    if (!String.IsNullOrEmpty(fileName)) { success = true; }
+                    if (!String.IsNullOrEmpty(fileName)) {
+                        success = true;
+                    }else
+                    {
+                        Controller.HandleError("Unable to create statement");
+                    }
                 }
                 else
                 {
@@ -218,7 +231,7 @@ namespace Astrodon
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Create statement :" + ex.Message);
+                Controller.HandleError(ex.Message);
                 fileName = String.Empty;
             }
             this.Cursor = Cursors.Arrow;

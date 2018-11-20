@@ -3,7 +3,6 @@ using Astrodon.Classes;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.Windows.Forms;
 
 namespace Astrodon
@@ -178,7 +177,7 @@ namespace Astrodon
                         }
                     }
                     txtComplex.Text = build.Name;
-                    customers = Controller.pastel.AddCustomers(build.Abbr, build.DataPath, true);
+                    customers = Controller.pastel.AddCustomers(build.Abbr, build.DataPath);
                     if (build != null && customers.Count > 0)
                     {
                         cmbCustomer.DataSource = customers;
@@ -414,22 +413,13 @@ namespace Astrodon
                 if (!String.IsNullOrEmpty(clearOldClearances))
                 {
                     dh.SetData(clearOldClearances, sqlParms, out status);
-                    if (!string.IsNullOrWhiteSpace(status) && status != "OK")
-                        Controller.HandleError("1:"+status);
                 }
 
                 dh.SetData(query, sqlParms, out status);
-                if (!string.IsNullOrWhiteSpace(status) && status != "OK")
-                    Controller.HandleError("2:" + status);
-                if (id == 0) {
-                    id = GetClearanceID();
-                }
+                if (id == 0) { id = GetClearanceID(); }
 
                 String transQuery = "DELETE FROM tblClearanceTransactions WHERE clearanceID NOT IN (SELECT id FROM tblClearances) OR id = " + id.ToString();
                 dh.SetData(transQuery, null, out status);
-                if (!string.IsNullOrWhiteSpace(status) && status != "OK")
-                    Controller.HandleError("3:" + status);
-
                 //MessageBox.Show("CLID = " + id.ToString());
                 transQuery = "INSERT INTO tblClearanceTransactions(clearanceID, description, qty, rate, markup, amount) VALUES(@clearanceID, @description, @qty, @rate, @markup, @amount)";
                 Dictionary<String, Object> sqlParms2 = new Dictionary<string, object>();
@@ -463,9 +453,7 @@ namespace Astrodon
                         sqlParms2["@markup"] = clrT.Markup_Percentage;
                         sqlParms2["@amount"] = clrT.Amount;
                         dh.SetData(transQuery, sqlParms2, out status);
-                        if (!string.IsNullOrWhiteSpace(status) && status != "OK")
-                            Controller.HandleError(status);
-                        
+                        if (status != "") { MessageBox.Show(status); }
                     }
                 }
                 if (id != 0 && process)
@@ -521,10 +509,9 @@ namespace Astrodon
                     }
                 }
             }
-            catch(Exception ex)
+            catch
             {
-                Controller.HandleError("4:" + ex);
-                
+                MessageBox.Show("clearanceID = " + clearanceID.ToString());
             }
             String docType = "Clearance " + clr.validTo.ToString("yyyy/MM/dd");
             Building building = null;
@@ -542,53 +529,32 @@ namespace Astrodon
                 String pastelReturn, pastelString;
                 try
                 {
-                    string clearanceFee = clr.clearanceFee.ToString("#0.00", CultureInfo.InvariantCulture);
-
-                    pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, values.centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, clr.customerCode, building.Centrec_Building, 
-                        building.Centrec_Building, docType, docType, clearanceFee, "5500/000", "", out pastelString);
-
-                    
-                    //Controller.ShowMessage("PostBatch: Centrec_Account: " + building.Centrec_Account + Environment.NewLine +
-                    //                                 " Centrec_Building " + building.Centrec_Building + Environment.NewLine +
-                    //                                 " clearance fee " + clearanceFee + Environment.NewLine+
-                    //                                  " building.DataPath " + building.DataPath + Environment.NewLine+
-                    //                                  " trust path " + values.centrec + Environment.NewLine
-                    //                                 + " trust_acc " + "5500/000" + Environment.NewLine );
-                    //Controller.ShowMessage("Pastel Returned: " + pastelReturn);
-
-                    Controller.pastel.PostBusGBatch(trnDate, 5, "5500000", clr.customerCode, docType, docType, clearanceFee);
-
-                    //Controller.ShowMessage("PostBusGBatch: acc: " + "5500000" + Environment.NewLine 
-                    //                     + " customerCode " + clr.customerCode + Environment.NewLine
-                    //                     + " docType " + docType + Environment.NewLine
-                    //                     + " clearanceFee " + clearanceFee);
-
-
-
+                    pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, values.centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, clr.customerCode, building.Centrec_Building, building.Centrec_Building, docType, docType, clr.clearanceFee.ToString(), "5500/000", "", out pastelString);
+                    Controller.ShowMessage("Post Batch: " + building.DataPath + " -> " + pastelReturn);
+                    pastelReturn = Controller.pastel.PostBusGBatch(trnDate, 5, "5500000", clr.customerCode, docType, docType, clr.clearanceFee.ToString("#0.00"));
+                    Controller.ShowMessage("Post Bus Batch: " + Environment.NewLine + pastelReturn);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    Controller.HandleError("Invalid fee post (standard)" + ex);
+                    MessageBox.Show("Invalid fee post (standard)");
                 }
-
                 if (hasSplit && !String.IsNullOrEmpty(splitDesc) && splitFee != 0)
                 {
                     try
                     {
-                        string splitfee = splitFee.ToString("#0.00", CultureInfo.InvariantCulture);
-                        pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, values.centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, clr.customerCode, building.Centrec_Building,
-                            building.Centrec_Building, splitDesc, splitDesc, splitfee, "5500/000", "", out pastelString);
-
-                        Controller.pastel.PostBusGBatch(trnDate, 5, "5500000", clr.customerCode, splitDesc, splitDesc, splitfee);
+                        pastelReturn = Controller.pastel.PostBatch(trnDate, building.Period, values.centrec, building.DataPath, 5, building.Journal, building.Centrec_Account, clr.customerCode, building.Centrec_Building, building.Centrec_Building, splitDesc, splitDesc, splitFee.ToString(), "5500/000", "", out pastelString);
+                        Controller.ShowMessage("SPLIT Post Batch: " + building.DataPath + " -> " + pastelReturn);
+                        pastelReturn = Controller.pastel.PostBusGBatch(trnDate, 5, "5500000", clr.customerCode, splitDesc, splitDesc, splitFee.ToString("#0.00"));
+                        Controller.ShowMessage("SPLIT Post Bus Batch: " + Environment.NewLine + pastelReturn);
                     }
                     catch
                     {
-                       Controller.HandleError("Invalid fee post (split)");
+                        MessageBox.Show("Invalid fee post (split)");
                     }
                 }
                 else if (hasSplit && (String.IsNullOrEmpty(splitDesc) || splitFee != 0))
                 {
-                    Controller.HandleError("Invalid split description or value");
+                    MessageBox.Show("Invalid split description or value");
                 }
             }
         }
@@ -622,10 +588,6 @@ namespace Astrodon
             //String query = "SELECT top(1) id FROM tblClearances WHERE customerCode = 'ABC001' ORDER BY id desc";
             String status = String.Empty;
             DataSet ds = dh.GetData(query, null, out status);
-
-            if (!string.IsNullOrWhiteSpace(status) && status != "OK")
-                Controller.HandleError("5:"+status);
-
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 return int.Parse(ds.Tables[0].Rows[0]["id"].ToString());

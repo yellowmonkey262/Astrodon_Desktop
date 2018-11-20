@@ -35,7 +35,7 @@ namespace Astrodon
 
                 using (var context = SqlDataHandler.GetDataContext())
                 {
-                    var sender = context.tblUsers.Where(a => a.email == fromEmail).FirstOrDefault();
+                    var sender = context.tblUsers.Where(a => a.email == fromEmail && a.Active == true).FirstOrDefault();
                     if(sender == null)
                     {
                         _LastUserSent = new Data.tblUser()

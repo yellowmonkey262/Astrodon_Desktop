@@ -47,10 +47,12 @@ namespace Astrodon.Forms
 
         private byte[] GetAttachment(String fileName, int attachmentType, out int fileID)
         {
-            String fileQuery = "SELECT * FROM tblAttachments WHERE fileName = '" + fileName + "' AND attachmentType = " + attachmentType.ToString();
+            String fileQuery = "SELECT * FROM tblAttachments WHERE fileName = @fileName AND attachmentType = @at";
+
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             String status;
             SqlDataHandler dataHandler = new SqlDataHandler();
+            sqlParms.Clear();
             sqlParms.Add("@fileName", fileName);
             sqlParms.Add("@at", attachmentType);
             DataSet dsAttachment = dataHandler.GetData(fileQuery, sqlParms, out status);
