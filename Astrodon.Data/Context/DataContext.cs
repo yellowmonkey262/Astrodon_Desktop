@@ -74,7 +74,7 @@ namespace Astrodon.Data
         {
             using (var dbContext = new DataContext(connectionString))
             {
-                dbContext.Database.ExecuteSqlCommand("delete from SystemLogs where EventTime < GetDate() - 14");
+                dbContext.Database.ExecuteSqlCommand("delete from SystemLogs where EventTime < GetDate() - 30");
             }
         }
 

@@ -99,7 +99,7 @@
             // 
             // btnUpload
             // 
-            this.btnUpload.Location = new System.Drawing.Point(369, 116);
+            this.btnUpload.Location = new System.Drawing.Point(369, 136);
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(75, 23);
             this.btnUpload.TabIndex = 23;
@@ -109,7 +109,7 @@
             // 
             // txtAttachment
             // 
-            this.txtAttachment.Location = new System.Drawing.Point(131, 118);
+            this.txtAttachment.Location = new System.Drawing.Point(131, 138);
             this.txtAttachment.Name = "txtAttachment";
             this.txtAttachment.Size = new System.Drawing.Size(231, 20);
             this.txtAttachment.TabIndex = 22;
@@ -118,8 +118,9 @@
             // txtMessage
             // 
             this.txtMessage.Location = new System.Drawing.Point(131, 92);
+            this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";
-            this.txtMessage.Size = new System.Drawing.Size(313, 20);
+            this.txtMessage.Size = new System.Drawing.Size(313, 40);
             this.txtMessage.TabIndex = 21;
             // 
             // cmbCustomer
@@ -156,7 +157,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 121);
+            this.label4.Location = new System.Drawing.Point(12, 141);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 13);
             this.label4.TabIndex = 17;
@@ -203,7 +204,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(12, 148);
+            this.label11.Location = new System.Drawing.Point(12, 168);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(68, 13);
             this.label11.TabIndex = 55;
@@ -213,9 +214,9 @@
             // 
             this.dgTransactions.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgTransactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgTransactions.Location = new System.Drawing.Point(15, 173);
+            this.dgTransactions.Location = new System.Drawing.Point(15, 188);
             this.dgTransactions.Name = "dgTransactions";
-            this.dgTransactions.Size = new System.Drawing.Size(563, 271);
+            this.dgTransactions.Size = new System.Drawing.Size(563, 256);
             this.dgTransactions.TabIndex = 54;
             // 
             // usrIndStatements

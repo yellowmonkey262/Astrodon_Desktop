@@ -595,7 +595,8 @@ namespace Astrodon
                         catch (Exception ex)
                         {
                             AddProgressString("Error processing " + customer.accNumber + " " + ex.Message);
-                            ctx.WriteStatementRunLog(customer.accNumber, Controller.user.name, ex.Message);
+                            ctx.WriteStatementRunLog(customer.accNumber, Controller.user.name, "Error processing ");
+                            ctx.WriteStatementRunLog(customer.accNumber, Controller.user.name, ex.Message + " stack" + ex.StackTrace);
                         }
                         ccount++;
                         lblCCount.Text = build.Name + " " + ccount.ToString() + "/" + customers.Count.ToString();

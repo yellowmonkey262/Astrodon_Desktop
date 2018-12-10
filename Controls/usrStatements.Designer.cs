@@ -39,7 +39,7 @@
             // 
             // btnFile
             // 
-            this.btnFile.Location = new System.Drawing.Point(768, 31);
+            this.btnFile.Location = new System.Drawing.Point(260, 31);
             this.btnFile.Name = "btnFile";
             this.btnFile.Size = new System.Drawing.Size(75, 23);
             this.btnFile.TabIndex = 19;
@@ -50,7 +50,7 @@
             // 
             // txtAttachment
             // 
-            this.txtAttachment.Location = new System.Drawing.Point(614, 31);
+            this.txtAttachment.Location = new System.Drawing.Point(106, 31);
             this.txtAttachment.Name = "txtAttachment";
             this.txtAttachment.Size = new System.Drawing.Size(148, 20);
             this.txtAttachment.TabIndex = 18;
@@ -59,9 +59,9 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(523, 34);
+            this.label3.Location = new System.Drawing.Point(15, 34);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(95, 15);
+            this.label3.Size = new System.Drawing.Size(85, 13);
             this.label3.TabIndex = 17;
             this.label3.Text = "Add attachment:";
             this.label3.Visible = false;
@@ -69,8 +69,9 @@
             // txtMessage
             // 
             this.txtMessage.Location = new System.Drawing.Point(614, 8);
+            this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";
-            this.txtMessage.Size = new System.Drawing.Size(392, 20);
+            this.txtMessage.Size = new System.Drawing.Size(392, 45);
             this.txtMessage.TabIndex = 16;
             // 
             // label2
@@ -78,7 +79,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(369, 11);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(277, 15);
+            this.label2.Size = new System.Drawing.Size(239, 13);
             this.label2.TabIndex = 15;
             this.label2.Text = "Additional message to be displayed on statement:";
             // 
@@ -106,7 +107,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(153, 11);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(95, 15);
+            this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 12;
             this.label1.Text = "Statement Date:";
             // 
@@ -115,7 +116,7 @@
             this.chkSelectAll.AutoSize = true;
             this.chkSelectAll.Location = new System.Drawing.Point(12, 10);
             this.chkSelectAll.Name = "chkSelectAll";
-            this.chkSelectAll.Size = new System.Drawing.Size(136, 19);
+            this.chkSelectAll.Size = new System.Drawing.Size(123, 17);
             this.chkSelectAll.TabIndex = 11;
             this.chkSelectAll.Text = "Select / Deselect All";
             this.chkSelectAll.UseVisualStyleBackColor = true;
@@ -139,7 +140,7 @@
             this.lblCCount.AutoSize = true;
             this.lblCCount.Location = new System.Drawing.Point(849, 36);
             this.lblCCount.Name = "lblCCount";
-            this.lblCCount.Size = new System.Drawing.Size(0, 15);
+            this.lblCCount.Size = new System.Drawing.Size(0, 13);
             this.lblCCount.TabIndex = 20;
             // 
             // usrStatements

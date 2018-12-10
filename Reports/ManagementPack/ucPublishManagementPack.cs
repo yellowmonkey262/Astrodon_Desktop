@@ -327,7 +327,11 @@ namespace Astrodon.Reports.ManagementPack
                         string fileUrl = string.Empty;
                         if (UploadFileToBuilding(building, dataItem, out fileUrl))
                         {
+
                             tbComments.Text = "File was uploaded to\n" + fileUrl;
+
+                            Controller.ShowMessage(tbComments.Text);
+
                             Application.DoEvents();
 
                             emailContent = emailContent.Replace("{URL}", fileUrl);
@@ -359,9 +363,14 @@ namespace Astrodon.Reports.ManagementPack
                             dataItem.Published = true;
                             dataItem.Commments = tbComments.Text;
                             context.SaveChanges();
+
+                            Controller.HandleError("Management Pack Published");
                             BindDataGrid();
                             ClosePDF();
                             Application.DoEvents();
+                        }else
+                        {
+                            Controller.HandleError("Unable to upload file to building");
                         }
                     }
                 }
@@ -389,57 +398,6 @@ namespace Astrodon.Reports.ManagementPack
                 dataItem.Period,
                 building.id, description, fileName, dataItem.ReportData,string.Empty);
             return true;
-            /*
-            url = string.Empty;
-            try
-            {
-                bool result = false;
-
-                var web = building.web;
-                var ftpClient = new Classes.Sftp(web, false,true);
-                try
-                {
-                    string workingDirectory = ftpClient.WorkingDirectory;
-
-                    ftpClient.ChangeDirectory(true);
-
-                    //Monthly_Financials_2019 
-                    string yearFolder = _Webfolder + dataItem.Period.Year.ToString();
-
-                    string uploadDirectory = workingDirectory + "/" + yearFolder;
-                    string uploadFile = uploadDirectory + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
-
-                    url = _RootURL + web;
-                    if (!url.EndsWith("/"))
-                        url = url + "/";
-
-                    url = url + yearFolder;
-                    url = url + "/ManagementPack_" + dataItem.Period.ToString("yyyy_MMM") + ".pdf";
-
-                    url = url.Replace(" ", "%20");
-
-                    ftpClient.ForceDirectory(uploadDirectory, true);
-
-                    if (!ftpClient.ForceUpload(_SelectedItem.PDFFileName, uploadFile, false))
-                    {
-                        Controller.HandleError("Unable to upload file to FTP server:" + uploadFile);
-                        return false;
-                    }
-
-                    result = true;
-                }
-                finally
-                {
-                    ftpClient.DisconnectClient();
-                }
-                return result;
-            }
-            catch (Exception e)
-            {
-                Controller.HandleError(e);
-                return false;
-            }*/
-
 
         }
 

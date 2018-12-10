@@ -91,7 +91,7 @@ namespace Astro.Library.Entities
         public StatementBuilding(int buildingId, String build, String dp, int p, DateTime lastProcessed, bool elevatedUser)
         {
             Allowed = true;
-            _ElevatedUser = false;// elevatedUser;
+            _ElevatedUser = elevatedUser;
             _BuildingId = buildingId;
             Process = false;
             Building = build;
