@@ -1150,22 +1150,31 @@ namespace Astrodon
 
         private String PostBatch(PastelPartnerSDK sdk, String buildPath, String StrIn, int entryType)
         {
-            String StrReturn = "0";
-            String strCodeIn;
-            String returner = sdk.SetDataPath(PastelRoot + "\\" + buildPath);
-            StrReturn = sdk.SetGLPath(PastelRoot);
-            if (StrReturn == "0")
+            try
             {
-                strCodeIn = StrIn;
-                short eType = (short)entryType;
-                // MessageBox.Show(buildPath + " - " + entryType.ToString() + " - " + StrIn);
-                StrReturn = sdk.ImportGLBatch(StrIn, eType);
+                String StrReturn = "0";
+                String strCodeIn;
+                String returner = sdk.SetDataPath(PastelRoot + "\\" + buildPath);
+                StrReturn = sdk.SetGLPath(PastelRoot);
+                if (StrReturn == "0")
+                {
+                    strCodeIn = StrIn;
+                    short eType = (short)entryType;
+                    StrReturn = sdk.ImportGLBatch(StrIn, eType);
+                }
+                if (StrReturn.Length == 0)
+                {
+                    return "9";
+                }
+                return StrReturn;
             }
-            if (StrReturn.Length == 0)
+            catch (Exception ex)
             {
-                return "9";
+                throw new Exception("Unable to post batch " + sdk == null ? "SDK is null " : "SDK has value " 
+                    + " buildPath " + buildPath 
+                    + " strIn " + StrIn 
+                    + " entry Type " + entryType);
             }
-            return StrReturn;
         }
 
         public int getPeriod(DateTime trnDate)
