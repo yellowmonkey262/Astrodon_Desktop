@@ -220,7 +220,7 @@ namespace Astrodon.ClientPortal
             filename = filename.Replace(" ", "");
             //return a URL to the uploaded document
 
-            Guid documentId = System.Guid.NewGuid();
+            Guid documentId = System.Guid.NewGuid(); 
 
             if (title.Length > MAX_TITLE_LENGTH)
                 title = title.Substring(0, MAX_TITLE_LENGTH);
@@ -240,7 +240,11 @@ namespace Astrodon.ClientPortal
                     new System.Data.SqlClient.SqlParameter("@DocumentId",documentId),
                     new System.Data.SqlClient.SqlParameter("@Data",data),
                   };
-            SQLUtilities.ExecuteSqlCommand(_ClientProtalConnection, script, parameters);
+
+
+            var result = SQLUtilities.FetchData(_ClientProtalConnection, script, parameters);
+
+            documentId = (Guid)result.Tables[0].Rows[0]["Id"];
 
             return GetUnitDocumentLink(documentId, emailAddress);
         }

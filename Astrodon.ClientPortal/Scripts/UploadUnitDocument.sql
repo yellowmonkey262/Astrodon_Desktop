@@ -76,6 +76,7 @@ BEGIN TRY
 	end
 	else
 	begin
+	  set @DocumentId = @ExistingDocumentId
 	  Update WebDocument set DocumentData = @Data where Id = @WebDocumentId
 
 	  Update UnitDocument
@@ -85,8 +86,11 @@ BEGIN TRY
 		  DateUploaded = GetDate()
 	  where Id = @ExistingDocumentId
 	end
-   
+  
     Commit transaction tran_upload_document
+
+	select @DocumentId as Id
+
 END TRY
 BEGIN CATCH
    rollback transaction tran_upload_document
@@ -107,5 +111,4 @@ BEGIN CATCH
                @ErrorState -- State.
                )
 END CATCH
-
 
