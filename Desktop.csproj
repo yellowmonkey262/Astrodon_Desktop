@@ -1340,6 +1340,10 @@
       <Project>{ce7d8e45-b945-4013-8633-c2add2ac8876}</Project>
       <Name>AstroLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="GvS.Controls.HtmlTextbox\GvS.Controls.HtmlTextbox.csproj">
+      <Project>{aaa9e9d4-7a91-46bf-a5fd-11538e57d5c2}</Project>
+      <Name>GvS.Controls.HtmlTextbox</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ReportService\" />

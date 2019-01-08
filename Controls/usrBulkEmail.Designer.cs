@@ -32,7 +32,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtSubject = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.txtMessage = new System.Windows.Forms.TextBox();
             this.chkBCC = new System.Windows.Forms.CheckBox();
             this.lstAttachments = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -47,6 +46,7 @@
             this.chkPriority = new System.Windows.Forms.CheckBox();
             this.btnDelete = new System.Windows.Forms.Button();
             this.chkTrustees = new System.Windows.Forms.CheckBox();
+            this.htmlMessage = new GvS.Controls.HtmlTextbox();
             ((System.ComponentModel.ISupportInitialize)(this.dgCustomers)).BeginInit();
             this.SuspendLayout();
             // 
@@ -130,15 +130,6 @@
             this.label4.Size = new System.Drawing.Size(53, 13);
             this.label4.TabIndex = 38;
             this.label4.Text = "Message:";
-            // 
-            // txtMessage
-            // 
-            this.txtMessage.Location = new System.Drawing.Point(111, 341);
-            this.txtMessage.Multiline = true;
-            this.txtMessage.Name = "txtMessage";
-            this.txtMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtMessage.Size = new System.Drawing.Size(529, 151);
-            this.txtMessage.TabIndex = 37;
             // 
             // chkBCC
             // 
@@ -279,10 +270,31 @@
             this.chkTrustees.UseVisualStyleBackColor = true;
             this.chkTrustees.CheckedChanged += new System.EventHandler(this.chkTrustees_CheckedChanged);
             // 
+            // htmlMessage
+            // 
+            this.htmlMessage.Fonts = new string[] {
+        "Corbel",
+        "Corbel, Verdana, Arial, Helvetica, sans-serif",
+        "Georgia, Times New Roman, Times, serif",
+        "Consolas, Courier New, Courier, monospace"};
+            this.htmlMessage.IllegalPatterns = new string[] {
+        "<script.*?>",
+        "<\\w+\\s+.*?(j|java|vb|ecma)script:.*?>",
+        "<\\w+(\\s+|\\s+.*?\\s+)on\\w+\\s*=.+?>",
+        "</?input.*?>"};
+            this.htmlMessage.Location = new System.Drawing.Point(111, 344);
+            this.htmlMessage.Name = "htmlMessage";
+            this.htmlMessage.Padding = new System.Windows.Forms.Padding(1);
+            this.htmlMessage.ShowHtmlSource = false;
+            this.htmlMessage.Size = new System.Drawing.Size(529, 148);
+            this.htmlMessage.TabIndex = 56;
+            this.htmlMessage.ToolbarStyle = GvS.Controls.ToolbarStyles.AlwaysInternal;
+            // 
             // usrBulkEmail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.htmlMessage);
             this.Controls.Add(this.chkTrustees);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.chkPriority);
@@ -298,7 +310,6 @@
             this.Controls.Add(this.lstAttachments);
             this.Controls.Add(this.chkBCC);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtSubject);
             this.Controls.Add(this.label2);
@@ -327,7 +338,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtSubject;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtMessage;
         private System.Windows.Forms.CheckBox chkBCC;
         private System.Windows.Forms.ListBox lstAttachments;
         private System.Windows.Forms.Label label5;
@@ -342,5 +352,6 @@
         private System.Windows.Forms.CheckBox chkPriority;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.CheckBox chkTrustees;
+        private GvS.Controls.HtmlTextbox htmlMessage;
     }
 }

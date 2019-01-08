@@ -47,7 +47,7 @@ namespace Astrodon
                 if (Controller.user.email != building.PM) { txtBCC.Text += "; " + Controller.user.email; }
                 String mailBody = "For any queries on your account, please contact " + building.Debtor + Environment.NewLine + Environment.NewLine;
                 mailBody += "For any maintenance queries, please contact " + building.PM + Environment.NewLine + Environment.NewLine;
-                txtMessage.Text = Environment.NewLine + Environment.NewLine + mailBody;
+                htmlMessage.Text = Environment.NewLine + Environment.NewLine + mailBody;
                 LoadCustomers(String.Empty);
                 LoadCategories();
             }
@@ -175,7 +175,7 @@ namespace Astrodon
             cmbBuilding.SelectedIndex = -1;
             cmbBuilding.SelectedIndexChanged += cmbBuilding_SelectedIndexChanged;
             dgCustomers.DataSource = null;
-            txtMessage.Text = String.Empty;
+            htmlMessage.Text = String.Empty;
             lstAttachments.Items.Clear();
         }
 
@@ -250,7 +250,7 @@ namespace Astrodon
                     return false;
                 }
             }
-            if (String.IsNullOrEmpty(txtMessage.Text))
+            if (String.IsNullOrEmpty(htmlMessage.Text))
             {
                 status = "No message or attachments";
                 return false;
@@ -266,7 +266,7 @@ namespace Astrodon
             sqlParms.Add("@incBCC", chkBCC.Checked);
             sqlParms.Add("@bccAddy", txtBCC.Text);
             sqlParms.Add("@subject", txtSubject.Text);
-            String message = String.IsNullOrEmpty(txtMessage.Text) ? "Please find attached document(s) for your attention" : txtMessage.Text;
+            String message = String.IsNullOrEmpty(htmlMessage.Text) ? "Please find attached document(s) for your attention" : htmlMessage.Text;
 
             User pmUser;
             new Users().GetUser(building.PM, out pmUser, out status);
