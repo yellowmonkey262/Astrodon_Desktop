@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using System.Linq;
 using Astrodon.Controls.Web;
 using Astrodon.Letter;
+using Astrodon.Reports.BuildingPMDebtor;
 
 namespace Astrodon
 {
@@ -768,6 +769,15 @@ namespace Astrodon
             control.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(control);
             toolStripStatusLabel1.Text = "Customer Document Type Configuration";
+        }
+
+        private void buildingPMDebtorListMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucBuildingPMDebtorList buildingPMDebtorList = new ucBuildingPMDebtorList();
+            buildingPMDebtorList.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(buildingPMDebtorList);
+            toolStripStatusLabel1.Text = "Building PM Debtor List";
         }
     }
 }

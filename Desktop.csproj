@@ -664,6 +664,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\BuildingPMDebtor\BuildingPMDebtorResult.cs" />
+    <Compile Include="Reports\BuildingPMDebtor\ucBuildingPMDebtorList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reports\BuildingPMDebtor\ucBuildingPMDebtorList.Designer.cs">
+      <DependentUpon>ucBuildingPMDebtorList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Calendar\CalendarPrintItem.cs" />
     <Compile Include="Reports\Calendar\CalendarReport.cs" />
     <Compile Include="Reports\Calendar\ucPrintCalendar.cs">
@@ -958,6 +965,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\BuildingPMDebtor\ucBuildingPMDebtorList.resx">
+      <DependentUpon>ucBuildingPMDebtorList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Calendar\ucPrintCalendar.resx">
       <DependentUpon>ucPrintCalendar.cs</DependentUpon>
