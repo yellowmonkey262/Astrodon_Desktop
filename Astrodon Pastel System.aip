@@ -13,10 +13,10 @@
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="Metathought Development and Design"/>
     <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp"/>
-    <ROW Property="ProductCode" Value="1033:{49E9F0DE-1072-4F49-8C93-FF2ED28FD569} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{CD98A515-86EA-42E5-BB42-09DB35A769DA} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Astrodon Pastel System"/>
-    <ROW Property="ProductVersion" Value="5.2.261" Type="32"/>
+    <ROW Property="ProductVersion" Value="5.2.263" Type="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{05EE21C2-B39F-4AB8-B687-1E49B15014C7}"/>
@@ -46,6 +46,7 @@
     <ROW Component="EPPlus.dll" ComponentId="{D9074DD2-6A64-4114-BEA1-2F7D497676F5}" Directory_="APPDIR" Attributes="0" KeyPath="EPPlus.dll"/>
     <ROW Component="EntityFramework.SqlServer.dll" ComponentId="{478046DB-8EB1-4311-A8A4-FCB2DD51DA55}" Directory_="APPDIR" Attributes="0" KeyPath="EntityFramework.SqlServer.dll"/>
     <ROW Component="EntityFramework.dll" ComponentId="{92910E0F-E11B-4E37-A5AD-4337B799F279}" Directory_="APPDIR" Attributes="0" KeyPath="EntityFramework.dll"/>
+    <ROW Component="GvS.Controls.HtmlTextbox.dll" ComponentId="{80A3DFE8-EE9D-4164-922C-990ED32D8BC9}" Directory_="APPDIR" Attributes="0" KeyPath="GvS.Controls.HtmlTextbox.dll"/>
     <ROW Component="Handle.exe" ComponentId="{775522E0-FA2E-49E2-BDB7-AAC0C39C18E6}" Directory_="APPDIR" Attributes="0" KeyPath="Handle.exe"/>
     <ROW Component="Interop.AcroPDFLib.dll" ComponentId="{FF424704-24B9-4A43-9EEC-B4CD2FA137DB}" Directory_="APPDIR" Attributes="0" KeyPath="Interop.AcroPDFLib.dll"/>
     <ROW Component="Itenso.Rtf.Converter.Html.dll" ComponentId="{719E4500-72D5-41A4-BB88-3C2E1B8DD295}" Directory_="APPDIR" Attributes="0" KeyPath="Itenso.Rtf.Converter.Html.dll"/>
@@ -66,12 +67,12 @@
     <ROW Component="log4net.dll" ComponentId="{0AF24B94-3EEA-4509-940B-C13773849409}" Directory_="APPDIR" Attributes="0" KeyPath="log4net.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="Astro.Library.dll Astrodon.ClientPortal.dll Astrodon.Data.dll Astrodon.exe Astrodon.vshost.exe AxInterop.AcroPDFLib.dll EPPlus.dll EntityFramework.SqlServer.dll EntityFramework.dll Handle.exe Interop.AcroPDFLib.dll Itenso.Rtf.Converter.Html.dll Itenso.Rtf.Converter.Xml.dll Itenso.Rtf.Interpreter.dll Itenso.Rtf.Parser.dll Itenso.Sys.dll MySql.Data.dll NetSpell.SpellChecker.dll NotificationWindow.dll ProductInformation Renci.SshNet.dll astlogo.jpg deDE.dic itextsharp.dll itextsharp.pdfa.dll itextsharp.xtra.dll log4net.dll"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="Astro.Library.dll Astrodon.ClientPortal.dll Astrodon.Data.dll Astrodon.exe Astrodon.vshost.exe AxInterop.AcroPDFLib.dll EPPlus.dll EntityFramework.SqlServer.dll EntityFramework.dll GvS.Controls.HtmlTextbox.dll Handle.exe Interop.AcroPDFLib.dll Itenso.Rtf.Converter.Html.dll Itenso.Rtf.Converter.Xml.dll Itenso.Rtf.Interpreter.dll Itenso.Rtf.Parser.dll Itenso.Sys.dll MySql.Data.dll NetSpell.SpellChecker.dll NotificationWindow.dll ProductInformation Renci.SshNet.dll astlogo.jpg deDE.dic itextsharp.dll itextsharp.pdfa.dll itextsharp.xtra.dll log4net.dll"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="Astro.Library.dll" Component_="Astro.Library.dll" FileName="ASTROL~1.DLL|Astro.Library.dll" Attributes="0" SourcePath="bin\Debug\Astro.Library.dll" SelfReg="false" NextFile="Astrodon.Data.dll"/>
-    <ROW File="Astrodon.ClientPortal.dll" Component_="Astrodon.ClientPortal.dll" FileName="ASTROD~2.DLL|Astrodon.ClientPortal.dll" Attributes="0" SourcePath="bin\Debug\Astrodon.ClientPortal.dll" SelfReg="false"/>
+    <ROW File="Astrodon.ClientPortal.dll" Component_="Astrodon.ClientPortal.dll" FileName="ASTROD~2.DLL|Astrodon.ClientPortal.dll" Attributes="0" SourcePath="bin\Debug\Astrodon.ClientPortal.dll" SelfReg="false" NextFile="GvS.Controls.HtmlTextbox.dll"/>
     <ROW File="Astrodon.Data.dll" Component_="Astrodon.Data.dll" FileName="ASTROD~1.DLL|Astrodon.Data.dll" Attributes="0" SourcePath="bin\Debug\Astrodon.Data.dll" SelfReg="false" NextFile="EntityFramework.dll"/>
     <ROW File="Astrodon.exe" Component_="Astrodon.exe" FileName="Astrodon.exe" Attributes="0" SourcePath="bin\Debug\Astrodon.exe" SelfReg="false" NextFile="Astrodon.exe.config" DigSign="true"/>
     <ROW File="Astrodon.exe.config" Component_="astlogo.jpg" FileName="ASTROD~1.CON|Astrodon.exe.config" Attributes="0" SourcePath="bin\Debug\Astrodon.exe.config" SelfReg="false" NextFile="Astrodon.pdb"/>
@@ -83,6 +84,7 @@
     <ROW File="EntityFramework.SqlServer.dll" Component_="EntityFramework.SqlServer.dll" FileName="ENTITY~2.DLL|EntityFramework.SqlServer.dll" Attributes="0" SourcePath="bin\Debug\EntityFramework.SqlServer.dll" SelfReg="false" NextFile="log4net.dll"/>
     <ROW File="EntityFramework.dll" Component_="EntityFramework.dll" FileName="ENTITY~1.DLL|EntityFramework.dll" Attributes="0" SourcePath="bin\Debug\EntityFramework.dll" SelfReg="false" NextFile="EntityFramework.SqlServer.dll"/>
     <ROW File="Envelopefooter.png" Component_="astlogo.jpg" FileName="ENVELO~1.PNG|Envelope-footer.png" Attributes="0" SourcePath="bin\Debug\Envelope-footer.png" SelfReg="false" NextFile="envfooter.jpg"/>
+    <ROW File="GvS.Controls.HtmlTextbox.dll" Component_="GvS.Controls.HtmlTextbox.dll" FileName="GVSCON~1.DLL|GvS.Controls.HtmlTextbox.dll" Attributes="0" SourcePath="bin\Debug\GvS.Controls.HtmlTextbox.dll" SelfReg="false"/>
     <ROW File="Handle.exe" Component_="Handle.exe" FileName="Handle.exe" Attributes="0" SourcePath="bin\Debug\Handle.exe" SelfReg="false" NextFile="deDE.dic" DigSign="true"/>
     <ROW File="Interop.AcroPDFLib.dll" Component_="Interop.AcroPDFLib.dll" FileName="INTERO~1.DLL|Interop.AcroPDFLib.dll" Attributes="0" SourcePath="bin\Debug\Interop.AcroPDFLib.dll" SelfReg="false" NextFile="EPPlus.dll"/>
     <ROW File="Itenso.Rtf.Converter.Html.dll" Component_="Itenso.Rtf.Converter.Html.dll" FileName="ITENSO~1.DLL|Itenso.Rtf.Converter.Html.dll" Attributes="0" SourcePath="bin\Debug\Itenso.Rtf.Converter.Html.dll" SelfReg="false" NextFile="Itenso.Rtf.Converter.Xml.dll"/>

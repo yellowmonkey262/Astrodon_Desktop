@@ -1171,9 +1171,11 @@ namespace Astrodon
             catch (Exception ex)
             {
                 throw new Exception("Unable to post batch " + sdk == null ? "SDK is null " : "SDK has value " 
-                    + " buildPath " + buildPath 
-                    + " strIn " + StrIn 
-                    + " entry Type " + entryType);
+                    + " buildPath " + buildPath + Environment.NewLine
+                    + " strIn " + StrIn + Environment.NewLine
+                    + " entry Type " + entryType + Environment.NewLine
+                    + " data path " + PastelRoot + "\\" + buildPath + Environment.NewLine
+                    + " error mesg: " + ex.Message + Environment.NewLine);
             }
         }
 
