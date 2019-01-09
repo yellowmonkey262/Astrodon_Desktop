@@ -125,7 +125,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 344);
+            this.label4.Location = new System.Drawing.Point(656, 16);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 13);
             this.label4.TabIndex = 38;
@@ -146,7 +146,7 @@
             // lstAttachments
             // 
             this.lstAttachments.FormattingEnabled = true;
-            this.lstAttachments.Location = new System.Drawing.Point(111, 498);
+            this.lstAttachments.Location = new System.Drawing.Point(111, 349);
             this.lstAttachments.Name = "lstAttachments";
             this.lstAttachments.Size = new System.Drawing.Size(529, 95);
             this.lstAttachments.TabIndex = 40;
@@ -154,7 +154,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 498);
+            this.label5.Location = new System.Drawing.Point(14, 349);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(69, 13);
             this.label5.TabIndex = 41;
@@ -162,7 +162,7 @@
             // 
             // btnAttachment
             // 
-            this.btnAttachment.Location = new System.Drawing.Point(16, 514);
+            this.btnAttachment.Location = new System.Drawing.Point(16, 365);
             this.btnAttachment.Name = "btnAttachment";
             this.btnAttachment.Size = new System.Drawing.Size(75, 23);
             this.btnAttachment.TabIndex = 42;
@@ -172,7 +172,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(565, 599);
+            this.btnCancel.Location = new System.Drawing.Point(1123, 616);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 44;
@@ -182,7 +182,7 @@
             // 
             // btnSendNow
             // 
-            this.btnSendNow.Location = new System.Drawing.Point(484, 599);
+            this.btnSendNow.Location = new System.Drawing.Point(1042, 616);
             this.btnSendNow.Name = "btnSendNow";
             this.btnSendNow.Size = new System.Drawing.Size(75, 23);
             this.btnSendNow.TabIndex = 45;
@@ -193,7 +193,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 604);
+            this.label6.Location = new System.Drawing.Point(14, 455);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(23, 13);
             this.label6.TabIndex = 46;
@@ -206,14 +206,14 @@
             "None",
             "Building",
             "Customer"});
-            this.cmbBill.Location = new System.Drawing.Point(111, 601);
+            this.cmbBill.Location = new System.Drawing.Point(111, 452);
             this.cmbBill.Name = "cmbBill";
             this.cmbBill.Size = new System.Drawing.Size(121, 21);
             this.cmbBill.TabIndex = 47;
             // 
             // txtBill
             // 
-            this.txtBill.Location = new System.Drawing.Point(238, 602);
+            this.txtBill.Location = new System.Drawing.Point(238, 453);
             this.txtBill.Name = "txtBill";
             this.txtBill.Size = new System.Drawing.Size(80, 20);
             this.txtBill.TabIndex = 48;
@@ -251,7 +251,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(16, 543);
+            this.btnDelete.Location = new System.Drawing.Point(16, 394);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 54;
@@ -282,11 +282,11 @@
         "<\\w+\\s+.*?(j|java|vb|ecma)script:.*?>",
         "<\\w+(\\s+|\\s+.*?\\s+)on\\w+\\s*=.+?>",
         "</?input.*?>"};
-            this.htmlMessage.Location = new System.Drawing.Point(111, 344);
+            this.htmlMessage.Location = new System.Drawing.Point(659, 35);
             this.htmlMessage.Name = "htmlMessage";
             this.htmlMessage.Padding = new System.Windows.Forms.Padding(1);
             this.htmlMessage.ShowHtmlSource = false;
-            this.htmlMessage.Size = new System.Drawing.Size(529, 148);
+            this.htmlMessage.Size = new System.Drawing.Size(539, 575);
             this.htmlMessage.TabIndex = 56;
             this.htmlMessage.ToolbarStyle = GvS.Controls.ToolbarStyles.AlwaysInternal;
             // 
@@ -319,7 +319,7 @@
             this.Controls.Add(this.cmbBuilding);
             this.Controls.Add(this.label1);
             this.Name = "usrBulkEmail";
-            this.Size = new System.Drawing.Size(655, 657);
+            this.Size = new System.Drawing.Size(1220, 652);
             this.Load += new System.EventHandler(this.usrBulkEmail_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgCustomers)).EndInit();
             this.ResumeLayout(false);
