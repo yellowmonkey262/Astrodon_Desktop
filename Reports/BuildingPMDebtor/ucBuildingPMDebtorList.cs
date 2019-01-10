@@ -16,7 +16,14 @@ namespace Astrodon.Reports.BuildingPMDebtor
 {
     public partial class ucBuildingPMDebtorList : UserControl
     {
+        private int? selectedPortfolioManagerId;
+        private int? selectedDebtorId;
+
         private List<BuildingPMDebtorResult> _BuildingPMDebtorResultList { get; set; }
+
+        private List<KeyValuePair<int?, string>> _PortfolioManagers { get; set; }
+
+        private List<KeyValuePair<int?, string>> _Debtors { get; set; }
 
         public ucBuildingPMDebtorList()
         {
@@ -45,6 +52,8 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                    BuildingId = b.id,
                                                    BuildingName = b.Building,
                                                    ABR = b.Code,
+                                                   BuildingRegistrationNumber = b.BuildingRegistrationNumber,
+                                                   CSOSRegistrationNumber = b.CSOSRegistrationNumber,
 
                                                    Units = c.BuildingId,
                                                    YearEndPeriod = b.Period,
@@ -77,6 +86,8 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                    BuildingId = grp.Key.BuildingId,
                                                    BuildingName = grp.Key.BuildingName,
                                                    ABR = grp.Key.ABR,
+                                                   BuildingRegistrationNumber = grp.Key.BuildingRegistrationNumber,
+                                                   CSOSRegistrationNumber = grp.Key.CSOSRegistrationNumber,
 
                                                    Units = grp.Count(t => t != null),
                                                    YearEndPeriod = grp.Key.YearEndPeriod,
@@ -103,6 +114,19 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                }).ToList();
             }
 
+            _PortfolioManagers = _BuildingPMDebtorResultList.Select(a => new KeyValuePair<int?, string>(a.PortfolioManagerId, a.PortfolioManager)).Distinct().ToList();
+            _PortfolioManagers.Insert(0, new KeyValuePair<int?, string>(null, "All"));
+            _Debtors = _BuildingPMDebtorResultList.Select(a => new KeyValuePair<int?, string>(a.DebtorId, a.Debtor)).Distinct().ToList();
+            _Debtors.Insert(0, new KeyValuePair<int?, string>(null, "All"));
+
+            cbPMDropDown.DataSource = _PortfolioManagers;
+            cbPMDropDown.DisplayMember = "Value";
+            cbPMDropDown.ValueMember = "Key";
+
+            cbDebtorDropDown.DataSource = _Debtors;
+            cbDebtorDropDown.DisplayMember = "Value";
+            cbDebtorDropDown.ValueMember = "Key";
+
             BindDataGrid();
         }
 
@@ -114,7 +138,8 @@ namespace Astrodon.Reports.BuildingPMDebtor
             buildingPMDebtorGridView.AutoGenerateColumns = false;
 
             BindingSource bs = new BindingSource();
-            bs.DataSource = _BuildingPMDebtorResultList;
+
+            bs.DataSource = FilterData();
 
             buildingPMDebtorGridView.Columns.Clear();
 
@@ -138,6 +163,20 @@ namespace Astrodon.Reports.BuildingPMDebtor
             {
                 DataPropertyName = "ABR",
                 HeaderText = "ABR",
+                ReadOnly = true
+            });
+
+            buildingPMDebtorGridView.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "BuildingRegistrationNumber",
+                HeaderText = "Building Reg Number",
+                ReadOnly = true
+            });
+
+            buildingPMDebtorGridView.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "CSOSRegistrationNumber",
+                HeaderText = "CSOS Reg Number",
                 ReadOnly = true
             });
 
@@ -254,6 +293,18 @@ namespace Astrodon.Reports.BuildingPMDebtor
 
         }
 
+        private void cbPMDropDown_SelectedValueChanged(object sender, EventArgs e)
+        {
+            selectedPortfolioManagerId = cbPMDropDown.SelectedValue as int?;
+            BindDataGrid();
+        }
+
+        private void cbDebtorDropDown_SelectedValueChanged(object sender, EventArgs e)
+        {
+            selectedDebtorId = cbDebtorDropDown.SelectedValue as int?;
+            BindDataGrid();
+        }
+
         private void btnExport_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog sfd = new SaveFileDialog())
@@ -267,10 +318,9 @@ namespace Astrodon.Reports.BuildingPMDebtor
                         {
                             var excelProvider = new ExcelProvider();
 
-                            var fileBytes = excelProvider.ExportQuery("BuildingPMDebtor", _BuildingPMDebtorResultList.AsQueryable(), new ExcelStyleSheet());
+                            var fileBytes = excelProvider.ExportQuery("BuildingPMDebtor", FilterData(), new ExcelStyleSheet());
 
                             File.WriteAllBytes(sfd.FileName, fileBytes);
-
 
                             Process.Start(sfd.FileName);
                             // MessageBox.Show("Saved Succesfully", "Report", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -281,9 +331,19 @@ namespace Astrodon.Reports.BuildingPMDebtor
 
                         MessageBox.Show(ex.Message, "Report Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-
                 }
             }
+        }
+
+        private IQueryable<BuildingPMDebtorResult> FilterData()
+        {
+            var filteredData = _BuildingPMDebtorResultList.AsEnumerable();
+            if (selectedPortfolioManagerId != null)
+                filteredData = filteredData.Where(a => a.PortfolioManagerId == selectedPortfolioManagerId);
+            if (selectedDebtorId != null)
+                filteredData = filteredData.Where(a => a.DebtorId == selectedDebtorId);
+
+            return filteredData.AsQueryable();
         }
     }
 }
