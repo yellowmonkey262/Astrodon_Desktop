@@ -19,7 +19,7 @@ namespace SelfHosted
             // ProcessorThread.ProcessBirthdaySMS();
             //ProcessorThread.ScheduleFinancialMeetings();
 
-       //     ProcessorThread.ProcessCustomerDocumentReminders();
+        //   ProcessorThread.TestBuildingODBCConnections();
         //    return;
 
             ReportServiceHost host = new ReportServiceHost();
