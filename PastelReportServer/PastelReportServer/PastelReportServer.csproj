@@ -88,6 +88,7 @@
     <Compile Include="DataProcessor\FixedFinancialMeetingsProcessor.cs" />
     <Compile Include="DataProcessor\InsuranceReminders.cs" />
     <Compile Include="DataProcessor\MaintenanceProcessor.cs" />
+    <Compile Include="DataProcessor\ODBCConnectionTest.cs" />
     <Compile Include="DataProcessor\ProcessorThread.cs" />
     <Compile Include="DataProcessor\RequisitionProcessor.cs" />
     <Compile Include="DebitOrder\DebitOrderExcel.cs" />

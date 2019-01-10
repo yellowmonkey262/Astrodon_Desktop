@@ -105,6 +105,15 @@ namespace Astrodon.DataProcessor
                     {
                         LogException(e, "ProcessCustomerDocumentReminders");
                     }
+
+                    try
+                    {
+                        TestBuildingODBCConnections();
+                    }
+                    catch (Exception e)
+                    {
+                        LogException(e, "ProcessCustomerDocumentReminders");
+                    }
                 }
 
                 Thread.Sleep(1000);
@@ -224,6 +233,15 @@ namespace Astrodon.DataProcessor
             }
         }
 
+        public static void TestBuildingODBCConnections()
+        {
+            using (var dc = new DataContext(GetConnectionString()))
+            {
+                var rp = new ODBCConnectionTest(dc);
+
+                rp.Process();
+            }
+        }
 
     }
 }
