@@ -65,6 +65,7 @@
             // 
             // cbPMDropDown
             // 
+            this.cbPMDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPMDropDown.FormattingEnabled = true;
             this.cbPMDropDown.Location = new System.Drawing.Point(41, 27);
             this.cbPMDropDown.Name = "cbPMDropDown";
@@ -96,6 +97,7 @@
             // 
             // cbDebtorDropDown
             // 
+            this.cbDebtorDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDebtorDropDown.FormattingEnabled = true;
             this.cbDebtorDropDown.Location = new System.Drawing.Point(356, 27);
             this.cbDebtorDropDown.Name = "cbDebtorDropDown";

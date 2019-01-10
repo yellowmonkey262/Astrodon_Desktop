@@ -76,7 +76,8 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                    AddressLine2 = b.addy2,
                                                    AddressLine3 = b.addy3,
                                                    AddressLine4 = b.addy4,
-                                                   AddressLine5 = b.addy5
+                                                   AddressLine5 = b.addy5,
+                                                   ODBCConnectionOK = b.ODBCConnectionOK == true ? "Yes" : "No"
                                                } into grp
 
                                                orderby grp.Key.BuildingName
@@ -93,6 +94,7 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                    YearEndPeriod = grp.Key.YearEndPeriod,
                                                    Code = grp.Key.Code,
                                                    DataPath = grp.Key.DataPath,
+                                                   ODBCConnectionOK = grp.Key.ODBCConnectionOK,
 
                                                    PortfolioManagerId = grp.Key.PortfolioManagerId,
                                                    PortfolioManager = grp.Key.PortfolioManager,
@@ -114,9 +116,19 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                }).ToList();
             }
 
-            _PortfolioManagers = _BuildingPMDebtorResultList.Select(a => new KeyValuePair<int?, string>(a.PortfolioManagerId, a.PortfolioManager)).Distinct().ToList();
+            _PortfolioManagers = _BuildingPMDebtorResultList.Where(a => !String.IsNullOrWhiteSpace(a.PortfolioManager))
+                                                            .Select(a => new KeyValuePair<int?, string>(a.PortfolioManagerId, a.PortfolioManager))
+                                                            .Distinct()
+                                                            .OrderBy(a => a.Value)
+                                                            .ToList();
+
             _PortfolioManagers.Insert(0, new KeyValuePair<int?, string>(null, "All"));
-            _Debtors = _BuildingPMDebtorResultList.Select(a => new KeyValuePair<int?, string>(a.DebtorId, a.Debtor)).Distinct().ToList();
+
+            _Debtors = _BuildingPMDebtorResultList.Select(a => new KeyValuePair<int?, string>(a.DebtorId, a.Debtor))
+                                                  .Distinct()
+                                                  .OrderBy(a => a.Value)
+                                                  .ToList();
+
             _Debtors.Insert(0, new KeyValuePair<int?, string>(null, "All"));
 
             cbPMDropDown.DataSource = _PortfolioManagers;
@@ -204,7 +216,14 @@ namespace Astrodon.Reports.BuildingPMDebtor
             buildingPMDebtorGridView.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "DataPath",
-                HeaderText = "Data Path",
+                HeaderText = "Pastel Folder",
+                ReadOnly = true
+            });
+
+            buildingPMDebtorGridView.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "ODBCConnectionOK",
+                HeaderText = "ODBC Ok",
                 ReadOnly = true
             });
 
