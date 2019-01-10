@@ -71,6 +71,10 @@
             this.txtDFS = new System.Windows.Forms.TextBox();
             this.label40 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.txtCSOSRegNum = new System.Windows.Forms.TextBox();
+            this.txtBuildingRegNum = new System.Windows.Forms.TextBox();
+            this.lblCSOSRegNum = new System.Windows.Forms.Label();
+            this.lblBuildingRegNum = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.txtCentrec1 = new System.Windows.Forms.TextBox();
             this.txtAbbr = new System.Windows.Forms.TextBox();
@@ -682,6 +686,10 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.txtCSOSRegNum);
+            this.groupBox6.Controls.Add(this.txtBuildingRegNum);
+            this.groupBox6.Controls.Add(this.lblCSOSRegNum);
+            this.groupBox6.Controls.Add(this.lblBuildingRegNum);
             this.groupBox6.Controls.Add(this.label3);
             this.groupBox6.Controls.Add(this.txtCentrec1);
             this.groupBox6.Controls.Add(this.txtAbbr);
@@ -717,7 +725,39 @@
             this.groupBox6.Size = new System.Drawing.Size(576, 292);
             this.groupBox6.TabIndex = 139;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Bank Details";
+            this.groupBox6.Text = "Bank Details and Registration Numbers";
+            // 
+            // txtCSOSRegNum
+            // 
+            this.txtCSOSRegNum.Location = new System.Drawing.Point(407, 231);
+            this.txtCSOSRegNum.Name = "txtCSOSRegNum";
+            this.txtCSOSRegNum.Size = new System.Drawing.Size(150, 20);
+            this.txtCSOSRegNum.TabIndex = 133;
+            // 
+            // txtBuildingRegNum
+            // 
+            this.txtBuildingRegNum.Location = new System.Drawing.Point(407, 202);
+            this.txtBuildingRegNum.Name = "txtBuildingRegNum";
+            this.txtBuildingRegNum.Size = new System.Drawing.Size(150, 20);
+            this.txtBuildingRegNum.TabIndex = 132;
+            // 
+            // lblCSOSRegNum
+            // 
+            this.lblCSOSRegNum.AutoSize = true;
+            this.lblCSOSRegNum.Location = new System.Drawing.Point(302, 231);
+            this.lblCSOSRegNum.Name = "lblCSOSRegNum";
+            this.lblCSOSRegNum.Size = new System.Drawing.Size(99, 13);
+            this.lblCSOSRegNum.TabIndex = 131;
+            this.lblCSOSRegNum.Text = "CSOS Reg Number";
+            // 
+            // lblBuildingRegNum
+            // 
+            this.lblBuildingRegNum.AutoSize = true;
+            this.lblBuildingRegNum.Location = new System.Drawing.Point(294, 205);
+            this.lblBuildingRegNum.Name = "lblBuildingRegNum";
+            this.lblBuildingRegNum.Size = new System.Drawing.Size(107, 13);
+            this.lblBuildingRegNum.TabIndex = 130;
+            this.lblBuildingRegNum.Text = "Building Reg Number";
             // 
             // label3
             // 
@@ -1249,7 +1289,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(76, 353);
+            this.label22.Location = new System.Drawing.Point(74, 349);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(45, 13);
             this.label22.TabIndex = 110;
@@ -2485,5 +2525,9 @@
         private System.Windows.Forms.Label label81;
         private System.Windows.Forms.DateTimePicker dtpPolicyExpiryDate;
         private System.Windows.Forms.Label label82;
+        private System.Windows.Forms.TextBox txtCSOSRegNum;
+        private System.Windows.Forms.TextBox txtBuildingRegNum;
+        private System.Windows.Forms.Label lblCSOSRegNum;
+        private System.Windows.Forms.Label lblBuildingRegNum;
     }
 }

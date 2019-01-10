@@ -191,6 +191,16 @@ namespace Astrodon
                 }
                 if (buildingEntity != null)
                 {
+                    if (!String.IsNullOrWhiteSpace(buildingEntity.BuildingRegistrationNumber))
+                        txtBuildingRegNum.Text = buildingEntity.BuildingRegistrationNumber;
+                    else
+                        txtBuildingRegNum.Text = string.Empty;
+
+                    if (!String.IsNullOrWhiteSpace(buildingEntity.CSOSRegistrationNumber))
+                        txtCSOSRegNum.Text = buildingEntity.CSOSRegistrationNumber;
+                    else
+                        txtCSOSRegNum.Text = string.Empty;
+
                     cbDisableDebitOrderFee.Checked = buildingEntity.IsDebitOrderFeeDisabled;
                     cbBuildingFinancialsEnabled.Checked = buildingEntity.BuildingFinancialsEnabled;
                     pnlFinancials.Visible = cbBuildingFinancialsEnabled.Checked;
@@ -531,6 +541,9 @@ namespace Astrodon
                 buildingEntity.BuildingFinancialsEnabled = cbBuildingFinancialsEnabled.Checked;
                 buildingEntity.FinancialDayOfMonth = Convert.ToInt32(tbFinancialDayOfMonth.Value);
                 buildingEntity.IsFixed = cbFixedFinalcials.Checked;
+
+                buildingEntity.BuildingRegistrationNumber = txtBuildingRegNum.Text;
+                buildingEntity.CSOSRegistrationNumber = txtCSOSRegNum.Text;
 
                 buildingEntity.FinancialStartDate = dtpFinancialStartDate.Value.Date;
                 if (cbFinancialEndDateSet.Checked)

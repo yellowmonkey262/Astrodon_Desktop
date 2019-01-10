@@ -47,40 +47,47 @@ namespace Astrodon.Reports.BuildingPMDebtor
         [ExcelExport(6, "Code", true, false, XLCellValues.Text)]
         public string Code { get; set; }
 
-        [ExcelExport(7, "PM", true, false, XLCellValues.Text)]
+        [ExcelExport(7, "Data Path", true, false, XLCellValues.Text)]
+        public string DataPath { get; set; }
+
+        public int PortfolioManagerId { get; set; }
+
+        [ExcelExport(8, "PM", true, false, XLCellValues.Text)]
         public string PortfolioManager { get; set; }
 
-        [ExcelExport(8, "PM Email", true, false, XLCellValues.Text)]
+        [ExcelExport(9, "PM Email", true, false, XLCellValues.Text)]
         public string PortfolioManagerEmail { get; set; }
 
-        [ExcelExport(9, "Debtor", true, false, XLCellValues.Text)]
+        public int DebtorId { get; set; }
+
+        [ExcelExport(10, "Debtor", true, false, XLCellValues.Text)]
         public string Debtor { get; set; }
 
-        [ExcelExport(10, "Debtor Email", true, false, XLCellValues.Text)]
+        [ExcelExport(11, "Debtor Email", true, false, XLCellValues.Text)]
         public string DebtorEmail { get; set; }
 
-        [ExcelExport(11, "Bank", true, false, XLCellValues.Text)]
+        [ExcelExport(12, "Bank", true, false, XLCellValues.Text)]
         public string Bank { get; set; }
 
-        [ExcelExport(12, "Account Number", true, false, XLCellValues.Text)]
+        [ExcelExport(13, "Account Number", true, false, XLCellValues.Text)]
         public string AccountNumber { get; set; }
 
-        [ExcelExport(13, "Branch Code", true, false, XLCellValues.Text)]
+        [ExcelExport(14, "Branch Code", true, false, XLCellValues.Text)]
         public string BranchCode { get; set; }
 
-        [ExcelExport(14, "Address Line 1", true, false, XLCellValues.Text)]
+        [ExcelExport(15, "Address Line 1", true, false, XLCellValues.Text)]
         public string AddressLine1 { get; set; }
 
-        [ExcelExport(15, "Address Line 2", true, false, XLCellValues.Text)]
+        [ExcelExport(16, "Address Line 2", true, false, XLCellValues.Text)]
         public string AddressLine2 { get; set; }
 
-        [ExcelExport(16, "Address Line 3", true, false, XLCellValues.Text)]
+        [ExcelExport(17, "Address Line 3", true, false, XLCellValues.Text)]
         public string AddressLine3 { get; set; }
 
-        [ExcelExport(17, "Address Line 4", true, false, XLCellValues.Text)]
+        [ExcelExport(18, "Address Line 4", true, false, XLCellValues.Text)]
         public string AddressLine4 { get; set; }
 
-        [ExcelExport(18, "Address Line 5", true, false, XLCellValues.Text)]
+        [ExcelExport(19, "Address Line 5", true, false, XLCellValues.Text)]
         public string AddressLine5 { get; set; }
     }
 }

@@ -100,6 +100,16 @@ namespace Astrodon.Data
 
         public bool BuildingFinancialsEnabled { get; set; }
 
+        [MaxLength(200)]
+        public string BuildingRegistrationNumber { get; set; }
+
+        [MaxLength(200)]
+        public string CSOSRegistrationNumber { get; set; }
+
+        public bool ODBCConnectionOK { get; set; }
+
+        public DateTime? LastODBConnectionTest { get; set; }
+
         #region Building Insurance
 
         public decimal CommonPropertyDimensions { get; set; }

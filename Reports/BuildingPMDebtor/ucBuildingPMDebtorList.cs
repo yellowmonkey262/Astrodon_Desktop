@@ -46,12 +46,16 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                    BuildingName = b.Building,
                                                    ABR = b.Code,
 
+                                                   Units = c.BuildingId,
                                                    YearEndPeriod = b.Period,
                                                    Code = b.AccNumber,
+                                                   DataPath = b.DataPath,
 
-                                                   PortfolioManager = (pm.name == null) ? "" : pm.name,
-                                                   PortfolioManagerEmail = (pm.email == null) ? "" : pm.email,
+                                                   PortfolioManagerId = (pm == null) ? 0 : pm.id,
+                                                   PortfolioManager = (pm == null) ? "" : pm.name,
+                                                   PortfolioManagerEmail = (pm == null) ? "" : pm.email,
 
+                                                   DebtorId = debtor.id,
                                                    Debtor = debtor.name,
                                                    DebtorEmail = debtor.email,
 
@@ -77,10 +81,13 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                    Units = grp.Count(t => t != null),
                                                    YearEndPeriod = grp.Key.YearEndPeriod,
                                                    Code = grp.Key.Code,
+                                                   DataPath = grp.Key.DataPath,
 
-                                                   PortfolioManager = (grp.Key.PortfolioManager == null) ? "" : grp.Key.PortfolioManager,
-                                                   PortfolioManagerEmail = (grp.Key.PortfolioManagerEmail == null) ? "" : grp.Key.PortfolioManagerEmail,
+                                                   PortfolioManagerId = grp.Key.PortfolioManagerId,
+                                                   PortfolioManager = grp.Key.PortfolioManager,
+                                                   PortfolioManagerEmail = grp.Key.PortfolioManagerEmail,
 
+                                                   DebtorId = grp.Key.DebtorId,
                                                    Debtor = grp.Key.Debtor,
                                                    DebtorEmail = grp.Key.DebtorEmail,
 
@@ -152,6 +159,13 @@ namespace Astrodon.Reports.BuildingPMDebtor
             {
                 DataPropertyName = "Code",
                 HeaderText = "Code",
+                ReadOnly = true
+            });
+
+            buildingPMDebtorGridView.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "DataPath",
+                HeaderText = "Data Path",
                 ReadOnly = true
             });
 
@@ -237,6 +251,7 @@ namespace Astrodon.Reports.BuildingPMDebtor
                 HeaderText = "Address 5",
                 ReadOnly = true
             });
+
         }
 
         private void btnExport_Click(object sender, EventArgs e)

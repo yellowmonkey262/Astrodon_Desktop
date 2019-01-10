@@ -380,6 +380,10 @@
     <Compile Include="Migrations\201808081419070_URLForLetters.Designer.cs">
       <DependentUpon>201808081419070_URLForLetters.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901100830213_BuildingRegistrationNumbers.cs" />
+    <Compile Include="Migrations\201901100830213_BuildingRegistrationNumbers.Designer.cs">
+      <DependentUpon>201901100830213_BuildingRegistrationNumbers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
@@ -666,6 +670,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201808081419070_URLForLetters.resx">
       <DependentUpon>201808081419070_URLForLetters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901100830213_BuildingRegistrationNumbers.resx">
+      <DependentUpon>201901100830213_BuildingRegistrationNumbers.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
