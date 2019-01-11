@@ -57,10 +57,10 @@
             this.dgItems.AllowUserToDeleteRows = false;
             this.dgItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgItems.Location = new System.Drawing.Point(0, 317);
+            this.dgItems.Location = new System.Drawing.Point(12, 317);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(644, 228);
+            this.dgItems.Size = new System.Drawing.Size(632, 223);
             this.dgItems.TabIndex = 52;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             // 
@@ -87,7 +87,7 @@
             // btnNew
             // 
             this.btnNew.AutoEllipsis = true;
-            this.btnNew.Location = new System.Drawing.Point(0, 288);
+            this.btnNew.Location = new System.Drawing.Point(12, 288);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(75, 23);
             this.btnNew.TabIndex = 49;
@@ -98,9 +98,9 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 37);
+            this.label1.Location = new System.Drawing.Point(9, 37);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(96, 15);
+            this.label1.Size = new System.Drawing.Size(82, 13);
             this.label1.TabIndex = 48;
             this.label1.Text = "Template Name";
             // 
@@ -110,16 +110,16 @@
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(3, 6);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(188, 20);
+            this.lblTitle.Size = new System.Drawing.Size(162, 17);
             this.lblTitle.TabIndex = 47;
             this.lblTitle.Text = "Notification Template";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 63);
+            this.label2.Location = new System.Drawing.Point(9, 64);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 15);
+            this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 54;
             this.label2.Text = "Template Type";
             // 
@@ -138,7 +138,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(9, 91);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(85, 15);
+            this.label3.Size = new System.Drawing.Size(75, 13);
             this.label3.TabIndex = 56;
             this.label3.Text = "Template Text";
             // 
@@ -153,7 +153,7 @@
             // lbAllowedTags
             // 
             this.lbAllowedTags.FormattingEnabled = true;
-            this.lbAllowedTags.Location = new System.Drawing.Point(661, 125);
+            this.lbAllowedTags.Location = new System.Drawing.Point(661, 120);
             this.lbAllowedTags.Name = "lbAllowedTags";
             this.lbAllowedTags.Size = new System.Drawing.Size(118, 420);
             this.lbAllowedTags.TabIndex = 58;
@@ -162,9 +162,9 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(661, 104);
+            this.label4.Location = new System.Drawing.Point(658, 104);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(80, 15);
+            this.label4.Size = new System.Drawing.Size(71, 13);
             this.label4.TabIndex = 59;
             this.label4.Text = "Allowed Tags";
             // 

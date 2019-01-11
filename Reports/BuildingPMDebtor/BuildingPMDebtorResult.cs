@@ -56,7 +56,7 @@ namespace Astrodon.Reports.BuildingPMDebtor
         [ExcelExport(9, "Pastel Folder", true, false, XLCellValues.Text)]
         public string DataPath { get; set; }
 
-        [ExcelExport(10, "Data Path", true, false, XLCellValues.Text)]
+        [ExcelExport(10, "ODBC Ok", true, false, XLCellValues.Text)]
         public string ODBCConnectionOK { get; internal set; }
 
 
