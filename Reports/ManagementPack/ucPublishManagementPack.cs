@@ -292,7 +292,6 @@ namespace Astrodon.Reports.ManagementPack
                 var dataItem = context.ManagementPackSet.Single(a => a.id == _SelectedItem.Id);
                 var building = context.tblBuildings.Single(a => a.id == _SelectedItem.BuildingId);
 
-                string emailContent = Controller.ReadResourceString("Astrodon.Reports.ManagementPack.ManagementPackEmail.txt");
 
                 var customers = Controller.pastel.AddCustomers(building.Code, building.DataPath, true);
                 var dbCustomers = context.CustomerSet
@@ -312,7 +311,7 @@ namespace Astrodon.Reports.ManagementPack
 
                 string[] toEmail = { _SelectedItem.UserCreatedEmail };
                 string status;
-                if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + "financial pack appoved.", emailContent, false, out status))
+                if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + " financial pack appoved.", approvalEmail, false, out status))
                 {
                     Controller.HandleError("Unable to send notification email : " + status);
                 }
@@ -321,9 +320,10 @@ namespace Astrodon.Reports.ManagementPack
                 {
                     if (Controller.AskQuestion("Are you sure you want to notify " + trustees.Count().ToString() + " trustees?"))
                     {
-                        emailContent = emailContent.Replace("{MANAGEMENTPACKPERIOD}", _SelectedItem.Period.ToString("MMMM yyyy"));
-                        emailContent = emailContent.Replace("{BUILDINGNAME}", building.Building);
-                        emailContent = emailContent.Replace("{PMEMAILADDRESS}", building.pm);
+                        string trusteeMail = Controller.ReadResourceString("Astrodon.Reports.ManagementPack.ManagementPackEmail.txt");
+                        trusteeMail = trusteeMail.Replace("{MANAGEMENTPACKPERIOD}", _SelectedItem.Period.ToString("MMMM yyyy"));
+                        trusteeMail = trusteeMail.Replace("{BUILDINGNAME}", building.Building);
+                        trusteeMail = trusteeMail.Replace("{PMEMAILADDRESS}", building.pm);
                         string fileUrl = string.Empty;
                         if (UploadFileToBuilding(building, dataItem, out fileUrl))
                         {
@@ -334,9 +334,9 @@ namespace Astrodon.Reports.ManagementPack
 
                             Application.DoEvents();
 
-                            emailContent = emailContent.Replace("{URL}", fileUrl);
+                            trusteeMail = trusteeMail.Replace("{URL}", fileUrl);
                             status = "";
-                            if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", emailContent, false, out status))
+                            if (!Mailer.SendDirectMail(building.pm, new string[] { building.pm }, "", "", "Monthly financial pack", trusteeMail, false, out status))
                             {
                                 Controller.HandleError("Unable to notify trustees by email : " + status);
                             }
@@ -347,7 +347,7 @@ namespace Astrodon.Reports.ManagementPack
                                 {
                                     toEmail = new string[] { trustee.Email[0] };
                                     tbComments.Text = tbComments.Text + "\nSent email to:" + trustee.accNumber + "-" + toEmail[0];
-                                    if (!Mailer.SendDirectMail(building.pm, toEmail, "", "", "Monthly financial pack", emailContent, false, out status))
+                                    if (!Mailer.SendDirectMail(building.pm, toEmail, "", "", "Monthly financial pack ", trusteeMail, false, out status))
                                     {
                                         Controller.HandleError("Unable to notify trustees by email : " + status);
                                     }else
