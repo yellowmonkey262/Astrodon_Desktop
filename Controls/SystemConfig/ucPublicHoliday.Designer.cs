@@ -46,7 +46,7 @@
             this.dgItems.AllowUserToDeleteRows = false;
             this.dgItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgItems.Location = new System.Drawing.Point(11, 149);
+            this.dgItems.Location = new System.Drawing.Point(8, 148);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
             this.dgItems.Size = new System.Drawing.Size(652, 392);
@@ -55,7 +55,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(180, 108);
+            this.btnCancel.Location = new System.Drawing.Point(184, 108);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 37;
@@ -65,7 +65,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(261, 108);
+            this.btnSave.Location = new System.Drawing.Point(265, 108);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 36;
@@ -76,7 +76,7 @@
             // btnNew
             // 
             this.btnNew.AutoEllipsis = true;
-            this.btnNew.Location = new System.Drawing.Point(11, 108);
+            this.btnNew.Location = new System.Drawing.Point(8, 108);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(75, 23);
             this.btnNew.TabIndex = 35;
@@ -88,7 +88,7 @@
             // 
             this.tbName.Location = new System.Drawing.Point(140, 37);
             this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(196, 20);
+            this.tbName.Size = new System.Drawing.Size(200, 20);
             this.tbName.TabIndex = 28;
             // 
             // label1
@@ -113,7 +113,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 70);
+            this.label2.Location = new System.Drawing.Point(8, 70);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(30, 13);
             this.label2.TabIndex = 39;

@@ -44,10 +44,10 @@
             this.dgItems.AllowUserToDeleteRows = false;
             this.dgItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgItems.Location = new System.Drawing.Point(3, 102);
+            this.dgItems.Location = new System.Drawing.Point(15, 102);
             this.dgItems.Name = "dgItems";
             this.dgItems.ReadOnly = true;
-            this.dgItems.Size = new System.Drawing.Size(544, 228);
+            this.dgItems.Size = new System.Drawing.Size(532, 237);
             this.dgItems.TabIndex = 45;
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick_1);
             // 
@@ -74,7 +74,7 @@
             // btnNew
             // 
             this.btnNew.AutoEllipsis = true;
-            this.btnNew.Location = new System.Drawing.Point(3, 73);
+            this.btnNew.Location = new System.Drawing.Point(15, 73);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(75, 23);
             this.btnNew.TabIndex = 42;
@@ -85,7 +85,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 28);
+            this.label1.Location = new System.Drawing.Point(12, 28);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(82, 13);
             this.label1.TabIndex = 40;
@@ -95,7 +95,7 @@
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(3, 3);
+            this.lblTitle.Location = new System.Drawing.Point(12, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(123, 17);
             this.lblTitle.TabIndex = 39;
@@ -120,7 +120,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblTitle);
             this.Name = "ucBondOriginator";
-            this.Size = new System.Drawing.Size(553, 338);
+            this.Size = new System.Drawing.Size(584, 364);
             ((System.ComponentModel.ISupportInitialize)(this.dgItems)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
