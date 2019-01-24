@@ -237,11 +237,26 @@ namespace Astrodon
             dataHandler.SetData(query, sqlParms, out status);
         }
 
+        public static void SetPAAvailable()
+        {
+            if (Controller.user.usertype == 4)
+            {
+                String query = "UPDATE tblPAStatus SET paStatus = 'True', availableSince = getdate() WHERE paID = @userId";
+                Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
+                sqlParms.Add("@userId", Controller.user.id);
+                string status;
+                dataHandler.SetData(query, sqlParms, out status);
+            }
+        }
+
         public static void AssignJob()
         {
             SqlDataHandler dm = new SqlDataHandler();
             String status;
-            String qQuery = "SELECT * FROM tblPMJob WHERE (status = 'PENDING') ORDER BY id";
+
+            //query to find first item to assign to this pm when he is done.
+            String qQuery = "SELECT top 5 * FROM tblPMJob WHERE (status = 'PENDING') ORDER BY id";
+
             String avPAQuery = "SELECT paID FROM tblPAStatus WHERE (paStatus = 'True') AND paID in (" + Controller.user.id.ToString() + ") ORDER BY availableSince";
             DataSet dsQ = dm.GetData(qQuery, null, out status);
             DataSet dsPA = dm.GetData(avPAQuery, null, out status);
