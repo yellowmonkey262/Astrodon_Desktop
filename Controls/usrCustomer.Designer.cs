@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(usrCustomer));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmbCustomer = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbBuilding = new System.Windows.Forms.ComboBox();
@@ -96,6 +96,14 @@
             this.txtEmailTo = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.dgDocs = new System.Windows.Forms.DataGridView();
+            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSubject = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colView = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.colSend = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.colRemove = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.colHistory = new System.Windows.Forms.DataGridViewButtonColumn();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
             this.dgTransactions = new System.Windows.Forms.DataGridView();
@@ -160,14 +168,6 @@
             this.btnTrustees = new System.Windows.Forms.Button();
             this.fdOpen = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSubject = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTitle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colView = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.colSend = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.colRemove = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.colHistory = new System.Windows.Forms.DataGridViewButtonColumn();
             this.tbPreview.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -331,6 +331,7 @@
             this.dtpDateOfBirth.Name = "dtpDateOfBirth";
             this.dtpDateOfBirth.Size = new System.Drawing.Size(200, 20);
             this.dtpDateOfBirth.TabIndex = 82;
+            this.dtpDateOfBirth.Value = new System.DateTime(2018, 12, 31, 0, 0, 0, 0);
             // 
             // label33
             // 
@@ -827,9 +828,82 @@
             this.colHistory});
             this.dgDocs.Location = new System.Drawing.Point(6, 64);
             this.dgDocs.Name = "dgDocs";
+            this.dgDocs.ReadOnly = true;
             this.dgDocs.Size = new System.Drawing.Size(859, 464);
             this.dgDocs.TabIndex = 58;
             this.dgDocs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgDocs_CellContentClick);
+            // 
+            // colDate
+            // 
+            this.colDate.DataPropertyName = "tstamp";
+            dataGridViewCellStyle1.Format = "d";
+            dataGridViewCellStyle1.NullValue = null;
+            this.colDate.DefaultCellStyle = dataGridViewCellStyle1;
+            this.colDate.HeaderText = "Date";
+            this.colDate.Name = "colDate";
+            this.colDate.ReadOnly = true;
+            this.colDate.Width = 55;
+            // 
+            // colSubject
+            // 
+            this.colSubject.DataPropertyName = "subject";
+            this.colSubject.HeaderText = "Subject";
+            this.colSubject.Name = "colSubject";
+            this.colSubject.ReadOnly = true;
+            this.colSubject.Width = 68;
+            // 
+            // colTitle
+            // 
+            this.colTitle.DataPropertyName = "title";
+            this.colTitle.HeaderText = "Title";
+            this.colTitle.Name = "colTitle";
+            this.colTitle.ReadOnly = true;
+            this.colTitle.Width = 52;
+            // 
+            // colFileName
+            // 
+            this.colFileName.DataPropertyName = "file";
+            this.colFileName.HeaderText = "File Name";
+            this.colFileName.Name = "colFileName";
+            this.colFileName.ReadOnly = true;
+            this.colFileName.Visible = false;
+            this.colFileName.Width = 79;
+            // 
+            // colView
+            // 
+            this.colView.HeaderText = "";
+            this.colView.Name = "colView";
+            this.colView.ReadOnly = true;
+            this.colView.Text = "View";
+            this.colView.UseColumnTextForButtonValue = true;
+            this.colView.Width = 5;
+            // 
+            // colSend
+            // 
+            this.colSend.HeaderText = "";
+            this.colSend.Name = "colSend";
+            this.colSend.ReadOnly = true;
+            this.colSend.Text = "Send";
+            this.colSend.UseColumnTextForButtonValue = true;
+            this.colSend.Width = 5;
+            // 
+            // colRemove
+            // 
+            this.colRemove.HeaderText = "";
+            this.colRemove.Name = "colRemove";
+            this.colRemove.ReadOnly = true;
+            this.colRemove.Text = "Remove";
+            this.colRemove.UseColumnTextForButtonValue = true;
+            this.colRemove.Width = 5;
+            // 
+            // colHistory
+            // 
+            this.colHistory.HeaderText = "";
+            this.colHistory.Name = "colHistory";
+            this.colHistory.ReadOnly = true;
+            this.colHistory.Text = "History";
+            this.colHistory.UseColumnTextForButtonValue = true;
+            this.colHistory.Width = 5;
             // 
             // tabPage4
             // 
@@ -857,6 +931,7 @@
             this.dgTransactions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgTransactions.Location = new System.Drawing.Point(12, 32);
             this.dgTransactions.Name = "dgTransactions";
+            this.dgTransactions.ReadOnly = true;
             this.dgTransactions.Size = new System.Drawing.Size(845, 487);
             this.dgTransactions.TabIndex = 52;
             this.dgTransactions.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgTransactions_DataBindingComplete);
@@ -940,6 +1015,7 @@
             this.colActioned});
             this.dataGridView1.Location = new System.Drawing.Point(17, 40);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(895, 150);
             this.dataGridView1.TabIndex = 74;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
@@ -982,6 +1058,7 @@
             this.colActioned.DataPropertyName = "action";
             this.colActioned.HeaderText = "Actioned";
             this.colActioned.Name = "colActioned";
+            this.colActioned.ReadOnly = true;
             // 
             // btnSaveReminder
             // 
@@ -1480,73 +1557,6 @@
             // fdOpen
             // 
             this.fdOpen.Filter = "Adobe PDF files (*.pdf)|*.pdf";
-            // 
-            // colDate
-            // 
-            this.colDate.DataPropertyName = "tstamp";
-            dataGridViewCellStyle1.Format = "d";
-            dataGridViewCellStyle1.NullValue = null;
-            this.colDate.DefaultCellStyle = dataGridViewCellStyle1;
-            this.colDate.HeaderText = "Date";
-            this.colDate.Name = "colDate";
-            this.colDate.ReadOnly = true;
-            this.colDate.Width = 55;
-            // 
-            // colSubject
-            // 
-            this.colSubject.DataPropertyName = "subject";
-            this.colSubject.HeaderText = "Subject";
-            this.colSubject.Name = "colSubject";
-            this.colSubject.Width = 68;
-            // 
-            // colTitle
-            // 
-            this.colTitle.DataPropertyName = "title";
-            this.colTitle.HeaderText = "Title";
-            this.colTitle.Name = "colTitle";
-            this.colTitle.ReadOnly = true;
-            this.colTitle.Width = 52;
-            // 
-            // colFileName
-            // 
-            this.colFileName.DataPropertyName = "file";
-            this.colFileName.HeaderText = "File Name";
-            this.colFileName.Name = "colFileName";
-            this.colFileName.ReadOnly = true;
-            this.colFileName.Visible = false;
-            this.colFileName.Width = 79;
-            // 
-            // colView
-            // 
-            this.colView.HeaderText = "";
-            this.colView.Name = "colView";
-            this.colView.Text = "View";
-            this.colView.UseColumnTextForButtonValue = true;
-            this.colView.Width = 5;
-            // 
-            // colSend
-            // 
-            this.colSend.HeaderText = "";
-            this.colSend.Name = "colSend";
-            this.colSend.Text = "Send";
-            this.colSend.UseColumnTextForButtonValue = true;
-            this.colSend.Width = 5;
-            // 
-            // colRemove
-            // 
-            this.colRemove.HeaderText = "";
-            this.colRemove.Name = "colRemove";
-            this.colRemove.Text = "Remove";
-            this.colRemove.UseColumnTextForButtonValue = true;
-            this.colRemove.Width = 5;
-            // 
-            // colHistory
-            // 
-            this.colHistory.HeaderText = "";
-            this.colHistory.Name = "colHistory";
-            this.colHistory.Text = "History";
-            this.colHistory.UseColumnTextForButtonValue = true;
-            this.colHistory.Width = 5;
             // 
             // usrCustomer
             // 
