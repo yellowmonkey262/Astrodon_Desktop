@@ -6,6 +6,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using System.Linq;
+using System.Data.Entity;
 
 namespace Astrodon
 {
@@ -241,16 +243,28 @@ namespace Astrodon
         {
             if (Controller.user.usertype == 4)
             {
-                String query = "UPDATE tblPAStatus SET paStatus = 'True', availableSince = getdate() WHERE paID = @userId";
-                Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
-                sqlParms.Add("@userId", Controller.user.id);
-                string status;
-                dataHandler.SetData(query, sqlParms, out status);
+                using (var ctx = SqlDataHandler.GetDataContext())
+                {
+                    var myUser = ctx.tblPAStatus.SingleOrDefault(a => a.paID == Controller.user.id);
+                    if(myUser == null)
+                    {
+                        myUser = new Data.tblPAStatu()
+                        {
+                            paID = Controller.user.id
+                        };
+                        ctx.tblPAStatus.Add(myUser);
+                    }
+
+                    myUser.paStatus = true;
+                    myUser.availableSince = DateTime.Now;
+                    ctx.SaveChanges();
+                }
             }
         }
 
         public static void AssignJob()
         {
+            SetPAAvailable();
             SqlDataHandler dm = new SqlDataHandler();
             String status;
 

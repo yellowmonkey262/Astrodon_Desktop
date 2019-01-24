@@ -58,7 +58,6 @@ namespace Astrodon
             else if (Controller.user.usertype == 4)
             {
                 pMJobListToolStripMenuItem.Enabled = false;
-                Controller.SetPAAvailable();
                 Controller.AssignJob();
                 jobListToolStripMenuItem_Click(this, new EventArgs());
             }

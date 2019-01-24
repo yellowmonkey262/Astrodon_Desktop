@@ -1645,8 +1645,6 @@ namespace Astrodon.Controls
             dataHandler.SetData(submitQuery, null, out status);
             if (Controller.user.usertype == 4)
             {
-                String avPAQuery = "UPDATE tblPAStatus SET paStatus = 'True', availableSince = getdate() WHERE paID = " + Controller.user.id.ToString();
-                dataHandler.SetData(avPAQuery, null, out status);
                 Controller.AssignJob();
             }
             Controller.mainF.ShowJobs();
