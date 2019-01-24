@@ -252,6 +252,7 @@
             // reportingToolStripMenuItem
             // 
             this.reportingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.buildingPMReportMenuItem,
             this.summaryToolStripMenuItem,
             this.sMSToolStripMenuItem,
             this.emailToolStripMenuItem,
@@ -260,8 +261,7 @@
             this.trustToolStripMenuItem,
             this.supplierReportToolStripMenuItem1,
             this.maintenanceReportToolStripMenuItem,
-            this.insuranceScheduleToolStripMenuItem,
-            this.buildingPMReportMenuItem});
+            this.insuranceScheduleToolStripMenuItem});
             this.reportingToolStripMenuItem.Name = "reportingToolStripMenuItem";
             this.reportingToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.reportingToolStripMenuItem.Text = "Reporting";

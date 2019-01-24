@@ -51,7 +51,22 @@ namespace Astrodon
                 importStatementsToolStripMenuItem.Enabled = false;
                 allocationsToolStripMenuItem.Enabled = false;
             }
-            if (Controller.user.usertype != 1 && Controller.user.usertype != 2) { reportingToolStripMenuItem.Enabled = false; }
+
+            reportingToolStripMenuItem.Enabled = true;
+
+            if (Controller.user.usertype != 1 && Controller.user.usertype != 2)
+            {
+                buildingPMReportMenuItem.Enabled = true;
+                summaryToolStripMenuItem.Enabled = false;
+                emailToolStripMenuItem.Enabled = false;
+                pAPMToolStripMenuItem.Enabled = false;
+                statementRunToolStripMenuItem.Enabled = false;
+                trustToolStripMenuItem.Enabled = false;
+                supplierReportToolStripMenuItem1.Enabled = false;
+                maintenanceReportToolStripMenuItem.Enabled = false;
+                insuranceScheduleToolStripMenuItem.Enabled = false;
+            }
+
             List<int> allowedUsers = new List<int>() { 43 };
             if (allowedUsers.Contains(Controller.user.id)) { reportingToolStripMenuItem.Enabled = true; }
             if (Controller.user.usertype == 1 || Controller.user.usertype == 2) { pMJobListToolStripMenuItem.Enabled = true; }
