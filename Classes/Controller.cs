@@ -6,6 +6,8 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using System.Linq;
+using System.Data.Entity;
 
 namespace Astrodon
 {
@@ -237,11 +239,38 @@ namespace Astrodon
             dataHandler.SetData(query, sqlParms, out status);
         }
 
+        public static void SetPAAvailable()
+        {
+            if (Controller.user.usertype == 4)
+            {
+                using (var ctx = SqlDataHandler.GetDataContext())
+                {
+                    var myUser = ctx.tblPAStatus.SingleOrDefault(a => a.paID == Controller.user.id);
+                    if(myUser == null)
+                    {
+                        myUser = new Data.tblPAStatu()
+                        {
+                            paID = Controller.user.id
+                        };
+                        ctx.tblPAStatus.Add(myUser);
+                    }
+
+                    myUser.paStatus = true;
+                    myUser.availableSince = DateTime.Now;
+                    ctx.SaveChanges();
+                }
+            }
+        }
+
         public static void AssignJob()
         {
+            SetPAAvailable();
             SqlDataHandler dm = new SqlDataHandler();
             String status;
-            String qQuery = "SELECT * FROM tblPMJob WHERE (status = 'PENDING') ORDER BY id";
+
+            //query to find first item to assign to this pm when he is done.
+            String qQuery = "SELECT top 5 * FROM tblPMJob WHERE (status = 'PENDING') ORDER BY id";
+
             String avPAQuery = "SELECT paID FROM tblPAStatus WHERE (paStatus = 'True') AND paID in (" + Controller.user.id.ToString() + ") ORDER BY availableSince";
             DataSet dsQ = dm.GetData(qQuery, null, out status);
             DataSet dsPA = dm.GetData(avPAQuery, null, out status);

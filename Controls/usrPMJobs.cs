@@ -12,7 +12,10 @@ namespace Astrodon.Controls
         {
             InitializeComponent();
             Controller.JobUpdateEvent += Controller_JobUpdateEvent;
-            if (Controller.user.usertype == 4) { Controller.AssignJob(); }
+            if (Controller.user.usertype == 4)
+            {
+                Controller.AssignJob();
+            }
             dgJobs.Columns[7].Visible = Controller.UserIsSheldon();
         }
 

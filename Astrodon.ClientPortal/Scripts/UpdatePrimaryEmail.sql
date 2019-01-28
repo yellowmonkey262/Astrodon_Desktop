@@ -45,6 +45,7 @@ begin
 	  --de register user
 	  delete from TempPassword where PasswordControlId in (Select id from PasswordControl where UserIdentityId = @UserIdentityId)
 	  delete from PasswordControl where UserIdentityId = @UserIdentityId
+	  delete from WebDocumentAccessLog  where UserIdentityId = @UserIdentityId
 	  delete from UserIdentity  where Id = @UserIdentityId
 	end
 
