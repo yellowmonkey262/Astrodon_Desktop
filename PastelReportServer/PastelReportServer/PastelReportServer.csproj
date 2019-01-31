@@ -78,12 +78,14 @@
   <ItemGroup>
     <Compile Include="Classes\Mailer.cs" />
     <Compile Include="Classes\SMS.cs" />
+    <Compile Include="CustomerMaintenance\CustomerCategory.cs" />
     <Compile Include="DataContracts\BuildingClosingBalance.cs" />
     <Compile Include="DataContracts\MaintenanceReportType.cs" />
     <Compile Include="DataContracts\Maintenance\PastelMaintenanceTransaction.cs" />
     <Compile Include="DataContracts\PaymentTransaction.cs" />
     <Compile Include="DataContracts\PervasiveItem.cs" />
     <Compile Include="DataProcessor\BirthdayProcessor.cs" />
+    <Compile Include="DataProcessor\BuildingCategoryErrorModel.cs" />
     <Compile Include="DataProcessor\CustomerDocumentReminders.cs" />
     <Compile Include="DataProcessor\FixedFinancialMeetingsProcessor.cs" />
     <Compile Include="DataProcessor\InsuranceReminders.cs" />

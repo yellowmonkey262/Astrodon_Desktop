@@ -1,4 +1,5 @@
 ﻿using Astrodon.Classes;
+using Astrodon.CustomerMaintenance;
 using Astrodon.Data;
 using Desktop.Lib.Pervasive;
 using OfficeOpenXml;
@@ -22,16 +23,27 @@ namespace Astrodon.DataProcessor
 
         public void Process()
         {
-            DateTime checkDate = DateTime.Today.AddDays(-2);
+            DateTime checkDate = DateTime.Today;
+            List<BuildingCategoryErrorModel> categoryErrors = new List<BuildingCategoryErrorModel>();
 
             var q = from b in _Context.tblBuildings
                     where b.BuildingDisabled == false
-                    && (b.ODBCConnectionOK == false || b.LastODBConnectionTest == null || b.LastODBConnectionTest <= checkDate)
                     select b;
 
+            var categories = CustomerCategory.CategoryList;
+
+         
             foreach (var building in q.ToList())
             {
                 building.ODBCConnectionOK = TestBuilding(building.DataPath);
+                #region Check if Customer Category with CCCode: 0 is 'None' or 'None / Standard'
+
+                if (building.ODBCConnectionOK)
+                {
+                    FixPastelCustomerCategories(building.DataPath, categories);
+                }
+
+                #endregion
                 building.LastODBConnectionTest = DateTime.Today;
                 _Context.SaveChanges();
             }
@@ -39,9 +51,10 @@ namespace Astrodon.DataProcessor
             var failedBuildings = _Context.tblBuildings.Where(a => a.BuildingDisabled == false && a.ODBCConnectionOK == false).ToList();
             if (failedBuildings.Count > 0)
                 EmailBuildingErrors(failedBuildings);
+        
         }
 
-
+       
         private void EmailBuildingErrors(List<tblBuilding> failedBuildings)
         {
             var excelFile = CreateExcelFile(failedBuildings);
@@ -75,7 +88,6 @@ namespace Astrodon.DataProcessor
             Console.WriteLine("Email Sent!");
 
         }
-
 
         private byte[] CreateExcelFile(List<tblBuilding> failedBuildings)
         {
@@ -120,7 +132,6 @@ namespace Astrodon.DataProcessor
             return result;
         }
 
-
         private bool TestBuilding(string dataPath)
         {
             try
@@ -143,6 +154,91 @@ namespace Astrodon.DataProcessor
                 {
                     EventTime = DateTime.Now,
                     Message = "ODBC Connection Test " + e.Message,
+                    StackTrace = e.StackTrace
+                });
+            }
+            return false;
+        }
+
+        private List<CustomerCategory> GetCustomerCategories(string buildPath)
+        {
+            string qry = "select  CCCode,CCDesc from [DataSet].CustomerCategories Order by CCCode";
+            qry = PervasiveSqlUtilities.SetDataSource(qry, buildPath);
+
+            List<CustomerCategory> result = new List<CustomerCategory>();
+
+            var data = PervasiveSqlUtilities.FetchPervasiveData(qry, null);
+            foreach (DataRow row in data.Rows)
+            {
+                CustomerCategory c = new CustomerCategory(row);
+                result.Add(c);
+            }
+
+            return result;
+
+
+        }
+
+        private bool FixPastelCustomerCategories(string dataPath, List<CustomerCategory> categories)
+        {
+            try
+            {
+
+                var allowedIds = categories.Select(a => a.CategoryId).ToArray();
+
+                string ids = "(" + string.Join(",", allowedIds) + ")";
+
+                var catListOnDB = GetCustomerCategories(dataPath);
+
+                var listToUpdate = new List<CustomerCategory>();
+                var listToInsert = new List<CustomerCategory>();
+
+                foreach (var cat in categories)
+                {
+                    var curr = catListOnDB.FirstOrDefault(a => a.CategoryId == cat.CategoryId);
+                    if (curr == null)
+                    {
+                        listToInsert.Add(cat);
+                    }
+                    else if (curr.CategoryName != cat.CategoryName)
+                    {
+                        listToUpdate.Add(cat);
+                    }
+
+                }
+
+                foreach(var i in listToInsert)
+                {
+                    string q = "Insert into [DataSet].CustomerCategories (CCCode,CCDesc) values (" + i.CategoryId.ToString() + ",'" + i.CategoryName + "')";
+                    q = PervasiveSqlUtilities.SetDataSource(q, dataPath);
+                    PervasiveSqlUtilities.ExecuteSQLCommand(q);
+                }
+
+                foreach (var i in listToUpdate)
+                {
+                    Console.WriteLine("Update " + i.CategoryName + " for " + dataPath);
+                    string q = "Update [DataSet].CustomerCategories set CCDesc = '" + i.CategoryName + "' where CCCode = " + i.CategoryId.ToString();
+                    q = PervasiveSqlUtilities.SetDataSource(q, dataPath);
+                    PervasiveSqlUtilities.ExecuteSQLCommand(q);
+                }
+
+
+                string odbcQuery = "update [DataSet].CustomerMaster set Category = 0 where Category not in " + ids;
+                odbcQuery = PervasiveSqlUtilities.SetDataSource(odbcQuery, dataPath);
+                PervasiveSqlUtilities.ExecuteSQLCommand(odbcQuery);
+
+                odbcQuery = "delete from [DataSet].CustomerCategories where CCCode not in " + ids;
+                odbcQuery = PervasiveSqlUtilities.SetDataSource(odbcQuery, dataPath);
+                PervasiveSqlUtilities.ExecuteSQLCommand(odbcQuery);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                _Context.SystemLogSet.Add(new Data.Log.SystemLog()
+                {
+                    EventTime = DateTime.Now,
+                    Message =  e.Message,
                     StackTrace = e.StackTrace
                 });
             }

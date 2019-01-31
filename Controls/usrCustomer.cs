@@ -13,6 +13,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Astrodon.ClientPortal;
 using Astrodon;
+using Astrodon.ReportService;
 
 namespace Astrodon
 {
@@ -27,7 +28,7 @@ namespace Astrodon
         private BindingSource bsReminders = new BindingSource();
         private SqlDataHandler dh = new SqlDataHandler();
         private bool[] sortOrder = new bool[4];
-        private Dictionary<int, String> categories;
+        private List<CustomerCategory> categories;
         private AstrodonClientPortal _ClientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
         public usrCustomer()
@@ -123,35 +124,21 @@ namespace Astrodon
                 LoadCustomers(-1);
 
                 categories = Controller.pastel.GetCustomerCategories(building.DataPath);
-                Categories stdCat = new Categories
-                {
-                    categoryID = 0,
-                    CategoryName = "None / Standard"
-                };
-                categories.Add(stdCat.categoryID, stdCat.CategoryName);
 
-                List<Categories> myCats = new List<Categories>();
-                foreach (KeyValuePair<int, String> category in categories)
-                {
-                    Categories cat = new Categories
-                    {
-                        categoryID = category.Key,
-                        CategoryName = category.Value
-                    };
-                    myCats.Add(cat);
-                }
-
-                var trustee = myCats.Where(a => a.categoryID == 7).FirstOrDefault();
+                var trustee = categories.Where(a => a.CategoryId == 7).FirstOrDefault();
                 if (trustee != null)
-                    myCats.Remove(trustee);
+                    categories.Remove(trustee);
 
-                cmbCategory.DataSource = myCats;
-                cmbCategory.ValueMember = "categoryID";
-                cmbCategory.DisplayMember = "categoryName";
+                cmbCategory.DataSource = categories;
+                cmbCategory.ValueMember = "CategoryId";
+                cmbCategory.DisplayMember = "CategoryName";
                 cmbCategory.SelectedIndex = -1;
                 UpdateSQLCustomers();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Controller.HandleError(ex);
+            }
         }
 
 
@@ -229,8 +216,15 @@ namespace Astrodon
                 txtFax.Text = customer.Fax;
                 txtTelephone.Text = customer.Telephone;
                 String category;
-                txtCategory.Text = (categories.TryGetValue(int.Parse(customer.category), out category) ? category : "-");
-                try { cmbCategory.SelectedValue = int.Parse(customer.category); } catch { }
+                try
+                {
+                    cmbCategory.SelectedValue = int.Parse(customer.category);
+                    txtCategory.Text = cmbCategory.SelectedText;
+                }
+                catch
+                {
+                    txtCategory.Text = "";
+                }
                 LoadTransactions();
                 LoadDocuments();
                 LoadAddress();
@@ -592,6 +586,10 @@ namespace Astrodon
                 int catID = (int)cmbCategory.SelectedValue;
                 newCat = catID.ToString();
             }
+            else
+            {
+                newCat = "1";
+            }
             customerString += "|N|" + newCat + "|" + customer.currencyCode.ToString() + "|" + customer.paymentTerms.ToString();
             customerString += "|" + customer.creditLimit.ToString() + "|" + uDef[0] + "|" + uDef[1] + "|" + uDef[2] + "|" + uDef[3] + "|" + uDef[4];
             customerString += "|" + customer.monthOrDay + "|" + customer.statPrintorEmail.ToString() + "|" + customer.docPrintorEmail.ToString();
@@ -912,12 +910,6 @@ namespace Astrodon
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
 
-        }
-
-        private class Categories
-        {
-            public int categoryID { get; set; }
-            public String CategoryName { get; set; }
         }
 
         private class UnitMaintenance

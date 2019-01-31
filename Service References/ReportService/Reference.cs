@@ -853,6 +853,67 @@ namespace Astrodon.ReportService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CustomerCategory", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.CustomerMaintenance")]
+    [System.SerializableAttribute()]
+    public partial class CustomerCategory : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int CategoryIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CategoryNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int CategoryId {
+            get {
+                return this.CategoryIdField;
+            }
+            set {
+                if ((this.CategoryIdField.Equals(value) != true)) {
+                    this.CategoryIdField = value;
+                    this.RaisePropertyChanged("CategoryId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string CategoryName {
+            get {
+                return this.CategoryNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CategoryNameField, value) != true)) {
+                    this.CategoryNameField = value;
+                    this.RaisePropertyChanged("CategoryName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
@@ -895,6 +956,9 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/BuildingBalancesGet", ReplyAction="http://tempuri.org/IReportService/BuildingBalancesGetResponse")]
         Astrodon.ReportService.BuildingClosingBalance[] BuildingBalancesGet(System.DateTime processMonth, string buildingDataPath);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetCustomerCategories", ReplyAction="http://tempuri.org/IReportService/GetCustomerCategoriesResponse")]
+        Astrodon.ReportService.CustomerCategory[] GetCustomerCategories(string buildPath);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -974,6 +1038,10 @@ namespace Astrodon.ReportService {
         
         public Astrodon.ReportService.BuildingClosingBalance[] BuildingBalancesGet(System.DateTime processMonth, string buildingDataPath) {
             return base.Channel.BuildingBalancesGet(processMonth, buildingDataPath);
+        }
+        
+        public Astrodon.ReportService.CustomerCategory[] GetCustomerCategories(string buildPath) {
+            return base.Channel.GetCustomerCategories(buildPath);
         }
     }
 }

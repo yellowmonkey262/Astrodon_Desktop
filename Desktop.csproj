@@ -1147,6 +1147,9 @@
     <None Include="Service References\ReportService\Astrodon.ReportService.BuildingClosingBalance.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\ReportService\Astrodon.ReportService.CustomerCategory.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ReportService\Astrodon.ReportService.DebitOrderItem.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -1178,6 +1181,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\item6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\item7.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />

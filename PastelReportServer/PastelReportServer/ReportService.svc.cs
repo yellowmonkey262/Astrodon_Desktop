@@ -21,6 +21,9 @@ using Astrodon.Data.DebitOrder;
 using Astrodon.DebitOrder;
 using Astrodon.Reports.MonthlyReport;
 using Astrodon.Reports.AllocationWorksheet;
+using Astrodon.CustomerMaintenance;
+using Desktop.Lib.Pervasive;
+using System.Data;
 
 namespace PastelDataService
 {
@@ -146,5 +149,26 @@ namespace PastelDataService
             var lr = new LevyRollReport();
             return lr.BuildingBalancesGet(processMonth, buildingDataPath);
         }
+
+        public List<CustomerCategory> GetCustomerCategories(string buildPath)
+        {
+            string qry = "select  CCCode,CCDesc from [DataSet].CustomerCategories Order by CCCode";
+            qry = PervasiveSqlUtilities.SetDataSource(qry, buildPath);
+
+            List<CustomerCategory> result = new List<CustomerCategory>();
+
+            var data = PervasiveSqlUtilities.FetchPervasiveData(qry, null);
+            foreach (DataRow row in data.Rows)
+            {
+                CustomerCategory c = new CustomerCategory(row);
+                result.Add(c);
+            }
+
+            return result;
+
+
+        }
+
+      
     }
 }

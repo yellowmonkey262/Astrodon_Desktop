@@ -148,6 +148,11 @@ namespace Astrodon.DataProcessor
             return pastelTransactions;
         }
 
+        public void UpdateNoneCategory(string sql)
+        {
+            PervasiveSqlUtilities.ExecuteSQLCommand(sql);
+        }
+
         private List<PastelMaintenanceTransaction> CalculateMatches(List<PastelMaintenanceTransaction> pastelTransactions, List<tblRequisition> reqList)
         {
             reqList = reqList.Except(reqList.Where(a => a.PastelLedgerAutoNumber != null)).ToList();
@@ -216,4 +221,5 @@ namespace Astrodon.DataProcessor
             return pastelTransactions;
         }
     }
+
 }

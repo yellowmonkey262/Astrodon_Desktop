@@ -1,4 +1,5 @@
-﻿using Astrodon.DataContracts;
+﻿using Astrodon.CustomerMaintenance;
+using Astrodon.DataContracts;
 using Astrodon.DataContracts.Maintenance;
 using Astrodon.DebitOrder;
 using Astrodon.Reports.LevyRoll;
@@ -54,5 +55,8 @@ namespace PastelDataService
 
         [OperationContract]
         List<BuildingClosingBalance> BuildingBalancesGet(DateTime processMonth, string buildingDataPath);
+
+        [OperationContract]
+        List<CustomerCategory> GetCustomerCategories(String buildPath);
     }
 }

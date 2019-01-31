@@ -5,6 +5,7 @@
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.ManagementReportCoverPage" />
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" />
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.LevyRoll" />
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/Astrodon.CustomerMaintenance" />
   <xs:element name="LevyRollReport">
     <xs:complexType>
       <xs:sequence>
@@ -214,6 +215,20 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Astrodon.DataContracts" minOccurs="0" name="BuildingBalancesGetResult" nillable="true" type="q6:ArrayOfBuildingClosingBalance" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCustomerCategories">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="buildPath" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCustomerCategoriesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Astrodon.CustomerMaintenance" minOccurs="0" name="GetCustomerCategoriesResult" nillable="true" type="q7:ArrayOfCustomerCategory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq;
+using Astrodon.ReportService;
 
 namespace Astrodon
 {
@@ -486,46 +487,11 @@ namespace Astrodon
             return delBits;
         }
 
-        public Dictionary<int, String> GetCustomerCategories(String buildPath)
+        public List<CustomerCategory> GetCustomerCategories(String buildPath)
         {
-            var sdk = CreateSDK();
-            try
+            using (var reportService = ReportServiceClient.CreateInstance())
             {
-                Dictionary<int, String> categories = new Dictionary<int, string>();
-                String returner = sdk.SetDataPath(PastelRoot + "\\" + buildPath);
-                if (returner == "0")
-                {
-                    try
-                    {
-                        String fileName = "ACCDCAT";
-                        String keyValue = sdk.MKI(-1);
-                        returner = sdk.GetNearest(fileName, keyNumber, keyValue);
-                        if ((Regex.Matches(returner, "|").Count > 1) && (!returner.StartsWith("9|")))
-                        {
-                            String[] rBits = returner.Split(new String[] { "|" }, StringSplitOptions.None);
-                            if (!categories.ContainsKey(int.Parse(rBits[1]))) { categories.Add(int.Parse(rBits[1]), rBits[2]); }
-                        }
-                        while (!returner.StartsWith("9|"))
-                        {
-                            returner = sdk.GetNext(fileName, keyNumber);
-                            if ((Regex.Matches(returner, "|").Count > 1) && (!returner.StartsWith("9|")))
-                            {
-                                String[] rBits = returner.Split(new String[] { "|" }, StringSplitOptions.None);
-                                if (!categories.ContainsKey(int.Parse(rBits[1]))) { categories.Add(int.Parse(rBits[1]), rBits[2]); }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Controller.HandleError(ex);
-                        returner = "error:" + ex.Message;
-                    }
-                }
-                return categories;
-            }
-            finally
-            {
-                sdk.StopBtrieve();
+                return reportService.GetCustomerCategories(buildPath).ToList();
             }
         }
 

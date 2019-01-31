@@ -13,11 +13,11 @@ namespace Desktop.Lib.Pervasive
 {
     public class PervasiveSqlUtilities
     {
-        private static string odbcName= "Pervasive";
+        private static string odbcName = "Pervasive";
 
         public static string ReadResourceScript(string path)
         {
-            var assembly =  System.Reflection.Assembly.GetExecutingAssembly();
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             string result = string.Empty;
 
             using (var stream = assembly.GetManifestResourceStream(path))
@@ -30,17 +30,18 @@ namespace Desktop.Lib.Pervasive
             return result;
         }
 
-        public static DataTable FetchPervasiveData(string sql,OdbcParameter param1)
+        public static DataTable FetchPervasiveData(string sql, OdbcParameter param1)
         {
             DataTable table = new DataTable();
-            string strAccessConn = @"Dsn="+odbcName+";";
+            string strAccessConn = @"Dsn=" + odbcName + ";";
             using (var conn = new OdbcConnection(strAccessConn))
             {
                 conn.ConnectionTimeout = 600;
                 using (var cmd = new OdbcCommand(sql, conn))
                 {
-                    if(param1 != null)
-                      cmd.Parameters.Add(param1);
+                    if (param1 != null)
+                        cmd.Parameters.Add(param1);
+
                     OdbcDataAdapter myDataAdapter = new OdbcDataAdapter(cmd);
                     cmd.CommandTimeout = 0; //no wait time
                     conn.Open();
@@ -51,15 +52,31 @@ namespace Desktop.Lib.Pervasive
             return table;
         }
 
+
         public static DataTable FetchPervasiveData(string sql)
         {
             return FetchPervasiveData(sql, null);
         }
 
+        public static void ExecuteSQLCommand(string sql)
+        {
+            string strAccessConn = @"Dsn=" + odbcName + ";";
+            using (var conn = new OdbcConnection(strAccessConn))
+            {
+                conn.ConnectionTimeout = 600;
+                using (var noneCmd = new OdbcCommand(sql, conn))
+                {
+                    conn.Open();
+                    noneCmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+        }
+
         public static string SetDataSource(string sqlQuery, string dataPath)
         {
-            if (System.AppDomain.CurrentDomain.FriendlyName == "SelfHosted.exe" || System.Diagnostics.Debugger.IsAttached)
-                return sqlQuery = sqlQuery.Replace("[DataSet].", "");
+            //if (System.AppDomain.CurrentDomain.FriendlyName == "SelfHosted.exe" || System.Diagnostics.Debugger.IsAttached)
+            //    return sqlQuery = sqlQuery.Replace("[DataSet].", "");
 
             return sqlQuery.Replace("[DataSet].", "PAS11" + dataPath + ".");
         }
