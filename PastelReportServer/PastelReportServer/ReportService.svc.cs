@@ -152,7 +152,12 @@ namespace PastelDataService
 
         public List<CustomerCategory> GetCustomerCategories(string buildPath)
         {
-            string qry = "select  CCCode,CCDesc from [DataSet].CustomerCategories Order by CCCode";
+            bool isRental = buildPath.ToUpper().StartsWith("RENTAL");
+
+            string qry = "select  CCCode,CCDesc from [DataSet].CustomerCategories";
+            if (isRental)
+                qry = qry + " where CCCode > 100 or CCCode = 0 ";
+            qry = qry + " Order by CCCode";
             qry = PervasiveSqlUtilities.SetDataSource(qry, buildPath);
 
             List<CustomerCategory> result = new List<CustomerCategory>();

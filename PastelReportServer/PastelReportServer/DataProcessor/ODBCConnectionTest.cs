@@ -30,20 +30,22 @@ namespace Astrodon.DataProcessor
                     where b.BuildingDisabled == false
                     select b;
 
-            var categories = CustomerCategory.CategoryList;
+            var normalCategories = CustomerCategory.CategoryList.Where(a =>a.CategoryId < 100).ToList();
+            var rentalCategories = CustomerCategory.CategoryList.Where(a => a.CategoryId > 100 || a.CategoryId == 0).ToList();
 
-         
+
             foreach (var building in q.ToList())
             {
                 building.ODBCConnectionOK = TestBuilding(building.DataPath);
-                #region Check if Customer Category with CCCode: 0 is 'None' or 'None / Standard'
 
                 if (building.ODBCConnectionOK)
                 {
-                    FixPastelCustomerCategories(building.DataPath, categories);
+                    if (building.DataPath.ToUpper().StartsWith("RENTAL"))
+                        FixPastelCustomerCategories(building.DataPath, rentalCategories);
+                    else
+                        FixPastelCustomerCategories(building.DataPath, normalCategories);
                 }
 
-                #endregion
                 building.LastODBConnectionTest = DateTime.Today;
                 _Context.SaveChanges();
             }

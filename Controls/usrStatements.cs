@@ -502,7 +502,11 @@ namespace Astrodon
 
 
                     }
-                    else if (buildingName.Trim().ToUpper() == _AstradonRentalsBuilding.ToUpper() && (customer.IntCategory == 13 || customer.IntCategory == 16 || customer.IntCategory == 17 || customer.IntCategory == 18))
+                    else if (buildingName.Trim().ToUpper() == _AstradonRentalsBuilding.ToUpper() && 
+                        (customer.IntCategory == 113 || 
+                        customer.IntCategory == 116 || 
+                        customer.IntCategory == 117 || 
+                        customer.IntCategory == 118))
                     {
 
                         AddProgressString("Astrodon Rentals category skipped : " + customer.accNumber + " " + customer.category);
