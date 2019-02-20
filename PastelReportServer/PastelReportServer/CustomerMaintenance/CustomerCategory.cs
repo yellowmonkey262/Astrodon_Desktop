@@ -47,6 +47,8 @@ namespace Astrodon.CustomerMaintenance
                     new CustomerCategory() { CategoryId = 8, CategoryName = "Registrations".ToUpper() },
                     new CustomerCategory() { CategoryId = 10, CategoryName = "Unallocated Deposits".ToUpper() },
                     new CustomerCategory() { CategoryId = 11, CategoryName = "Transferred Units/PMS".ToUpper() },
+                    new CustomerCategory() { CategoryId = 12, CategoryName = "Propell".ToUpper() },
+                    new CustomerCategory() { CategoryId = 13, CategoryName = "Bad Debt".ToUpper() },
 
                     //RENTAL CATEGORIES above 100
 

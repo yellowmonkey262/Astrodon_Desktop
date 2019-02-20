@@ -13,7 +13,7 @@ namespace Astrodon
         public User GetUser(String username, String password, out User user, out String status)
         {
             user = new User(); 
-            String loginQuery = "SELECT id, admin, email, name, phone, fax, usertype, pmSignature FROM tblUsers WHERE Active=1 and BINARY_CHECKSUM(username) = BINARY_CHECKSUM(@username)";
+            String loginQuery = "SELECT * FROM tblUsers WHERE Active=1 and BINARY_CHECKSUM(username) = BINARY_CHECKSUM(@username)";
             loginQuery += " AND BINARY_CHECKSUM(password) = BINARY_CHECKSUM(@password)";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@username", username);
@@ -30,6 +30,14 @@ namespace Astrodon
                 user.phone = dr["phone"].ToString();
                 user.fax = dr["fax"].ToString();
                 user.usertype = int.Parse(dr["usertype"].ToString());
+                try
+                {
+                    user.SubmitLettersForReview = bool.Parse(dr["SubmitLettersForReview"].ToString());
+                }
+                catch (Exception ex)
+                {
+                    Controller.HandleError(ex);
+                }
                 user.buildings = GetBuildingsIDs(user.usertype, user.id, user.email, out status);
                 user.username = username;
                 user.password = password;
@@ -53,7 +61,7 @@ namespace Astrodon
         public User GetUser(String email, out User user, out String status)
         {
             user = new User();
-            String loginQuery = "SELECT id, admin, email, name, phone, fax, usertype, pmSignature FROM tblUsers WHERE email = @email and Active = 1";
+            String loginQuery = "SELECT * FROM tblUsers WHERE email = @email and Active = 1";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@email", email);
             SqlDataHandler dh = new SqlDataHandler();
@@ -69,6 +77,7 @@ namespace Astrodon
                 user.fax = dr["fax"].ToString();
                 user.usertype = int.Parse(dr["usertype"].ToString());
                 user.buildings = GetBuildingsIDs(user.usertype, user.id, user.email, out status);
+                user.SubmitLettersForReview = bool.Parse(dr["SubmitLettersForReview"].ToString());
                 user.signature = null;
                 return user;
             }
@@ -96,6 +105,7 @@ namespace Astrodon
                 user.phone = dr["phone"].ToString();
                 user.fax = dr["fax"].ToString();
                 user.usertype = int.Parse(dr["usertype"].ToString());
+                user.SubmitLettersForReview = bool.Parse(dr["SubmitLettersForReview"].ToString());
                 user.buildings = GetBuildingsIDs(user.usertype, user.id, user.email, out status);
                 user.username = dr["username"].ToString();
                 user.password = dr["password"].ToString();
@@ -119,7 +129,7 @@ namespace Astrodon
         public User GetUserBuild(int id)
         {
             User user = new User();
-            String loginQuery = "SELECT DISTINCT u.id, u.admin, u.email, u.name, u.phone, u.fax, u.usertype, u.username, u.password";
+            String loginQuery = "SELECT DISTINCT u.id, u.admin, u.email, u.name, u.phone, u.fax, u.usertype, u.username, u.password, u.SubmitLettersForReview";
             loginQuery += " FROM tblUserBuildings ub INNER JOIN tblUsers u ON ub.userid = u.id INNER JOIN tblBuildings b ON ub.buildingid = b.id";
             loginQuery += " WHERE (b.id = " + id.ToString() + ") AND (u.usertype = 3) AND (u.Active = 1)";
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
@@ -136,6 +146,7 @@ namespace Astrodon
                 user.phone = dr["phone"].ToString();
                 user.fax = dr["fax"].ToString();
                 user.usertype = int.Parse(dr["usertype"].ToString());
+                user.SubmitLettersForReview = bool.Parse(dr["SubmitLettersForReview"].ToString());
                 user.buildings = GetBuildingsIDs(user.usertype, user.id, user.email, out status);
                 user.username = dr["username"].ToString();
                 user.password = dr["password"].ToString();
@@ -161,7 +172,7 @@ namespace Astrodon
                 users.Add(u);
             }
             String status = String.Empty;
-            String loginQuery = "SELECT id, username, password, admin, email, name, phone, fax, usertype, pmSignature, ProcessCheckLists FROM tblUsers where Active = 1 order by name";
+            String loginQuery = "SELECT id, username, password, admin, email, name, phone, fax, usertype, pmSignature, ProcessCheckLists,SubmitLettersForReview FROM tblUsers where Active = 1 order by name";
             SqlDataHandler dh = new SqlDataHandler();
             DataSet ds = dh.GetData(loginQuery, null, out status);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -179,6 +190,7 @@ namespace Astrodon
                     user.fax = dr["fax"].ToString();
                     user.processCheckLists = bool.Parse(dr["ProcessCheckLists"].ToString());
                     user.usertype = int.Parse(dr["usertype"].ToString());
+                    user.SubmitLettersForReview = bool.Parse(dr["SubmitLettersForReview"].ToString());
                     user.buildings = GetBuildingsIDs(user.usertype, user.id, user.email, out status);
                     user.signature = null;
                     try

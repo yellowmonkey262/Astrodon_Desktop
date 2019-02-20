@@ -384,6 +384,10 @@
     <Compile Include="Migrations\201901100830213_BuildingRegistrationNumbers.Designer.cs">
       <DependentUpon>201901100830213_BuildingRegistrationNumbers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902200637292_SubmitLettersForReview.cs" />
+    <Compile Include="Migrations\201902200637292_SubmitLettersForReview.Designer.cs">
+      <DependentUpon>201902200637292_SubmitLettersForReview.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
@@ -673,6 +677,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901100830213_BuildingRegistrationNumbers.resx">
       <DependentUpon>201901100830213_BuildingRegistrationNumbers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902200637292_SubmitLettersForReview.resx">
+      <DependentUpon>201902200637292_SubmitLettersForReview.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

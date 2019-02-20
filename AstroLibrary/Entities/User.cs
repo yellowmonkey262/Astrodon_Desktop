@@ -31,6 +31,8 @@ namespace Astro.Library.Entities
 
         public int usertype { get; set; }
 
+        public bool SubmitLettersForReview { get; set; }
+
         public List<int> buildings { get; set; }
 
         public Image signature { get; set; }

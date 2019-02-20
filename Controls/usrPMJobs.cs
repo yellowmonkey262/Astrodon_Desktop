@@ -49,7 +49,7 @@ namespace Astrodon.Controls
 
         private void RefreshList()
         {
-            if (Controller.user.usertype == 2 || Controller.user.id == 1)
+            if (Controller.user.usertype == 2 || Controller.user.id == 1 || Controller.user.SubmitLettersForReview)
             {
                 dgJobs.AllowUserToDeleteRows = true;
                 jobListAdapter.FillPM(this.astrodonDataSet.JobList, Controller.user.id);
@@ -90,7 +90,7 @@ namespace Astrodon.Controls
                 try
                 {
                     String status = dvr.Cells[5].Value.ToString();
-                    if (Controller.user.usertype == 2)
+                    if (Controller.user.usertype == 2 || Controller.user.SubmitLettersForReview)
                     {
                         if (status != "NEW" && status != "PENDING" && status != "REVIEW") { dvr.Cells[6] = txtcell; }
                         if (status == "REVIEW") { hasReviews = true; }

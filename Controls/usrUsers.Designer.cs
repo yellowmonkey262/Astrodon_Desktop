@@ -51,6 +51,8 @@
             this.cbProcessCheckLists = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.btnSelectAll = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
+            this.cbSubmitLettersForReview = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picSig)).BeginInit();
             this.SuspendLayout();
             // 
@@ -304,10 +306,30 @@
             this.btnSelectAll.UseVisualStyleBackColor = true;
             this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(237, 170);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(128, 13);
+            this.label13.TabIndex = 30;
+            this.label13.Text = "Submit Letters for Review";
+            // 
+            // cbSubmitLettersForReview
+            // 
+            this.cbSubmitLettersForReview.AutoSize = true;
+            this.cbSubmitLettersForReview.Location = new System.Drawing.Point(371, 170);
+            this.cbSubmitLettersForReview.Name = "cbSubmitLettersForReview";
+            this.cbSubmitLettersForReview.Size = new System.Drawing.Size(15, 14);
+            this.cbSubmitLettersForReview.TabIndex = 29;
+            this.cbSubmitLettersForReview.UseVisualStyleBackColor = true;
+            // 
             // usrUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.cbSubmitLettersForReview);
             this.Controls.Add(this.btnSelectAll);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.cbProcessCheckLists);
@@ -375,5 +397,7 @@
         private System.Windows.Forms.CheckBox cbProcessCheckLists;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnSelectAll;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox cbSubmitLettersForReview;
     }
 }

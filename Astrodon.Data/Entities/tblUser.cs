@@ -40,6 +40,8 @@ namespace Astrodon.Data
 
         public bool ProcessCheckLists { get; set; }
 
+        public bool SubmitLettersForReview { get; set; }
+
         public bool Active { get; set; }
 
         public virtual ICollection<BuildingCalendarEntry> BuildingCalendarEntries { get; set; }

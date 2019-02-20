@@ -1633,7 +1633,12 @@ namespace Astrodon.Controls
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            String newStatus = (Controller.user.usertype == 2 ? "PENDING" : "REVIEW");
+            String newStatus = "REVIEW";
+            if(Controller.user.usertype == 2 || Controller.user.SubmitLettersForReview) //      types.Add(new UserType(2, "PM"));
+            {
+                newStatus = "PENDING";
+            }
+
             UpdateJobStatus(newStatus);
             ProcessMessage("submitted job for " + (newStatus == "PENDING" ? "action" : "review"));
             String submitQuery = "UPDATE tblPMJob SET status = '" + newStatus + "' WHERE (status = 'NEW' or status = 'ASSIGNED' or status = 'REWORK') AND id = " + jobID.ToString();
@@ -1643,10 +1648,7 @@ namespace Astrodon.Controls
                 dataHandler.SetData(updateQuery, null, out status);
             }
             dataHandler.SetData(submitQuery, null, out status);
-            if (Controller.user.usertype == 4)
-            {
-                Controller.AssignJob();
-            }
+            Controller.AssignJob();
             Controller.mainF.ShowJobs();
         }
 
