@@ -23,12 +23,15 @@ namespace Astrodon
 
         private static String generatHTMLEmail(String requestString, String emailString, string fromEmail)
         {
-            if (!emailString.ToLower().Contains("<br />"))
+            if (!emailString.ToLower().Contains("/>"))
                 emailString = emailString.Replace(Environment.NewLine, "<br />");
 
             string html = ResourceManager.EmailLayout(requestString);
             html = html.Replace("{{SenderEmail}}", fromEmail);
             html = html.Replace("{{CONTENT-GOES-HERE}}", emailString);
+
+            //paragraph spacing
+            html = html.Replace("<p>", "<p style=\"padding: 5px 5px 5px 5px; margin: 2px 2px 2px 2px\">");
 
             if (_LastUserSent == null || _LastUserSent.email != fromEmail)
             {
