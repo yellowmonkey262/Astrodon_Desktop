@@ -134,13 +134,12 @@ namespace Astrodon.Email
                     html = html.Replace("{{FILENAME}}", Path.GetFileNameWithoutExtension(fileName));
                     html = html.Replace("{{URL}}", attachments[fileName]);
 
-                    attachmentPart = attachmentPart + Environment.NewLine + html;
+                    attachmentPart = attachmentPart + "<br />" + html;
                 }
 
-                if (!bodyContent.Contains("<br />"))
-                    bodyContent = bodyContent.Replace(Environment.NewLine, "<br />");
+           
 
-                bodyContent = bodyContent + Environment.NewLine + attachmentPart;
+                bodyContent = bodyContent + attachmentPart;
             }
 
             return bodyContent;
