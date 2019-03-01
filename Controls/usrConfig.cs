@@ -2,22 +2,27 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
+using System.Linq;
 
-namespace Astrodon {
+namespace Astrodon
+{
 
-    public partial class usrConfig : UserControl {
+    public partial class usrConfig : UserControl
+    {
         private CashDepositFees fees;
         private String settingsQuery;
         private String updateSettingsQuery;
         private String status = String.Empty;
         private SqlDataHandler dh = new SqlDataHandler();
 
-        public usrConfig() {
+        public usrConfig()
+        {
             InitializeComponent();
             fees = new CashDepositFees();
         }
 
-        private void usrConfig_Load(object sender, EventArgs e) {
+        private void usrConfig_Load(object sender, EventArgs e)
+        {
             settingsQuery = "SELECT minbal, reminder_fee, final_fee, summons_fee, discon_notice_fee, discon_fee, handover_fee, clearance, ex_clearance, recon_split, debit_order, ret_debit_order, ";
             settingsQuery += " eft_fee, monthly_journal, trust, centrec, business, rental FROM tblSettings";
             updateSettingsQuery = "UPDATE tblSettings SET minbal = @minbal, reminder_fee = @rem, final_fee = @fd, summons_fee = @summons, discon_notice_fee = @dcn, discon_fee = @dc, ";
@@ -26,9 +31,11 @@ namespace Astrodon {
             LoadSettings();
         }
 
-        private void LoadSettings() {
+        private void LoadSettings()
+        {
             DataSet ds = dh.GetData(settingsQuery, null, out status);
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0) {
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
                 DataRow dr = ds.Tables[0].Rows[0];
                 txtMinBalance.Text = dr["minbal"].ToString();
                 txtRemFee.Text = dr["reminder_fee"].ToString();
@@ -52,7 +59,8 @@ namespace Astrodon {
             dgCashDepositFee.DataSource = fees.fees;
         }
 
-        private void btnSave_Click(object sender, EventArgs e) {
+        private void btnSave_Click(object sender, EventArgs e)
+        {
             Dictionary<String, Object> sqlParms = new Dictionary<string, object>();
             sqlParms.Add("@minbal", txtMinBalance.Text);
             sqlParms.Add("@rem", txtRemFee.Text);
@@ -75,16 +83,53 @@ namespace Astrodon {
             dh.SetData(updateSettingsQuery, sqlParms, out status);
             fees.Update();
             fees = new CashDepositFees();
-            if (status == "") {
+            if (status == "")
+            {
                 MessageBox.Show("Settings Updated!", "Config", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LoadSettings();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Settings Update failed: " + status, "Config", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e) {
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
             LoadSettings();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (Controller.UserIsSheldon() && Controller.AskQuestion("Are you sure you want to overwrite ALL building fees?"))
+            {
+                using (var ctx = SqlDataHandler.GetDataContext())
+                {
+
+                    var s = ctx.tblSettings.First();
+                    var buildings = ctx.tblBuildingSettings.ToList();
+
+                    foreach (var b in buildings)
+                    {
+                        b.reminderFee = s.reminder_fee.Value;
+                        b.finalFee = s.final_fee.Value;
+                        b.disconnectionFee = s.discon_notice_fee.Value;
+                        b.summonsFee = s.summons_fee.Value;
+                        b.disconnectionNoticefee = s.discon_notice_fee.Value;
+                        b.handoverFee = s.handover_fee.Value;
+                    }
+
+                    ctx.SaveChanges();
+
+                    Controller.ShowMessage("Updated all buildings with: " + Environment.NewLine +
+                                           "Reminder Fee: " + s.reminder_fee.Value.ToString() + Environment.NewLine +
+                                           "Final Fee: " + s.final_fee.Value.ToString() + Environment.NewLine +
+                                           "Disconnection fee: " + s.discon_notice_fee.Value.ToString() + Environment.NewLine +
+                                           "Disconnection notice fee: " + s.discon_notice_fee.Value.ToString() + Environment.NewLine +
+                                           "Summons fee: " + s.summons_fee.Value.ToString() + Environment.NewLine +
+                                           "Handover fee: " + s.handover_fee.Value.ToString() + Environment.NewLine);
+                }
+            }
         }
     }
 }

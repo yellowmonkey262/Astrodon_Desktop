@@ -65,6 +65,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.txtRental = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgCashDepositFee)).BeginInit();
             this.SuspendLayout();
             // 
@@ -396,10 +397,23 @@
             this.label19.TabIndex = 40;
             this.label19.Text = "Rental Acc:";
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Red;
+            this.button1.ForeColor = System.Drawing.Color.White;
+            this.button1.Location = new System.Drawing.Point(22, 561);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(162, 32);
+            this.button1.TabIndex = 42;
+            this.button1.Text = "Apply to ALL Buildings";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // usrConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.txtRental);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.txtRecon);
@@ -492,5 +506,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txtRental;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Button button1;
     }
 }
