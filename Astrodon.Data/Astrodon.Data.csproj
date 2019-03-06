@@ -388,6 +388,10 @@
     <Compile Include="Migrations\201902200637292_SubmitLettersForReview.Designer.cs">
       <DependentUpon>201902200637292_SubmitLettersForReview.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903060429025_ReminderLinkedToDocument.cs" />
+    <Compile Include="Migrations\201903060429025_ReminderLinkedToDocument.Designer.cs">
+      <DependentUpon>201903060429025_ReminderLinkedToDocument.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
@@ -680,6 +684,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902200637292_SubmitLettersForReview.resx">
       <DependentUpon>201902200637292_SubmitLettersForReview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903060429025_ReminderLinkedToDocument.resx">
+      <DependentUpon>201903060429025_ReminderLinkedToDocument.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

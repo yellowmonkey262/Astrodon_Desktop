@@ -1,5 +1,6 @@
 namespace Astrodon.Data
 {
+    using CustomerData;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -43,5 +44,18 @@ namespace Astrodon.Data
         public string Fax { get; set; }
 
         public string Email { get; set; }
+
+        public int? CustomerDocumentId { get; set; }
+        [ForeignKey(nameof(CustomerDocumentId))]
+        public CustomerDocument CustomerDocument { get; set; }
+
+        [NotMapped]
+        public bool HasDocument
+        {
+            get
+            {
+                return CustomerDocumentId != null && CustomerDocumentId > 0;
+            }
+        }
     }
 }

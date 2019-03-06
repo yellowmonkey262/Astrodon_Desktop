@@ -864,6 +864,7 @@ namespace Astrodon
                         Phone = customer.CellPhone,
                         Fax = customer.Fax,
                         Email = email,
+                        //ILSE - use the CustomerDocumentId field on the tblReminder entity to link to a documetn.
                     };
                     context.tblReminders.Add(reminder);
                     context.SaveChanges();
