@@ -424,6 +424,8 @@ namespace Astrodon
         private void LoadReminders()
         {
             bsReminders.Clear();
+            bsReminders.DataSource = null;
+
             DateTime start = DateTime.Today.AddMonths(6);
 
             using (var context = SqlDataHandler.GetDataContext())
@@ -438,11 +440,59 @@ namespace Astrodon
                             User = r.User.name,
                             id = r.id,
                             note = r.remNote,
-                            remDate = r.remDate
+                            remDate = r.remDate,
+                            DocumentId = r.CustomerDocumentId
                         };
                 bsReminders.DataSource = q.OrderBy(a => a.remDate).ToList();
                 dataGridView1.CellValueChanged -= dataGridView1_CellValueChanged;
                 dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
+
+                dataGridView1.Columns.Clear();
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "id",
+                    HeaderText = "ID",
+                    Name = "id",
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "User",
+                    HeaderText = "User",
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "remDate",
+                    HeaderText = "Date/Time",
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+                {
+                    DataPropertyName = "note",
+                    HeaderText = "Note",
+                    Name = "note",
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewCheckBoxColumn()
+                {
+                    DataPropertyName = "action",
+                    HeaderText = "Actioned",
+                    ReadOnly = true
+                });
+
+                dataGridView1.Columns.Add(new DataGridViewButtonColumn()
+                {
+                    HeaderText = "Action",
+                    Text = "View",
+                    UseColumnTextForButtonValue = true,
+                    Width = 50
+                });
             }
 
             //    String remQuery = "SELECT r.id, u.name, r.remDate, r.remNote, r.action FROM tblReminders r  INNER JOIN tblUsers u ON r.userid = u.id WHERE r.customer = '" + customer.accNumber + "' AND action = 'False' ORDER BY remDate";
@@ -639,8 +689,8 @@ namespace Astrodon
                     if (!String.IsNullOrWhiteSpace(newEmail))
                         custEntity.EmailAddress1 = newEmail;
 
-                    if(dtpDateOfBirth.Value.Year > 1890)
-                      custEntity.DateOfBirth = dtpDateOfBirth.Value;
+                    if (dtpDateOfBirth.Value.Year > 1890)
+                        custEntity.DateOfBirth = dtpDateOfBirth.Value;
 
                     custEntity.IDNumber = tbRSAIDNumber.Text;
                     custEntity.SendBirthdayNotification = cbBirthDayNotificaiton.Checked;
@@ -654,7 +704,7 @@ namespace Astrodon
 
                 if (oldEmail != newEmail)
                 {
-                    if(!String.IsNullOrWhiteSpace(newEmail))
+                    if (!String.IsNullOrWhiteSpace(newEmail))
                     {
                         _ClientPortal.UpdatePrimaryEmail(building.ID, customer.accNumber, oldEmail, newEmail);
                     }
@@ -749,8 +799,8 @@ namespace Astrodon
                     byte[] data = _ClientPortal.GetUnitFile(cd.Id);
                     DisplayPDFNew(data);
                 }
-               
-                else if(colIdx == 5)
+
+                else if (colIdx == 5)
                 {
                     var link = _ClientPortal.GetUnitDocumentLink(cd.Id, txtEmailTo.Text);
 
@@ -762,8 +812,8 @@ namespace Astrodon
                         fromEmail = building.PM;
 
                     string status;
-                    
-                    if (Email.EmailProvider.SendCustomerFile(fromEmail, txtEmailTo.Text,true,cd.title, customer.accNumber,building.IsRentalBuilding, link,out status))
+
+                    if (Email.EmailProvider.SendCustomerFile(fromEmail, txtEmailTo.Text, true, cd.title, customer.accNumber, building.IsRentalBuilding, link, out status))
                     {
                         MessageBox.Show("Message Sent");
                     }
@@ -772,11 +822,11 @@ namespace Astrodon
                         Controller.HandleError("Unable to send email. Error returned:" + Environment.NewLine + status);
                     }
 
-                  
+
                 }
                 else if (colIdx == 6)
                 {
-                    using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password","Password", true))
+                    using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Password", true))
                     {
                         if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
                         {
@@ -785,7 +835,8 @@ namespace Astrodon
                             LoadDocuments();
                         }
                     }
-                }else if (colIdx == 7)
+                }
+                else if (colIdx == 7)
                 {
                     Astrodon.Forms.frmWebDocumentAccessLog.ShowUnitDocumentHistory(cd.Id, cd.title);
                 }
@@ -796,7 +847,7 @@ namespace Astrodon
             }
         }
 
- 
+
         private void dgDocs_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             int colIdx = e.ColumnIndex;
@@ -1566,7 +1617,6 @@ namespace Astrodon
             }
         }
 
-
         private void LoadCustomerEntity()
         {
             cbBirthDayNotificaiton.Checked = false;
@@ -1690,6 +1740,22 @@ namespace Astrodon
                         context.SaveChanges();
                     }
                 }
+                if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+                {
+                    var reminder = senderGrid.Rows[e.RowIndex].DataBoundItem as Reminder;
+
+                    int selectedNoteRowId = (int)dataGridView1.CurrentRow.Cells["id"].Value;
+                    string selectedNoteRowNote = (string)dataGridView1.CurrentRow.Cells["note"].Value;
+
+                    if (reminder != null)
+                    {
+                        if (reminder.DocumentId.HasValue)
+                            DisplayCustomerDocument(reminder.DocumentId.Value);
+                        else
+                            Controller.HandleError("No Document attached to " + selectedNoteRowId + " - " + selectedNoteRowNote);
+                        return;
+                    }
+                }
             }
         }
 
@@ -1706,6 +1772,10 @@ namespace Astrodon
             cbCustomerDocumentType.DataSource = _DocumentTypes;
             cbCustomerDocumentType.DisplayMember = "Name";
             cbCustomerDocumentType.ValueMember = "id";
+
+            cbNotesDocumentType.DataSource = _DocumentTypes;
+            cbNotesDocumentType.DisplayMember = "Name";
+            cbNotesDocumentType.ValueMember = "id";
         }
 
         private List<CustomerDocumentListItem> _Documents;
@@ -1770,7 +1840,7 @@ namespace Astrodon
                 UseColumnTextForButtonValue = true,
                 Width = 50
             });
-           
+
             dgDocuments.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 DataPropertyName = "UploadedStr",
@@ -1858,6 +1928,7 @@ namespace Astrodon
                     return;
                 }
 
+
                 using (var context = SqlDataHandler.GetDataContext())
                 {
                     var customerEntity = context.CustomerSet.SingleOrDefault(a => a.BuildingId == building.ID && a.AccountNumber == customer.accNumber);
@@ -1933,7 +2004,7 @@ namespace Astrodon
                         DisplayCustomerDocument(doc.Id);
                     else if (e.ColumnIndex == 1)
                         EditDocument(doc);
-                    else if(e.ColumnIndex > 6)
+                    else if (e.ColumnIndex > 6)
                         DeleteDocument(doc);
                 }
             }
@@ -1953,7 +2024,7 @@ namespace Astrodon
 
             if (Controller.AskQuestion("Are you sure you want to delete " + doc.Name + Environment.NewLine))
             {
-                using (var ctx = new DataContext())
+                using (var ctx = SqlDataHandler.GetDataContext())
                 {
                     var cdoc = ctx.CustomerDocumentSet.Single(a => a.id == doc.Id);
                     ctx.CustomerDocumentSet.Remove(cdoc);
@@ -1988,11 +2059,9 @@ namespace Astrodon
 
                     if (_editDoc != null && _editDoc.Expire != null)
                         dtDocumentExpiry.Value = _editDoc.Expire.Value;
-
                 }
             }
         }
-
 
         private void EditDocument(CustomerDocumentListItem doc)
         {
@@ -2004,11 +2073,10 @@ namespace Astrodon
             if (_editDoc.Expire != null)
             {
                 dtDocumentExpiry.Value = _editDoc.Expire.Value;
-             }
+            }
 
             cbCustomerDocumentType.SelectedValue = _editDoc.DocumentTypeId;
             tbCustomerDocNotes.Text = _editDoc.Notes ?? string.Empty;
-
 
         }
 
@@ -2019,7 +2087,7 @@ namespace Astrodon
                 Controller.HandleError("Please select a document to edit first.");
                 return;
             }
-           
+
             var documentType = (cbCustomerDocumentType.SelectedItem as Docs.CustomerDocumentType);
             if (documentType == null)
             {
@@ -2072,7 +2140,7 @@ namespace Astrodon
 
         private void btnSelectFile_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrWhiteSpace(tbTitle.Text))
+            if (string.IsNullOrWhiteSpace(tbTitle.Text))
             {
                 Controller.HandleError("File title required", "Validation Error");
                 return;
@@ -2088,7 +2156,7 @@ namespace Astrodon
 
                 var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
 
-                clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Now, building.ID, customer.accNumber, tbTitle.Text, filePath,string.Empty);
+                clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Now, building.ID, customer.accNumber, tbTitle.Text, filePath, string.Empty);
 
                 Controller.ShowMessage("File Uploaded");
 
@@ -2096,12 +2164,102 @@ namespace Astrodon
             }
         }
 
-      
+        private void btnNotesDocUpload_Click(object sender, EventArgs e)
+        {
+            if (customer == null || building == null)
+            {
+                Controller.HandleError("Please select a building and customer");
+                return;
+            }
+            if (cbNotesDocumentType.SelectedIndex < 0)
+            {
+                Controller.HandleError("Please select a document type first");
+                return;
+            }
+
+            var documentType = (cbNotesDocumentType.SelectedItem as Docs.CustomerDocumentType);
+            if (documentType == null)
+            {
+                Controller.HandleError("Please select a document type first");
+                return;
+            }
+
+            int selectedNoteRowId = (int)dataGridView1.CurrentRow.Cells["id"].Value;
+            string selectedNoteRowNote = (string)dataGridView1.CurrentRow.Cells["note"].Value;
+
+            DialogResult dialogResult = MessageBox.Show("Do you want to upload a document to note " + selectedNoteRowId + " - " + selectedNoteRowNote + "?", "Information", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                fdOpen.Multiselect = false;
+                if (fdOpen.ShowDialog() == DialogResult.OK)
+                {
+                    var filePath = fdOpen.FileName;
+                    if (!IsValidPdf(filePath))
+                    {
+                        Controller.HandleError("Not a valid PDF file");
+                        return;
+                    }
+
+                    using (var context = SqlDataHandler.GetDataContext())
+                    {
+                        var customerEntity = context.CustomerSet.SingleOrDefault(a => a.BuildingId == building.ID && a.AccountNumber == customer.accNumber);
+                        if (customerEntity == null)
+                        {
+                            customerEntity = new Data.CustomerData.Customer()
+                            {
+                                BuildingId = building.ID,
+                                AccountNumber = customer.accNumber,
+                                Description = customer.description,
+                                IsTrustee = customer.IsTrustee,
+                                Created = DateTime.Now
+                            };
+                            context.CustomerSet.Add(customerEntity);
+                            customerEntity.LoadEmails(customer.Email);
+                        }
+
+                        var noteReminder = context.tblReminders.Single(a => a.id == selectedNoteRowId);
+
+                        if (noteReminder.HasDocument)
+                        {
+                            var oldDocument = context.CustomerDocumentSet.Single(a => a.id == noteReminder.CustomerDocumentId);
+                            context.CustomerDocumentSet.Remove(oldDocument);
+                        }
+
+                        var doc = new Docs.CustomerDocument()
+                        {
+                            Customer = customerEntity,
+                            CustomerDocumentTypeId = (int)cbNotesDocumentType.SelectedValue,
+                            FileName = Path.GetFileName(filePath),
+                            FileData = File.ReadAllBytes(filePath),
+                            Uploaded = DateTime.Now,
+                            UploadedUserId = Controller.user.id,
+                            ExpireNotificationDisabled = false,
+                        };
+
+                        context.CustomerDocumentSet.Add(doc);
+                        noteReminder.CustomerDocument = doc;
+
+                        try
+                        {
+                            context.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            Controller.HandleError(ex);
+                        }
+                    }
+
+                    MessageBox.Show("Document uploaded successfully", "Success");
+                    LoadReminders();
+                    LoadCustomerDocuments();
+                }
+            }
+        }
     }
 
     class CustomerDocumentListItem
     {
-        public int CustomerId { get;  set; }
+        public int CustomerId { get; set; }
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -2120,9 +2278,9 @@ namespace Astrodon
 
         public string LoadedBy { get; set; }
 
-        public string DocmentType { get;  set; }
+        public string DocmentType { get; set; }
 
-        public DateTime? Expire { get;  set; }
+        public DateTime? Expire { get; set; }
 
         public string ExpireStr
         {
