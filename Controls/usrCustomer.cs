@@ -915,7 +915,6 @@ namespace Astrodon
                         Phone = customer.CellPhone,
                         Fax = customer.Fax,
                         Email = email,
-                        //ILSE - use the CustomerDocumentId field on the tblReminder entity to link to a documetn.
                     };
                     context.tblReminders.Add(reminder);
                     context.SaveChanges();
@@ -2027,9 +2026,17 @@ namespace Astrodon
                 using (var ctx = SqlDataHandler.GetDataContext())
                 {
                     var cdoc = ctx.CustomerDocumentSet.Single(a => a.id == doc.Id);
+                    var noteReminder = ctx.tblReminders.SingleOrDefault(a => a.CustomerDocumentId == doc.Id);
+
+                    if(noteReminder != null)
+                    {
+                        noteReminder.CustomerDocumentId = null;
+                    }
+
                     ctx.CustomerDocumentSet.Remove(cdoc);
                     ctx.SaveChanges();
                     LoadCustomerDocuments();
+                    LoadReminders();
                 }
             }
         }
@@ -2187,7 +2194,7 @@ namespace Astrodon
             int selectedNoteRowId = (int)dataGridView1.CurrentRow.Cells["id"].Value;
             string selectedNoteRowNote = (string)dataGridView1.CurrentRow.Cells["note"].Value;
 
-            DialogResult dialogResult = MessageBox.Show("Do you want to upload a document to note " + selectedNoteRowId + " - " + selectedNoteRowNote + "?", "Information", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Do you want to upload a document to note " + selectedNoteRowId + " - " + selectedNoteRowNote + "?", "Confirmation", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 fdOpen.Multiselect = false;
