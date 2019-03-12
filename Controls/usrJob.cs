@@ -592,7 +592,11 @@ namespace Astrodon.Controls
         {
             if (rdAllCustomers.Checked)
             {
-                foreach (jobCustomers jc in JobCustomers) { jc.Include = true; }
+                foreach (jobCustomers jc in JobCustomers)
+                {
+                    if (!jc.Account.EndsWith("Z") && !jc.Account.EndsWith("999"))
+                        jc.Include = true;
+                }
                 rdCustomers.Checked = false;
                 rdTrustees.Checked = false;
             }
