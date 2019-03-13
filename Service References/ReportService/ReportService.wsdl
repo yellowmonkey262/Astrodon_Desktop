@@ -11,6 +11,8 @@
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Data.DebitOrder" />
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.LevyRoll" />
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/Astrodon.CustomerMaintenance" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/Astrodon.TransactionSearch" />
+      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IReportService_LevyRollReport_InputMessage">
@@ -97,6 +99,12 @@
   <wsdl:message name="IReportService_GetCustomerCategories_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCustomerCategoriesResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_SearchPastel_InputMessage">
+    <wsdl:part name="parameters" element="tns:SearchPastel" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_SearchPastel_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SearchPastelResponse" />
+  </wsdl:message>
   <wsdl:portType name="IReportService">
     <wsdl:operation name="LevyRollReport">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/LevyRollReport" message="tns:IReportService_LevyRollReport_InputMessage" />
@@ -153,6 +161,10 @@
     <wsdl:operation name="GetCustomerCategories">
       <wsdl:input wsam:Action="http://tempuri.org/IReportService/GetCustomerCategories" message="tns:IReportService_GetCustomerCategories_InputMessage" />
       <wsdl:output wsam:Action="http://tempuri.org/IReportService/GetCustomerCategoriesResponse" message="tns:IReportService_GetCustomerCategories_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchPastel">
+      <wsdl:input wsam:Action="http://tempuri.org/IReportService/SearchPastel" message="tns:IReportService_SearchPastel_InputMessage" />
+      <wsdl:output wsam:Action="http://tempuri.org/IReportService/SearchPastelResponse" message="tns:IReportService_SearchPastel_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
@@ -276,6 +288,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetCustomerCategories">
       <soap:operation soapAction="http://tempuri.org/IReportService/GetCustomerCategories" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchPastel">
+      <soap:operation soapAction="http://tempuri.org/IReportService/SearchPastel" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

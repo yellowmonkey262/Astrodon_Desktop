@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Astrodon.TransactionSearch" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Astrodon.TransactionSearch" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports" />
+  <xs:complexType name="ArrayOfTransactionDataItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransactionDataItem" nillable="true" type="tns:TransactionDataItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransactionDataItem" nillable="true" type="tns:ArrayOfTransactionDataItem" />
+  <xs:complexType name="TransactionDataItem">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/Astrodon.Reports" base="q1:PervasiveDataItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AccountNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="BuildingPath" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LinkAccount" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Refrence" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TransactionDate" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TransactionDataItem" nillable="true" type="tns:TransactionDataItem" />
+</xs:schema>

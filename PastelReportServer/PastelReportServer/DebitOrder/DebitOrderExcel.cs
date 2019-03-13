@@ -95,13 +95,13 @@ namespace Astrodon.DebitOrder
             var dDate = new DateTime(processMonth.Year, processMonth.Month, 1);
             string sqlPeriodConfig = PervasiveSqlUtilities.ReadResourceScript("Astrodon.Reports.Scripts.PeriodParameters.sql");
             sqlPeriodConfig = SetDataSource(sqlPeriodConfig, building.DataPath);
-            var periodData = PervasiveSqlUtilities.FetchPervasiveData(sqlPeriodConfig, null);
+            var periodData = PervasiveSqlUtilities.FetchPervasiveData(sqlPeriodConfig);
 
             string sqlCustomerBalances = PervasiveSqlUtilities.ReadResourceScript("Astrodon.Reports.Scripts.CustomerBalance.sql");
             sqlCustomerBalances = SetDataSource(sqlCustomerBalances, building.DataPath);
 
             sqlCustomerBalances = sqlCustomerBalances.Replace("@CUSTOMERCODE", customerCode.Trim());
-            var customerBalanceData = PervasiveSqlUtilities.FetchPervasiveData(sqlCustomerBalances, null);
+            var customerBalanceData = PervasiveSqlUtilities.FetchPervasiveData(sqlCustomerBalances);
 
             CustomerBalance custBalance = new CustomerBalance(customerBalanceData.Rows[0]);
 

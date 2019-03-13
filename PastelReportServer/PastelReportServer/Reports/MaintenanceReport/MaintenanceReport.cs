@@ -247,7 +247,7 @@ namespace Astrodon.Reports.MaintenanceReport
             string qry = "select * from [DataSet].LedgerMaster where AccNumber " + accQry;
 
             qry = SetDataSource(qry, dataPath);
-            var accountData = PervasiveSqlUtilities.FetchPervasiveData( qry, null);
+            var accountData = PervasiveSqlUtilities.FetchPervasiveData( qry);
             List<PervasiveAccount> accountList = new List<PervasiveAccount>();
             foreach (DataRow row in accountData.Rows)
             {
@@ -270,7 +270,7 @@ namespace Astrodon.Reports.MaintenanceReport
             {
                 string sqlPeriodConfig = PervasiveSqlUtilities.ReadResourceScript("Astrodon.Reports.Scripts.PeriodParameters.sql");
                 sqlPeriodConfig = SetDataSource(sqlPeriodConfig, dataPath);
-                var periodData = PervasiveSqlUtilities.FetchPervasiveData(sqlPeriodConfig, null);
+                var periodData = PervasiveSqlUtilities.FetchPervasiveData(sqlPeriodConfig);
                 foreach (DataRow row in periodData.Rows)
                 {
                     _periodItem = new PeriodDataItem(row);

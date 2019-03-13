@@ -169,7 +169,7 @@ namespace Astrodon.DataProcessor
 
             List<CustomerCategory> result = new List<CustomerCategory>();
 
-            var data = PervasiveSqlUtilities.FetchPervasiveData(qry, null);
+            var data = PervasiveSqlUtilities.FetchPervasiveData(qry);
             foreach (DataRow row in data.Rows)
             {
                 CustomerCategory c = new CustomerCategory(row);

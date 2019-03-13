@@ -53,7 +53,7 @@ namespace Astrodon.Reports.LevyRoll
             var dDate = new DateTime(processMonth.Year, processMonth.Month, 1);
             string sqlPeriodConfig = PervasiveSqlUtilities.ReadResourceScript("Astrodon.Reports.Scripts.PeriodParameters.sql");
             sqlPeriodConfig = SetDataSource(sqlPeriodConfig, dataPath);
-            var periodData = PervasiveSqlUtilities.FetchPervasiveData(sqlPeriodConfig, null);
+            var periodData = PervasiveSqlUtilities.FetchPervasiveData(sqlPeriodConfig);
             PeriodDataItem periodItem = null;
             foreach (DataRow row in periodData.Rows)
             {
@@ -80,7 +80,7 @@ namespace Astrodon.Reports.LevyRoll
                 sqlQuery = sqlQuery.Replace(" %CUSTOMERCODEFILTER%", "");
 
 
-            var allMasterAccounts = PervasiveSqlUtilities.FetchPervasiveData(sqlQuery, null);
+            var allMasterAccounts = PervasiveSqlUtilities.FetchPervasiveData(sqlQuery);
 
             sqlQuery = PervasiveSqlUtilities.ReadResourceScript("Astrodon.Reports.Scripts.LevyRoll.sql");
             sqlQuery = SetDataSource(sqlQuery, dataPath);

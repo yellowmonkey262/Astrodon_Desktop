@@ -6,6 +6,7 @@
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/Astrodon.DebitOrder" />
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports.LevyRoll" />
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/Astrodon.CustomerMaintenance" />
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/Astrodon.TransactionSearch" />
   <xs:element name="LevyRollReport">
     <xs:complexType>
       <xs:sequence>
@@ -229,6 +230,26 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Astrodon.CustomerMaintenance" minOccurs="0" name="GetCustomerCategoriesResult" nillable="true" type="q7:ArrayOfCustomerCategory" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SearchPastel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="buildingPath" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fromDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="toDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="reference" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="minimumAmount" nillable="true" type="xs:decimal" />
+        <xs:element minOccurs="0" name="maximumAmount" nillable="true" type="xs:decimal" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SearchPastelResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Astrodon.TransactionSearch" minOccurs="0" name="SearchPastelResult" nillable="true" type="q8:ArrayOfTransactionDataItem" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

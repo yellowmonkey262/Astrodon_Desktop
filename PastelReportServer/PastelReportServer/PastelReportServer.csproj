@@ -127,8 +127,11 @@
     <Compile Include="Reports\RequisitionBatch\RequisitionBatchReport.cs" />
     <Compile Include="Reports\SupplierReport\SupplierReport.cs" />
     <Compile Include="Reports\SupplierReport\SupplierReportDataItem.cs" />
+    <Compile Include="TransactionSearch\TransactionDataItem.cs" />
+    <Compile Include="TransactionSearch\TransactionSearch.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="TransactionSearch\TransactionSearch.sql" />
     <EmbeddedResource Include="Reports\Scripts\CustomerBalance.sql" />
     <EmbeddedResource Include="DataProcessor\Scripts\MaintenanceRecordList.sql" />
     <EmbeddedResource Include="DataProcessor\Scripts\PaymentTransactionList.sql" />

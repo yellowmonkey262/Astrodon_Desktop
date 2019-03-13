@@ -19,17 +19,17 @@ namespace SelfHosted
             // ProcessorThread.ProcessBirthdaySMS();
             //ProcessorThread.ScheduleFinancialMeetings();
 
-           ProcessorThread.TestBuildingODBCConnections();
-            return;
+            //ProcessorThread.TestBuildingODBCConnections();
+            // return;
 
-           // ReportServiceHost host = new ReportServiceHost();
-           // Console.WriteLine("Service is running");
+            ReportServiceHost host = new ReportServiceHost();
+            Console.WriteLine("Service is running");
 
             //var processorThread = new ProcessorThread();
             //Console.WriteLine("ProcessorThread is running");
 
-            //Console.ReadLine();
-            //host.Terminated = true;
+            Console.ReadLine();
+            host.Terminated = true;
         }
 
         private static void TestMissingMaintenance()

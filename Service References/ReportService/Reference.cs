@@ -914,6 +914,164 @@ namespace Astrodon.ReportService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TransactionDataItem", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.TransactionSearch")]
+    [System.SerializableAttribute()]
+    public partial class TransactionDataItem : Astrodon.ReportService.PervasiveDataItem {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AccountNumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal AmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string BuildingPathField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DescriptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LinkAccountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RefrenceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime TransactionDateField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string AccountNumber {
+            get {
+                return this.AccountNumberField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AccountNumberField, value) != true)) {
+                    this.AccountNumberField = value;
+                    this.RaisePropertyChanged("AccountNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Amount {
+            get {
+                return this.AmountField;
+            }
+            set {
+                if ((this.AmountField.Equals(value) != true)) {
+                    this.AmountField = value;
+                    this.RaisePropertyChanged("Amount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string BuildingPath {
+            get {
+                return this.BuildingPathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BuildingPathField, value) != true)) {
+                    this.BuildingPathField = value;
+                    this.RaisePropertyChanged("BuildingPath");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Description {
+            get {
+                return this.DescriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DescriptionField, value) != true)) {
+                    this.DescriptionField = value;
+                    this.RaisePropertyChanged("Description");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LinkAccount {
+            get {
+                return this.LinkAccountField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LinkAccountField, value) != true)) {
+                    this.LinkAccountField = value;
+                    this.RaisePropertyChanged("LinkAccount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Refrence {
+            get {
+                return this.RefrenceField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RefrenceField, value) != true)) {
+                    this.RefrenceField = value;
+                    this.RaisePropertyChanged("Refrence");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime TransactionDate {
+            get {
+                return this.TransactionDateField;
+            }
+            set {
+                if ((this.TransactionDateField.Equals(value) != true)) {
+                    this.TransactionDateField = value;
+                    this.RaisePropertyChanged("TransactionDate");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ReportDataBase", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Astrodon.ReportService.PervasiveDataItem))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Astrodon.ReportService.TransactionDataItem))]
+    public partial class ReportDataBase : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PervasiveDataItem", Namespace="http://schemas.datacontract.org/2004/07/Astrodon.Reports")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(Astrodon.ReportService.TransactionDataItem))]
+    public partial class PervasiveDataItem : Astrodon.ReportService.ReportDataBase {
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
@@ -959,6 +1117,9 @@ namespace Astrodon.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetCustomerCategories", ReplyAction="http://tempuri.org/IReportService/GetCustomerCategoriesResponse")]
         Astrodon.ReportService.CustomerCategory[] GetCustomerCategories(string buildPath);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/SearchPastel", ReplyAction="http://tempuri.org/IReportService/SearchPastelResponse")]
+        Astrodon.ReportService.TransactionDataItem[] SearchPastel(string buildingPath, System.DateTime fromDate, System.DateTime toDate, string reference, string description, System.Nullable<decimal> minimumAmount, System.Nullable<decimal> maximumAmount);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1042,6 +1203,10 @@ namespace Astrodon.ReportService {
         
         public Astrodon.ReportService.CustomerCategory[] GetCustomerCategories(string buildPath) {
             return base.Channel.GetCustomerCategories(buildPath);
+        }
+        
+        public Astrodon.ReportService.TransactionDataItem[] SearchPastel(string buildingPath, System.DateTime fromDate, System.DateTime toDate, string reference, string description, System.Nullable<decimal> minimumAmount, System.Nullable<decimal> maximumAmount) {
+            return base.Channel.SearchPastel(buildingPath, fromDate, toDate, reference, description, minimumAmount, maximumAmount);
         }
     }
 }

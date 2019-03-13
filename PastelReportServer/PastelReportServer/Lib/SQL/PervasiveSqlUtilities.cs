@@ -56,9 +56,36 @@ namespace Desktop.Lib.Pervasive
         }
 
 
+        public static DataTable FetchPervasiveData(string sql, List<OdbcParameter> parameters)
+        {
+            try
+            {
+                DataTable table = new DataTable();
+                string strAccessConn = @"Dsn=" + odbcName + ";";
+                using (var conn = new OdbcConnection(strAccessConn))
+                {
+                    conn.ConnectionTimeout = 600;
+                    using (var cmd = new OdbcCommand(sql, conn))
+                    { 
+                        if (parameters != null && parameters.Count > 0)
+                            cmd.Parameters.AddRange(parameters.ToArray());
+
+                        OdbcDataAdapter myDataAdapter = new OdbcDataAdapter(cmd);
+                        cmd.CommandTimeout = 0; //no wait time
+                        conn.Open();
+                        myDataAdapter.Fill(table);
+                        conn.Close();
+                    }
+                }
+                return table;
+            }
+            catch (Exception ex2) { throw new Exception("DB Exception running qry on " + odbcName); }
+        }
+
+
         public static DataTable FetchPervasiveData(string sql)
         {
-            return FetchPervasiveData(sql, null);
+            return FetchPervasiveData(sql, null as List<OdbcParameter>);
         }
 
         public static void ExecuteSQLCommand(string sql)

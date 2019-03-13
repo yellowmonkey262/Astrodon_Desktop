@@ -24,6 +24,7 @@ using Astrodon.Reports.AllocationWorksheet;
 using Astrodon.CustomerMaintenance;
 using Desktop.Lib.Pervasive;
 using System.Data;
+using Astrodon.TransactionSearch;
 
 namespace PastelDataService
 {
@@ -164,7 +165,7 @@ namespace PastelDataService
 
                 List<CustomerCategory> result = new List<CustomerCategory>();
 
-                var data = PervasiveSqlUtilities.FetchPervasiveData(qry, null);
+                var data = PervasiveSqlUtilities.FetchPervasiveData(qry);
                 foreach (DataRow row in data.Rows)
                 {
                     CustomerCategory c = new CustomerCategory(row);
@@ -179,6 +180,9 @@ namespace PastelDataService
             }
         }
 
-      
+        public List<TransactionDataItem> SearchPastel(string buildingPath, DateTime fromDate, DateTime toDate, string reference, string description, decimal? minimumAmount, decimal? maximumAmount)
+        {
+            return TransactionSearch.SearchPastel(buildingPath, fromDate, toDate, reference, description, minimumAmount, maximumAmount);
+        }
     }
 }

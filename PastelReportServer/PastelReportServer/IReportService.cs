@@ -4,6 +4,7 @@ using Astrodon.DataContracts.Maintenance;
 using Astrodon.DebitOrder;
 using Astrodon.Reports.LevyRoll;
 using Astrodon.Reports.ManagementReportCoverPage;
+using Astrodon.TransactionSearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,5 +59,15 @@ namespace PastelDataService
 
         [OperationContract]
         List<CustomerCategory> GetCustomerCategories(String buildPath);
+
+        [OperationContract]
+        List<TransactionDataItem> SearchPastel(string buildingPath,
+           DateTime fromDate, DateTime toDate,
+           string reference,
+           string description,
+           decimal? minimumAmount,
+           decimal? maximumAmount);
     }
+
+
 }

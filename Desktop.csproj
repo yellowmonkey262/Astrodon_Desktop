@@ -743,6 +743,12 @@
     <Compile Include="Reports\SupplierReport\usrSupplierReport.Designer.cs">
       <DependentUpon>usrSupplierReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\TransactionSearch\ucTransactionSearch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reports\TransactionSearch\ucTransactionSearch.Designer.cs">
+      <DependentUpon>ucTransactionSearch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Service References\ReportService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1019,6 +1025,9 @@
     <EmbeddedResource Include="Reports\SupplierReport\usrSupplierReport.resx">
       <DependentUpon>usrSupplierReport.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\TransactionSearch\ucTransactionSearch.resx">
+      <DependentUpon>ucTransactionSearch.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -1159,6 +1168,9 @@
     <None Include="Service References\ReportService\Astrodon.ReportService.PeriodItem.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\ReportService\Astrodon.ReportService.TransactionDataItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\ReportService\item.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1184,6 +1196,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\item7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\item8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\item81.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />
