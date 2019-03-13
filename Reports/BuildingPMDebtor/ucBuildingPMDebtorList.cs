@@ -38,14 +38,20 @@ namespace Astrodon.Reports.BuildingPMDebtor
                 _BuildingPMDebtorResultList = (from b in context.tblBuildings
                                                join pmTemp in context.tblUsers on b.pm equals pmTemp.email into pmJoin
                                                from pm in pmJoin.DefaultIfEmpty()
-                                               join ubTemp in context.tblUserBuildings on b.id equals ubTemp.buildingid into ubJoin
-                                               from ub in ubJoin.DefaultIfEmpty()
-                                               join debtorTemp in context.tblUsers on ub.userid equals debtorTemp.id into debtorJoin
-                                               from debtor in debtorJoin.DefaultIfEmpty()
+                                               join subQuery in
+                                               (
+                                                 from ub in context.tblUserBuildings
+                                                 join u in context.tblUsers on ub.userid equals u.id
+                                                 where u.usertype == 3
+                                                 select new { ub.buildingid, u.id, u.name, u.email }
+                                               ) on b.id equals subQuery.buildingid into debtor
+                                               from d in debtor.DefaultIfEmpty()
                                                join cTemp in context.CustomerSet on b.id equals cTemp.BuildingId into cJoin
                                                from c in cJoin.DefaultIfEmpty()
+                                               join iTemp in context.InsuranceBrokerSet on b.InsuranceBrokerId equals iTemp.id into iJoin
+                                               from i in iJoin.DefaultIfEmpty()
 
-                                               where b.BuildingDisabled == false && debtor.usertype == 3
+                                               where b.BuildingDisabled == false
 
                                                group c by new
                                                {
@@ -64,9 +70,9 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                    PortfolioManager = (pm == null) ? "" : pm.name,
                                                    PortfolioManagerEmail = (pm == null) ? "" : pm.email,
 
-                                                   DebtorId = debtor.id,
-                                                   Debtor = debtor.name,
-                                                   DebtorEmail = debtor.email,
+                                                   DebtorId = (d == null) ? 0 : d.id,
+                                                   Debtor = (d == null) ? "" : d.name,
+                                                   DebtorEmail = (d == null) ? "" : d.email,
 
                                                    Bank = b.bankName,
                                                    AccountNumber = b.bankAccNumber,
@@ -77,7 +83,10 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                    AddressLine3 = b.addy3,
                                                    AddressLine4 = b.addy4,
                                                    AddressLine5 = b.addy5,
-                                                   ODBCConnectionOK = b.ODBCConnectionOK == true ? "Yes" : "No"
+                                                   ODBCConnectionOK = b.ODBCConnectionOK == true ? "Yes" : "No",
+
+                                                   CompanyName = i.CompanyName,
+                                                   PolicyNumber = b.PolicyNumber
                                                } into grp
 
                                                orderby grp.Key.BuildingName
@@ -112,7 +121,10 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                    AddressLine2 = grp.Key.AddressLine2,
                                                    AddressLine3 = grp.Key.AddressLine3,
                                                    AddressLine4 = grp.Key.AddressLine4,
-                                                   AddressLine5 = grp.Key.AddressLine5
+                                                   AddressLine5 = grp.Key.AddressLine5,
+
+                                                   CompanyName = grp.Key.CompanyName,
+                                                   PolicyNumber = grp.Key.PolicyNumber
                                                }).ToList();
             }
 
@@ -310,6 +322,19 @@ namespace Astrodon.Reports.BuildingPMDebtor
                 ReadOnly = true
             });
 
+            buildingPMDebtorGridView.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "PolicyNumber",
+                HeaderText = "Policy Number",
+                ReadOnly = true
+            });
+
+            buildingPMDebtorGridView.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "CompanyName",
+                HeaderText = "Company Name",
+                ReadOnly = true
+            });
         }
 
         private void cbPMDropDown_SelectedValueChanged(object sender, EventArgs e)
@@ -329,7 +354,7 @@ namespace Astrodon.Reports.BuildingPMDebtor
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
                 sfd.Filter = "Excel Files | *.xlsx";
-                if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {

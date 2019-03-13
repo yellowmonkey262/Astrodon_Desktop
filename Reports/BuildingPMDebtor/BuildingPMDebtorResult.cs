@@ -59,7 +59,6 @@ namespace Astrodon.Reports.BuildingPMDebtor
         [ExcelExport(10, "ODBC Ok", true, false, XLCellValues.Text)]
         public string ODBCConnectionOK { get; internal set; }
 
-
         public int PortfolioManagerId { get; set; }
 
         [ExcelExport(11, "PM", true, false, XLCellValues.Text)]
@@ -100,5 +99,10 @@ namespace Astrodon.Reports.BuildingPMDebtor
         [ExcelExport(22, "Address Line 5", true, false, XLCellValues.Text)]
         public string AddressLine5 { get; set; }
 
+        [ExcelExport(23, "Policy Number", true, false, XLCellValues.Text)]
+        public string PolicyNumber { get; set; }
+
+        [ExcelExport(24, "Insurance Company", true, false, XLCellValues.Text)]
+        public string CompanyName { get; set; }
     }
 }
