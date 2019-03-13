@@ -45,7 +45,7 @@ namespace Astrodon.Reports.BuildingPMDebtor
                                                join cTemp in context.CustomerSet on b.id equals cTemp.BuildingId into cJoin
                                                from c in cJoin.DefaultIfEmpty()
 
-                                               where b.BuildingDisabled == false && debtor.usertype == 3
+                                               where b.BuildingDisabled == false
 
                                                group c by new
                                                {

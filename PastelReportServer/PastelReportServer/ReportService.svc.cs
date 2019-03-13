@@ -152,26 +152,31 @@ namespace PastelDataService
 
         public List<CustomerCategory> GetCustomerCategories(string buildPath)
         {
-            bool isRental = buildPath.ToUpper().StartsWith("RENTAL");
+               bool isRental = buildPath.ToUpper().StartsWith("RENTAL");
 
-            string qry = "select  CCCode,CCDesc from [DataSet].CustomerCategories";
-            if (isRental)
-                qry = qry + " where CCCode > 100 or CCCode = 0 ";
-            qry = qry + " Order by CCCode";
-            qry = PervasiveSqlUtilities.SetDataSource(qry, buildPath);
-
-            List<CustomerCategory> result = new List<CustomerCategory>();
-
-            var data = PervasiveSqlUtilities.FetchPervasiveData(qry, null);
-            foreach (DataRow row in data.Rows)
+                string qry = "select  CCCode,CCDesc from [DataSet].CustomerCategories";
+                if (isRental)
+                    qry = qry + " where CCCode > 100 or CCCode = 0 ";
+                qry = qry + " Order by CCCode";
+                qry = PervasiveSqlUtilities.SetDataSource(qry, buildPath);
+            try
             {
-                CustomerCategory c = new CustomerCategory(row);
-                result.Add(c);
+
+                List<CustomerCategory> result = new List<CustomerCategory>();
+
+                var data = PervasiveSqlUtilities.FetchPervasiveData(qry, null);
+                foreach (DataRow row in data.Rows)
+                {
+                    CustomerCategory c = new CustomerCategory(row);
+                    result.Add(c);
+                }
+
+                return result;
             }
-
-            return result;
-
-
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message + " -> [" + qry + "]");
+            }
         }
 
       

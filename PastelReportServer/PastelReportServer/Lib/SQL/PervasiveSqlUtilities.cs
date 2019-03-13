@@ -32,6 +32,7 @@ namespace Desktop.Lib.Pervasive
 
         public static DataTable FetchPervasiveData(string sql, OdbcParameter param1)
         {
+            try { 
             DataTable table = new DataTable();
             string strAccessConn = @"Dsn=" + odbcName + ";";
             using (var conn = new OdbcConnection(strAccessConn))
@@ -50,6 +51,8 @@ namespace Desktop.Lib.Pervasive
                 }
             }
             return table;
+            }
+            catch (Exception ex2) { throw new Exception("DB Exception running qry on " + odbcName); }
         }
 
 
