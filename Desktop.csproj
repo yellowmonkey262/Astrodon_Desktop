@@ -743,6 +743,7 @@
     <Compile Include="Reports\SupplierReport\usrSupplierReport.Designer.cs">
       <DependentUpon>usrSupplierReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\TransactionSearch\TransactionSearchModel.cs" />
     <Compile Include="Reports\TransactionSearch\ucTransactionSearch.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -24,10 +24,10 @@ namespace Astrodon.TransactionSearch
             sqlQuery = PervasiveSqlUtilities.SetDataSource(sqlQuery, buildingPath);
 
             if (!string.IsNullOrWhiteSpace(reference))
-                sqlQuery = sqlQuery = sqlQuery + " and Refrence = '%" + reference + "%' ";
+                sqlQuery = sqlQuery = sqlQuery + " and Refrence like '%" + reference + "%' ";
 
             if (!string.IsNullOrWhiteSpace(description))
-                sqlQuery = sqlQuery = sqlQuery + " and description = '%" + description + "%' ";
+                sqlQuery = sqlQuery = sqlQuery + " and description like '%" + description + "%' ";
 
 
             if (minimumAmount != null)
@@ -36,10 +36,14 @@ namespace Astrodon.TransactionSearch
             if (maximumAmount != null)
                 sqlQuery = sqlQuery = sqlQuery + " and Abs(Amount) <= " + maximumAmount.Value.ToString("#0.00", CultureInfo.InstalledUICulture);
 
+            var p1 = new OdbcParameter("FromDate", OdbcType.Date);
+            var p2 = new OdbcParameter("ToDate", OdbcType.Date);
+            p1.Value = fromDate.Date;
+            p2.Value = toDate.Date;
             List<OdbcParameter> parameters = new List<OdbcParameter>()
             {
-                new OdbcParameter("FromDate",fromDate),
-                new OdbcParameter("ToDate",toDate),
+               p1,
+               p2
             };
 
             var dt = PervasiveSqlUtilities.FetchPervasiveData(sqlQuery, parameters);

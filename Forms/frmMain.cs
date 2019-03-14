@@ -21,6 +21,7 @@ using System.Linq;
 using Astrodon.Controls.Web;
 using Astrodon.Letter;
 using Astrodon.Reports.BuildingPMDebtor;
+using Astrodon.Reports.TransactionSearch;
 
 namespace Astrodon
 {
@@ -794,5 +795,15 @@ namespace Astrodon
             pnlContents.Controls.Add(buildingPMDebtorList);
             toolStripStatusLabel1.Text = "Building PM Debtor List";
         }
+
+        private void transactionSearchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucTransactionSearch transactionSearch = new ucTransactionSearch();
+            transactionSearch.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(transactionSearch);
+            toolStripStatusLabel1.Text = "Transaction Search";
+        }
     }
+
 }

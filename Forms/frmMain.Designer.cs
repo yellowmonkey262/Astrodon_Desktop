@@ -42,6 +42,7 @@
             this.customerDocumentTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.upgradeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buildingPMReportMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.summaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.emailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,7 +52,6 @@
             this.supplierReportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.maintenanceReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insuranceScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buildingPMReportMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.processingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rentalImportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lettersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,6 +107,7 @@
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.transactionSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -261,10 +262,18 @@
             this.trustToolStripMenuItem,
             this.supplierReportToolStripMenuItem1,
             this.maintenanceReportToolStripMenuItem,
-            this.insuranceScheduleToolStripMenuItem});
+            this.insuranceScheduleToolStripMenuItem,
+            this.transactionSearchToolStripMenuItem});
             this.reportingToolStripMenuItem.Name = "reportingToolStripMenuItem";
             this.reportingToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.reportingToolStripMenuItem.Text = "Reporting";
+            // 
+            // buildingPMReportMenuItem
+            // 
+            this.buildingPMReportMenuItem.Name = "buildingPMReportMenuItem";
+            this.buildingPMReportMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.buildingPMReportMenuItem.Text = "Building PM Debtor List";
+            this.buildingPMReportMenuItem.Click += new System.EventHandler(this.buildingPMDebtorListMenuItem_Click);
             // 
             // summaryToolStripMenuItem
             // 
@@ -329,13 +338,6 @@
             this.insuranceScheduleToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.insuranceScheduleToolStripMenuItem.Text = "Insurance Schedule";
             this.insuranceScheduleToolStripMenuItem.Click += new System.EventHandler(this.insuranceScheduleToolStripMenuItem_Click);
-            // 
-            // buildingPMReportMenuItem
-            // 
-            this.buildingPMReportMenuItem.Name = "buildingPMReportMenuItem";
-            this.buildingPMReportMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.buildingPMReportMenuItem.Text = "Building PM Debtor List";
-            this.buildingPMReportMenuItem.Click += new System.EventHandler(this.buildingPMDebtorListMenuItem_Click);
             // 
             // processingToolStripMenuItem
             // 
@@ -770,6 +772,13 @@
             this.timer1.Interval = 30000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // transactionSearchToolStripMenuItem
+            // 
+            this.transactionSearchToolStripMenuItem.Name = "transactionSearchToolStripMenuItem";
+            this.transactionSearchToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.transactionSearchToolStripMenuItem.Text = "Transaction Search";
+            this.transactionSearchToolStripMenuItem.Click += new System.EventHandler(this.transactionSearchToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -879,5 +888,6 @@
         private System.Windows.Forms.ToolStripMenuItem bondOriginatorsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customerDocumentTypesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem buildingPMReportMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem transactionSearchToolStripMenuItem;
     }
 }
