@@ -224,7 +224,7 @@ namespace Astrodon
             String amt = ramt.ToString("#0.00");
             int buildPeriod;
             int trustPeriod = Methods.getPeriod( DateTime.Now, selectedBuilding.Period, out buildPeriod);
-            String pastelReturn1 = Controller.pastel.PostBatch(DateTime.Now, buildPeriod, "CENTRE19", selectedBuilding.DataPath, 5, selectedBuilding.Journal, selectedBuilding.Centrec_Account, "9250000", "1115000", "1115000", "SMS", reference, amt, selectedBuilding.Centrec_Building, "", out pastelString);
+            String pastelReturn1 = Controller.pastel.PostBatch(DateTime.Now, buildPeriod, SqlDataHandler.CENTRE_Path, selectedBuilding.DataPath, 5, selectedBuilding.Journal, selectedBuilding.Centrec_Account, "9250000", "1115000", "1115000", "SMS", reference, amt, selectedBuilding.Centrec_Building, "", out pastelString);
         }
 
         private SMSMessage AddSMS(String customer, String number)

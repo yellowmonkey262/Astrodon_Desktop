@@ -43,6 +43,19 @@ namespace Astrodon
             }
         }
 
+        public static string CENTRE_Path
+        {
+            get
+            {
+                string sql = "select centrec from tblSettings";
+                SqlDataHandler dh = new SqlDataHandler();
+                string status;
+                DataSet ds = dh.GetData(sql, null, out status);
+
+                return ds.Tables[0].Rows[0]["centrec"] as string;
+            }
+        }
+
         public static string GetConnectionString()
         {
             if (Environment.MachineName == "STEPHEN-PC")
