@@ -30,6 +30,19 @@ namespace Astrodon
             cmd.CommandType = CommandType.Text;
         }
 
+        public static string ASTRODON_Path
+        {
+            get
+            {
+                string sql = "select business from tblSettings";
+                SqlDataHandler dh = new SqlDataHandler();
+                string status;
+                DataSet ds = dh.GetData(sql, null, out status);
+
+                return ds.Tables[0].Rows[0]["business"] as string;
+            }
+        }
+
         public static string GetConnectionString()
         {
             if (Environment.MachineName == "STEPHEN-PC")
