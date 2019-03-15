@@ -29,7 +29,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.lstAttachments = new System.Windows.Forms.ListBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.txtMessage = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtSubject = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -45,11 +44,12 @@
             this.label9 = new System.Windows.Forms.Label();
             this.txtCC = new System.Windows.Forms.TextBox();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.txtMessage = new GvS.Controls.HtmlTextbox();
             this.SuspendLayout();
             // 
             // btnSendNow
             // 
-            this.btnSendNow.Location = new System.Drawing.Point(484, 462);
+            this.btnSendNow.Location = new System.Drawing.Point(1006, 467);
             this.btnSendNow.Name = "btnSendNow";
             this.btnSendNow.Size = new System.Drawing.Size(75, 23);
             this.btnSendNow.TabIndex = 67;
@@ -59,7 +59,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(565, 462);
+            this.btnCancel.Location = new System.Drawing.Point(1087, 467);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 66;
@@ -69,7 +69,7 @@
             // 
             // btnAttachment
             // 
-            this.btnAttachment.Location = new System.Drawing.Point(16, 377);
+            this.btnAttachment.Location = new System.Drawing.Point(16, 240);
             this.btnAttachment.Name = "btnAttachment";
             this.btnAttachment.Size = new System.Drawing.Size(75, 23);
             this.btnAttachment.TabIndex = 64;
@@ -80,7 +80,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 361);
+            this.label5.Location = new System.Drawing.Point(14, 214);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(69, 13);
             this.label5.TabIndex = 63;
@@ -89,7 +89,7 @@
             // lstAttachments
             // 
             this.lstAttachments.FormattingEnabled = true;
-            this.lstAttachments.Location = new System.Drawing.Point(111, 361);
+            this.lstAttachments.Location = new System.Drawing.Point(111, 214);
             this.lstAttachments.Name = "lstAttachments";
             this.lstAttachments.Size = new System.Drawing.Size(529, 95);
             this.lstAttachments.TabIndex = 62;
@@ -97,20 +97,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 207);
+            this.label4.Location = new System.Drawing.Point(660, 22);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 13);
             this.label4.TabIndex = 60;
             this.label4.Text = "Message:";
-            // 
-            // txtMessage
-            // 
-            this.txtMessage.Location = new System.Drawing.Point(111, 204);
-            this.txtMessage.Multiline = true;
-            this.txtMessage.Name = "txtMessage";
-            this.txtMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtMessage.Size = new System.Drawing.Size(529, 151);
-            this.txtMessage.TabIndex = 59;
             // 
             // label3
             // 
@@ -231,7 +222,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(16, 406);
+            this.btnDelete.Location = new System.Drawing.Point(16, 269);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 76;
@@ -239,10 +230,31 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
+            // txtMessage
+            // 
+            this.txtMessage.Fonts = new string[] {
+        "Corbel",
+        "Corbel, Verdana, Arial, Helvetica, sans-serif",
+        "Georgia, Times New Roman, Times, serif",
+        "Consolas, Courier New, Courier, monospace"};
+            this.txtMessage.IllegalPatterns = new string[] {
+        "<script.*?>",
+        "<\\w+\\s+.*?(j|java|vb|ecma)script:.*?>",
+        "<\\w+(\\s+|\\s+.*?\\s+)on\\w+\\s*=.+?>",
+        "</?input.*?>"};
+            this.txtMessage.Location = new System.Drawing.Point(663, 41);
+            this.txtMessage.Name = "txtMessage";
+            this.txtMessage.Padding = new System.Windows.Forms.Padding(1);
+            this.txtMessage.ShowHtmlSource = false;
+            this.txtMessage.Size = new System.Drawing.Size(499, 420);
+            this.txtMessage.TabIndex = 77;
+            this.txtMessage.ToolbarStyle = GvS.Controls.ToolbarStyles.AlwaysInternal;
+            // 
             // usrEmailCustomer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.txtCC);
@@ -258,7 +270,6 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.lstAttachments);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtSubject);
             this.Controls.Add(this.label2);
@@ -266,7 +277,7 @@
             this.Controls.Add(this.cmbBuilding);
             this.Controls.Add(this.label1);
             this.Name = "usrEmailCustomer";
-            this.Size = new System.Drawing.Size(664, 507);
+            this.Size = new System.Drawing.Size(1171, 514);
             this.Load += new System.EventHandler(this.usrEmailCustomer_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -281,7 +292,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ListBox lstAttachments;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtMessage;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtSubject;
         private System.Windows.Forms.Label label2;
@@ -297,5 +307,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox txtCC;
         private System.Windows.Forms.Button btnDelete;
+        private GvS.Controls.HtmlTextbox txtMessage;
     }
 }
