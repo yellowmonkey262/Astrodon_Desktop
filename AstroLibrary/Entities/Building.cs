@@ -268,13 +268,14 @@ namespace Astro.Library.Entities
 
         public bool isHOA { get; set; }
 
-        public Building2(int __id, String __building, String __code, String __path, int __period, int __journal, String __acc, String __contra, String bc, String business, Account _centrec, Customer _build, String __bank)
+        public Building2(int __id, String __building, String __code, String __path, int __period, int __journal, String __acc, String __contra, String bc, String business, 
+            Account _centrec, Customer _build, String __bank)
         {
             Id = __id;
             BuildingName = __building;
             Code = __code;
             Path = __path;
-            Acc = __acc;
+            Acc = __acc ;
             Contra = __contra;
             Period = __period;
             Journal = __journal;

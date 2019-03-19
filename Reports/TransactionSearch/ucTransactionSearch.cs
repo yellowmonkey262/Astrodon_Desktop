@@ -59,7 +59,7 @@ namespace Astrodon.Reports.TransactionSearch
                         }
                         catch (Exception ex)
                         {
-                            //Controller.HandleError(ex.Message);
+                            Controller.HandleError(ex.Message);
                         }
                     }
                 }

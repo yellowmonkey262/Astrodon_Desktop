@@ -120,6 +120,11 @@ namespace Astrodon
                         Building2 build = new Building2(id, building, code, path, period, journal, acc, centrec_building, centrec, business, buildCentrec, centrecBuild, bank);
                         repBuildings.Add(building, build);
                     }
+                    else
+                    {
+                        Building2 build = new Building2(id, building, code, path, period, journal, acc, centrec_building, centrec, business,new Account("NONE"),new Customer(true,"NONE"), bank);
+                        repBuildings.Add(building, build);
+                    }
                     //break;
                 }
                 catch (Exception ex)

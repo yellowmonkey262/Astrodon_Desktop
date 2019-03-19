@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq;
 using Astrodon.ReportService;
+using System.Data;
 
 namespace Astrodon
 {
@@ -1311,8 +1312,6 @@ namespace Astrodon
             }
         }
 
-        public static string _CURRENT_BUSINESS_PATH = "ASTROD19";
-
         public void PostBusBatch(DateTime trnDate, int trustType, String acc, String buildAcc, String reference, String description, String amt)
         {
             var sdk = CreateSDK();
@@ -1323,7 +1322,7 @@ namespace Astrodon
                 int trustPeriod = getPeriod(trnDate);
                 StrIn = trustPeriod.ToString() + "|" + trnDate.ToString("dd/MM/yyyy") + "|D|" + acc + "|" + buildAcc + "|" + description + "|" + amt + "|0|0|A|||0|0|1120000|1|1";
                 //MessageBox.Show(StrIn + " - " + trustType.ToString());
-                returner = PostBatch(sdk,_CURRENT_BUSINESS_PATH, StrIn, trustType);
+                returner = PostBatch(sdk,SqlDataHandler.ASTRODON_Path, StrIn, trustType);
                 //MessageBox.Show(returner);
             }
             finally
@@ -1342,7 +1341,7 @@ namespace Astrodon
                 int trustPeriod = getPeriod(trnDate);
                 StrIn = trustPeriod.ToString() + "|" + trnDate.ToString("dd/MM/yyyy") + "|G|" + acc + "|" + buildAcc + "|" + description + "|" + amt + "|0|0|A|||0|0|1120000|1|1";
                 //MessageBox.Show(StrIn + " - " + trustType.ToString());
-                returner = PostBatch(sdk, _CURRENT_BUSINESS_PATH, StrIn, trustType);
+                returner = PostBatch(sdk, SqlDataHandler.ASTRODON_Path, StrIn, trustType);
                 //MessageBox.Show(returner);
                 return returner;
             }
