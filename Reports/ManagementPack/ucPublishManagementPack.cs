@@ -311,7 +311,7 @@ namespace Astrodon.Reports.ManagementPack
 
                 string[] toEmail = { _SelectedItem.UserCreatedEmail };
                 string status;
-                if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + " financial pack appoved.", approvalEmail, false, out status))
+                if (!Mailer.SendDirectMail(Controller.user.email, toEmail, "", "", _SelectedItem.Building + " financial pack approved.", approvalEmail, false, out status))
                 {
                     Controller.HandleError("Unable to send notification email : " + status);
                 }
