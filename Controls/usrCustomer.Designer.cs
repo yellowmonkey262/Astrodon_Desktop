@@ -996,7 +996,7 @@
             this.txtNewNote.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtNewNote.Location = new System.Drawing.Point(11, 456);
+            this.txtNewNote.Location = new System.Drawing.Point(11, 390);
             this.txtNewNote.Multiline = true;
             this.txtNewNote.Name = "txtNewNote";
             this.txtNewNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -1006,7 +1006,7 @@
             // btnSaveNote
             // 
             this.btnSaveNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveNote.Location = new System.Drawing.Point(784, 551);
+            this.btnSaveNote.Location = new System.Drawing.Point(784, 485);
             this.btnSaveNote.Name = "btnSaveNote";
             this.btnSaveNote.Size = new System.Drawing.Size(128, 23);
             this.btnSaveNote.TabIndex = 77;
@@ -1016,18 +1016,18 @@
             // 
             // txtNotes
             // 
-            this.txtNotes.Location = new System.Drawing.Point(11, 291);
+            this.txtNotes.Location = new System.Drawing.Point(11, 261);
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.ReadOnly = true;
             this.txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtNotes.Size = new System.Drawing.Size(901, 159);
+            this.txtNotes.Size = new System.Drawing.Size(901, 124);
             this.txtNotes.TabIndex = 76;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(14, 275);
+            this.label16.Location = new System.Drawing.Point(14, 241);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(85, 13);
             this.label16.TabIndex = 75;
@@ -1051,7 +1051,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(11, 113);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(901, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(901, 125);
             this.dataGridView1.TabIndex = 74;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
