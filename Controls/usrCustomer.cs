@@ -828,7 +828,7 @@ namespace Astrodon
                 {
                     using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Password", true))
                     {
-                        if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "45828")
+                        if (prompt.ShowDialog() == DialogResult.OK && prompt.fileName == "19780411")
                         {
                             _ClientPortal.DeleteUnitFile(cd.Id);
 
@@ -2013,7 +2013,7 @@ namespace Astrodon
         {
             using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password", true))
             {
-                if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
+                if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "19780411")
                 {
                     MessageBox.Show("Invalid password entered", "Requisitions", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     this.Cursor = Cursors.Arrow;

@@ -64,7 +64,7 @@ namespace Astrodon.Controls.Supplier
                     string password = string.Empty;
                     using (Forms.frmPrompt prompt = new Forms.frmPrompt("Password", "Please enter password",true))
                     {
-                        if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "45828")
+                        if (prompt.ShowDialog() != DialogResult.OK || prompt.fileName != "19780411")
                         {
                             Controller.HandleError("Invalid password entered");
                             return;

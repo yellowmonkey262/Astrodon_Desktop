@@ -138,7 +138,7 @@ namespace Astrodon
 
         private void btnProcess_Click(object sender, EventArgs e)
         {
-            if (Prompt.ShowDialog("Password", "Credits") == "45828" || rememberedPassword)
+            if (Prompt.ShowDialog("Password", "Credits") == "19780411" || rememberedPassword)
             {
                 rememberedPassword = true;
                 int colCount = dgCredits.ColumnCount;
