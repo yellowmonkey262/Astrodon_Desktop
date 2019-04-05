@@ -13,6 +13,7 @@ using Astrodon.Data.MaintenanceData;
 using System.IO;
 using Astrodon.Data.RequisitionData;
 using iTextSharp.text.pdf;
+using System.Globalization;
 
 namespace Astrodon.Controls
 {
@@ -345,16 +346,21 @@ namespace Astrodon.Controls
             btnSupplierLookup.Enabled = true;
             cmbAccount.Items.Clear();
             cmbLedger.Items.Clear();
-
-            try
+            if (cmbBuilding.SelectedIndex >= 0 && cmbBuilding.SelectedIndex < myBuildings.Count)
             {
-                lblBank.Text = myBuildings[cmbBuilding.SelectedIndex].Bank.ToUpper();
-                cmbAccount.Items.Add("TRUST");
-                cmbAccount.Items.Add("OWN");
-                cmbAccount.SelectedItem = lblBank.Text;
+                try
+                {
+                    lblBank.Text = myBuildings[cmbBuilding.SelectedIndex].Bank.ToUpper();
+                    cmbAccount.Items.Add("TRUST");
+                    cmbAccount.Items.Add("OWN");
+                    cmbAccount.SelectedItem = lblBank.Text;
+                }
+                catch (Exception ex) { Controller.HandleError(ex); }
+            }else
+            {
+                Controller.ShowMessage("Please select a bulding first.");
+                return;
             }
-            catch(Exception ex) { Controller.HandleError(ex); }
-
             LoadRequisitions();
 
             try
@@ -670,7 +676,7 @@ namespace Astrodon.Controls
             }
 
             decimal amt;
-            if (decimal.TryParse(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null && cmbLedger.SelectedItem != null && cmbAccount.SelectedItem != null)
+            if (ReadDecimal(txtAmount.Text, out amt) && cmbBuilding.SelectedItem != null && cmbLedger.SelectedItem != null && cmbAccount.SelectedItem != null)
             {
                 if (dtInvoiceDate.Value <= _minDate)
                 {
@@ -889,8 +895,24 @@ namespace Astrodon.Controls
             else
             {
                 this.Cursor = Cursors.Arrow;
-                MessageBox.Show("Please enter all fields");
+                Controller.HandleError("Please enter all fields");
             }
+        }
+
+        private bool ReadDecimal(string txt, out decimal amt)
+        {
+            amt = 0;
+            bool result = false;
+            if (!string.IsNullOrWhiteSpace(txt))
+            {
+                txt = txt.Trim();
+
+                result = Decimal.TryParse(txt, out amt);
+            }
+            if (!result)
+                Controller.HandleError("'"+txt + "' is not a valid amount.");
+
+            return result;
         }
 
         private void ClearRequisitions()
