@@ -85,7 +85,7 @@ namespace Astrodon
             txtCentrec1.Text = selectedBuilding.Centrec_Account;
             txtCentrec2.Text = selectedBuilding.Centrec_Building;
             txtBus.Text = selectedBuilding.Business_Account;
-            try { cmbBank.SelectedItem = selectedBuilding.Bank; } catch { cmbBank.SelectedItem = "PLEASE SELECT"; }
+            try { cmbBank.SelectedItem = selectedBuilding.Bank; } catch { cmbBank.SelectedItem = null; }
             txtPM.Text = selectedBuilding.PM;
             txtBankName.Text = selectedBuilding.Bank_Name;
             txtAccNumber.Text = selectedBuilding.Bank_Acc_Number;
@@ -709,7 +709,7 @@ namespace Astrodon
                 RecursiveClearForm(item as Control);
             //txtID.Text = txtName.Text = txtAbbr.Text = txtTrust.Text = txtPath.Text = txtPeriod.Text = txtCash.Text = txtOwnBank.Text = txtCashbook3.Text = txtPayment.Text = txtReceipt.Text = "";
             //txtJournal.Text = txtCentrec1.Text = txtCentrec2.Text = txtBus.Text = "";
-            cmbBank.SelectedItem = "PLEASE SELECT";
+            cmbBank.SelectedItem = null;
             dgTrustees.DataSource = null;
             //txtPM.Text = txtBankName.Text = txtAccNumber.Text = txtAccName.Text = txtBranch.Text = "";
             //chkWeb.Checked = btnSave.Enabled = false;
@@ -751,7 +751,7 @@ namespace Astrodon
             selectedBuilding.Centrec_Account = txtCentrec1.Text;
             selectedBuilding.Centrec_Building = txtCentrec2.Text;
             selectedBuilding.Business_Account = txtBus.Text;
-            selectedBuilding.Bank = cmbBank.SelectedItem.ToString();
+            selectedBuilding.Bank = (cmbBank.SelectedItem as string) == "OWN" ? "OWN" : "TRUST";
             selectedBuilding.PM = txtPM.Text;
             selectedBuilding.Bank_Name = txtBankName.Text;
             selectedBuilding.Bank_Acc_Number = txtAccNumber.Text;
