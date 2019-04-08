@@ -61,37 +61,44 @@ namespace Astrodon.Controls
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            bool statements = (cmbSearch.SelectedItem.ToString() == "Statements");
-            String crit = cmbCrit.SelectedItem.ToString();
-            DataSet ds;
-            if (cmbSearchBy.SelectedItem.ToString() == "Unit")
+            if (cmbSearch.SelectedItem == null || cmbCrit.SelectedItem == null || cmbSearchBy.SelectedItem == null)
             {
-                if (statements) { ds = GetStatementsUnit(crit); } else { ds = GetLettersUnit(crit); }
+                Controller.HandleError("Please make sure all fields are selected");
             }
             else
             {
-                if (cmbSearchBy.SelectedItem.ToString() == "Sent Status")
+                bool statements = (cmbSearch.SelectedItem.ToString() == "Statements");
+                String crit = cmbCrit.SelectedItem.ToString();
+                DataSet ds;
+                if (cmbSearchBy.SelectedItem.ToString() == "Unit")
                 {
-                    if (statements) { ds = GetStatementsStatus(crit, false); } else { ds = GetLettersStatus(crit, false); }
+                    if (statements) { ds = GetStatementsUnit(crit); } else { ds = GetLettersUnit(crit); }
                 }
                 else
                 {
-                    if (statements) { ds = GetStatementsStatus(crit, true); } else { ds = GetLettersStatus(crit, true); }
+                    if (cmbSearchBy.SelectedItem.ToString() == "Sent Status")
+                    {
+                        if (statements) { ds = GetStatementsStatus(crit, false); } else { ds = GetLettersStatus(crit, false); }
+                    }
+                    else
+                    {
+                        if (statements) { ds = GetStatementsStatus(crit, true); } else { ds = GetLettersStatus(crit, true); }
+                    }
                 }
-            }
-            bs.Clear();
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
+                bs.Clear();
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
-                    EmailResponse er = new EmailResponse();
-                    er.Unit = dr["unitNo"].ToString();
-                    er.Date = DateTime.Parse(dr["Date Sent"].ToString()).ToString("yyyy/MM/dd");
-                    er.Delivery_Status = dr["Delivery Status"].ToString();
-                    er.Sent_Status = dr["Sent Status"].ToString();
-                    er.Subject = dr["Subject"].ToString();
-                    er.To = dr["Sent To"].ToString();
-                    bs.Add(er);
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        EmailResponse er = new EmailResponse();
+                        er.Unit = dr["unitNo"].ToString();
+                        er.Date = DateTime.Parse(dr["Date Sent"].ToString()).ToString("yyyy/MM/dd");
+                        er.Delivery_Status = dr["Delivery Status"].ToString();
+                        er.Sent_Status = dr["Sent Status"].ToString();
+                        er.Subject = dr["Subject"].ToString();
+                        er.To = dr["Sent To"].ToString();
+                        bs.Add(er);
+                    }
                 }
             }
         }

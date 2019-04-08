@@ -216,7 +216,7 @@ namespace Astrodon
             pnlContents.Controls.Clear();
             usrSummaryReport summControl = new usrSummaryReport { Dock = DockStyle.Fill };
             pnlContents.Controls.Add(summControl);
-            toolStripStatusLabel1.Text = "Summary Report";
+            toolStripStatusLabel1.Text = "Centrec Report";
         }
 
         private void sMSToolStripMenuItem_Click(object sender, EventArgs e)

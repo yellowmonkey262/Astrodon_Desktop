@@ -52,6 +52,7 @@
             this.supplierReportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.maintenanceReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insuranceScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.transactionSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.processingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rentalImportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lettersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,7 +108,6 @@
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.transactionSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -279,7 +279,7 @@
             // 
             this.summaryToolStripMenuItem.Name = "summaryToolStripMenuItem";
             this.summaryToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.summaryToolStripMenuItem.Text = "Summary";
+            this.summaryToolStripMenuItem.Text = "Centrec Report";
             this.summaryToolStripMenuItem.Click += new System.EventHandler(this.summaryToolStripMenuItem_Click);
             // 
             // sMSToolStripMenuItem
@@ -338,6 +338,13 @@
             this.insuranceScheduleToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.insuranceScheduleToolStripMenuItem.Text = "Insurance Schedule";
             this.insuranceScheduleToolStripMenuItem.Click += new System.EventHandler(this.insuranceScheduleToolStripMenuItem_Click);
+            // 
+            // transactionSearchToolStripMenuItem
+            // 
+            this.transactionSearchToolStripMenuItem.Name = "transactionSearchToolStripMenuItem";
+            this.transactionSearchToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.transactionSearchToolStripMenuItem.Text = "Transaction Search";
+            this.transactionSearchToolStripMenuItem.Click += new System.EventHandler(this.transactionSearchToolStripMenuItem_Click);
             // 
             // processingToolStripMenuItem
             // 
@@ -771,13 +778,6 @@
             // 
             this.timer1.Interval = 30000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // transactionSearchToolStripMenuItem
-            // 
-            this.transactionSearchToolStripMenuItem.Name = "transactionSearchToolStripMenuItem";
-            this.transactionSearchToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.transactionSearchToolStripMenuItem.Text = "Transaction Search";
-            this.transactionSearchToolStripMenuItem.Click += new System.EventHandler(this.transactionSearchToolStripMenuItem_Click);
             // 
             // frmMain
             // 
