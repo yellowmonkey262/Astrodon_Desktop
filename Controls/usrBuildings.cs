@@ -174,7 +174,7 @@ namespace Astrodon
                         cust.Portfolio = null;
 
                     cust.LoadEmails(acc.Email);
-
+                    acc.Portfolio = cust.Portfolio;
                     saveChanges = true;
 
                 }
