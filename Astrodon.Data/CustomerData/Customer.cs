@@ -58,6 +58,8 @@ namespace Astrodon.Data.CustomerData
 
         public virtual ICollection<CustomerDocument> Documents { get; set; }
 
+        public string Portfolio { get; set; }
+       
         public void LoadEmails(string[] emailList)
         {
 

@@ -1066,6 +1066,8 @@ namespace Astro.Library.Entities
             get { return _notes; }
         }
 
+        public string Portfolio { get; set; }
+
         public void SetNotes(List<String> note)
         {
             String[] splitter = new string[] { "|" };

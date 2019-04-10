@@ -740,7 +740,7 @@ namespace Astrodon.Controls.Supplier
         public string BuildingName { get; set; }
         public int SupplierBuildingId { get; set; }
         public string Bank { get; set; }
-        public int BankId { get; set; }
+        public int? BankId { get; set; }
         public string BranchCode { get; set; }
         public string BranchName { get; set; }
         public string AccountNumber { get; set; }

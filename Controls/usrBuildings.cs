@@ -11,6 +11,7 @@ using System.Data.Entity;
 using iTextSharp.text.pdf;
 using Astrodon.Data.BankData;
 using Astrodon.ClientPortal;
+using Astradon.Data.Utility;
 
 namespace Astrodon
 {
@@ -114,6 +115,21 @@ namespace Astrodon
             txtLimitM.Text = selectedBuilding.limitM.ToString("#,##0.00");
             txtLimitW.Text = selectedBuilding.limitW.ToString("#,##0.00");
             txtLimitD.Text = selectedBuilding.limitD.ToString("#,##0.00");
+
+            List<string> trusteeTypes = new List<string>();
+            DataGridViewComboBoxColumn col = dgTrustees.Columns["Portfolio"] as DataGridViewComboBoxColumn;
+            col.Items.Clear();
+
+            foreach (Data.CustomerData.TrusteePortfolioType pf in Enum.GetValues(typeof(Data.CustomerData.TrusteePortfolioType)))
+            {
+                string val = NameSplitting.SplitCamelCase(pf);
+                if (selectedBuilding.isHOA)
+                    val = val.Replace("Trustee", "Director");
+                col.Items.Add(val);
+            }
+
+         
+
             LoadBuildingInsurance();
             LoadCustomers();
             btnSave.Enabled = true;
@@ -142,7 +158,8 @@ namespace Astrodon
                             BuildingId = selectedBuilding.ID,
                             AccountNumber = acc.accNumber,
                             Created = DateTime.Now,
-                            IsTrustee = acc.IsTrustee
+                            IsTrustee = acc.IsTrustee,
+                            Portfolio = null
                         };
 
                         context.CustomerSet.Add(cust);
@@ -151,10 +168,13 @@ namespace Astrodon
                     }
                     acc.IsTrustee = cust.IsTrustee;
                     if (cust.Description != acc.description)
-                    {
                         cust.Description = acc.description;
-                    }
+
+                    if (acc.IsTrustee == false)
+                        cust.Portfolio = null;
+
                     cust.LoadEmails(acc.Email);
+
                     saveChanges = true;
 
                 }
@@ -882,7 +902,12 @@ namespace Astrodon
                     }
                     dbCust.Description = customer.description;
                     dbCust.IsTrustee = customer.IsTrustee;
+
+                    if (!dbCust.IsTrustee)
+                        customer.Portfolio = null;
+                    dbCust.Portfolio = customer.Portfolio;
                     vCustomer.IsTrustee = customer.IsTrustee;
+                    vCustomer.Portfolio = customer.Portfolio;
                     dbCust.LoadEmails(vCustomer.Email);
                     dbContext.SaveChanges();
 

@@ -26,26 +26,25 @@ namespace Astrodon.Data.SupplierData
 
         #region Banking Details
 
-        public virtual int BankId { get; set; }
+        public virtual int? BankId { get; set; }
         [ForeignKey("BankId")]
         public virtual Bank Bank { get; set; }
 
         [MaxLength(200)]
-        [Required]
         public virtual string BranchName { get; set; }
 
         [MaxLength(200)]
-        [Required]
         public virtual string BranceCode { get; set; }
 
         [MaxLength(200)]
-        [Required]
         public virtual string AccountNumber { get; set; }
 
         [MaxLength(10)]
         public virtual string BeneficiaryReferenceNumber { get; set; }
 
         #endregion
+
+        public string SpecialInstructions { get; set; }
 
         public virtual ICollection<SupplierBuildingAudit> AuditRecords { get; set; }
 

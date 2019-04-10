@@ -323,6 +323,70 @@ namespace Astrodon
             return result;
         }
 
-      
+
+        private static string _TrustPath = "";
+        private static string GetTrustPath()
+        {
+            if (!string.IsNullOrWhiteSpace(_TrustPath))
+                return _TrustPath;
+
+            String query = "SELECT trust FROM tblSettings";
+            String status;
+            DataSet ds = (new SqlDataHandler()).GetData(query, null, out status);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                _TrustPath = ds.Tables[0].Rows[0]["trust"].ToString();
+            }
+            else
+            {
+                _TrustPath = String.Empty;
+            }
+            return _TrustPath;
+        }
+
+        public static double? GetBuildingBalance(Astrodon.Data.tblBuilding building)
+        {
+            if (building.bank == null)
+                throw new Exception("Building bank not configured");
+
+            string buildingPath = "";
+            if (building.bank.ToUpper() == "TRUST")
+            {
+                buildingPath = GetTrustPath();
+                return GetBalance(buildingPath, building.AccNumber);
+            }
+            else
+            {
+                buildingPath = building.DataFolder;
+                return GetBalance(buildingPath, building.ownbank);
+            }
+        }
+
+        private static double GetBalance(String datapath, String account)
+        {
+            String acc = Controller.pastel.GetAccount(datapath, account.Replace("/", ""));
+            if (acc.StartsWith("99"))
+            {
+                return 0;
+            }
+            else
+            {
+                String[] accBits = acc.Split(new String[] { "|" }, StringSplitOptions.None);
+                double bal = 0;
+                try
+                {
+                    for (int i = 7; i <= 32; i++)
+                    {
+                        if (i < accBits.Length)
+                        {
+                            double lbal = (double.TryParse(accBits[i], out lbal) ? lbal : 0);
+                            bal += lbal;
+                        }
+                    }
+                }
+                catch (Exception ex) { Controller.HandleError(ex); }
+                return bal;
+            }
+        }
     }
 }

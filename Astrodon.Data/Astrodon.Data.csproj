@@ -67,6 +67,7 @@
     <Compile Include="CustomerData\Customer.cs" />
     <Compile Include="CustomerData\CustomerDocument.cs" />
     <Compile Include="CustomerData\CustomerDocumentType.cs" />
+    <Compile Include="CustomerData\TrusteePortfolioType.cs" />
     <Compile Include="DebitOrder\AccountTypeType.cs" />
     <Compile Include="DebitOrder\CustomerDebitOrder.cs" />
     <Compile Include="DebitOrder\CustomerDebitOrderArchive.cs" />
@@ -392,6 +393,10 @@
     <Compile Include="Migrations\201903060429025_ReminderLinkedToDocument.Designer.cs">
       <DependentUpon>201903060429025_ReminderLinkedToDocument.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904101226241_CustomerProfile.cs" />
+    <Compile Include="Migrations\201904101226241_CustomerProfile.Designer.cs">
+      <DependentUpon>201904101226241_CustomerProfile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
@@ -687,6 +692,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903060429025_ReminderLinkedToDocument.resx">
       <DependentUpon>201903060429025_ReminderLinkedToDocument.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101226241_CustomerProfile.resx">
+      <DependentUpon>201904101226241_CustomerProfile.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

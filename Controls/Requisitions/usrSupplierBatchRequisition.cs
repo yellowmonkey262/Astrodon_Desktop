@@ -907,7 +907,7 @@ namespace Astrodon.Controls.Requisitions
 
     class SupplierBankAccountDetail
     {
-        public int BankId { get; set; }
+        public int? BankId { get; set; }
 
         public string BranchCode { get; set; }
 
