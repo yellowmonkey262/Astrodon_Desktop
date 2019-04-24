@@ -750,6 +750,13 @@
     <Compile Include="Reports\TransactionSearch\ucTransactionSearch.Designer.cs">
       <DependentUpon>ucTransactionSearch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reports\TrusteeReport\TrusteeReportModel.cs" />
+    <Compile Include="Reports\TrusteeReport\ucTrusteeReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reports\TrusteeReport\ucTrusteeReport.Designer.cs">
+      <DependentUpon>ucTrusteeReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Service References\ReportService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1028,6 +1035,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\TransactionSearch\ucTransactionSearch.resx">
       <DependentUpon>ucTransactionSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\TrusteeReport\ucTrusteeReport.resx">
+      <DependentUpon>ucTrusteeReport.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>

@@ -22,6 +22,7 @@ using Astrodon.Controls.Web;
 using Astrodon.Letter;
 using Astrodon.Reports.BuildingPMDebtor;
 using Astrodon.Reports.TransactionSearch;
+using Astrodon.Reports.TrusteeReport;
 
 namespace Astrodon
 {
@@ -803,6 +804,15 @@ namespace Astrodon
             transactionSearch.Dock = DockStyle.Fill;
             pnlContents.Controls.Add(transactionSearch);
             toolStripStatusLabel1.Text = "Transaction Search";
+        }
+
+        private void trusteeReportListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            ucTrusteeReport trusteeReport = new ucTrusteeReport();
+            trusteeReport.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(trusteeReport);
+            toolStripStatusLabel1.Text = "Trustee Report";
         }
     }
 

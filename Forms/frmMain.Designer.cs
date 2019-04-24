@@ -53,6 +53,7 @@
             this.maintenanceReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insuranceScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.transactionSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trusteeReportListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.processingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rentalImportsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lettersToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -263,7 +264,8 @@
             this.supplierReportToolStripMenuItem1,
             this.maintenanceReportToolStripMenuItem,
             this.insuranceScheduleToolStripMenuItem,
-            this.transactionSearchToolStripMenuItem});
+            this.transactionSearchToolStripMenuItem,
+            this.trusteeReportListToolStripMenuItem});
             this.reportingToolStripMenuItem.Name = "reportingToolStripMenuItem";
             this.reportingToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.reportingToolStripMenuItem.Text = "Reporting";
@@ -345,6 +347,13 @@
             this.transactionSearchToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.transactionSearchToolStripMenuItem.Text = "Transaction Search";
             this.transactionSearchToolStripMenuItem.Click += new System.EventHandler(this.transactionSearchToolStripMenuItem_Click);
+            // 
+            // trusteeReportListToolStripMenuItem
+            // 
+            this.trusteeReportListToolStripMenuItem.Name = "trusteeReportListToolStripMenuItem";
+            this.trusteeReportListToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.trusteeReportListToolStripMenuItem.Text = "Trustee Report";
+            this.trusteeReportListToolStripMenuItem.Click += new System.EventHandler(this.trusteeReportListToolStripMenuItem_Click);
             // 
             // processingToolStripMenuItem
             // 
@@ -889,5 +898,6 @@
         private System.Windows.Forms.ToolStripMenuItem customerDocumentTypesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem buildingPMReportMenuItem;
         private System.Windows.Forms.ToolStripMenuItem transactionSearchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trusteeReportListToolStripMenuItem;
     }
 }
