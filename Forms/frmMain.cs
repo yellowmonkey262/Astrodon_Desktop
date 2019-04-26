@@ -814,6 +814,15 @@ namespace Astrodon
             pnlContents.Controls.Add(trusteeReport);
             toolStripStatusLabel1.Text = "Trustee Report";
         }
+
+        private void preferredSuppliersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pnlContents.Controls.Clear();
+            usrPreferredSuppliers preferredSuppliers = new usrPreferredSuppliers();
+            preferredSuppliers.Dock = DockStyle.Fill;
+            pnlContents.Controls.Add(preferredSuppliers);
+            toolStripStatusLabel1.Text = "Preferred Suppliers";
+        }
     }
 
 }

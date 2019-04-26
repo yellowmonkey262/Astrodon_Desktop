@@ -109,6 +109,7 @@
             this.pnlContents = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.preferredSuppliersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -502,7 +503,8 @@
             this.requisitionsToolStripMenuItem,
             this.buildingMaintenanceToolStripMenuItem,
             this.suppliersToolStripMenuItem1,
-            this.insuranceBrokerMaintenanceToolStripMenuItem});
+            this.insuranceBrokerMaintenanceToolStripMenuItem,
+            this.preferredSuppliersToolStripMenuItem});
             this.pMPAToolStripMenuItem.Name = "pMPAToolStripMenuItem";
             this.pMPAToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.pMPAToolStripMenuItem.Text = "PM / PA";
@@ -788,6 +790,13 @@
             this.timer1.Interval = 30000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // preferredSuppliersToolStripMenuItem
+            // 
+            this.preferredSuppliersToolStripMenuItem.Name = "preferredSuppliersToolStripMenuItem";
+            this.preferredSuppliersToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.preferredSuppliersToolStripMenuItem.Text = "Preferred Suppliers";
+            this.preferredSuppliersToolStripMenuItem.Click += new System.EventHandler(this.preferredSuppliersToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -899,5 +908,6 @@
         private System.Windows.Forms.ToolStripMenuItem buildingPMReportMenuItem;
         private System.Windows.Forms.ToolStripMenuItem transactionSearchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem trusteeReportListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem preferredSuppliersToolStripMenuItem;
     }
 }

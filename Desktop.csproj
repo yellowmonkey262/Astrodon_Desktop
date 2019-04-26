@@ -181,6 +181,12 @@
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Classes\webreport.cs" />
     <Compile Include="Classes\WordProcessor.cs" />
+    <Compile Include="Controls\Supplier\usrPreferredSuppliers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Supplier\usrPreferredSuppliers.Designer.cs">
+      <DependentUpon>usrPreferredSuppliers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SystemConfig\ucCustomerDocumentType.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -769,6 +775,9 @@
     <Compile Include="Utils\ExcelHelper\ExcelUtils.cs" />
     <Compile Include="Utils\ExcelHelper\IExcelProvider.cs" />
     <Compile Include="Utils\ExcelHelper\IExcelStyleSheet.cs" />
+    <EmbeddedResource Include="Controls\Supplier\usrPreferredSuppliers.resx">
+      <DependentUpon>usrPreferredSuppliers.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SystemConfig\ucCustomerDocumentType.resx">
       <DependentUpon>ucCustomerDocumentType.cs</DependentUpon>
     </EmbeddedResource>

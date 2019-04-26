@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Astrodon.Reports.TrusteeReport
 {
-    class TrusteeReportModel
+    public class TrusteeReportModel
     {
         [ExcelExport(1, "Code", true, false, XLCellValues.Text)]
         public string Code { get; set; }
