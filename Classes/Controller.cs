@@ -421,7 +421,7 @@ namespace Astrodon
                     {
                         Controller.HandleError("Building information not completed." + Environment.NewLine
                             + errorMessage + Environment.NewLine +
-                            "Processing of this building is not allowed.");
+                            "Please enter this information now.");
                         return false;
                     }
 

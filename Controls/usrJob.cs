@@ -368,8 +368,6 @@ namespace Astrodon.Controls
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
-
             if (cmbBuilding.SelectedItem != null)
             {
                 String bCode = cmbBuilding.SelectedValue.ToString();
