@@ -46,6 +46,7 @@ namespace Astrodon.Controls.Maintenance
             {
                 Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
                 _Buildings = bManager.buildings;
+                _Buildings.Insert(0, new Building() { Name = "", ID = 0 });
                 cmbBuilding.DataSource = _Buildings;
                 cmbBuilding.ValueMember = "ID";
                 cmbBuilding.DisplayMember = "Name";
@@ -429,6 +430,20 @@ namespace Astrodon.Controls.Maintenance
             }
 
             return Ret;
+        }
+
+        private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Building selectedBuilding = cmbBuilding.SelectedItem as Building;
+
+            if (cmbBuilding.SelectedItem != null)
+            {
+                if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.ID))
+                {
+                    cmbBuilding.SelectedIndex = 0;
+                    return;
+                }
+            }
         }
     }
 }

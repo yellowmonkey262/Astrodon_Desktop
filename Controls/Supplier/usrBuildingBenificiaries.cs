@@ -31,6 +31,7 @@ namespace Astrodon.Controls.Supplier
                 var userid = Controller.user.id;
                 Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
                 _Buildings = bManager.buildings.Where(a => a.Bank_Name == "Nedbank").ToList();
+                _Buildings.Insert(0, new Building() { Name = "", ID = 0 });
                 cmbBuilding.DataSource = _Buildings;
                 cmbBuilding.ValueMember = "ID";
                 cmbBuilding.DisplayMember = "Name";
@@ -217,6 +218,22 @@ namespace Astrodon.Controls.Supplier
                 }
                 Application.DoEvents();
                 LoadSupplierList();
+            }
+        }
+
+        private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Building selectedBuilding = cmbBuilding.SelectedItem as Building;
+
+            if (cmbBuilding.SelectedItem != null)
+            {
+                if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.ID))
+                {
+                    cmbBuilding.SelectedIndex = 0;
+                    dgItems.DataSource = null;
+                    cbAllSuppliers.Checked = false;
+                    return;
+                }
             }
         }
     }

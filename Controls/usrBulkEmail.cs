@@ -43,13 +43,28 @@ namespace Astrodon
             try
             {
                 building = buildings[cmbBuilding.SelectedIndex];
-                txtBCC.Text = building.PM;
-                if (Controller.user.email != building.PM) { txtBCC.Text += "; " + Controller.user.email; }
-                String mailBody = "For any queries on your account, please contact " + building.Debtor + Environment.NewLine + Environment.NewLine;
-                mailBody += "For any maintenance queries, please contact " + building.PM + Environment.NewLine + Environment.NewLine;
-                htmlMessage.Text = Environment.NewLine + Environment.NewLine + mailBody;
-                LoadCustomers(String.Empty);
-                LoadCategories();
+                if (cmbBuilding.SelectedItem != null)
+                {
+                    if (!Controller.VerifyBuildingDetailsEntered(building.ID))
+                    {
+                        cmbBuilding.SelectedIndex = -1;
+                        dgCustomers.DataSource = null;
+                        htmlMessage.Text = null;
+                        txtBCC.Text = null;
+                        return;
+                    }
+                }
+
+                if (cmbBuilding.SelectedIndex >= 0)
+                {
+                    txtBCC.Text = building.PM;
+                    if (Controller.user.email != building.PM) { txtBCC.Text += "; " + Controller.user.email; }
+                    String mailBody = "For any queries on your account, please contact " + building.Debtor + Environment.NewLine + Environment.NewLine;
+                    mailBody += "For any maintenance queries, please contact " + building.PM + Environment.NewLine + Environment.NewLine;
+                    htmlMessage.Text = Environment.NewLine + Environment.NewLine + mailBody;
+                    LoadCustomers(String.Empty);
+                    LoadCategories();
+                }
             }
             catch (Exception ex) { Controller.HandleError(ex); }
         }
@@ -147,14 +162,14 @@ namespace Astrodon
                 {
                     EmailList dataRow = dvr.DataBoundItem as EmailList;
                     Customer customer = customers.SingleOrDefault(c => c.accNumber == dataRow.AccNumber);
-                   
+
 
                     if (customer != null && customer.IsTrustee)
                     {
                         if (chkTrustees.Checked == false)
                             dvr.Cells[3].Value = false;
                         else
-                           dvr.Cells[3].Value = customer.IsTrustee;
+                            dvr.Cells[3].Value = customer.IsTrustee;
                     }
                     else
                     {
@@ -226,7 +241,7 @@ namespace Astrodon
                 }
             }
 
-            if(!Controller.AskQuestion("Send this email to " + sentToList.Count().ToString() + " email addresses?"))
+            if (!Controller.AskQuestion("Send this email to " + sentToList.Count().ToString() + " email addresses?"))
             {
                 status = "User cancelled";
                 return false;
@@ -281,7 +296,7 @@ namespace Astrodon
             sqlParms.Add("@billAmount", txtBill.Text);
             sqlParms.Add("@queue", queue);
             sqlParms.Add("@fromAddress", pmUser.email);
-            if(string.IsNullOrWhiteSpace(pmUser.email))
+            if (string.IsNullOrWhiteSpace(pmUser.email))
             {
                 status = "PM " + pmUser.name + " does not have an email address";
                 return false;
@@ -371,7 +386,7 @@ namespace Astrodon
                                     BinaryReader br = new BinaryReader(fs);
                                     bytes = br.ReadBytes((Int32)fs.Length);
                                 }
-                             
+
                                 String fileQuery = "INSERT INTO tblMsgData(msgID, Name, ContentType, Data) VALUES (@msgID, @Name, @ContentType, @Data)";
                                 sqlParms.Clear();
                                 sqlParms.Add("@msgID", msgID);
@@ -385,7 +400,7 @@ namespace Astrodon
                                     MessageBox.Show(status, "Attachments", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                     return false;
                                 }
-                               
+
                             }
                             else
                             {
@@ -405,25 +420,25 @@ namespace Astrodon
             return success;
         }
 
-     /*   private void UploadToWeb(byte[] data, string filename,string description, List<EmailList> sendToList)
-        {
-            if (data != null)
-            {
-                var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
-                foreach (string customerAccount in sendToList.Select(a => a.AccNumber).Distinct())
-                {
-                    try
-                    {
-                        clientPortal.UploadUnitDocument(DocumentCategoryType.Letter,DateTime.Today
-                            , building.ID, customerAccount,  filename, description, data);
-                    }catch(Exception ex)
-                    {
-                        Controller.HandleError(ex);
-                    }
-                }
-            }
-        }
-        */
+        /*   private void UploadToWeb(byte[] data, string filename,string description, List<EmailList> sendToList)
+           {
+               if (data != null)
+               {
+                   var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
+                   foreach (string customerAccount in sendToList.Select(a => a.AccNumber).Distinct())
+                   {
+                       try
+                       {
+                           clientPortal.UploadUnitDocument(DocumentCategoryType.Letter,DateTime.Today
+                               , building.ID, customerAccount,  filename, description, data);
+                       }catch(Exception ex)
+                       {
+                           Controller.HandleError(ex);
+                       }
+                   }
+               }
+           }
+           */
 
         private void SendMail(int msgID)
         {
@@ -463,7 +478,7 @@ namespace Astrodon
                         }
                     }
                     String billableCustomersQuery = "SELECT distinct accNo FROM tblMsgRecipients WHERE billCustomer = 'True' and msgID = " + msgID.ToString();
-                    
+
                     DataSet billableCustomers = dh.GetData(billableCustomersQuery, null, out status);
 
                     String allRecipientsQuery = "SELECT id, accNo, recipient FROM tblMsgRecipients WHERE msgID = " + msgID.ToString();

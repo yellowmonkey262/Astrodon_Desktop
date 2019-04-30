@@ -52,18 +52,35 @@ namespace Astrodon.Controls.Web
             var userid = Controller.user.id;
             Buildings bManager = (userid == 0 || Controller.UserIsSheldon() ? new Buildings(false) : new Buildings(userid));
 
-            _Buildings = bManager.buildings;
+            _Buildings = bManager.buildings.ToList();
+            _Buildings.Insert(0, new Building() { Name = "", ID = 0 });
             cmbBuilding.DataSource = _Buildings;
             cmbBuilding.ValueMember = "ID";
             cmbBuilding.DisplayMember = "Name";
+            if (_Buildings.Count > 0)
+                cmbBuilding.SelectedIndex = 0;
         }
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
         {
             var building = cmbBuilding.SelectedItem as Building;
-            LoadSelectedBuilding(building);
-            LoadBuildingImage(building);
 
+            if (cmbBuilding.SelectedItem != null)
+            {
+                if (!Controller.VerifyBuildingDetailsEntered(building.ID))
+                {
+                    cmbBuilding.SelectedIndex = -1;
+                    dgItems.DataSource = null;
+                    picBuilding.Image = null;
+                    return;
+                }
+            }
+
+            if (cmbBuilding.SelectedIndex >= 0)
+            {
+                LoadSelectedBuilding(building);
+                LoadBuildingImage(building);
+            }
         }
 
         private void LoadSelectedBuilding(Building building)

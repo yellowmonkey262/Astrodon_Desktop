@@ -55,6 +55,7 @@ namespace Astrodon.Controls.Requisitions
                 {
                     _Buildings = bManager.buildings.Where(a => a.PM == Controller.user.email).ToList(); //only pm buildings
                 }
+                _Buildings.Insert(0, new Building() { Name = "", ID = 0 });
                 cmbBuilding.DataSource = _Buildings;
                 cmbBuilding.ValueMember = "ID";
                 cmbBuilding.DisplayMember = "Name";
@@ -408,11 +409,22 @@ namespace Astrodon.Controls.Requisitions
         {
             if (cmbBuilding.SelectedItem != null)
             {
-
                 try
                 {
+                    Building selectedBuilding = cmbBuilding.SelectedItem as Building;
+
                     this.Cursor = Cursors.WaitCursor;
-                    LoadGrid();
+
+                    if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.ID))
+                    {
+                        cmbBuilding.SelectedIndex = 0;
+                        dgItems.DataSource = null;
+                        return;
+                    }
+                    else
+                    {
+                        LoadGrid();
+                    }
                 }
                 finally
                 {

@@ -12,6 +12,7 @@ using Astrodon.Forms;
 using Astrodon.Data.MaintenanceData;
 using Astradon.Data.Utility;
 using System.Data.Entity;
+using Astro.Library.Entities;
 
 namespace Astrodon.Controls.Maintenance
 {
@@ -19,6 +20,7 @@ namespace Astrodon.Controls.Maintenance
     {
         private DataContext _DataContext;
         private List<MaintenanceResult> _MaintenanceRecords;
+        private List<Building> allBuildings;
 
         public usrMaintenance(DataContext context)
         {
@@ -112,6 +114,7 @@ namespace Astrodon.Controls.Maintenance
                                 Value = building.Name
                             }).OrderBy(a => a.Value).ToList();
 
+            buildings.Insert(0, new IdValue() { Id = 0, Value = "" });
             cmbBuilding.DataSource = buildings;
             cmbBuilding.ValueMember = "Id";
             cmbBuilding.DisplayMember = "Value";
@@ -336,6 +339,21 @@ namespace Astrodon.Controls.Maintenance
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IdValue selectedBuilding = cmbBuilding.SelectedItem as IdValue;
+
+            if (cmbBuilding.SelectedItem != null)
+            {
+                if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.Id))
+                {
+                    cmbBuilding.SelectedIndex = -1;
+                    dgMaintenance.DataSource = null;
+                    return;
+                }
+            }
         }
     }
 

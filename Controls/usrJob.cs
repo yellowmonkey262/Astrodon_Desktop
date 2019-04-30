@@ -379,6 +379,7 @@ namespace Astrodon.Controls
                         if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.ID))
                         {
                             cmbBuilding.SelectedIndex = -1;
+                            dgCustomers.DataSource = null;
                             return;
                         }
                         break;

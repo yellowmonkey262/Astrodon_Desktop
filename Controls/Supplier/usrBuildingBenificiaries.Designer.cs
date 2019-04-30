@@ -55,6 +55,7 @@
             this.cmbBuilding.Name = "cmbBuilding";
             this.cmbBuilding.Size = new System.Drawing.Size(241, 21);
             this.cmbBuilding.TabIndex = 16;
+            this.cmbBuilding.SelectedIndexChanged += new System.EventHandler(this.cmbBuilding_SelectedIndexChanged);
             // 
             // button1
             // 

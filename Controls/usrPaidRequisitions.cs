@@ -52,7 +52,7 @@ namespace Astrodon.Controls
                     }
                 }
             }
-            rBuildings = rBuildings.OrderByDescending(c => c.Name).ToList();
+            rBuildings = rBuildings.OrderBy(c => c.Name).ToList();
             cmbBuilding.SelectedIndexChanged -= cmbBuilding_SelectedIndexChanged;
             cmbBuilding.DataSource = rBuildings;
             cmbBuilding.ValueMember = "ID";
@@ -151,7 +151,26 @@ namespace Astrodon.Controls
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbBuilding.SelectedItem != null) { LoadRequisitions(); }
+            Building selectedBuilding = cmbBuilding.SelectedItem as Building;
+
+            if (cmbBuilding.SelectedItem != null)
+            {
+                if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.ID))
+                {
+                    cmbBuilding.SelectedIndex = -1;
+                    dgUnprocessed.DataSource = null;
+                    dgUnpaid.DataSource = null;
+                    dgPaid.DataSource = null;
+                    return;
+                }
+            }
+            if (cmbBuilding.SelectedIndex >= 0)
+            {
+                dgUnprocessed.DataSource = unProcessedRequisitions;
+                dgUnpaid.DataSource = unPaidRequisitions;
+                dgPaid.DataSource = paidRequisitions;
+                LoadRequisitions();
+            }
         }
     }
 }

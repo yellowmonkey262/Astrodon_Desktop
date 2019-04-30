@@ -34,6 +34,7 @@ namespace Astrodon.Controls.Supplier
                 var userid = Controller.user.id;
                 Buildings bManager = (userid == 0 ? new Buildings(false) : new Buildings(userid));
                 _Buildings = bManager.buildings.ToList();
+                _Buildings.Insert(0, new Building() { Name = "", ID = 0 });
                 cmbBuilding.DataSource = _Buildings;
                 cmbBuilding.ValueMember = "ID";
                 cmbBuilding.DisplayMember = "Name";
@@ -121,13 +122,25 @@ namespace Astrodon.Controls.Supplier
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Building selectedBuildingId = cmbBuilding.SelectedItem as Building;
+            Building selectedBuilding = cmbBuilding.SelectedItem as Building;
 
-            _BuildingId = selectedBuildingId.ID;
+            if (cmbBuilding.SelectedItem != null)
+            {
+                if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.ID))
+                {
+                    cmbBuilding.SelectedIndex = 0;
+                    return;
+                }
+            }
 
-            LoadSuppliers(_BuildingId);
-            lblSupplierNameEdit.Text = "";
-            txtSpecialInstructions.Text = "";
+            if (cmbBuilding.SelectedIndex >= 0)
+            {
+                _BuildingId = selectedBuilding.ID;
+
+                LoadSuppliers(_BuildingId);
+                lblSupplierNameEdit.Text = "";
+                txtSpecialInstructions.Text = "";
+            }
         }
 
         private void dgvPreferredSuppliers_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -169,6 +182,7 @@ namespace Astrodon.Controls.Supplier
             }
         }
 
+        #region Preferred Suuplier
         public class PreferredSupplierResult
         {
             public string CompanyName { get; set; }
@@ -183,7 +197,6 @@ namespace Astrodon.Controls.Supplier
 
             public int SupplierId { get; set; }
         }
-
-
+        #endregion
     }
 }
