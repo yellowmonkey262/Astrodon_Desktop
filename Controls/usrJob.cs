@@ -368,6 +368,8 @@ namespace Astrodon.Controls
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
+
             if (cmbBuilding.SelectedItem != null)
             {
                 String bCode = cmbBuilding.SelectedValue.ToString();
@@ -376,6 +378,11 @@ namespace Astrodon.Controls
                     if (b.ID == int.Parse(bCode))
                     {
                         selectedBuilding = b;
+                        if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.ID))
+                        {
+                            cmbBuilding.SelectedIndex = -1;
+                            return;
+                        }
                         break;
                     }
                 }

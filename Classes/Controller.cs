@@ -388,5 +388,46 @@ namespace Astrodon
                 return bal;
             }
         }
+
+        public static bool VerifyBuildingDetailsEntered(int buildingId)
+        {
+            if (buildingId > 0)
+            {
+                using (var ctx = SqlDataHandler.GetDataContext())
+                {
+                    var bld = ctx.tblBuildings.Single(a => a.id == buildingId);
+
+                    /*
+                         Insurance details
+                         Insurance broker
+                         Building Reg number
+                         CSOS reg number
+                   */
+
+                    string errorMessage = string.Empty;
+                    if (string.IsNullOrWhiteSpace(bld.CSOSRegistrationNumber))
+                        errorMessage += "CSOS Registration Number is empty." + Environment.NewLine;
+
+                    if (string.IsNullOrWhiteSpace(bld.BuildingRegistrationNumber))
+                        errorMessage += "Building Registration Number is empty." + Environment.NewLine;
+
+                    if (bld.InsuranceBrokerId == null)
+                        errorMessage += "Insurance Broker not configured." + Environment.NewLine;
+
+                    if (string.IsNullOrWhiteSpace(bld.PolicyNumber))
+                        errorMessage += "Insurance Details not configured." + Environment.NewLine;
+
+                    if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        Controller.HandleError("Building information not completed." + Environment.NewLine
+                            + errorMessage + Environment.NewLine +
+                            "Processing of this building is not allowed.");
+                        return false;
+                    }
+
+                }
+            }
+            return true;
+        }
     }
 }

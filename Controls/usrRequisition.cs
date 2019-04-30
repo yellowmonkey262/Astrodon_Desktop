@@ -343,14 +343,26 @@ namespace Astrodon.Controls
 
         private void cmbBuilding_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cmbBuilding.SelectedIndex >= 0)
+            {
+                if (!Controller.VerifyBuildingDetailsEntered(myBuildings[cmbBuilding.SelectedIndex].ID))
+                {
+                    cmbBuilding.SelectedIndex = -1;
+                    return;
+                }
+            }
+
             btnSupplierLookup.Enabled = true;
             cmbAccount.Items.Clear();
             cmbLedger.Items.Clear();
             if (cmbBuilding.SelectedIndex >= 0 && cmbBuilding.SelectedIndex < myBuildings.Count)
             {
+                
+
                 try
                 {
                     lblBank.Text = myBuildings[cmbBuilding.SelectedIndex].Bank.ToUpper();
+                  
                     cmbAccount.Items.Add("TRUST");
                     cmbAccount.Items.Add("OWN");
                     cmbAccount.SelectedItem = lblBank.Text;
