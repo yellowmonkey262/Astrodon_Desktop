@@ -605,6 +605,12 @@
     <Compile Include="Forms\frmNewBuilding.Designer.cs">
       <DependentUpon>frmNewBuilding.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmPDFView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmPDFView.Designer.cs">
+      <DependentUpon>frmPDFView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmPrintDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -973,6 +979,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmNewBuilding.resx">
       <DependentUpon>frmNewBuilding.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmPDFView.resx">
+      <DependentUpon>frmPDFView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmPrintDialog.resx">
       <DependentUpon>frmPrintDialog.cs</DependentUpon>

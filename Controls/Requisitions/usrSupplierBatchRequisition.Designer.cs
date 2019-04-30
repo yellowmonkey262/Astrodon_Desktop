@@ -56,7 +56,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(18, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(118, 13);
+            this.label1.Size = new System.Drawing.Size(137, 15);
             this.label1.TabIndex = 52;
             this.label1.Text = "Supplier Bulk Payments";
             // 
@@ -124,7 +124,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(14, 137);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 13);
+            this.label2.Size = new System.Drawing.Size(123, 15);
             this.label2.TabIndex = 62;
             this.label2.Text = "Default Bank Account";
             // 
@@ -143,7 +143,7 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(14, 114);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(105, 13);
+            this.label14.Size = new System.Drawing.Size(116, 15);
             this.label14.TabIndex = 61;
             this.label14.Text = "Default Invoice Date";
             // 
@@ -162,7 +162,7 @@
             this.lbSupplierName.AutoSize = true;
             this.lbSupplierName.Location = new System.Drawing.Point(156, 46);
             this.lbSupplierName.Name = "lbSupplierName";
-            this.lbSupplierName.Size = new System.Drawing.Size(92, 13);
+            this.lbSupplierName.Size = new System.Drawing.Size(106, 15);
             this.lbSupplierName.TabIndex = 60;
             this.lbSupplierName.Text = "-- none selected --";
             // 
@@ -171,7 +171,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(14, 46);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(78, 13);
+            this.label12.Size = new System.Drawing.Size(90, 15);
             this.label12.TabIndex = 59;
             this.label12.Text = "Select Supplier";
             // 
@@ -180,7 +180,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(14, 18);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(63, 13);
+            this.label10.Size = new System.Drawing.Size(70, 15);
             this.label10.TabIndex = 58;
             this.label10.Text = "Select Date";
             // 
@@ -199,7 +199,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(14, 77);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(120, 13);
+            this.label9.Size = new System.Drawing.Size(134, 15);
             this.label9.TabIndex = 57;
             this.label9.Text = "Default Ledger Account";
             // 
@@ -223,6 +223,7 @@
             this.dgItems.ReadOnly = true;
             this.dgItems.Size = new System.Drawing.Size(1338, 426);
             this.dgItems.TabIndex = 69;
+            this.dgItems.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellClick);
             this.dgItems.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgItems_CellContentClick);
             this.dgItems.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgItems_DataBindingComplete);
             this.dgItems.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgItems_DataError);

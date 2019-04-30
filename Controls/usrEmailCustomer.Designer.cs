@@ -45,6 +45,8 @@
             this.txtCC = new System.Windows.Forms.TextBox();
             this.btnDelete = new System.Windows.Forms.Button();
             this.txtMessage = new GvS.Controls.HtmlTextbox();
+            this.cbCCTrustees = new System.Windows.Forms.CheckBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnSendNow
@@ -69,7 +71,7 @@
             // 
             // btnAttachment
             // 
-            this.btnAttachment.Location = new System.Drawing.Point(16, 240);
+            this.btnAttachment.Location = new System.Drawing.Point(16, 256);
             this.btnAttachment.Name = "btnAttachment";
             this.btnAttachment.Size = new System.Drawing.Size(75, 23);
             this.btnAttachment.TabIndex = 64;
@@ -80,16 +82,16 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 214);
+            this.label5.Location = new System.Drawing.Point(14, 230);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(69, 13);
+            this.label5.Size = new System.Drawing.Size(77, 15);
             this.label5.TabIndex = 63;
             this.label5.Text = "Attachments:";
             // 
             // lstAttachments
             // 
             this.lstAttachments.FormattingEnabled = true;
-            this.lstAttachments.Location = new System.Drawing.Point(111, 214);
+            this.lstAttachments.Location = new System.Drawing.Point(111, 230);
             this.lstAttachments.Name = "lstAttachments";
             this.lstAttachments.Size = new System.Drawing.Size(529, 95);
             this.lstAttachments.TabIndex = 62;
@@ -99,22 +101,22 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(660, 22);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 13);
+            this.label4.Size = new System.Drawing.Size(61, 15);
             this.label4.TabIndex = 60;
             this.label4.Text = "Message:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 181);
+            this.label3.Location = new System.Drawing.Point(14, 197);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 13);
+            this.label3.Size = new System.Drawing.Size(51, 15);
             this.label3.TabIndex = 58;
             this.label3.Text = "Subject:";
             // 
             // txtSubject
             // 
-            this.txtSubject.Location = new System.Drawing.Point(111, 178);
+            this.txtSubject.Location = new System.Drawing.Point(111, 194);
             this.txtSubject.Name = "txtSubject";
             this.txtSubject.Size = new System.Drawing.Size(529, 20);
             this.txtSubject.TabIndex = 57;
@@ -122,15 +124,15 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 155);
+            this.label2.Location = new System.Drawing.Point(14, 171);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.Size = new System.Drawing.Size(34, 15);
             this.label2.TabIndex = 56;
             this.label2.Text = "BCC:";
             // 
             // txtBCC
             // 
-            this.txtBCC.Location = new System.Drawing.Point(111, 152);
+            this.txtBCC.Location = new System.Drawing.Point(111, 168);
             this.txtBCC.Name = "txtBCC";
             this.txtBCC.Size = new System.Drawing.Size(529, 20);
             this.txtBCC.TabIndex = 55;
@@ -149,7 +151,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(14, 14);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
+            this.label1.Size = new System.Drawing.Size(89, 15);
             this.label1.TabIndex = 51;
             this.label1.Text = "Select Building";
             // 
@@ -167,7 +169,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(14, 41);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(84, 13);
+            this.label6.Size = new System.Drawing.Size(97, 15);
             this.label6.TabIndex = 68;
             this.label6.Text = "Select Customer";
             // 
@@ -176,7 +178,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(14, 75);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(82, 13);
+            this.label7.Size = new System.Drawing.Size(97, 15);
             this.label7.TabIndex = 70;
             this.label7.Text = "Customer Name";
             // 
@@ -185,21 +187,21 @@
             this.lblCustomer.AutoSize = true;
             this.lblCustomer.Location = new System.Drawing.Point(108, 75);
             this.lblCustomer.Name = "lblCustomer";
-            this.lblCustomer.Size = new System.Drawing.Size(0, 13);
+            this.lblCustomer.Size = new System.Drawing.Size(0, 15);
             this.lblCustomer.TabIndex = 71;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(14, 103);
+            this.label8.Location = new System.Drawing.Point(14, 119);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(87, 13);
+            this.label8.Size = new System.Drawing.Size(102, 15);
             this.label8.TabIndex = 73;
             this.label8.Text = "Email Addresses:";
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(111, 100);
+            this.txtEmail.Location = new System.Drawing.Point(111, 116);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(529, 20);
             this.txtEmail.TabIndex = 72;
@@ -207,22 +209,22 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(14, 129);
+            this.label9.Location = new System.Drawing.Point(14, 145);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(24, 13);
+            this.label9.Size = new System.Drawing.Size(26, 15);
             this.label9.TabIndex = 75;
             this.label9.Text = "CC:";
             // 
             // txtCC
             // 
-            this.txtCC.Location = new System.Drawing.Point(111, 126);
+            this.txtCC.Location = new System.Drawing.Point(111, 142);
             this.txtCC.Name = "txtCC";
             this.txtCC.Size = new System.Drawing.Size(529, 20);
             this.txtCC.TabIndex = 74;
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(16, 269);
+            this.btnDelete.Location = new System.Drawing.Point(16, 285);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 76;
@@ -250,10 +252,31 @@
             this.txtMessage.TabIndex = 77;
             this.txtMessage.ToolbarStyle = GvS.Controls.ToolbarStyles.AlwaysInternal;
             // 
+            // cbCCTrustees
+            // 
+            this.cbCCTrustees.AutoSize = true;
+            this.cbCCTrustees.Location = new System.Drawing.Point(111, 97);
+            this.cbCCTrustees.Name = "cbCCTrustees";
+            this.cbCCTrustees.Size = new System.Drawing.Size(18, 17);
+            this.cbCCTrustees.TabIndex = 78;
+            this.cbCCTrustees.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(13, 97);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(73, 15);
+            this.label10.TabIndex = 79;
+            this.label10.Text = "CC Trustees";
+            this.label10.Click += new System.EventHandler(this.label10_Click);
+            // 
             // usrEmailCustomer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.cbCCTrustees);
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.label9);
@@ -308,5 +331,7 @@
         private System.Windows.Forms.TextBox txtCC;
         private System.Windows.Forms.Button btnDelete;
         private GvS.Controls.HtmlTextbox txtMessage;
+        private System.Windows.Forms.CheckBox cbCCTrustees;
+        private System.Windows.Forms.Label label10;
     }
 }
