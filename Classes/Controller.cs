@@ -344,13 +344,16 @@ namespace Astrodon
             return _TrustPath;
         }
 
-        public static double? GetBuildingBalance(Astrodon.Data.tblBuilding building)
+        public static double? GetBuildingBalance(Astrodon.Data.tblBuilding building, string bank = "")
         {
-            if (building.bank == null)
+            if (string.IsNullOrWhiteSpace(bank))
+                bank = building.bank;
+
+            if (bank == null)
                 throw new Exception("Building bank not configured");
 
             string buildingPath = "";
-            if (building.bank.ToUpper() == "TRUST")
+            if (bank.ToUpper() == "TRUST")
             {
                 buildingPath = GetTrustPath();
                 return GetBalance(buildingPath, building.AccNumber);

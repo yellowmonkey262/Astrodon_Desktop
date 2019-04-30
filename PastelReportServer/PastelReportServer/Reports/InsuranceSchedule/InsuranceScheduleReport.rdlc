@@ -6,19 +6,22 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>5.49319cm</Width>
+              <Width>5.45086cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.94095cm</Width>
+              <Width>1.47505cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.61211cm</Width>
+              <Width>3.47428cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.49319cm</Width>
+              <Width>2.52986cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>6.12819cm</Width>
+              <Width>2.84736cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>11.01124cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -67,7 +70,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>PQ Persentage</Value>
+                              <Value>PQ%</Value>
                               <Style>
                                 <FontFamily>Courier New</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -185,6 +188,41 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox24</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox1">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Notes</Value>
+                              <Style>
+                                <FontFamily>Courier New</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox1</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -371,12 +409,47 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Notes">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!Notes.Value</Value>
+                              <Style>
+                                <FontFamily>Courier New</FontFamily>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Notes</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
           <TablixMembers>
+            <TablixMember />
             <TablixMember />
             <TablixMember />
             <TablixMember />
@@ -395,18 +468,47 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsInsuranceData</DataSetName>
-        <Top>0.49389cm</Top>
         <Left>0.3175cm</Left>
         <Height>1.2cm</Height>
-        <Width>26.66763cm</Width>
+        <Width>26.78864cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Tablix>
+      <Textbox Name="ExcessStructures">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!ExcessStructures.Value</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>ExcessStructures</rd:DefaultName>
+        <Top>1.58962cm</Top>
+        <Left>0.3175cm</Left>
+        <Height>2.505cm</Height>
+        <Width>26.78864cm</Width>
+        <ZIndex>1</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>1.23326in</Height>
+    <Height>2.08326in</Height>
     <Style />
   </Body>
   <Width>10.775in</Width>
@@ -934,7 +1036,7 @@
           <Top>7.82257cm</Top>
           <Left>18.7547cm</Left>
           <Height>0.5559cm</Height>
-          <Width>8.60544cm</Width>
+          <Width>8.35144cm</Width>
           <ZIndex>7</ZIndex>
           <Style>
             <Border>
@@ -1233,6 +1335,10 @@
           <DataField>AdditionalCost</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Notes">
+          <DataField>Notes</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="PQPersentage">
           <DataField>PQPersentage</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -1387,6 +1493,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="CommonReplacementValue">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ExcessStructures">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

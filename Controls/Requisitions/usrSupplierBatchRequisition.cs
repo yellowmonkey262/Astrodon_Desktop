@@ -176,7 +176,8 @@ namespace Astrodon.Controls.Requisitions
                                 BankId = bank.id,
                                 BankAlreadyLinked = true,
                                 OwnTrustAccount = "OWN",
-                                IsOwnAccount = b.bank == "OWN" ? true: false
+                                IsOwnAccount = b.bank == "OWN" ? true: false,
+                                Building = b
                             };
 
                     _SupplierBuildingList = q.ToList();
@@ -204,7 +205,8 @@ namespace Astrodon.Controls.Requisitions
                                  BranchName = null,
                                  BankAlreadyLinked = false,
                                  OwnTrustAccount = "OWN",
-                                 IsOwnAccount = b.bank == "OWN" ? true : false
+                                 IsOwnAccount = b.bank == "OWN" ? true : false,
+                                 Building = b
                              };
 
                     _SupplierBuildingList.AddRange(q2.ToList());
@@ -329,6 +331,15 @@ namespace Astrodon.Controls.Requisitions
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
             {
+                DataPropertyName = "Balance",
+                HeaderText = "Balance",
+                ReadOnly = true,
+                DefaultCellStyle = currencyColumnStyle,
+                MinimumWidth = 80
+            });
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
                 DataPropertyName = "SupplierReference",
                 HeaderText = "Supplier Reference",
                 ReadOnly = false,
@@ -360,6 +371,16 @@ namespace Astrodon.Controls.Requisitions
             {
                 HeaderText = "Invoice",
                 Text = "Upload",
+                Name = "Upload",
+                UseColumnTextForButtonValue = true,
+                MinimumWidth = 30
+            });
+
+            dgItems.Columns.Add(new DataGridViewButtonColumn()
+            {
+                HeaderText = "Invoice",
+                Text = "View",
+                Name = "View",
                 UseColumnTextForButtonValue = true,
                 MinimumWidth = 30
             });
@@ -496,25 +517,35 @@ namespace Astrodon.Controls.Requisitions
 
             var senderGrid = (DataGridView)sender;
 
+            if (e.RowIndex >= 0)
+                senderGrid.Rows[e.RowIndex].Selected = true;
+
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
             {
                 var item = senderGrid.Rows[e.RowIndex].DataBoundItem as BuildingRequisitionItem;
-
-
-                if (ofdAttachment.ShowDialog() == DialogResult.OK)
+                if (senderGrid.Columns[e.ColumnIndex].Name == "Upload")
                 {
-                    for (int i = 0; i < ofdAttachment.FileNames.Count(); i++)
+                    if (ofdAttachment.ShowDialog() == DialogResult.OK)
                     {
-                        if (IsValidPdf(ofdAttachment.FileNames[i]))
+                        for (int i = 0; i < ofdAttachment.FileNames.Count(); i++)
                         {
-                            item.AttachmentFileName = ofdAttachment.FileNames[i];
-                            item.Refresh();
-                        }
-                        else
-                        {
-                            Controller.HandleError("Invalid PDF\n" + ofdAttachment.FileNames[i] + "\n Please load a different pdf");
+                            if (IsValidPdf(ofdAttachment.FileNames[i]))
+                            {
+                                item.AttachmentFileName = ofdAttachment.FileNames[i];
+                                item.Refresh();
+                            }
+                            else
+                            {
+                                Controller.HandleError("Invalid PDF\n" + ofdAttachment.FileNames[i] + "\n Please load a different pdf");
+                            }
                         }
                     }
+                }else if (senderGrid.Columns[e.ColumnIndex].Name == "View")
+                {
+                    if (!String.IsNullOrWhiteSpace(item.AttachmentFileName))
+                        frmPDFView.PreviewPDF(File.ReadAllBytes(item.AttachmentFileName));
+                    else
+                        Controller.HandleError("Invoice not loaded");
                 }
 
             }
@@ -633,7 +664,8 @@ namespace Astrodon.Controls.Requisitions
                                 BankId = requisition.BankId.Value,
                                 BranceCode = requisition.BranchCode,
                                 BranchName = requisition.BranchName,
-                                SupplierId = _Supplier.id
+                                SupplierId = _Supplier.id,
+                                Building = requisition.Building
                             };
                             context.SupplierBuildingSet.Add(supBank);
                             LoadBuildingAudit(supBank, context);
@@ -728,6 +760,13 @@ namespace Astrodon.Controls.Requisitions
         {
             dtInvoiceDate_ValueChanged(sender, e);
         }
+
+        private void dgItems_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && sender is DataGridView)
+               ( sender as DataGridView).Rows[e.RowIndex].Selected = true;
+
+        }
     }
 
 
@@ -772,6 +811,8 @@ namespace Astrodon.Controls.Requisitions
 
         public decimal? Amount { get; set; }
 
+        public decimal? Balance { get; set; }
+
         public string SupplierReference { get; set; }
 
         public string InvoiceNumber { get; set; }
@@ -787,7 +828,6 @@ namespace Astrodon.Controls.Requisitions
         public string SupplierBank { get; set; }
 
         public DataGridViewComboBoxCell ComboBox { get; set; }
-
      
         public void SetSelectedAccount(string accountNumber,bool refresh)
         {
@@ -825,6 +865,8 @@ namespace Astrodon.Controls.Requisitions
                 if(Amount == null)
                     return true;
 
+                RefreshBalance();
+
                 bool fileOk = FileLoaded;
                 if (InvoiceAttachmentRequired == false)
                     fileOk = true;
@@ -837,6 +879,7 @@ namespace Astrodon.Controls.Requisitions
                     && ComboBox != null && ComboBox.Value != null
                     && !String.IsNullOrWhiteSpace( AccountNumberToUse)
                     && !String.IsNullOrWhiteSpace(OwnTrustAccount)
+                    && Amount <= Balance
                     )
                 {
                     if (BankAlreadyLinked)
@@ -848,14 +891,25 @@ namespace Astrodon.Controls.Requisitions
                     return false;
             }
         }
-
+        public tblBuilding Building { get; set; }
         public DataGridViewRow DataRow { get;  set; }
+
         public bool InvoiceAttachmentRequired { get;  set; }
         public string BuildingAbreviatio { get;  set; }
         public string BuildingTrustAccount { get;  set; }
         public string BranchCode { get;  set; }
         public string BranchName { get;  set; }
+
         public string OwnTrustAccount { get; set; }
+
+        private void RefreshBalance()
+        {
+            if (Balance == null)
+            {
+                this.Balance = Convert.ToDecimal(Controller.GetBuildingBalance(this.Building, OwnTrustAccount));
+            }
+        }
+
         private int? _BankId;
         public int? BankId
         {
@@ -873,7 +927,7 @@ namespace Astrodon.Controls.Requisitions
                     {
                         this.BranchCode = b.BranchCode;
                         this.BranchName = b.BranchName;
-                        Refresh();
+                         Refresh();
                     }
                 }
             }

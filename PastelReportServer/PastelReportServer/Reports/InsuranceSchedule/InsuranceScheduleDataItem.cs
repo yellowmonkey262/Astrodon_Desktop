@@ -12,5 +12,6 @@ namespace Astrodon.Reports.InsuranceSchedule
         public string AdditionalCost { get; set; }
         public string UnitCost { get; set; }
         public string TotalCost { get; set; }
+        public string Notes { get; internal set; }
     }
 }

@@ -30,7 +30,8 @@ namespace Astrodon.Reports.InsuranceSchedule
                 PQPersentage = (a.PQRating * 100).ToString(),
                 AdditionalCost = a.AdditionalInsurance.ToString(),
                 UnitCost = (building.UnitReplacementCost * a.PQRating).ToString(),
-                TotalCost = ((building.UnitReplacementCost * a.PQRating) + a.AdditionalInsurance).ToString()
+                TotalCost = ((building.UnitReplacementCost * a.PQRating) + a.AdditionalInsurance).ToString(),
+                Notes = a.Notes
             });
 
             Dictionary<string, IEnumerable> reportData = new Dictionary<string, IEnumerable>();
@@ -50,6 +51,7 @@ namespace Astrodon.Reports.InsuranceSchedule
             reportParams.Add("AccountName", building.accName);
             reportParams.Add("AccountNumber", building.bankAccNumber);
             reportParams.Add("BranchCode", building.branch);
+            reportParams.Add("ExcessStructures", building.ExcessStructures);
 
             reportParams.Add("BrokerAccountNumber", building.PolicyNumber);
             if (building.InsuranceBroker != null)
