@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Astrodon.Controls
 {
@@ -82,6 +83,28 @@ namespace Astrodon.Controls
             {
                 var customer = customers[cmbCustomer.SelectedIndex];
                 var building = buildings[cmbBuilding.SelectedIndex];
+                string trusteeEmails = "";
+
+                if(cbCCTrustees.Checked)
+                {
+                    using (var ctx = SqlDataHandler.GetDataContext())
+                    {
+                        var emls = ctx.CustomerSet.Where(a => a.BuildingId == building.ID
+                                                               && a.IsTrustee
+                                                               && a.EmailAddress1 != "").Select(a => a.EmailAddress1).ToList();
+                        foreach(var s in emls)
+                        {
+                            if(!string.IsNullOrWhiteSpace(s))
+                            {
+                                if (!string.IsNullOrWhiteSpace(trusteeEmails))
+                                    trusteeEmails = trusteeEmails + ";" + s;
+                                else
+                                    trusteeEmails = s;
+                            }
+                        }
+                    }
+                }
+
                 String[] emails = txtEmail.Text.Split(new String[] { ";" }, StringSplitOptions.None);
 
                 var clientPortal = new AstrodonClientPortal(SqlDataHandler.GetClientPortalConnectionString());
@@ -96,10 +119,17 @@ namespace Astrodon.Controls
                             clientPortal.UploadUnitDocument(DocumentCategoryType.Letter, DateTime.Today, building.ID, customer.accNumber, txtSubject.Text, fileName, txtEmail.Text));   
                     }
                 }
-             
 
 
-                if (Email.EmailProvider.SendDirectMail(building.ID, customer.accNumber, emails, txtCC.Text, txtBCC.Text, txtSubject.Text, txtMessage.Text, attachmentsData))
+                string cc = txtCC.Text;
+                if (!string.IsNullOrWhiteSpace(cc) && !string.IsNullOrWhiteSpace(trusteeEmails))
+                    cc = ";" + trusteeEmails;
+                else
+                    cc = trusteeEmails;
+
+
+                if (Email.EmailProvider.SendDirectMail(building.ID, customer.accNumber, 
+                    emails, cc, txtBCC.Text, txtSubject.Text, txtMessage.Text, attachmentsData))
                 {
                     MessageBox.Show("Message sent");
                 }
@@ -162,6 +192,11 @@ namespace Astrodon.Controls
             {
                 MessageBox.Show("Please select attachments to be deleted");
             }
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
