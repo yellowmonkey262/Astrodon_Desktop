@@ -417,7 +417,7 @@ namespace Astrodon.Controls.Requisitions
 
                     if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.ID))
                     {
-                        cmbBuilding.SelectedIndex = 0;
+                        cmbBuilding.SelectedIndex = -1;
                         dgItems.DataSource = null;
                         return;
                     }

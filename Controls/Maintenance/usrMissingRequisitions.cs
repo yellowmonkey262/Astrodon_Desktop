@@ -440,7 +440,7 @@ namespace Astrodon.Controls.Maintenance
             {
                 if (!Controller.VerifyBuildingDetailsEntered(selectedBuilding.ID))
                 {
-                    cmbBuilding.SelectedIndex = 0;
+                    cmbBuilding.SelectedIndex = -1;
                     return;
                 }
             }
