@@ -356,7 +356,7 @@ namespace Astrodon
             if (bank.ToUpper() == "TRUST")
             {
                 buildingPath = GetTrustPath();
-                return GetBalance(buildingPath, building.AccNumber);
+                return GetBalance(buildingPath, building.AccNumber) * -1;
             }
             else
             {
