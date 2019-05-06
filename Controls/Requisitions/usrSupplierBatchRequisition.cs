@@ -65,7 +65,7 @@ namespace Astrodon.Controls.Requisitions
             {
                 foreach (var itm in _SupplierBuildingList)
                 {
-                    itm.SetSelectedAccount(cmbLedger.SelectedValue as string,false);
+                    itm.SetSelectedAccount(cmbLedger.SelectedValue as string, false);
                 }
                 var x = _SupplierBuildingList.FirstOrDefault();
                 if (x != null)
@@ -79,7 +79,7 @@ namespace Astrodon.Controls.Requisitions
             {
                 foreach (var itm in _SupplierBuildingList)
                 {
-                    itm.SetSelectedInvoiceDate(dtInvoiceDate.Value,false);
+                    itm.SetSelectedInvoiceDate(dtInvoiceDate.Value, false);
                 }
                 var x = _SupplierBuildingList.FirstOrDefault();
                 if (x != null)
@@ -176,7 +176,7 @@ namespace Astrodon.Controls.Requisitions
                                 BankId = bank.id,
                                 BankAlreadyLinked = true,
                                 OwnTrustAccount = "OWN",
-                                IsOwnAccount = b.bank == "OWN" ? true: false,
+                                IsOwnAccount = b.bank == "OWN" ? true : false,
                                 Building = b
                             };
 
@@ -214,19 +214,24 @@ namespace Astrodon.Controls.Requisitions
                     _SupplierBuildingList = _SupplierBuildingList.OrderBy(a => a.BuildingName).ToList();
 
                     var qBank = from sb in context.SupplierBuildingSet
-                            select new SupplierBankAccountDetail()
-                            {
-                                BankId = sb.BankId,
-                                BankName = sb.Bank.Name,
-                                BranchCode = sb.BranceCode,
-                                AccountNumber = sb.AccountNumber,
-                                BranchName = sb.BranchName
-                            };
+                                where sb.SupplierId == supplier.id
+                                select new SupplierBankAccountDetail()
+                                {
+                                    BankId = sb.BankId,
+                                    BankName = sb.Bank.Name,
+                                    BranchCode = sb.BranceCode,
+                                    AccountNumber = sb.AccountNumber,
+                                    BranchName = sb.BranchName
+                                };
 
                     _SupplierBankAccounts = qBank.Distinct().OrderBy(a => a.BankName).ToList();
                     cbSupplierBankAccount.DataSource = _SupplierBankAccounts;
                     cbSupplierBankAccount.ValueMember = "BankId";
                     cbSupplierBankAccount.DisplayMember = "DisplayString";
+                    if (_SupplierBankAccounts.Count > 0)
+                        cbSupplierBankAccount.SelectedIndex = 0;
+                    else
+                        cbSupplierBankAccount.SelectedIndex = -1;
 
                     LoadBuildingsGrid();
                 }
@@ -256,7 +261,7 @@ namespace Astrodon.Controls.Requisitions
             foreach (var sb in _SupplierBuildingList)
             {
                 sb.PastelAccountList = LoadPastelAccountsForBuilding(sb.BuildingDataPath);
-                sb.SetSelectedAccount(cmbLedger.SelectedValue as string,false);
+                sb.SetSelectedAccount(cmbLedger.SelectedValue as string, false);
                 sb.BankList = _BankList.ToList();
             }
             var x = _SupplierBuildingList.FirstOrDefault();
@@ -492,7 +497,7 @@ namespace Astrodon.Controls.Requisitions
         {
             string row = "Row:" + e.RowIndex.ToString() + " Column:" + e.ColumnIndex.ToString();
             string err = e.Exception.Message;
-            Controller.HandleError("Invalid value added"+Environment.NewLine +
+            Controller.HandleError("Invalid value added" + Environment.NewLine +
                                    err + Environment.NewLine +
                                    row);
 
@@ -549,7 +554,8 @@ namespace Astrodon.Controls.Requisitions
                             }
                         }
                     }
-                }else if (senderGrid.Columns[e.ColumnIndex].Name == "View")
+                }
+                else if (senderGrid.Columns[e.ColumnIndex].Name == "View")
                 {
                     if (!String.IsNullOrWhiteSpace(item.AttachmentFileName))
                         frmPDFView.PreviewPDF(File.ReadAllBytes(item.AttachmentFileName));
@@ -773,7 +779,7 @@ namespace Astrodon.Controls.Requisitions
         private void dgItems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && sender is DataGridView)
-               ( sender as DataGridView).Rows[e.RowIndex].Selected = true;
+                (sender as DataGridView).Rows[e.RowIndex].Selected = true;
 
         }
     }
@@ -847,8 +853,8 @@ namespace Astrodon.Controls.Requisitions
         public string SupplierBank { get; set; }
 
         public DataGridViewComboBoxCell ComboBox { get; set; }
-     
-        public void SetSelectedAccount(string accountNumber,bool refresh)
+
+        public void SetSelectedAccount(string accountNumber, bool refresh)
         {
             if (this.PastelAccountList != null && !String.IsNullOrWhiteSpace(accountNumber))
             {
@@ -864,8 +870,8 @@ namespace Astrodon.Controls.Requisitions
                 }
 
             }
-            if(refresh)
-              Refresh();
+            if (refresh)
+                Refresh();
         }
 
         public DataGridViewTextBoxCell InvoiceDateControl { get; set; }
@@ -873,15 +879,15 @@ namespace Astrodon.Controls.Requisitions
         public void SetSelectedInvoiceDate(DateTime invoiceDate, bool refresh)
         {
             this.InvoiceDate = invoiceDate;
-            if(refresh)
-              Refresh();
+            if (refresh)
+                Refresh();
         }
 
         public bool IsValid
         {
             get
             {
-                if(Amount == null)
+                if (Amount == null)
                     return true;
 
                 RefreshBalance();
@@ -896,7 +902,7 @@ namespace Astrodon.Controls.Requisitions
                     && InvoiceDate > new DateTime(2000, 1, 1)
                     && fileOk
                     && ComboBox != null && ComboBox.Value != null
-                    && !String.IsNullOrWhiteSpace( AccountNumberToUse)
+                    && !String.IsNullOrWhiteSpace(AccountNumberToUse)
                     && !String.IsNullOrWhiteSpace(OwnTrustAccount)
                     && Amount <= Balance
                     )
@@ -911,13 +917,13 @@ namespace Astrodon.Controls.Requisitions
             }
         }
         public tblBuilding Building { get; set; }
-        public DataGridViewRow DataRow { get;  set; }
+        public DataGridViewRow DataRow { get; set; }
 
-        public bool InvoiceAttachmentRequired { get;  set; }
-        public string BuildingAbreviatio { get;  set; }
-        public string BuildingTrustAccount { get;  set; }
-        public string BranchCode { get;  set; }
-        public string BranchName { get;  set; }
+        public bool InvoiceAttachmentRequired { get; set; }
+        public string BuildingAbreviatio { get; set; }
+        public string BuildingTrustAccount { get; set; }
+        public string BranchCode { get; set; }
+        public string BranchName { get; set; }
 
         public string OwnTrustAccount { get; set; }
 
@@ -939,20 +945,20 @@ namespace Astrodon.Controls.Requisitions
             set
             {
                 _BankId = value;
-                if(value != null && String.IsNullOrWhiteSpace(BranchCode) && String.IsNullOrWhiteSpace(BranchName))
+                if (value != null && String.IsNullOrWhiteSpace(BranchCode) && String.IsNullOrWhiteSpace(BranchName))
                 {
                     var b = BankList.SingleOrDefault(a => a.id == _BankId);
-                    if(b != null && !String.IsNullOrWhiteSpace( b.BranchCode))
+                    if (b != null && !String.IsNullOrWhiteSpace(b.BranchCode))
                     {
                         this.BranchCode = b.BranchCode;
                         this.BranchName = b.BranchName;
-                         Refresh();
+                        Refresh();
                     }
                 }
             }
         }
 
-        public List<Data.BankData.Bank> BankList { get;  set; }
+        public List<Data.BankData.Bank> BankList { get; set; }
         public bool BankAlreadyLinked { get; internal set; }
         public bool IsOwnAccount { get; internal set; }
 
