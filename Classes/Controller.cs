@@ -360,16 +360,18 @@ namespace Astrodon
             }
             else
             {
-                buildingPath = building.DataFolder;
+                buildingPath = building.DataPath;
                 return GetBalance(buildingPath, building.ownbank);
             }
         }
 
         private static double GetBalance(String datapath, String account)
         {
-            String acc = Controller.pastel.GetAccount(datapath, account.Replace("/", ""));
+            var checkAccount = account.Replace("/", "");
+            String acc = Controller.pastel.GetAccount(datapath, checkAccount);
             if (acc.StartsWith("99"))
             {
+                HandleError("Unable to read balance for account: " + checkAccount + Environment.NewLine + acc);
                 return 0;
             }
             else
@@ -400,6 +402,9 @@ namespace Astrodon
                 {
                     var bld = ctx.tblBuildings.Single(a => a.id == buildingId);
 
+                    if (bld.IsRentalBuilding)
+                        return true;
+
                     /*
                          Insurance details
                          Insurance broker
@@ -408,17 +413,23 @@ namespace Astrodon
                    */
 
                     string errorMessage = string.Empty;
-                    if (string.IsNullOrWhiteSpace(bld.CSOSRegistrationNumber))
-                        errorMessage += "CSOS Registration Number is empty." + Environment.NewLine;
+                    if (!bld.DisableCSOSCheck)
+                    {
+                        if (string.IsNullOrWhiteSpace(bld.CSOSRegistrationNumber))
+                            errorMessage += "CSOS Registration Number is empty." + Environment.NewLine;
+                    }
 
-                    if (string.IsNullOrWhiteSpace(bld.BuildingRegistrationNumber))
-                        errorMessage += "Building Registration Number is empty." + Environment.NewLine;
+                    if (!bld.DisableInsuranceCheck)
+                    {
+                        if (string.IsNullOrWhiteSpace(bld.BuildingRegistrationNumber))
+                            errorMessage += "Building Registration Number is empty." + Environment.NewLine;
 
-                    if (bld.InsuranceBrokerId == null)
-                        errorMessage += "Insurance Broker not configured." + Environment.NewLine;
+                        if (bld.InsuranceBrokerId == null)
+                            errorMessage += "Insurance Broker not configured." + Environment.NewLine;
 
-                    if (string.IsNullOrWhiteSpace(bld.PolicyNumber))
-                        errorMessage += "Insurance Details not configured." + Environment.NewLine;
+                        if (string.IsNullOrWhiteSpace(bld.PolicyNumber))
+                            errorMessage += "Insurance Details not configured." + Environment.NewLine;
+                    }
 
                     if (!string.IsNullOrWhiteSpace(errorMessage))
                     {

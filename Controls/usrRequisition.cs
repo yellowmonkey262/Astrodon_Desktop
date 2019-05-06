@@ -218,6 +218,7 @@ namespace Astrodon.Controls
 
         private double GetBalance(String datapath, String account)
         {
+           // Controller.ShowMessage(datapath + " -> " + account);
             String acc = Controller.pastel.GetAccount(datapath, account.Replace("/", ""));
             if (acc.StartsWith("99"))
             {

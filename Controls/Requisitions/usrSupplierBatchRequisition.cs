@@ -340,6 +340,15 @@ namespace Astrodon.Controls.Requisitions
 
             dgItems.Columns.Add(new DataGridViewTextBoxColumn()
             {
+                DataPropertyName = "Available",
+                HeaderText = "Available",
+                ReadOnly = true,
+                DefaultCellStyle = currencyColumnStyle,
+                MinimumWidth = 80
+            });
+
+            dgItems.Columns.Add(new DataGridViewTextBoxColumn()
+            {
                 DataPropertyName = "SupplierReference",
                 HeaderText = "Supplier Reference",
                 ReadOnly = false,
@@ -812,6 +821,16 @@ namespace Astrodon.Controls.Requisitions
         public decimal? Amount { get; set; }
 
         public decimal? Balance { get; set; }
+
+        public decimal? Available
+        {
+            get
+            {
+                if (Amount == null || Balance == null)
+                    return null;
+                return Balance - Amount;
+            }
+        }
 
         public string SupplierReference { get; set; }
 

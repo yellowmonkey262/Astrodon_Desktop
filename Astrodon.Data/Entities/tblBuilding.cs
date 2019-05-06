@@ -167,6 +167,19 @@ namespace Astrodon.Data
             }
         }
 
+        [NotMapped]
+        public bool IsRentalBuilding
+        {
+            get
+            {
+                return Building != null && Building.ToUpper() == "ASTRODON RENTALS";
+            }
+        }
+
+        public bool DisableCSOSCheck { get; set; }
+
+        public bool DisableInsuranceCheck { get; set; }
+
         public bool IsDebitOrderFeeDisabled { get; set; }
 
         public bool CheckIfFolderExists()

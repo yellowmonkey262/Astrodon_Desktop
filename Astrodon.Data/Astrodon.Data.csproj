@@ -397,6 +397,10 @@
     <Compile Include="Migrations\201904101226241_CustomerProfile.Designer.cs">
       <DependentUpon>201904101226241_CustomerProfile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905060550260_DisableChecks.cs" />
+    <Compile Include="Migrations\201905060550260_DisableChecks.Designer.cs">
+      <DependentUpon>201905060550260_DisableChecks.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
@@ -695,6 +699,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904101226241_CustomerProfile.resx">
       <DependentUpon>201904101226241_CustomerProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905060550260_DisableChecks.resx">
+      <DependentUpon>201905060550260_DisableChecks.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

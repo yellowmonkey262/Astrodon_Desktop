@@ -33,6 +33,8 @@ namespace Astrodon
             dtpEventTime.Format = DateTimePickerFormat.Time;
             dtpEventTime.ShowUpDown = true;
             btnRemove.Visible = Controller.UserIsSheldon();
+            cbCSOSCheckDisabled.Enabled = Controller.UserIsSheldon();
+            cbInsuarnceCheckDisabled.Enabled = Controller.UserIsSheldon();
             LoadBondOriginators();
         }
 
@@ -211,6 +213,9 @@ namespace Astrodon
                 }
                 if (buildingEntity != null)
                 {
+                    cbCSOSCheckDisabled.Checked = buildingEntity.DisableCSOSCheck;
+                    cbInsuarnceCheckDisabled.Checked = buildingEntity.DisableInsuranceCheck;
+
                     if (!String.IsNullOrWhiteSpace(buildingEntity.BuildingRegistrationNumber))
                         txtBuildingRegNum.Text = buildingEntity.BuildingRegistrationNumber;
                     else
@@ -645,7 +650,8 @@ namespace Astrodon
                 buildingEntity.MonthlyInsurancePremium = string.IsNullOrWhiteSpace(txtMonthlyPremium.Text) ? 0 :
                     Convert.ToDecimal(txtMonthlyPremium.Text);
 
-
+                buildingEntity.DisableCSOSCheck = cbCSOSCheckDisabled.Checked;
+                buildingEntity.DisableInsuranceCheck = cbInsuarnceCheckDisabled.Checked;
                 buildingEntity.PolicyNumber = txtInsurancePolicyNumber.Text;
                 buildingEntity.InsuranceReplacementValueIncludesCommonProperty = cbReplacementIncludesCommonProperty.Checked;
                 buildingEntity.InsurancePolicyRenewalDate = dtpPolicyRenewalDate.Value;
