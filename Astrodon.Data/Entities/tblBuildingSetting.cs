@@ -56,8 +56,8 @@ namespace Astrodon.Data
 
         public string handoverSMS { get; set; }
 
-        #region Debit Order
         public decimal DebitOrderFee { get; set; }
-        #endregion
+
+        public decimal SMSFee { get; set; }
     }
 }

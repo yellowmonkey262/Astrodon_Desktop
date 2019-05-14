@@ -70,5 +70,7 @@ namespace Astrodon.Data
         public string business { get; set; }
 
         public string rental { get; set; }
+
+        public decimal DefaultSMSFee { get; set; }
     }
 }

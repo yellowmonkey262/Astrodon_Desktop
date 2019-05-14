@@ -401,6 +401,10 @@
     <Compile Include="Migrations\201905060550260_DisableChecks.Designer.cs">
       <DependentUpon>201905060550260_DisableChecks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905140925594_SMSFee.cs" />
+    <Compile Include="Migrations\201905140925594_SMSFee.Designer.cs">
+      <DependentUpon>201905140925594_SMSFee.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplate.cs" />
     <Compile Include="NotificationTemplateData\NotificationTemplateType.cs" />
@@ -702,6 +706,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905060550260_DisableChecks.resx">
       <DependentUpon>201905060550260_DisableChecks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905140925594_SMSFee.resx">
+      <DependentUpon>201905140925594_SMSFee.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
