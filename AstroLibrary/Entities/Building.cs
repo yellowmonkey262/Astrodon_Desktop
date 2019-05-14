@@ -87,6 +87,8 @@ namespace Astro.Library.Entities
 
         public decimal DebitOrderFee { get;set;}
 
+        public decimal SMSFee { get; set; }
+
         public String reminderTemplate { get; set; }
 
         public String finalTemplate { get; set; }

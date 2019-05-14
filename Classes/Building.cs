@@ -126,6 +126,7 @@ namespace Astrodon
                         b.summonsSMS = dFee["summonsSMS"].ToString();
                         b.disconnectionSMS = dFee["disconnectionSMS"].ToString();
                         b.handoverSMS = dFee["handoverSMS"].ToString();
+                        b.SMSFee = (decimal)dFee["SMSFee"];
                     }
                     else
                     {
@@ -214,6 +215,7 @@ namespace Astrodon
             sqlParms.Add("@ln", buildings[idx].letterName);
             sqlParms.Add("@ID", buildings[idx].ID);
 
+            sqlParms.Add("@SMSFee", buildings[idx].SMSFee);
             sqlParms.Add("@debitOrderFee", buildings[idx].DebitOrderFee);
             sqlParms.Add("@rf", buildings[idx].reminderFee);
             sqlParms.Add("@rfs", buildings[idx].reminderSplit);
@@ -285,12 +287,12 @@ namespace Astrodon
                 feeQuery += " UPDATE tblBuildingSettings SET reminderFee = @rf, reminderSplit = @rfs, finalFee = @ff, finalSplit = @ffs, disconnectionNoticefee = @dcf, disconnectionNoticeSplit = @dcfs, ";
                 feeQuery += " summonsFee = @sf, summonsSplit = @sfs, disconnectionFee = @df, disconnectionSplit = @dfs, handoverFee = @hf, handoverSplit = @hfs, reminderTemplate = @rt, finalTemplate = @ft, ";
                 feeQuery += " diconnectionNoticeTemplate = @dct, summonsTemplate = @st, reminderSMS = @rsms, finalSMS = @fsms, disconnectionNoticeSMS = @dcsms, summonsSMS = @ssms, disconnectionSMS = @dsms, ";
-                feeQuery += " handoverSMS = @hosms, debitOrderFee = @debitOrderFee WHERE (buildingID = @ID)";
+                feeQuery += " handoverSMS = @hosms, debitOrderFee = @debitOrderFee, SMSFee = @SMSFee WHERE (buildingID = @ID)";
                 feeQuery += " ELSE ";
                 feeQuery += " INSERT INTO tblBuildingSettings(buildingID, reminderFee, reminderSplit, finalFee, finalSplit, disconnectionNoticefee, disconnectionNoticeSplit, summonsFee, summonsSplit, ";
                 feeQuery += " disconnectionFee, disconnectionSplit, handoverFee, handoverSplit, reminderTemplate, finalTemplate, diconnectionNoticeTemplate, summonsTemplate, reminderSMS, finalSMS, ";
-                feeQuery += " disconnectionNoticeSMS, summonsSMS, disconnectionSMS, handoverSMS,debitOrderFee)";
-                feeQuery += " VALUES(@ID, @rf, @rfs, @ff, @ffs, @dcf, @dcfs, @sf, @sfs, @df, @dfs, @hf, @hfs, @rt, @ft, @dct, @st, @rsms, @fsms, @dcsms, @ssms, @dsms, @hosms,@debitOrderFee)";
+                feeQuery += " disconnectionNoticeSMS, summonsSMS, disconnectionSMS, handoverSMS, debitOrderFee, SMSFee)";
+                feeQuery += " VALUES(@ID, @rf, @rfs, @ff, @ffs, @dcf, @dcfs, @sf, @sfs, @df, @dfs, @hf, @hfs, @rt, @ft, @dct, @st, @rsms, @fsms, @dcsms, @ssms, @dsms, @hosms, @debitOrderFee, @SMSFee)";
                 dh.SetData(feeQuery, sqlParms, out status);
                 return true;
             }

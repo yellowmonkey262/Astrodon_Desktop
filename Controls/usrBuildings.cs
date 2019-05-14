@@ -117,6 +117,7 @@ namespace Astrodon
             txtLimitM.Text = selectedBuilding.limitM.ToString("#,##0.00");
             txtLimitW.Text = selectedBuilding.limitW.ToString("#,##0.00");
             txtLimitD.Text = selectedBuilding.limitD.ToString("#,##0.00");
+            txtSMSFee.Text = selectedBuilding.SMSFee.ToString();
 
             List<string> trusteeTypes = new List<string>();
             DataGridViewComboBoxColumn col = dgTrustees.Columns["Portfolio"] as DataGridViewComboBoxColumn;
@@ -129,8 +130,6 @@ namespace Astrodon
                     val = val.Replace("Trustee", "Director");
                 col.Items.Add(val);
             }
-
-         
 
             LoadBuildingInsurance();
             LoadCustomers();
@@ -611,7 +610,6 @@ namespace Astrodon
             }
         }
 
-
         private void SaveBuildingInsurance()
         {
             if (!ValidatePQ())
@@ -803,6 +801,7 @@ namespace Astrodon
             selectedBuilding.addy3 = txtAddress3.Text;
             selectedBuilding.addy4 = txtAddress4.Text;
             selectedBuilding.addy5 = txtAddress5.Text;
+            selectedBuilding.SMSFee = decimal.Parse(txtSMSFee.Text);
 
             double value = 0;
             selectedBuilding.limitM = double.TryParse(txtLimitM.Text, out value) ? value : 0;
@@ -1011,7 +1010,7 @@ namespace Astrodon
 
         private void btnStandard_Click(object sender, EventArgs e)
         {
-            String settingsQuery = "SELECT reminder_fee, final_fee, summons_fee, discon_notice_fee, discon_fee, handover_fee FROM tblSettings";
+            String settingsQuery = "SELECT reminder_fee, final_fee, summons_fee, discon_notice_fee, discon_fee, handover_fee, DefaultSMSFee FROM tblSettings";
             SqlDataHandler dh = new SqlDataHandler();
             String status = String.Empty;
             DataSet dsStandard = dh.GetData(settingsQuery, null, out status);
@@ -1024,6 +1023,7 @@ namespace Astrodon
                 txtSF.Text = dr["summons_fee"].ToString();
                 txtDF.Text = dr["discon_fee"].ToString();
                 txtHF.Text = dr["handover_fee"].ToString();
+                txtSMSFee.Text = dr["DefaultSMSFee"].ToString();
             }
         }
 

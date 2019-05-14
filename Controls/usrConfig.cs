@@ -24,10 +24,10 @@ namespace Astrodon
         private void usrConfig_Load(object sender, EventArgs e)
         {
             settingsQuery = "SELECT minbal, reminder_fee, final_fee, summons_fee, discon_notice_fee, discon_fee, handover_fee, clearance, ex_clearance, recon_split, debit_order, ret_debit_order, ";
-            settingsQuery += " eft_fee, monthly_journal, trust, centrec, business, rental FROM tblSettings";
+            settingsQuery += " eft_fee, monthly_journal, trust, centrec, business, rental, DefaultSMSFee FROM tblSettings";
             updateSettingsQuery = "UPDATE tblSettings SET minbal = @minbal, reminder_fee = @rem, final_fee = @fd, summons_fee = @summons, discon_notice_fee = @dcn, discon_fee = @dc, ";
             updateSettingsQuery += " handover_fee = @ho, clearance = @cl, ex_clearance = @excl, recon_split = @crs, debit_order = @do, ret_debit_order = @rdo, eft_fee = @eff, ";
-            updateSettingsQuery += " monthly_journal = @mbj, trust = @trust, centrec = @centrec, business = @business, rental = @rental";
+            updateSettingsQuery += " monthly_journal = @mbj, trust = @trust, centrec = @centrec, business = @business, rental = @rental, DefaultSMSFee = @defaultsmsfee";
             LoadSettings();
         }
 
@@ -55,6 +55,7 @@ namespace Astrodon
                 txtCentrec.Text = dr["centrec"].ToString();
                 txtBusiness.Text = dr["business"].ToString();
                 txtRental.Text = dr["rental"].ToString();
+                txtSMSFee.Text = dr["DefaultSMSFee"].ToString();
             }
             dgCashDepositFee.DataSource = fees.fees;
         }
@@ -80,6 +81,7 @@ namespace Astrodon
             sqlParms.Add("@centrec", txtCentrec.Text);
             sqlParms.Add("@business", txtBusiness.Text);
             sqlParms.Add("@rental", txtRental.Text);
+            sqlParms.Add("@defaultsmsfee", txtSMSFee.Text);
             dh.SetData(updateSettingsQuery, sqlParms, out status);
             fees.Update();
             fees = new CashDepositFees();
@@ -117,6 +119,7 @@ namespace Astrodon
                         b.summonsFee = s.summons_fee.Value;
                         b.disconnectionNoticefee = s.discon_notice_fee.Value;
                         b.handoverFee = s.handover_fee.Value;
+                        b.SMSFee = s.DefaultSMSFee;
                     }
 
                     ctx.SaveChanges();
@@ -127,7 +130,8 @@ namespace Astrodon
                                            "Disconnection fee: " + s.discon_notice_fee.Value.ToString() + Environment.NewLine +
                                            "Disconnection notice fee: " + s.discon_notice_fee.Value.ToString() + Environment.NewLine +
                                            "Summons fee: " + s.summons_fee.Value.ToString() + Environment.NewLine +
-                                           "Handover fee: " + s.handover_fee.Value.ToString() + Environment.NewLine);
+                                           "Handover fee: " + s.handover_fee.Value.ToString() + Environment.NewLine +
+                                           "SMS Fee: " + s.DefaultSMSFee.ToString() + Environment.NewLine);
                 }
             }
         }
